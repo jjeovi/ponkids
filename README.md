@@ -20,12 +20,28 @@
   
 ## 멤버구성
 ***
-- 안성기 :
-- 이은희 :
+- 안성기 : 
+- 이은희 : 
 
 ## 개발 관련 메모 
 ***
 하단에 필요한 내용 계속 추가하겠음. 
+
+
+<details>
+<summary> 프로젝트 setting 관련</summary>
+
+<!-- summary 아래 한칸 공백 두어야함 -->
+
+*************
+ - eclipse , intellij 모두 실행 가능
+ - eclipse 에서는 string boot 로 설정 해야함.  (https://diary-developer.tistory.com/9 )
+ - 사전 java 17버전 설치
+
+
+
+*************
+</details>
 
 
 <details>
