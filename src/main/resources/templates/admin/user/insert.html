@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<title layout:fragment="title">pioneerkids Admin - 회원 등록</title>
+<!-- S : Javascript functions	-->
+<script layout:fragment="script">
+    var dupCheckFlag = false;
+
+    // DOM 준비 된 이후 실행
+    $( function () {
+
+        // initialize a validator instance from the "FormValidator" constructor.
+        // A "<form>" element is optionally passed as an argument, but is not a must
+        var validator = new FormValidator( {
+            "events": [ 'blur', 'input', 'change' ]
+        }, document.forms[0] );
+        // on form "submit" event
+        document.forms[0].onsubmit = function ( e ) {
+            var submit = true,
+                validatorResult = validator.checkAll( this );
+            // console.log( validatorResult );
+
+            // **  valid 추가 필요시 여기서
+
+            // id 중복체크 여부 검사
+            if ( !dupCheckFlag ) {
+                alert( "아이디를 확인해주세요." );
+                $( "#userId" ).focus();
+                return false;
+            }
+
+            // 연락처 유효성 검사
+            var telNo = $( "#telNo" ).val();
+            if ( !isTelNoFormat( telNo ) ) {
+                alert( "연락처 형태에 맞게 입력해주세요" );
+                $( "#telNo" ).focus();
+                return false;
+            }
+
+            // 거주지역 그 외만 선택 했을 시 return false;
+            var resideArea = $( "input:radio[name='resideArea']:checked" ).val();
+            var country = $( "#countryList" ).val();
+            if ( resideArea == 'other' ) {
+                if ( country == '' ) {
+                    alert( "거주지역을 선택해주세요." );
+                    $( "#countryList" ).focus();
+                    return false;
+                } else {
+                    $("[name='resideArea']").val(country);
+                }
+
+            }
+
+            // 권한이 관리자일때, 권한 선택 안되어있을 때 return false
+            var mngrYn = $( "input:radio[name='mngrYn']:checked" ).val();
+            var roleSn = $( "[name='roleSn']" ).val();
+            if ( mngrYn == 'Y' && roleSn == '' ) {
+                alert( "관리자 권한을 선택해 주세요." );
+                $( "#roleList" ).focus();
+                return false;
+            }
+
+            // 통과
+
+            // 거주지역 set
+            if ( resideArea == 'other' ) {
+                $("[name='resideArea']").val(country);
+            }
+            return !!validatorResult.valid;
+        };
+
+        // on form "reset" event
+        document.forms[0].onreset = function ( e ) {
+            validator.reset();
+        };
+        // stuff related ONLY for this demo page:
+        $( '.toggleValidationTooltips' ).change( function () {
+            validator.settings.alerts = !this.checked;
+            if ( this.checked )
+                $( 'form .alert' ).remove();
+        } ).prop( 'checked', false );
+
+
+        // 거주지역 변동시 셀렉트박스 표출 처리
+        $( "input:radio[name='resideArea']" ).change( function () {
+
+            // 그 외 거주지역 선택시 나라 선택하도록 setting
+            var country = $( this ).val();
+
+            if ( country == 'other' ) {
+                $( "#countryList" ).show();
+            } else {
+                $( "#countryList" ).hide();
+            }
+        } );
+
+        // 거주지역 그 외 셀렉트박스 선택시 처리 로직
+        // $("#countryList").change( function (){
+        //
+        //     var resideArea = $(this).val();
+        //
+        //     $( "input:radio[name='resideArea']" ).val(resideArea);
+        // })
+
+        // 관리자 여부 변동시 셀렉트박스 표출 처리
+        $( "input:radio[name='mngrYn']" ).change( function () {
+
+            // 관리자 로 선택시 권한 상세 선택하도록 setting
+            var mngrYn = $( this ).val();
+
+            if ( mngrYn == 'Y' ) {
+                $( "#roleList" ).show();
+            } else {
+                $( "#roleList" ).hide();
+            }
+        } );
+
+        // 비밀번호 체크
+        function chkPW() {
+
+            var pw = $( "#password" ).val();
+            var num = pw.search( /[0-9]/g );
+            var eng = pw.search( /[a-z]/ig );
+            var spe = pw.search( /[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi );
+
+            if ( pw.length < 8 || pw.length > 20 ) {
+
+                alert( "8자리 ~ 20자리 이내로 입력해주세요." );
+                return false;
+            } else if ( pw.search( /\s/ ) != -1 ) {
+                alert( "비밀번호는 공백 없이 입력해주세요." );
+                return false;
+            } else if ( num < 0 || eng < 0 || spe < 0 ) {
+                alert( "영문,숫자, 특수문자를 혼합하여 입력해주세요." );
+                return false;
+            } else {
+                console.log( "통과" );
+                return true;
+            }
+
+        }
+
+        // 아이디 입력 focusout 처리 ( 중복체크 로직 )
+        $( "#userId" ).focusout( function () {
+            dupCheckFlag = false;
+            var userId = $( "#userId" ).val();      // userId값 넘기기
+
+            if ( validId( userId ) ) {
+
+                $.ajax( {
+                    url: "/live/idDupCheck",
+                    type: "GET",
+                    dataType: "json",
+                    data: { userId: userId },
+                    contentType: "application/json",
+                    success: function ( result ) {
+                        if ( !result ) dupCheckFlag = true;
+                        idDupResult( dupCheckFlag, "checkResult" );
+                    }
+                } );
+            } else {
+                idDupResult( dupCheckFlag, "checkResult" );
+            }
+        } )
+
+    } );
+
+    // 비밀번호 보이기 함수
+    function hideshow() {
+        var password = document.getElementById( "password1" );
+        var slash = document.getElementById( "slash" );
+        var eye = document.getElementById( "eye" );
+
+        if ( password.type === 'password' ) {
+            password.type = "text";
+            slash.style.display = "block";
+            eye.style.display = "none";
+        } else {
+            password.type = "password";
+            slash.style.display = "none";
+            eye.style.display = "block";
+        }
+    }
+
+    // 유효성 검사
+    function validCheckT() {
+        alert( "test" );
+
+        return false;
+    }
+
+</script>
+<!-- E : Javascript functions	-->
+
+<div layout:fragment="content" class="right_col" role="main">
+
+    <!-- S : 상단 메뉴 명 -->
+    <div class="title_top">
+        <h3><*1>회원 등록</h3>
+        <hr class="t_top_line">
+    </div>
+    <!-- E : 상단 메뉴 명 -->
+
+    <!-- S : 메뉴 상세설명  -->
+    <div class="div_menu_detail row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel" style="height: auto;">
+                <div class="x_title">
+                    <h2><*2>회원등록 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content" style="display: none;">
+                    <*3><h4>상세설명 메뉴입니다.<small>메뉴는 회원 등록입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
+                    설정가능합니다.)</small></h4>
+                    <div>
+                        <div class="starrr stars"></div>
+                        상세설명 메뉴입니다. <span class="stars-count">0123456789</span> star(s)
+                    </div>
+                    <p>The menu is membership registration. This part allows the administrator to enter text
+                        describing the menu. (It can be set in Menu Management.)</p>
+                    <div class="starrr stars-existing" data-rating="4"></div>
+                    You gave a rating of <span class="stars-count-existing">4</span> star(s)
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- E : 메뉴 상세설명 -->
+
+    <!-- S: 메인 등록 영역 -->
+    <div class="row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                <div class="x_content">
+                    <form id="insertForm" name="insertForm" method="post" th:action="@{/admin/user/save}"
+                          th:object="${userSaveReqDto}">
+                        <input type="hidden" name="mngrConfmYn" value="Y"/>
+                        <!-- TODO 프로필 이미지 추가 작업 -->
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">아이디(이메일형식)<span
+                                    class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6">
+                                <input name="userId" id="userId" class="form-control"
+                                       required="required"/>
+                                <small class="font-gray-dark">
+                                    <b>비밀번호</b> 찾기 시 해당 이메일로 인증번호를 발송합니다. 정확한 이메일을 입력해주세요.
+                                </small>
+                            </div>
+                            <div class="col-md-2 pt_10p pl-0">
+                                <span id="checkResult"></span>
+                                <!--                                <button type="button" class="btn btn-purple w100p" id="checkDup"-->
+                                <!--                                        onclick="checkDupId()">중복 확인-->
+                                <!--                                </button>화-->
+                            </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">비밀번호<span
+                                    class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control" type="password" id="password1" name="password"
+                                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[!@#$%^&*]).{8,}"
+                                       title="Minimum 8 Characters Including An Upper And Lower Case Letter, A Number And A Unique Character"
+                                       required/>
+                                <span style="position: absolute;right:15px;top:7px;" onclick="hideshow()">
+													<i id="slash" class="fa fa-eye-slash" style="display:none;"></i>
+													<i id="eye" class="fa fa-eye"></i>
+                                            </span>
+                                <small class="font-gray-dark">
+                                    영문 (대소문자 구분), 숫자, 특수문자를 포함하여 <b>최소 8자리</b>로 구성
+                                </small>
+                            </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">비밀번호 재입력<span class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control" type="password" name="password2"
+                                       data-validate-linked='password' required='required'/>
+                            </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">이름<span
+                                    class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control" data-validate-length-range="6" name="userNm"
+                                       placeholder="이름을 입력해주세요."/>
+                                <small class="font-gray-dark">
+                                    최소 2자 이상, 10자 이하로 입력해주세요.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">성별<span
+                                    class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6 ">
+                                <div class="btn-group radiobox">
+                                    <input type="radio" id="gender1" name="gender" value="M" class="join-btn" required>
+                                    <label for="gender1" class="btn btn-outline-purple w100p"
+                                           data-toggle-class="btn-primary"
+                                           data-toggle-passive-class="btn-default">남자</label>
+                                    <input type="radio" id="gender2" name="gender" value="F" class="join-btn" required>
+                                    <label for="gender2" class="btn btn-outline-purple w100p"
+                                           data-toggle-class="btn-primary"
+                                           data-toggle-passive-class="btn-default">여자</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">생년월일<span
+                                    class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control Date8String" type="date" name="brdtDate" required="required">
+                                <small class="font-gray-dark">
+                                    아이디 찾기 시 생년월일을 입력합니다.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">연락처<span
+                                    class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control" type="tel" name="telNo" id="telNo" required="required"
+                                       placeholder="연락처입력 ( - 제외 )" data-validate-length-range="10,11">
+                            </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">거주지역<span
+                                    class="required">*</span></label>
+                            <div class="col-md-2 col-sm-4">
+                                <div class="btn-group radiobox">
+                                    <input type="radio" id="resideArea1" name="resideArea" value="대한민국"
+                                           class="join-btn" required="required">
+                                    <label for="resideArea1" class="btn btn-outline-purple w100p"
+                                           data-toggle-class="btn-primary"
+                                           data-toggle-passive-class="btn-default">대한민국</label>
+                                    <input type="radio" id="resideArea2" name="resideArea" value="other"
+                                           class="join-btn" required="required">
+                                    <label for="resideArea2" class="btn btn-outline-purple w100p"
+                                           data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">그
+                                        외</label>
+                                </div>
+                            </div>
+                            <!--TODO 공통코드로 불러서 뿌리게끔 수정-->
+                            <div class="col-md-2 col-sm-4">
+                                <select class="form-control" name="otherResideArea" id="countryList"
+                                        style="display: none;">
+                                    <option value="">국가 선택</option>
+                                    <option value="가나">가나</option>
+                                    <option value="가봉">가봉</option>
+                                    <option value="가이아나">가이아나</option>
+                                    <option value="감비아">감비아</option>
+                                    <option value="과테말라">과테말라</option>
+                                    <option value="괌">괌</option>
+                                    <option value="그레나다">그레나다</option>
+                                    <option value="그리스">그리스</option>
+                                    <option value="기니">기니</option>
+                                    <option value="기니비사우">기니비사우</option>
+                                    <option value="나미비아">나미비아</option>
+                                    <option value="나우루">나우루</option>
+                                    <option value="나이지리아">나이지리아</option>
+                                    <option value="남극">남극</option>
+                                    <option value="남아프리카공화국">남아프리카공화국</option>
+                                    <option value="네덜란드">네덜란드</option>
+                                    <option value="네덜란드령보네르">네덜란드령보네르</option>
+                                    <option value="네덜란드령아루바">네덜란드령아루바</option>
+                                    <option value="네팔">네팔</option>
+                                    <option value="노르웨이">노르웨이</option>
+                                    <option value="뉴질랜드">뉴질랜드</option>
+                                    <option value="뉴질랜드령니우에">뉴질랜드령니우에</option>
+                                    <option value="뉴질랜드령토켈라우제도">뉴질랜드령토켈라우제도</option>
+                                    <option value="니제르">니제르</option>
+                                    <option value="니카라과">니카라과</option>
+                                    <option value="덴마크">덴마크</option>
+                                    <option value="덴마크령그린란드">덴마크령그린란드</option>
+                                    <option value="덴마크령페로제도">덴마크령페로제도</option>
+                                    <option value="도미니카공화국">도미니카공화국</option>
+                                    <option value="독일">독일</option>
+                                    <option value="동티모르">동티모르</option>
+                                    <option value="라오스">라오스</option>
+                                    <option value="라이베리아">라이베리아</option>
+                                    <option value="라트비아">라트비아</option>
+                                    <option value="러시아/카자흐스탄">러시아/카자흐스탄</option>
+                                    <option value="레바논">레바논</option>
+                                    <option value="레소토">레소토</option>
+                                    <option value="루마니아">루마니아</option>
+                                    <option value="룩셈부르크">룩셈부르크</option>
+                                    <option value="르완다">르완다</option>
+                                    <option value="리비아">리비아</option>
+                                    <option value="리투아니아">리투아니아</option>
+                                    <option value="리히텐슈타인">리히텐슈타인</option>
+                                    <option value="마다가스카르">마다가스카르</option>
+                                    <option value="마셜제도공화국">마셜제도공화국</option>
+                                    <option value="마요트">마요트</option>
+                                    <option value="마이크로네시아연방">마이크로네시아연방</option>
+                                    <option value="마카오">마카오</option>
+                                    <option value="마케도니아공화국">마케도니아공화국</option>
+                                    <option value="말라위">말라위</option>
+                                    <option value="말레이시아">말레이시아</option>
+                                    <option value="말리">말리</option>
+                                    <option value="멕시코">멕시코</option>
+                                    <option value="모나코">모나코</option>
+                                    <option value="모로코">모로코</option>
+                                    <option value="모리셔스">모리셔스</option>
+                                    <option value="모리타니아">모리타니아</option>
+                                    <option value="모잠비크">모잠비크</option>
+                                    <option value="몬테네그로">몬테네그로</option>
+                                    <option value="몰도바">몰도바</option>
+                                    <option value="몰디브">몰디브</option>
+                                    <option value="몰타">몰타</option>
+                                    <option value="몽골">몽골</option>
+                                    <option value="미국">미국</option>
+                                    <option value="미국령북마리아나제도">미국령북마리아나제도</option>
+                                    <option value="미얀마">미얀마</option>
+                                    <option value="바누아투">바누아투</option>
+                                    <option value="바레인">바레인</option>
+                                    <option value="바베이도스">바베이도스</option>
+                                    <option value="바하마">바하마</option>
+                                    <option value="방글라데시">방글라데시</option>
+                                    <option value="베냉">베냉</option>
+                                    <option value="베네수엘라">베네수엘라</option>
+                                    <option value="베트남">베트남</option>
+                                    <option value="벨기에">벨기에</option>
+                                    <option value="벨라루스">벨라루스</option>
+                                    <option value="벨리즈">벨리즈</option>
+                                    <option value="보스니아헤르체고비나">보스니아헤르체고비나</option>
+                                    <option value="보츠와나">보츠와나</option>
+                                    <option value="볼리비아">볼리비아</option>
+                                    <option value="부룬디">부룬디</option>
+                                    <option value="부르키나파소">부르키나파소</option>
+                                    <option value="부탄">부탄</option>
+                                    <option value="불가리아">불가리아</option>
+                                    <option value="브라질">브라질</option>
+                                    <option value="브루나이">브루나이</option>
+                                    <option value="사모아">사모아</option>
+                                    <option value="사우디아라비아">사우디아라비아</option>
+                                    <option value="산마리노">산마리노</option>
+                                    <option value="상투메프린시페">상투메프린시페</option>
+                                    <option value="세네갈">세네갈</option>
+                                    <option value="세르비아">세르비아</option>
+                                    <option value="세이셀">세이셀</option>
+                                    <option value="세인트빈센트그레나딘">세인트빈센트그레나딘</option>
+                                    <option value="소말리아">소말리아</option>
+                                    <option value="솔로몬제도">솔로몬제도</option>
+                                    <option value="수단">수단</option>
+                                    <option value="수리남">수리남</option>
+                                    <option value="스리랑카">스리랑카</option>
+                                    <option value="스와질랜드">스와질랜드</option>
+                                    <option value="스웨덴">스웨덴</option>
+                                    <option value="스위스">스위스</option>
+                                    <option value="스페인">스페인</option>
+                                    <option value="슬로바키아">슬로바키아</option>
+                                    <option value="슬로베니아">슬로베니아</option>
+                                    <option value="시리아">시리아</option>
+                                    <option value="시에라리온">시에라리온</option>
+                                    <option value="싱가포르">싱가포르</option>
+                                    <option value="아랍에미리트">아랍에미리트</option>
+                                    <option value="아르메니아">아르메니아</option>
+                                    <option value="아르헨티나">아르헨티나</option>
+                                    <option value="아메리칸사모아">아메리칸사모아</option>
+                                    <option value="아이슬란드">아이슬란드</option>
+                                    <option value="아이티">아이티</option>
+                                    <option value="아일랜드">아일랜드</option>
+                                    <option value="아제르바이잔">아제르바이잔</option>
+                                    <option value="아프가니스탄">아프가니스탄</option>
+                                    <option value="안도라">안도라</option>
+                                    <option value="알바니아">알바니아</option>
+                                    <option value="알제리">알제리</option>
+                                    <option value="앙골라">앙골라</option>
+                                    <option value="에디오피아">에디오피아</option>
+                                    <option value="에리트레아">에리트레아</option>
+                                    <option value="에스토니아">에스토니아</option>
+                                    <option value="에콰도르">에콰도르</option>
+                                    <option value="엘살바도르">엘살바도르</option>
+                                    <option value="영국">영국</option>
+                                    <option value="영국령세인트헬레나">영국령세인트헬레나</option>
+                                    <option value="영국령인도양지역">영국령인도양지역</option>
+                                    <option value="영국령지브롤터">영국령지브롤터</option>
+                                    <option value="영국령포클랜드제도">영국령포클랜드제도</option>
+                                    <option value="예멘">예멘</option>
+                                    <option value="오만">오만</option>
+                                    <option value="오스트레일리아의외">오스트레일리아의외</option>
+                                    <option value="오스트리아">오스트리아</option>
+                                    <option value="온두라스">온두라스</option>
+                                    <option value="요르단">요르단</option>
+                                    <option value="우간다">우간다</option>
+                                    <option value="우루과이">우루과이</option>
+                                    <option value="우즈베키스탄">우즈베키스탄</option>
+                                    <option value="우크라이나">우크라이나</option>
+                                    <option value="이라크">이라크</option>
+                                    <option value="이란">이란</option>
+                                    <option value="이스라엘">이스라엘</option>
+                                    <option value="이집트">이집트</option>
+                                    <option value="이탈리아">이탈리아</option>
+                                    <option value="인도">인도</option>
+                                    <option value="인도네시아">인도네시아</option>
+                                    <option value="일본">일본</option>
+                                    <option value="자메이카">자메이카</option>
+                                    <option value="잠비아">잠비아</option>
+                                    <option value="적도기니">적도기니</option>
+                                    <option value="조지아">조지아</option>
+                                    <option value="중국">중국</option>
+                                    <option value="중앙아프리카공화국">중앙아프리카공화국</option>
+                                    <option value="지부티">지부티</option>
+                                    <option value="짐바브웨">짐바브웨</option>
+                                    <option value="차드">차드</option>
+                                    <option value="체코">체코</option>
+                                    <option value="칠레">칠레</option>
+                                    <option value="카메룬">카메룬</option>
+                                    <option value="카보베르데">카보베르데</option>
+                                    <option value="카타르">카타르</option>
+                                    <option value="캄보디아왕국">캄보디아왕국</option>
+                                    <option value="캐나다">캐나다</option>
+                                    <option value="케냐">케냐</option>
+                                    <option value="코모로">코모로</option>
+                                    <option value="코스타리카">코스타리카</option>
+                                    <option value="코트디부아르">코트디부아르</option>
+                                    <option value="콜롬비아">콜롬비아</option>
+                                    <option value="콩고">콩고</option>
+                                    <option value="콩고민주공화국">콩고민주공화국</option>
+                                    <option value="쿠바">쿠바</option>
+                                    <option value="쿠웨이트">쿠웨이트</option>
+                                    <option value="쿡제도">쿡제도</option>
+                                    <option value="크로아티아">크로아티아</option>
+                                    <option value="키르기스스탄">키르기스스탄</option>
+                                    <option value="키리바시">키리바시</option>
+                                    <option value="키프로스">키프로스</option>
+                                    <option value="타이완">타이완</option>
+                                    <option value="타지키스탄">타지키스탄</option>
+                                    <option value="탄자니아">탄자니아</option>
+                                    <option value="태국">태국</option>
+                                    <option value="터키">터키</option>
+                                    <option value="토고">토고</option>
+                                    <option value="통가">통가</option>
+                                    <option value="투르크메니스탄">투르크메니스탄</option>
+                                    <option value="튀니지">튀니지</option>
+                                    <option value="트리니다드토바고">트리니다드토바고</option>
+                                    <option value="파나마">파나마</option>
+                                    <option value="파라과이">파라과이</option>
+                                    <option value="파키스탄">파키스탄</option>
+                                    <option value="파푸아뉴기니">파푸아뉴기니</option>
+                                    <option value="팔라우">팔라우</option>
+                                    <option value="팔레스타인">팔레스타인</option>
+                                    <option value="페루">페루</option>
+                                    <option value="포르투갈">포르투갈</option>
+                                    <option value="폴란드">폴란드</option>
+                                    <option value="푸에르토리코">푸에르토리코</option>
+                                    <option value="프랑스">프랑스</option>
+                                    <option value="프랑스령과들루프">프랑스령과들루프</option>
+                                    <option value="프랑스령기아나">프랑스령기아나</option>
+                                    <option value="프랑스령뉴칼레도니아">프랑스령뉴칼레도니아</option>
+                                    <option value="프랑스령레위니옹">프랑스령레위니옹</option>
+                                    <option value="프랑스령마르티니크">프랑스령마르티니크</option>
+                                    <option value="프랑스령생피에르미클롱">프랑스령생피에르미클롱</option>
+                                    <option value="프랑스령월리스푸투나제">프랑스령월리스푸투나제</option>
+                                    <option value="프랑스령폴리네시아">프랑스령폴리네시아</option>
+                                    <option value="피지">피지</option>
+                                    <option value="핀란드">핀란드</option>
+                                    <option value="필리핀">필리핀</option>
+                                    <option value="헝가리">헝가리</option>
+                                    <option value="호주">호주</option>
+                                    <option value="홍콩">홍콩</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">주소</label>
+                            <div class="col-md-1 col-sm-6">
+                                <input class="form-control text-center" type="text" name="zip" disabled="disabled"
+                                       placeholder="우편번호"/>
+                            </div>
+                            <div class="col-md-5 col-sm-6 pl-0">
+                                <input class="form-control" type="text" name="rdnmAdr" disabled="disabled"
+                                       placeholder="주소 찾기 버튼 클릭하여 주소 입력"/>
+                            </div>
+                            <div class="col-md-1 pl-0">
+                                <button type="button" class="btn btn-purple w100p">주소 찾기</button>
+                            </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">관리자 여부<span
+                                    class="required">*</span></label>
+                            <div class="col-md-2 col-sm-4">
+                                <div class="btn-group radiobox">
+                                    <input type="radio" id="mngrYn1" name="mngrYn" value="N" class="join-btn">
+                                    <label for="mngrYn1" class="btn btn-outline-purple w100p"
+                                           data-toggle-class="btn-primary"
+                                           data-toggle-passive-class="btn-default">사용자</label>
+                                    <input type="radio" id="mngrYn2" name="mngrYn" value="Y" class="join-btn">
+                                    <label for="mngrYn2" class="btn btn-outline-purple w100p"
+                                           data-toggle-class="btn-primary"
+                                           data-toggle-passive-class="btn-default">관리자</label>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-4">
+
+                                <select class="form-control" name="roleSn" id="roleList" style="display: none;">
+                                    <option value="">관리자 권한 선택</option>
+                                    <option th:each="item : ${authList}" th:value="${item.roleSn}">[[${item.roleDc}]]
+                                    </option>
+                                </select>
+                                <!--                                <select class="form-control" name="role" id="roleList" style="display: none;">-->
+                                <!--                                    <option value="">관리자 권한 선택</option>-->
+                                <!--                                    <option value="MASTER">최고관리자</option>-->
+                                <!--                                    <option value="ADMIN">운영자</option>-->
+                                <!--                                    <option value="MANAGER">매니저</option>-->
+                                <!--                                    <option value="GUEST">외부관계자</option>-->
+                                <!--                                </select>-->
+                            </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">자녀</label>
+                            <div class="div_menu_detail row col-md-10">
+                                <div class="col-md-12 col-sm-12 ">
+                                    <div class="x_panel mb-0" style="height:auto;overflow: scroll; max-height:250px;">
+                                        <div class="x_content">
+                                            <!-- 자녀 등록 모달 -->
+                                            <button type="button" class="btn btn-purple w100p" data-toggle="modal" data-target=".bs-example-modal-lg">자녀 추가</button>
+
+                                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" >
+                                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                    <div class="modal-content">
+
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <h4>Text in a modal</h4>
+                                                            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+                                                            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal" tabindex="-1">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Modal title</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Modal body text goes here.</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">Open modal for @getbootstrap</button>
+
+                                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form>
+                                                                <div class="mb-3">
+                                                                    <label for="recipient-name" class="col-form-label">Recipient:</label>
+                                                                    <input type="text" class="form-control" id="recipient-name">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="message-text" class="col-form-label">Message:</label>
+                                                                    <textarea class="form-control" id="message-text"></textarea>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="button" class="btn btn-primary">Send message</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <table class="table table-bordered text-center">
+                                                <thead>
+                                                <tr>
+                                                    <th>순번</th>
+                                                    <th>이름</th>
+                                                    <th>성별</th>
+                                                    <th>생년월일</th>
+                                                    <th>연락처</th>
+                                                    <th>이메일</th>
+                                                    <th>관리</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <th scope="row">1</th>
+                                                    <td>김자식</td>
+                                                    <td>남자</td>
+                                                    <td>2016-01-01</td>
+                                                    <td>010-1234-5678</td>
+                                                    <td>ponkids@gmail.com</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-success btn-sm table-btn">
+                                                            수정
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger btn-sm table-btn">
+                                                            삭제
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <small class="font-gray-dark">회원등록 후에도 자녀 등록이 가능합니다.<b>회원조회 &gt; 회원 우측
+                                        [수정]</b></small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ln_solid"></div>
+
+                        <!-- 저장버튼 -->
+                        <div class="item form-group">
+                            <!-- bottom left area -->
+                            <div class="col-md-2 col-sm-3 text-left">
+                                <button type="cancel" class="btn btn-white w120p">목록</button>
+                            </div>
+                            <!-- bottom center area -->
+                            <div class="col-md-8 col-sm-6 text-center">
+                                <button type="cancel" class="btn btn-white w120p" id="cancelBtn"
+                                        onclick="return validCheckT();">취소
+                                </button>
+                                <button type="submit" class="btn btn-purple w120p">저장</button>
+                            </div>
+                            <!-- bottom right area -->
+                            <div class="col-md-2 col-sm-3 text-right">
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- E: 메인 등록 영역 -->
+
+</div>
+<script>
+
+    // 유효성 검사
+    function validCheckT() {
+        alert( "test123" );
+
+        return false;
+    }
+
+</script>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="layout.html :: head"></head>
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <!--S: 좌측메뉴바--><div th:replace="layout.html :: left-menu-bar" class="col-md-3 left_col" ></div><!--E: 좌측메뉴바-->
+        <!--S: 상단 탑 바--><div th:replace="layout.html :: top-nav" class="top_nav" ></div><!--S: 상단 탑 바-->
+
+        <!-- S: 콘텐츠 -->
+        <div class="right_col" role="main">
+            <!-- S : 상단 메뉴 명 -->
+            <div class="content_menu_top">
+            </div>
+            <!-- E : 상단 메뉴 명 -->
+
+
+            <!-- S : 콘텐츠 내용  -->
+            <div class="body_contents">
+
+                <!-- S : 메뉴 상세설명  -->
+                <div class="div_menu_detail">
+
+                </div>
+
+                <!-- E : 메뉴 상세설명 -->
+                <br />
+
+                <!-- S: 메인 테이블 -->
+                <div>
+                    <!-- S : 테이블 상단 검색 바 -->
+                    <div></div>
+                    <!-- E : 테이블 상단 검색 바 -->
+
+                    <!-- S : 테이블 -->
+                    <div></div>
+                    <!-- E : 테이블 -->
+
+                    <!-- S : 테이블 하단 페이징 -->
+                    <div></div>
+                    <!-- E : 테이블 하단 페이징 -->
+                </div>
+                <!-- E : 메인 테이블 -->
+
+
+            </div>
+        </div>
+        <!-- E: 콘텐츠 -->
+
+        <!-- S:푸터 --><footer th:replace="layout.html :: footer"></footer><!-- E:푸터 -->
+    </div>
+</div>
+<div th:replace="layout.html :: div-script"></div>
+</body>
+</html>

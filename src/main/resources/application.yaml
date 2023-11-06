@@ -1,0 +1,35 @@
+spring:
+    devtools:
+        livereload:
+            enabled : true
+        restart:
+            enabled : true
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://db.jjeovi.gabia.io:5432/dbjjeovi
+        username: jjeovi
+        password: wjq516215!
+    jpa:
+        properties:
+            hibernate:
+                jdbc:
+                    lob:
+                        non_contextual_creation: 'true'
+                default_schema : ponkids_dev
+        hibernate:
+            ddl-auto: update
+    thymeleaf:
+        cache : false
+    profiles :
+        active : local
+                
+server:
+  error:
+      whitelabel:
+        enabled : true
+        
+#p6spy query logging
+decorator:
+    datasource:
+        p6spy:
+            enable-logging: true

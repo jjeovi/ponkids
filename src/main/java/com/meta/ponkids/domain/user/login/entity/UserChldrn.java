@@ -1,0 +1,51 @@
+package com.meta.ponkids.domain.user.login.entity;
+
+import org.hibernate.annotations.ColumnDefault;
+
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+
+@Entity
+@Table( name = "TB_USER_CHLDRN" )
+public class UserChldrn {
+    
+    @Id
+    @Column( unique = true )
+    @GeneratedValue
+    private String chldrnSn;              // 자녀 일련번호
+    
+    private String userId;
+    
+    private int userChldrnSeq;
+    
+    private String chldrnNm;            // 자녀 이름
+    
+    private String chldrnGender;        // 자녀 성별
+    
+    private String chldrnBrdtDate;      // 자녀 생년월일
+    
+    private String chldrnEmail;         // 자녀 이메일
+    
+    private String chldrnTelNo;         // 자녀 연락처
+    
+    private String atchFileSn;          // 첨부 파일 일련번호
+    
+    
+    @NotNull
+    private String registerId;          // 등록자 ID
+    
+    @NotNull
+    private String registerIp;          // 등록자 IP
+    
+    private String updusrId;            // 수정자 ID
+    
+    private String updusrIp;            // 수정자 IP
+    
+    
+    @NotNull
+    @ColumnDefault( "N" )
+    private String delYn;               // 삭제 여부
+    
+    
+}

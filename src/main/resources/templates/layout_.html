@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>pioneerkids Admin</title>
+
+    <!-- Bootstrap -->
+    <link href="/bootstrap/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="/bootstrap/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="/bootstrap/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="/bootstrap/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+
+    <!-- bootstrap-progressbar -->
+    <link href="/bootstrap/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="/bootstrap/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
+    <!-- bootstrap-daterangepicker -->
+    <link href="/bootstrap/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="/bootstrap/build/css/custom.css" rel="stylesheet">
+
+</head>
+<!--S: 스크립트-->
+<div th:fragment="div-script">
+    <!-- jQuery -->
+    <script src="/bootstrap/vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="/bootstrap/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- FastClick -->
+    <script src="/bootstrap/vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="/bootstrap/vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="/bootstrap/vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- gauge.js -->
+    <script src="/bootstrap/vendors/gauge.js/dist/gauge.min.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="/bootstrap/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- iCheck -->
+    <script src="/bootstrap/vendors/iCheck/icheck.min.js"></script>
+    <!-- Skycons -->
+    <script src="/bootstrap/vendors/skycons/skycons.js"></script>
+    <!-- Flot -->
+    <script src="/bootstrap/vendors/Flot/jquery.flot.js"></script>
+    <script src="/bootstrap/vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="/bootstrap/vendors/Flot/jquery.flot.time.js"></script>
+    <script src="/bootstrap/vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="/bootstrap/vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="/bootstrap/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="/bootstrap/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="/bootstrap/vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="/bootstrap/vendors/DateJS/build/date.js"></script>
+    <!-- JQVMap -->
+    <script src="/bootstrap/vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="/bootstrap/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="/bootstrap/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="/bootstrap/vendors/moment/min/moment.min.js"></script>
+    <script src="/bootstrap/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+    <!--validator -->
+    <script src="/bootstrap//vendors/validator/multifield.js"></script>
+    <script src="/bootstrap//vendors/validator/validator.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="/bootstrap/build/js/custom.min.js"></script>
+
+    <!-- Datatables -->
+    <script src="/bootstrap/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/bootstrap/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="/bootstrap/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/bootstrap/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="/bootstrap/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="/bootstrap/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="/bootstrap/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="/bootstrap/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="/bootstrap/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="/bootstrap/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/bootstrap/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="/bootstrap/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script src="/bootstrap/vendors/jszip/dist/jszip.min.js"></script>
+    <script src="/bootstrap/vendors/pdfmake/build/pdfmake.min.js"></script>
+    <script src="/bootstrap/vendors/pdfmake/build/vfs_fonts.js"></script>
+</div>
+<!--E: 스크립트-->
+<!--s: body-->
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <!--S: 좌측메뉴바-->
+        <div th:fragment="left-menu-bar" class="col-md-3 left_col">
+            <div class="left_col scroll-view">
+                <!-- S:상단 배너 로고 (초기화면이동버튼)-->
+                <div class="navbar nav_title" style="border: 0;">
+                    <a href="/index.html" class="site_title">
+
+                    </a>
+                </div>
+                <!-- E:상단 배너 로고 (초기화면이동버튼)-->
+                <div class="clearfix"></div>
+                <!-- S: 좌측 상단 프로필 부분 -->
+                <div class="profile clearfix">
+                    <div class="profile_pic">
+                        <img src="/images/img.jpg" alt="..." class="img-circle profile_img">
+                    </div>
+                    <div class="profile_info">
+                        <span>Welcome</span>
+                        <h2>John Doe</h2>
+                    </div>
+                </div>
+                <!-- E: 좌측 상단 프로필 부분 -->
+                <!-- S: 사이드바 메뉴 -->
+                <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                    <div class="menu_section">
+                        <ul class="nav side-menu">
+                            <li>
+                                <a><span class="menuNm">메뉴명»(1depth)</span> <span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">»
+                                    <li><a href="#level1_1">메뉴명(2depth)</a></li>
+                                    <li><a>메뉴명(2depth)<span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li class="sub_menu">
+                                                <a href="level2.html">메뉴명(3depth)</a>
+                                            </li>
+                                            <li>
+                                                <a href="#level2_1">메뉴명(3depth)</a>
+                                            </li>
+                                            <li>
+                                                <a href="#level2_2">메뉴명(3depth)</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#level1_2">Level One</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li><a href="javascript:void(0)">Landing Page </a></li>
+                        </ul>
+                    </div>
+
+                </div>
+                <!-- E: 사이드바 메뉴 -->
+            </div>
+        </div>
+        <!--E: 좌측메뉴바-->
+        <!--S: 상단 탑 바-->
+        <div th:fragment="top-nav" class="top_nav">
+            <div class="nav_menu">
+                <div class="nav toggle">
+                    <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                </div>
+                <nav class="nav navbar-nav">
+                    <ul class=" navbar-right">
+                        <li class="nav-item dropdown open" style="padding-left: 15px;">
+                            <a href="javascript:;" class="user-profile" aria-haspopup="true" id="navbarDropdown"
+                               data-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-sign-out pull-right" style="padding-top:2px;"></i> 로그아웃
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown open" style="padding-left: 15px;">
+                            <a href="javascript:;" class="user-profile" aria-haspopup="true" id="navbarDropdown"
+                               data-toggle="dropdown" aria-expanded="false">
+                                마이페이지
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown open" style="padding-left: 15px;">
+                            <a href="javascript:;" class="user-profile" aria-haspopup="true" id="navbarDropdown"
+                               data-toggle="dropdown" aria-expanded="false">
+                                <span>피오니</span> 님
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <!--E: 상단 탑 바-->
+        <!-- page content -->
+        <div class="right_col" role="main">
+
+        </div>
+        <!-- /page content -->
+
+        <!-- S:푸터 -->
+        <footer th:fragment="footer">
+            <div class="pull-right">
+                pioneerkids Admin Template by meta</a>
+            </div>
+            <div class="clearfix"></div>
+        </footer>
+        <!-- E:푸터 -->
+    </div>
+</div>
+</body>
+<!--e: body-->
+</html>
