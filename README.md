@@ -36,9 +36,7 @@
 *************
  - eclipse , intellij 모두 실행 가능
  - eclipse 에서는 string boot 로 설정 해야함.  (https://diary-developer.tistory.com/9 )
- - eclipse 롬복 없을시 롬복 설치 진행 필요 (미설치시 프로젝트 에러 발생 : https://congsong.tistory.com/31 )
- - 사전 java 17버전 설치
-
+ - eclipse 롬복 설치 진행 필요 (미설치시 프로젝트 에러 발생 : https://congsong.tistory.com/31 )
 
 
 *************
