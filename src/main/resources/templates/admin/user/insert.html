@@ -182,12 +182,6 @@
         }
     }
 
-    // 유효성 검사
-    function validCheckT() {
-        alert( "test" );
-
-        return false;
-    }
 
     // 자녀 추가 버튼 클릭
     function addChldrn(){
@@ -209,28 +203,12 @@
         $("[name='chldrnAddDiv']").hide();
         var $newChldrnForm = $("<div name='chldrnAddDiv' class='newForm'>").load("/admin/user/addChldrnForm.html");
         $("#addChldrnModal").append($newChldrnForm);
+        $("#modal123").modal(hide);
 
-        $("[name='chldrnAddDiv'].newForm").find("[name='chldrnGender']").on('click',function(){
-            $(this).parent().addClass("active");
-            $(this).parent().siblings().removeClass("active");
-        })
 
         return true;
     }
 
-
-    // 자녀 추가 버튼 클릭 시 실행
-    function openAddChldrnModal() {
-
-        // - 모달 안의 데이터 set
-        // - 모달 안은 여러개의 자녀 등록 div로 구성된다. (여러명의 자녀 등록에 대비)
-        // - 자녀 등록 div 는 순서를 가지며 그 순서는 userChldrnSeq 로 매핑한다.
-        // - 모달을 띄울때에는 마지막 userChldrnSeq 의 모달을 제외하고 모두 hide처리.
-
-
-
-
-    }
 
 
 </script>
@@ -652,7 +630,7 @@
                                             </button>
 s
                                             <!-- 자녀 등록 모달 -->
-                                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+                                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="modal123"
                                                  aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                                                 <div class="modal-dialog modal-dialog-centered modal-lg">
                                                     <div class="modal-content">
@@ -723,8 +701,7 @@ s
                             </div>
                             <!-- bottom center area -->
                             <div class="col-md-8 col-sm-6 text-center">
-                                <button type="cancel" class="btn btn-white w120p" id="cancelBtn"
-                                        onclick="return validCheckT();">취소
+                                <button type="cancel" class="btn btn-white w120p" id="cancelBtn">취소
                                 </button>
                                 <button type="submit" class="btn btn-purple w120p">저장</button>
                             </div>
@@ -741,14 +718,4 @@ s
     <!-- E: 메인 등록 영역 -->
 
 </div>
-<script>
-
-    // 유효성 검사
-    function validCheckT() {
-        alert( "test123" );
-
-        return false;
-    }
-
-</script>
 </html>

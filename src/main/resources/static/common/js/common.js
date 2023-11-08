@@ -72,3 +72,12 @@ function validCheckName( name ) {
     return true;
 
 }
+
+
+// 라디오 버튼 클릭시 active 클래스 추가
+function clickRadioEvent(e){
+	// 라디오 버튼의 label들을 찾아 모든 label 에 active클래스를 제거 후, 클릭된 label 에 active클래스 추가
+	$(e).parent().siblings("label").removeClass("active");
+	$(e).parent().addClass("active");
+	
+}
