@@ -1686,7 +1686,7 @@ h2 {
   position: relative;
   width: 100%;
   margin-bottom: 10px;
-  padding: 10px 17px;
+  padding: 10px 12px;
   display: inline-block;
   background: #fff;
   border: 1px solid #E6E9ED;
@@ -5027,10 +5027,13 @@ ul.notifications {
   border-color: #a08bd8;
 }
 .btn-outline-purple:hover {
+  color: #fff;
   background-color: #8d65ff;
   border-color : #7361a7;
+  box-shadow: 0 0 0 0.2rem rgba(173, 143, 253, 0.5);
 }
 .btn-outline-purple:active, .btn-outline-purple:focus,.btn-outline-purple.focus  {
+  color: #fff;
   box-shadow: 0 0 0 0.2rem rgba(173, 143, 253, 0.5);
 }
 /* E : outline setting */
