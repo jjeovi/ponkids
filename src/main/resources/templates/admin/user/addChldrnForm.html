@@ -1,0 +1,52 @@
+<!-- TODO 자녀 프로필 이미지 추가 작업 -->
+<div class="field item form-group">
+    <label class="col-form-label col-md-2 col-sm-3 label-align">
+        이름<span class="required">*</span>
+    </label>
+    <div class="col-md-6 col-sm-6">
+        <input class="form-control"
+               data-validate-length-range="2,10"
+               name="chldrnNm" id="chldrnNm" placeholder="이름을 입력해주세요."/>
+        <small class="font-gray-dark">
+            최소 2자 이상, 10자 이하로 입력해주세요.
+        </small>
+    </div>
+</div>
+<div class="field item form-group">
+    <label class="col-form-label col-md-2 col-sm-3 label-align">
+        성별<span class="required">*</span>
+    </label>
+    <div class="col-md-6 col-sm-6 ">
+        <div class="btn-group radiobox">
+            <label class="btn btn-outline-purple w100p"
+                   data-toggle-class="btn-primary"
+                   data-toggle-passive-class="btn-default">
+                <input type="radio" name="chldrnGender" value="M" class="join-btn"> 남자
+            </label>
+            <label class="btn btn-outline-purple w100p"
+                   data-toggle-class="btn-primary"
+                   data-toggle-passive-class="btn-default">
+                <input type="radio" name="chldrnGender" value="F" class="join-btn">여자
+            </label>
+        </div>
+    </div>
+</div>
+<div class="field item form-group">
+    <label class="col-form-label col-md-2 col-sm-3 label-align">생년월일</label>
+    <div class="col-md-6 col-sm-6">
+        <input class="form-control Date8String" type="date" name="chldrnBrdtDate">
+    </div>
+</div>
+<div class="field item form-group">
+    <label class="col-form-label col-md-2 col-sm-3 label-align">이메일</label>
+    <div class="col-md-6 col-sm-6">
+        <input name="chldrnEmail" class="form-control"/>
+    </div>
+</div>
+<div class="field item form-group">
+    <label class="col-form-label col-md-2 col-sm-3 label-align">연락처</label>
+    <div class="col-md-6 col-sm-6">
+        <input class="form-control" type="tel" name="chldrnTelNo" placeholder="연락처입력 ( - 제외 )"
+               data-validate-length-range="10,11">
+    </div>
+</div>

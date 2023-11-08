@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -23,6 +24,14 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor( authInterceptor ).
                 addPathPatterns( "/admin/**" ).             // 1. 체크 하는 로직은 /admin/ 하위 path 만 검사
                 excludePathPatterns( "/admin/login" );      // 2. 로그인 페이지는 검사하지 않음.
+    }
+    
+    @Override
+    public void addResourceHandlers(final ResourceHandlerRegistry registry){
+        // templates 도 classpath 로 설정 ( /static/~ , /templates/~ 를 모두 정적으로 read 할 수 있다.
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/templates/", "classpath:/static/");
+        
     }
     
 }

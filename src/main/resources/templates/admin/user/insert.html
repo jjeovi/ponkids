@@ -46,7 +46,7 @@
                     $( "#countryList" ).focus();
                     return false;
                 } else {
-                    $("[name='resideArea']").val(country);
+                    $( "[name='resideArea']" ).val( country );
                 }
 
             }
@@ -64,7 +64,7 @@
 
             // 거주지역 set
             if ( resideArea == 'other' ) {
-                $("[name='resideArea']").val(country);
+                $( "[name='resideArea']" ).val( country );
             }
             return !!validatorResult.valid;
         };
@@ -189,6 +189,50 @@
         return false;
     }
 
+    // 자녀 추가 버튼 클릭
+    function addChldrn(){
+        // 이름, 성별 유효성 검사
+
+        var $chldrnAddDiv = $("[name='chldrnAddDiv'].newForm");             // 현재 자녀등록div
+        var chldrnNm = $chldrnAddDiv.find("[name='chldrnNm']").val();
+        var chldrnGender = $chldrnAddDiv.find("[name='chldrnGender']:checked").val();
+
+        if(! validCheckName(chldrnNm)) {
+            return false;
+        } else if ( chldrnGender == null || chldrnGender == '' ){
+            alert("자녀 성별을 선택해주세요.");
+            return false;
+        }
+
+        // TODO 신규자녀정보를 chldrnTable 테이블에 표시 한 뒤  새로운 chldrnAddDiv 생성
+        $("[name='chldrnAddDiv']").removeClass("newForm");
+        $("[name='chldrnAddDiv']").hide();
+        var $newChldrnForm = $("<div name='chldrnAddDiv' class='newForm'>").load("/admin/user/addChldrnForm.html");
+        $("#addChldrnModal").append($newChldrnForm);
+
+        $("[name='chldrnAddDiv'].newForm").find("[name='chldrnGender']").on('click',function(){
+            $(this).parent().addClass("active");
+            $(this).parent().siblings().removeClass("active");
+        })
+
+        return true;
+    }
+
+
+    // 자녀 추가 버튼 클릭 시 실행
+    function openAddChldrnModal() {
+
+        // - 모달 안의 데이터 set
+        // - 모달 안은 여러개의 자녀 등록 div로 구성된다. (여러명의 자녀 등록에 대비)
+        // - 자녀 등록 div 는 순서를 가지며 그 순서는 userChldrnSeq 로 매핑한다.
+        // - 모달을 띄울때에는 마지막 userChldrnSeq 의 모달을 제외하고 모두 hide처리.
+
+
+
+
+    }
+
+
 </script>
 <!-- E : Javascript functions	-->
 
@@ -283,7 +327,7 @@
                             <label class="col-form-label col-md-2 col-sm-3 label-align">이름<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" data-validate-length-range="6" name="userNm"
+                                <input class="form-control" data-validate-length-range="2,10" name="userNm" required="required"
                                        placeholder="이름을 입력해주세요."/>
                                 <small class="font-gray-dark">
                                     최소 2자 이상, 10자 이하로 입력해주세요.
@@ -583,29 +627,17 @@
                             <div class="col-md-2 col-sm-4">
                                 <div class="btn-group radiobox">
                                     <input type="radio" id="mngrYn1" name="mngrYn" value="N" class="join-btn">
-                                    <label for="mngrYn1" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">사용자</label>
+                                    <label for="mngrYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">사용자</label>
                                     <input type="radio" id="mngrYn2" name="mngrYn" value="Y" class="join-btn">
-                                    <label for="mngrYn2" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">관리자</label>
+                                    <label for="mngrYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">관리자</label>
                                 </div>
                             </div>
                             <div class="col-md-2 col-sm-4">
-
                                 <select class="form-control" name="roleSn" id="roleList" style="display: none;">
                                     <option value="">관리자 권한 선택</option>
                                     <option th:each="item : ${authList}" th:value="${item.roleSn}">[[${item.roleDc}]]
                                     </option>
                                 </select>
-                                <!--                                <select class="form-control" name="role" id="roleList" style="display: none;">-->
-                                <!--                                    <option value="">관리자 권한 선택</option>-->
-                                <!--                                    <option value="MASTER">최고관리자</option>-->
-                                <!--                                    <option value="ADMIN">운영자</option>-->
-                                <!--                                    <option value="MANAGER">매니저</option>-->
-                                <!--                                    <option value="GUEST">외부관계자</option>-->
-                                <!--                                </select>-->
                             </div>
                         </div>
                         <div class="field item form-group">
@@ -614,105 +646,63 @@
                                 <div class="col-md-12 col-sm-12 ">
                                     <div class="x_panel mb-0" style="height:auto;overflow: scroll; max-height:250px;">
                                         <div class="x_content">
-                                            <!-- 자녀 등록 모달 -->
-                                            <button type="button" class="btn btn-purple w100p" data-toggle="modal" data-target=".bs-example-modal-lg">자녀 추가</button>
 
-                                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" >
+                                            <button type="button" class="btn btn-purple w100p" data-toggle="modal"
+                                                    data-target=".bs-example-modal-lg">자녀 추가
+                                            </button>
+s
+                                            <!-- 자녀 등록 모달 -->
+                                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+                                                 aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                                                 <div class="modal-dialog modal-dialog-centered modal-lg">
                                                     <div class="modal-content">
-
                                                         <div class="modal-header">
-                                                            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                                                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                                                            </button>
+                                                            <h4 class="modal-title">자녀 추가</h4>
+                                                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
                                                         </div>
-                                                        <div class="modal-body">
-                                                            <h4>Text in a modal</h4>
-                                                            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-                                                            <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                            <button type="button" class="btn btn-primary">Save changes</button>
-                                                        </div>
+                                                        <div class="modal-body" id="addChldrnModal">
+                                                            <div name="chldrnAddDiv" class="newForm" th:insert="/admin/user/addChldrnForm.html">
 
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal" tabindex="-1">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Modal title</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+
                                                         </div>
-                                                        <div class="modal-body">
-                                                            <p>Modal body text goes here.</p>
-                                                        </div>
+                                                        <div id="load123"></div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기 </button>
+                                                            <button type="button" class="btn btn-purple" id="addChldrnBtn" onclick="addChldrn();">저장</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">Open modal for @getbootstrap</button>
-
-                                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form>
-                                                                <div class="mb-3">
-                                                                    <label for="recipient-name" class="col-form-label">Recipient:</label>
-                                                                    <input type="text" class="form-control" id="recipient-name">
-                                                                </div>
-                                                                <div class="mb-3">
-                                                                    <label for="message-text" class="col-form-label">Message:</label>
-                                                                    <textarea class="form-control" id="message-text"></textarea>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <button type="button" class="btn btn-primary">Send message</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <table class="table table-bordered text-center">
+                                            <table class="table table-bordered text-center" id="chldrnTable">
                                                 <thead>
-                                                <tr>
-                                                    <th>순번</th>
-                                                    <th>이름</th>
-                                                    <th>성별</th>
-                                                    <th>생년월일</th>
-                                                    <th>연락처</th>
-                                                    <th>이메일</th>
-                                                    <th>관리</th>
-                                                </tr>
+                                                    <tr>
+                                                        <th>순번</th>
+                                                        <th>이름</th>
+                                                        <th>성별</th>
+                                                        <th>생년월일</th>
+                                                        <th>연락처</th>
+                                                        <th>이메일</th>
+                                                        <th>관리</th>
+                                                    </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr>
-                                                    <th scope="row">1</th>
-                                                    <td>김자식</td>
-                                                    <td>남자</td>
-                                                    <td>2016-01-01</td>
-                                                    <td>010-1234-5678</td>
-                                                    <td>ponkids@gmail.com</td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-success btn-sm table-btn">
-                                                            수정
-                                                        </button>
-                                                        <button type="button" class="btn btn-danger btn-sm table-btn">
-                                                            삭제
-                                                        </button>
-                                                    </td>
-                                                </tr>
+                                                    <tr>
+                                                        <th scope="row">1</th>
+                                                        <td>김자식</td>
+                                                        <td>남자</td>
+                                                        <td>2016-01-01</td>
+                                                        <td>010-1234-5678</td>
+                                                        <td>ponkids@gmail.com</td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-success btn-sm table-btn">
+                                                                수정
+                                                            </button>
+                                                            <button type="button" class="btn btn-danger btn-sm table-btn">
+                                                                삭제
+                                                            </button>
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
