@@ -5155,13 +5155,6 @@ ul.notifications {
   background-color: #9674f1;
   border-color: #a08bd8;
 }
-.radiobox input[type=radio].active{
-  color: #fff;
-  background-color: #9674f1;
-  border-color: #a08bd8;
-}
-
-
 .radiobox>.btn:nth-of-type(1) {
   border-radius: 3px !important;
   border-top-right-radius: 0 !important;

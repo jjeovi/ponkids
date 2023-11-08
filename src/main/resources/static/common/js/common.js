@@ -2,7 +2,6 @@ const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // �
 
 $( function () {
 
-
 } );
 
 
@@ -41,34 +40,19 @@ function idDupResult( dupCheckFlag, checkResult ) {
 
     // color setting
     if ( dupCheckFlag ) $( "#" + checkResult ).addClass( "text-primary" );
-    else $( "#" + checkResult ).addClass( "text-danger" );
+    else                $( "#" + checkResult ).addClass( "text-danger" );
 
     // 사용 여부
     if ( dupCheckFlag ) $( "#" + checkResult ).text( "사용가능" );
-    else $( "#" + checkResult ).text( "사용불가" );
+    else                $( "#" + checkResult ).text( "사용불가" );
 
 }
 
 // 휴대폰 유효성 검사
-function isTelNoFormat( telNo ) {
-    if ( telNo == "" ) {
+function isTelNoFormat(telNo){
+    if(telNo == ""){
         return true;
     }
     var phoneRule = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
-    return phoneRule.test( telNo );
-}
-
-
-// 이름 유효성 검사
-// - 2자 < name < 10자
-function validCheckName( name ) {
-    if ( name == '' ) {
-        alert( "이름을 입력해주세요." );
-        return false;
-    } else if ( name.length < 2 || name.length > 10 ) {
-        alert( "이름은 2자 이상 10자 이하로 입력해주세요." );
-        return false;
-    }
-    return true;
-
+    return phoneRule.test(telNo);
 }
