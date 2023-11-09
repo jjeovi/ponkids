@@ -194,7 +194,7 @@ $(document).ready(function () {
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
         elems.forEach(function (html) {
             var switchery = new Switchery(html, {
-                color: '#26B99A'
+                color: '#8d65ff'
             });
         });
     }
@@ -434,7 +434,7 @@ function init_flot_chart() {
             borderWidth: 1,
             color: '#fff'
         },
-        colors: ["rgba(38, 185, 154, 0.38)", "rgba(3, 88, 106, 0.38)"],
+        colors: ["rgba(141, 101, 255, 0.38)", "rgba(3, 88, 106, 0.38)"],
         xaxis: {
             tickColor: "rgba(51, 51, 51, 0.06)",
             mode: "time",
@@ -1979,10 +1979,10 @@ function init_charts() {
                 labels: ["January", "February", "March", "April", "May", "June", "July"],
                 datasets: [{
                     label: "My First dataset",
-                    backgroundColor: "rgba(38, 185, 154, 0.31)",
-                    borderColor: "rgba(38, 185, 154, 0.7)",
-                    pointBorderColor: "rgba(38, 185, 154, 0.7)",
-                    pointBackgroundColor: "rgba(38, 185, 154, 0.7)",
+                    backgroundColor: "rgba(141, 101, 255, 0.31)",
+                    borderColor: "rgba(141, 101, 255, 0.7)",
+                    pointBorderColor: "rgba(141, 101, 255, 0.7)",
+                    pointBackgroundColor: "rgba(141, 101, 255, 0.7)",
                     pointHoverBackgroundColor: "#fff",
                     pointHoverBorderColor: "rgba(220,220,220,1)",
                     pointBorderWidth: 1,
@@ -2012,10 +2012,10 @@ function init_charts() {
                 labels: ["January", "February", "March", "April", "May", "June", "July"],
                 datasets: [{
                     label: "My First dataset",
-                    backgroundColor: "rgba(38, 185, 154, 0.31)",
-                    borderColor: "rgba(38, 185, 154, 0.7)",
-                    pointBorderColor: "rgba(38, 185, 154, 0.7)",
-                    pointBackgroundColor: "rgba(38, 185, 154, 0.7)",
+                    backgroundColor: "rgba(141, 101, 255, 0.31)",
+                    borderColor: "rgba(141, 101, 255, 0.7)",
+                    pointBorderColor: "rgba(141, 101, 255, 0.7)",
+                    pointBackgroundColor: "rgba(141, 101, 255, 0.7)",
                     pointHoverBackgroundColor: "#fff",
                     pointHoverBorderColor: "rgba(220,220,220,1)",
                     pointBorderWidth: 1,
@@ -2045,10 +2045,10 @@ function init_charts() {
                 labels: ["January", "February", "March", "April", "May", "June", "July"],
                 datasets: [{
                     label: "My First dataset",
-                    backgroundColor: "rgba(38, 185, 154, 0.31)",
-                    borderColor: "rgba(38, 185, 154, 0.7)",
-                    pointBorderColor: "rgba(38, 185, 154, 0.7)",
-                    pointBackgroundColor: "rgba(38, 185, 154, 0.7)",
+                    backgroundColor: "rgba(141, 101, 255, 0.31)",
+                    borderColor: "rgba(141, 101, 255, 0.7)",
+                    pointBorderColor: "rgba(141, 101, 255, 0.7)",
+                    pointBackgroundColor: "rgba(141, 101, 255, 0.7)",
                     pointHoverBackgroundColor: "#fff",
                     pointHoverBorderColor: "rgba(220,220,220,1)",
                     pointBorderWidth: 1,
@@ -2078,10 +2078,10 @@ function init_charts() {
                 labels: ["January", "February", "March", "April", "May", "June", "July"],
                 datasets: [{
                     label: "My First dataset",
-                    backgroundColor: "rgba(38, 185, 154, 0.31)",
-                    borderColor: "rgba(38, 185, 154, 0.7)",
-                    pointBorderColor: "rgba(38, 185, 154, 0.7)",
-                    pointBackgroundColor: "rgba(38, 185, 154, 0.7)",
+                    backgroundColor: "rgba(141, 101, 255, 0.31)",
+                    borderColor: "rgba(141, 101, 255, 0.7)",
+                    pointBorderColor: "rgba(141, 101, 255, 0.7)",
+                    pointBackgroundColor: "rgba(141, 101, 255, 0.7)",
                     pointHoverBackgroundColor: "#fff",
                     pointHoverBorderColor: "rgba(220,220,220,1)",
                     pointBorderWidth: 1,
@@ -2111,10 +2111,10 @@ function init_charts() {
                 labels: ["January", "February", "March", "April", "May", "June", "July"],
                 datasets: [{
                     label: "My First dataset",
-                    backgroundColor: "rgba(38, 185, 154, 0.31)",
-                    borderColor: "rgba(38, 185, 154, 0.7)",
-                    pointBorderColor: "rgba(38, 185, 154, 0.7)",
-                    pointBackgroundColor: "rgba(38, 185, 154, 0.7)",
+                    backgroundColor: "rgba(141, 101, 255, 0.31)",
+                    borderColor: "rgba(141, 101, 255, 0.7)",
+                    pointBorderColor: "rgba(141, 101, 255, 0.7)",
+                    pointBackgroundColor: "rgba(141, 101, 255, 0.7)",
                     pointHoverBackgroundColor: "#fff",
                     pointHoverBorderColor: "rgba(220,220,220,1)",
                     pointBorderWidth: 1,
@@ -2147,10 +2147,10 @@ function init_charts() {
                 labels: ["January", "February", "March", "April", "May", "June", "July"],
                 datasets: [{
                     label: "My First dataset",
-                    backgroundColor: "rgba(38, 185, 154, 0.31)",
-                    borderColor: "rgba(38, 185, 154, 0.7)",
-                    pointBorderColor: "rgba(38, 185, 154, 0.7)",
-                    pointBackgroundColor: "rgba(38, 185, 154, 0.7)",
+                    backgroundColor: "rgba(141, 101, 255, 0.31)",
+                    borderColor: "rgba(141, 101, 255, 0.7)",
+                    pointBorderColor: "rgba(141, 101, 255, 0.7)",
+                    pointBackgroundColor: "rgba(141, 101, 255, 0.7)",
                     pointHoverBackgroundColor: "#fff",
                     pointHoverBorderColor: "rgba(220,220,220,1)",
                     pointBorderWidth: 1,
@@ -2264,9 +2264,9 @@ function init_charts() {
                 data: [65, 59, 90, 81, 56, 55, 40]
             }, {
                 label: "My Second dataset",
-                backgroundColor: "rgba(38, 185, 154, 0.2)",
-                borderColor: "rgba(38, 185, 154, 0.85)",
-                pointColor: "rgba(38, 185, 154, 0.85)",
+                backgroundColor: "rgba(141, 101, 255, 0.2)",
+                borderColor: "rgba(141, 101, 255, 0.85)",
+                pointColor: "rgba(141, 101, 255, 0.85)",
                 pointStrokeColor: "#fff",
                 pointHighlightFill: "#fff",
                 pointHighlightStroke: "rgba(151,187,205,1)",
@@ -5012,7 +5012,7 @@ $(document).ready(function () {
     init_IonRangeSlider();
     init_ColorPicker();
     init_TagsInput();
-    init_parsley();
+//    init_parsley();
     init_daterangepicker();
     init_daterangepicker_right();
     init_daterangepicker_single_call();

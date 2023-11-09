@@ -1917,8 +1917,8 @@ table.countries_list td {
   border-color: #ddd !important; }
 
 .paging_full_numbers a.paginate_active {
-  background-color: rgba(38, 185, 154, 0.59) !important;
-  border-color: rgba(38, 185, 154, 0.59) !important; }
+  background-color: rgba(141, 101, 255, 0.59) !important;
+  border-color: rgba(141, 101, 255, 0.59) !important; }
 
 button.DTTT_button, div.DTTT_button, a.DTTT_button {
   border: 1px solid #E7E7E7 !important;
@@ -1934,16 +1934,16 @@ table.jambo_table thead {
   color: #ECF0F1; }
 
 table.jambo_table tbody tr:hover td {
-  background: rgba(38, 185, 154, 0.07);
-  border-top: 1px solid rgba(38, 185, 154, 0.11);
-  border-bottom: 1px solid rgba(38, 185, 154, 0.11); }
+  background: rgba(141, 101, 255, 0.07);
+  border-top: 1px solid rgba(141, 101, 255, 0.11);
+  border-bottom: 1px solid rgba(141, 101, 255, 0.11); }
 
 table.jambo_table tbody tr.selected {
-  background: rgba(38, 185, 154, 0.16); }
+  background: rgba(141, 101, 255, 0.16); }
 
 table.jambo_table tbody tr.selected td {
-  border-top: 1px solid rgba(38, 185, 154, 0.4);
-  border-bottom: 1px solid rgba(38, 185, 154, 0.4); }
+  border-top: 1px solid rgba(141, 101, 255, 0.4);
+  border-bottom: 1px solid rgba(141, 101, 255, 0.4); }
 
 .dataTables_paginate a {
   background: #ff0000; }
@@ -4344,15 +4344,15 @@ div[data-role="editor-toolbar"] {
 /** /Select2 **/
 /** Switchery **/
 .switchery {
-  width: 32px;
-  height: 20px; }
+  width: 52px;
+  height: 29px; }
 
 .switchery > small {
-  width: 20px;
-  height: 20px; }
+  width: 29px;
+  height: 29px; }
 
 /** /Switchery **/
-/** Normalize.css **/
+/** Normalize.css **/	
 fieldset {
   border: none;
   margin: 0;
@@ -4738,8 +4738,8 @@ ul.verticle_bars li {
 /** PNotify **/
 .alert-success {
   color: #ffffff;
-  background-color: rgba(38, 185, 154, 0.88);
-  border-color: rgba(38, 185, 154, 0.88); }
+  background-color: rgba(141, 101, 255, 0.88);
+  border-color: rgba(141, 101, 255, 0.88); }
 
 .alert-info {
   color: #E9EDEF;
@@ -5211,8 +5211,10 @@ ul.notifications {
 .mr_35p { margin-right : 35px;}
 .mr_40p { margin-right : 40px;}
 .mr_45p { margin-right : 45px;}
-.mr_50p { margin-right : 50px;}.
+.mr_50p { margin-right : 50px;}
 
+
+.mb_0p { margin-bottom: 0px;}
 .mb_5p { margin-bottom: 5px;}
 .mb_10p { margin-bottom : 10px;}
 .mb_15p { margin-bottom : 15px;}
