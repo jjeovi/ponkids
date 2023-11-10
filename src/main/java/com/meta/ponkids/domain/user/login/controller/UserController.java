@@ -1,7 +1,9 @@
 package com.meta.ponkids.domain.user.login.controller;
 
+import com.meta.ponkids.domain.system.role.dto.RoleSaveReqDto;
 import com.meta.ponkids.domain.system.role.entity.Role;
 import com.meta.ponkids.domain.system.role.repository.RoleRepository;
+import com.meta.ponkids.domain.user.login.dto.UserChldrnSaveReqDto;
 import com.meta.ponkids.domain.user.login.dto.UserSaveReqDto;
 import com.meta.ponkids.domain.user.login.repository.UserRepository;
 import com.meta.ponkids.domain.user.login.service.UserService;
@@ -47,7 +49,9 @@ public class UserController {
     
     @PostMapping( "/admin/user/save" )
     public String userSave( @RequestParam( "userNm" ) String userNm,
-                            @ModelAttribute UserSaveReqDto userSaveReqDto, HttpServletRequest request ) {
+                            @ModelAttribute UserSaveReqDto userSaveReqDto, HttpServletRequest request,
+                            UserChldrnSaveReqDto userChldrnSaveReqDto,
+                            RoleSaveReqDto roleSaveReqDto) {
         // getClientIp setting
         userSaveReqDto.setRegisterIp( IpUtils.getClientIP( request ) );
         

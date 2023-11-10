@@ -4,18 +4,19 @@
 <title layout:fragment="title">pioneerkids Admin - 회원 등록</title>
 <!-- S : Javascript functions	-->
 <script layout:fragment="script">
-    var dupCheckFlag = false;
+    var dupCheckFlag = false;   // 중복체크 변수 선언
 
     // DOM 준비 된 이후 실행
     $( function () {
 
         // initialize a validator instance from the "FormValidator" constructor.
         // A "<form>" element is optionally passed as an argument, but is not a must
+
         var validator = new FormValidator( {
             "events": [ 'blur', 'input', 'change' ]
         }, document.forms[0] );
         // on form "submit" event
-        document.forms[0].onsubmit = function ( e ) {
+        document.forms[0].onsubmit = function ( e ) { // 회원 등록시 유효성 검사.
             var submit = true,
                 validatorResult = validator.checkAll( this );
             // console.log( validatorResult );
@@ -94,14 +95,6 @@
             }
         } );
 
-        // 거주지역 그 외 셀렉트박스 선택시 처리 로직
-        // $("#countryList").change( function (){
-        //
-        //     var resideArea = $(this).val();
-        //
-        //     $( "input:radio[name='resideArea']" ).val(resideArea);
-        // })
-
         // 관리자 여부 변동시 셀렉트박스 표출 처리
         $( "input:radio[name='mngrYn']" ).change( function () {
 
@@ -114,31 +107,6 @@
                 $( "#roleList" ).hide();
             }
         } );
-
-        // 비밀번호 체크
-        function chkPW() {
-
-            var pw = $( "#password" ).val();
-            var num = pw.search( /[0-9]/g );
-            var eng = pw.search( /[a-z]/ig );
-            var spe = pw.search( /[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi );
-
-            if ( pw.length < 8 || pw.length > 20 ) {
-
-                alert( "8자리 ~ 20자리 이내로 입력해주세요." );
-                return false;
-            } else if ( pw.search( /\s/ ) != -1 ) {
-                alert( "비밀번호는 공백 없이 입력해주세요." );
-                return false;
-            } else if ( num < 0 || eng < 0 || spe < 0 ) {
-                alert( "영문,숫자, 특수문자를 혼합하여 입력해주세요." );
-                return false;
-            } else {
-                console.log( "통과" );
-                return true;
-            }
-
-        }
 
         // 아이디 입력 focusout 처리 ( 중복체크 로직 )
         $( "#userId" ).focusout( function () {
@@ -162,7 +130,6 @@
                 idDupResult( dupCheckFlag, "checkResult" );
             }
         } )
-
     } );
 
     // 비밀번호 보이기 함수
@@ -182,41 +149,178 @@
         }
     }
 
-
     // 자녀 추가 버튼 클릭
-    function addChldrn(){
+    function addChldrn() {
+        // target 자녀 div
+        var $targetChldrnDiv = $( "[name='chldrnAddDiv'].newForm" );
+
         // 이름, 성별 유효성 검사
+        if ( !chldrnValidCheck( $targetChldrnDiv ) ) return false;
 
-        var $chldrnAddDiv = $("[name='chldrnAddDiv'].newForm");             // 현재 자녀등록div
-        var chldrnNm = $chldrnAddDiv.find("[name='chldrnNm']").val();
-        var chldrnGender = $chldrnAddDiv.find("[name='chldrnGender']:checked").val();
+        // 신규자녀정보를 chldrnTable 테이블에 표시 한 뒤  새로운 chldrnAddDiv 생성
+        addChldrnRow( $targetChldrnDiv );    // 자녀정보테이블에추가
 
-        if(! validCheckName(chldrnNm)) {
-            return false;
-        } else if ( chldrnGender == null || chldrnGender == '' ){
-            alert("자녀 성별을 선택해주세요.");
-            return false;
-        }
+        // 모든 chldrnAddDiv newForm 제거
+        $( "[name='chldrnAddDiv']" ).removeClass( "newForm" );
+        // 모든 chldrnAddDiv 숨기기
+        $( "[name='chldrnAddDiv']" ).hide();
 
-        // TODO 신규자녀정보를 chldrnTable 테이블에 표시 한 뒤  새로운 chldrnAddDiv 생성
-        $("[name='chldrnAddDiv']").removeClass("newForm");
-        $("[name='chldrnAddDiv']").hide();
-        var $newChldrnForm = $("<div name='chldrnAddDiv' class='newForm'>").load("/admin/user/addChldrnForm.html");
-        $("#addChldrnModal").append($newChldrnForm);
-        $("#modal123").modal(hide);
+        // 새로운 폼 추가
+        var $newChldrnForm = $( "<div name='chldrnAddDiv' class='newForm'>" ).load( "/admin/user/addChldrnForm.html" );
+        $( "#addChldrnModalBody" ).append( $newChldrnForm );
 
-
+        // 모달창 닫기
+        $( "#addChldrnModal" ).modal( 'hide' );
         return true;
     }
 
+    // 자녀 수정 버튼 클릭 > 수정정보 tr에 현행화
+    function updateChldrn() {
+        // target 자녀 div
+        var $targetChldrnDiv = $( "[name='chldrnAddDiv'].modifyForm" );
 
+        // 이름, 성별 유효성 검사
+        if ( !chldrnValidCheck( $targetChldrnDiv ) ) return false;
 
+        // trNum 번째 chldrn 정보를 수정
+        modifyChldrnRow( $targetChldrnDiv );    // 자녀정보테이블에추가
+
+        // 모든 chldrnAddDiv newForm 제거
+        $( "[name='chldrnAddDiv']" ).removeClass( "modifyForm" );
+        // 모든 chldrnAddDiv 숨기기
+        $( "[name='chldrnAddDiv']" ).hide();
+        // 신규 추가 모달 show
+        $( "[name='chldrnAddDiv'].newForm" ).show();
+
+        // 모달창 닫기
+        $( "#addChldrnModal" ).modal( 'hide' );
+        return true;
+
+    }
+
+    // 자녀 정보 테이블에 add
+    function addChldrnRow( $targetChldrnDiv ) {
+        // $("#chldrnTableBody tr").length  // 현재 테이블 tr 개수
+
+        // 추가
+        $( "#chldrnTableBody" ).append(
+            $( "<tr>" ).append(
+                $( "<td>" ).attr( "name", "trNum" ).append( $( "#chldrnTableBody tr" ).length + 1 ),                    // 순번
+                $( "<td>" ).attr( "name", "chldrnNm" ).append( $targetChldrnDiv.find( "[name='chldrnNm']" ).val() ),        // 이름
+                $( "<td>" ).attr( "name", "chldrnGender" ).append( $targetChldrnDiv.find( "[name='chldrnGender']:checked" ).val() == "M" ? "남자" : "여자" ),    // 성별
+                $( "<td>" ).attr( "name", "chldrnBrdtDate" ).append( $targetChldrnDiv.find( "[name='chldrnBrdtDate']" ).val() ),  // 생년월일
+                $( "<td>" ).attr( "name", "chldrnTelNo" ).append( $targetChldrnDiv.find( "[name='chldrnTelNo']" ).val() ),     // 연락처
+                $( "<td>" ).attr( "name", "chldrnEmail" ).append( $targetChldrnDiv.find( "[name='chldrnEmail']" ).val() ),     // 이메일
+                $( "<td>" ).append(                                                         // 관리
+                    $( "<button>" ).attr( "onclick", "modifyChldrn(this)" ).addClass( "btn btn-success btn-sm table-btn" ).append( "수정" ),
+                    $( "<button>" ).attr( "onclick", "deleteChldrn(this)" ).addClass( "btn btn-danger btn-sm table-btn" ).append( "삭제" )
+                )
+            )
+        );
+    }
+
+    // 자녀 정보 테이블에 add
+    function modifyChldrnRow( $targetChldrnDiv ) {
+        // $("#chldrnTableBody tr").length  // 현재 테이블 tr 개수
+
+        // $targetChldrnDiv 이 몇번째 div 인지 체크 (trNum set)
+        var trNum = $targetChldrnDiv.prevAll().length;
+
+        $modifyTr = $( "#chldrnTableBody tr" ).eq( trNum );
+
+        $modifyTr.find( "[name='chldrnNm']" ).text( $targetChldrnDiv.find( "[name='chldrnNm']" ).val() );
+        $modifyTr.find( "[name='chldrnGender']" ).text( $targetChldrnDiv.find( "[name='chldrnGender']:checked" ).val() == "M" ? "남자" : "여자" );
+        $modifyTr.find( "[name='chldrnBrdtDate']" ).text( $targetChldrnDiv.find( "[name='chldrnBrdtDate']" ).val() );
+        $modifyTr.find( "[name='chldrnTelNo']" ).text( $targetChldrnDiv.find( "[name='chldrnTelNo']" ).val() );
+        $modifyTr.find( "[name='chldrnEmail']" ).text( $targetChldrnDiv.find( "[name='chldrnEmail']" ).val() );
+
+    }
+
+    // 자녀 form 유효성 검사
+    function chldrnValidCheck( $targetChldrnDiv ) {
+
+        var chldrnNm = $targetChldrnDiv.find( "[name='chldrnNm']" ).val();
+        var chldrnGender = $targetChldrnDiv.find( "[name='chldrnGender']:checked" ).val();
+
+        if ( !validCheckName( chldrnNm ) ) {
+            return false;
+        } else if ( chldrnGender == null || chldrnGender == '' ) {
+            alert( "자녀 성별을 선택해주세요." );
+            return false;
+        }
+
+        return true;
+
+    }
+
+    // 자녀 수정 버튼 > modal 출력
+    function modifyChldrn( e ) {
+        // 모달 하단의 버튼 설정
+        setModalBtn( "U" );
+
+        // 햔재 선택된 자녀의 number 체크 후(trNum)
+        // trNum 번째 chldrnAddDiv 를 show
+        var trNum = $( e ).closest( 'tr' ).prevAll().length;
+
+        // 모든 chldrnAddDiv 숨기기
+        $( "[name='chldrnAddDiv']" ).hide();
+        // trNum 번째 chldrnAddDiv show
+        $( "[name='chldrnAddDiv']" ).eq( trNum ).show();
+        // 모든 chldrnAddDiv 에 modifyForm class 제거 후, trNum 번째에만 modifyForm class 추가
+        $( "[name='chldrnAddDiv']" ).removeClass( "modifyForm" );
+        $( "[name='chldrnAddDiv']" ).eq( trNum ).addClass( "modifyForm" );
+
+        // 현재 선택한 라디오버튼 강제로 값 checked 처리 (안해주면 checked 처리가 풀려있음).
+        // 남자 = M 여자 = F
+        var chldrnGenderVal = $( e ).parent().siblings( "[name='chldrnGender']" ).text() == "남자" ? "M" : "F";
+        if ( chldrnGenderVal == "M" ) {
+            $( "[name='chldrnAddDiv']" ).eq( trNum ).find( "[name='chldrnGender'][value='M']" ).prop( "checked", true );
+        } else if ( chldrnGenderVal == "F" ) {
+            $( "[name='chldrnAddDiv']" ).eq( trNum ).find( "[name='chldrnGender'][value='F']" ).prop( "checked", true );
+        }
+
+        // 모달 창 show
+        $( "#addChldrnModal" ).modal( 'show' );
+    }
+
+    // 자녀 삭제 버튼
+    function deleteChldrn( e ) {
+        if ( confirm( "해당 자녀를 삭제합니다." ) ) {
+            // 몇번째 테이블인지 체크
+            var trNum = $( e ).closest( 'tr' ).prevAll().length;
+
+            // 테이블의 tr 과 모달의 trNum 번째 div 2가지를 remove 한다.
+            // - 테이블 tr remove
+            $( e ).parent().parent().remove();
+            // - 모달의 trNum 번째 div remove
+            $( "[name='chldrnAddDiv']" ).eq( trNum ).remove();
+
+            $( '#chldrnTable tr' ).each( function () {
+                $( this ).find( "[name='trNum']" ).text( ( $( this ).prevAll().length ) + 1 );
+            } );
+        }
+
+    }
+
+    function setModalBtn( mode ) {
+
+        if ( mode == "C" ) {
+            // 모달창의 수정 버튼 숨기고 저장 버튼을 표시
+            $( "#addChldrnBtn" ).show();
+            $( "#updateChldrnBtn" ).hide();
+
+        } else if ( mode == "U" ) {
+            // 모달창의 저장 버튼 숨기고 수정 버튼을 표시
+            $( "#addChldrnBtn" ).hide();
+            $( "#updateChldrnBtn" ).show();
+        }
+    }
 </script>
 <!-- E : Javascript functions	-->
-
 <div layout:fragment="content" class="right_col" role="main">
 
     <!-- S : 상단 메뉴 명 -->
+    // TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림.
     <div class="title_top">
         <h3><*1>회원 등록</h3>
         <hr class="t_top_line">
@@ -272,9 +376,6 @@
                             </div>
                             <div class="col-md-2 pt_10p pl-0">
                                 <span id="checkResult"></span>
-                                <!--                                <button type="button" class="btn btn-purple w100p" id="checkDup"-->
-                                <!--                                        onclick="checkDupId()">중복 확인-->
-                                <!--                                </button>화-->
                             </div>
                         </div>
                         <div class="field item form-group">
@@ -305,7 +406,8 @@
                             <label class="col-form-label col-md-2 col-sm-3 label-align">이름<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" data-validate-length-range="2,10" name="userNm" required="required"
+                                <input class="form-control" data-validate-length-range="2,10" name="userNm"
+                                       required="required"
                                        placeholder="이름을 입력해주세요."/>
                                 <small class="font-gray-dark">
                                     최소 2자 이상, 10자 이하로 입력해주세요.
@@ -363,7 +465,7 @@
                                         외</label>
                                 </div>
                             </div>
-                            <!--TODO 공통코드로 불러서 뿌리게끔 수정-->
+                            <!-- TODO 공통코드로 불러서 뿌리게끔 수정 -->
                             <div class="col-md-2 col-sm-4">
                                 <select class="form-control" name="otherResideArea" id="countryList"
                                         style="display: none;">
@@ -603,11 +705,18 @@
                             <label class="col-form-label col-md-2 col-sm-3 label-align">관리자 여부<span
                                     class="required">*</span></label>
                             <div class="col-md-2 col-sm-4">
+                            	<label class="mb_0p">
+									<input type="checkbox" class="js-switch" checked /> Checked
+								</label>
                                 <div class="btn-group radiobox">
                                     <input type="radio" id="mngrYn1" name="mngrYn" value="N" class="join-btn">
-                                    <label for="mngrYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">사용자</label>
+                                    <label for="mngrYn1" class="btn btn-outline-purple w100p"
+                                           data-toggle-class="btn-primary"
+                                           data-toggle-passive-class="btn-default">사용자</label>
                                     <input type="radio" id="mngrYn2" name="mngrYn" value="Y" class="join-btn">
-                                    <label for="mngrYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">관리자</label>
+                                    <label for="mngrYn2" class="btn btn-outline-purple w100p"
+                                           data-toggle-class="btn-primary"
+                                           data-toggle-passive-class="btn-default">관리자</label>
                                 </div>
                             </div>
                             <div class="col-md-2 col-sm-4">
@@ -622,65 +731,59 @@
                             <label class="col-form-label col-md-2 col-sm-3 label-align">자녀</label>
                             <div class="div_menu_detail row col-md-10">
                                 <div class="col-md-12 col-sm-12 ">
-                                    <div class="x_panel mb-0" style="height:auto;overflow: scroll; max-height:250px;">
-                                        <div class="x_content">
-
-                                            <button type="button" class="btn btn-purple w100p" data-toggle="modal"
-                                                    data-target=".bs-example-modal-lg">자녀 추가
+                                    <div class="x_panel mb-0" style="height:auto;overflow: scroll; max-height:350px;">
+                                        <div class="x_content mt_5p">
+                                            <button type="button" class="btn btn-purple w100p mb_15p"
+                                                    data-toggle="modal" data-target=".bs-example-modal-lg"
+                                                    onclick="setModalBtn('C')">
+                                                자녀 추가
                                             </button>
-s
                                             <!-- 자녀 등록 모달 -->
-                                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="modal123"
+                                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+                                                 id="addChldrnModal"
                                                  aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
                                                 <div class="modal-dialog modal-dialog-centered modal-lg">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h4 class="modal-title">자녀 추가</h4>
-                                                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                                                            <button type="button" class="close" data-dismiss="modal">
+                                                                <span aria-hidden="true">×</span></button>
                                                         </div>
-                                                        <div class="modal-body" id="addChldrnModal">
-                                                            <div name="chldrnAddDiv" class="newForm" th:insert="/admin/user/addChldrnForm.html">
-
+                                                        <div class="modal-body" id="addChldrnModalBody">
+                                                            <div name="chldrnAddDiv" class="newForm"
+                                                                 th:insert="/admin/user/addChldrnForm.html">
+                                                                <!-- 자녀 추가 모달 (/admin/user/addChldrnForm.html) -->
                                                             </div>
-
                                                         </div>
-                                                        <div id="load123"></div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기 </button>
-                                                            <button type="button" class="btn btn-purple" id="addChldrnBtn" onclick="addChldrn();">저장</button>
+                                                            <button type="button" class="btn btn-white"
+                                                                    data-dismiss="modal">닫기
+                                                            </button>
+                                                            <button type="button" class="btn btn-purple"
+                                                                    id="addChldrnBtn" onclick="addChldrn()">저장
+                                                            </button>
+                                                            <button type="button" class="btn btn-success"
+                                                                    id="updateChldrnBtn" onclick="updateChldrn()"
+                                                                    style="display:none;">수정
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <table class="table table-bordered text-center" id="chldrnTable">
                                                 <thead>
-                                                    <tr>
-                                                        <th>순번</th>
-                                                        <th>이름</th>
-                                                        <th>성별</th>
-                                                        <th>생년월일</th>
-                                                        <th>연락처</th>
-                                                        <th>이메일</th>
-                                                        <th>관리</th>
-                                                    </tr>
+                                                <tr>
+                                                    <th>순번</th>
+                                                    <th>이름</th>
+                                                    <th>성별</th>
+                                                    <th>생년월일</th>
+                                                    <th>연락처</th>
+                                                    <th>이메일</th>
+                                                    <th>관리</th>
+                                                </tr>
                                                 </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <th scope="row">1</th>
-                                                        <td>김자식</td>
-                                                        <td>남자</td>
-                                                        <td>2016-01-01</td>
-                                                        <td>010-1234-5678</td>
-                                                        <td>ponkids@gmail.com</td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-success btn-sm table-btn">
-                                                                수정
-                                                            </button>
-                                                            <button type="button" class="btn btn-danger btn-sm table-btn">
-                                                                삭제
-                                                            </button>
-                                                        </td>
-                                                    </tr>
+                                                <tbody id="chldrnTableBody">
+                                                <!-- 자녀 추가 테이블 -->
                                                 </tbody>
                                             </table>
                                         </div>
@@ -690,9 +793,7 @@ s
                                 </div>
                             </div>
                         </div>
-
                         <div class="ln_solid"></div>
-
                         <!-- 저장버튼 -->
                         <div class="item form-group">
                             <!-- bottom left area -->
@@ -707,7 +808,6 @@ s
                             </div>
                             <!-- bottom right area -->
                             <div class="col-md-2 col-sm-3 text-right">
-
                             </div>
                         </div>
                     </form>
@@ -716,6 +816,5 @@ s
         </div>
     </div>
     <!-- E: 메인 등록 영역 -->
-
 </div>
 </html>

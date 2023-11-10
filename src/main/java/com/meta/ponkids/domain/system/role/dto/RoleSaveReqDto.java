@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @Data
-public class RoleSaveRequest {
+public class RoleSaveReqDto {
 
     @NotNull
     @Email
@@ -59,8 +59,7 @@ public class RoleSaveRequest {
 
     // builder 생성
     @Builder
-
-    public RoleSaveRequest(String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Integer atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, String confmDt, String cntnSns, String registerIp, String delYn) {
+    public RoleSaveReqDto(String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Integer atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, String confmDt, String cntnSns, String registerIp, String delYn) {
         this.userId = userId;
         this.password = password;
         this.userNm = userNm;
@@ -81,4 +80,6 @@ public class RoleSaveRequest {
         this.registerIp = registerIp;
         this.delYn = delYn;
     }
+    
+    
 }
