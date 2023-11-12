@@ -1,20 +1,25 @@
 package com.meta.ponkids.domain.user.service;
 
 
+import com.meta.ponkids.domain.system.role.dto.RoleSaveReqDto;
+import com.meta.ponkids.domain.system.role.entity.Role;
+import com.meta.ponkids.domain.system.role.repository.RoleRepository;
 import com.meta.ponkids.domain.user.dto.MultiUserChldrnSaveReqDto;
 import com.meta.ponkids.domain.user.dto.UserChldrnSaveReqDto;
-import com.meta.ponkids.domain.user.dto.UserListResDto;
+import com.meta.ponkids.domain.user.dto.UserRoleSaveReqDto;
 import com.meta.ponkids.domain.user.dto.UserSaveReqDto;
 import com.meta.ponkids.domain.user.entity.User;
-import com.meta.ponkids.domain.system.role.dto.RoleSaveReqDto;
 import com.meta.ponkids.domain.user.entity.UserChldrn;
 import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
 import com.meta.ponkids.domain.user.repository.UserRepository;
+import com.meta.ponkids.domain.user.repository.UserRoleRepository;
+import com.meta.ponkids.global.util.ip.IpUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,45 +30,41 @@ public class UserService {
     
     private final UserRepository userRepository;
     private final UserChldrnRepository userChldrnRepository;
+    private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;  // 패스워드 인코딩
     
-    
-//    public Page<UserListResDto> paging
-    
-    public UserSaveReqDto save( UserSaveReqDto userSaveReqDto, RoleSaveReqDto roleSaveReqDto , MultiUserChldrnSaveReqDto userChldrns ) {
-
+    @Transactional
+    public UserSaveReqDto save( UserSaveReqDto userSaveReqDto, UserRoleSaveReqDto userRoleSaveReqDto , MultiUserChldrnSaveReqDto userChldrns , HttpServletRequest request) {
+        
+        userSaveReqDto.setRegisterIp( IpUtils.getClientIP( request ) );                         // 회원 IP 저장
         userSaveReqDto.setPassword( passwordEncoder.encode( userSaveReqDto.getPassword() ) );   // 비밀번호 암호화
         
-        // 관리자 승인여부 Y 이면 승인일시 now로 setting
-        if (userSaveReqDto.getMngrConfmYn().equals( "Y" ) ) {
-            userSaveReqDto.setConfmDt( LocalDateTime.now() );
-        }
-        
-        // dto to entity 작업 (필수)
-        User user = userSaveReqDto.toEntity();
+        userRepository.save( userSaveReqDto.toEntity() );        // ** 회원 save
         
         // 관리자 여부 Y 일 때 권한 등록
         if ( userSaveReqDto.getMngrYn().equals("Y") ) {
-            user.getRoles().add(roleSaveReqDto.toEntity());
+            userRoleSaveReqDto.setRegisterIp( IpUtils.getClientIP( request ) );     // 관리자 IP 저장
+            userRoleSaveReqDto.setRegisterId( "admin@test.com" );                   // TODO : 현재 세션의 userId값으로 수정
+            
+            userRoleRepository.save( userRoleSaveReqDto.toEntity() );
         }
         
-        // save
-        userRepository.save( user );
-        
-        // S : 자녀 존재하면 자녀 등록
+        // 자녀 존재하면 자녀 등록
         if ( userChldrns != null && userChldrns.getUserChldrns().size() > 0 ) {
             List<UserChldrn> userChldrnList = new ArrayList<>();
             for ( UserChldrnSaveReqDto userChldrn : userChldrns.getUserChldrns() ) {
                 
-                userChldrn.setUserId(user.getUserId());
-                userChldrn.setUserChldrnSeq( userChldrns.getUserChldrns().indexOf( userChldrn ) + 1 );
+                userChldrn.setUserId(userSaveReqDto.getUserId());             // userId Setting
+                userChldrn.setUserChldrnSeq( userChldrns.getUserChldrns().indexOf( userChldrn ) + 1 );  // userChldrnSeq Setting
                 
-                userChldrnList.add(userChldrn.toEntity());
+                userChldrn.setRegisterIp( IpUtils.getClientIP( request ) );     // 관리자 IP 저장
+                userChldrn.setRegisterId( "admin@test.com" );                   // TODO : 현재 세션의 userId값으로 수정
+                
+                userChldrnList.add(userChldrn.toEntity());      // userlist add
             }
             
-            userChldrnRepository.saveAll( userChldrnList );
+            userChldrnRepository.saveAll( userChldrnList );     // 한꺼번에 save. 각각 save보다 빠르다.
         }
-        // E : 자녀 존재하면 자녀 등록
         
         return userSaveReqDto;
     }

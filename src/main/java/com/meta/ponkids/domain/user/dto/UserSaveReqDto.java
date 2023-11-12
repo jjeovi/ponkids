@@ -1,14 +1,12 @@
 package com.meta.ponkids.domain.user.dto;
 
 import com.meta.ponkids.domain.user.entity.User;
-import lombok.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 
 @NoArgsConstructor
 @Data
@@ -84,7 +82,6 @@ public class UserSaveReqDto {
         this.delYn = delYn;
     }
     
-    
     // DTO to Entity 메소드는 DTO 내부에서 생성.
     public User toEntity() {
         return User.builder()
@@ -106,9 +103,7 @@ public class UserSaveReqDto {
                 .confmDt( confmDt )
                 .cntnSns( cntnSns )
                 .registerIp( registerIp )
-                .delYn( "N" )
                 .build();
     }
-    
     
 }

@@ -1,22 +1,25 @@
 package com.meta.ponkids.domain.user.entity;
 
+import com.meta.ponkids.global.common.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Where;
-
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 @Where( clause = "del_yn = 'N'")
 @Table( name = "TB_USER_CHLDRN" )
-public class UserChldrn {
+public class UserChldrn extends BaseTimeEntity {
     
     @Id
     @Column( unique = true )
@@ -39,7 +42,6 @@ public class UserChldrn {
     
     private String atchFileSn;          // 첨부 파일 일련번호
     
-    
     @NotNull
     private String registerId;          // 등록자 ID
     
@@ -50,10 +52,7 @@ public class UserChldrn {
     
     private String updusrIp;            // 수정자 IP
     
-    
-    @NotNull
     @ColumnDefault( "N" )
     private String delYn;               // 삭제 여부
-    
     
 }

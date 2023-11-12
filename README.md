@@ -10,10 +10,11 @@
 
 ## 개발환경
 ***
- - java : 17 (jdk 17) 
+ - java : 17 (jdk 17)
  - OS : windows / mac
  - language : java
- - framework : spring, spring-data-jpa 
+ - framework : spring, spring-data-jpa
+ - spring Version : 2.7.17
  - server : spring boot
  - database : postgresql 11.0
  - web : thymeleaf , bootstrap , jQuery , html5

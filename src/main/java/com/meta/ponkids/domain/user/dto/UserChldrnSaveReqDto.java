@@ -26,8 +26,14 @@ public class UserChldrnSaveReqDto {
 	
 	private String atchFileSn;
 	
+	private String registerId;
+	
+	private String registerIp;
+	
+	
+	
 	@Builder
-	public UserChldrnSaveReqDto( String userId, int userChldrnSeq, String chldrnNm, String chldrnGender, String chldrnBrdtDate, String chldrnEmail, String chldrnTelNo, String atchFileSn ) {
+	public UserChldrnSaveReqDto( String userId, int userChldrnSeq, String chldrnNm, String chldrnGender, String chldrnBrdtDate, String chldrnEmail, String chldrnTelNo, String atchFileSn, String registerId, String registerIp ) {
 		this.userId = userId;
 		this.userChldrnSeq = userChldrnSeq;
 		this.chldrnNm = chldrnNm;
@@ -36,8 +42,9 @@ public class UserChldrnSaveReqDto {
 		this.chldrnEmail = chldrnEmail;
 		this.chldrnTelNo = chldrnTelNo;
 		this.atchFileSn = atchFileSn;
+		this.registerId = registerId;
+		this.registerIp = registerIp;
 	}
-	
 	
 	// DTO to Entity 메소드는 DTO 내부에서 생성.
 	public UserChldrn toEntity() {
@@ -50,6 +57,8 @@ public class UserChldrnSaveReqDto {
 				.chldrnEmail( chldrnEmail )
 				.chldrnTelNo( chldrnTelNo )
 				.atchFileSn( atchFileSn )
+				.registerId( registerId )
+				.registerIp( registerIp )
 				.build();
 	}
 }

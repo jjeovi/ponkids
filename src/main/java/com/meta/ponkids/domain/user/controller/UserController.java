@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,8 +29,7 @@ public class UserController {
      */
     @GetMapping( "/admin/user/list" )
     public String userList(Model model,@ModelAttribute UserListResDto userListResDto) {
-        
-        
+    
 //        userService.findAll(userListResDto);
         
 //        model.addAttribute( "authList", userService.findAll() );
@@ -40,11 +40,11 @@ public class UserController {
     @GetMapping( "/admin/user/insert" )
     public String userInsert( Model model ) {
         
-        model.addAttribute( new UserSaveReqDto() );
-        
-        
+        // 권한 리스트
         model.addAttribute( "authList", roleRepository.findAll() );
         
+        // 가입 object 생성
+        model.addAttribute( new UserSaveReqDto() );
         
         return "admin/user/insert";
     }
@@ -52,26 +52,32 @@ public class UserController {
     @PostMapping( "/admin/user/save" )
     public String userSave(
                             @ModelAttribute UserSaveReqDto userSaveReqDto,
-//                            @ModelAttribute UserChldrnSaveReqDto userChldrnSaveReqDto,      // required false
-                            @RequestParam(required = false) RoleSaveReqDto roleSaveReqDto,  // required false
-                            Model model,
+                            @ModelAttribute UserRoleSaveReqDto userRoleSaveReqDto,  // required false
                             MultiUserChldrnSaveReqDto userChldrns,
-                            HttpServletRequest request
-    ) {
-        // getClientIp setting
-        userSaveReqDto.setRegisterIp( IpUtils.getClientIP( request ) );
-        // save
-        userService.save( userSaveReqDto, roleSaveReqDto, userChldrns );
+                            Model model,
+                            HttpServletRequest request ) {
         
-        // logic :
-        // userChldrnSaveReqDto 를 배열 처리 userChldrnSaveReqDto -> userChldrnList
-        // userChldrnList 가 0 이상이면 크기만큼 userChldrn save
+        if ( userRepository.existsByUserId( userSaveReqDto.getUserId() ) ) {
+            // 중복 ID 존재시 가입 불가
+            
+        } else {
+            // 회원가입 처리
+            
+            // 관리자 승인여부 Y 이면 승인일시 now로 setting
+            if (userSaveReqDto.getMngrConfmYn().equals( "Y" ) ) {
+                userSaveReqDto.setConfmDt( LocalDateTime.now() );
+            }
+            
+            // save
+            userService.save( userSaveReqDto, userRoleSaveReqDto, userChldrns, request );
+            
+        }
         
-        //if( userChldrnSaveReqDto.get)
+        // 메시지 출력 및 url 이동 처리
+        model.addAttribute("resultMsg", "정상적으로 등록되었습니다.");
+        model.addAttribute("moveUrl", "/admin/user/list");
         
-        
-        // TODO message 생성하여 modal 에 저장 후 return
-        return "admin/user/list";
+        return "common/alert";
     }
     
     @ResponseBody
