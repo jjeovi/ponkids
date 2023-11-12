@@ -1,9 +1,14 @@
-package com.meta.ponkids.domain.user.login.dto;
+package com.meta.ponkids.domain.user.dto;
 
+import com.meta.ponkids.domain.user.entity.User;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 
 @NoArgsConstructor
 @Data
@@ -47,7 +52,7 @@ public class UserSaveReqDto {
 
     private String confmerIp;       // 승인자 IP
 
-    private String confmDt;         // 승인일시
+    private LocalDateTime confmDt;         // 승인일시
 
     private String cntnSns;         // 연계SNS
 
@@ -57,7 +62,7 @@ public class UserSaveReqDto {
 
     // builder 생성
     @Builder
-    public UserSaveReqDto( String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Integer atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, String confmDt, String cntnSns, String registerIp, String delYn) {
+    public UserSaveReqDto( String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Integer atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSns, String registerIp, String delYn) {
         this.userId = userId;
         this.password = password;
         this.userNm = userNm;
@@ -77,6 +82,32 @@ public class UserSaveReqDto {
         this.cntnSns = cntnSns;
         this.registerIp = registerIp;
         this.delYn = delYn;
+    }
+    
+    
+    // DTO to Entity 메소드는 DTO 내부에서 생성.
+    public User toEntity() {
+        return User.builder()
+                .userId( userId )
+                .password( password )
+                .userNm( userNm )
+                .gender( gender )
+                .brdtDate( brdtDate )
+                .telNo( telNo )
+                .resideArea( resideArea )
+                .zip( zip )
+                .rdnmAdr( rdnmAdr )
+                .detailAdr( detailAdr )
+                .atchFileSn( atchFileSn )
+                .mngrYn( mngrYn )
+                .mngrConfmYn( mngrConfmYn )
+                .confmerId( confmerId )
+                .confmerIp( confmerIp )
+                .confmDt( confmDt )
+                .cntnSns( cntnSns )
+                .registerIp( registerIp )
+                .delYn( "N" )
+                .build();
     }
     
     

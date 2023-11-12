@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
  * -----------------------------------------------------------
  * 10/29/23        jjeoV       최초 생성
  */
-
 @Getter
 @MappedSuperclass
 @EntityListeners( AuditingEntityListener.class )

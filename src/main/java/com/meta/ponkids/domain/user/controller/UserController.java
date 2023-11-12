@@ -1,12 +1,10 @@
-package com.meta.ponkids.domain.user.login.controller;
+package com.meta.ponkids.domain.user.controller;
 
 import com.meta.ponkids.domain.system.role.dto.RoleSaveReqDto;
-import com.meta.ponkids.domain.system.role.entity.Role;
 import com.meta.ponkids.domain.system.role.repository.RoleRepository;
-import com.meta.ponkids.domain.user.login.dto.UserChldrnSaveReqDto;
-import com.meta.ponkids.domain.user.login.dto.UserSaveReqDto;
-import com.meta.ponkids.domain.user.login.repository.UserRepository;
-import com.meta.ponkids.domain.user.login.service.UserService;
+import com.meta.ponkids.domain.user.dto.*;
+import com.meta.ponkids.domain.user.repository.UserRepository;
+import com.meta.ponkids.domain.user.service.UserService;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,7 +27,12 @@ public class UserController {
      * description    :
      */
     @GetMapping( "/admin/user/list" )
-    public String userList() {
+    public String userList(Model model,@ModelAttribute UserListResDto userListResDto) {
+        
+        
+//        userService.findAll(userListResDto);
+        
+//        model.addAttribute( "authList", userService.findAll() );
         
         return "admin/user/list";
     }
@@ -48,26 +50,32 @@ public class UserController {
     }
     
     @PostMapping( "/admin/user/save" )
-    public String userSave( @RequestParam( "userNm" ) String userNm,
-                            @ModelAttribute UserSaveReqDto userSaveReqDto, HttpServletRequest request,
-                            UserChldrnSaveReqDto userChldrnSaveReqDto,
-                            RoleSaveReqDto roleSaveReqDto) {
+    public String userSave(
+                            @ModelAttribute UserSaveReqDto userSaveReqDto,
+//                            @ModelAttribute UserChldrnSaveReqDto userChldrnSaveReqDto,      // required false
+                            @RequestParam(required = false) RoleSaveReqDto roleSaveReqDto,  // required false
+                            Model model,
+                            MultiUserChldrnSaveReqDto userChldrns,
+                            HttpServletRequest request
+    ) {
         // getClientIp setting
         userSaveReqDto.setRegisterIp( IpUtils.getClientIP( request ) );
-        
-        // TODO 프로필 있는지 확인하여 프로필 이미지 있으면 프로필 저장 후, atchFileSn 값 을 저장
-        // TODO 자녀가 있으면 회원 등록 이후 자녀 정보의 등록도 필요
-        
         // save
-        userService.save( userSaveReqDto );
+        userService.save( userSaveReqDto, roleSaveReqDto, userChldrns );
+        
+        // logic :
+        // userChldrnSaveReqDto 를 배열 처리 userChldrnSaveReqDto -> userChldrnList
+        // userChldrnList 가 0 이상이면 크기만큼 userChldrn save
+        
+        //if( userChldrnSaveReqDto.get)
+        
         
         // TODO message 생성하여 modal 에 저장 후 return
         return "admin/user/list";
     }
     
-    
     @ResponseBody
-    @RequestMapping( value = "/live/idDupCheck" ,method = {RequestMethod.GET})
+    @RequestMapping( value = "/live/idDupCheck", method = { RequestMethod.GET } )
     public boolean ipDupCheck( @RequestParam( "userId" ) String userId ) {
         return userRepository.existsByUserId( userId );
     }

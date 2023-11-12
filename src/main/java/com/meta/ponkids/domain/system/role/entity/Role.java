@@ -1,6 +1,6 @@
 package com.meta.ponkids.domain.system.role.entity;
 
-import com.meta.ponkids.domain.user.login.entity.User;
+import com.meta.ponkids.domain.user.entity.User;
 import com.meta.ponkids.global.common.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Where( clause = "del_yn = 'N'")
@@ -32,7 +30,6 @@ import java.util.List;
 )
 public class Role extends BaseTimeEntity {
     
-    
     @Id
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_ROLE_SN" )
     private int roleSn;
@@ -40,7 +37,6 @@ public class Role extends BaseTimeEntity {
     private String roleNm;
     
     private String roleDc;
-    
     
     @NotNull
     private String registerId;          // 등록자 ID
@@ -52,14 +48,10 @@ public class Role extends BaseTimeEntity {
     
     private String updusrIp;            // 수정자 IP
     
-    
     @ColumnDefault( "N" )
     private String delYn;               // 삭제 여부
-    
     
     @ManyToMany
     private List<User> userList;
     
 }
-
-

@@ -1,19 +1,27 @@
-package com.meta.ponkids.domain.user.login.entity;
+package com.meta.ponkids.domain.user.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Where( clause = "del_yn = 'N'")
 @Table( name = "TB_USER_CHLDRN" )
 public class UserChldrn {
     
     @Id
     @Column( unique = true )
     @GeneratedValue
-    private String chldrnSn;              // 자녀 일련번호
+    private int chldrnSn;              // 자녀 일련번호
     
     private String userId;
     

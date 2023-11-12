@@ -1,10 +1,8 @@
-package com.meta.ponkids.domain.user.login.entity;
+package com.meta.ponkids.domain.user.entity;
 
 import com.meta.ponkids.domain.system.role.entity.Role;
 import com.meta.ponkids.global.common.BaseTimeEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.Where;
@@ -17,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -93,5 +92,7 @@ public class  User extends BaseTimeEntity {
             joinColumns = @JoinColumn(name="user_id"),
             inverseJoinColumns = @JoinColumn(name="role_sn"))
     private List<Role> roles = new ArrayList<>();
+    
+    
 }
 

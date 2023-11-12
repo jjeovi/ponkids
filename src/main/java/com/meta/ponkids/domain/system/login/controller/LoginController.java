@@ -1,4 +1,4 @@
-package com.meta.ponkids.domain.user.login.controller;
+package com.meta.ponkids.domain.system.login.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
