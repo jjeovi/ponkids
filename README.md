@@ -127,3 +127,18 @@ SELECT pg_terminate_backend(pid);
 *************
 </details>
 
+
+<details>
+
+<summary> 231113 : JPAQueryFactory 에러 발생 시 - build.gradle 우클릭 하여 Gradle - Refresh Gradle Project 클릭하여 라이브러리 추가작업 필요.</summary> 
+
+<!-- summary 아래 한칸 공백 두어야함 -->
+
+*************
+#### 
+ - 231113 : JPAQueryFactory 에러 발생 시 - build.gradle 우클릭 하여 Gradle - Refresh Gradle Project 클릭하여 라이브러리 추가작업 필요.
+ 
+
+*************
+</details>
+
