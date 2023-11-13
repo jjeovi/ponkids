@@ -1,18 +1,28 @@
 package com.meta.ponkids.domain.user.controller;
 
-import com.meta.ponkids.domain.system.role.dto.RoleSaveReqDto;
-import com.meta.ponkids.domain.system.role.repository.RoleRepository;
-import com.meta.ponkids.domain.user.dto.*;
-import com.meta.ponkids.domain.user.repository.UserRepository;
-import com.meta.ponkids.domain.user.service.UserService;
-import com.meta.ponkids.global.util.ip.IpUtils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import java.time.LocalDateTime;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.meta.ponkids.domain.system.role.repository.RoleRepository;
+import com.meta.ponkids.domain.user.dto.MultiUserChldrnSaveReqDto;
+import com.meta.ponkids.domain.user.dto.UserListResDto;
+import com.meta.ponkids.domain.user.dto.UserRoleSaveReqDto;
+import com.meta.ponkids.domain.user.dto.UserSaveReqDto;
+import com.meta.ponkids.domain.user.repository.UserRepository;
+import com.meta.ponkids.domain.user.service.UserService;
+
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
@@ -59,6 +69,12 @@ public class UserController {
         
         if ( userRepository.existsByUserId( userSaveReqDto.getUserId() ) ) {
             // 중복 ID 존재시 가입 불가
+        	
+        	 // 메시지 출력 및 url 이동 처리
+            model.addAttribute("resultMsg", "해당ID로 가입된 ID가 있습니다. 다시 시도해주세요.");
+            model.addAttribute("moveUrl", "/admin/user/list");
+
+            return "common/alert";
             
         } else {
             // 회원가입 처리

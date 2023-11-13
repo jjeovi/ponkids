@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <title layout:fragment="title">pioneerkids Admin - 회원 등록</title>
@@ -69,20 +69,11 @@
                 $( "[name='resideArea']" ).val( country );
             }
 
-            // 자녀 정보의 newForm 이  포함된 div 제거 작업 . 제거 하지 않으면 newForm 에 포함된 내용도 등록이 됨.
-            // $("[name='chldrnAddDiv'].newForm").remove();
-
             // 자녀정보 배열 처리 :
             // 자녀정보들 각각 값들을 배열화시켜 submit
             // div name : chldrnAddDiv / newForm 이 아닌 div 를 배열로 정리
             $("[name='chldrnAddDiv']").not('.newForm').each( function (index) {
                 // 자녀이름, 자녀성별, 자녀생년월일, 자녀이메일, 자녀연락처
-                // $(this).find("input[name=chldrnNm]").attr("name", "userChldrns[" + index + "].chldrnNm");
-                // $(this).find("input[name=chldrnGender]").attr("name", "userChldrns[" + index + "].chldrnGender");
-                // $(this).find("input[name=chldrnBrdtDate]").attr("name", "userChldrns[" + index + "].chldrnBrdtDate");
-                // $(this).find("input[name=chldrnEmail]").attr("name", "userChldrns[" + index + "].chldrnEmail");
-                // $(this).find("input[name=chldrnTelNo]").attr("name", "userChldrns[" + index + "].chldrnTelNo");
-
                 $(this).find("input[name=chldrnNm]").attr("name", "userChldrns[" + index + "].chldrnNm");
                 $(this).find("input[name=chldrnGender]").attr("name", "userChldrns[" + index + "].chldrnGender");
                 $(this).find("input[name=chldrnBrdtDate]").attr("name", "userChldrns[" + index + "].chldrnBrdtDate");
@@ -353,7 +344,7 @@
 <div layout:fragment="content" class="right_col" role="main">
 
     <!-- S : 상단 메뉴 명 -->
-    // TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림.
+    <!-- TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림. -->
     <div class="title_top">
         <h3><*1>회원 등록</h3>
         <hr class="t_top_line">
@@ -388,41 +379,13 @@
     </div>
     <!-- E : 메뉴 상세설명 -->
 
-    <!-- S: 메인 등록 영역 -->
+    <!-- S: content -->
     <div class="row">
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
                     <form id="insertForm" name="insertForm" method="post" th:action="@{/admin/user/save}">
                         <input type="hidden" name="mngrConfmYn" value="Y"/>
-
-<!--                        <input type="text" name="userChldrns[0].title" value="1번"><br>-->
-<!--                        <input type="text" name="userChldrns[0].subject" value="국어"><br>-->
-<!--                        <input type="text" name="userChldrns[0].limit_time" value="30"><br><br>-->
-
-
-<!--                        <input type="text" name="userChldrns[1].title" value="2번"><br>-->
-<!--                        <input type="text" name="userChldrns[1].subject" value="영어"><br>-->
-<!--                        <input type="text" name="userChldrns[1].limit_time" value="60"><br><br>-->
-
-<!--                        <input type="text" name="userChldrns[2].title" value="3번"><br>-->
-<!--                        <input type="text" name="userChldrns[2].subject" value="수학"><br>-->
-<!--                        <input type="text" name="userChldrns[2].limit_time" value="100"><br><br>-->
-
-<!--                        <input type="text" name="examlist[0].title" id="targets[0].chldrnNm" value="11">-->
-
-<!--                        <input type="text" name="examlist[0].title" value="1번"><br>-->
-<!--                        <input type="text" name="examlist[0].subject" value="국어"><br>-->
-<!--                        <input type="text" name="examlist[0].limit_time" value="30"><br><br>-->
-
-
-<!--                        <input type="text" name="examlist[1].title" value="2번"><br>-->
-<!--                        <input type="text" name="examlist[1].subject" value="영어"><br>-->
-<!--                        <input type="text" name="examlist[1].limit_time" value="60"><br><br>-->
-
-<!--                        <input type="text" name="examlist[2].title" value="3번"><br>-->
-<!--                        <input type="text" name="examlist[2].subject" value="수학"><br>-->
-<!--                        <input type="text" name="examlist[2].limit_time" value="100"><br><br>-->
                         <!-- TODO 프로필 이미지 추가 작업 -->
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">아이디(이메일형식)<span
@@ -846,38 +809,6 @@
                                                 <!-- 자녀 추가 테이블 -->
                                                 </tbody>
                                             </table>
-<!--                                            <table class="table table-bordered text-center" id="chldrnTable222">-->
-<!--                                                <thead>-->
-<!--                                                <tr>-->
-<!--                                                    <th>test순번</th>-->
-<!--                                                    <th>이름</th>-->
-<!--                                                    <th>성별</th>-->
-<!--                                                    <th>생년월일</th>-->
-<!--                                                    <th>연락처</th>-->
-<!--                                                    <th>이메일</th>-->
-<!--                                                    <th>관리</th>-->
-<!--                                                </tr>-->
-<!--                                                </thead>-->
-<!--                                                <tbody>-->
-<!--                                                    <tr>-->
-<!--                                                        <td>11</td>-->
-<!--                                                        <td><input type="text" name="examlist[0].title" id="targets[0].chldrnNm" value="11"/></td>-->
-<!--                                                        <td><input type="text" name="examlist[0].subject" id="targets[0].chldrnGenderRadio" value="M"/></td>-->
-<!--                                                        <td><input type="text" name="examlist[0].limit_time" id="targets[0].chldrnBrdtDate" value="2020-01-01"/></td>-->
-<!--                                                        <td><input type="text" name="targets[0].chldrnEmail" id="targets[0].chldrnEmail" value="222@test.com"/></td>-->
-<!--                                                        <td><input type="text" name="targets[0].chldrnTelNo" id="targets[0].chldrnTelNo" value="01010101010"/></td>-->
-<!--                                                    </tr>-->
-<!--                                                    <tr>-->
-<!--                                                        <td>2</td>-->
-<!--                                                        <td><input type="text" name="examlist[1].title" id="targets[1.chldrnNm" value="22"/></td>-->
-<!--                                                        <td><input type="text" name="examlist[1].subject" id="targets[1].chldrnGenderRadio" value="M"/></td>-->
-<!--                                                        <td><input type="text" name="examlist[1].limit_time" id="targets[1].chldrnBrdtDate" value="2020-01-01"/></td>-->
-<!--                                                        <td><input type="text" name="targets[1].chldrnEmail" id="targets[1].chldrnEmail" value="222@test.com"/></td>-->
-<!--                                                        <td><input type="text" name="targets[1].chldrnTelNo" id="targets[1].chldrnTelNo" value="01010101010"/></td>-->
-<!--                                                    </tr>-->
-<!--                                                &lt;!&ndash; 자녀 추가 테이블 &ndash;&gt;-->
-<!--                                                </tbody>-->
-<!--                                            </table>-->
                                         </div>
                                     </div>
                                     <small class="font-gray-dark">회원등록 후에도 자녀 등록이 가능합니다.<b>회원조회 &gt; 회원 우측
@@ -907,6 +838,6 @@
             </div>
         </div>
     </div>
-    <!-- E: 메인 등록 영역 -->
+    <!-- E : content -->
 </div>
 </html>
