@@ -105,16 +105,21 @@ DB phpPgAdmin : http://db.jjeovi.gabia.io/pgadmin/?_gl=1*15jm1ly*_ga*ODI1NTQ5MzY
 
  - 
 -- 1.해당 쿼리를 날려 pid값을 확인 해놓음. (위에서부터 차례로)
--- 현재 유휴 세션 조회. state = idle
+   
+-- 현재 유휴 세션 조회. state = idle  
+
 select * from pg_catalog.pg_stat_activity   
 where datname = 'dbjjeovi'
 and state = 'idle'
 order by backend_start asc;
 
 
--- 2. 1에서 확인한 pid 값을 대입시켜 세션을 강제종료 ex : SELECT pg_terminate_backend('177283'); 
--- 세션 종료 명령어
-SELECT pg_terminate_backend(pid);
+-- 2. 1에서 확인한 pid 값을 대입시켜 세션을 강제종료 ex : SELECT pg_terminate_backend('177283');  
+
+-- 세션 종료 명령어  
+
+SELECT pg_terminate_backend(pid);  
+
 
 
  - 추가적으로 원인파악이되면 조치를 취하겠습니다.!!
