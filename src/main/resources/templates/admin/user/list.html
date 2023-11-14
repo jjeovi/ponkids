@@ -1,55 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
-<head th:replace="layout.html :: head"></head>
-<body class="nav-md">
-<div class="container body">
-    <div class="main_container">
-        <!--S: 좌측메뉴바--><div th:replace="layout.html :: left-menu-bar" class="col-md-3 left_col" ></div><!--E: 좌측메뉴바-->
-        <!--S: 상단 탑 바--><div th:replace="layout.html :: top-nav" class="top_nav" ></div><!--S: 상단 탑 바-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<title layout:fragment="title">pioneerkids Admin - 회원 조회</title>
+<!-- S : Javascript functions	-->
+<script layout:fragment="script">
 
-        <!-- S: 콘텐츠 -->
-        <div class="right_col" role="main">
-            <!-- S : 상단 메뉴 명 -->
-            <div class="content_menu_top">
-            </div>
-            <!-- E : 상단 메뉴 명 -->
+</script>
+<!-- E : Javascript functions	-->
+<div layout:fragment="content" class="right_col" role="main">
 
+    <!-- S : 상단 메뉴 명 -->
+    <!-- TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림. -->
+    <div class="title_top">
+        <h3><*1>회원 조회</h3>
+        <hr class="t_top_line">
+    </div>
+    <!-- E : 상단 메뉴 명 -->
 
-            <!-- S : 콘텐츠 내용  -->
-            <div class="body_contents">
-
-                <!-- S : 메뉴 상세설명  -->
-                <div class="div_menu_detail">
-
+    <!-- S : 메뉴 상세설명  -->
+    <div class="div_menu_detail row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel" style="height: auto;">
+                <div class="x_title">
+                    <h2><*2>회원조회 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
                 </div>
-
-                <!-- E : 메뉴 상세설명 -->
-                <br />
-
-                <!-- S: 메인 테이블 -->
-                <div>
-                    <!-- S : 테이블 상단 검색 바 -->
-                    <div></div>
-                    <!-- E : 테이블 상단 검색 바 -->
-
-                    <!-- S : 테이블 -->
-                    <div></div>
-                    <!-- E : 테이블 -->
-
-                    <!-- S : 테이블 하단 페이징 -->
-                    <div></div>
-                    <!-- E : 테이블 하단 페이징 -->
+                <div class="x_content" style="display: none;">
+                    <*3><h4>상세설명 메뉴입니다.<small>메뉴는 회원 등록입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
+                    설정가능합니다.)</small></h4>
+                    <div>
+                        <div class="starrr stars"></div>
+                        상세설명 메뉴입니다. <span class="stars-count">0123456789</span> star(s)
+                    </div>
+                    <p>The menu is membership registration. This part allows the administrator to enter text
+                        describing the menu. (It can be set in Menu Management.)</p>
+                    <div class="starrr stars-existing" data-rating="4"></div>
+                    You gave a rating of <span class="stars-count-existing">4</span> star(s)
                 </div>
-                <!-- E : 메인 테이블 -->
-
-
             </div>
         </div>
-        <!-- E: 콘텐츠 -->
-
-        <!-- S:푸터 --><footer th:replace="layout.html :: footer"></footer><!-- E:푸터 -->
     </div>
+    <!-- E : 메뉴 상세설명 -->
+
+    <!-- S: content -->
+    <div class="row">
+		<!-- S : 테이블 상단 검색 창 -->
+		<div class="col-md-12 col-sm-12 ">
+			<div class="btn-group btn-group-sm float-right" role="group" aria-label="...">
+	          <button class="btn btn-secondary" type="button">Left</button>
+	          
+	          <button class="btn btn-secondary" type="button">Right</button>
+	          <input type="search" class="form-control input-sm" placeholder="" aria-controls="datatable-responsive">
+	        </div>
+        </div>
+        <!-- E : 테이블 상단 검색 창 -->
+        <!-- S : 테이블 -->
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                <div class="x_content">
+	                <table class="table table-bordered">
+		                <thead>
+		                    <tr>
+		                      <th>#</th>
+		                      <th>First Name</th>
+		                      <th>Last Name</th>
+		                      <th>Username</th>
+		                    </tr>
+		                </thead>
+		                <tbody>
+		                    <tr>
+		                      <th scope="row">1</th>
+		                      <td>Mark</td>
+		                      <td>Otto</td>
+		                      <td>@mdo</td>
+		                    </tr>
+		                    <tr>
+		                      <th scope="row">2</th>
+		                      <td>Jacob</td>
+		                      <td>Thornton</td>
+		                      <td>@fat</td>
+		                    </tr>
+		                    <tr>
+		                      <th scope="row">3</th>
+		                      <td>Larry</td>
+		                      <td>the Bird</td>
+		                      <td>@twitter</td>
+		                    </tr>
+		                </tbody>
+	                </table>
+                </div>
+            </div>
+        </div>
+        <!-- E : 테이블 -->
+        <!-- S : 테이블 하단 페이징 -->
+		<div class="col-md-12 col-sm-12 ">
+			
+        </div>
+        <!-- E : 테이블 하단 페이징 -->
+    </div>
+    <!-- E : content -->
 </div>
-<div th:replace="layout.html :: div-script"></div>
-</body>
 </html>

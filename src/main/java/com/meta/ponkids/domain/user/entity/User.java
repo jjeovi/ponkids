@@ -1,14 +1,12 @@
-package com.meta.ponkids.domain.user.login.entity;
+package com.meta.ponkids.domain.user.entity;
 
 import com.meta.ponkids.domain.system.role.entity.Role;
 import com.meta.ponkids.global.common.BaseTimeEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Where;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -17,10 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicInsert
+@DynamicUpdate
 @Where( clause = "del_yn = 'N'")
 @Table( name = "TB_USER" )
 public class  User extends BaseTimeEntity {
@@ -83,15 +83,15 @@ public class  User extends BaseTimeEntity {
     
     private String updusrIp;            // 수정자 IP
     
-    @NotNull
     @ColumnDefault("N")
     private String delYn;               // 삭제 여부
     
     @ManyToMany
     @JoinTable(
             name = "tb_user_role",
-            joinColumns = @JoinColumn(name="user_id"),
-            inverseJoinColumns = @JoinColumn(name="role_sn"))
-    private List<Role> roles = new ArrayList<>();
+            joinColumns = @JoinColumn(name="userId"),
+            inverseJoinColumns = @JoinColumn(name="roleSn"))
+    private final List<Role> roles = new ArrayList<>();
+    
 }
 

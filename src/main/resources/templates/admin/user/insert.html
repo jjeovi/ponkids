@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <title layout:fragment="title">pioneerkids Admin - 회원 등록</title>
@@ -61,13 +61,31 @@
                 return false;
             }
 
-            // 통과
+            // ==================== 유효성 모두 통과 후 dataset 정리 ==================================
+            // ==================== 유효성 모두 통과 후 dataset 정리 ==================================
 
             // 거주지역 set
             if ( resideArea == 'other' ) {
                 $( "[name='resideArea']" ).val( country );
             }
+
+            // 자녀정보 배열 처리 :
+            // 자녀정보들 각각 값들을 배열화시켜 submit
+            // div name : chldrnAddDiv / newForm 이 아닌 div 를 배열로 정리
+            $("[name='chldrnAddDiv']").not('.newForm').each( function (index) {
+                // 자녀이름, 자녀성별, 자녀생년월일, 자녀이메일, 자녀연락처
+                $(this).find("input[name=chldrnNm]").attr("name", "userChldrns[" + index + "].chldrnNm");
+                $(this).find("input[name=chldrnGender]").attr("name", "userChldrns[" + index + "].chldrnGender");
+                $(this).find("input[name=chldrnBrdtDate]").attr("name", "userChldrns[" + index + "].chldrnBrdtDate");
+                $(this).find("input[name=chldrnEmail]").attr("name", "userChldrns[" + index + "].chldrnEmail");
+                $(this).find("input[name=chldrnTelNo]").attr("name", "userChldrns[" + index + "].chldrnTelNo");
+
+            });
+
+
+            // return false;
             return !!validatorResult.valid;
+
         };
 
         // on form "reset" event
@@ -157,6 +175,9 @@
         // 이름, 성별 유효성 검사
         if ( !chldrnValidCheck( $targetChldrnDiv ) ) return false;
 
+        // 성별 (라디오) 값 hidden 태그에 저장
+        $targetChldrnDiv.find("[name='chldrnGender']").val($targetChldrnDiv.find("[name='chldrnGenderRadio']:checked").val());
+
         // 신규자녀정보를 chldrnTable 테이블에 표시 한 뒤  새로운 chldrnAddDiv 생성
         addChldrnRow( $targetChldrnDiv );    // 자녀정보테이블에추가
 
@@ -181,6 +202,9 @@
 
         // 이름, 성별 유효성 검사
         if ( !chldrnValidCheck( $targetChldrnDiv ) ) return false;
+
+        // 성별 (라디오) 값 hidden 태그에 저장
+        $targetChldrnDiv.find("[name='chldrnGender']").val($targetChldrnDiv.find("[name='chldrnGenderRadio']:checked").val());
 
         // trNum 번째 chldrn 정보를 수정
         modifyChldrnRow( $targetChldrnDiv );    // 자녀정보테이블에추가
@@ -207,7 +231,7 @@
             $( "<tr>" ).append(
                 $( "<td>" ).attr( "name", "trNum" ).append( $( "#chldrnTableBody tr" ).length + 1 ),                    // 순번
                 $( "<td>" ).attr( "name", "chldrnNm" ).append( $targetChldrnDiv.find( "[name='chldrnNm']" ).val() ),        // 이름
-                $( "<td>" ).attr( "name", "chldrnGender" ).append( $targetChldrnDiv.find( "[name='chldrnGender']:checked" ).val() == "M" ? "남자" : "여자" ),    // 성별
+                $( "<td>" ).attr( "name", "chldrnGenderRadio" ).append( $targetChldrnDiv.find( "[name='chldrnGenderRadio']:checked" ).val() == "M" ? "남자" : "여자" ),    // 성별
                 $( "<td>" ).attr( "name", "chldrnBrdtDate" ).append( $targetChldrnDiv.find( "[name='chldrnBrdtDate']" ).val() ),  // 생년월일
                 $( "<td>" ).attr( "name", "chldrnTelNo" ).append( $targetChldrnDiv.find( "[name='chldrnTelNo']" ).val() ),     // 연락처
                 $( "<td>" ).attr( "name", "chldrnEmail" ).append( $targetChldrnDiv.find( "[name='chldrnEmail']" ).val() ),     // 이메일
@@ -229,7 +253,7 @@
         $modifyTr = $( "#chldrnTableBody tr" ).eq( trNum );
 
         $modifyTr.find( "[name='chldrnNm']" ).text( $targetChldrnDiv.find( "[name='chldrnNm']" ).val() );
-        $modifyTr.find( "[name='chldrnGender']" ).text( $targetChldrnDiv.find( "[name='chldrnGender']:checked" ).val() == "M" ? "남자" : "여자" );
+        $modifyTr.find( "[name='chldrnGenderRadio']" ).text( $targetChldrnDiv.find( "[name='chldrnGenderRadio']:checked" ).val() == "M" ? "남자" : "여자" );
         $modifyTr.find( "[name='chldrnBrdtDate']" ).text( $targetChldrnDiv.find( "[name='chldrnBrdtDate']" ).val() );
         $modifyTr.find( "[name='chldrnTelNo']" ).text( $targetChldrnDiv.find( "[name='chldrnTelNo']" ).val() );
         $modifyTr.find( "[name='chldrnEmail']" ).text( $targetChldrnDiv.find( "[name='chldrnEmail']" ).val() );
@@ -240,11 +264,11 @@
     function chldrnValidCheck( $targetChldrnDiv ) {
 
         var chldrnNm = $targetChldrnDiv.find( "[name='chldrnNm']" ).val();
-        var chldrnGender = $targetChldrnDiv.find( "[name='chldrnGender']:checked" ).val();
+        var chldrnGenderRadio = $targetChldrnDiv.find( "[name='chldrnGenderRadio']:checked" ).val();
 
         if ( !validCheckName( chldrnNm ) ) {
             return false;
-        } else if ( chldrnGender == null || chldrnGender == '' ) {
+        } else if ( chldrnGenderRadio == null || chldrnGenderRadio == '' ) {
             alert( "자녀 성별을 선택해주세요." );
             return false;
         }
@@ -272,11 +296,11 @@
 
         // 현재 선택한 라디오버튼 강제로 값 checked 처리 (안해주면 checked 처리가 풀려있음).
         // 남자 = M 여자 = F
-        var chldrnGenderVal = $( e ).parent().siblings( "[name='chldrnGender']" ).text() == "남자" ? "M" : "F";
-        if ( chldrnGenderVal == "M" ) {
-            $( "[name='chldrnAddDiv']" ).eq( trNum ).find( "[name='chldrnGender'][value='M']" ).prop( "checked", true );
-        } else if ( chldrnGenderVal == "F" ) {
-            $( "[name='chldrnAddDiv']" ).eq( trNum ).find( "[name='chldrnGender'][value='F']" ).prop( "checked", true );
+        var chldrnGenderRadioVal = $( e ).parent().siblings( "[name='chldrnGenderRadio']" ).text() == "남자" ? "M" : "F";
+        if ( chldrnGenderRadioVal == "M" ) {
+            $( "[name='chldrnAddDiv']" ).eq( trNum ).find( "[name='chldrnGenderRadio'][value='M']" ).prop( "checked", true );
+        } else if ( chldrnGenderRadioVal == "F" ) {
+            $( "[name='chldrnAddDiv']" ).eq( trNum ).find( "[name='chldrnGenderRadio'][value='F']" ).prop( "checked", true );
         }
 
         // 모달 창 show
@@ -303,7 +327,6 @@
     }
 
     function setModalBtn( mode ) {
-
         if ( mode == "C" ) {
             // 모달창의 수정 버튼 숨기고 저장 버튼을 표시
             $( "#addChldrnBtn" ).show();
@@ -315,12 +338,13 @@
             $( "#updateChldrnBtn" ).show();
         }
     }
+
 </script>
 <!-- E : Javascript functions	-->
 <div layout:fragment="content" class="right_col" role="main">
 
     <!-- S : 상단 메뉴 명 -->
-    // TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림.
+    <!-- TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림. -->
     <div class="title_top">
         <h3><*1>회원 등록</h3>
         <hr class="t_top_line">
@@ -355,13 +379,12 @@
     </div>
     <!-- E : 메뉴 상세설명 -->
 
-    <!-- S: 메인 등록 영역 -->
+    <!-- S: content -->
     <div class="row">
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="insertForm" name="insertForm" method="post" th:action="@{/admin/user/save}"
-                          th:object="${userSaveReqDto}">
+                    <form id="insertForm" name="insertForm" method="post" th:action="@{/admin/user/save}">
                         <input type="hidden" name="mngrConfmYn" value="Y"/>
                         <!-- TODO 프로필 이미지 추가 작업 -->
                         <div class="field item form-group">
@@ -815,6 +838,6 @@
             </div>
         </div>
     </div>
-    <!-- E: 메인 등록 영역 -->
+    <!-- E : content -->
 </div>
 </html>
