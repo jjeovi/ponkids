@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<title layout:fragment="title">pioneerkids Admin - 회원 조회</title>
+<!-- S : Javascript functions	-->
+<script layout:fragment="script">
+
+</script>
+<!-- E : Javascript functions	-->
+<div layout:fragment="content" class="right_col" role="main">
+
+    <!-- S : 상단 메뉴 명 -->
+    <!-- TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림. -->
+    <div class="title_top">
+        <h3><*1>게시판 조회</h3>
+        <hr class="t_top_line">
+    </div>
+    <!-- E : 상단 메뉴 명 -->
+
+    <!-- S : 메뉴 상세설명  -->
+    <div class="div_menu_detail row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel" style="height: auto;">
+                <div class="x_title">
+                    <h2><*2>게시판조회 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content" style="display: none;">
+                    <*3><h4>상세설명 메뉴입니다.<small>메뉴는 회원 등록입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
+                    설정가능합니다.)</small></h4>
+                    <div>
+                        <div class="starrr stars"></div>
+                        상세설명 메뉴입니다. <span class="stars-count">0123456789</span> star(s)
+                    </div>
+                    <p>The menu is membership registration. This part allows the administrator to enter text
+                        describing the menu. (It can be set in Menu Management.)</p>
+                    <div class="starrr stars-existing" data-rating="4"></div>
+                    You gave a rating of <span class="stars-count-existing">4</span> star(s)
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- E : 메뉴 상세설명 -->
+
+    <!-- S: content -->
+    <div class="row">
+		<!-- S : 테이블 상단 검색 창 -->
+		<div class="col-md-12 col-sm-12 ">
+			<div class="btn-group btn-group-sm float-right" role="group" aria-label="...">
+	          <button class="btn btn-secondary" type="button">Left</button>
+	          
+	          <button class="btn btn-secondary" type="button">Right</button>
+	          <input type="search" class="form-control input-sm" placeholder="" aria-controls="datatable-responsive">
+	        </div>
+        </div>
+        <!-- E : 테이블 상단 검색 창 -->
+        <!-- S : 테이블 -->
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                <div class="x_content">
+	                <table class="table table-bordered">
+		                <thead>
+		                    <tr>
+		                      <th>순번</th>
+		                      <th>게시판 구분코드</th>
+		                      <th>이름</th>
+		                      <th>댓글사용여부</th>
+		                      <th>공개여부</th>
+		                      <th>사용여부</th>
+		                      <th>등록일</th>
+		                      <th>관리</th>
+		                    </tr>
+		                </thead>
+		                <tbody>
+		                   
+		                </tbody>
+	                </table>
+                </div>
+            </div>
+        </div>
+        <!-- E : 테이블 -->
+        <!-- S : 테이블 하단 페이징 -->
+		<div class="col-md-12 col-sm-12 ">
+			
+        </div>
+        <!-- E : 테이블 하단 페이징 -->
+    </div>
+    <!-- E : content -->
+</div>
+</html>
