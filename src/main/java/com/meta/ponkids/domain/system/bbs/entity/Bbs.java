@@ -1,6 +1,6 @@
 package com.meta.ponkids.domain.system.bbs.entity;
 
-import com.meta.ponkids.domain.user.login.entity.User;
+
 import com.meta.ponkids.global.common.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
