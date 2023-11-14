@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.meta.ponkids.domain.system.bbs.dto.BbsSaveReqDto;
 import com.meta.ponkids.domain.system.bbs.repository.BbsRepository;
 import com.meta.ponkids.domain.system.bbs.service.BbsService;
-import com.meta.ponkids.domain.user.login.dto.UserSaveReqDto;
+
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
