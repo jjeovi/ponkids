@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.meta.ponkids.domain.system.role.repository.RoleRepository;
 import com.meta.ponkids.domain.user.dto.MultiUserChldrnSaveReqDto;
-import com.meta.ponkids.domain.user.dto.UserListResDto;
+import com.meta.ponkids.domain.user.dto.UserListDto;
 import com.meta.ponkids.domain.user.dto.UserRoleSaveReqDto;
 import com.meta.ponkids.domain.user.dto.UserSaveReqDto;
 import com.meta.ponkids.domain.user.repository.UserRepository;
@@ -38,9 +38,9 @@ public class UserController {
      * description    :
      */
     @GetMapping( "/admin/user/list" )
-    public String userList(Model model,@ModelAttribute UserListResDto userListResDto) {
+    public String userList(Model model,@ModelAttribute UserListDto userListDto) {
     
-//        userService.findAll(userListResDto);
+        userService.findList(userListDto);
         
 //        model.addAttribute( "authList", userService.findAll() );
         

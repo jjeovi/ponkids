@@ -1,11 +1,13 @@
 package com.meta.ponkids.domain.user.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
-public class UserListResDto {
+public class UserListDto {
     
     private String userId;
     
@@ -20,5 +22,14 @@ public class UserListResDto {
     private String resideArea;
     
     private String mngrYn;
+    
+    private String mngrConfmYn;
+    
+    @QueryProjection
+    public UserListDto(String userId) {
+    	this.userId = userId;
+    }
+    
+    
     
 }

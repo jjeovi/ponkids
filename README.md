@@ -142,3 +142,67 @@ SELECT pg_terminate_backend(pid);
 *************
 </details>
 
+
+
+<details>
+
+<summary> JPAQueryFactory 구조 패턴 </summary>
+
+<!-- summary 아래 한칸 공백 두어야함 -->
+
+
+*************
+#### JPAQueryFactory 를 사용하는데 기본패키지 구조를 잡고 가야할 것 같아서,,
+
+
+ - JPA로만 활용해서 쿼리를 날리기에 어려움이 있는 거 같아서 검색해보니 JPAQueryFactory 를 사용해 쿼리를 커스터마이징 하는 방법이 있다고 해서 그 패턴을 사용하기로 결정했습니다... (다른 방법으로도 쿼리의 복잡성을 해결할 수 있지만, 저희는 JPAQueryFactory를 사용하는것으로..)
+ - 해당 JPAQueryFactory의 설치는 build.gradle을 통해서 마쳤고, 구현하는 방법(방식)또한 다양하게 구현할 수 있는데,
+   저는 스프링 공식 사이트 에서 추천하는 방식으로 사용을 하려고 합니다. 
+   
+   *참고 url
+ - https://docs.spring.io/spring-data/jpa/docs/2.1.3.RELEASE/reference/html/#repositories.custom-implementations
+ - https://velog.io/@soyeon207/QueryDSL-Spring-Boot-%EC%97%90%EC%84%9C-QueryDSL-JPA-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
+ - https://80000coding.oopy.io/ec8f069c-1953-4b3b-885a-7430f67f3b8f
+ 
+ 참고이미지1
+ 
+<img src="./src/main/resources/doc/img/패키지구조1.png" alt=JPAQueryFactory "패키지구조" width="900">
+*************
+
+
+ 참고이미지2
+ 
+<img src="./src/main/resources/doc/img/패키지구조2.png" alt=JPAQueryFactory "패키지구조" width="900">
+ 
+ - Repository(interface) 가 JpaRepository(interface), CustomRepository(interface)를 다중 상속 받고,
+→ CustomRepository 인터페이스에 선언되어 있는 메소드에 대한 구현은 RepositoryImpl 에서 한다.
+→ 그리고 사용자는 Repository 인터페이스를 DI 받아서 사용한다.
+
+
+```text
+com.meta.ponkids.domain /
+                    │
+                    └── {domain} /
+                           ├── ...
+                           ├── repository /
+                           │       │ 
+                           │       ├── custom /
+                           │       │     └── {domain}RepositoryCustom.java
+                           │       ├── impl /
+                           │       │     └── {domain}RepositoryImpl.java
+                           │       └── {domain}Repository.java
+                           └── ..... 
+      
+   
+```
+
+ - 위의 구조로 파일생성 해주시고, 
+ - {domain}Repository.java       : JpaRepository 와 RepositoryCustom 을 둘다 상속 받습니다.
+ - {domain}RepositoryCustom.java : QueryDSL 로 커스텀해서 사용할 메소드를 선언합니다.
+ - {domain}RepositoryImpl.java   : RepositoryCustom interface 에 선언한 메소드를 구현합니다.
+ 
+ - 이때 {domain}RepositoryImpl 파일은 Repository+Impl 의 형식을 반드시 따라주어야 합니다.
+ 
+*************
+</details>
+

@@ -1,28 +1,27 @@
 package com.meta.ponkids.domain.user.service;
 
 
-import com.meta.ponkids.domain.system.role.dto.RoleSaveReqDto;
-import com.meta.ponkids.domain.system.role.entity.Role;
-import com.meta.ponkids.domain.system.role.repository.RoleRepository;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.meta.ponkids.domain.user.dto.MultiUserChldrnSaveReqDto;
 import com.meta.ponkids.domain.user.dto.UserChldrnSaveReqDto;
+import com.meta.ponkids.domain.user.dto.UserListDto;
 import com.meta.ponkids.domain.user.dto.UserRoleSaveReqDto;
 import com.meta.ponkids.domain.user.dto.UserSaveReqDto;
-import com.meta.ponkids.domain.user.entity.User;
 import com.meta.ponkids.domain.user.entity.UserChldrn;
 import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
 import com.meta.ponkids.domain.user.repository.UserRepository;
 import com.meta.ponkids.domain.user.repository.UserRoleRepository;
 import com.meta.ponkids.global.util.ip.IpUtils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +31,8 @@ public class UserService {
     private final UserChldrnRepository userChldrnRepository;
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;  // 패스워드 인코딩
+    
+    
     
     @Transactional
     public UserSaveReqDto save( UserSaveReqDto userSaveReqDto, UserRoleSaveReqDto userRoleSaveReqDto, MultiUserChldrnSaveReqDto userChldrns, HttpServletRequest request ) {
@@ -68,5 +69,13 @@ public class UserService {
         }
         
         return userSaveReqDto;
+    }
+    
+    
+    public List<UserListDto> findList(UserListDto userListDto){
+    	
+    	
+    	
+    	return userRepository.findList(userListDto); 
     }
 }

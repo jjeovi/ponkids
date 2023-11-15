@@ -56,6 +56,7 @@ dependencies {
 
 // querydsl에서 사용할 경로 설정(현재 지정한 부분은 .gitignore에 포함됨)
 def querydslDir = "$buildDir/generated/querydsl"
+//def querydslDir = "src/main/generated/queryDsl"
 
 // JPA 사용 여부 및 사용할 경로 설정
 querydsl {
@@ -73,9 +74,9 @@ compileQuerydsl{
 	options.annotationProcessorPath = configurations.querydsl
 }
 
-compileJava {
-	options.compilerArgs << '-Aquerydsl.generatedAnnotationClass=javax.annotation.Generated'
-}
+//compileJava {
+//	options.compilerArgs << '-Aquerydsl.generatedAnnotationClass=javax.annotation.Generated'
+//}
 
 // querydsl이 compileClassPath를 상속하도록 설정
 configurations {
