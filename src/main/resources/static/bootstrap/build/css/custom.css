@@ -1031,7 +1031,8 @@ body .container.body .right_col {
 
 .nav-md .container.body .right_col {
   padding: 10px 20px 0;
-  margin-left: 230px; }
+  margin-left: 230px;
+  min-height: 980px; }
 
 .nav_title {
   width: 230px;
@@ -1159,7 +1160,7 @@ body {
   color: #73879C;
   background: #A692DC;
   font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
   line-height: 1.471; }
 
@@ -5009,7 +5010,7 @@ ul.notifications {
   padding: 0 0 4px 0; }
 
 .fa {
-  color : #a08bd8;
+  color : #fff;
 }
 
 .btn:active {
@@ -5108,28 +5109,67 @@ ul.notifications {
 /* E : btn setting */
 
 .w50p {
-  width:50px;
+  width : 50px;
 }
 .w60p {
-  width:60px;
+  width : 60px;
 }
 .w70p {
-  width:70px;
+  width : 70px;
 }
 .w80p {
-  width:80px;
+  width : 80px;
 }
 .w90p {
-  width:90px;
+  width : 90px;
 }
 .w100p {
-  width:100px;
+  width : 100px;
 }
 .w110p {
-  width:110px;
+  width : 110px;
 }
 .w120p {
-  width:120px;
+  width : 120px;
+}
+.w130p {
+  width : 130px;
+}
+.w140p {
+  width : 140px;
+}
+.w150p {
+  width : 150px;
+ }
+.w160p {
+  width : 160px;
+}
+.w170p {
+  width : 170px;
+}
+.w180p {
+  width : 180px;
+}
+.w190p {
+  width : 190px;
+}
+.w200p {
+  width : 200px;
+}
+.w210p {
+  width : 210px;
+}
+.w220p {
+  width : 220px;
+}
+.w230p {
+  width : 230px;
+}
+.w240p {
+  width : 240px;
+}
+.w250p {
+  width : 250px;
 }
 
 .table-btn {
@@ -5272,3 +5312,18 @@ ul.notifications {
 .pb_40p { padding-bottom : 40px;}
 .pb_45p { padding-bottom : 45px;}
 .pb_50p { padding-bottom : 50px;}
+
+
+/* 페이징 처리 */
+.pagination-lg .page-link {
+  padding: 0.3rem 0.9rem;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+/* 세로 라인 생성 (vertical_line) */
+.vl {
+  border: 1px solid #d7c7fa;
+  height: 1.9rem;
+  margin-top: 4px;
+}

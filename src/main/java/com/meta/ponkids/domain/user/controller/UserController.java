@@ -44,12 +44,14 @@ public class UserController {
     @GetMapping( "/admin/user/list" )
     public String userList( Model model,
                             @ModelAttribute UserListDto userListDto,
-                            @PageableDefault(size=10) Pageable pageable ) {
+                            @PageableDefault( size = 10 ) Pageable pageable ) {
         
-
-        Page<UserListDto> resultList =userService.getList( userListDto, pageable );
         
-        model.addAttribute("resultList", resultList);
+        Page<UserListDto> resultList = userService.getList( userListDto, pageable );
+        
+        
+        model.addAttribute( "resultList", resultList );
+        model.addAttribute( "searchDTO", userListDto );
 
 //        model.addAttribute( "authList", userService.findAll() );
         

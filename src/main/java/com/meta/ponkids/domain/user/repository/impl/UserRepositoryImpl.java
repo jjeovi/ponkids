@@ -3,13 +3,12 @@ package com.meta.ponkids.domain.user.repository.impl;
 import com.meta.ponkids.domain.user.dto.QUserListDto;
 import com.meta.ponkids.domain.user.dto.UserListDto;
 import com.meta.ponkids.domain.user.repository.custom.UserRepositoryCustom;
-import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
@@ -26,47 +25,31 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     
     @Override
     public Page<UserListDto> getList( UserListDto userListDto, Pageable pageable ) {
-    
-//        return queryFactory.select(new QUserListDto(user.userId))
-//                .from(user)
-//                .where(user.delYn.eq("N"))
-//                .fetch();
-
-//        QueryResults<UserListDto> results = query.select( new QUserListDto(
-//                        // select
-//                        user.userId,
-//                        user.userNm,
-//                        user.gender,
-//                        user.brdtDate,
-//                        user.telNo,
-//                        user.resideArea,
-//                        user.mngrYn,
-//                        user.mngrConfmYn
-//                ) )
-//                // from
-//                .from( user )
-//                // where
-//                .where(
-//                        eqGender( userListDto.getGender() ),
-//                        eqMngrYn( userListDto.getMngrYn() ),
-//                        eqMngrConfmYn( userListDto.getMngrConfmYn() ),
-//                        eqOption( userListDto.getSchOption(), userListDto.getSchCntn() )
-//                )
-//                .offset( pageable.getOffset() ) // N번부터 시작
-//                .limit( pageable.getPageSize() )
-//                .fetchResults();
         
         // (1) '결과list' 와 (2)'count' 를 2번에 걸쳐 조회
+        
         // (1) 결과list (results).
-        List<UserListDto> results = query.select( new QUserListDto(
-                        // select
+        List<UserListDto> results = query
+                // select
+                .select( new QUserListDto(
                         user.userId,
                         user.userNm,
-                        user.gender,
+                        new CaseBuilder()
+                                .when( user.gender.eq( "M" ) ).then( "남자" )
+                                .when(user.gender.eq( "F" )).then( "여자" )
+                                .otherwise( "" )
+                                .as("gender"),
                         user.brdtDate,
-                        user.telNo,
-                        user.resideArea,
-                        user.mngrYn,
+//                        user.telNo.coalesce( "번호없음" ),    // NULL 처리는 coalesce 로 한다. ( NULL일시 "번호없음" )
+                        user.telNo,    // NULL 처리는 coalesce 로 한다. ( NULL일시 "번호없음" )
+                        new CaseBuilder()
+                                .when(user.resideArea.eq( "" )).then( "지역없음")
+                                .otherwise(user.resideArea).as("resideArea"),
+                        new CaseBuilder()
+                                .when( user.mngrYn.eq( "Y" ) ).then( "관리자" )
+                                .when(user.mngrYn.eq( "N" )).then( "사용자" )
+                                .otherwise( "" )
+                                .as("mngrYn"),
                         user.mngrConfmYn
                 )  )
                 // from
@@ -97,7 +80,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
     }
     
-    // ------------------- WHERE 검색 옵션 setting -------------------
+    // -------------------------------- WHERE 검색 옵션 setting --------------------------------
     private BooleanExpression eqGender( String gender ) {
         return StringUtils.hasText( gender ) ? user.gender.eq( gender ) : null;
     }
@@ -113,8 +96,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     private BooleanExpression eqOption(String schOption, String schCntn){
         // 검색 옵션  A : 아이디 , B : 이름
         if (StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn )){
-                 if( schOption.equals("A")) return user.userId.eq( schCntn );
-            else if (schOption.equals("B")) return user.userNm.eq( schCntn );
+                 if( schOption.equals("A")) return user.userId.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+            else if (schOption.equals("B")) return user.userNm.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
             else                            return null;
         } else { return null; }
     }

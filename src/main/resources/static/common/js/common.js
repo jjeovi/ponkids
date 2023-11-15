@@ -3,6 +3,11 @@ const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // �
 $( function () {
 
 
+    // 해당 데이터가 없으면 colspan값 th개수만큼 자동으로 set
+    if($("#noDataTd").length){
+        $("#noDataTd").attr("colspan",$('#listTable th').length);
+    }
+
 } );
 
 
@@ -75,9 +80,26 @@ function validCheckName( name ) {
 
 
 // 라디오 버튼 클릭시 active 클래스 추가
-function clickRadioEvent(e){
-	// 라디오 버튼의 label들을 찾아 모든 label 에 active클래스를 제거 후, 클릭된 label 에 active클래스 추가
-	$(e).parent().siblings("label").removeClass("active");
-	$(e).parent().addClass("active");
-	
+function clickRadioEvent( e ) {
+    // 라디오 버튼의 label들을 찾아 모든 label 에 active클래스를 제거 후, 클릭된 label 에 active클래스 추가
+    $( e ).parent().siblings( "label" ).removeClass( "active" );
+    $( e ).parent().addClass( "active" );
+
+}
+
+// list search 함수 'form' 이름을 가진 form 을 'page' 의 페이지로 submit
+// parameter : formname,page
+function searchListPage( form, page ) {
+
+    $("[name='page']").val(page);
+    $("form[name='" + form + "']").submit();
+
+}
+
+
+// listform 의 size Selectbox 변경시 submit
+function searchListSize( form, size ) {
+    $("[name='size']").val(size);
+    $("[name='page']").val(0);
+    $("form[name='" + form + "']").submit();
 }
