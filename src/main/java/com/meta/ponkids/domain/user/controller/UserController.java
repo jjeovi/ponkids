@@ -4,6 +4,10 @@ import java.time.LocalDateTime;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,10 +42,15 @@ public class UserController {
      * description    :
      */
     @GetMapping( "/admin/user/list" )
-    public String userList(Model model,@ModelAttribute UserListDto userListDto) {
-    
-        userService.findList(userListDto);
+    public String userList( Model model,
+                            @ModelAttribute UserListDto userListDto,
+                            @PageableDefault(size=10) Pageable pageable ) {
         
+
+        Page<UserListDto> resultList =userService.getList( userListDto, pageable );
+        
+        model.addAttribute("resultList", resultList);
+
 //        model.addAttribute( "authList", userService.findAll() );
         
         return "admin/user/list";
@@ -61,26 +70,26 @@ public class UserController {
     
     @PostMapping( "/admin/user/save" )
     public String userSave(
-                            @ModelAttribute UserSaveReqDto userSaveReqDto,
-                            @ModelAttribute UserRoleSaveReqDto userRoleSaveReqDto,  // required false
-                            MultiUserChldrnSaveReqDto userChldrns,
-                            Model model,
-                            HttpServletRequest request ) {
+            @ModelAttribute UserSaveReqDto userSaveReqDto,
+            @ModelAttribute UserRoleSaveReqDto userRoleSaveReqDto,  // required false
+            MultiUserChldrnSaveReqDto userChldrns,
+            Model model,
+            HttpServletRequest request ) {
         
         if ( userRepository.existsByUserId( userSaveReqDto.getUserId() ) ) {
             // 중복 ID 존재시 가입 불가
-        	
-        	 // 메시지 출력 및 url 이동 처리
-            model.addAttribute("resultMsg", "해당ID로 가입된 ID가 있습니다. 다시 시도해주세요.");
-            model.addAttribute("moveUrl", "/admin/user/list");
-
+            
+            // 메시지 출력 및 url 이동 처리
+            model.addAttribute( "resultMsg", "해당ID로 가입된 ID가 있습니다. 다시 시도해주세요." );
+            model.addAttribute( "moveUrl", "/admin/user/list" );
+            
             return "common/alert";
             
         } else {
             // 회원가입 처리
             
             // 관리자 승인여부 Y 이면 승인일시 now로 setting
-            if (userSaveReqDto.getMngrConfmYn().equals( "Y" ) ) {
+            if ( userSaveReqDto.getMngrConfmYn().equals( "Y" ) ) {
                 userSaveReqDto.setConfmDt( LocalDateTime.now() );
             }
             
@@ -90,8 +99,8 @@ public class UserController {
         }
         
         // 메시지 출력 및 url 이동 처리
-        model.addAttribute("resultMsg", "정상적으로 등록되었습니다.");
-        model.addAttribute("moveUrl", "/admin/user/list");
+        model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
+        model.addAttribute( "moveUrl", "/admin/user/list" );
         
         return "common/alert";
     }

@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,8 +33,6 @@ public class UserService {
     private final UserChldrnRepository userChldrnRepository;
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;  // 패스워드 인코딩
-    
-    
     
     @Transactional
     public UserSaveReqDto save( UserSaveReqDto userSaveReqDto, UserRoleSaveReqDto userRoleSaveReqDto, MultiUserChldrnSaveReqDto userChldrns, HttpServletRequest request ) {
@@ -71,11 +71,7 @@ public class UserService {
         return userSaveReqDto;
     }
     
-    
-    public List<UserListDto> findList(UserListDto userListDto){
-    	
-    	
-    	
-    	return userRepository.findList(userListDto); 
+    public Page<UserListDto> getList( UserListDto userListDto, Pageable pageable){
+    	return userRepository.getList(userListDto, pageable);
     }
 }

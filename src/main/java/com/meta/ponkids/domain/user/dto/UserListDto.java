@@ -13,11 +13,11 @@ public class UserListDto {
     
     private String userNm;
     
-    private String userGender;
+    private String gender;
     
-    private String userBrdtDate;
+    private String brdtDate;
     
-    private String userTelNo;
+    private String telNo;
     
     private String resideArea;
     
@@ -25,11 +25,20 @@ public class UserListDto {
     
     private String mngrConfmYn;
     
+    private String schOption;   // 검색 옵션 : 생성자에는 추가하지 않음!
+    
+    private String schCntn;     // 검색 옵션 : 생성자에는 추가하지 않음!
+    
     @QueryProjection
-    public UserListDto(String userId) {
-    	this.userId = userId;
+    public UserListDto( String userId, String userNm, String gender, String brdtDate, String telNo, String resideArea, String mngrYn, String mngrConfmYn ) {
+        this.userId = userId;
+        this.userNm = userNm;
+        this.gender = gender;
+        this.brdtDate = brdtDate;
+        this.telNo = telNo;
+        this.resideArea = resideArea;
+        this.mngrYn = mngrYn;
+        this.mngrConfmYn = mngrConfmYn;
     }
-    
-    
     
 }

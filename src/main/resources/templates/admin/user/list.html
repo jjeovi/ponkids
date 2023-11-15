@@ -46,60 +46,85 @@
     <!-- E : 메뉴 상세설명 -->
 
     <!-- S: content -->
-    <div class="row">
-		<!-- S : 테이블 상단 검색 창 -->
-		<div class="col-md-12 col-sm-12 ">
-			<div class="btn-group btn-group-sm float-right" role="group" aria-label="...">
-	          <button class="btn btn-secondary" type="button">Left</button>
-	          
-	          <button class="btn btn-secondary" type="button">Right</button>
-	          <input type="search" class="form-control input-sm" placeholder="" aria-controls="datatable-responsive">
-	        </div>
-        </div>
-        <!-- E : 테이블 상단 검색 창 -->
-        <!-- S : 테이블 -->
-        <div class="col-md-12 col-sm-12 ">
-            <div class="x_panel">
-                <div class="x_content">
-	                <table class="table table-bordered">
-		                <thead>
-		                    <tr>
-		                      <th>#</th>
-		                      <th>First Name</th>
-		                      <th>Last Name</th>
-		                      <th>Username</th>
-		                    </tr>
-		                </thead>
-		                <tbody>
-		                    <tr>
-		                      <th scope="row">1</th>
-		                      <td>Mark</td>
-		                      <td>Otto</td>
-		                      <td>@mdo</td>
-		                    </tr>
-		                    <tr>
-		                      <th scope="row">2</th>
-		                      <td>Jacob</td>
-		                      <td>Thornton</td>
-		                      <td>@fat</td>
-		                    </tr>
-		                    <tr>
-		                      <th scope="row">3</th>
-		                      <td>Larry</td>
-		                      <td>the Bird</td>
-		                      <td>@twitter</td>
-		                    </tr>
-		                </tbody>
-	                </table>
+    <div class="x_panel">
+        <div class="x_content">
+            <div class="row">
+                <!-- S : 테이블 상단 검색 창 -->
+                <div class="col-md-12 col-sm-12 ">
+                    <div class="btn-group btn-group-sm float-right" role="group" aria-label="...">
+                      <button class="btn btn-secondary" type="button">Left</button>
+
+                      <button class="btn btn-secondary" type="button">Right</button>
+                      <input type="search" class="form-control input-sm" placeholder="" aria-controls="datatable-responsive">
+                    </div>
+                </div>
+                <!-- E : 테이블 상단 검색 창 -->
+                <!-- S : 테이블 -->
+                <div class="col-md-12 col-sm-12 ">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>순번</th>
+                            <th>아이디</th>
+                            <th>이름</th>
+                            <th>성별</th>
+                            <th>생년월일</th>
+                            <th>연락처</th>
+                            <th>거주지역</th>
+                            <th>관리자여부</th>
+                            <th>관리</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="data:${resultList}">
+                            <td>1</td>
+                            <td th:text="${data.userId}"></td>
+                            <td th:text="${data.userNm}"></td>
+                            <td th:text="${data.gender}"></td>
+                            <td th:text="${data.brdtDate}"></td>
+                            <td th:text="${data.telNo}"></td>
+                            <td th:text="${data.resideArea}"></td>
+                            <td th:text="${data.resideArea}"></td>
+                            <td th:text="${data.mngrYn}"></td>
+                            <td>관리</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- E : 테이블 -->
+                <!-- S : 테이블 하단 페이징 -->
+                <div class="col-md-12 col-sm-12 ">
+
+                </div>
+                <!-- E : 테이블 하단 페이징 -->
+                <!-- S : 하단 목록 -->
+                <div class="col-md-12 col-sm-12">
+                    <!-- bottom left area -->
+                    <div class="col-md-2 col-sm-3 text-left">
+                        <button type="cancel" class="btn btn-white w120p">등록</button>
+                    </div>
+                    <!-- bottom center area -->
+                    <div class="col-md-8 col-sm-6 text-center">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <!-- bottom right area -->
+                    <div class="col-md-2 col-sm-3 text-right">
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- E : 테이블 -->
-        <!-- S : 테이블 하단 페이징 -->
-		<div class="col-md-12 col-sm-12 ">
-			
-        </div>
-        <!-- E : 테이블 하단 페이징 -->
     </div>
     <!-- E : content -->
 </div>
