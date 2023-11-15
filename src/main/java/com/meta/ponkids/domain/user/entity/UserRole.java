@@ -35,8 +35,8 @@ public class UserRole extends BaseTimeEntity {
     @NotNull
     private String userId;
     
-    @NotNull
-    private int roleSn;
+//    @NotNull
+    private Long roleSn;
     
     @NotNull
     private String registerId;

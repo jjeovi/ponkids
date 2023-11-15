@@ -52,8 +52,14 @@
 
             }
 
+            if($("#mngrYn").isChecked()) {
+                $("#mngrYn").val("Y");
+            } else {
+                $("#mngrYn").val("N");
+            }
+
             // 권한이 관리자일때, 권한 선택 안되어있을 때 return false
-            var mngrYn = $( "input:radio[name='mngrYn']:checked" ).val();
+            var mngrYn = $( "input:checkbox[name='mngrYn']" ).val();
             var roleSn = $( "[name='roleSn']" ).val();
             if ( mngrYn == 'Y' && roleSn == '' ) {
                 alert( "관리자 권한을 선택해 주세요." );
@@ -114,17 +120,41 @@
         } );
 
         // 관리자 여부 변동시 셀렉트박스 표출 처리
-        $( "input:radio[name='mngrYn']" ).change( function () {
+        // $( "input:radio[name='mngrYn']" ).change( function () {
+        //
+        //     // 관리자 로 선택시 권한 상세 선택하도록 setting
+        //     var mngrYn = $( this ).val();
+        //
+        //     if ( mngrYn == 'Y' ) {
+        //         // 권한 상세 선택 보이고, 자녀 추가 영역 가림
+        //         $( "#roleList" ).show();
+        //         $("#userChldrnAddDiv").hide();
+        //     } else {
+        //         // 권한 상세 선택 가리고, 자녀 추가 영역 보임
+        //         $( "#roleList" ).hide();
+        //         $("#userChldrnAddDiv").show();
+        //     }
+        // } );
 
-            // 관리자 로 선택시 권한 상세 선택하도록 setting
-            var mngrYn = $( this ).val();
+        // 관리자 여부 체크시 동적 이벤트
+        $('input:checkbox[name=mngrYn]').change(function() {
+            if ($(this).prop("checked")) {
+                $( this ).val( "Y" );
 
-            if ( mngrYn == 'Y' ) {
+                // 권한 상세 선택 보이고, 자녀 추가 영역 가림
                 $( "#roleList" ).show();
+                $("#userChldrnAddDiv").hide();
+
+
             } else {
+                $( this ).val( "N" );
+
+                // 권한 상세 선택 가리고, 자녀 추가 영역 보임
                 $( "#roleList" ).hide();
+                $("#userChldrnAddDiv").show();
+
             }
-        } );
+        });
 
         // 아이디 입력 focusout 처리 ( 중복체크 로직 )
         $( "#userId" ).focusout( function () {
@@ -393,7 +423,7 @@
                             <div class="col-md-6 col-sm-6">
                                 <input name="userId" id="userId" class="form-control"
                                        required="required"/>
-                                <small class="font-gray-dark">
+                                <small class="font-gray-dark"   >
                                     <b>비밀번호</b> 찾기 시 해당 이메일로 인증번호를 발송합니다. 정확한 이메일을 입력해주세요.
                                 </small>
                             </div>
@@ -729,18 +759,18 @@
                                     class="required">*</span></label>
                             <div class="col-md-2 col-sm-4">
                             	<label class="mb_0p">
-									<input type="checkbox" class="js-switch" checked /> Checked
+									<input type="checkbox" value="N" class="js-switch" name="mngrYn" id="mngrYn"/> Checked
 								</label>
-                                <div class="btn-group radiobox">
-                                    <input type="radio" id="mngrYn1" name="mngrYn" value="N" class="join-btn">
-                                    <label for="mngrYn1" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">사용자</label>
-                                    <input type="radio" id="mngrYn2" name="mngrYn" value="Y" class="join-btn">
-                                    <label for="mngrYn2" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">관리자</label>
-                                </div>
+<!--                                <div class="btn-group radiobox">-->
+<!--                                    <input type="radio" id="mngrYn1" name="mngrYn" value="N" class="join-btn">-->
+<!--                                    <label for="mngrYn1" class="btn btn-outline-purple w100p"-->
+<!--                                           data-toggle-class="btn-primary"-->
+<!--                                           data-toggle-passive-class="btn-default">사용자</label>-->
+<!--                                    <input type="radio" id="mngrYn2" name="mngrYn" value="Y" class="join-btn">-->
+<!--                                    <label for="mngrYn2" class="btn btn-outline-purple w100p"-->
+<!--                                           data-toggle-class="btn-primary"-->
+<!--                                           data-toggle-passive-class="btn-default">관리자</label>-->
+<!--                                </div>-->
                             </div>
                             <div class="col-md-2 col-sm-4">
                                 <select class="form-control" name="roleSn" id="roleList" style="display: none;">
@@ -750,7 +780,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="field item form-group">
+                        <div class="field item form-group" id="userChldrnAddDiv">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">자녀</label>
                             <div class="div_menu_detail row col-md-10">
                                 <div class="col-md-12 col-sm-12 ">

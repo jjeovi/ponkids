@@ -34,7 +34,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;  // 패스워드 인코딩
     
     @Transactional
-    public UserSaveReqDto save( UserSaveReqDto userSaveReqDto, UserRoleSaveReqDto userRoleSaveReqDto , MultiUserChldrnSaveReqDto userChldrns , HttpServletRequest request) {
+    public UserSaveReqDto save( UserSaveReqDto userSaveReqDto, UserRoleSaveReqDto userRoleSaveReqDto, MultiUserChldrnSaveReqDto userChldrns, HttpServletRequest request ) {
         
         userSaveReqDto.setRegisterIp( IpUtils.getClientIP( request ) );                         // 회원 IP 저장
         userSaveReqDto.setPassword( passwordEncoder.encode( userSaveReqDto.getPassword() ) );   // 비밀번호 암호화
@@ -42,7 +42,7 @@ public class UserService {
         userRepository.save( userSaveReqDto.toEntity() );        // ** 회원 save
         
         // 관리자 여부 Y 일 때 권한 등록
-        if ( userSaveReqDto.getMngrYn().equals("Y") ) {
+        if ( userSaveReqDto.getMngrYn().equals( "Y" ) ) {
             userRoleSaveReqDto.setRegisterIp( IpUtils.getClientIP( request ) );     // 관리자 IP 저장
             userRoleSaveReqDto.setRegisterId( "admin@test.com" );                   // TODO : 현재 세션의 userId값으로 수정
             
@@ -50,17 +50,18 @@ public class UserService {
         }
         
         // 자녀 존재하면 자녀 등록
-        if ( userChldrns != null && userChldrns.getUserChldrns().size() > 0 ) {
+        // 사용자 일 경우에만 자녀 추가
+        if ( userChldrns != null && userChldrns.getUserChldrns() != null && userChldrns.getUserChldrns().size() > 0 && userSaveReqDto.getMngrYn().equals( "N" ) ) {
             List<UserChldrn> userChldrnList = new ArrayList<>();
             for ( UserChldrnSaveReqDto userChldrn : userChldrns.getUserChldrns() ) {
                 
-                userChldrn.setUserId(userSaveReqDto.getUserId());             // userId Setting
+                userChldrn.setUserId( userSaveReqDto.getUserId() );             // userId Setting
                 userChldrn.setUserChldrnSeq( userChldrns.getUserChldrns().indexOf( userChldrn ) + 1 );  // userChldrnSeq Setting
                 
                 userChldrn.setRegisterIp( IpUtils.getClientIP( request ) );     // 관리자 IP 저장
                 userChldrn.setRegisterId( "admin@test.com" );                   // TODO : 현재 세션의 userId값으로 수정
                 
-                userChldrnList.add(userChldrn.toEntity());      // userlist add
+                userChldrnList.add( userChldrn.toEntity() );      // userlist add
             }
             
             userChldrnRepository.saveAll( userChldrnList );     // 한꺼번에 save. 각각 save보다 빠르다.
