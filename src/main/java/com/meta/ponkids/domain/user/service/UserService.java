@@ -67,4 +67,16 @@ public class UserService {
     public Page<UserListDto> getList( UserListDto userListDto, Pageable pageable){
     	return userRepository.getList(userListDto, pageable);
     }
+    
+    public String deleteById(String userId){
+        
+            userRepository.deleteById( userId );
+        
+        UserChldrn userChldrn = userChldrnRepository.findFirstByUserId(userId);
+        
+        
+        
+        return "";
+    }
+    
 }

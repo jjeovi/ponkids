@@ -107,6 +107,20 @@ public class UserController {
         return "common/alert";
     }
     
+    
+    @GetMapping("/admin/user/delete")
+    public String userDelete(
+            @RequestParam String userId,
+            Model model
+    ) {
+//        userRepository.deleteById( userId );
+        userService.deleteById(userId);
+        // 메시지 출력 및 url 이동 처리
+        model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
+        model.addAttribute( "moveUrl", "/admin/user/list" );
+        return "common/alert";
+    }
+    
     @ResponseBody
     @RequestMapping( value = "/live/idDupCheck", method = { RequestMethod.GET } )
     public boolean ipDupCheck( @RequestParam( "userId" ) String userId ) {

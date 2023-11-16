@@ -3,11 +3,11 @@ package com.meta.ponkids.domain.user.entity;
 import com.meta.ponkids.domain.system.role.entity.Role;
 import com.meta.ponkids.global.common.BaseTimeEntity;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
+
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -22,6 +22,7 @@ import java.util.List;
 @DynamicInsert
 @DynamicUpdate
 @Where( clause = "del_yn = 'N'")
+@SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y' WHERE user_id = ?")
 @Table( name = "TB_USER" )
 public class  User extends BaseTimeEntity {
     
