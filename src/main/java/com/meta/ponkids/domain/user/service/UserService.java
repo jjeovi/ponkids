@@ -2,6 +2,7 @@ package com.meta.ponkids.domain.user.service;
 
 
 import com.meta.ponkids.domain.user.dto.*;
+import com.meta.ponkids.domain.user.entity.User;
 import com.meta.ponkids.domain.user.entity.UserChldrn;
 import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
 import com.meta.ponkids.domain.user.repository.UserRepository;
@@ -64,19 +65,35 @@ public class UserService {
         return userSaveReqDto;
     }
     
+    
     public Page<UserListDto> getList( UserListDto userListDto, Pageable pageable){
     	return userRepository.getList(userListDto, pageable);
     }
     
-    public String deleteById(String userId){
-        
-            userRepository.deleteById( userId );
-        
-        UserChldrn userChldrn = userChldrnRepository.findFirstByUserId(userId);
-        
-        
-        
-        return "";
+    
+    public UserModDto findByUserId(String userId) {
+    	
+    	User user = userRepository.findByUserId(userId);
+    	
+    	UserModDto userModDto = new UserModDto();
+    	userModDto = userModDto.toDto(user);
+    	
+    	return userModDto;
+    	
     }
+    
+
+    @Transactional
+	public void deleteAllByUserId(String userId) {
+    	
+    	// delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업 
+        userRepository.deleteById( userId );	// User.java 의 @SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y' WHERE user_id = ?") 를 수행
+    	
+        // userId delete 처리
+		userChldrnRepository.deleteAllByUserId(userId);
+		
+	}
+    
+    
     
 }

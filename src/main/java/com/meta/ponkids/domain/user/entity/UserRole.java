@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -24,8 +25,9 @@ import javax.validation.constraints.NotNull;
         name = "SEQ_TB_USER_ROLE_SN",
         sequenceName = "SEQ_TB_USER_ROLE_SN", //매핑할 데이터베이스 시퀀스 이름
         initialValue = 1, allocationSize = 1)
+@SQLDelete(sql = "UPDATE tb_user_role SET del_yn ='Y', updt_dt = now() WHERE user_id = ?")
 @Where( clause = "del_yn = 'N'")
-@Table( name = "TB_USER_ROLE" )
+@Table( name = "tb_user_role" )
 public class UserRole extends BaseTimeEntity {
     
     @Id

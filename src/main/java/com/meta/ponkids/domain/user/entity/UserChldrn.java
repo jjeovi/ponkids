@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -17,8 +18,9 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
+@SQLDelete(sql = "UPDATE tb_user_chldrn SET del_yn ='Y', updt_dt = now() WHERE user_id = ?")
 @Where( clause = "del_yn = 'N'")
-@Table( name = "TB_USER_CHLDRN" )
+@Table( name = "tb_user_chldrn" )
 public class UserChldrn extends BaseTimeEntity {
     
     @Id

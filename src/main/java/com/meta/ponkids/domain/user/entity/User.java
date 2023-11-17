@@ -22,7 +22,7 @@ import java.util.List;
 @DynamicInsert
 @DynamicUpdate
 @Where( clause = "del_yn = 'N'")
-@SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y' WHERE user_id = ?")
+@SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y', updt_dt = now() WHERE user_id = ?")
 @Table( name = "TB_USER" )
 public class  User extends BaseTimeEntity {
     

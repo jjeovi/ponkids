@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface UserRepository extends JpaRepository<User, String>, UserRepositoryCustom {
     
-    boolean existsByUserId( String UserId );
+    boolean existsByUserId( String userId );
+    
+    public User findByUserId( String userId);
     
 }

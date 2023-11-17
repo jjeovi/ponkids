@@ -3,10 +3,10 @@ package com.meta.ponkids.domain.user.controller;
 import java.time.LocalDateTime;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,13 +36,15 @@ public class UserController {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     
+    private final static String BASIC_PATH = "/admin/user";
+    
     /**
      * methodName    : userList
      * date           : 10/28/23
      * description    :
      */
-    @GetMapping( "/admin/user/list" )
-    public String userList( Model model,
+    @GetMapping( BASIC_PATH + "/list" )
+    public String list( Model model,
                             @ModelAttribute UserListDto userListDto,
                             @PageableDefault( size = 10 ) Pageable pageable ) {
         
@@ -52,14 +54,15 @@ public class UserController {
         
         model.addAttribute( "resultList", resultList );
         model.addAttribute( "searchDTO", userListDto );
-
-//        model.addAttribute( "authList", userService.findAll() );
         
-        return "admin/user/list";
+        // 기본 경로 setting
+        model.addAttribute("basicPath", BASIC_PATH);
+
+        return BASIC_PATH + "/list";
     }
     
-    @GetMapping( "/admin/user/insert" )
-    public String userInsert( Model model ) {
+    @GetMapping( BASIC_PATH + "/insert" )
+    public String insert( Model model ) {
         
         // 권한 리스트
         model.addAttribute( "authList", roleRepository.findAll() );
@@ -67,11 +70,15 @@ public class UserController {
         // 가입 object 생성
         model.addAttribute( new UserSaveReqDto() );
         
-        return "admin/user/insert";
+        // 기본 경로 setting
+        model.addAttribute("basicPath", BASIC_PATH);
+        
+        
+        return BASIC_PATH + "/insert";
     }
     
-    @PostMapping( "/admin/user/save" )
-    public String userSave(
+    @PostMapping( BASIC_PATH + "/save" )
+    public String save(
             @ModelAttribute UserSaveReqDto userSaveReqDto,
             @ModelAttribute UserRoleSaveReqDto userRoleSaveReqDto,  // required false
             MultiUserChldrnSaveReqDto userChldrns,
@@ -83,7 +90,7 @@ public class UserController {
             
             // 메시지 출력 및 url 이동 처리
             model.addAttribute( "resultMsg", "해당ID로 가입된 ID가 있습니다. 다시 시도해주세요." );
-            model.addAttribute( "moveUrl", "/admin/user/list" );
+            model.addAttribute( "moveUrl", BASIC_PATH +"/list" );
             
             return "common/alert";
             
@@ -102,22 +109,44 @@ public class UserController {
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
-        model.addAttribute( "moveUrl", "/admin/user/list" );
+        model.addAttribute( "moveUrl", BASIC_PATH +"/list" );
         
         return "common/alert";
     }
     
     
-    @GetMapping("/admin/user/delete")
-    public String userDelete(
-            @RequestParam String userId,
+    @Transactional
+    @GetMapping(BASIC_PATH + "/modify")
+    public String modify(
+            @RequestParam(required = true) String userId,
             Model model
     ) {
-//        userRepository.deleteById( userId );
-        userService.deleteById(userId);
+    	
+    	// 권한 리스트
+        model.addAttribute( "authList", roleRepository.findAll() );
+        model.addAttribute("modDto", userService.findByUserId(userId));
+        
+        // 기본 경로 setting
+        model.addAttribute("basicPath", BASIC_PATH);
+        
+        return BASIC_PATH + "/modify";
+    }
+    
+    
+    @Transactional
+    @GetMapping( BASIC_PATH + "/delete")
+    public String delete(
+            @RequestParam(required = true) String userId,
+            Model model
+    ) {
+        
+        userService.deleteAllByUserId( userId );	// User.java 의 @SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y' WHERE user_id = ?") 를 수행
+        
+//        userChldrnService.deleteAllByUserId(userId);
+       
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
-        model.addAttribute( "moveUrl", "/admin/user/list" );
+        model.addAttribute( "moveUrl", BASIC_PATH +"/list" );
         return "common/alert";
     }
     
