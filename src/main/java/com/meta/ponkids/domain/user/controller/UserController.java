@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,15 +45,15 @@ public class UserController {
      * description    :
      */
     @GetMapping( BASIC_PATH + "/list" )
-    public String list( Model model,
-                            @ModelAttribute UserListDto userListDto,
-                            @PageableDefault( size = 10 ) Pageable pageable ) {
+    public String list( @ModelAttribute UserListDto userListDto, 
+    					@PageableDefault( size = 10 ) Pageable pageable,
+    					Model model ) {
         
-        
+        // 목록 조회
         Page<UserListDto> resultList = userService.getList( userListDto, pageable );
-        
-        
         model.addAttribute( "resultList", resultList );
+        
+        // 검색 dto setting
         model.addAttribute( "searchDTO", userListDto );
         
         // 기본 경로 setting
@@ -61,8 +62,9 @@ public class UserController {
         return BASIC_PATH + "/list";
     }
     
-    @GetMapping( BASIC_PATH + "/insert" )
-    public String insert( Model model ) {
+    
+    @GetMapping( BASIC_PATH + "/regist" )
+    public String regist( Model model ) {
         
         // 권한 리스트
         model.addAttribute( "authList", roleRepository.findAll() );
@@ -73,17 +75,17 @@ public class UserController {
         // 기본 경로 setting
         model.addAttribute("basicPath", BASIC_PATH);
         
-        
-        return BASIC_PATH + "/insert";
+        return BASIC_PATH + "/regist";
     }
     
-    @PostMapping( BASIC_PATH + "/save" )
-    public String save(
+    
+    @PostMapping( BASIC_PATH + "/insert" )
+    public String insert(
             @ModelAttribute UserSaveReqDto userSaveReqDto,
             @ModelAttribute UserRoleSaveReqDto userRoleSaveReqDto,  // required false
             MultiUserChldrnSaveReqDto userChldrns,
-            Model model,
-            HttpServletRequest request ) {
+            HttpServletRequest request,
+            Model model ) {
         
         if ( userRepository.existsByUserId( userSaveReqDto.getUserId() ) ) {
             // 중복 ID 존재시 가입 불가
@@ -115,45 +117,72 @@ public class UserController {
     }
     
     
-    @Transactional
-    @GetMapping(BASIC_PATH + "/modify")
-    public String modify(
+    @GetMapping(value= { BASIC_PATH + "/detail", 
+    		             BASIC_PATH + "/modify" } )	 
+    public String detailOrModify(
             @RequestParam(required = true) String userId,
-            Model model
-    ) {
+            Model model,
+            HttpServletRequest request ) {
     	
     	// 권한 리스트
         model.addAttribute( "authList", roleRepository.findAll() );
-        model.addAttribute("modDto", userService.findByUserId(userId));
+        
+        // target object 조회
+        model.addAttribute("targetDto", userService.findByUserId(userId));
         
         // 기본 경로 setting
         model.addAttribute("basicPath", BASIC_PATH);
         
-        return BASIC_PATH + "/modify";
+        
+        String urlPath = request.getServletPath();
+        String remainPath = ""; 
+        if ( urlPath.split(BASIC_PATH)[1].startsWith("/detail") ) remainPath = "detail";
+        if ( urlPath.split(BASIC_PATH)[1].startsWith("/modify") ) remainPath = "modify";
+        
+        
+        return BASIC_PATH + "/" + remainPath;
+    }
+    
+    
+    @PostMapping(BASIC_PATH + "/update")
+    public String update(
+    		@RequestParam(required = true) String userId,
+    		Model model ) {
+    	
+    	// 권한 리스트
+    	model.addAttribute( "authList", roleRepository.findAll() );
+    	model.addAttribute("modDto", userService.findByUserId(userId));
+    	
+    	// 기본 경로 setting
+    	model.addAttribute("basicPath", BASIC_PATH);
+    	
+    	return BASIC_PATH + "/update";
     }
     
     
     @Transactional
-    @GetMapping( BASIC_PATH + "/delete")
+    @PostMapping( BASIC_PATH + "/delete")
     public String delete(
             @RequestParam(required = true) String userId,
-            Model model
-    ) {
+            Model model ) {
         
-        userService.deleteAllByUserId( userId );	// User.java 의 @SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y' WHERE user_id = ?") 를 수행
+    	// 삭제 처리 
+        userService.deleteAllByUserId( userId );	
         
-//        userChldrnService.deleteAllByUserId(userId);
-       
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
         model.addAttribute( "moveUrl", BASIC_PATH +"/list" );
+        
         return "common/alert";
     }
     
     @ResponseBody
     @RequestMapping( value = "/live/idDupCheck", method = { RequestMethod.GET } )
     public boolean ipDupCheck( @RequestParam( "userId" ) String userId ) {
+    	
         return userRepository.existsByUserId( userId );
     }
+    
+    
     
 }

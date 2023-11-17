@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -87,12 +88,12 @@ public class  User extends BaseTimeEntity {
     @ColumnDefault("N")
     private String delYn;               // 삭제 여부
     
-    @ManyToMany
-    @JoinTable(
-            name = "tb_user_role",
-            joinColumns = @JoinColumn(name="userId"),
-            inverseJoinColumns = @JoinColumn(name="roleSn"))
-    private final List<Role> roles = new ArrayList<>();
+//    @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE})
+//    @JoinTable(
+//            name = "tb_user_role",
+//            joinColumns = @JoinColumn(name="userId"),
+//            inverseJoinColumns = @JoinColumn(name="roleSn"))
+//    private final List<Role> roles = new ArrayList<>();
     
 }
 

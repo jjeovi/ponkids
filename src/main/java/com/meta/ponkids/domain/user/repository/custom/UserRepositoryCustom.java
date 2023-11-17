@@ -10,7 +10,5 @@ import org.springframework.data.domain.Pageable;
 public interface UserRepositoryCustom {
 	
 	Page<UserListDto> getList( UserListDto userListDto, Pageable pageable );
-	
-//	List<Book> findAllBooks();
 
 }

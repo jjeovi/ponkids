@@ -356,7 +356,7 @@
     <!-- S : 상단 메뉴 명 -->
     <!-- TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림. -->
     <div class="title_top">
-        <h3><*1>회원 등록</h3>
+        <h3>회원 등록</h3>
         <hr class="t_top_line">
     </div>
     <!-- E : 상단 메뉴 명 -->
@@ -364,16 +364,16 @@
     <!-- S : 메뉴 상세설명  -->
     <div class="div_menu_detail row">
         <div class="col-md-12 col-sm-12 ">
-            <div class="x_panel" style="height: auto;">
+            <div class="x_panel">
                 <div class="x_title">
-                    <h2><*2>회원등록 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
+                    <h2>회원등록 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a></li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content" style="display: none;">
-                    <*3><h4>상세설명 메뉴입니다.<small>메뉴는 회원 등록입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
+                    <h4>상세설명 메뉴입니다.<small>메뉴는 회원 등록입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
                     설정가능합니다.)</small></h4>
                     <div>
                         <div class="starrr stars"></div>
@@ -394,15 +394,15 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="insertForm" name="insertForm" method="post" th:action="@{/admin/user/save}">
-                        <input type="hidden" name="mngrConfmYn" value="Y"/>
+                    <form id="updateForm" name="updateForm" method="post" th:action="@{/admin/user/insert}">
+	                    <!-- hidden type  -->
+                        <input type="hidden" name="mngrConfmYn" th:value="${targetDto.mngrConfmYn}"/>
                         <!-- TODO 프로필 이미지 추가 작업 -->
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">아이디(이메일형식)<span
-                                    class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>아이디(이메일형식)</label>
                             <div class="col-md-6 col-sm-6">
-                                <input name="userId" id="userId" class="form-control"
-                                       required="required"/>
+                                <input name="userIdOri" id="userIdOri" class="form-control" th:value="${targetDto.userId}"
+                                       required="required" disabled="disabled"/>
                                 <small class="font-gray-dark"   >
                                     <b>비밀번호</b> 찾기 시 해당 이메일로 인증번호를 발송합니다. 정확한 이메일을 입력해주세요.
                                 </small>
@@ -412,90 +412,59 @@
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">비밀번호<span
-                                    class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>비밀번호</label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="password" id="password1" name="password"
-                                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[!@#$%^&*]).{8,}"
-                                       title="Minimum 8 Characters Including An Upper And Lower Case Letter, A Number And A Unique Character"
-                                       required/>
-                                <span style="position: absolute;right:15px;top:7px;" onclick="hideshow()">
-													<i id="slash" class="fa fa-eye-slash" style="display:none;"></i>
-													<i id="eye" class="fa fa-eye"></i>
-                                            </span>
+                            	<button type="button" class="btn btn-purple">비밀번호 초기화</button>
                                 <small class="font-gray-dark">
-                                    영문 (대소문자 구분), 숫자, 특수문자를 포함하여 <b>최소 8자리</b>로 구성
+                                	초기화 시 비밀번호는 ponkids1234!@
                                 </small>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">비밀번호 재입력<span class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>이름</label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="password" name="password2"
-                                       data-validate-linked='password' required='required'/>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">이름<span
-                                    class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control" data-validate-length-range="2,10" name="userNm"
-                                       required="required"
-                                       placeholder="이름을 입력해주세요."/>
+                                <input class="form-control" data-validate-length-range="2,10" name="userNm" required="required" placeholder="이름을 입력해주세요." th:value="${targetDto.userNm}"/>
                                 <small class="font-gray-dark">
                                     최소 2자 이상, 10자 이하로 입력해주세요.
                                 </small>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">성별<span
-                                    class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>성별</label>
                             <div class="col-md-6 col-sm-6 ">
                                 <div class="btn-group radiobox">
-                                    <input type="radio" id="gender1" name="gender" value="M" class="join-btn" required>
-                                    <label for="gender1" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">남자</label>
-                                    <input type="radio" id="gender2" name="gender" value="F" class="join-btn" required>
-                                    <label for="gender2" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">여자</label>
+                                    <input type="radio" id="gender1" name="gender" value="M" class="join-btn" th:checked="${targetDto.gender eq 'M'}" required >
+                                    <label for="gender1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">남자</label>
+                                    <input type="radio" id="gender2" name="gender" value="F" class="join-btn" th:checked="${targetDto.gender eq 'F'}" required>
+                                    <label for="gender2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">여자</label>
                                 </div>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">생년월일<span
-                                    class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>생년월일</label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control Date8String" type="date" name="brdtDate" required="required">
+                                <input class="form-control Date8String" type="date" name="brdtDate" required="required" th:value="${targetDto.brdtDate}">
                                 <small class="font-gray-dark">
                                     아이디 찾기 시 생년월일을 입력합니다.
                                 </small>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">연락처<span
-                                    class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>연락처</label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="tel" name="telNo" id="telNo" required="required"
-                                       placeholder="연락처입력 ( - 제외 )" data-validate-length-range="10,11">
+                                <input class="form-control" type="tel" name="telNo" id="telNo" th:value="${targetDto.telNo}" required="required" placeholder="연락처입력 ( - 제외 )" data-validate-length-range="10,11" >
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">거주지역<span
-                                    class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>거주지역</label>
                             <div class="col-md-2 col-sm-4">
                                 <div class="btn-group radiobox">
-                                    <input type="radio" id="resideArea1" name="resideArea" value="대한민국"
-                                           class="join-btn" required="required">
-                                    <label for="resideArea1" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">대한민국</label>
-                                    <input type="radio" id="resideArea2" name="resideArea" value="other"
-                                           class="join-btn" required="required">
-                                    <label for="resideArea2" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">그
-                                        외</label>
+                                    <input type="radio" id="resideArea1" name="resideArea" value="대한민국" class="join-btn" th:checked="${targetDto.resideArea eq '대한민국'}" required="required">
+                                    <label for="resideArea1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">대한민국</label>
+                                    <input type="radio" id="resideArea2" name="resideArea" value="other" class="join-btn" th:checked="${targetDto.resideArea ne '대한민국'}" required="required">
+                                    <label for="resideArea2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                    	그 외
+                                    </label>
                                 </div>
                             </div>
                             <!-- TODO 공통코드로 불러서 뿌리게끔 수정 -->
@@ -735,15 +704,14 @@
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">관리자 여부<span
-                                    class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>관리자 여부</label>
                             <div class="col-md-2 col-sm-4">
                                 <div class="btn-group radiobox">
-                                    <input type="radio" id="mngrYn1" name="mngrYn" value="N" class="join-btn">
+                                    <input type="radio" id="mngrYn1" name="mngrYn" value="N" th:checked="${targetDto.mngrYn eq 'N'}" class="join-btn" disabled="disabled">
                                     <label for="mngrYn1" class="btn btn-outline-purple w100p"
                                            data-toggle-class="btn-primary"
                                            data-toggle-passive-class="btn-default">사용자</label>
-                                    <input type="radio" id="mngrYn2" name="mngrYn" value="Y" class="join-btn">
+                                    <input type="radio" id="mngrYn2" name="mngrYn" value="Y" th:checked="${targetDto.mngrYn eq 'Y'}" class="join-btn" disabled="disabled">
                                     <label for="mngrYn2" class="btn btn-outline-purple w100p"
                                            data-toggle-class="btn-primary"
                                            data-toggle-passive-class="btn-default">관리자</label>

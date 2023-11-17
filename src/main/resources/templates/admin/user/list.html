@@ -9,13 +9,6 @@
 
     });
 
-    // 삭제 function
-    function deleteItem( id ) {
-        if ( confirm( "삭제하시겠습니까?" ) ) {
-            location.href = "/admin/user/delete?userId=" + id;
-        }
-    }
-
 </script>
 <!-- E : Javascript functions	-->
 <div layout:fragment="content" class="right_col" role="main">
@@ -23,7 +16,7 @@
     <!-- S : 상단 메뉴 명 -->
     <!-- TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림. -->
     <div class="title_top">
-        <h3><*1>회원 조회</h3>
+        <h3>회원 조회</h3>
         <hr class="t_top_line">
     </div>
     <!-- E : 상단 메뉴 명 -->
@@ -31,16 +24,16 @@
     <!-- S : 메뉴 상세설명  -->
     <div class="div_menu_detail row">
         <div class="col-md-12 col-sm-12 ">
-            <div class="x_panel" style="height: auto;">
+            <div class="x_panel">
                 <div class="x_title">
-                    <h2><*2>회원조회 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
+                    <h2>회원조회 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a></li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content" style="display: none;">
-                    <*3><h4>상세설명 메뉴입니다.<small>메뉴는 회원 등록입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
+                    <h4>상세설명 메뉴입니다.<small>메뉴는 회원 등록입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
                                               설정가능합니다.)</small></h4>
                     <div>
                         <div class="starrr stars"></div>
@@ -85,7 +78,7 @@
                                 <option value="N" th:selected=" ${searchDTO.mngrConfmYn} == 'N' ">미승인</option>
                             </select>
                             <div class="vl ml_5p"></div>
-                            <select class="form-control ml_5p" name="schOption" style="width: 55%;">
+                            <select class="form-control ml_5p w_55r" name="schOption">
                                 <option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">아이디</option>
                                 <option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">이름</option>
                             </select>
@@ -113,27 +106,27 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
-                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
-                                <td th:text="${data.userId}"></td>
-                                <td th:text="${data.userNm}"></td>
-                                <td th:text="${data.gender}"></td>
-                                <td th:text="${data.brdtDate}"></td>
-                                <td th:text="${data.telNo}"></td>
-                                <td th:text="${data.resideArea}"></td>
-                                <td th:text="${data.mngrYn}"></td>
-                                <td>
-                                    <a th:href="@{/admin/user/detail(userId=${data.userId})}"
-                                       class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
-                                    <a th:href="'javascript:deleteItem(\'' + ${data.userId} + '\');'"
-                                       class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>삭제</a>
-                                </td>
-                            </tr>
-                            <tr th:unless = "${!resultList.isEmpty()}">
-                                <td id="noDataTd">
-                                    데이터가 없습니다.
-                                </td>
-                            </tr>
+	                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
+	                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
+	                                <td th:text="${data.userId}"></td>
+	                                <td th:text="${data.userNm}"></td>
+	                                <td th:text="${data.gender}"></td>
+	                                <td th:text="${data.brdtDate}"></td>
+	                                <td th:text="${data.telNo}"></td>
+	                                <td th:text="${data.resideArea}"></td>
+	                                <td th:text="${data.mngrYn}"></td>
+	                                <td>
+	                                    <a th:href="@{/admin/user/modify(userId=${data.userId})}"
+	                                       class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
+	                                    <a th:href="'javascript:deleteItem(\'' + ${data.userId} + '\');'"
+	                                       class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>삭제</a>
+	                                </td>
+	                            </tr>
+	                            <tr th:unless = "${!resultList.isEmpty()}">
+	                                <td id="noDataTd">
+	                                    데이터가 없습니다.
+	                                </td>
+	                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -147,7 +140,7 @@
                     <div class="col-md-12 col-sm-12">
                         <!-- bottom left area -->
                         <div class="col-md-2 col-sm-3 text-left">
-                            <a href="/admin/user/insert" class="btn btn-white w120p">등록</a>
+                            <a href="/admin/user/regist" class="btn btn-white w120p">등록</a>
                         </div>
                         <!-- bottom center area (paging) -->
                         <div class="col-md-8 col-sm-6 text-center"
@@ -169,6 +162,9 @@
                         </div>
                     </div>
                 </form>
+                <form id="deleteForm" name="deleteForm" method="post" th:action="@{/admin/user/delete}">
+            		<input type="hidden" name="userId" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+            	</form>
             </div>
         </div>
     </div>

@@ -1696,8 +1696,10 @@ h2 {
   column-break-inside: avoid;
   opacity: 1;
   -webkit-transition: all .2s ease;
-  transition: all .2s ease; }
-
+  transition: all .2s ease;
+  height:auto;
+ }
+  
 .x_title {
   border-bottom: 2px solid #d6c8fa;
   padding: 1px 5px 6px;
@@ -5314,6 +5316,10 @@ ul.notifications {
 .pb_50p { padding-bottom : 50px;}
 
 
+.w_55r { width: 55%;}
+
+
+
 /* 페이징 처리 */
 .pagination-lg .page-link {
   padding: 0.3rem 0.9rem;
@@ -5326,4 +5332,18 @@ ul.notifications {
   border: 1px solid #d7c7fa;
   height: 1.9rem;
   margin-top: 4px;
+}
+
+/* 비밀번호 보이기 숨기기 버튼 */ 
+.hideshow {
+	position: absolute;
+	right:15px;
+	top:7px; 	
+}
+
+
+/* 필수요소 */
+label > .required {
+	color: #ff1212;
+    margin-right: 4px;
 }

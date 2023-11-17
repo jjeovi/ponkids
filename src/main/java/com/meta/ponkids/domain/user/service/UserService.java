@@ -88,8 +88,11 @@ public class UserService {
     	
     	// delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업 
         userRepository.deleteById( userId );	// User.java 의 @SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y' WHERE user_id = ?") 를 수행
+        
+        // 권한 삭제 : userRole delete 처리
+        userRoleRepository.deleteByUserId(userId);
     	
-        // userId delete 처리
+        // 자녀 삭제 : userchldrn delete 처리
 		userChldrnRepository.deleteAllByUserId(userId);
 		
 	}

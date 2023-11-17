@@ -1,14 +1,16 @@
 const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // 이메일 유효성 검사
 
-$( function () {
 
+// ------------- function () 함수 실행  호출시점 : DOM Tree 생성 완료 후 -----------------
+$( function () {
 
     // 해당 데이터가 없으면 colspan값 th개수만큼 자동으로 set
     if($("#noDataTd").length){
         $("#noDataTd").attr("colspan",$('#listTable th').length);
     }
-
-} );
+    
+});
+// ------------- function () 함수 종료 -----------------
 
 
 // 유효성 검사 ID
@@ -20,7 +22,6 @@ function validId( userId ) {
     return emailValidChk( userId );
 }
 
-
 // 이메일 유효성 정규식 체크 로직
 function emailValidChk( email ) {
     if ( emailPattern.test( email ) === false ) {
@@ -31,12 +32,10 @@ function emailValidChk( email ) {
     }
 }
 
-
 // 특정 문자열 전체 replace
 function replaceAll( str, searchStr, replaceStr ) {
     return str.split( searchStr ).join( replaceStr );
 };
-
 
 // 중복확인 결과 뿌리기
 function idDupResult( dupCheckFlag, checkResult ) {
@@ -51,7 +50,6 @@ function idDupResult( dupCheckFlag, checkResult ) {
     // 사용 여부
     if ( dupCheckFlag ) $( "#" + checkResult ).text( "사용가능" );
     else $( "#" + checkResult ).text( "사용불가" );
-
 }
 
 // 휴대폰 유효성 검사
@@ -62,7 +60,6 @@ function isTelNoFormat( telNo ) {
     var phoneRule = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
     return phoneRule.test( telNo );
 }
-
 
 // 이름 유효성 검사
 // - 2자 < name < 10자
@@ -75,16 +72,13 @@ function validCheckName( name ) {
         return false;
     }
     return true;
-
 }
-
 
 // 라디오 버튼 클릭시 active 클래스 추가
 function clickRadioEvent( e ) {
     // 라디오 버튼의 label들을 찾아 모든 label 에 active클래스를 제거 후, 클릭된 label 에 active클래스 추가
     $( e ).parent().siblings( "label" ).removeClass( "active" );
     $( e ).parent().addClass( "active" );
-
 }
 
 // list search 함수 'form' 이름을 가진 form 을 'page' 의 페이지로 submit
@@ -93,13 +87,22 @@ function searchListPage( form, page ) {
 
     $("[name='page']").val(page);
     $("form[name='" + form + "']").submit();
-
 }
-
 
 // listform 의 size Selectbox 변경시 submit
 function searchListSize( form, size ) {
     $("[name='size']").val(size);
     $("[name='page']").val(0);
     $("form[name='" + form + "']").submit();
+}
+
+
+// delete function
+function deleteItem( delPk ){
+	
+	if ( confirm("삭제하시겠습니까?")){
+		$("[name='deleteForm']").find("#delPk").val(delPk);
+		$("[name='deleteForm']").submit();
+		
+	}
 }

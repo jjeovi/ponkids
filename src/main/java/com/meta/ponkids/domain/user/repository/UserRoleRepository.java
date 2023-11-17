@@ -2,7 +2,18 @@ package com.meta.ponkids.domain.user.repository;
 
 import com.meta.ponkids.domain.user.entity.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface UserRoleRepository extends JpaRepository<UserRole, Integer>{
+	
+    
+    @Modifying(clearAutomatically = true)
+    @Query(value="UPDATE tb_user_role "
+    		+ "      SET del_yn = 'Y'"
+    		+ "        , updt_dt = now() "
+    		+ "    WHERE user_id = :userId", nativeQuery = true)	// nativeQuery true 없으면 error
+    int deleteByUserId(@Param("userId") String userId);
 
 }
