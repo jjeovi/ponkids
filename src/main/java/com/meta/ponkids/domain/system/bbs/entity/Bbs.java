@@ -33,6 +33,7 @@ import java.util.List;
 public class  Bbs extends BaseTimeEntity {
     
     @Id
+    @Column(insertable=false)
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_BBS_SN" )
     private int bbsSn;             // 게시판일련번호  
   
@@ -44,34 +45,23 @@ public class  Bbs extends BaseTimeEntity {
                         
     private String bbsGdcc;         // 게시판 안내문구   
                                       
-    private String bbsDc;          // 게시판 서ㅓㄹ명
+    private String bbsDc;          // 게시판 설명
 
     private String answerSetYn;   // 댓글 설정여부
-    
 
     private String useYn;         //사용여부
      
-    private String openYn;      //공개여부     
+    private String openYn;      //공개여부    
     
-    @NotNull
-    private String registerId;   // 등록자ID 
-    @NotNull
-    private String registerIp;   // 등록자Ip    
-    @NotNull
-    private LocalDateTime regDt;      //등록일
-    
-    private String upduserId;         //수정자ID 
-    
-    private String upduserIp;          //수정자IP
-    
-    private LocalDateTime updtDt;     //수정일시
-    
+    private String registerId;      //공개여부     
+
     @NotNull
     @ColumnDefault("N")
     private String delYn;     // 삭제 여부   
+
     
-    @ManyToMany
-    private List<Bbs> bbsList = new ArrayList<>();
+   // @ManyToMany
+   // private List<Bbs> bbsList = new ArrayList<>();
     
 
 }

@@ -1,14 +1,18 @@
 package com.meta.ponkids.domain.system.bbs.controller;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import com.meta.ponkids.domain.system.bbs.dto.BbsListDto;
 import com.meta.ponkids.domain.system.bbs.dto.BbsSaveReqDto;
 import com.meta.ponkids.domain.system.bbs.repository.BbsRepository;
 import com.meta.ponkids.domain.system.bbs.service.BbsService;
-
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -19,50 +23,94 @@ public class BbsController {
     
    private final BbsService bbsService;
    private final BbsRepository bbsRepository;
+   
+   private final static String BASIC_PATH = "/admin/bbs";
+    
+   /**
+    * methodName    : userList
+    * date           : 11/17/23
+    * description    :
+    */
+   @GetMapping( BASIC_PATH + "/list" )
+   public String list( @ModelAttribute BbsListDto bbsListDto, 
+   					@PageableDefault( size = 10 ) Pageable pageable,
+   					Model model ) {
+       
+       // 목록 조회
+       Page<BbsListDto> resultList = bbsService.getList( bbsListDto, pageable );
+       model.addAttribute( "resultList", resultList );
+       
+       // 검색 dto setting
+       model.addAttribute( "searchDTO", bbsListDto );
+       
+       // 기본 경로 setting
+       model.addAttribute("basicPath", BASIC_PATH);
 
+       return BASIC_PATH + "/list";
+   }
+   
     
-    /**
-     * methodName    : bbsList
-     * date           : 10/28/23
-     * description    :
-     */
-    @GetMapping( "/admin/bbs/list" )
-    public String bbsList() {
-    	
     
-        
-        return "admin/bbs/list";
-    }
-    
-    @GetMapping( "/admin/bbs/insert" )
-    public String bbsInsert( Model model ) {
+    @GetMapping(  BASIC_PATH  + "/regist" )
+    public String regist( Model model ) {
         
         model.addAttribute( new BbsSaveReqDto() );
         
+        // 기본 경로 setting
+        model.addAttribute("basicPath", BASIC_PATH);
         
-        //model.addAttribute( "authList", roleRepository.findAll() );
-        
-        
-        return "admin/bbs/insert";
+        return BASIC_PATH + "/regist";
     }
     
     
-    @PostMapping("/admin/bbs/save")
-    public String bbsSave( 
-    		               @ModelAttribute BbsSaveReqDto bbsSaveReqDto, HttpServletRequest request){
-      // getClientIp setting
-
-      // TODO 프로필 있는지 확인하여 프로필 이미지 있으면 프로필 저장 후, atchFileSn 값 을 저장
-      // TODO 자녀가 있으면 회원 등록 이후 자녀 정보의 등록도 필요
-
+    @PostMapping("/admin/bbs/insert")
+    public String insert( 
+    		               @ModelAttribute BbsSaveReqDto bbsSaveReqDto, HttpServletRequest request
+    		               , Model model) {
       // save
         bbsService.save(bbsSaveReqDto);
+        
+        // 메시지 출력 및 url 이동 처리
+        model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
+        model.addAttribute( "moveUrl", BASIC_PATH +"/list" );
 
-      // TODO message 생성하여 modal 에 저장 후 return
-      return "admin/bbs/list";
+        return "common/alert";
   }
-
     
-
     
+    @GetMapping(value= {  BASIC_PATH + "/modify" } )	 
+      public String detailOrModify(
+      @RequestParam(required = true) String bbsSn,
+      Model model,
+      HttpServletRequest request ) {
+      
+      // 권한 리스트
+     // model.addAttribute( "authList", roleRepository.findAll() );
+      
+      // target object 조회
+    //  model.addAttribute("targetDto", bbsService.findByBbsSn(bbsSn));
+      
+      // 기본 경로 setting
+      model.addAttribute("basicPath", BASIC_PATH);
+      
+      
+      String urlPath = request.getServletPath();
+      String remainPath = ""; 
+
+      if ( urlPath.split(BASIC_PATH)[1].startsWith("/modify") ) remainPath = "modify";
+      
+      
+      return BASIC_PATH + "/" + remainPath;
+      }
+    
+    @GetMapping(  BASIC_PATH  + "/nttRegist" )
+    public String nttRegist( Model model ) {
+        
+       // model.addAttribute( new BbsSaveReqDto() );
+        
+        // 기본 경로 setting
+        model.addAttribute("basicPath", BASIC_PATH);
+        
+        return BASIC_PATH + "/nttRegist";
+    }
 }
