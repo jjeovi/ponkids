@@ -22,6 +22,7 @@ import java.util.List;
 
 
 import static com.meta.ponkids.domain.system.bbs.entity.QBbs.bbs;
+import static com.meta.ponkids.domain.user.entity.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
@@ -50,6 +51,13 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
                                 bbs.registerId                // from
                 	    )  ).from( bbs )
                 .orderBy( bbs.bbsSn.desc() )
+                // where
+                .where(
+                		eqAnswerSetYn( bbsListDto.getAnswerSetYn() ),
+                		eqUseYn( bbsListDto.getUseYn() ),
+                		eqOpenYn( bbsListDto.getOpenYn() ),
+                        eqOption( bbsListDto.getSchOption(), bbsListDto.getSchCntn() )
+                )
                 // paging
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )
@@ -58,10 +66,40 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
 	      
         // (2) count
         JPAQuery<Long> count = query.select(bbs.count())
-                .from(bbs);
+                .from(bbs)
+                .where(
+                		eqAnswerSetYn( bbsListDto.getAnswerSetYn() ),
+                		eqUseYn( bbsListDto.getUseYn() ),
+                		eqOpenYn( bbsListDto.getOpenYn() ),
+                        eqOption( bbsListDto.getSchOption(), bbsListDto.getSchCntn() )
+                );
                
     	return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
 	 }
+    
+    
+    // -------------------------------- WHERE 검색 옵션 setting --------------------------------
+    private BooleanExpression eqAnswerSetYn( String answerSetYn) {
+        return StringUtils.hasText( answerSetYn ) ? bbs.answerSetYn.eq( answerSetYn ) : null;
+    }
+    private BooleanExpression eqUseYn( String useYn) {
+    	return StringUtils.hasText( useYn ) ? bbs.useYn.eq( useYn ) : null;
+    }
+    
+    private BooleanExpression eqOpenYn( String openYn) {
+    	return StringUtils.hasText( openYn ) ? bbs.openYn.eq( openYn ) : null;
+    }
+    
+
+    
+    private BooleanExpression eqOption(String schOption, String schCntn){
+        // 검색 옵션  A : 아이디 , B : 이름
+        if (StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn )){
+                 if( schOption.equals("A")) return bbs.bbsNm.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+            else if (schOption.equals("B")) return bbs.registerId.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+            else                            return null;
+        } else { return null; }
+    }
 	 
 
 
