@@ -68,7 +68,7 @@ public class BbsService {
     	Bbs bbs = bbsRepository.findByBbsSn(bbsSn);
     	
     	BbsModDto bbsModDto = new BbsModDto();
-    	//bbsModDto = bbsModDto.toDto(bbsSn);
+    	bbsModDto = bbsModDto.toDto(bbs);
     	
     	return bbsModDto;
     	

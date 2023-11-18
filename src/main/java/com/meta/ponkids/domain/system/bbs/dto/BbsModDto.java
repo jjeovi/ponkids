@@ -1,6 +1,8 @@
 package com.meta.ponkids.domain.system.bbs.dto;
 
 import com.meta.ponkids.domain.system.bbs.entity.Bbs;
+import com.meta.ponkids.domain.user.dto.UserModDto;
+import com.meta.ponkids.domain.user.entity.User;
 
 import lombok.Builder;
 import lombok.Data;
@@ -27,12 +29,16 @@ public class BbsModDto {
 
 	private String registerId;
 	
+	private String bbsGdcc;
+	
+	private String bbsDc;
+	
 	
 	
 
     // builder 생성
     @Builder
-    public BbsModDto( int bbsSn ,String bbsSeCd, String bbsNm,  String answerSetYn, String useYn,String openYn	 ,String registerId ) {
+    public BbsModDto( int bbsSn ,String bbsSeCd, String bbsNm,  String answerSetYn, String useYn,String openYn	 ,String registerId ,String bbsGdcc, String bbsDc) {
 
         this.bbsSn = bbsSn;
         this.bbsSeCd = bbsSeCd;
@@ -41,6 +47,8 @@ public class BbsModDto {
         this.useYn = useYn;
         this.openYn = openYn;
         this.registerId = registerId;
+        this.bbsGdcc = bbsGdcc;
+        this.bbsDc = bbsDc;
    }
     
     
@@ -54,6 +62,23 @@ public class BbsModDto {
                 .useYn( useYn )
                 .openYn( openYn )
                 .registerId( registerId )
+                .bbsGdcc( bbsGdcc )
+                .bbsDc( bbsDc )
+                .build();
+    }
+    
+    
+    public BbsModDto toDto(Bbs bbs) {
+        return BbsModDto.builder()
+        		.bbsSn( bbs.getBbsSn() )
+                .bbsSeCd( bbs.getBbsSeCd() )
+                .bbsNm( bbs.getBbsNm() )
+                .answerSetYn( bbs.getAnswerSetYn() )
+                .useYn( bbs.getUseYn() )
+                .openYn( bbs.getOpenYn() )
+                .registerId( bbs.getRegisterId() )
+                .bbsGdcc( bbs.getBbsGdcc() )
+                .bbsDc( bbs.getBbsDc() )
                 .build();
     }
     

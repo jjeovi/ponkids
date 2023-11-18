@@ -79,16 +79,14 @@ public class BbsController {
     
     
     @GetMapping(value= {  BASIC_PATH + "/modify" } )	 
-      public String detailOrModify(
-      @RequestParam(required = true) String bbsSn,
-      Model model,
-      HttpServletRequest request ) {
+      public String modify( @RequestParam(required = true) int bbsSn,  Model model, 
+    		  HttpServletRequest request ) {
       
       // 권한 리스트
      // model.addAttribute( "authList", roleRepository.findAll() );
       
       // target object 조회
-    //  model.addAttribute("targetDto", bbsService.findByBbsSn(bbsSn));
+      model.addAttribute("targetDto", bbsService.findByBbsSn(bbsSn));
       
       // 기본 경로 setting
       model.addAttribute("basicPath", BASIC_PATH);
@@ -102,6 +100,21 @@ public class BbsController {
       
       return BASIC_PATH + "/" + remainPath;
       }
+    
+    @PostMapping(BASIC_PATH + "/update")
+    public String update(
+    		@RequestParam(required = true) BbsSaveReqDto bbsSaveReqDto,
+    		Model model ) {
+    	
+    	   //bbsService.update(bbsSaveReqDto);
+           
+           // 메시지 출력 및 url 이동 처리
+           model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
+           model.addAttribute( "moveUrl", BASIC_PATH +"/list" );
+
+           return "common/alert";
+    }
+    
     
     @GetMapping(  BASIC_PATH  + "/nttRegist" )
     public String nttRegist( Model model ) {

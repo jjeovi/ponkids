@@ -105,7 +105,7 @@
                                 <td th:text="${data.useYn}"></td>
                                 <td></td>
                                 <td> 
-									 <a th:href="@{/admin/bbs/modify(registerId=${data.registerId})}"
+									 <a th:href="@{/admin/bbs/modify(bbsSn=${data.bbsSn})}"
 	                                       class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
 	                                    <a th:href="'javascript:deleteItem(\'' + ${data.registerId} + '\');'"
 	                                       class="btn btn-danger btn-xs"><i class="fa fa-pencil"></i>게시물관리</a>

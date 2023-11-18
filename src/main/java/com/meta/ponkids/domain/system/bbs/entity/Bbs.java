@@ -2,34 +2,33 @@ package com.meta.ponkids.domain.system.bbs.entity;
 
 
 import com.meta.ponkids.global.common.BaseTimeEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.Where;
+import lombok.*;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 
-@Where( clause = "del_yn = 'N'")
-@Entity
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@DynamicInsert
-@Table( name = "TB_BBS" )
+
 @SequenceGenerator(
         name = "SEQ_TB_BBS_SN",
         sequenceName = "SEQ_TB_BBS_SN",
         initialValue = 1,
         allocationSize = 1
 )
+@Entity
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@DynamicInsert
+@DynamicUpdate
+@Where( clause = "del_yn = 'N'")
+@SQLDelete(sql = "UPDATE tb_bbs SET del_yn ='Y', updt_dt = now() WHERE user_id = ?")
+@Table( name = "TB_BBS" )
 public class  Bbs extends BaseTimeEntity {
     
     @Id
@@ -59,7 +58,7 @@ public class  Bbs extends BaseTimeEntity {
     @ColumnDefault("N")
     private String delYn;     // 삭제 여부   
 
-    
+
    // @ManyToMany
    // private List<Bbs> bbsList = new ArrayList<>();
     
