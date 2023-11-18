@@ -145,7 +145,7 @@ public class UserController {
     
     /**
      * methodName    : update
-     * date           : 11/17/23
+     * date           : 1   1/17/23
      * description    : user update method
      */
     @PostMapping( BASIC_PATH + "/update" )
@@ -155,6 +155,7 @@ public class UserController {
             Model model ) {
         
         // TODO update 구현
+        
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
