@@ -8,143 +8,9 @@
 
     // DOM 준비 된 이후 실행
     $( function () {
+     });		
 
-        // initialize a validator instance from the "FormValidator" constructor.
-        // A "<form>" element is optionally passed as an argument, but is not a must
-
-        var validator = new FormValidator( {
-            "events": [ 'blur', 'input', 'change' ]
-        }, document.forms[0] );
-        // on form "submit" event
-        document.forms[0].onsubmit = function ( e ) { // 회원 등록시 유효성 검사.
-            var submit = true,
-                validatorResult = validator.checkAll( this );
-            // console.log( validatorResult );
-
-            // **  valid 추가 필요시 여기서
-
-            // id 중복체크 여부 검사
-            if ( !dupCheckFlag ) {
-                alert( "아이디를 확인해주세요." );
-                $( "#userId" ).focus();
-                return false;
-            }
-
-            // 연락처 유효성 검사
-            var telNo = $( "#telNo" ).val();
-            if ( !isTelNoFormat( telNo ) ) {
-                alert( "연락처 형태에 맞게 입력해주세요" );
-                $( "#telNo" ).focus();
-                return false;
-            }
-
-            // 거주지역 그 외만 선택 했을 시 return false;
-            var resideArea = $( "input:radio[name='resideArea']:checked" ).val();
-            var country = $( "#countryList" ).val();
-            if ( resideArea == 'other' ) {
-                if ( country == '' ) {
-                    alert( "거주지역을 선택해주세요." );
-                    $( "#countryList" ).focus();
-                    return false;
-                } else {
-                    $( "[name='resideArea']" ).val( country );
-                }
-
-            }
-
-            // 권한이 관리자일때, 권한 선택 안되어있을 때 return false
-            var mngrYn = $( "input:radio[name='mngrYn']:checked" ).val();
-            var roleSn = $( "[name='roleSn']" ).val();
-            if ( mngrYn == 'Y' && roleSn == '' ) {
-                alert( "관리자 권한을 선택해 주세요." );
-                $( "#roleList" ).focus();
-                return false;
-            }
-
-            // 통과
-
-            // 거주지역 set
-            if ( resideArea == 'other' ) {
-                $( "[name='resideArea']" ).val( country );
-            }
-            return !!validatorResult.valid;
-        };
-
-        // on form "reset" event
-        document.forms[0].onreset = function ( e ) {
-            validator.reset();
-        };
-        // stuff related ONLY for this demo page:
-        $( '.toggleValidationTooltips' ).change( function () {
-            validator.settings.alerts = !this.checked;
-            if ( this.checked )
-                $( 'form .alert' ).remove();
-        } ).prop( 'checked', false );
-
-
-        // 거주지역 변동시 셀렉트박스 표출 처리
-        $( "input:radio[name='resideArea']" ).change( function () {
-
-            // 그 외 거주지역 선택시 나라 선택하도록 setting
-            var country = $( this ).val();
-
-            if ( country == 'other' ) {
-                $( "#countryList" ).show();
-            } else {
-                $( "#countryList" ).hide();
-            }
-        } );
-
-        // 관리자 여부 변동시 셀렉트박스 표출 처리
-        $( "input:radio[name='mngrYn']" ).change( function () {
-
-            // 관리자 로 선택시 권한 상세 선택하도록 setting
-            var mngrYn = $( this ).val();
-
-            if ( mngrYn == 'Y' ) {
-                $( "#roleList" ).show();
-            } else {
-                $( "#roleList" ).hide();
-            }
-        } );
-
-        // 아이디 입력 focusout 처리 ( 중복체크 로직 )
-        $( "#userId" ).focusout( function () {
-            dupCheckFlag = false;
-            var userId = $( "#userId" ).val();      // userId값 넘기기
-
-            if ( validId( userId ) ) {
-
-                $.ajax( {
-                    url: "/live/idDupCheck",
-                    type: "GET",
-                    dataType: "json",
-                    data: { userId: userId },
-                    contentType: "application/json",
-                    success: function ( result ) {
-                        if ( !result ) dupCheckFlag = true;
-                        idDupResult( dupCheckFlag, "checkResult" );
-                    }
-                } );
-            } else {
-                idDupResult( dupCheckFlag, "checkResult" );
-            }
-        } )
-    } );
-
-  
-
-
-
-$("#answerSetYn").on('change', function() {
-if ($(this).is(':checked')) {
-    $(this).attr('value', 'Y');
-}
-else {
-   $(this).attr('value', 'N');
-}});
-
-   
+      
 
 
 
@@ -155,7 +21,7 @@ else {
     <!-- S : 상단 메뉴 명 -->
     // TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림.
     <div class="title_top">
-        <h3><*1>게시판 등록</h3>
+        <h3>게시판 등록</h3>
         <hr class="t_top_line">
     </div>
     <!-- E : 상단 메뉴 명 -->
@@ -165,14 +31,14 @@ else {
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel" style="height: auto;">
                 <div class="x_title">
-                    <h2><*2>게시판등록 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
+                    <h2>게시판등록 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a></li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content" style="display: none;">
-                    <*3><h4>상세설명 메뉴입니다.<small>메뉴는 게시판 등록입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
+                    <h4>상세설명 메뉴입니다.<small>메뉴는 게시판 등록입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
                     설정가능합니다.)</small></h4>
                     <div>
                         <div class="starrr stars"></div>
@@ -193,26 +59,29 @@ else {
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="insertForm" name="insertForm" method="post" th:action="@{/admin/bbs/save}"
+                    <form id="insertForm" name="insertForm" method="post" th:action="@{/admin/bbs/insert}"
                           th:object="${bbsSaveReqDto}">
                         <input type="hidden" name="mngrConfmYn" value="Y"/>
                         <!-- TODO 프로필 이미지 추가 작업 -->
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">게시판 구분1111</label><span
-                                    class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <select   name="bbsSeCd">
-									<option value="01">포토형</option>
-									<option value="02">리스트형</option>
-								</select>
+                      <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>게시판 구분</label>
+                            <div class="col-md-6 col-sm-6 ">
+                                <div class="btn-group radiobox">
+                                    <input type="radio" id="bbsSeCd1" name="bbsSeCd" value="01" class="join-btn" required>
+                                    <label for="bbsSeCd1" class="btn btn-outline-purple w100p"
+                                           data-toggle-class="btn-primary"
+                                           data-toggle-passive-class="btn-default">포토형</label>
+                                    <input type="radio" id="bbsSeCd2" name="bbsSeCd" value="02" class="join-btn" required>
+                                    <label for="bbsSeCd2" class="btn btn-outline-purple w100p"
+                                           data-toggle-class="btn-primary"
+                                           data-toggle-passive-class="btn-default">리스트형</label>
+                                </div>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">게시판 이름<span
-                                    class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>게시판 이름</label>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="input" id="bbsNm" name="bbsNm"
-                                    
                                        title="Minimum 8 Characters Including An Upper And Lower Case Letter, A Number And A Unique Character"
                                        required/>
                                 <span style="position: absolute;right:15px;top:7px;" onclick="hideshow()">
@@ -222,16 +91,14 @@ else {
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">게시판 안내문구<span class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>게시판 안내문구</label>
                             <div class="col-md-6 col-sm-6">
-                                <textarea class="form-control" type="" name="bbsGdcc" id="bbsGdcc"
-                                       data-validate-linked='password' required='required'>
+                                <textarea class="form-control" type="" name="bbsGdcc" id="bbsGdcc"  required='required'>
                                 </textarea>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">게시판 설명<span
-                                    class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>게시판 설명</label>
                             <div class="col-md-6 col-sm-6">
                                 <textarea class="form-control" required="required"
                                        placeholder="게시판 설명을 입력해주세요." id="bbsDc"  name="bbsDc">
@@ -239,8 +106,7 @@ else {
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">댓글 여부<span
-                                    class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>댓글 여부</label>
                             <div class="col-md-2 col-sm-4">
 								 <div class="btn-group radiobox">
                                     <input type="radio" id="answerSetYn1" name="answerSetYn" value="Y" class="join-btn">
@@ -255,8 +121,7 @@ else {
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">공개 여부<span
-                                    class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span  class="required">*</span>공개 여부</label>
                             <div class="col-md-2 col-sm-4">
                             	 <div class="btn-group radiobox">
                                     <input type="radio" id="openYn1" name="openYn" value="Y" class="join-btn">
@@ -268,10 +133,10 @@ else {
                                            data-toggle-class="btn-primary"
                                            data-toggle-passive-class="btn-default">비공개</label>
                                 </div>
+                             </div>   
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">사용 여부<span
-                                    class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>사용 여부</label>
                             <div class="col-md-2 col-sm-4">
 								 <div class="btn-group radiobox">
                                     <input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn">
@@ -288,16 +153,15 @@ else {
 
                         <div class="ln_solid"></div>
                         <!-- 저장버튼 -->
-                        <div class="item form-group">
+                       <div class="col-md-12">
                             <!-- bottom left area -->
                             <div class="col-md-2 col-sm-3 text-left">
-                                <button type="cancel" class="btn btn-white w120p">목록</button>
+                                <a href="/admin/bbs/list" class="btn btn-white w120p">목록</a>
                             </div>
                             <!-- bottom center area -->
                             <div class="col-md-8 col-sm-6 text-center">
-                                <button type="cancel" class="btn btn-white w120p" id="cancelBtn">취소
-                                </button>
-                                <button type="submit" class="btn btn-purple w120p" id="registBtn">등록</button>
+                                <a href="/admin/bbs/list" class="btn btn-white w120p">취소</a>
+                                <button type="submit" class="btn btn-purple w120p">저장</button>
                             </div>
                             <!-- bottom right area -->
                             <div class="col-md-2 col-sm-3 text-right">

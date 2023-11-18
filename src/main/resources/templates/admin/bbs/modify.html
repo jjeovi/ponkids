@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<title layout:fragment="title">pioneerkids (Admin-bbs) - 게시판 수정</title>
+<!-- S : Javascript functions	-->
+<script layout:fragment="script">
+    var dupCheckFlag = false;   // 중복체크 변수 선언
+
+    // DOM 준비 된 이후 실행
+    $( function () {
+     });		
+
+      
+
+
+
+</script>
+<!-- E : Javascript functions	-->
+<div layout:fragment="content" class="right_col" role="main">
+
+    <!-- S : 상단 메뉴 명 -->
+    // TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림.
+    <div class="title_top">
+        <h3>게시판 수정</h3>
+        <hr class="t_top_line">
+    </div>
+    <!-- E : 상단 메뉴 명 -->
+
+    <!-- S : 메뉴 상세설명  -->
+    <div class="div_menu_detail row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel" style="height: auto;">
+                <div class="x_title">
+                    <h2>게시판 수정 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content" style="display: none;">
+                    <h4>상세설명 메뉴입니다.<small>메뉴는 게시판 등록입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
+                    설정가능합니다.)</small></h4>
+                    <div>
+                        <div class="starrr stars"></div>
+                        상세설명 메뉴입니다. <span class="stars-count">0123456789</span> star(s)
+                    </div>
+                    <p>The menu is membership registration. This part allows the administrator to enter text
+                        describing the menu. (It can be set in Menu Management.)</p>
+                    <div class="starrr stars-existing" data-rating="4"></div>
+                    You gave a rating of <span class="stars-count-existing">4</span> star(s)
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- E : 메뉴 상세설명 -->
+
+    <!-- S: 메인 등록 영역 -->
+    <div class="row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                <div class="x_content">
+                    <form id="insertForm" name="insertForm" method="post" th:action="@{/admin/bbs/update}"
+                          th:object="${bbsSaveReqDto}">
+                        <input type="hidden" name="bbsSn" th:checked="${targetDto.bbsSn}" />
+                        <!-- TODO 프로필 이미지 추가 작업 -->
+                       <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>게시판 구분</label>
+                            <div class="col-md-6 col-sm-6 ">
+                                <div class="btn-group radiobox">
+                                    <input type="radio" id="bbsSeCd1" name="bbsSeCd" value="01" class="join-btn"    th:checked="${targetDto.bbsSeCd eq '01'}"  disabled>
+                                    <label for="bbsSeCd1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">포토형</label>
+                                    <input type="radio" id="bbsSeCd2" name="bbsSeCd" value="02" class="join-btn"   th:checked="${targetDto.bbsSeCd eq '02'}" disabled>
+                                    <label for="bbsSeCd2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">리스트형</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>게시판 이름</label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control" type="input" id="bbsNm" name="bbsNm"
+                                       title="Minimum 8 Characters Including An Upper And Lower Case Letter, A Number And A Unique Character"
+                                       required  th:value="${targetDto.bbsNm}"   />
+                                     
+                                <span style="position: absolute;right:15px;top:7px;" onclick="hideshow()">
+									<i id="slash" class="fa fa-eye-slash" style="display:none;"></i>
+									<i id="eye" class="fa fa-eye"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>게시판 안내문구</label>
+                            <div class="col-md-6 col-sm-6">
+                                <textarea class="form-control" type="" name="bbsGdcc" id="bbsGdcc"   required='required'  th:value="${targetDto.bbsGdcc}"  >
+                                </textarea>
+                            </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>게시판 설명</label>
+                            <div class="col-md-6 col-sm-6">
+                                <textarea class="form-control" required="required"
+                                       placeholder="게시판 설명을 입력해주세요." id="bbsDc"  name="bbsDc"  th:value="${targetDto.bbsDc}">
+                                </textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>댓글여부</label>
+                            <div class="col-md-6 col-sm-6 ">
+                                <div class="btn-group radiobox">
+                                    <input type="radio" id="answerSetYn1" name="answerSetYn" value="Y" class="join-btn" th:checked="${targetDto.answerSetYn eq 'Y'}" required >
+                                    <label for="answerSetYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">사용</label>
+                                    <input type="radio" id="answerSetYn2" name="answerSetYn" value="N" class="join-btn" th:checked="${targetDto.answerSetYn eq 'N'}" required>
+                                    <label for="answerSetYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">미사용</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>공개여부</label>
+                            <div class="col-md-6 col-sm-6 ">
+                                <div class="btn-group radiobox">
+                                    <input type="radio" id="openYn1" name="openYn" value="Y" class="join-btn" th:checked="${targetDto.openYn eq 'Y'}" required >
+                                    <label for="openYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">공개</label>
+                                    <input type="radio" id="openYn2" name="openYn" value="N" class="join-btn" th:checked="${targetDto.openYn eq 'N'}" required>
+                                    <label for="openYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">비공개</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                         <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>사용여부</label>
+                            <div class="col-md-6 col-sm-6 ">
+                                <div class="btn-group radiobox">
+                                    <input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn" th:checked="${targetDto.useYn eq 'Y'}" required >
+                                    <label for="useYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">사용</label>
+                                    <input type="radio" id="useYn2" name="useYn" value="N" class="join-btn" th:checked="${targetDto.useYn eq 'N'}" required>
+                                    <label for="useYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">미사용</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                       </div>
+
+                        <div class="ln_solid"></div>
+                        <!-- 저장버튼 -->
+                       <div class="col-md-12">
+                            <!-- bottom left area -->
+                            <div class="col-md-2 col-sm-3 text-left">
+                                <a href="/admin/bbs/list" class="btn btn-white w120p">목록</a>
+                            </div>
+                            <!-- bottom center area -->
+                            <div class="col-md-8 col-sm-6 text-center">
+                                <a href="/admin/bbs/list" class="btn btn-white w120p">취소</a>
+                                <button type="submit" class="btn btn-purple w120p">저장</button>
+                            </div>
+                            <!-- bottom right area -->
+                            <div class="col-md-2 col-sm-3 text-right">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- E: 메인 등록 영역 -->
+</div>
+</html>

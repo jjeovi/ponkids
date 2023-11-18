@@ -20,6 +20,8 @@ public class BbsSaveReqDto {
 	
 	private String bbsGdcc;
 	
+	private String bbsDc;
+	
 	private String answerSetYn;
 	
 	@NotNull
@@ -47,7 +49,7 @@ public class BbsSaveReqDto {
 
     // builder 생성
     @Builder
-    public BbsSaveReqDto( int bbsSn ,String bbsSeCd, String bbsNm, String bbsGdcc, String answerSetYn, String useYn,String openYn,String delYn
+    public BbsSaveReqDto( int bbsSn ,String bbsSeCd, String bbsNm, String bbsGdcc,String bbsDc, String answerSetYn, String useYn,String openYn,String delYn
     		,String registerId,String registerIp,String regDt ,String upduserId,String upduserIp,String updtDt) {
         this.bbsSn = bbsSn;
         this.bbsSeCd = bbsSeCd;
@@ -63,6 +65,7 @@ public class BbsSaveReqDto {
         this.upduserIp = upduserIp;
         this.updtDt = updtDt;
         this.delYn = delYn;
+        this.bbsDc = bbsDc;
     }
     
     
