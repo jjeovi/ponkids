@@ -16,6 +16,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
+/**
+ * className    : UserController
+ * author         : jjeoV
+ * date           : 11/18/23
+ * description    : class of 회원관리
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 11/18/23         jjeoV             최초 생성
+ */
 @Controller
 @RequiredArgsConstructor
 public class UserController {
@@ -145,7 +155,7 @@ public class UserController {
     
     /**
      * methodName    : update
-     * date           : 1   1/17/23
+     * date           : 11/17/23
      * description    : user update method
      */
     @PostMapping( BASIC_PATH + "/update" )
@@ -155,6 +165,7 @@ public class UserController {
             Model model ) {
         
         // TODO update 구현
+        
         
         
         // 메시지 출력 및 url 이동 처리
