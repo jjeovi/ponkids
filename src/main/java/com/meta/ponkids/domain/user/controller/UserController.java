@@ -71,7 +71,7 @@ public class UserController {
         model.addAttribute( "authList", roleRepository.findAll() );
         
         // 가입 object 생성
-        model.addAttribute( new UserSaveReqDto() );
+        model.addAttribute( new UserSaveDto() );
         
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
@@ -87,13 +87,13 @@ public class UserController {
      */
     @PostMapping( BASIC_PATH + "/insert" )
     public String insert(
-            @ModelAttribute UserSaveReqDto userSaveReqDto,
-            @ModelAttribute UserRoleSaveReqDto userRoleSaveReqDto,  // required false
-            MultiUserChldrnSaveReqDto userChldrns,
+            @ModelAttribute UserSaveDto userSaveDto,
+            @ModelAttribute UserRoleSaveDto userRoleSaveDto,  // required false
+            MultiUserChldrnSaveDto userChldrns,
             HttpServletRequest request,
             Model model ) {
         
-        if ( userRepository.existsByUserId( userSaveReqDto.getUserId() ) ) {
+        if ( userRepository.existsByUserId( userSaveDto.getUserId() ) ) {
             // 중복 ID 존재시 가입 불가
             
             // 메시지 출력 및 url 이동 처리
@@ -106,12 +106,12 @@ public class UserController {
             // 회원가입 처리
             
             // 관리자 승인여부 Y 이면 승인일시 now로 setting
-            if ( userSaveReqDto.getMngrConfmYn().equals( "Y" ) ) {
-                userSaveReqDto.setConfmDt( LocalDateTime.now() );
+            if ( userSaveDto.getMngrConfmYn().equals( "Y" ) ) {
+                userSaveDto.setConfmDt( LocalDateTime.now() );
             }
             
             // save
-            userService.save( userSaveReqDto, userRoleSaveReqDto, userChldrns, request );
+            userService.save( userSaveDto, userRoleSaveDto, userChldrns, request );
             
         }
         

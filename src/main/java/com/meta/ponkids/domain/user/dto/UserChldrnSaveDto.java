@@ -4,11 +4,10 @@ import com.meta.ponkids.domain.user.entity.UserChldrn;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @NoArgsConstructor
 @Data
-public class UserChldrnSaveReqDto {
+public class UserChldrnSaveDto {
 	
 	private String userId;
 	
@@ -33,7 +32,7 @@ public class UserChldrnSaveReqDto {
 	
 	
 	@Builder
-	public UserChldrnSaveReqDto( String userId, int userChldrnSeq, String chldrnNm, String chldrnGender, String chldrnBrdtDate, String chldrnEmail, String chldrnTelNo, String atchFileSn, String registerId, String registerIp ) {
+	public UserChldrnSaveDto( String userId, int userChldrnSeq, String chldrnNm, String chldrnGender, String chldrnBrdtDate, String chldrnEmail, String chldrnTelNo, String atchFileSn, String registerId, String registerIp ) {
 		this.userId = userId;
 		this.userChldrnSeq = userChldrnSeq;
 		this.chldrnNm = chldrnNm;
