@@ -1,4 +1,4 @@
-package com.meta.ponkids.domain.system.bbs.entity;
+package com.meta.ponkids.domain.system.ntt.entity;
 
 
 import com.meta.ponkids.global.common.BaseTimeEntity;
@@ -14,8 +14,8 @@ import javax.validation.constraints.NotNull;
 
 
 @SequenceGenerator(
-        name = "SEQ_TB_BBS_SN",
-        sequenceName = "SEQ_TB_BBS_SN",
+        name = "SEQ_TB_NTT_SN",
+        sequenceName = "SEQ_TB_NTT_SN",
         initialValue = 1,
         allocationSize = 1
 )
@@ -27,31 +27,33 @@ import javax.validation.constraints.NotNull;
 @DynamicInsert
 @DynamicUpdate
 @Where( clause = "del_yn = 'N'")
-@SQLDelete(sql = "UPDATE tb_bbs SET del_yn ='Y', updt_dt = now() WHERE bbsSn = ?")
-@Table( name = "TB_BBS" )
-public class  Bbs extends BaseTimeEntity {
+@SQLDelete(sql = "UPDATE tb_ntt SET del_yn ='Y', updt_dt = now() WHERE nttSn = ?")
+@Table( name = "TB_NTT" )
+public class  Ntt extends BaseTimeEntity {
     
     @Id
     @Column(insertable=false)
-    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_BBS_SN" )
-    private int bbsSn;             // 게시판일련번호  
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_NTT_SN" )
+    private int nttSn;             // 게시판일련번호  
   
     @NotNull
-    private String bbsSeCd;        // 게시판구분코드
+    private int bbsSn;        // 게시판구분코드
     
     @NotNull
-    private String bbsNm;             //게시판이름
+    private String nttSeq;             //게시판이름
                         
-    private String bbsGdcc;         // 게시판 안내문구   
+    private String nttNm;         // 게시판 안내문구   
                                       
-    private String bbsDc;          // 게시판 설명
+    private String nttCn;          // 게시판 설명
 
-    private String answerSetYn;   // 댓글 설정여부
+    private String atchFileSn;   // 댓글 설정여부
 
-    private String useYn;         //사용여부
+    private int nttRdCnt;         //사용여부
      
     private String openYn;      //공개여부    
     
+    private String noticeSetYn;      //공개여부     
+    private String noticeSeq;      //공개여부     
     private String registerId;      //공개여부     
 
     @NotNull

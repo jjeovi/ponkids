@@ -91,8 +91,11 @@
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>게시판 안내문구</label>
                             <div class="col-md-6 col-sm-6">
-                                <textarea class="form-control" type="" name="bbsGdcc" id="bbsGdcc"   required='required'  th:value="${targetDto.bbsGdcc}"  >
-                                </textarea>
+								<textarea id="message" required="required" class="form-control" name="message" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.."
+								 data-parsley-bbsGdcc-threshold="10"  th:value="${targetDto.bbsGdcc}"></textarea>
+
+
+                           
                             </div>
                         </div>
                         <div class="field item form-group">

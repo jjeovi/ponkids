@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<title layout:fragment="title">pioneerkids (Admin-bbs) - 게시판 등록</title>
+<script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/decoupled-document/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor/translations/ko.js"></script>
+<!-- S : Javascript functions	-->
+
+<!-- E : Javascript functions	-->
+<div layout:fragment="content" class="right_col" role="main">
+
+    <!-- S : 상단 메뉴 명 -->
+    // TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림.
+    <div class="title_top">
+        <h3>리스트형 게시물 등록</h3>
+        <hr class="t_top_line">
+    </div>
+    <!-- E : 상단 메뉴 명 -->
+
+    <!-- S : 메뉴 상세설명  -->
+    <div class="div_menu_detail row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel" style="height: auto;">
+                <div class="x_title">
+                    <h2>리스트형 게시물 등록 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content" style="display: none;">
+                    <h4>상세설명 메뉴입니다.<small>메뉴는 리스트형 게시물 등록입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
+                    설정가능합니다.)</small></h4>
+                    <div>
+                        <div class="starrr stars"></div>
+                        상세설명 메뉴입니다. <span class="stars-count">0123456789</span> star(s)
+                    </div>
+                    <p>The menu is membership registration. This part allows the administrator to enter text
+                        describing the menu. (It can be set in Menu Management.)</p>
+                    <div class="starrr stars-existing" data-rating="4"></div>
+                    You gave a rating of <span class="stars-count-existing">4</span> star(s)
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- E : 메뉴 상세설명 -->
+
+    <!-- S: 메인 등록 영역 -->
+    <div class="row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                <div class="x_content">
+                    <form id="insertForm" name="insertForm" method="post" th:action="@{/admin/bbs/nttInsert}"
+                          th:object="${bbsSaveReqDto}">
+                        <input type="hidden" name="bbsSn" value="100012"/>
+                        <!-- TODO 프로필 이미지 추가 작업 -->
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>제목</label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control" type="input" id="nttNm" name="nttNm"
+                                       title="Minimum 8 Characters Including An Upper And Lower Case Letter, A Number And A Unique Character"
+                                       required/>
+                                <span style="position: absolute;right:15px;top:7px;" onclick="hideshow()">
+									<i id="slash" class="fa fa-eye-slash" style="display:none;"></i>
+									<i id="eye" class="fa fa-eye"></i>
+                                </span>
+                            </div>
+                        </div>
+                       
+							 <div class="field item form-group">
+								 <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>내용</label>
+								 <div class="col-md-6 col-sm-6">
+									   
+									<ul class="nav navbar-right panel_toolbox">
+										<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+										</li>
+										<li class="dropdown">
+											<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+											<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+												<a class="dropdown-item" href="#">Settings 1</a>
+												<a class="dropdown-item" href="#">Settings 2</a>
+											</div>
+										</li>
+										<li><a class="close-link"><i class="fa fa-close"></i></a>
+										</li>
+									</ul>
+									<div class="clearfix"></div>
+										<div id="alerts"></div>
+								<div class="btn-toolbar editor" data-role="editor-toolbar" data-target="#editor-one">
+									<div class="btn-group">
+										<a class="btn dropdown-toggle" data-toggle="dropdown" title="Font"><i class="fa fa-font"></i><b class="caret"></b></a>
+										<ul class="dropdown-menu">
+										</ul>
+									</div>
+
+									<div class="btn-group">
+										<a class="btn dropdown-toggle" data-toggle="dropdown" title="Font Size"><i class="fa fa-text-height"></i>&nbsp;<b class="caret"></b></a>
+										<ul class="dropdown-menu">
+											<li>
+												<a data-edit="fontSize 5">
+													<p style="font-size:17px">Huge</p>
+												</a>
+											</li>
+											<li>
+												<a data-edit="fontSize 3">
+													<p style="font-size:14px">Normal</p>
+												</a>
+											</li>
+											<li>
+												<a data-edit="fontSize 1">
+													<p style="font-size:11px">Small</p>
+												</a>
+											</li>
+										</ul>
+									</div>
+
+									<div class="btn-group">
+										<a class="btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><i class="fa fa-bold"></i></a>
+										<a class="btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><i class="fa fa-italic"></i></a>
+										<a class="btn" data-edit="strikethrough" title="Strikethrough"><i class="fa fa-strikethrough"></i></a>
+										<a class="btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><i class="fa fa-underline"></i></a>
+									</div>
+
+									<div class="btn-group">
+										<a class="btn" data-edit="insertunorderedlist" title="Bullet list"><i class="fa fa-list-ul"></i></a>
+										<a class="btn" data-edit="insertorderedlist" title="Number list"><i class="fa fa-list-ol"></i></a>
+										<a class="btn" data-edit="outdent" title="Reduce indent (Shift+Tab)"><i class="fa fa-dedent"></i></a>
+										<a class="btn" data-edit="indent" title="Indent (Tab)"><i class="fa fa-indent"></i></a>
+									</div>
+
+									<div class="btn-group">
+										<a class="btn" data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)"><i class="fa fa-align-left"></i></a>
+										<a class="btn" data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><i class="fa fa-align-center"></i></a>
+										<a class="btn" data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><i class="fa fa-align-right"></i></a>
+										<a class="btn" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><i class="fa fa-align-justify"></i></a>
+									</div>
+
+									<div class="btn-group">
+										<a class="btn dropdown-toggle" data-toggle="dropdown" title="Hyperlink"><i class="fa fa-link"></i></a>
+										<div class="dropdown-menu input-append">
+											<input class="span2" placeholder="URL" type="text" data-edit="createLink" />
+											<button class="btn" type="button">Add</button>
+										</div>
+										<a class="btn" data-edit="unlink" title="Remove Hyperlink"><i class="fa fa-cut"></i></a>
+									</div>
+
+									<div class="btn-group">
+										<a class="btn" title="Insert picture (or just drag & drop)" id="pictureBtn"><i class="fa fa-picture-o"></i></a>
+										<input type="file" data-role="magic-overlay" data-target="#pictureBtn" data-edit="insertImage" />
+									</div>
+
+									<div class="btn-group">
+										<a class="btn" data-edit="undo" title="Undo (Ctrl/Cmd+Z)"><i class="fa fa-undo"></i></a>
+										<a class="btn" data-edit="redo" title="Redo (Ctrl/Cmd+Y)"><i class="fa fa-repeat"></i></a>
+									</div>
+								</div>
+
+								<div id="editor-one" class="editor-wrapper"></div>
+
+								<textarea name="nttCn" id="nttCn" style="display:none;"></textarea>
+
+								<br />
+
+								<div class="ln_solid"></div>
+                                      
+                                 </div>
+                                 
+                                 
+                                 
+                            
+							</div>
+							
+							
+							<div class="card mb-2">
+	<div class="card-header bg-light">
+	        <i class="fa fa-comment fa"></i> 댓글
+	</div>
+	<div class="card-body">
+		<ul class="list-group list-group-flush">
+		    <li class="list-group-item">
+			<div class="form-inline mb-2">
+				<label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
+				<input type="text" class="form-control ml-2" placeholder="Enter yourId" id="replyId">
+				<label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
+				<input type="password" class="form-control ml-2" placeholder="Enter password" id="replyPassword">
+			</div>
+			<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+			<button type="button" class="btn btn-dark mt-3" onClick="javascript:addReply();">등록</button>
+		    </li>
+		</ul>
+	</div>
+</di>
+							 
+  
+							
+							
+							
+					
+					
+
+                        <div class="ln_solid"></div>
+                        <!-- 저장버튼 -->
+                       <div class="col-md-12">
+                            <!-- bottom left area -->
+                            <div class="col-md-2 col-sm-3 text-left">
+                                <a href="/admin/bbs/list" class="btn btn-white w120p">목록</a>
+                            </div>
+                            <!-- bottom center area -->
+                            <div class="col-md-8 col-sm-6 text-center">
+                                <a href="/admin/bbs/list" class="btn btn-white w120p">취소</a>
+                                <button type="submit" class="btn btn-purple w120p">저장</button>
+                            </div>
+                            <!-- bottom right area -->
+                            <div class="col-md-2 col-sm-3 text-right">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- E: 메인 등록 영역 -->
+</div>
+</html>

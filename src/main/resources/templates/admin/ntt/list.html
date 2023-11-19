@@ -16,7 +16,7 @@
     <!-- S : 상단 메뉴 명 -->
     <!-- TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림. -->
     <div class="title_top">
-        <h3>게시판 조회</h3>
+        <h3>게시물 조회</h3>
         <hr class="t_top_line">
     </div>
     <!-- E : 상단 메뉴 명 -->
@@ -26,14 +26,14 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel" style="height: auto;">
                 <div class="x_title">
-                    <h2>게시판 조회 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
+                    <h2>게시물 조회 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a></li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content" style="display: none;">
-                    <*3><h4>상세설명 메뉴입니다.<small>메뉴는 게시판 조회입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
+                    <*3><h4>상세설명 메뉴입니다.<small>메뉴는 게시물 조회입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
                                               설정가능합니다.)</small></h4>
                     <div>
                         <div class="starrr stars"></div>
@@ -51,29 +51,41 @@
 
     <!-- S: content -->
     <div class="x_panel">
+     <div class="form-group row">
+											<label class="control-label col-md-3 col-sm-3 ">게시판 그룹</label>
+											<div class="col-md-10 col-sm-10 ">
+												<select class="select2_multiple form-control" multiple="multiple">
+													<option>전체</option>
+													<option>포토형</option>
+													<option selected>리스트형</option>
+												</select>
+											</div>
+											<label class="control-label col-md-3 col-sm-3 ">게시판</label>
+											<div class="col-md-10 col-sm-10 ">
+												<select class="select2_multiple form-control" multiple="multiple">
+												    <option>전체</option>
+													<option selected>공지사항</option>
+												</select>
+											</div>
+										</di>
+
         <div class="x_content">
             <div class="row">
                 <form id="listForm" name="listForm" method="get" th:action="@{/admin/bbs/list}">
-                    <input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
+                    <input type="hidden" name="page" />
                     <!-- S : 테이블 상단 검색 창 -->
                     <!-- totalCount -->
                     <div class="col-md-1 col-sm-2 mt_10p pl_15p">
-                        총 <span th:utext="${resultList.totalElements}"></span>건
+                        총 <span></span>건
                     </div>
                     <div class="col-md-11 col-sm-10 mb_10p">
                         <div class="btn-group float-right" role="group">
-                            <select class="form-control" name="useYn">
-                                <option value="">사용여부</option>
-                                <option value="Y" th:selected=" ${searchDTO.useYn} == 'Y' ">Y</option>
-                                <option value="N" th:selected=" ${searchDTO.useYn} == 'N' ">N</option>
-                            </select>
-                  
                             <div class="vl ml_5p"></div>
                             <select class="form-control ml_5p" name="schOption" style="width: 55%;">
-                                <option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">제목</option>
-                                <option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">등록자</option>
+                                <option value="A" >제목</option>
+                                <option value="B" >등록자</option>
                             </select>
-                            <input type="text" name="schCntn" th:value="${searchDTO.schCntn}"
+                            <input type="text" name="schCntn"
                                    class="form-control input-sm" placeholder="검색어 입력"
                                    aria-controls="datatable-responsive">
                             <button type="submit" class="btn btn-purple w250p">검색</button>
@@ -86,34 +98,13 @@
                             <thead>
                                <tr>
                                   <th>순번</th>
-                                  <th>게시판구분코드</th>
-                                  <th>이름</th>
-                                  <th>댓글사용여부</th>
-                                  <th>공개여부</th>
-                                  <th>사용여부</th>
+                                  <th>제목</th>
                                   <th>등록일</th>
                                   <th>관리</th>
                                </tr>
                             </thead>
                             <tbody>
-                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
-                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
-                                <td th:text="${data.bbsSeCd}"></td>
-                                <td th:text="${data.bbsNm}"></td>
-                                <td th:text="${data.answerSetYn}"></td>
-                                <td th:text="${data.openYn}"></td>
-                                <td th:text="${data.useYn}"></td>
-                                <td></td>
-                                <td> 
-									 <a th:href="@{/admin/bbs/modify(bbsSn=${data.bbsSn})}"
-	                                       class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
-	                                   <a th:href="@{/admin/ntt/list(bbsSn=${data.bbsSn})}"
-	                                       class="btn btn-danger btn-xs"><i class="fa fa-pencil"></i>게시물관리</a>      
-	                                 
-								</td>
-                             
-                            </tr>
-                            <tr th:unless = "${!resultList.isEmpty()}">
+                            <tr >
                                 <td id="noDataTd">
                                     데이터가 없습니다.
                                 </td>
@@ -130,15 +121,17 @@
                     <!-- S : 하단 목록 -->
                                        <!-- S : 하단 목록 -->
                     <div class="col-md-12 col-sm-12">
-                        <div class="col-md-2 col-sm-3 text-left">
-                            <a href="/admin/bbs/regist" class="btn btn-white w120p">등록</a>
+                        <!-- bottom left area -->
+                        <div class="col-md-8 col-sm-6 text-left">
+						    <a href="/admin/bbs/list" class="btn btn-white w120p">게시판 관리</a>
+                            <a href="/admin/ntt/regist" class="btn btn-white w120p">등록</a>
                         </div>
                         <!-- bottom center area (paging) -->
-                        <div class="col-md-8 col-sm-6 text-center"
+                       <!-- <div class="col-md-8 col-sm-6 text-center"
                              th:insert="~{layout/tiles/paging :: paging('listForm', ${resultList})}">
-                            <!-- parameter : ( submit할 form 의 name값 ), ( ${resultList} 는 Page<T> 오브젝트 )  -->
+                             parameter : ( submit할 form 의 name값 ), ( ${resultList} 는 Page<T> 오브젝트 )  
                         </div>
-                        <!-- bottom right area -->
+                         bottom right area 
                         <div class="col-md-2 col-sm-3 text-right">
                             <select class="form-control" name="size" onchange="searchListSize('listForm',this.value);">
                                 <option value="10" th:selected=" ${resultList.pageable.pageSize} == '10' ">10개씩 보기
@@ -150,7 +143,7 @@
                                 <option value="100" th:selected=" ${resultList.pageable.pageSize} == '100' ">100개씩 보기
                                 </option>
                             </select>
-                        </div>
+                        </div>-->
                     </div>
                 </form>
             </div>

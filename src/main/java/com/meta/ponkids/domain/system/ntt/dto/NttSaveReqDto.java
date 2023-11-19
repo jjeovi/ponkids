@@ -1,0 +1,73 @@
+package com.meta.ponkids.domain.system.ntt.dto;
+
+import lombok.*;
+
+
+import javax.validation.constraints.NotNull;
+
+@NoArgsConstructor
+@Data
+public class NttSaveReqDto {
+
+    @NotNull
+    private int nttSn;
+	
+    @NotNull
+	private int bbsSn;
+	private String nttSeq;
+	private String nttNm;
+	private String nttCn;
+	
+	private String atchFileSn;
+	
+	private int nttRdCnt;
+	private String openYn
+	;
+	private String noticeSetYn;
+	private String noticeSeq;
+  
+	@NotNull
+	private String registerId;
+	
+	@NotNull
+	private String registerIp;
+	
+
+	private String regDt;
+	
+
+	private String upduserId;
+	
+	private String upduserIp;
+	
+	private String updtDt;
+	
+	private String delYn;
+
+    // builder 생성
+    @Builder
+    public NttSaveReqDto( int nttSn ,int bbsSn, String nttSeq, String nttNm,String nttCn, String atchFileSn, int nttRdCnt,String noticeSetYn, String noticeSeq,
+    		String openYn,String delYn
+    		,String registerId,String registerIp,String regDt ,String upduserId,String upduserIp,String updtDt) {
+        this.nttSn = nttSn;
+        this.bbsSn = bbsSn;
+        this.nttSeq = nttSeq;
+        this.nttNm = nttNm;
+        this.nttCn = nttCn;
+        this.atchFileSn = atchFileSn;
+        this.nttRdCnt = nttRdCnt;
+        this.noticeSetYn = noticeSetYn;
+        this.noticeSeq = noticeSeq;
+        this.openYn = openYn;
+        this.registerId = registerId;
+        this.registerIp = registerIp;
+        this.regDt = regDt;
+        this.upduserId = upduserId;
+        this.upduserIp = upduserIp;
+        this.updtDt = updtDt;
+        this.delYn = delYn;
+      
+    }
+    
+    
+}

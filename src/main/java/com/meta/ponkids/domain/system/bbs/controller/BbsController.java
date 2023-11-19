@@ -27,7 +27,7 @@ public class BbsController {
    private final static String BASIC_PATH = "/admin/bbs";
     
    /**
-    * methodName    : userList
+    * methodName    : bbsList
     * date           : 11/17/23
     * description    :
     */
@@ -115,15 +115,7 @@ public class BbsController {
            return "common/alert";
     }
     
+
     
-    @GetMapping(  BASIC_PATH  + "/nttRegist" )
-    public String nttRegist( Model model ) {
-        
-       // model.addAttribute( new BbsSaveReqDto() );
-        
-        // 기본 경로 setting
-        model.addAttribute("basicPath", BASIC_PATH);
-        
-        return BASIC_PATH + "/nttRegist";
-    }
+
 }

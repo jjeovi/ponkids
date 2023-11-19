@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Data
 public class BbsSaveReqDto {
-
     @NotNull
     private int bbsSn;
 	
