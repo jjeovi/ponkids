@@ -5,6 +5,8 @@ import com.meta.ponkids.global.common.BaseTimeEntity;
 import lombok.*;
 import org.hibernate.annotations.*;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -40,7 +42,7 @@ public class  Ntt extends BaseTimeEntity {
     private int bbsSn;        // 게시판구분코드
     
     @NotNull
-    private String nttSeq;             //게시판이름
+    private int nttSeq;             //게시판이름
                         
     private String nttNm;         // 게시판 안내문구   
                                       
@@ -55,6 +57,8 @@ public class  Ntt extends BaseTimeEntity {
     private String noticeSetYn;      //공개여부     
     private String noticeSeq;      //공개여부     
     private String registerId;      //공개여부     
+    private String registerIp;      //공개여부     
+    private LocalDateTime regDt;      //공개여부     
 
     @NotNull
     @ColumnDefault("N")

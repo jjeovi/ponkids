@@ -2,6 +2,7 @@ package com.meta.ponkids.domain.system.ntt.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
@@ -33,7 +34,7 @@ public class NttSaveReqDto {
 	private String registerIp;
 	
 
-	private String regDt;
+	private LocalDateTime regDt;
 	
 
 	private String upduserId;
@@ -48,7 +49,7 @@ public class NttSaveReqDto {
     @Builder
     public NttSaveReqDto( int nttSn ,int bbsSn, String nttSeq, String nttNm,String nttCn, String atchFileSn, int nttRdCnt,String noticeSetYn, String noticeSeq,
     		String openYn,String delYn
-    		,String registerId,String registerIp,String regDt ,String upduserId,String upduserIp,String updtDt) {
+    		,String registerId,String registerIp,LocalDateTime regDt ,String upduserId,String upduserIp,String updtDt) {
         this.nttSn = nttSn;
         this.bbsSn = bbsSn;
         this.nttSeq = nttSeq;

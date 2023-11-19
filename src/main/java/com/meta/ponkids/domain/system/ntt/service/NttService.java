@@ -21,24 +21,27 @@ public class NttService {
     private final NttRepository nttRepository;
 
 
-    public NttSaveReqDto save(NttSaveReqDto BbsNttSaveReqDto) {
+    public NttSaveReqDto save(NttSaveReqDto nttSaveReqDto) {
 
     	// dto to entity 작업 (필수)
         Ntt bbsNtt = Ntt.builder()
-        		.nttSn(BbsNttSaveReqDto.getNttSn())
-        		.bbsSn(BbsNttSaveReqDto.getBbsSn())
-        		.nttSeq("1")
-        		.nttNm(BbsNttSaveReqDto.getNttNm())
-        		.nttCn(BbsNttSaveReqDto.getNttCn())
+        		.nttSn(nttSaveReqDto.getNttSn())
+        		.bbsSn(nttSaveReqDto.getBbsSn())
+        		.nttSeq(1)
+        		.nttNm(nttSaveReqDto.getNttNm())
+        		.nttCn(nttSaveReqDto.getNttCn())
         		.nttRdCnt(1)
                 .registerId("ehlee")
                 .delYn( "N" )
+                .openYn( "Y" )
+                .registerIp("0.0.0.0")
+                .regDt(LocalDateTime.now())
                 .build();
 
         // save
         nttRepository.save(bbsNtt);
 
-        return BbsNttSaveReqDto;
+        return nttSaveReqDto;
     }
     
     
