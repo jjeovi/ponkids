@@ -9,15 +9,27 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+
+/**
+ * InterfaceName  : UserChldrnRepository
+ * author         : jjeoV
+ * date           : 2023-11-19
+ * description    : interface of 자녀 Repository
+ * ===========================================================
+ * DATE              AUTHOR               NOTE
+ * -----------------------------------------------------------
+ * 2023-11-19        jjeoV             최초 생성
+ */
 public interface UserChldrnRepository extends JpaRepository<UserChldrn, Integer> {
     
-    List<UserChldrn> findByUserId(String userId);
+    List<UserChldrn> findByUserId( String userId );
     
-    @Modifying(clearAutomatically = true)
-    @Query(value="UPDATE tb_user_chldrn "
-    		+ "      SET del_yn = 'Y'"
-    		+ "        , updt_dt = now() "
-    		+ "    WHERE user_id = :userId", nativeQuery = true)	// nativeQuery true 없으면 error
-    int deleteAllByUserId(@Param("userId") String userId);
-
+    @Modifying( clearAutomatically = true )
+    @Query( value = "UPDATE tb_user_chldrn "
+            + "      SET del_yn = 'Y'"
+            + "        , updt_dt = now() "
+            + "    WHERE user_id = :userId", nativeQuery = true )
+        // nativeQuery true 없으면 error
+    int deleteAllByUserId( @Param( "userId" ) String userId );
+    
 }

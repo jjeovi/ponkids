@@ -1,20 +1,30 @@
 package com.meta.ponkids.domain.user.entity;
 
-import com.meta.ponkids.domain.system.role.entity.Role;
 import com.meta.ponkids.global.common.BaseTimeEntity;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.*;
 
-import javax.persistence.*;
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * className      : User
+ * author         : jjeoV
+ * date           : 2023-11-19
+ * description    : class of 회원 Entity
+ * ===========================================================
+ * DATE              AUTHOR               NOTE
+ * -----------------------------------------------------------
+ * 2023-11-19        jjeoV             최초 생성
+ */
 @Entity
 @Getter
 @Builder

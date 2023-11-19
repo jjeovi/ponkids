@@ -4,7 +4,6 @@ import com.meta.ponkids.domain.system.role.repository.RoleRepository;
 import com.meta.ponkids.domain.user.dto.*;
 import com.meta.ponkids.domain.user.repository.UserRepository;
 import com.meta.ponkids.domain.user.service.UserService;
-import groovy.util.logging.Log4j;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -19,14 +18,14 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
 /**
- * className    : UserController
+ * className      : UserController
  * author         : jjeoV
- * date           : 11/18/23
- * description    : class of 회원관리
+ * date           : 2023-11-19
+ * description    : class of 회원관리 Controller
  * ===========================================================
- * DATE              AUTHOR             NOTE
+ * DATE              AUTHOR               NOTE
  * -----------------------------------------------------------
- * 11/18/23         jjeoV             최초 생성
+ * 2023-11-19        jjeoV             최초 생성
  */
 @Controller
 @Log4j2
@@ -82,7 +81,6 @@ public class UserController {
         return BASIC_PATH + "/regist";
     }
     
-    
     /**
      * methodName    : insert
      * date           : 11/17/23
@@ -115,7 +113,6 @@ public class UserController {
             
             // save
             userService.save( userSaveDto, userRoleSaveDto, userChldrns, request );
-            
         }
         
         // 메시지 출력 및 url 이동 처리
@@ -168,7 +165,7 @@ public class UserController {
             Model model ) {
         
         // update 구현
-        userService.update(modDto);
+        userService.update( modDto );
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
@@ -176,7 +173,6 @@ public class UserController {
         
         return "common/alert";
     }
-    
     
     /**
      * methodName    : delete

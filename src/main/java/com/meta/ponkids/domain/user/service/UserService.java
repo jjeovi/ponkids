@@ -20,6 +20,16 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * className      : UserService
+ * author         : jjeoV
+ * date           : 2023-11-19
+ * description    : class of 회원 Service
+ * ===========================================================
+ * DATE              AUTHOR               NOTE
+ * -----------------------------------------------------------
+ * 2023-11-19        jjeoV             최초 생성
+ */
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -67,63 +77,62 @@ public class UserService {
     }
     
     
-    public Page<UserListDto> getList( UserListDto userListDto, Pageable pageable){
-    	return userRepository.getList(userListDto, pageable);
+    public Page<UserListDto> getList( UserListDto userListDto, Pageable pageable ) {
+        return userRepository.getList( userListDto, pageable );
     }
     
     
-    public UserModDto findByUserId(String userId) {
-    	
-    	User user = userRepository.findByUserId(userId);
-    	
-    	UserModDto userModDto = new UserModDto();
-    	userModDto = userModDto.toDto(user);
-    	
-    	return userModDto;
-    	
+    public UserModDto findByUserId( String userId ) {
+        
+        User user = userRepository.findByUserId( userId );
+        
+        UserModDto userModDto = new UserModDto();
+        userModDto = userModDto.toDto( user );
+        
+        return userModDto;
+        
     }
     
-    public void update(UserModDto modDto){
+    public void update( UserModDto modDto ) {
         // target 조회
         User user = userRepository.findByUserId( modDto.getUserId() );
         
         // target object 전환 ( entity to dto )
-        UserModDto targetDto =  new UserModDto();
+        UserModDto targetDto = new UserModDto();
         targetDto = targetDto.toDto( user );
         
         // target object 에 수정사항 set
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
-        if ( StringUtils.hasText( modDto.getUserNm() ) )        targetDto.setUserNm( modDto.getUserNm() );          // 이름
-        if ( StringUtils.hasText( modDto.getGender() ) )        targetDto.setGender( modDto.getGender() );          // 성별
-        if ( StringUtils.hasText( modDto.getBrdtDate() ) )      targetDto.setBrdtDate( modDto.getBrdtDate() );      // 생년월일
-        if ( StringUtils.hasText( modDto.getTelNo() ) )         targetDto.setTelNo( modDto.getTelNo() );            // 연락처
-        if ( StringUtils.hasText( modDto.getResideArea() ) )    targetDto.setResideArea( modDto.getResideArea() );  // 거주지역
-        if ( StringUtils.hasText( modDto.getRdnmAdr() ) )       targetDto.setRdnmAdr( modDto.getRdnmAdr() );        // 주소
-        if ( StringUtils.hasText( modDto.getZip() ) )           targetDto.setZip( modDto.getZip() );                // 우편번호
-        if ( StringUtils.hasText( modDto.getMngrYn() ) )        targetDto.setMngrYn( modDto.getMngrYn() );          // 관리자여부
+        if ( StringUtils.hasText( modDto.getUserNm() ) ) targetDto.setUserNm( modDto.getUserNm() );          // 이름
+        if ( StringUtils.hasText( modDto.getGender() ) ) targetDto.setGender( modDto.getGender() );          // 성별
+        if ( StringUtils.hasText( modDto.getBrdtDate() ) ) targetDto.setBrdtDate( modDto.getBrdtDate() );      // 생년월일
+        if ( StringUtils.hasText( modDto.getTelNo() ) ) targetDto.setTelNo( modDto.getTelNo() );            // 연락처
+        if ( StringUtils.hasText( modDto.getResideArea() ) ) targetDto.setResideArea( modDto.getResideArea() );  // 거주지역
+        if ( StringUtils.hasText( modDto.getRdnmAdr() ) ) targetDto.setRdnmAdr( modDto.getRdnmAdr() );        // 주소
+        if ( StringUtils.hasText( modDto.getZip() ) ) targetDto.setZip( modDto.getZip() );                // 우편번호
+        if ( StringUtils.hasText( modDto.getMngrYn() ) ) targetDto.setMngrYn( modDto.getMngrYn() );          // 관리자여부
         
         // target object 전환 ( dto to entity )
         user = targetDto.toEntity();
         
         // 수정사항 적용
-        userRepository.save(user);
+        userRepository.save( user );
     }
     
-
+    
     @Transactional
-	public void deleteAllByUserId(String userId) {
-    	
-    	// delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업 
-        userRepository.deleteById( userId );	// User.java 의 @SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y' WHERE user_id = ?") 를 수행
+    public void deleteAllByUserId( String userId ) {
+        
+        // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
+        userRepository.deleteById( userId );    // User.java 의 @SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y' WHERE user_id = ?") 를 수행
         
         // 권한 삭제 : userRole delete 처리
-        userRoleRepository.deleteByUserId(userId);
-    	
+        userRoleRepository.deleteByUserId( userId );
+        
         // 자녀 삭제 : userchldrn delete 처리
-		userChldrnRepository.deleteAllByUserId(userId);
-		
-	}
-    
+        userChldrnRepository.deleteAllByUserId( userId );
+        
+    }
     
     
 }

@@ -5,15 +5,23 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+/**
+ * className    : UserRole
+ * author         : jjeoV
+ * date           : 2023-11-19
+ * description    : class of 회원권한 Entity
+ * ===========================================================
+ * DATE              AUTHOR               NOTE
+ * -----------------------------------------------------------
+ * 2023-11-19        jjeoV             최초 생성
+ */
 @Entity
 @Getter
 @Builder
@@ -24,20 +32,20 @@ import javax.validation.constraints.NotNull;
 @SequenceGenerator(
         name = "SEQ_TB_USER_ROLE_SN",
         sequenceName = "SEQ_TB_USER_ROLE_SN", //매핑할 데이터베이스 시퀀스 이름
-        initialValue = 1, allocationSize = 1)
-@SQLDelete(sql = "UPDATE tb_user_role SET del_yn ='Y', updt_dt = now() WHERE user_id = ?")
-@Where( clause = "del_yn = 'N'")
+        initialValue = 1, allocationSize = 1 )
+@SQLDelete( sql = "UPDATE tb_user_role SET del_yn ='Y', updt_dt = now() WHERE user_id = ?" )
+@Where( clause = "del_yn = 'N'" )
 @Table( name = "tb_user_role" )
 public class UserRole extends BaseTimeEntity {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_USER_ROLE_SN")
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_USER_ROLE_SN" )
     private int userRoleSn;
-  
+    
     @NotNull
     private String userId;
     
-//    @NotNull
+    //    @NotNull
     private Long roleSn;
     
     @NotNull
@@ -46,7 +54,7 @@ public class UserRole extends BaseTimeEntity {
     @NotNull
     private String registerIp;
     
-    @ColumnDefault("N")
+    @ColumnDefault( "N" )
     private String delYn;
     
 }
