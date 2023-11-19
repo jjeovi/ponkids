@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Data
-public class UserSaveReqDto {
+public class UserSaveDto {
 
     @NotNull
     @Email
@@ -60,7 +60,7 @@ public class UserSaveReqDto {
 
     // builder 생성
     @Builder
-    public UserSaveReqDto( String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Integer atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSns, String registerIp, String delYn) {
+    public UserSaveDto( String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Integer atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSns, String registerIp, String delYn) {
         this.userId = userId;
         this.password = password;
         this.userNm = userNm;

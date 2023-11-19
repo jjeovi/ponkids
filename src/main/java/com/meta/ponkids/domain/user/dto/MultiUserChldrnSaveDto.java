@@ -7,6 +7,6 @@ import java.util.List;
 
 @NoArgsConstructor
 @Data
-public class MultiUserChldrnSaveReqDto {
-    public List<UserChldrnSaveReqDto> userChldrns;
+public class MultiUserChldrnSaveDto {
+    public List<UserChldrnSaveDto> userChldrns;
 }

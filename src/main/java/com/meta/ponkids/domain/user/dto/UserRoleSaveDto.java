@@ -1,16 +1,12 @@
 package com.meta.ponkids.domain.user.dto;
 
-import com.meta.ponkids.domain.system.role.entity.Role;
 import com.meta.ponkids.domain.user.entity.UserRole;
-import com.meta.ponkids.domain.user.repository.UserRoleRepository;
 import lombok.*;
-
-import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor
 @Data
 @Setter
-public class UserRoleSaveReqDto {
+public class UserRoleSaveDto {
     
 //    @NotNull
     private Long roleSn;          // 아이디
@@ -25,7 +21,7 @@ public class UserRoleSaveReqDto {
     
     // builder 생성
     @Builder
-    public UserRoleSaveReqDto( Long roleSn, String userId, String registerId, String registerIp, String delYn ) {
+    public UserRoleSaveDto( Long roleSn, String userId, String registerId, String registerIp, String delYn ) {
         this.roleSn = roleSn;
         this.userId = userId;
         this.registerId = registerId;
