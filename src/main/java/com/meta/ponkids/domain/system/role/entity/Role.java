@@ -50,8 +50,4 @@ public class Role extends BaseTimeEntity {
     
     @ColumnDefault( "N" )
     private String delYn;               // 삭제 여부
-    
-    @ManyToMany
-    private List<User> userList;
-    
 }

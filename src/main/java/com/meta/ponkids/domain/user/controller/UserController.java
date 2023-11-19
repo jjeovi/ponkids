@@ -4,7 +4,9 @@ import com.meta.ponkids.domain.system.role.repository.RoleRepository;
 import com.meta.ponkids.domain.user.dto.*;
 import com.meta.ponkids.domain.user.repository.UserRepository;
 import com.meta.ponkids.domain.user.service.UserService;
+import groovy.util.logging.Log4j;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -27,6 +29,7 @@ import java.time.LocalDateTime;
  * 11/18/23         jjeoV             최초 생성
  */
 @Controller
+@Log4j2
 @RequiredArgsConstructor
 public class UserController {
     
@@ -155,21 +158,20 @@ public class UserController {
     
     /**
      * methodName    : update
-     * date           : 11/17/23
+     * date
+     * : 11/17/23
      * description    : user update method
      */
     @PostMapping( BASIC_PATH + "/update" )
     public String update(
-            @RequestParam( required = true ) String userId,
             @ModelAttribute UserModDto modDto,
             Model model ) {
         
-        // TODO update 구현
-        
-        
+        // update 구현
+        userService.update(modDto);
         
         // 메시지 출력 및 url 이동 처리
-        model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
+        model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
         model.addAttribute( "moveUrl", BASIC_PATH + "/list" );
         
         return "common/alert";

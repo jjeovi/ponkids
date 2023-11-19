@@ -4,7 +4,6 @@
 <title layout:fragment="title">pioneerkids Admin - 회원 등록</title>
 <!-- S : Javascript functions	-->
 <script layout:fragment="script">
-    var dupCheckFlag = false;   // 중복체크 변수 선언
 
     // DOM 준비 된 이후 실행
     $( function () {
@@ -23,12 +22,6 @@
 
             // **  valid 추가 필요시 여기서
 
-            // id 중복체크 여부 검사
-            if ( !dupCheckFlag ) {
-                alert( "아이디를 확인해주세요." );
-                $( "#userId" ).focus();
-                return false;
-            }
 
             // 연락처 유효성 검사
             var telNo = $( "#telNo" ).val();
@@ -136,72 +129,33 @@
             }
         } );
 
-        // 아이디 입력 focusout 처리 ( 중복체크 로직 )
-        $( "#userId" ).focusout( function () {
-            dupCheckFlag = false;
-            var userId = $( "#userId" ).val();      // userId값 넘기기
-
-            if ( validId( userId ) ) {
-
-                $.ajax( {
-                    url: "/live/idDupCheck",
-                    type: "GET",
-                    dataType: "json",
-                    data: { userId: userId },
-                    contentType: "application/json",
-                    success: function ( result ) {
-                        if ( !result ) dupCheckFlag = true;
-                        idDupResult( dupCheckFlag, "checkResult" );
-                    }
-                } );
-            } else {
-                idDupResult( dupCheckFlag, "checkResult" );
-            }
-        } )
     } );
-
-    // 비밀번호 보이기 함수
-    function hideshow() {
-        var password = document.getElementById( "password1" );
-        var slash = document.getElementById( "slash" );
-        var eye = document.getElementById( "eye" );
-
-        if ( password.type === 'password' ) {
-            password.type = "text";
-            slash.style.display = "block";
-            eye.style.display = "none";
-        } else {
-            password.type = "password";
-            slash.style.display = "none";
-            eye.style.display = "block";
-        }
-    }
 
     // 자녀 추가 버튼 클릭
     function addChldrn() {
         // target 자녀 div
-        var $targetChldrnDiv = $( "[name='chldrnAddDiv'].newForm" );
+        var $target_chldrn_div = $( "[name='chldrn_add_div'].new_form" );
 
         // 이름, 성별 유효성 검사
-        if ( !chldrnValidCheck( $targetChldrnDiv ) ) return false;
+        if ( !chldrn_valid_check( $target_chldrn_div ) ) return false;
 
         // 성별 (라디오) 값 hidden 태그에 저장
-        $targetChldrnDiv.find("[name='chldrnGender']").val($targetChldrnDiv.find("[name='chldrnGenderRadio']:checked").val());
+        $target_chldrn_div.find("[name='chldrn_gender']").val($target_chldrn_div.find("[name='chldrn_gender_radio']:checked").val());
 
-        // 신규자녀정보를 chldrnTable 테이블에 표시 한 뒤  새로운 chldrnAddDiv 생성
-        addChldrnRow( $targetChldrnDiv );    // 자녀정보테이블에추가
+        // 신규자녀정보를 chldrn_table 테이블에 표시 한 뒤  새로운 chldrn_add_div 생성
+        add_chldrn_row( $target_chldrn_div );    // 자녀정보테이블에추가
 
-        // 모든 chldrnAddDiv newForm 제거
-        $( "[name='chldrnAddDiv']" ).removeClass( "newForm" );
-        // 모든 chldrnAddDiv 숨기기
-        $( "[name='chldrnAddDiv']" ).hide();
+        // 모든 chldrn_add_div new_form 제거
+        $( "[name='chldrn_add_div']" ).remove_class( "new_form" );
+        // 모든 chldrn_add_div 숨기기
+        $( "[name='chldrn_add_div']" ).hide();
 
         // 새로운 폼 추가
-        var $newChldrnForm = $( "<div name='chldrnAddDiv' class='newForm'>" ).load( "/admin/user/addChldrnForm.html" );
-        $( "#addChldrnModalBody" ).append( $newChldrnForm );
+        var $new_chldrn_form = $( "<div name='chldrn_add_div' class='new_form'>" ).load( "/admin/user/add_chldrn_form.html" );
+        $( "#add_chldrn_modal_body" ).append( $new_chldrn_form );
 
         // 모달창 닫기
-        $( "#addChldrnModal" ).modal( 'hide' );
+        $( "#add_chldrn_modal" ).modal( 'hide' );
         return true;
     }
 
@@ -401,8 +355,8 @@
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>아이디(이메일형식)</label>
                             <div class="col-md-6 col-sm-6">
-                                <input name="userIdOri" id="userIdOri" class="form-control" th:value="${targetDto.userId}"
-                                       required="required" disabled="disabled"/>
+                                <input name="userId" id="userId" class="form-control" th:value="${targetDto.userId}"
+                                       required="required" readonly/>
                                 <small class="font-gray-dark"   >
                                     <b>비밀번호</b> 찾기 시 해당 이메일로 인증번호를 발송합니다. 정확한 이메일을 입력해주세요.
                                 </small>

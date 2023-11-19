@@ -28,7 +28,7 @@ import java.util.List;
 public class  User extends BaseTimeEntity {
     
     /* USER_SN 컬럼 insert 시 사용하지 않음 */
-    @Column(insertable=false)
+    @Column(insertable=false, updatable = false)
     private int userSn;
     
     @Id
@@ -36,7 +36,6 @@ public class  User extends BaseTimeEntity {
     @Email
     private String userId;              // 사용자 아이디
     
-    @NotNull
     private String password;            // 비밀번호
     
     @NotNull
@@ -61,10 +60,8 @@ public class  User extends BaseTimeEntity {
     
     private Integer atchFileSn;         // 첨부파일 일련번호
     
-    @NotNull
     private String mngrYn;              // 관리자 여부
     
-    @NotNull
     @ColumnDefault("N")
     private String mngrConfmYn;         // 관리자 승인 여부
     
@@ -78,7 +75,7 @@ public class  User extends BaseTimeEntity {
     
     private LocalDateTime lastLoginDt;  // 마지막 로그인한 일시
     
-    @NotNull
+    @Column(updatable = false)
     private String registerIp;          // 등록자 IP
     
     private String updusrId;            // 수정자 ID
@@ -86,6 +83,7 @@ public class  User extends BaseTimeEntity {
     private String updusrIp;            // 수정자 IP
     
     @ColumnDefault("N")
+    @Column(insertable = false, updatable = false)
     private String delYn;               // 삭제 여부
     
 //    @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE})

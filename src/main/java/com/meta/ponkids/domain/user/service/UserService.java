@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -80,6 +81,32 @@ public class UserService {
     	
     	return userModDto;
     	
+    }
+    
+    public void update(UserModDto modDto){
+        // target 조회
+        User user = userRepository.findByUserId( modDto.getUserId() );
+        
+        // target object 전환 ( entity to dto )
+        UserModDto targetDto =  new UserModDto();
+        targetDto = targetDto.toDto( user );
+        
+        // target object 에 수정사항 set
+        // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
+        if ( StringUtils.hasText( modDto.getUserNm() ) )        targetDto.setUserNm( modDto.getUserNm() );          // 이름
+        if ( StringUtils.hasText( modDto.getGender() ) )        targetDto.setGender( modDto.getGender() );          // 성별
+        if ( StringUtils.hasText( modDto.getBrdtDate() ) )      targetDto.setBrdtDate( modDto.getBrdtDate() );      // 생년월일
+        if ( StringUtils.hasText( modDto.getTelNo() ) )         targetDto.setTelNo( modDto.getTelNo() );            // 연락처
+        if ( StringUtils.hasText( modDto.getResideArea() ) )    targetDto.setResideArea( modDto.getResideArea() );  // 거주지역
+        if ( StringUtils.hasText( modDto.getRdnmAdr() ) )       targetDto.setRdnmAdr( modDto.getRdnmAdr() );        // 주소
+        if ( StringUtils.hasText( modDto.getZip() ) )           targetDto.setZip( modDto.getZip() );                // 우편번호
+        if ( StringUtils.hasText( modDto.getMngrYn() ) )        targetDto.setMngrYn( modDto.getMngrYn() );          // 관리자여부
+        
+        // target object 전환 ( dto to entity )
+        user = targetDto.toEntity();
+        
+        // 수정사항 적용
+        userRepository.save(user);
     }
     
 
