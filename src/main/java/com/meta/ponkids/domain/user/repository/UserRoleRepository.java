@@ -6,14 +6,25 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface UserRoleRepository extends JpaRepository<UserRole, Integer>{
-	
+/**
+ * InterfaceName  : UserRoleRepository
+ * author         : jjeoV
+ * date           : 2023-11-19
+ * description    : interface of 회원 권한 Repository
+ * ===========================================================
+ * DATE              AUTHOR               NOTE
+ * -----------------------------------------------------------
+ * 2023-11-19        jjeoV             최초 생성
+ */
+public interface UserRoleRepository extends JpaRepository<UserRole, Integer> {
     
-    @Modifying(clearAutomatically = true)
-    @Query(value="UPDATE tb_user_role "
-    		+ "      SET del_yn = 'Y'"
-    		+ "        , updt_dt = now() "
-    		+ "    WHERE user_id = :userId", nativeQuery = true)	// nativeQuery true 없으면 error
-    int deleteByUserId(@Param("userId") String userId);
-
+    
+    @Modifying( clearAutomatically = true )
+    @Query( value = "UPDATE tb_user_role "
+            + "      SET del_yn = 'Y'"
+            + "        , updt_dt = now() "
+            + "    WHERE user_id = :userId", nativeQuery = true )
+        // nativeQuery true 없으면 error
+    int deleteByUserId( @Param( "userId" ) String userId );
+    
 }

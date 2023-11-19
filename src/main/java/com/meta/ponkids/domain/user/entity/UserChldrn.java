@@ -4,22 +4,32 @@ import com.meta.ponkids.global.common.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+
+/**
+ * className      : UserChldrn
+ * author         : jjeoV
+ * date           : 2023-11-19
+ * description    : class of 자녀 Entity
+ * ===========================================================
+ * DATE              AUTHOR               NOTE
+ * -----------------------------------------------------------
+ * 2023-11-19        jjeoV             최초 생성
+ */
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
-@SQLDelete(sql = "UPDATE tb_user_chldrn SET del_yn ='Y', updt_dt = now() WHERE user_id = ?")
-@Where( clause = "del_yn = 'N'")
+@SQLDelete( sql = "UPDATE tb_user_chldrn SET del_yn ='Y', updt_dt = now() WHERE user_id = ?" )
+@Where( clause = "del_yn = 'N'" )
 @Table( name = "tb_user_chldrn" )
 public class UserChldrn extends BaseTimeEntity {
     

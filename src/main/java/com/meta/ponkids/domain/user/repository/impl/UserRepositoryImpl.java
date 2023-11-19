@@ -18,6 +18,16 @@ import java.util.List;
 
 import static com.meta.ponkids.domain.user.entity.QUser.user;
 
+/**
+ * className      : UserRepositoryImpl
+ * author         : jjeoV
+ * date           : 2023-11-19
+ * description    : class of 회원 RepositoryImpl
+ * ===========================================================
+ * DATE              AUTHOR               NOTE
+ * -----------------------------------------------------------
+ * 2023-11-19        jjeoV             최초 생성
+ */
 @Repository
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepositoryCustom {
@@ -36,22 +46,22 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                         user.userNm,
                         new CaseBuilder()
                                 .when( user.gender.eq( "M" ) ).then( "남자" )
-                                .when(user.gender.eq( "F" )).then( "여자" )
+                                .when( user.gender.eq( "F" ) ).then( "여자" )
                                 .otherwise( "" )
-                                .as("gender"),
+                                .as( "gender" ),
                         user.brdtDate,
 //                        user.telNo.coalesce( "번호없음" ),    // NULL 처리는 coalesce 로 한다. ( NULL일시 "번호없음" )
                         user.telNo,    // NULL 처리는 coalesce 로 한다. ( NULL일시 "번호없음" )
                         new CaseBuilder()
-                                .when(user.resideArea.eq( "" )).then( "지역없음")
-                                .otherwise(user.resideArea).as("resideArea"),
+                                .when( user.resideArea.eq( "" ) ).then( "지역없음" )
+                                .otherwise( user.resideArea ).as( "resideArea" ),
                         new CaseBuilder()
                                 .when( user.mngrYn.eq( "Y" ) ).then( "관리자" )
-                                .when(user.mngrYn.eq( "N" )).then( "사용자" )
+                                .when( user.mngrYn.eq( "N" ) ).then( "사용자" )
                                 .otherwise( "" )
-                                .as("mngrYn"),
+                                .as( "mngrYn" ),
                         user.mngrConfmYn
-                )  )
+                ) )
                 // from
                 .from( user )
                 // where
@@ -69,13 +79,13 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .fetch();
         
         // (2) count
-        JPAQuery<Long> count = query.select(user.count())
-                .from(user)
+        JPAQuery<Long> count = query.select( user.count() )
+                .from( user )
                 .where(
                         eqGender( userListDto.getGender() ),
                         eqMngrYn( userListDto.getMngrYn() ),
                         eqMngrConfmYn( userListDto.getMngrConfmYn() ),
-                        eqOption( userListDto.getSchOption(), userListDto.getSchCntn() ));
+                        eqOption( userListDto.getSchOption(), userListDto.getSchCntn() ) );
         
         return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
     }
@@ -93,12 +103,16 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         return StringUtils.hasText( mngrConfmYn ) ? user.mngrConfmYn.eq( mngrConfmYn ) : null;
     }
     
-    private BooleanExpression eqOption(String schOption, String schCntn){
+    private BooleanExpression eqOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름
-        if (StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn )){
-                 if( schOption.equals("A")) return user.userId.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
-            else if (schOption.equals("B")) return user.userNm.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
-            else                            return null;
-        } else { return null; }
+        if ( StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn ) ) {
+            if ( schOption.equals( "A" ) )
+                return user.userId.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+            else if ( schOption.equals( "B" ) )
+                return user.userNm.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+            else return null;
+        } else {
+            return null;
+        }
     }
 }

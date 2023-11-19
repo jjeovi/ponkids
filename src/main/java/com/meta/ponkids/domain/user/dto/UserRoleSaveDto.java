@@ -1,14 +1,27 @@
 package com.meta.ponkids.domain.user.dto;
 
 import com.meta.ponkids.domain.user.entity.UserRole;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+/**
+ * className      : UserRoleSaveDto
+ * author         : jjeoV
+ * date           : 2023-11-19
+ * description    : class of 회원 권한 등록 Dto
+ * ===========================================================
+ * DATE              AUTHOR               NOTE
+ * -----------------------------------------------------------
+ * 2023-11-19        jjeoV             최초 생성
+ */
 @NoArgsConstructor
 @Data
 @Setter
 public class UserRoleSaveDto {
     
-//    @NotNull
+    //    @NotNull
     private Long roleSn;          // 아이디
     
     private String userId;
@@ -29,9 +42,8 @@ public class UserRoleSaveDto {
         this.delYn = delYn;
     }
     
-   
     // DTO to Entity 메소드는 DTO 내부에서 생성.
-    public UserRole toEntity(){
+    public UserRole toEntity() {
         return UserRole.builder()
                 .userId( userId )
                 .roleSn( roleSn )

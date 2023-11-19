@@ -1,10 +1,19 @@
 package com.meta.ponkids.domain.user.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * className      : UserListDto
+ * author         : jjeoV
+ * date           : 2023-11-19
+ * description    : class of 회원 목록 Dto
+ * ===========================================================
+ * DATE              AUTHOR               NOTE
+ * -----------------------------------------------------------
+ * 2023-11-19        jjeoV             최초 생성
+ */
 @NoArgsConstructor
 @Data
 public class UserListDto {
