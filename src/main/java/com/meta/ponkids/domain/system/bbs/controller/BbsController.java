@@ -69,7 +69,7 @@ public class BbsController {
     		               @ModelAttribute BbsSaveReqDto bbsSaveReqDto, HttpServletRequest request
     		               , Model model) {
       // save
-        bbsService.save(bbsSaveReqDto);
+        bbsService.save(bbsSaveReqDto, request);
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );

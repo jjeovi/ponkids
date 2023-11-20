@@ -16,10 +16,13 @@ import com.meta.ponkids.domain.user.dto.UserListDto;
 import com.meta.ponkids.domain.user.dto.UserModDto;
 import com.meta.ponkids.domain.user.entity.User;
 import com.meta.ponkids.domain.user.entity.UserChldrn;
+import com.meta.ponkids.global.util.ip.IpUtils;
 
 import antlr.collections.List;
 
 import java.time.LocalDateTime;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +31,7 @@ public class BbsService {
     private final BbsRepository bbsRepository;
 
 
-    public BbsSaveReqDto save(BbsSaveReqDto bbsSaveReqDto) {
+    public BbsSaveReqDto save(BbsSaveReqDto bbsSaveReqDto ,HttpServletRequest request ) {
 
     	// dto to entity 작업 (필수)
         Bbs bbs = Bbs.builder()
@@ -40,15 +43,13 @@ public class BbsService {
                 .answerSetYn(bbsSaveReqDto.getAnswerSetYn())
                 .useYn(bbsSaveReqDto.getUseYn())
                 .openYn(bbsSaveReqDto.getOpenYn())
-               // .registerId(bbsSaveReqDto.getRegisterId())
                 .registerId("ehlee")
-                //.registerIp("0.0.0.0")
+                .registerIp( IpUtils.getClientIP( request ))
                // .registerIp(bbsSaveReqDto.getRegisterIp())
-               // .regDt(LocalDateTime.now())
+                 .regDt(LocalDateTime.now())
               //  .upduserId(bbsSaveReqDto.getUpduserId())
                 //.upduserIp(bbsSaveReqDto.getUpduserIp())
                 //.updtDt(LocalDateTime.now())
-                .delYn( "N" )
                 .build();
 
         // save

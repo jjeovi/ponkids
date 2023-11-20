@@ -55,6 +55,11 @@ public class  Bbs extends BaseTimeEntity {
     private String openYn;      //공개여부    
     
     private String registerId;      //공개여부   
+    
+    private String registerIp;      //공개여부   
+    
+    private LocalDateTime regDt;      //공개여부   
+
 
     @ColumnDefault("N")                             // del_yn 컬럼에 공통으로 추가
     @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가

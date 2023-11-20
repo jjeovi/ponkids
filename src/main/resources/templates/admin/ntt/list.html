@@ -51,7 +51,7 @@
 
     <!-- S: content -->
     <div class="x_panel">
-  <div class="form-group row">
+    <div class="form-group row">
 											<label class="control-label col-md-3 col-sm-3 ">게시판 그룹</label>
 											<div class="col-md-10 col-sm-10 ">
 												<select class="select2_multiple form-control" multiple="multiple">
@@ -72,7 +72,7 @@
         <div class="x_content">
             <div class="row">
                 <form id="listForm" name="listForm" method="get" th:action="@{/admin/ntt/list}">
-                    <input type="hidden" name="bbsSn" value="${bbsSn}" />
+                    <input type="hidden" name="bbsSn" th:value="${bbsSn}"/>
                     <!-- S : 테이블 상단 검색 창 -->
                     <!-- totalCount -->
                     <div class="col-md-1 col-sm-2 mt_10p pl_15p">

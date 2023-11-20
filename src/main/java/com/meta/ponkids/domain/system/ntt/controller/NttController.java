@@ -45,6 +45,11 @@ public class NttController {
         // target object 조회
         model.addAttribute("bbsSn", bbsSn);
         
+    	//게시물 조회 
+        //Page<NttListDto> nttList = nttService.getNttList( nttListDto);
+       /// model.addAttribute( "nttList", nttList );
+        
+        
     	// 목록 조회
         Page<NttListDto> resultList = nttService.getList( nttListDto, pageable );
         model.addAttribute( "resultList", resultList );

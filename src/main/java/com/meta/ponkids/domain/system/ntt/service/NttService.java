@@ -32,7 +32,6 @@ public class NttService {
         		.nttCn(nttSaveReqDto.getNttCn())
         		.nttRdcnt(1)
                 .registerId("ehlee")
-                .delYn( "N" )
                 .openYn( "Y" )
                 .registerIp("0.0.0.0")
                 .regDt(LocalDateTime.now())
