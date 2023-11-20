@@ -44,9 +44,21 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
                                 .otherwise( "" )
                                 .as("bbsSeCd"),
                                 bbs.bbsNm,
-                                bbs.answerSetYn,
-                                bbs.useYn,   
-                                bbs.openYn,
+                                new CaseBuilder()
+                                .when( bbs.answerSetYn.eq( "Y" ) ).then( "사용" )
+                                .when(bbs.answerSetYn.eq( "N" )).then( "미사용" )
+                                .otherwise( "" )
+                                .as("answerSetYn"),
+                                new CaseBuilder()
+                                .when( bbs.useYn.eq( "Y" ) ).then( "사용" )
+                                .when(bbs.useYn.eq( "N" )).then( "미사용" )
+                                .otherwise( "" )
+                                .as("useYn"),
+                                new CaseBuilder()
+                                .when( bbs.openYn.eq( "Y" ) ).then( "공개" )
+                                .when(bbs.openYn.eq( "N" )).then( "비공개" )
+                                .otherwise( "" )
+                                .as("openYn"),
                                 bbs.registerId,
                                 bbs.regDt      
                 	    )  ).from( bbs )

@@ -51,7 +51,7 @@
 
     <!-- S: content -->
     <div class="x_panel">
-     <div class="form-group row">
+  <div class="form-group row">
 											<label class="control-label col-md-3 col-sm-3 ">게시판 그룹</label>
 											<div class="col-md-10 col-sm-10 ">
 												<select class="select2_multiple form-control" multiple="multiple">
@@ -71,7 +71,7 @@
 
         <div class="x_content">
             <div class="row">
-                <form id="listForm" name="listForm" method="get" th:action="@{/admin/bbs/list}">
+                <form id="listForm" name="listForm" method="get" th:action="@{/admin/ntt/list}">
                     <input type="hidden" name="page" />
                     <!-- S : 테이블 상단 검색 창 -->
                     <!-- totalCount -->
@@ -82,8 +82,8 @@
                         <div class="btn-group float-right" role="group">
                             <div class="vl ml_5p"></div>
                             <select class="form-control ml_5p" name="schOption" style="width: 55%;">
-                                <option value="A" >제목</option>
-                                <option value="B" >등록자</option>
+                                <option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">제목</option>
+                                <option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">등록자</option>
                             </select>
                             <input type="text" name="schCntn"
                                    class="form-control input-sm" placeholder="검색어 입력"
@@ -100,11 +100,22 @@
                                   <th>순번</th>
                                   <th>제목</th>
                                   <th>등록일</th>
+                                  <th>조회수</th>
                                   <th>관리</th>
                                </tr>
                             </thead>
                             <tbody>
-                            <tr >
+                             <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
+                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
+                                <td th:text="${data.nttNm}"></td>
+                                <td th:text="${data.regDt}"></td>
+                                <td th:text="${data.nttRdcnt}"></td>
+                                <td> 
+									<a th:href="@{/admin/list/modify(bbsSn=${data.bbsSn})}"
+	                                       class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
+								</td>
+                            </tr>
+                            <tr th:unless = "${!resultList.isEmpty()}">
                                 <td id="noDataTd">
                                     데이터가 없습니다.
                                 </td>
@@ -120,18 +131,16 @@
                     <!-- E : 테이블 하단 페이징 -->
                     <!-- S : 하단 목록 -->
                                        <!-- S : 하단 목록 -->
-                    <div class="col-md-12 col-sm-12">
-                        <!-- bottom left area -->
-                        <div class="col-md-8 col-sm-6 text-left">
-						    <a href="/admin/bbs/list" class="btn btn-white w120p">게시판 관리</a>
-                            <a href="/admin/ntt/regist" class="btn btn-white w120p">등록</a>
+                     <div class="col-md-12 col-sm-12">
+                        <div class="col-md-2 col-sm-3 text-left">
+                            <a href="/admin/bbs/regist" class="btn btn-white w120p">등록</a>
                         </div>
                         <!-- bottom center area (paging) -->
-                       <!-- <div class="col-md-8 col-sm-6 text-center"
+                        <div class="col-md-8 col-sm-6 text-center"
                              th:insert="~{layout/tiles/paging :: paging('listForm', ${resultList})}">
-                             parameter : ( submit할 form 의 name값 ), ( ${resultList} 는 Page<T> 오브젝트 )  
+                            <!-- parameter : ( submit할 form 의 name값 ), ( ${resultList} 는 Page<T> 오브젝트 )  -->
                         </div>
-                         bottom right area 
+                        <!-- bottom right area -->
                         <div class="col-md-2 col-sm-3 text-right">
                             <select class="form-control" name="size" onchange="searchListSize('listForm',this.value);">
                                 <option value="10" th:selected=" ${resultList.pageable.pageSize} == '10' ">10개씩 보기
@@ -143,7 +152,7 @@
                                 <option value="100" th:selected=" ${resultList.pageable.pageSize} == '100' ">100개씩 보기
                                 </option>
                             </select>
-                        </div>-->
+                        </div>
                     </div>
                 </form>
             </div>

@@ -12,5 +12,6 @@ public interface NttRepository extends JpaRepository< Ntt, Integer> , NttReposit
    
    public Ntt findByNttSn(int nttSn);
 
+
 	    
 }

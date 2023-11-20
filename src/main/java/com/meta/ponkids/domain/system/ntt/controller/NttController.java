@@ -2,14 +2,21 @@ package com.meta.ponkids.domain.system.ntt.controller;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+
+import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttSaveReqDto;
 import com.meta.ponkids.domain.system.ntt.service.NttService;
 
 import javax.servlet.http.HttpServletRequest;
+
+
 import java.util.List;
 
 @Controller
@@ -29,16 +36,21 @@ public class NttController {
      */
     @GetMapping( BASIC_PATH + "/list" )
     public String nttList(
-    		     int bbsSn, 
-    					//@PageableDefault( size = 10 ) Pageable pageable,
+    		 @RequestParam(required = true) int bbsSn,
+    		 @ModelAttribute NttListDto nttListDto, 
+    					@PageableDefault( size = 10 ) Pageable pageable,
     					Model model ) {
         
-        // 목록 조회
-        //Page<BbsListDto> resultList = bbsService.getList( bbsListDto, pageable );
-        //model.addAttribute( "resultList", resultList );
+        
+        // target object 조회
+        model.addAttribute("bbsSn", bbsSn);
+        
+    	// 목록 조회
+        Page<NttListDto> resultList = nttService.getList( nttListDto, pageable );
+        model.addAttribute( "resultList", resultList );
         
         // 검색 dto setting
-        //model.addAttribute( "searchDTO", bbsListDto );
+        model.addAttribute( "searchDTO", nttListDto );
         
         // 기본 경로 setting
         model.addAttribute("basicPath", BASIC_PATH);

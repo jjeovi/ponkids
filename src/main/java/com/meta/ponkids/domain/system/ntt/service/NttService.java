@@ -6,11 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+
+import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttSaveReqDto;
 import com.meta.ponkids.domain.system.ntt.entity.Ntt;
 import com.meta.ponkids.domain.system.ntt.repository.NttRepository;
-
-import antlr.collections.List;
 
 import java.time.LocalDateTime;
 
@@ -30,7 +30,7 @@ public class NttService {
         		.nttSeq(1)
         		.nttNm(nttSaveReqDto.getNttNm())
         		.nttCn(nttSaveReqDto.getNttCn())
-        		.nttRdCnt(1)
+        		.nttRdcnt(1)
                 .registerId("ehlee")
                 .delYn( "N" )
                 .openYn( "Y" )
@@ -43,6 +43,11 @@ public class NttService {
 
         return nttSaveReqDto;
     }
+    
+    public Page<NttListDto> getList( NttListDto nttListDto, Pageable pageable ) {
+	  return nttRepository.getList(nttListDto, pageable); 
+	
+	 }
     
     
 	

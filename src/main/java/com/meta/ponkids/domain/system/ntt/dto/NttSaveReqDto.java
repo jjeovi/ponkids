@@ -21,7 +21,7 @@ public class NttSaveReqDto {
 	
 	private String atchFileSn;
 	
-	private int nttRdCnt;
+	private int nttRdcnt;
 	private String openYn
 	;
 	private String noticeSetYn;
@@ -47,7 +47,7 @@ public class NttSaveReqDto {
 
     // builder 생성
     @Builder
-    public NttSaveReqDto( int nttSn ,int bbsSn, String nttSeq, String nttNm,String nttCn, String atchFileSn, int nttRdCnt,String noticeSetYn, String noticeSeq,
+    public NttSaveReqDto( int nttSn ,int bbsSn, String nttSeq, String nttNm,String nttCn, String atchFileSn, int nttRdcnt,String noticeSetYn, String noticeSeq,
     		String openYn,String delYn
     		,String registerId,String registerIp,LocalDateTime regDt ,String upduserId,String upduserIp,String updtDt) {
         this.nttSn = nttSn;
@@ -56,7 +56,7 @@ public class NttSaveReqDto {
         this.nttNm = nttNm;
         this.nttCn = nttCn;
         this.atchFileSn = atchFileSn;
-        this.nttRdCnt = nttRdCnt;
+        this.nttRdcnt = nttRdcnt;
         this.noticeSetYn = noticeSetYn;
         this.noticeSeq = noticeSeq;
         this.openYn = openYn;

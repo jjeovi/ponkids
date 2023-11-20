@@ -1,9 +1,13 @@
 package com.meta.ponkids.domain.system.ntt.repository.custom;
 
+import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 public interface NttRepositoryCustom {
 	
-	//Page<BbsListDto> getList( BbsListDto bbsListDto, Pageable pageable );
+	Page<NttListDto> getList( NttListDto nttListDto, Pageable pageable );
+	
 
 }

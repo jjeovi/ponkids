@@ -14,7 +14,6 @@ import com.meta.ponkids.domain.system.bbs.dto.BbsModDto;
 import com.meta.ponkids.domain.system.bbs.dto.BbsSaveReqDto;
 import com.meta.ponkids.domain.system.bbs.repository.BbsRepository;
 import com.meta.ponkids.domain.system.bbs.service.BbsService;
-import com.meta.ponkids.domain.user.dto.UserModDto;
 
 import javax.servlet.http.HttpServletRequest;
 

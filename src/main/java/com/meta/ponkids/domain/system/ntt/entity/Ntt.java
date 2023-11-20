@@ -50,19 +50,21 @@ public class  Ntt extends BaseTimeEntity {
 
     private String atchFileSn;   // 댓글 설정여부
 
-    private int nttRdCnt;         //사용여부
+    private int nttRdcnt;         
      
-    private String openYn;      //공개여부    
+    private String openYn;     
     
-    private String noticeSetYn;      //공개여부     
-    private String noticeSeq;      //공개여부     
-    private String registerId;      //공개여부     
-    private String registerIp;      //공개여부     
-    private LocalDateTime regDt;      //공개여부     
+    private String noticeSetYn;        
+    private String noticeSeq;        
+    private String registerId;         
+    private String registerIp;       
+    private LocalDateTime regDt;      
 
-    @NotNull
-    @ColumnDefault("N")
-    private String delYn;     // 삭제 여부   
+
+    @ColumnDefault("N")                             // del_yn 컬럼에 공통으로 추가
+    @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가
+    private String delYn;                           // 삭제 여부
+    
 
 
    // @ManyToMany
