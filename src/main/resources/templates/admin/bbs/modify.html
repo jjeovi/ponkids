@@ -60,8 +60,8 @@
             <div class="x_panel">
                 <div class="x_content">
                     <form id="updateForm" name="updateForm" method="post" th:action="@{/admin/bbs/update}"
-                           th:object="${modDto}">
-                        <input type="hidden" name="bbsSn" th:checked="${targetDto.bbsSn}" />
+                        th:object="${modDto}">
+                        <input type="hidden" name="bbsSn" th:value="${targetDto.bbsSn}"/>
                         <!-- TODO 프로필 이미지 추가 작업 -->
                        <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>게시판 구분</label>
@@ -92,17 +92,14 @@
                             <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>게시판 안내문구</label>
                             <div class="col-md-6 col-sm-6">
 								<textarea id="message" required="required" class="form-control" name="message" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.."
-								 data-parsley-bbsGdcc-threshold="10"  th:value="${targetDto.bbsGdcc}"></textarea>
-
-
-                           
+								 data-parsley-bbsGdcc-threshold="10"  th:value="${targetDto.bbsGdcc}"  th:text="${targetDto.bbsGdcc}"></textarea>
                             </div>
                         </div>
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>게시판 설명</label>
                             <div class="col-md-6 col-sm-6">
                                 <textarea class="form-control" required="required"
-                                       placeholder="게시판 설명을 입력해주세요." id="bbsDc"  name="bbsDc"  th:value="${targetDto.bbsDc}">
+                                       placeholder="게시판 설명을 입력해주세요." id="bbsDc"  name="bbsDc"  th:value="${targetDto.bbsDc}"   th:text="${targetDto.bbsDc}">
                                 </textarea>
                             </div>
                         </div>
@@ -144,7 +141,7 @@
                             </div>
                         </div>
                         
-                       </div>
+                       
 
                         <div class="ln_solid"></div>
                         <!-- 저장버튼 -->

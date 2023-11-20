@@ -56,10 +56,10 @@ public class  Bbs extends BaseTimeEntity {
     
     private String registerId;      //공개여부   
 
-    @NotNull
-    @ColumnDefault("N")
-    private String delYn;     // 삭제 여부   
-
+    @ColumnDefault("N")                             // del_yn 컬럼에 공통으로 추가
+    @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가
+    private String delYn;                           // 삭제 여부
+    
 
    // @ManyToMany
    // private List<Bbs> bbsList = new ArrayList<>();

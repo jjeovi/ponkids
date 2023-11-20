@@ -105,7 +105,7 @@ public class BbsController {
     
     @PostMapping(BASIC_PATH + "/update")
     public String update(
-    		@RequestParam(required = true)  BbsModDto modDto,
+    		@ModelAttribute  BbsModDto modDto,
     		Model model ) {
     	
     	   bbsService.update(modDto);
