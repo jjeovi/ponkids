@@ -54,7 +54,7 @@ public class UserChldrn extends BaseTimeEntity {
     
     private String chldrnTelNo;         // 자녀 연락처
     
-    private String atchFileSn;          // 첨부 파일 일련번호
+    private Long atchFileSn;          // 첨부 파일 일련번호
     
     @NotNull
     private String registerId;          // 등록자 ID

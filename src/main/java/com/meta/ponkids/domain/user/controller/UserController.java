@@ -1,5 +1,6 @@
 package com.meta.ponkids.domain.user.controller;
 
+import com.meta.ponkids.domain.system.file.service.AtchFileService;
 import com.meta.ponkids.domain.system.role.repository.RoleRepository;
 import com.meta.ponkids.domain.user.dto.*;
 import com.meta.ponkids.domain.user.repository.UserRepository;
@@ -16,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 /**
@@ -29,13 +32,13 @@ import java.time.LocalDateTime;
  * 2023-11-19        jjeoV             최초 생성
  */
 @Controller
-@Log4j2
 @RequiredArgsConstructor
 public class UserController {
     
     private final UserService userService;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final AtchFileService atchFileService;
     
     private final static String BASIC_PATH = "/admin/user";
     
@@ -94,7 +97,7 @@ public class UserController {
             @ModelAttribute UserRoleSaveDto userRoleSaveDto,  // required false
             MultiUserChldrnSaveDto userChldrns,
             HttpServletRequest request,
-            Model model ) {
+            Model model ) throws IOException {
         
         if ( userRepository.existsByUserId( userSaveDto.getUserId() ) ) {
             // 중복 ID 존재시 가입 불가
@@ -110,12 +113,9 @@ public class UserController {
             
             // 첨부파일 존재시 파일 저장
             if(!files.isEmpty()){
-            
-            
+            	userSaveDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 ) 
             }
             
-            String origFilename = files.getOriginalFilename();
-            System.out.println( "origFilename = " + origFilename );
             // 관리자 승인여부 Y 이면 승인일시 now로 setting
             if ( userSaveDto.getMngrConfmYn().equals( "Y" ) ) {
                 userSaveDto.setConfmDt( LocalDateTime.now() );

@@ -1,8 +1,6 @@
 spring:
     servlet :
         multipart :
-            #location : C:/upload    # 업로드 파일 저장 경로 ( window )
-            location : /Users/jjeoV/Desktop/jjeoV/2023/pioneerKids/upload/    # 업로드 파일 저장 경로 ( Mac )
             maxFileSize : 10MB      # 파일 하나의 최대 크기
             maxRequestSize : 30MB   # 한 번에 최대 업로드 가능 용량
     devtools:
@@ -28,6 +26,10 @@ spring:
         cache : false
     profiles :
         active : local
+       
+upload:
+    path : C:/upload/    # 업로드 파일 저장 경로 ( window )
+    #path : /Users/jjeoV/Desktop/jjeoV/2023/pioneerKids/upload/    # 업로드 파일 저장 경로 ( Mac )
 
                 
 server:

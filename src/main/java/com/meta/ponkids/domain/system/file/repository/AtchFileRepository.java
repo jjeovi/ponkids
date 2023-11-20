@@ -1,10 +1,10 @@
 package com.meta.ponkids.domain.system.file.repository;
 
-import com.meta.ponkids.domain.system.file.entity.File;
+import com.meta.ponkids.domain.system.file.entity.AtchFile;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * InterfaceName  : FileRepository
+ * InterfaceName  : AtchFileRepository
  * author         : jjeoV
  * date           : 2023-11-19
  * description    : interface of 파일 Repository
@@ -13,6 +13,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * -----------------------------------------------------------
  * 2023-11-19        jjeoV             최초 생성
  */
-public interface FileRepository extends JpaRepository<File, Long> {
+public interface AtchFileRepository extends JpaRepository<AtchFile, Long> {
 
 }

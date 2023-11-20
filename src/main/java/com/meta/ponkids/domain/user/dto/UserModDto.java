@@ -53,7 +53,7 @@ public class UserModDto {
     
     private String detailAdr;       // 상세 주소
     
-    private Integer atchFileSn;      // 첨부파일 일련번호
+    private Long atchFileSn;      // 첨부파일 일련번호
     
     @NotNull
     private String mngrYn;          // 관리자 여부
@@ -75,7 +75,7 @@ public class UserModDto {
     
     // builder 생성
     @Builder
-    public UserModDto( Long userSn, String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Integer atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSns, String registerIp, String delYn ) {
+    public UserModDto( Long userSn, String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSns, String registerIp, String delYn ) {
         this.userSn = userSn;
         this.userId = userId;
         this.password = password;

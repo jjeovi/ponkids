@@ -34,7 +34,7 @@ public class UserChldrnSaveDto {
     
     private String chldrnTelNo;
     
-    private String atchFileSn;
+    private Long atchFileSn;
     
     private String registerId;
     
@@ -42,7 +42,7 @@ public class UserChldrnSaveDto {
     
     
     @Builder
-    public UserChldrnSaveDto( Long userSn, Long userChldrnSeq, String chldrnNm, String chldrnGender, String chldrnBrdtDate, String chldrnEmail, String chldrnTelNo, String atchFileSn, String registerId, String registerIp ) {
+    public UserChldrnSaveDto( Long userSn, Long userChldrnSeq, String chldrnNm, String chldrnGender, String chldrnBrdtDate, String chldrnEmail, String chldrnTelNo, Long atchFileSn, String registerId, String registerIp ) {
         this.userSn = userSn;
         this.userChldrnSeq = userChldrnSeq;
         this.chldrnNm = chldrnNm;

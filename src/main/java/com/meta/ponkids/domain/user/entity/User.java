@@ -78,7 +78,7 @@ public class  User extends BaseTimeEntity {
     
     private String detailAdr;           // 상세 주소
     
-    private Integer atchFileSn;         // 첨부파일 일련번호
+    private Long atchFileSn;         // 첨부파일 일련번호
     
     private String mngrYn;              // 관리자 여부
     
@@ -103,7 +103,7 @@ public class  User extends BaseTimeEntity {
     private String updusrIp;            // 수정자 IP
     
     @ColumnDefault("N")                             // del_yn 컬럼에 공통으로 추가
-    @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가
+    @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가 (등록 시, 수정 시 해당컬럼 신경쓰지 않음.)
     private String delYn;                           // 삭제 여부
     
 //    @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE})
