@@ -16,7 +16,7 @@ import org.springframework.data.repository.query.Param;
  * -----------------------------------------------------------
  * 2023-11-19        jjeoV             최초 생성
  */
-public interface UserRoleRepository extends JpaRepository<UserRole, Integer> {
+public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
     
     @Modifying( clearAutomatically = true )
     @Query( value = "UPDATE tb_user_role "

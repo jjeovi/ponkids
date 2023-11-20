@@ -20,7 +20,7 @@ import java.util.List;
  * -----------------------------------------------------------
  * 2023-11-19        jjeoV             최초 생성
  */
-public interface UserChldrnRepository extends JpaRepository<UserChldrn, Integer> {
+public interface UserChldrnRepository extends JpaRepository<UserChldrn, Long> {
     
     List<UserChldrn> findByUserSn( Long userSn );
     
