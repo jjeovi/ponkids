@@ -3,7 +3,7 @@ package com.meta.ponkids.domain.system.ntt.repository.impl;
 import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
 import com.meta.ponkids.domain.system.ntt.dto.QNttListDto;
 import com.meta.ponkids.domain.system.ntt.repository.custom.NttRepositoryCustom;
-
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -11,10 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
-
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+import static com.meta.ponkids.domain.system.bbs.entity.QBbs.bbs;
 import static com.meta.ponkids.domain.system.ntt.entity.QNtt.ntt;
 
 @Repository
@@ -36,6 +37,9 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
                  ntt.registerId,
                  ntt.regDt
 				 ) ).from(ntt)
+				 .where(
+	                   eqOption( nttListDto.getSchOption(), nttListDto.getSchCntn() )
+	                )
 				   .orderBy( ntt.nttSn.desc() )
 				   .offset( pageable.getOffset() )
 	               .limit( pageable.getPageSize() )
@@ -43,11 +47,25 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
 		 
 		   // (2) count
 	        JPAQuery<Long> count = query.select(ntt.count())
-	                .from(ntt);
+	                .from(ntt)
+	                .where(
+	 	                   eqOption( nttListDto.getSchOption(), nttListDto.getSchCntn() )
+	 	                );
 	             
 	               
 	    	return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
 	}
+	
+    
+    private BooleanExpression eqOption(String schOption, String schCntn){
+        // 검색 옵션  A : 아이디 , B : 이름
+        if (StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn )){
+                 if( schOption.equals("A")) return bbs.bbsNm.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+            else if (schOption.equals("B")) return bbs.registerId.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+            else                            return null;
+        } else { return null; }
+    }
+	 
 
 
 }
