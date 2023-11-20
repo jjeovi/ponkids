@@ -1,6 +1,5 @@
 package com.meta.ponkids.domain.user.service;
 
-
 import com.meta.ponkids.domain.user.dto.*;
 import com.meta.ponkids.domain.user.entity.User;
 import com.meta.ponkids.domain.user.entity.UserChldrn;
@@ -133,6 +132,5 @@ public class UserService {
         userChldrnRepository.deleteAllByUserId( userId );
         
     }
-    
     
 }

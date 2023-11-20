@@ -18,7 +18,6 @@ import org.springframework.data.repository.query.Param;
  */
 public interface UserRoleRepository extends JpaRepository<UserRole, Integer> {
     
-    
     @Modifying( clearAutomatically = true )
     @Query( value = "UPDATE tb_user_role "
             + "      SET del_yn = 'Y'"

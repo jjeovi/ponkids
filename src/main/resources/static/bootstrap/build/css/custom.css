@@ -5200,12 +5200,24 @@ ul.notifications {
   background-color: #9674f1;
   border-color: #a08bd8;
 }
+
+.radiobox input[type=radio]:checked+label.readonly{
+  color: #fff;
+  background-color: #8c8a8f;
+  border-color: #323232;
+}
+
+/*label.readonly{*/
+/*  color: #fff;*/
+/*  background-color: #707070;*/
+/*  border-color: #a08bd8;*/
+/*}*/
+
 .radiobox input[type=radio].active{
   color: #fff;
   background-color: #9674f1;
   border-color: #a08bd8;
 }
-
 
 .radiobox>.btn:nth-of-type(1) {
   border-radius: 3px !important;
@@ -5341,9 +5353,44 @@ ul.notifications {
 	top:7px; 	
 }
 
+/* imaged preview */
+.filebox .upload-display {  /* 이미지가 표시될 지역 */
+  margin-bottom: 5px;
+  float:left;
+}
 
-/* 필수요소 */
-label > .required {
-	color: #ff1212;
-    margin-right: 4px;
+@media(min-width: 768px) {
+  .filebox .upload-display {
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 0;
+  }
+}
+
+.filebox .upload-thumb-wrap {  /* 추가될 이미지를 감싸는 요소 */
+  display: inline-block;
+  width: auto;
+  padding: 2px;
+  vertical-align: middle;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  max-width: 150px;
+}
+
+
+.filebox .upload-display img {  /* 추가될 이미지 */
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+}
+
+/* 프로필이미지 (이미지 없는 기본 Default 이미지) */
+.upload-thumb.noimg {
+  content: url('/images/base/no-image.gif');
+}
+
+.input-file-name {
+  width:50%;
 }

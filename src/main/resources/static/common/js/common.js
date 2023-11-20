@@ -8,6 +8,23 @@ $( function () {
     if($("#noDataTd").length){
         $("#noDataTd").attr("colspan",$('#listTable th').length);
     }
+
+
+    // input type=radio 에서 readonly 를 주면
+    // 해당 label에 readonly 클래스 추가
+
+    // readonly 속성인 모든 radio 순회
+    $("input:radio[readonly=readonly]").each(function(i,item) {
+
+        // 해당하는 label 값에 readonly 추가
+        if(item.readOnly) {
+            $("label[for='" + item.id + "']").addClass("readonly");
+        }
+
+        // 변경 불가 처리
+        $(this).attr("onclick","return false;");
+    });
+
     
 });
 // ------------- function () 함수 종료 -----------------
@@ -106,3 +123,43 @@ function deleteItem( delPk ){
 		
 	}
 }
+
+
+// S : file upload (img) 관련
+// 출처: https://webdir.tistory.com/435 [WEBDIR:티스토리]
+//preview image
+var imgTarget = $('.preview-image .upload-hidden');
+
+imgTarget.on('change', function(){
+    var parent = $(this).parent();
+    parent.children('.upload-display').remove();
+    parent.children('.upload-file-name').remove();
+
+    if(window.FileReader && $(this)[0].files[0] != null){
+
+        parent.prepend('<div class="upload-file-name"><input class="input-file-name" value="' + $(this)[0].files[0].name + '" disabled="disabled"></div>');
+
+        //image 파일만
+        if (!$(this)[0].files[0].type.match(/image\//)) {
+            parent.prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img class="upload-thumb noimg"></div></div>');
+            return;
+        }
+
+        var reader = new FileReader();
+        reader.onload = function(e){
+            var src = e.target.result;
+            parent.prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img src="'+src+'" class="upload-thumb"></div></div>');
+        }
+        reader.readAsDataURL($(this)[0].files[0]);
+    } else {
+        // $(this)[0].select();
+        // $(this)[0].blur();
+        // var imgSrc = document.selection.createRange().text;
+        parent.prepend('<div class="upload-file-name"><input class="input-file-name" value="선택된 파일 없음" disabled="disabled"></div>');
+        parent.prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img class="upload-thumb noimg"></div></div>');
+        //
+        // var img = $(this).siblings('.upload-display').find('img');
+        // img[0].style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\""+imgSrc+"\")";
+    }
+});
+// E : file upload (img) 관련

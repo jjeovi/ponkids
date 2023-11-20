@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <title layout:fragment="title">pioneerkids Admin - 회원 등록</title>
@@ -52,14 +52,8 @@
 
             }
 
-            if($("#mngrYn").prop("checked")) {
-                $("#mngrYn").val("Y");
-            } else {
-                $("#mngrYn").val("N");
-            }
-
             // 권한이 관리자일때, 권한 선택 안되어있을 때 return false
-            var mngrYn = $( "[name='mngrYn']" ).val();
+            var mngrYn = $( "[name='mngrYn']:checked" ).val();
             var roleSn = $( "[name='roleSn']" ).val();
             if ( mngrYn == 'Y' && roleSn == '' ) {
                 alert( "관리자 권한을 선택해 주세요." );
@@ -88,10 +82,8 @@
 
             });
 
-
             // return false;
             return !!validatorResult.valid;
-
         };
 
         // on form "reset" event
@@ -394,9 +386,27 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="insertForm" name="insertForm" method="post" th:action="@{/admin/user/insert}">
+                    <form id="insertForm" name="insertForm" method="post" th:action="@{/admin/user/insert}" enctype="multipart/form-data">
                         <input type="hidden" name="mngrConfmYn" value="Y"/>
-                        <!-- TODO 프로필 이미지 추가 작업 -->
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">프로필 이미지</label>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="filebox preview-image">
+                                    <div class="upload-display">
+                                        <div class="upload-thumb-wrap">
+                                            <img alt="프로필 이미지" class="upload-thumb noimg">
+                                        </div>
+                                    </div>
+                                    <div class="upload-file-name">
+                                        <input class="input-file-name" value="선택된 파일 없음" disabled="disabled">
+                                    </div>
+                                    <div class="upload-btn mt_10p">
+                                        <label for="file" class="btn btn-purple">업로드</label>
+                                    </div>
+                                    <input type="file" id="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png, .zip" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>아이디(이메일형식)</label>
                             <div class="col-md-6 col-sm-6">

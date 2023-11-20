@@ -12,6 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -87,7 +88,8 @@ public class UserController {
      * description    : user insert method
      */
     @PostMapping( BASIC_PATH + "/insert" )
-    public String insert(
+    public String insert (
+            @RequestParam("file") MultipartFile files,
             @ModelAttribute UserSaveDto userSaveDto,
             @ModelAttribute UserRoleSaveDto userRoleSaveDto,  // required false
             MultiUserChldrnSaveDto userChldrns,
@@ -106,6 +108,14 @@ public class UserController {
         } else {
             // 회원가입 처리
             
+            // 첨부파일 존재시 파일 저장
+            if(!files.isEmpty()){
+            
+            
+            }
+            
+            String origFilename = files.getOriginalFilename();
+            System.out.println( "origFilename = " + origFilename );
             // 관리자 승인여부 Y 이면 승인일시 now로 setting
             if ( userSaveDto.getMngrConfmYn().equals( "Y" ) ) {
                 userSaveDto.setConfmDt( LocalDateTime.now() );
@@ -143,12 +153,10 @@ public class UserController {
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
-        
         String urlPath = request.getServletPath();
         String remainPath = "";
         if ( urlPath.split( BASIC_PATH )[ 1 ].startsWith( "/detail" ) ) remainPath = "detail";
         if ( urlPath.split( BASIC_PATH )[ 1 ].startsWith( "/modify" ) ) remainPath = "modify";
-        
         
         return BASIC_PATH + "/" + remainPath;
     }
@@ -206,6 +214,4 @@ public class UserController {
         
         return userRepository.existsByUserId( userId );
     }
-    
-    
 }

@@ -646,11 +646,11 @@
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">주소</label>
                             <div class="col-md-1 col-sm-6">
-                                <input class="form-control text-center" type="text" name="zip" disabled="disabled"
+                                <input class="form-control text-center" type="text" name="zip" readonly
                                        placeholder="우편번호"/>
                             </div>
                             <div class="col-md-5 col-sm-6 pl-0">
-                                <input class="form-control" type="text" name="rdnmAdr" disabled="disabled"
+                                <input class="form-control" type="text" name="rdnmAdr" th:readonly="readonly"
                                        placeholder="주소 찾기 버튼 클릭하여 주소 입력"/>
                             </div>
                             <div class="col-md-1 pl-0">
@@ -661,11 +661,11 @@
                             <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>관리자 여부</label>
                             <div class="col-md-2 col-sm-4">
                                 <div class="btn-group radiobox">
-                                    <input type="radio" id="mngrYn1" name="mngrYn" value="N" th:checked="${targetDto.mngrYn eq 'N'}" class="join-btn" disabled="disabled">
+                                    <input type="radio" id="mngrYn1" name="mngrYn" value="N" th:checked="${targetDto.mngrYn eq 'N'}" class="join-btn" readonly >
                                     <label for="mngrYn1" class="btn btn-outline-purple w100p"
                                            data-toggle-class="btn-primary"
                                            data-toggle-passive-class="btn-default">사용자</label>
-                                    <input type="radio" id="mngrYn2" name="mngrYn" value="Y" th:checked="${targetDto.mngrYn eq 'Y'}" class="join-btn" disabled="disabled">
+                                    <input type="radio" id="mngrYn2" name="mngrYn" value="Y" th:checked="${targetDto.mngrYn eq 'Y'}" class="join-btn" readonly>
                                     <label for="mngrYn2" class="btn btn-outline-purple w100p"
                                            data-toggle-class="btn-primary"
                                            data-toggle-passive-class="btn-default">관리자</label>

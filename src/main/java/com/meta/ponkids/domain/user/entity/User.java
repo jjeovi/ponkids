@@ -30,10 +30,10 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@DynamicInsert
-@DynamicUpdate
-@Where( clause = "del_yn = 'N'")
-@SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y', updt_dt = now() WHERE user_id = ?")
+@DynamicInsert // insert 구문 시 null 이 아닌 값들만 insert
+@DynamicUpdate // update 구문 시 null 이 아닌 값들만 update
+@Where( clause = "del_yn = 'N'") // DEFAULT 로 WHERE DEL_YN = 'N' 문을 추가하여 조회
+@SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y', updt_dt = now() WHERE user_id = ?") // delelte 시 실행 (ex ) ~Repository.deleteById)
 @Table( name = "TB_USER" )
 public class  User extends BaseTimeEntity {
     
@@ -92,9 +92,9 @@ public class  User extends BaseTimeEntity {
     
     private String updusrIp;            // 수정자 IP
     
-    @ColumnDefault("N")
-    @Column(insertable = false, updatable = false)
-    private String delYn;               // 삭제 여부
+    @ColumnDefault("N")                             // del_yn 컬럼에 공통으로 추가
+    @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가
+    private String delYn;                           // 삭제 여부
     
 //    @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE})
 //    @JoinTable(
