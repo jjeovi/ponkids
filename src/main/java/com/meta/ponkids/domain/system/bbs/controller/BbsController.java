@@ -10,12 +10,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.meta.ponkids.domain.system.bbs.dto.BbsListDto;
+import com.meta.ponkids.domain.system.bbs.dto.BbsModDto;
 import com.meta.ponkids.domain.system.bbs.dto.BbsSaveReqDto;
 import com.meta.ponkids.domain.system.bbs.repository.BbsRepository;
 import com.meta.ponkids.domain.system.bbs.service.BbsService;
+import com.meta.ponkids.domain.user.dto.UserModDto;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -103,10 +105,10 @@ public class BbsController {
     
     @PostMapping(BASIC_PATH + "/update")
     public String update(
-    		@RequestParam(required = true) BbsSaveReqDto bbsSaveReqDto,
+    		@RequestParam(required = true)  BbsModDto modDto,
     		Model model ) {
     	
-    	   //bbsService.update(bbsSaveReqDto);
+    	   bbsService.update(modDto);
            
            // 메시지 출력 및 url 이동 처리
            model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );

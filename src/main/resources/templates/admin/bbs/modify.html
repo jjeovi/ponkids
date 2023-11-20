@@ -59,8 +59,8 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="insertForm" name="insertForm" method="post" th:action="@{/admin/bbs/update}"
-                          th:object="${bbsSaveReqDto}">
+                    <form id="updateForm" name="updateForm" method="post" th:action="@{/admin/bbs/update}"
+                           th:object="${modDto}">
                         <input type="hidden" name="bbsSn" th:checked="${targetDto.bbsSn}" />
                         <!-- TODO 프로필 이미지 추가 작업 -->
                        <div class="field item form-group">

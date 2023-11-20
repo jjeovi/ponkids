@@ -5,6 +5,8 @@ import com.meta.ponkids.global.common.BaseTimeEntity;
 import lombok.*;
 import org.hibernate.annotations.*;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -52,7 +54,7 @@ public class  Bbs extends BaseTimeEntity {
      
     private String openYn;      //공개여부    
     
-    private String registerId;      //공개여부     
+    private String registerId;      //공개여부   
 
     @NotNull
     @ColumnDefault("N")
