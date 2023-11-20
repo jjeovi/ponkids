@@ -245,3 +245,37 @@ com.meta.ponkids.domain /
 
 *************
 </details>
+
+
+
+
+<details>
+
+<summary> 231120 : 파일첨부 관련 환결설정 세팅사항</summary> 
+
+<!-- summary 아래 한칸 공백 두어야함 -->
+
+*************
+#### 
+- 231120 : 파일첨부 관련 환결설정 세팅사항
+
+
+ - ponkids/src/main/resources/application.yaml
+
+```
+spring:
+    servlet :
+        multipart :
+            #location : C:/upload    # 업로드 파일 저장 경로 ( window )
+             location : /Users/jjeoV/Desktop/jjeoV/2023/pioneerKids/upload/    # 업로드 파일 저장 경로 ( Mac )
+
+```
+
+첨부파일 관련 작업시...
+
+location : {path} 경로를 본인 local 경로에 맞춰 setting 하여 주세요.
+현재는 첨부파일 관련 개발중에 있어, 추후 개발 어느정도 되면 설정관련해서 정리하여 올려놓겠습니다.
+
+
+*************
+</details>
