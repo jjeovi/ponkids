@@ -22,14 +22,14 @@ import java.util.List;
  */
 public interface UserChldrnRepository extends JpaRepository<UserChldrn, Integer> {
     
-    List<UserChldrn> findByUserId( String userId );
+    List<UserChldrn> findByUserSn( Long userSn );
     
     @Modifying( clearAutomatically = true )
     @Query( value = "UPDATE tb_user_chldrn "
             + "      SET del_yn = 'Y'"
             + "        , updt_dt = now() "
-            + "    WHERE user_id = :userId", nativeQuery = true )
+            + "    WHERE user_sn = :userSn", nativeQuery = true )
         // nativeQuery true 없으면 error
-    int deleteAllByUserId( @Param( "userId" ) String userId );
+    int deleteAllByUserSn( @Param( "userSn" ) Long userSn );
     
 }

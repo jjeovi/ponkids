@@ -22,10 +22,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 public class UserSaveDto {
+	
+	private Long userSn;
     
     @NotNull
-    @Email
-    private String userId;          // 아이디
+    private String userId;          	// 회원 일련번호
     
     @NotNull
     private String password;        // 비밀번호

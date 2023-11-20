@@ -42,28 +42,25 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         List<UserListDto> results = query
                 // select
                 .select( new QUserListDto(
-                        user.userId,
-                        user.userNm,
-                        new CaseBuilder()
-                                .when( user.gender.eq( "M" ) ).then( "남자" )
-                                .when( user.gender.eq( "F" ) ).then( "여자" )
-                                .otherwise( "" )
-                                .as( "gender" ),
-                        user.brdtDate,
-//                        user.telNo.coalesce( "번호없음" ),    // NULL 처리는 coalesce 로 한다. ( NULL일시 "번호없음" )
-                        user.telNo,    // NULL 처리는 coalesce 로 한다. ( NULL일시 "번호없음" )
-                        new CaseBuilder()
-                                .when( user.resideArea.eq( "" ) ).then( "지역없음" )
-                                .otherwise( user.resideArea ).as( "resideArea" ),
-                        new CaseBuilder()
-                                .when( user.mngrYn.eq( "Y" ) ).then( "관리자" )
-                                .when( user.mngrYn.eq( "N" ) ).then( "사용자" )
-                                .otherwise( "" )
-                                .as( "mngrYn" ),
-                        user.mngrConfmYn
-                ) )
-                // from
-                .from( user )
+                		user.userSn,
+                		user.userId,
+                		user.userNm,
+                		new CaseBuilder()
+                		.when( user.gender.eq("M")).then("남자")
+                		.when( user.gender.eq("F")).then("여자")
+                		.otherwise("")
+                		.as("gender"),
+                		user.brdtDate,
+                		user.telNo,
+                		new CaseBuilder()
+                		.when(user.resideArea.eq("")).then("지역없음")
+                		.otherwise( user.resideArea).as("resideArea"),
+                		new CaseBuilder()
+                		.when( user.mngrYn.eq("Y")).then("관리자")
+                		.when( user.mngrYn.eq("N")).then("사용자")
+                		.otherwise("").as("mngrYn"),
+                		user.mngrConfmYn)
+                ).from( user )
                 // where
                 .where(
                         eqGender( userListDto.getGender() ),

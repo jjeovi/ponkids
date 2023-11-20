@@ -22,8 +22,8 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Integer> {
     @Query( value = "UPDATE tb_user_role "
             + "      SET del_yn = 'Y'"
             + "        , updt_dt = now() "
-            + "    WHERE user_id = :userId", nativeQuery = true )
+            + "    WHERE user_sn = :userSn", nativeQuery = true )
         // nativeQuery true 없으면 error
-    int deleteByUserId( @Param( "userId" ) String userId );
+    int deleteByUserSn( @Param( "userSn" ) Long userSn );
     
 }

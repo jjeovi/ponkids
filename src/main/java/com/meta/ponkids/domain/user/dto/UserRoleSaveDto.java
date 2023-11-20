@@ -24,7 +24,7 @@ public class UserRoleSaveDto {
     //    @NotNull
     private Long roleSn;          // 아이디
     
-    private String userId;
+    private Long userSn;
     
     private String registerId;
     
@@ -34,9 +34,9 @@ public class UserRoleSaveDto {
     
     // builder 생성
     @Builder
-    public UserRoleSaveDto( Long roleSn, String userId, String registerId, String registerIp, String delYn ) {
+    public UserRoleSaveDto( Long roleSn, Long userSn, String registerId, String registerIp, String delYn ) {
         this.roleSn = roleSn;
-        this.userId = userId;
+        this.userSn = userSn;
         this.registerId = registerId;
         this.registerIp = registerIp;
         this.delYn = delYn;
@@ -45,7 +45,7 @@ public class UserRoleSaveDto {
     // DTO to Entity 메소드는 DTO 내부에서 생성.
     public UserRole toEntity() {
         return UserRole.builder()
-                .userId( userId )
+                .userSn( userSn )
                 .roleSn( roleSn )
                 .registerId( registerId )
                 .registerIp( registerIp )

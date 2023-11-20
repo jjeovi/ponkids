@@ -14,10 +14,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * -----------------------------------------------------------
  * 2023-11-19        jjeoV             최초 생성
  */
-public interface UserRepository extends JpaRepository<User, String>, UserRepositoryCustom {
+public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom {
     
     boolean existsByUserId( String userId );
     
-    public User findByUserId( String userId );
+    public User findByUserSn( Long userSn );
     
 }

@@ -20,9 +20,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class UserChldrnSaveDto {
     
-    private String userId;
+    private Long userSn;
     
-    private int userChldrnSeq;
+    private Long userChldrnSeq;
     
     private String chldrnNm;
     
@@ -42,8 +42,8 @@ public class UserChldrnSaveDto {
     
     
     @Builder
-    public UserChldrnSaveDto( String userId, int userChldrnSeq, String chldrnNm, String chldrnGender, String chldrnBrdtDate, String chldrnEmail, String chldrnTelNo, String atchFileSn, String registerId, String registerIp ) {
-        this.userId = userId;
+    public UserChldrnSaveDto( Long userSn, Long userChldrnSeq, String chldrnNm, String chldrnGender, String chldrnBrdtDate, String chldrnEmail, String chldrnTelNo, String atchFileSn, String registerId, String registerIp ) {
+        this.userSn = userSn;
         this.userChldrnSeq = userChldrnSeq;
         this.chldrnNm = chldrnNm;
         this.chldrnGender = chldrnGender;
@@ -59,7 +59,7 @@ public class UserChldrnSaveDto {
     public UserChldrn toEntity() {
         return UserChldrn.builder()
                 .userChldrnSeq( userChldrnSeq )
-                .userId( userId )
+                .userSn( userSn )
                 .chldrnNm( chldrnNm )
                 .chldrnGender( chldrnGender )
                 .chldrnBrdtDate( getChldrnBrdtDate() )

@@ -238,8 +238,8 @@
                 $( "<td>" ).attr( "name", "chldrnTelNo" ).append( $targetChldrnDiv.find( "[name='chldrnTelNo']" ).val() ),     // 연락처
                 $( "<td>" ).attr( "name", "chldrnEmail" ).append( $targetChldrnDiv.find( "[name='chldrnEmail']" ).val() ),     // 이메일
                 $( "<td>" ).append(                                                         // 관리
-                    $( "<button>" ).attr( "onclick", "modifyChldrn(this)" ).addClass( "btn btn-success btn-sm table-btn" ).append( "수정" ),
-                    $( "<button>" ).attr( "onclick", "deleteChldrn(this)" ).addClass( "btn btn-danger btn-sm table-btn" ).append( "삭제" )
+                    $( "<button>" ).attr( "onclick", "modifyChldrn(this)" ).attr("type","button").addClass( "btn btn-success btn-sm table-btn" ).append( "수정" ),
+                    $( "<button>" ).attr( "onclick", "deleteChldrn(this)" ).attr("type","button").addClass( "btn btn-danger btn-sm table-btn" ).append( "삭제" )
                 )
             )
         );

@@ -9,7 +9,10 @@ import org.hibernate.annotations.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -32,16 +35,23 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @DynamicInsert // insert 구문 시 null 이 아닌 값들만 insert
 @DynamicUpdate // update 구문 시 null 이 아닌 값들만 update
+@SequenceGenerator(
+        name = "SEQ_TB_USER_SN",
+        sequenceName = "SEQ_TB_USER_SN",
+        initialValue = 1,
+        allocationSize = 1
+)
 @Where( clause = "del_yn = 'N'") // DEFAULT 로 WHERE DEL_YN = 'N' 문을 추가하여 조회
-@SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y', updt_dt = now() WHERE user_id = ?") // delelte 시 실행 (ex ) ~Repository.deleteById)
+@SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y', updt_dt = now() WHERE user_sn = ?") // delelte 시 실행 (ex ) ~Repository.deleteById)
 @Table( name = "TB_USER" )
 public class  User extends BaseTimeEntity {
+	
+	@Id
+	@GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_USER_SN" )
+//	/* USER_SN 컬럼 insert 시 사용하지 않음 */
+//    @Column(insertable=false, updatable = false)
+    private Long userSn;
     
-    /* USER_SN 컬럼 insert 시 사용하지 않음 */
-    @Column(insertable=false, updatable = false)
-    private int userSn;
-    
-    @Id
     @Column( unique = true )
     @Email
     private String userId;              // 사용자 아이디

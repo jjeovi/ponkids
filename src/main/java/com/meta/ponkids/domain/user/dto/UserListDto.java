@@ -17,8 +17,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class UserListDto {
-    
-    private String userId;
+	
+	private Long userSn;
+	
+	private String userId;
     
     private String userNm;
     
@@ -38,9 +40,11 @@ public class UserListDto {
     
     private String schCntn;     // 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!
     
+    
     @QueryProjection
-    public UserListDto( String userId, String userNm, String gender, String brdtDate, String telNo, String resideArea, String mngrYn, String mngrConfmYn ) {
-        this.userId = userId;
+    public UserListDto(Long userSn, String userId, String userNm, String gender, String brdtDate, String telNo, String resideArea, String mngrYn, String mngrConfmYn ) {
+    	this.userSn = userSn;
+    	this.userId = userId;
         this.userNm = userNm;
         this.gender = gender;
         this.brdtDate = brdtDate;

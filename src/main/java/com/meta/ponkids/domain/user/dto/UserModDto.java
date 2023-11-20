@@ -25,6 +25,9 @@ import java.time.LocalDateTime;
 public class UserModDto {
     
     @NotNull
+    private Long userSn;            // 회원 일련번호
+    
+    @NotNull
     @Email
     private String userId;          // 아이디
     
@@ -72,7 +75,8 @@ public class UserModDto {
     
     // builder 생성
     @Builder
-    public UserModDto( String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Integer atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSns, String registerIp, String delYn ) {
+    public UserModDto( Long userSn, String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Integer atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSns, String registerIp, String delYn ) {
+        this.userSn = userSn;
         this.userId = userId;
         this.password = password;
         this.userNm = userNm;
@@ -97,6 +101,7 @@ public class UserModDto {
     // DTO to Entity 메소드는 DTO 내부에서 생성.
     public User toEntity() {
         return User.builder()
+                .userSn( userSn )
                 .userId( userId )
                 .password( password )
                 .userNm( userNm )
@@ -120,6 +125,7 @@ public class UserModDto {
     
     public UserModDto toDto( User user ) {
         return UserModDto.builder()
+                .userSn( user.getUserSn() )
                 .userId( user.getUserId() )
                 .password( user.getPassword() )
                 .userNm( user.getUserNm() )

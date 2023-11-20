@@ -41,17 +41,18 @@ public class UserService {
     @Transactional
     public UserSaveDto save( UserSaveDto userSaveDto, UserRoleSaveDto userRoleSaveDto, MultiUserChldrnSaveDto userChldrns, HttpServletRequest request ) {
         
-        userSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );                         // 회원 IP 저장
-        userSaveDto.setPassword( passwordEncoder.encode( userSaveDto.getPassword() ) );   // 비밀번호 암호화
+        userSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );                        // 회원 IP 저장
+        userSaveDto.setPassword( passwordEncoder.encode( userSaveDto.getPassword() ) );   	// 비밀번호 암호화
         
-        userRepository.save( userSaveDto.toEntity() );        // ** 회원 save
+        User newUser = userRepository.save( userSaveDto.toEntity() );        				// ** 회원 save -> save된 정보 newUser 로 저장 
         
         // 관리자 여부 Y 일 때 권한 등록
         if ( userSaveDto.getMngrYn().equals( "Y" ) ) {
-            userRoleSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );     // 관리자 IP 저장
-            userRoleSaveDto.setRegisterId( "admin@test.com" );                   // TODO : 현재 세션의 userId값으로 수정
+        	userRoleSaveDto.setUserSn(newUser.getUserSn());						 			// 등록한 ID의 sn값 바로 호출 (newUser에서 값 호출)
+            userRoleSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );     			// 관리자 IP 저장
+            userRoleSaveDto.setRegisterId( "admin@test.com" );                   			// TODO : 현재 세션의 userId값으로 수정
             
-            userRoleRepository.save( userRoleSaveDto.toEntity() );
+            userRoleRepository.save( userRoleSaveDto.toEntity() );							// * 권한 save
         }
         
         // 자녀 존재하면 자녀 등록
@@ -60,16 +61,16 @@ public class UserService {
             List<UserChldrn> userChldrnList = new ArrayList<>();
             for ( UserChldrnSaveDto userChldrn : userChldrns.getUserChldrns() ) {
                 
-                userChldrn.setUserId( userSaveDto.getUserId() );             // userId Setting
-                userChldrn.setUserChldrnSeq( userChldrns.getUserChldrns().indexOf( userChldrn ) + 1 );  // userChldrnSeq Setting
+                userChldrn.setUserSn( newUser.getUserSn() );													// 등록한 ID의 sn값 setting (newUser에서 값 호출)
+                userChldrn.setUserChldrnSeq( (long)userChldrns.getUserChldrns().indexOf( userChldrn ) + 1 );	// userChldrnSeq Setting
                 
-                userChldrn.setRegisterIp( IpUtils.getClientIP( request ) );     // 관리자 IP 저장
-                userChldrn.setRegisterId( "admin@test.com" );                   // TODO : 현재 세션의 userId값으로 수정
+                userChldrn.setRegisterIp( IpUtils.getClientIP( request ) );    									// 관리자 IP 저장
+                userChldrn.setRegisterId( "admin@test.com" );                   								// TODO : 현재 세션의 userId값으로 수정
                 
-                userChldrnList.add( userChldrn.toEntity() );      // userlist add
+                userChldrnList.add( userChldrn.toEntity() );      												// userlist add
             }
             
-            userChldrnRepository.saveAll( userChldrnList );     // 한꺼번에 save. 각각 save보다 빠르다.
+            userChldrnRepository.saveAll( userChldrnList );     												// * userChldrn save. 한꺼번에 save. 각각 save보다 빠르다.
         }
         
         return userSaveDto;
@@ -81,9 +82,9 @@ public class UserService {
     }
     
     
-    public UserModDto findByUserId( String userId ) {
+    public UserModDto findByUserSn( Long userSn ) {
         
-        User user = userRepository.findByUserId( userId );
+        User user = userRepository.findByUserSn( userSn );
         
         UserModDto userModDto = new UserModDto();
         userModDto = userModDto.toDto( user );
@@ -94,7 +95,7 @@ public class UserService {
     
     public void update( UserModDto modDto ) {
         // target 조회
-        User user = userRepository.findByUserId( modDto.getUserId() );
+        User user = userRepository.findByUserSn( modDto.getUserSn() );
         
         // target object 전환 ( entity to dto )
         UserModDto targetDto = new UserModDto();
@@ -120,16 +121,16 @@ public class UserService {
     
     
     @Transactional
-    public void deleteAllByUserId( String userId ) {
+    public void deleteAllByUserSn( Long userSn ) {
         
         // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
-        userRepository.deleteById( userId );    // User.java 의 @SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y' WHERE user_id = ?") 를 수행
+        userRepository.deleteById( userSn );    // User.java 의 @SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y' WHERE user_id = ?") 를 수행
         
         // 권한 삭제 : userRole delete 처리
-        userRoleRepository.deleteByUserId( userId );
+        userRoleRepository.deleteByUserSn( userSn );
         
         // 자녀 삭제 : userchldrn delete 처리
-        userChldrnRepository.deleteAllByUserId( userId );
+        userChldrnRepository.deleteAllByUserSn( userSn );
         
     }
     

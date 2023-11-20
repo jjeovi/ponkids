@@ -137,10 +137,11 @@ public class UserController {
      * date           : 11/17/23
      * description    : user detail or user modify method
      */
-    @GetMapping( value = { BASIC_PATH + "/detail",
+    @GetMapping( value = { 
+    		BASIC_PATH + "/detail",
             BASIC_PATH + "/modify" } )
     public String detailOrModify(
-            @RequestParam( required = true ) String userId,
+            @RequestParam( required = true ) Long userSn,
             Model model,
             HttpServletRequest request ) {
         
@@ -148,7 +149,7 @@ public class UserController {
         model.addAttribute( "authList", roleRepository.findAll() );
         
         // target object 조회
-        model.addAttribute( "targetDto", userService.findByUserId( userId ) );
+        model.addAttribute( "targetDto", userService.findByUserSn( userSn ) );
         
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
@@ -190,11 +191,11 @@ public class UserController {
     @Transactional
     @PostMapping( BASIC_PATH + "/delete" )
     public String delete(
-            @RequestParam( required = true ) String userId,
+            @RequestParam( required = true ) Long userSn,
             Model model ) {
         
         // 삭제 처리
-        userService.deleteAllByUserId( userId );
+        userService.deleteAllByUserSn( userSn );
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );

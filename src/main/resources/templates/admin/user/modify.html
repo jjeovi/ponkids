@@ -351,6 +351,7 @@
                     <form id="updateForm" name="updateForm" method="post" th:action="@{/admin/user/update}">
 	                    <!-- hidden type  -->
                         <input type="hidden" name="mngrConfmYn" th:value="${targetDto.mngrConfmYn}"/>
+                        <input type="hidden" name="userSn" 		th:value="${targetDto.userSn}"/>
                         <!-- TODO 프로필 이미지 추가 작업 -->
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>아이디(이메일형식)</label>

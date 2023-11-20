@@ -116,9 +116,9 @@
 	                                <td th:text="${data.resideArea}"></td>
 	                                <td th:text="${data.mngrYn}"></td>
 	                                <td>
-	                                    <a th:href="@{/admin/user/modify(userId=${data.userId})}"
+	                                    <a th:href="@{/admin/user/modify(userSn=${data.userSn})}"
 	                                       class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
-	                                    <a th:href="'javascript:deleteItem(\'' + ${data.userId} + '\');'"
+	                                    <a th:href="'javascript:deleteItem(\'' + ${data.userSn} + '\');'"
 	                                       class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>삭제</a>
 	                                </td>
 	                            </tr>
@@ -163,7 +163,7 @@
                     </div>
                 </form>
                 <form id="deleteForm" name="deleteForm" method="post" th:action="@{/admin/user/delete}">
-            		<input type="hidden" name="userId" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+            		<input type="hidden" name="userSn" id="delPk" /> <!-- delPk 문자 수정 금지 -->
             	</form>
             </div>
         </div>

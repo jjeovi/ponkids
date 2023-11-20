@@ -3,6 +3,7 @@ package com.meta.ponkids.domain.user.entity;
 import com.meta.ponkids.global.common.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.*;
 
@@ -24,11 +25,12 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
-@SQLDelete( sql = "UPDATE tb_user_chldrn SET del_yn ='Y', updt_dt = now() WHERE user_id = ?" )
+@SQLDelete( sql = "UPDATE tb_user_chldrn SET del_yn ='Y', updt_dt = now() WHERE user_sn = ?" )
 @Where( clause = "del_yn = 'N'" )
 @Table( name = "tb_user_chldrn" )
 public class UserChldrn extends BaseTimeEntity {
@@ -36,11 +38,11 @@ public class UserChldrn extends BaseTimeEntity {
     @Id
     @Column( unique = true )
     @GeneratedValue
-    private int chldrnSn;              // 자녀 일련번호
+    private Long chldrnSn;              // 자녀 일련번호
     
-    private String userId;
+    private Long userSn;
     
-    private int userChldrnSeq;
+    private Long userChldrnSeq;
     
     private String chldrnNm;            // 자녀 이름
     
