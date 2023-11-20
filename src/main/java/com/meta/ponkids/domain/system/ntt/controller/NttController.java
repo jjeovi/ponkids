@@ -91,4 +91,29 @@ public class NttController {
         return "common/alert";
   }
     
+    
+    
+    @GetMapping(value= {  BASIC_PATH + "/modify" } )	 
+      public String modify( @RequestParam(required = true) int nttSn,  Model model, 
+    		  HttpServletRequest request ) {
+      
+      // 권한 리스트
+     // model.addAttribute( "authList", roleRepository.findAll() );
+      
+      // target object 조회
+      model.addAttribute("targetDto", nttService.findByNttSn(nttSn));
+      
+      // 기본 경로 setting
+      model.addAttribute("basicPath", BASIC_PATH);
+      
+      
+      String urlPath = request.getServletPath();
+      String remainPath = ""; 
+
+      if ( urlPath.split(BASIC_PATH)[1].startsWith("/modify") ) remainPath = "modify";
+      
+      
+      return BASIC_PATH + "/" + remainPath;
+      }  
+    
 }

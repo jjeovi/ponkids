@@ -6,8 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-
+import com.meta.ponkids.domain.system.bbs.dto.BbsModDto;
+import com.meta.ponkids.domain.system.bbs.entity.Bbs;
 import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
+import com.meta.ponkids.domain.system.ntt.dto.NttModDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttSaveReqDto;
 import com.meta.ponkids.domain.system.ntt.entity.Ntt;
 import com.meta.ponkids.domain.system.ntt.repository.NttRepository;
@@ -47,6 +49,20 @@ public class NttService {
 	  return nttRepository.getList(nttListDto, pageable); 
 	
 	 }
+    
+    
+    
+    public NttModDto findByNttSn(int nttSn) {
+    	
+    	Ntt ntt = nttRepository.findByNttSn(nttSn);
+    	
+    	NttModDto nttModDto = new NttModDto();
+    	nttModDto = nttModDto.toDto(ntt);
+    	
+    	return nttModDto;
+    	
+    }
+    
     
     
 	
