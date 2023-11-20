@@ -22,7 +22,6 @@ import java.util.List;
 
 
 import static com.meta.ponkids.domain.system.bbs.entity.QBbs.bbs;
-import static com.meta.ponkids.domain.user.entity.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
@@ -48,7 +47,8 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
                                 bbs.answerSetYn,
                                 bbs.useYn,   
                                 bbs.openYn,
-                                bbs.registerId                // from
+                                bbs.registerId,
+                                bbs.regDt      
                 	    )  ).from( bbs )
                 .orderBy( bbs.bbsSn.desc() )
                 // where

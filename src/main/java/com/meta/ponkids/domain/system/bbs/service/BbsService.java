@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.meta.ponkids.domain.system.bbs.dto.BbsListDto;
 import com.meta.ponkids.domain.system.bbs.dto.BbsModDto;
@@ -72,6 +73,32 @@ public class BbsService {
     	
     	return bbsModDto;
     	
+    }
+    
+    
+    public void update( BbsModDto modDto ) {
+        // target 조회
+        Bbs bbs = bbsRepository.findByBbsSn( modDto.getBbsSn() );
+        
+        // target object 전환 ( entity to dto )
+        BbsModDto targetDto = new BbsModDto();
+        targetDto = targetDto.toDto( bbs );
+        
+        // target object 에 수정사항 set
+        // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
+        if ( StringUtils.hasText( modDto.getBbsNm() ) ) targetDto.setBbsNm( modDto.getBbsNm() );          // 게시판 이름 
+        if ( StringUtils.hasText( modDto.getBbsGdcc() ) ) targetDto.setBbsGdcc( modDto.getBbsGdcc() );    // 게시판 안내문구   
+        if ( StringUtils.hasText( modDto.getBbsDc() ) ) targetDto.setBbsDc( modDto.getBbsDc() );          // 게시판 설명
+        if ( StringUtils.hasText( modDto.getAnswerSetYn() ) ) targetDto.setAnswerSetYn( modDto.getAnswerSetYn() );            // 댓글설정여부
+        if ( StringUtils.hasText( modDto.getUseYn() ) ) targetDto.setUseYn( modDto.getUseYn() );          // 사용여부
+        if ( StringUtils.hasText( modDto.getOpenYn() ) ) targetDto.setOpenYn( modDto.getOpenYn() );        // 공개여부여부
+
+        
+        // target object 전환 ( dto to entity )
+        bbs = targetDto.toEntity();
+        
+        // 수정사항 적용
+        bbsRepository.save( bbs );
     }
     
     

@@ -5,6 +5,8 @@ import com.meta.ponkids.global.common.BaseTimeEntity;
 import lombok.*;
 import org.hibernate.annotations.*;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -52,12 +54,12 @@ public class  Bbs extends BaseTimeEntity {
      
     private String openYn;      //공개여부    
     
-    private String registerId;      //공개여부     
+    private String registerId;      //공개여부   
 
-    @NotNull
-    @ColumnDefault("N")
-    private String delYn;     // 삭제 여부   
-
+    @ColumnDefault("N")                             // del_yn 컬럼에 공통으로 추가
+    @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가
+    private String delYn;                           // 삭제 여부
+    
 
    // @ManyToMany
    // private List<Bbs> bbsList = new ArrayList<>();
