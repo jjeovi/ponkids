@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -168,10 +169,30 @@ public class UserController {
      * : 11/17/23
      * description    : user update method
      */
+    @Transactional
     @PostMapping( BASIC_PATH + "/update" )
     public String update(
+            @RequestParam("file") MultipartFile files,
             @ModelAttribute UserModDto modDto,
-            Model model ) {
+            Model model ) throws IOException {
+        
+        // 첨부파일 존재시 파일 저장
+        if(!files.isEmpty()){
+            // 기존에 첨부파일 있을시 삭제
+            if( modDto.getAtchFileSnOri() != null ) {
+                atchFileService.delete(modDto.getAtchFileSnOri());
+            }
+            
+            // 첨부파일 저장
+            modDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 )
+        } else {
+            // 첨부파일 존재하지않을 때
+            // 기존 첨부파일이 있었는데 삭제됬다면 삭제처리
+            if( modDto.getAtchFileSnOri()!= null && modDto.getAtchFileSn() == null ) {
+                atchFileService.delete(modDto.getAtchFileSnOri());
+                modDto.setAtchFileSn( null );
+            }
+        }
         
         // update 구현
         userService.update( modDto );

@@ -1,15 +1,18 @@
 package com.meta.ponkids.domain.system.file.service;
 
+import com.meta.ponkids.domain.system.file.entity.pk.AtchFileDetailPk;
 import lombok.RequiredArgsConstructor;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.mail.Multipart;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +36,7 @@ import com.meta.ponkids.domain.system.file.repository.AtchFileRepository;
  * 2023-11-19        jjeoV             최초 생성
  */
 @Service
+@Log4j2
 @RequiredArgsConstructor
 public class AtchFileService {
 	private final AtchFileRepository atchFileRepository;
@@ -41,6 +45,11 @@ public class AtchFileService {
 	@Value("${upload.path}")
 	private String uploadPath;
 	
+	/**
+	 * methodName    : save
+	 * date           : 11/21/23
+	 * description    : 파일 생성 및 db 저장
+	 */
 	@Transactional
 	public Long save(MultipartFile file) throws IOException {
 		// 파일 save 
@@ -85,11 +94,60 @@ public class AtchFileService {
 		atchFileDetailRepository.save(atchFileDetail);
 		
 		return newAtchFile.getAtchFileSn();
+	
+	}
+	
+	/**
+	 * methodName    : delete
+	 * date           : 11/21/23
+	 * description    : 파일 삭제 ( 서버상의 파일을 물리적 삭제 처리 + db 정보 삭제 )
+	 */
+	@Transactional
+	public void delete( Long atchFileSn ) {
+		
+		// S : 서버상 파일 물리적 삭제 처리
+		List<AtchFileDetail> atchFileDetailList =  atchFileDetailRepository.getList( atchFileSn );
+		
+		for ( AtchFileDetail atchFileDetail : atchFileDetailList ) {
+			
+			File file = new File(atchFileDetail.getFileStrePath());
+			
+			if( file.exists() ){ //파일존재여부확인
+				
+				if(file.isDirectory()){ //파일이 디렉토리인지 확인
+					
+					File[] files = file.listFiles();
+					
+					for( int i=0; i<files.length; i++){
+						if( files[i].delete() ){
+							log.info( files[i].getName()+" 삭제성공" );
+						}else{
+							log.info( files[i].getName()+" 삭제실패" );
+						}
+					}
+					
+				}
+				if(file.delete()){
+					log.info( "파일삭제 성공" );
+				}else{
+					log.info( "파일삭제 실패" );
+				}
+				
+			}else{
+				log.info( "파일이 존재하지 않습니다." );
+			}
+		
+		}
+		// E : 서버상 파일 물리적 삭제 처리
+		
+		// DB상의 파일 삭제
+		atchFileDetailRepository.deleteByAtchFileDetailPk_AtchFileSn(atchFileSn);
+		atchFileRepository.deleteById( atchFileSn );
 	}
 	
 	
 	// 파일 저장 이름 만들기
-	// 서버상 저장되는 파일명은 중복의 위험을 줄이기 위해 랜덤난수를 생성하여 save
+	// 서버상 저장되는 파일명은 중복의 위험을 줄이기 위해 랜덤난수를 생성
 	private String createSaveFileName(String orignlFileNm) {
 	    String ext = extractExt(orignlFileNm);
 	    String uuid = UUID.randomUUID().toString();	// 랜덤 난수 생성

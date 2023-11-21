@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <title layout:fragment="title">pioneerkids Admin - 회원 등록</title>
@@ -283,6 +283,7 @@
 
     }
 
+    // 모달 버튼 setting
     function setModalBtn( mode ) {
         if ( mode == "C" ) {
             // 모달창의 수정 버튼 숨기고 저장 버튼을 표시
@@ -294,6 +295,24 @@
             $( "#addChldrnBtn" ).hide();
             $( "#updateChldrnBtn" ).show();
         }
+    }
+
+    // 프로필이미지 제거
+    function removeImage( e ) {
+
+        // atchFileSn 값 제거
+        $( e ).parent().siblings("[name='atchFileSn']").remove();
+
+        // 이미지 썸네일 제거 및 파일명 제거작업
+        var parent = $('.preview-image .upload-hidden').parent();
+        $( e ).parent().siblings('.upload-display').remove();
+        $( e ).parent().siblings('.upload-file-name').remove();
+        $( e ).parent().parent().prepend('<div class="upload-file-name"><input class="input-file-name" value="선택된 파일 없음" disabled="disabled"></div>');
+        $( e ).parent().parent().prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img class="upload-thumb noimg"></div></div>');
+
+        // 이미지 제거 버튼 또한 제거
+        $( e ).remove();
+
     }
 
 </script>
@@ -341,11 +360,11 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="updateForm" name="updateForm" method="post" th:action="@{/admin/user/update}">
+                    <form id="updateForm" name="updateForm" method="post" th:action="@{/admin/user/update}" enctype="multipart/form-data">>
 	                    <!-- hidden type  -->
-                        <input type="hidden" name="mngrConfmYn" th:value="${targetDto.mngrConfmYn}" />
-                        <input type="hidden" name="userSn" 		th:value="${targetDto.userSn}" />
-                        
+                        <input type="hidden" name="mngrConfmYn"     th:value="${targetDto.mngrConfmYn}" />
+                        <input type="hidden" name="userSn" 		    th:value="${targetDto.userSn}" />
+
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">프로필 이미지</label>
                             <div class="col-md-6 col-sm-6">
@@ -361,9 +380,13 @@
                                         <input class="input-file-name" value="선택된 파일 없음" disabled="disabled" >
                                     </div>
                                     <div class="upload-btn mt_10p">
-                                        <label for="file" class="btn btn-purple">업로드</label>
+                                        <label class="btn btn-purple">업로드
+                                            <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" th:value="${targetDto.atchFileSn}">
+                                        </label>
+                                        <button type="button" class="btn btn-purple" id="removeImageBtn" onclick="removeImage(this);" th:if = 	"${targetDto.atchFileSn != null}">이미지제거</button>
                                     </div>
-                                    <input type="file" id="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;">
+                                    <input type="hidden" name="atchFileSn" 	    th:value="${targetDto.atchFileSn}" />
+                                    <input type="hidden" name="atchFileSnOri" 	th:value="${targetDto.atchFileSn}" />
                                 </div>
                             </div>
                         </div>

@@ -131,9 +131,12 @@ function deleteItem( delPk ){
 var imgTarget = $('.preview-image .upload-hidden');
 
 imgTarget.on('change', function(){
-    var parent = $(this).parent();
+    var parent = $(this).parent().parent().parent();
     parent.children('.upload-display').remove();
     parent.children('.upload-file-name').remove();
+
+    // id값 제거
+    parent.children("[name='atchFileSn']").remove();
 
     if(window.FileReader && $(this)[0].files[0] != null){
 

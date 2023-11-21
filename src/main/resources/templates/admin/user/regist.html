@@ -288,6 +288,8 @@
         // trNum 번째 chldrnAddDiv 를 show
         var trNum = $( e ).closest( 'tr' ).prevAll().length;
 
+        $( "[name='chldrnAddDiv']" ).eq( trNum ).clone().appendTo("[name='chldrnModDiv']");
+
         // 모든 chldrnAddDiv 숨기기
         $( "[name='chldrnAddDiv']" ).hide();
         // trNum 번째 chldrnAddDiv show
@@ -401,9 +403,11 @@
                                         <input class="input-file-name" value="선택된 파일 없음" disabled="disabled">
                                     </div>
                                     <div class="upload-btn mt_10p">
-                                        <label for="file" class="btn btn-purple">업로드</label>
+                                        <label class="btn btn-purple">업로드
+                                            <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;">
+                                        </label>
                                     </div>
-                                    <input type="file" id="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;">
+
                                 </div>
                             </div>
                         </div>
@@ -778,6 +782,9 @@
                                                                 <span aria-hidden="true">×</span></button>
                                                         </div>
                                                         <div class="modal-body" id="addChldrnModalBody">
+                                                            <div name="chldrnModDiv" class="modForm" style="display: none;">
+                                                                <!-- 자녀 수정시 여기서 수정 작업 -->
+                                                            </div>
                                                             <div name="chldrnAddDiv" class="newForm"
                                                                  th:insert="/admin/user/addChldrnForm.html">
                                                                 <!-- 자녀 추가 모달 (/admin/user/addChldrnForm.html) -->

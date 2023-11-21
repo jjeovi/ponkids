@@ -55,6 +55,8 @@ public class UserModDto {
     
     private Long atchFileSn;      // 첨부파일 일련번호
     
+    private Long atchFileSnOri;      // 첨부파일 일련번호
+    
     @NotNull
     private String mngrYn;          // 관리자 여부
     

@@ -4,6 +4,7 @@ import com.meta.ponkids.domain.system.file.entity.AtchFile;
 import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
 import com.meta.ponkids.domain.system.file.entity.pk.AtchFileDetailPk;
 
+import com.meta.ponkids.domain.system.file.repository.custom.AtchFileDetailRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -16,6 +17,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * -----------------------------------------------------------
  * 2023-11-19        jjeoV             최초 생성
  */
-public interface AtchFileDetailRepository extends JpaRepository<AtchFileDetail, AtchFileDetailPk> {
+public interface AtchFileDetailRepository extends JpaRepository<AtchFileDetail, AtchFileDetailPk>, AtchFileDetailRepositoryCustom {
+    
+    
+    int deleteByAtchFileDetailPk_AtchFileSn(Long acthFileSn);
+    
 
 }
