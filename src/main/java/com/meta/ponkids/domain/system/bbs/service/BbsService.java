@@ -40,7 +40,7 @@ public class BbsService {
                 .bbsNm(bbsSaveReqDto.getBbsNm())
                 .bbsGdcc(bbsSaveReqDto.getBbsGdcc())
                 .bbsDc(bbsSaveReqDto.getBbsDc())
-                .answerSetYn(bbsSaveReqDto.getAnswerSetYn())
+                .replySetYn(bbsSaveReqDto.getReplySetYn())
                 .useYn(bbsSaveReqDto.getUseYn())
                 .openYn(bbsSaveReqDto.getOpenYn())
                 .registerId("ehlee")
@@ -90,7 +90,7 @@ public class BbsService {
         if ( StringUtils.hasText( modDto.getBbsNm() ) ) targetDto.setBbsNm( modDto.getBbsNm() );          // 게시판 이름 
         if ( StringUtils.hasText( modDto.getBbsGdcc() ) ) targetDto.setBbsGdcc( modDto.getBbsGdcc() );    // 게시판 안내문구   
         if ( StringUtils.hasText( modDto.getBbsDc() ) ) targetDto.setBbsDc( modDto.getBbsDc() );          // 게시판 설명
-        if ( StringUtils.hasText( modDto.getAnswerSetYn() ) ) targetDto.setAnswerSetYn( modDto.getAnswerSetYn() );            // 댓글설정여부
+        if ( StringUtils.hasText( modDto.getReplySetYn() ) ) targetDto.setReplySetYn( modDto.getReplySetYn() );            // 댓글설정여부
         if ( StringUtils.hasText( modDto.getUseYn() ) ) targetDto.setUseYn( modDto.getUseYn() );          // 사용여부
         if ( StringUtils.hasText( modDto.getOpenYn() ) ) targetDto.setOpenYn( modDto.getOpenYn() );        // 공개여부여부
 

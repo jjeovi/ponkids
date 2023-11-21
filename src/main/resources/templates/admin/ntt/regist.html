@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"   >
+<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"  >
 <title layout:fragment="title">pioneerkids (Admin-bbs) - 게시물 등록</title>
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="/common/js/common_eh.js"></script>
@@ -114,11 +114,61 @@ $(document).ready(function() {
                 </div>
             </div>
         </div>
+        
+        
+        
     </div>
     <!-- E: 메인 등록 영역 -->
-</div>
+   
+    <!-- S: 댓글등록 -->
+    <div class="card my-4">
+        <h5 class="card-header">댓글쓰기 </h5>
+        <div class="card-body">
+            <form  id="replyInsertForm" name="replyInsertForm" method="post" th:action="@{/admin/ntt/replyInsert}"
+                          th:object="${nttReplySaveReqDto}">
+            	<div class="form-group">
+            		<textarea class="form-control" rows="3"></textarea>
+            	</div>
+            	<button type="submit" class="btn btn-primary">등록</button>
+            </form>
+        </div>
+    </div>
+    
+     <div class="card my-4">
+		 <h5 class="card-header">댓글목록 </h5>
+		 <ul id = "reply--box" class = "list-group">
+           <li>
+			    <div class="form-group">
+            		<textarea class="form-control" rows="3"></textarea>
+            	</div>
+            	<button type="submit" class="btn btn-primary">수정</button>
+            	<button type="submit" class="btn btn-primary">삭제</button>
+            	 <ul id = "reply--box" class = "list-group">
+                  <li>
+			         <div class="form-group"> 답글쓰기
+            		<textarea class="form-control" rows="3"></textarea>
+            	    </div>
+            	  <button type="submit" class="btn btn-primary">수정</button>
+            	 <button type="submit" class="btn btn-primary">삭제</button>
+                </li>
+        </ul>
+          </li>
+        </ul>
+    </div>		 
+    
+    
+      <!--  해당 포스트에 댓글이 있다면  -->
 
-	
+            <!-- Single Comment -->
+            <div class="media mb-4" id="">
+                <div class="media-body">
+                    <!--"작성자 이름  날짜" 및 내용 출력-->
+                    <h5 class="mt-0">&nbsp;&nbsp;<small class="text-muted">댓글1</small>
+                    </h5>
+                    <p></p> 
+                </div>
+            </div>
+</div>
 </body>
 <!-- E : Javascript functions	-->
 

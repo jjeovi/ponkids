@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
+import com.meta.ponkids.domain.system.ntt.dto.NttReplySaveReqDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttSaveReqDto;
 import com.meta.ponkids.domain.system.ntt.service.NttService;
 
@@ -115,5 +116,22 @@ public class NttController {
       
       return BASIC_PATH + "/" + remainPath;
       }  
+    
+    
+    
+    @PostMapping(BASIC_PATH  + "/nttReplySaveReqDto")
+    public String nttReplySaveReqDto( 
+    		               @ModelAttribute NttReplySaveReqDto nttReplySaveReqDto, HttpServletRequest request
+    		               , Model model) {
+      // save
+         //nttService.replySave(nttReplySaveReqDto);
+        
+        // 메시지 출력 및 url 이동 처리
+        model.addAttribute( "resultMsg", "정상적으로 댓글이 등록되었습니다." );
+        ///model.addAttribute( "moveUrl", BASIC_PATH +"/list" );
+
+        return "common/alert";
+  }
+    
     
 }

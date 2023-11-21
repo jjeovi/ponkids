@@ -45,10 +45,10 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
                                 .as("bbsSeCd"),
                                 bbs.bbsNm,
                                 new CaseBuilder()
-                                .when( bbs.answerSetYn.eq( "Y" ) ).then( "사용" )
-                                .when(bbs.answerSetYn.eq( "N" )).then( "미사용" )
+                                .when( bbs.replySetYn.eq( "Y" ) ).then( "사용" )
+                                .when(bbs.replySetYn.eq( "N" )).then( "미사용" )
                                 .otherwise( "" )
-                                .as("answerSetYn"),
+                                .as("replySetYn"),
                                 new CaseBuilder()
                                 .when( bbs.useYn.eq( "Y" ) ).then( "사용" )
                                 .when(bbs.useYn.eq( "N" )).then( "미사용" )
@@ -65,7 +65,7 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
                 .orderBy( bbs.bbsSn.desc() )
                 // where
                 .where(
-                		eqAnswerSetYn( bbsListDto.getAnswerSetYn() ),
+                		eqReplySetYn( bbsListDto.getReplySetYn() ),
                 		eqUseYn( bbsListDto.getUseYn() ),
                 		eqOpenYn( bbsListDto.getOpenYn() ),
                         eqOption( bbsListDto.getSchOption(), bbsListDto.getSchCntn() )
@@ -80,7 +80,7 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
         JPAQuery<Long> count = query.select(bbs.count())
                 .from(bbs)
                 .where(
-                		eqAnswerSetYn( bbsListDto.getAnswerSetYn() ),
+                		eqReplySetYn( bbsListDto.getReplySetYn() ),
                 		eqUseYn( bbsListDto.getUseYn() ),
                 		eqOpenYn( bbsListDto.getOpenYn() ),
                         eqOption( bbsListDto.getSchOption(), bbsListDto.getSchCntn() )
@@ -91,8 +91,8 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
     
     
     // -------------------------------- WHERE 검색 옵션 setting --------------------------------
-    private BooleanExpression eqAnswerSetYn( String answerSetYn) {
-        return StringUtils.hasText( answerSetYn ) ? bbs.answerSetYn.eq( answerSetYn ) : null;
+    private BooleanExpression eqReplySetYn( String replySetYn) {
+        return StringUtils.hasText( replySetYn ) ? bbs.replySetYn.eq( replySetYn ) : null;
     }
     private BooleanExpression eqUseYn( String useYn) {
     	return StringUtils.hasText( useYn ) ? bbs.useYn.eq( useYn ) : null;

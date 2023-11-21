@@ -19,7 +19,7 @@ public class BbsListDto {
     
     private String bbsNm;
     
-    private String answerSetYn;
+    private String replySetYn;
     
     private String useYn;
     
@@ -36,12 +36,12 @@ public class BbsListDto {
     
     
     @QueryProjection
-    public BbsListDto( int bbsSn ,String bbsSeCd, String bbsNm,  String answerSetYn, String useYn,String openYn	 ,String registerId,LocalDateTime regDt) {
+    public BbsListDto( int bbsSn ,String bbsSeCd, String bbsNm,  String replySetYn, String useYn,String openYn	 ,String registerId,LocalDateTime regDt) {
 
          this.bbsSn = bbsSn;
          this.bbsSeCd = bbsSeCd;
          this.bbsNm = bbsNm;
-         this.answerSetYn = answerSetYn;
+         this.replySetYn = replySetYn;
          this.useYn = useYn;
          this.openYn = openYn;
          this.regDt = regDt;

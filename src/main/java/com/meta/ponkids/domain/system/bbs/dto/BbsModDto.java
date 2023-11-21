@@ -21,7 +21,7 @@ public class BbsModDto {
     
     private String bbsNm;
     
-    private String answerSetYn;
+    private String replySetYn;
     
     private String useYn;
     
@@ -38,12 +38,12 @@ public class BbsModDto {
 
     // builder 생성
     @Builder
-    public BbsModDto( int bbsSn ,String bbsSeCd, String bbsNm,  String answerSetYn, String useYn,String openYn	 ,String registerId ,String bbsGdcc, String bbsDc) {
+    public BbsModDto( int bbsSn ,String bbsSeCd, String bbsNm,  String replySetYn, String useYn,String openYn	 ,String registerId ,String bbsGdcc, String bbsDc) {
 
         this.bbsSn = bbsSn;
         this.bbsSeCd = bbsSeCd;
         this.bbsNm = bbsNm;
-        this.answerSetYn = answerSetYn;
+        this.replySetYn = replySetYn;
         this.useYn = useYn;
         this.openYn = openYn;
         this.registerId = registerId;
@@ -58,7 +58,7 @@ public class BbsModDto {
                 .bbsSn( bbsSn )
                 .bbsSeCd( bbsSeCd )
                 .bbsNm( bbsNm )
-                .answerSetYn( answerSetYn )
+                .replySetYn( replySetYn )
                 .useYn( useYn )
                 .openYn( openYn )
                 .registerId( registerId )
@@ -73,7 +73,7 @@ public class BbsModDto {
         		.bbsSn( bbs.getBbsSn() )
                 .bbsSeCd( bbs.getBbsSeCd() )
                 .bbsNm( bbs.getBbsNm() )
-                .answerSetYn( bbs.getAnswerSetYn() )
+                .replySetYn( bbs.getReplySetYn() )
                 .useYn( bbs.getUseYn() )
                 .openYn( bbs.getOpenYn() )
                 .registerId( bbs.getRegisterId() )
