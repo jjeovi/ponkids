@@ -36,29 +36,32 @@ public class  Bbs extends BaseTimeEntity {
     @Id
     @Column(insertable=false)
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_BBS_SN" )
-    private int bbsSn;             // 게시판일련번호  
+    private int bbsSn;           
   
     @NotNull
-    private String bbsSeCd;        // 게시판구분코드
+    private String bbsSeCd;      
     
     @NotNull
-    private String bbsNm;             //게시판이름
+    private String bbsNm;            
                         
-    private String bbsGdcc;         // 게시판 안내문구   
+    private String bbsGdcc;       
                                       
-    private String bbsDc;          // 게시판 설명
+    private String bbsDc;         
 
-    private String replySetYn;   // 댓글 설정여부
+    private String replySetYn;   
 
-    private String useYn;         //사용여부
+    private String useYn;        
      
-    private String openYn;      //공개여부    
+    private String openYn;         
     
-    private String registerId;      //공개여부   
+    @Column(updatable = false)
+    private String registerId;      
     
-    private String registerIp;      //공개여부   
+    @Column(updatable = false)
+    private String registerIp; 
     
-    private LocalDateTime regDt;      //공개여부   
+    @Column(updatable = false)
+    private LocalDateTime regDt;     
 
 
     @ColumnDefault("N")                             // del_yn 컬럼에 공통으로 추가

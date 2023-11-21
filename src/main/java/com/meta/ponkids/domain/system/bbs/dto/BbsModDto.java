@@ -29,6 +29,7 @@ public class BbsModDto {
 
 	private String registerId;
 	
+	
 	private String registerIp;
 	
 	private String bbsGdcc;
