@@ -77,13 +77,15 @@ public class BbsService {
     }
     
     
-    public void update( BbsModDto modDto ) {
+    public void update( BbsModDto modDto  ,HttpServletRequest request  ) {
         // target 조회
         Bbs bbs = bbsRepository.findByBbsSn( modDto.getBbsSn() );
         
         // target object 전환 ( entity to dto )
         BbsModDto targetDto = new BbsModDto();
         targetDto = targetDto.toDto( bbs );
+        
+        modDto.setRegisterIp( IpUtils.getClientIP( request ));
         
         // target object 에 수정사항 set
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가

@@ -104,10 +104,11 @@ public class BbsController {
     
     @PostMapping(BASIC_PATH + "/update")
     public String update(
-    		@ModelAttribute  BbsModDto modDto,
+    		@ModelAttribute  BbsModDto modDto, HttpServletRequest request
+            ,
     		Model model ) {
     	
-    	   bbsService.update(modDto);
+    	   bbsService.update(modDto,request);
            
            // 메시지 출력 및 url 이동 처리
            model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );

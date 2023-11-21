@@ -29,6 +29,8 @@ public class BbsModDto {
 
 	private String registerId;
 	
+	private String registerIp;
+	
 	private String bbsGdcc;
 	
 	private String bbsDc;
@@ -38,7 +40,7 @@ public class BbsModDto {
 
     // builder 생성
     @Builder
-    public BbsModDto( int bbsSn ,String bbsSeCd, String bbsNm,  String replySetYn, String useYn,String openYn	 ,String registerId ,String bbsGdcc, String bbsDc) {
+    public BbsModDto( int bbsSn ,String bbsSeCd, String bbsNm,  String replySetYn, String useYn,String openYn	 ,String registerId  ,String registerIp ,String bbsGdcc, String bbsDc) {
 
         this.bbsSn = bbsSn;
         this.bbsSeCd = bbsSeCd;
@@ -47,6 +49,7 @@ public class BbsModDto {
         this.useYn = useYn;
         this.openYn = openYn;
         this.registerId = registerId;
+        this.registerIp = registerIp;
         this.bbsGdcc = bbsGdcc;
         this.bbsDc = bbsDc;
    }
@@ -62,6 +65,7 @@ public class BbsModDto {
                 .useYn( useYn )
                 .openYn( openYn )
                 .registerId( registerId )
+                .registerIp( registerIp )
                 .bbsGdcc( bbsGdcc )
                 .bbsDc( bbsDc )
                 .build();
@@ -77,6 +81,7 @@ public class BbsModDto {
                 .useYn( bbs.getUseYn() )
                 .openYn( bbs.getOpenYn() )
                 .registerId( bbs.getRegisterId() )
+                .registerIp( bbs.getRegisterIp() )
                 .bbsGdcc( bbs.getBbsGdcc() )
                 .bbsDc( bbs.getBbsDc() )
                 .build();
