@@ -1,5 +1,8 @@
 package com.meta.ponkids.domain.user.dto;
 
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.meta.ponkids.domain.user.entity.UserChldrn;
 import lombok.Builder;
 import lombok.Data;
@@ -39,6 +42,8 @@ public class UserChldrnSaveDto {
     private String registerId;
     
     private String registerIp;
+    
+    private MultipartFile file;
     
     
     @Builder

@@ -24,6 +24,7 @@ public interface UserChldrnRepository extends JpaRepository<UserChldrn, Long> {
     
     List<UserChldrn> findByUserSn( Long userSn );
     
+    
     @Modifying( clearAutomatically = true )
     @Query( value = "UPDATE tb_user_chldrn "
             + "      SET del_yn = 'Y'"

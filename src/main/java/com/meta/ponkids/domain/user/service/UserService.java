@@ -1,5 +1,6 @@
 package com.meta.ponkids.domain.user.service;
 
+import com.meta.ponkids.domain.system.file.service.AtchFileService;
 import com.meta.ponkids.domain.user.dto.*;
 import com.meta.ponkids.domain.user.entity.User;
 import com.meta.ponkids.domain.user.entity.UserChldrn;
@@ -16,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,9 +40,10 @@ public class UserService {
     private final UserChldrnRepository userChldrnRepository;
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;  // 패스워드 인코딩
+    private final AtchFileService atchFileService;
     
     @Transactional
-    public UserSaveDto save( UserSaveDto userSaveDto, UserRoleSaveDto userRoleSaveDto, MultiUserChldrnSaveDto userChldrns, HttpServletRequest request ) {
+    public UserSaveDto save( UserSaveDto userSaveDto, UserRoleSaveDto userRoleSaveDto, MultiUserChldrnSaveDto userChldrns, HttpServletRequest request ) throws IOException {
         
         userSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );                        // 회원 IP 저장
         userSaveDto.setPassword( passwordEncoder.encode( userSaveDto.getPassword() ) );   	// 비밀번호 암호화
@@ -67,6 +71,11 @@ public class UserService {
                 userChldrn.setRegisterIp( IpUtils.getClientIP( request ) );    									// 관리자 IP 저장
                 userChldrn.setRegisterId( "admin@test.com" );                   								// TODO : 현재 세션의 userId값으로 수정
                 
+                // 자녀 프로필 존재시 추가
+                if(!userChldrn.getFile().isEmpty()) {
+                	userChldrn.setAtchFileSn(atchFileService.save(userChldrn.getFile()));
+                }
+                
                 userChldrnList.add( userChldrn.toEntity() );      												// userlist add
             }
             
@@ -90,7 +99,6 @@ public class UserService {
         userModDto = userModDto.toDto( user );
         
         return userModDto;
-        
     }
     
     public void update( UserModDto modDto ) {
@@ -126,14 +134,13 @@ public class UserService {
     public void deleteAllByUserSn( Long userSn ) {
         
         // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
-        userRepository.deleteById( userSn );    // User.java 의 @SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y' WHERE user_id = ?") 를 수행
+        userRepository.deleteById( userSn );    // User.java 의 @SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y' WHERE user_sn = ?") 를 수행
         
         // 권한 삭제 : userRole delete 처리
         userRoleRepository.deleteByUserSn( userSn );
         
         // 자녀 삭제 : userchldrn delete 처리
         userChldrnRepository.deleteAllByUserSn( userSn );
-        
     }
     
 }

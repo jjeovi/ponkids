@@ -21,6 +21,4 @@ import java.util.List;
 @Data
 public class MultiUserChldrnSaveDto {
     public List<UserChldrnSaveDto> userChldrns;
-    
-    public List<MultipartFile> files;
 }

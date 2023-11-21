@@ -3,7 +3,9 @@ package com.meta.ponkids.domain.user.controller;
 import com.meta.ponkids.domain.system.file.service.AtchFileService;
 import com.meta.ponkids.domain.system.role.repository.RoleRepository;
 import com.meta.ponkids.domain.user.dto.*;
+import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
 import com.meta.ponkids.domain.user.repository.UserRepository;
+import com.meta.ponkids.domain.user.service.UserChldrnService;
 import com.meta.ponkids.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -37,6 +39,7 @@ import java.time.LocalDateTime;
 public class UserController {
     
     private final UserService userService;
+    private final UserChldrnRepository userChldrnRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final AtchFileService atchFileService;
@@ -91,6 +94,7 @@ public class UserController {
      * date           : 11/17/23
      * description    : user insert method
      */
+    @Transactional
     @PostMapping( BASIC_PATH + "/insert" )
     public String insert (
             @RequestParam("file") MultipartFile files,
@@ -151,6 +155,9 @@ public class UserController {
         
         // target object 조회
         model.addAttribute( "targetDto", userService.findByUserSn( userSn ) );
+        
+        // chldrn target object 조회
+        model.addAttribute("targetChldrnDto", userChldrnRepository.findByUserSn( userSn ));
         
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
