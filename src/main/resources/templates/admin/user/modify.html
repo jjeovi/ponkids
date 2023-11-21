@@ -66,16 +66,21 @@
             // 자녀정보들 각각 값들을 배열화시켜 submit
             // div name : chldrnAddDiv / newForm 이 아닌 div 를 배열로 정리
             $("[name='chldrnAddDiv']").not('.newForm').each( function (index) {
-                // 자녀이름, 자녀성별, 자녀생년월일, 자녀이메일, 자녀연락처
-                $(this).find("input[name=chldrnNm]").attr("name", "userChldrns[" + index + "].chldrnNm");
-                $(this).find("input[name=chldrnGender]").attr("name", "userChldrns[" + index + "].chldrnGender");
-                $(this).find("input[name=chldrnBrdtDate]").attr("name", "userChldrns[" + index + "].chldrnBrdtDate");
-                $(this).find("input[name=chldrnEmail]").attr("name", "userChldrns[" + index + "].chldrnEmail");
-                $(this).find("input[name=chldrnTelNo]").attr("name", "userChldrns[" + index + "].chldrnTelNo");
+                // 첨부파일, userSn, 자녀순번, 자녀이름, 자녀성별, 자녀생년월일, 자녀이메일, 자녀연락처
+                $(this).find("input[name=atchFileSn]"		).attr("name", "userChldrns[" + index + "].atchFileSn");
+                $(this).find("input[name=userSn]"			).attr("name", "userChldrns[" + index + "].userSn");
+                $(this).find("input[name=userChldrnSeq]"	).attr("name", "userChldrns[" + index + "].userChldrnSeq");
+                $(this).find("input[name=chldrnNm]"			).attr("name", "userChldrns[" + index + "].chldrnNm");
+                $(this).find("input[name=chldrnGender]"		).attr("name", "userChldrns[" + index + "].chldrnGender");
+                $(this).find("input[name=chldrnBrdtDate]"	).attr("name", "userChldrns[" + index + "].chldrnBrdtDate");
+                $(this).find("input[name=chldrnEmail]"		).attr("name", "userChldrns[" + index + "].chldrnEmail");
+                $(this).find("input[name=chldrnTelNo]"		).attr("name", "userChldrns[" + index + "].chldrnTelNo");
+                $(this).find("input[name=file]"				).attr("name", "userChldrns[" + index + "].file");
+                
             });
 
 
-            // return false;
+//             return false;
             return !!validatorResult.valid;
 
         };
@@ -298,9 +303,12 @@
         var chldrnGenderRadioVal = $( e ).parent().siblings( "[name='chldrnGenderRadio']" ).text() == "남자" ? "M" : "F";
         if ( chldrnGenderRadioVal == "M" ) {
             $( "[name='chldrnModDiv']" ).find( "[name='chldrnGenderRadio'][value='M']" ).prop( "checked", true );
+            $( "[name='chldrnModDiv']" ).find( "[name='chldrnGenderRadio'][value='M']" ).trigger("click");
         } else if ( chldrnGenderRadioVal == "F" ) {
             $( "[name='chldrnModDiv']" ).find( "[name='chldrnGenderRadio'][value='F']" ).prop( "checked", true );
+            $( "[name='chldrnModDiv']" ).find( "[name='chldrnGenderRadio'][value='F']" ).trigger("click");
         }
+        
         
         $( "#addChldrnModal" ).modal( 'show' );
     }
@@ -383,7 +391,7 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="updateForm" name="updateForm" method="post" th:action="@{/admin/user/update}" enctype="multipart/form-data">>
+                    <form id="updateForm" name="updateForm" method="post" th:action="@{/admin/user/update}" enctype="multipart/form-data">
 	                    <!-- hidden type  -->
                         <input type="hidden" name="mngrConfmYn"     th:value="${targetDto.mngrConfmYn}" />
                         <input type="hidden" name="userSn" 		    th:value="${targetDto.userSn}" />
@@ -400,7 +408,7 @@
                                         </div>
                                     </div>
                                     <div class="upload-file-name">
-                                        <input class="input-file-name" value="선택된 파일 없음" disabled="disabled" >
+                                        <input class="input-file-name" value="" disabled="disabled" >
                                     </div>
                                     <div class="upload-btn mt_10p">
                                         <label class="btn btn-purple">업로드
@@ -766,9 +774,12 @@
                                                         	<div name="chldrnModDiv" class="modForm" style="display: none;">
                                                                 <!-- 자녀 수정시 여기서 수정 작업 -->
                                                             </div>
+                                                            <div name="chldrnAddDiv" 
+                                                            	th:replace="~{admin/user/modChldrnForm :: chldrnDiv(${targetChldrnDtoList}) }"
+                                                            ></div>
                                                             <div name="chldrnAddDiv" class="newForm"
                                                                  th:insert="/admin/user/addChldrnForm.html">
-                                                                <!-- 자녀 추가 모달 (/admin/user/addChldrnForm.html) -->
+                                                                <!-- 자녀 수정 모달 (/admin/user/addChldrnForm.html) -->
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
@@ -800,6 +811,17 @@
                                                 </thead>
                                                 <tbody id="chldrnTableBody">
                                                 <!-- 자녀 추가 테이블 -->
+                                                	<tr th:if = "${!targetChldrnDtoList.isEmpty()}" th:each=" data : ${targetChldrnDtoList} ">
+						                                <td name="trNum" th:text="${dataStat.count}"></td>
+						                                <td name="chldrnNm" th:text="${data.chldrnNm}"></td>
+						                                <td name="chldrnGenderRadio" th:text="${data.chldrnGender}"></td>
+						                                <td name="chldrnBrdtDate" th:text="${data.chldrnBrdtDate}"></td>
+						                                <td name="chldrnTelNo" th:text="${data.chldrnTelNo}"></td>
+						                                <td name="chldrnEmail" th:text="${data.chldrnEmail}"></td>
+						                                <td>
+						                                	<button onclick="modifyChldrn(this)" type="button" class="btn btn-success btn-sm table-btn">수정</button><button onclick="deleteChldrn(this)" type="button" class="btn btn-danger btn-sm table-btn">삭제</button>
+						                                </td>
+						                            </tr>
                                                 </tbody>
                                             </table>
                                         </div>

@@ -53,9 +53,9 @@ public class UserModDto {
     
     private String detailAdr;       // 상세 주소
     
-    private Long atchFileSn;      // 첨부파일 일련번호
+    private Long atchFileSn;      	// 첨부파일 일련번호
     
-    private Long atchFileSnOri;      // 첨부파일 일련번호
+    private Long atchFileSnOri;     // 첨부파일 일련번호
     
     @NotNull
     private String mngrYn;          // 관리자 여부
@@ -67,17 +67,19 @@ public class UserModDto {
     
     private String confmerIp;       // 승인자 IP
     
-    private LocalDateTime confmDt;         // 승인일시
+    private LocalDateTime confmDt;  // 승인일시
     
     private String cntnSns;         // 연계SNS
     
-    private String registerIp;      // 등록자 IP
+    private String updusrId;      	// 수정자 ID
+    
+    private String updusrIp;      	// 수정자 IP
     
     private String delYn;           // 삭제여부
     
     // builder 생성
     @Builder
-    public UserModDto( Long userSn, String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSns, String registerIp, String delYn ) {
+    public UserModDto( Long userSn, String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSns, String updusrId, String updusrIp, String delYn ) {
         this.userSn = userSn;
         this.userId = userId;
         this.password = password;
@@ -96,7 +98,8 @@ public class UserModDto {
         this.confmerIp = confmerIp;
         this.confmDt = confmDt;
         this.cntnSns = cntnSns;
-        this.registerIp = registerIp;
+        this.updusrId = updusrId;
+        this.updusrIp = updusrIp;
         this.delYn = delYn;
     }
     
@@ -121,7 +124,8 @@ public class UserModDto {
                 .confmerIp( confmerIp )
                 .confmDt( confmDt )
                 .cntnSns( cntnSns )
-                .registerIp( registerIp )
+                .updusrId( updusrId)
+                .updusrIp( updusrIp)
                 .build();
     }
     
@@ -145,6 +149,8 @@ public class UserModDto {
                 .confmerIp( user.getConfmerIp() )
                 .confmDt( user.getConfmDt() )
                 .cntnSns( user.getCntnSns() )
+                .updusrId(user.getUpdusrId())
+                .updusrIp(user.getUpdusrIp())
                 .build();
     }
     

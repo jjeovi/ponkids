@@ -5,10 +5,9 @@ const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // �
 $( function () {
 
     // 해당 데이터가 없으면 colspan값 th개수만큼 자동으로 set
-    if($("#noDataTd").length){
-        $("#noDataTd").attr("colspan",$('#listTable th').length);
+    if($(".noDataTd").length){
+        $(".noDataTd").attr("colspan",$('#listTable th').length);
     }
-
 
     // input type=radio 에서 readonly 를 주면
     // 해당 label에 readonly 클래스 추가
@@ -171,7 +170,6 @@ function removeImage( e ) {
     $( e ).parent().siblings("[name='atchFileSn']").remove();
 
     // 이미지 썸네일 제거 및 파일명 제거작업
-    var parent = $('.preview-image .upload-hidden').parent();
     $( e ).parent().siblings('.upload-display').remove();
     $( e ).parent().siblings('.upload-file-name').remove();
     $( e ).parent().parent().prepend('<div class="upload-file-name"><input class="input-file-name" value="선택된 파일 없음" disabled="disabled"></div>');

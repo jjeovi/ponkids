@@ -39,6 +39,7 @@ import java.time.LocalDateTime;
 public class UserController {
     
     private final UserService userService;
+    private final UserChldrnService userChldrnService;
     private final UserChldrnRepository userChldrnRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -98,13 +99,13 @@ public class UserController {
     @PostMapping( BASIC_PATH + "/insert" )
     public String insert (
             @RequestParam("file") MultipartFile files,
-            @ModelAttribute UserSaveDto userSaveDto,
+            @ModelAttribute UserSaveDto saveDto,
             @ModelAttribute UserRoleSaveDto userRoleSaveDto,  // required false
             MultiUserChldrnSaveDto userChldrns,
             HttpServletRequest request,
             Model model ) throws IOException {
         
-        if ( userRepository.existsByUserId( userSaveDto.getUserId() ) ) {
+        if ( userRepository.existsByUserId( saveDto.getUserId() ) ) {
             // 중복 ID 존재시 가입 불가
             
             // 메시지 출력 및 url 이동 처리
@@ -118,16 +119,16 @@ public class UserController {
             
             // 첨부파일 존재시 파일 저장
             if(!files.isEmpty()){
-            	userSaveDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 ) 
+            	saveDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 ) 
             }
             
             // 관리자 승인여부 Y 이면 승인일시 now로 setting
-            if ( userSaveDto.getMngrConfmYn().equals( "Y" ) ) {
-                userSaveDto.setConfmDt( LocalDateTime.now() );
+            if ( saveDto.getMngrConfmYn().equals( "Y" ) ) {
+            	saveDto.setConfmDt( LocalDateTime.now() );
             }
             
             // save
-            userService.save( userSaveDto, userRoleSaveDto, userChldrns, request );
+            userService.save( saveDto, userRoleSaveDto, userChldrns, request );
         }
         
         // 메시지 출력 및 url 이동 처리
@@ -157,7 +158,7 @@ public class UserController {
         model.addAttribute( "targetDto", userService.findByUserSn( userSn ) );
         
         // chldrn target object 조회
-        model.addAttribute("targetChldrnDto", userChldrnRepository.findByUserSn( userSn ));
+        model.addAttribute("targetChldrnDtoList", userChldrnRepository.getListByUserSn( userSn ));
         
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
@@ -181,6 +182,9 @@ public class UserController {
     public String update(
             @RequestParam("file") MultipartFile files,
             @ModelAttribute UserModDto modDto,
+            @ModelAttribute UserRoleModDto userRoleModDto,  // required false
+            MultiUserChldrnSaveDto userChldrns,
+            HttpServletRequest request,
             Model model ) throws IOException {
         
         // 첨부파일 존재시 파일 저장
@@ -202,7 +206,8 @@ public class UserController {
         }
         
         // update 구현
-        userService.update( modDto );
+        userService.update( modDto, userRoleModDto,  userChldrns, request );
+//        userService.save( saveDto, userRoleSaveDto, userChldrns, request );
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
@@ -224,6 +229,14 @@ public class UserController {
         
         // 삭제 처리
         userService.deleteAllByUserSn( userSn );
+        
+        
+        // 첨부파일 삭제
+        Long atchFileSn = userService.findByUserSn(userSn).getAtchFileSn();
+        if (atchFileSn != null ) {
+        	atchFileService.delete(atchFileSn);
+        };
+        
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );

@@ -14,6 +14,7 @@ import javax.mail.Multipart;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -103,7 +104,7 @@ public class AtchFileService {
 	 * description    : 파일 삭제 ( 서버상의 파일을 물리적 삭제 처리 + db 정보 삭제 )
 	 */
 	@Transactional
-	public void delete( Long atchFileSn ) {
+	public void delete( Long atchFileSn ) throws EmptyResultDataAccessException {
 		
 		// S : 서버상 파일 물리적 삭제 처리
 		List<AtchFileDetail> atchFileDetailList =  atchFileDetailRepository.getList( atchFileSn );
@@ -140,9 +141,13 @@ public class AtchFileService {
 		}
 		// E : 서버상 파일 물리적 삭제 처리
 		
-		// DB상의 파일 삭제
-		atchFileDetailRepository.deleteByAtchFileDetailPk_AtchFileSn(atchFileSn);
-		atchFileRepository.deleteById( atchFileSn );
+		try {
+			// DB상의 파일 삭제
+			atchFileDetailRepository.deleteByAtchFileDetailPk_AtchFileSn(atchFileSn);
+			atchFileRepository.deleteById( atchFileSn );
+		} catch (EmptyResultDataAccessException e) {
+			log.info("error 발생", e);
+		}
 	}
 	
 	

@@ -3,17 +3,17 @@ package com.meta.ponkids.domain.user.dto;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.meta.ponkids.domain.user.entity.UserChldrn;
+import com.querydsl.core.annotations.QueryProjection;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
 /**
- * className      : UserChldrnSaveDto
+ * className      : UserChldrnListDto
  * author         : jjeoV
  * date           : 2023-11-19
- * description    : class of 자녀등록 Dto
+ * description    : class of 자녀 목록 Dto
  * ===========================================================
  * DATE              AUTHOR               NOTE
  * -----------------------------------------------------------
@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 @Data
-public class UserChldrnSaveDto {
+public class UserChldrnListDto {
     
     private Long userSn;
     
@@ -46,8 +46,8 @@ public class UserChldrnSaveDto {
     private MultipartFile file;
     
     
-    @Builder
-    public UserChldrnSaveDto( Long userSn, Long userChldrnSeq, String chldrnNm, String chldrnGender, String chldrnBrdtDate, String chldrnEmail, String chldrnTelNo, Long atchFileSn, String registerId, String registerIp ) {
+    @QueryProjection
+    public UserChldrnListDto( Long userSn, Long userChldrnSeq, String chldrnNm, String chldrnGender, String chldrnBrdtDate, String chldrnEmail, String chldrnTelNo, Long atchFileSn, String registerId, String registerIp ) {
         this.userSn = userSn;
         this.userChldrnSeq = userChldrnSeq;
         this.chldrnNm = chldrnNm;
@@ -75,4 +75,5 @@ public class UserChldrnSaveDto {
                 .registerIp( registerIp )
                 .build();
     }
+    
 }

@@ -1,6 +1,7 @@
 package com.meta.ponkids.domain.user.repository;
 
 import com.meta.ponkids.domain.user.entity.UserChldrn;
+import com.meta.ponkids.domain.user.repository.custom.UserChldrnRepositoryCustom;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,14 +14,14 @@ import java.util.List;
 /**
  * InterfaceName  : UserChldrnRepository
  * author         : jjeoV
- * date           : 2023-11-19
+ * date           : 2023-11-20
  * description    : interface of 자녀 Repository
  * ===========================================================
  * DATE              AUTHOR               NOTE
  * -----------------------------------------------------------
  * 2023-11-19        jjeoV             최초 생성
  */
-public interface UserChldrnRepository extends JpaRepository<UserChldrn, Long> {
+public interface UserChldrnRepository extends JpaRepository<UserChldrn, Long>, UserChldrnRepositoryCustom {
     
     List<UserChldrn> findByUserSn( Long userSn );
     
