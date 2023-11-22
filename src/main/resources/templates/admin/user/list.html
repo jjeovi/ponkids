@@ -53,7 +53,7 @@
     <div class="x_panel">
         <div class="x_content">
             <div class="row">
-                <form id="listForm" name="listForm" method="get" th:action="@{/admin/user/list}">
+                <form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/list ( basicPath = ${basicPath} ) }">
                     <input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
                     <!-- S : 테이블 상단 검색 창 -->
                     <!-- totalCount -->
@@ -116,7 +116,7 @@
 	                                <td th:text="${data.resideArea}"></td>
 	                                <td th:text="${data.mngrYn}"></td>
 	                                <td>
-	                                    <a th:href="@{/admin/user/modify(userSn=${data.userSn})}"
+	                                    <a th:href="@{{basicPath}/modify ( basicPath = ${basicPath}, userSn = ${data.userSn} ) }"
 	                                       class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
 	                                    <a th:href="'javascript:deleteItem(\'' + ${data.userSn} + '\');'"
 	                                       class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>삭제</a>
@@ -135,7 +135,7 @@
                     <div class="col-md-12 col-sm-12">
                         <!-- bottom left area -->
                         <div class="col-md-2 col-sm-3 text-left">
-                            <a href="/admin/user/regist" class="btn btn-white w120p">등록</a>
+                            <a th:href="@{ {basicPath}/regist ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">등록</a>
                         </div>
                         <!-- S : 테이블 하단 페이징 -->
                         <div class="col-md-8 col-sm-6 text-center"
@@ -158,7 +158,7 @@
                         </div>
                     </div>
                 </form>
-                <form id="deleteForm" name="deleteForm" method="post" th:action="@{/admin/user/delete}">
+                <form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/delete ( basicPath = ${basicPath} ) }">
             		<input type="hidden" name="userSn" id="delPk" /> <!-- delPk 문자 수정 금지 -->
             	</form>
             </div>

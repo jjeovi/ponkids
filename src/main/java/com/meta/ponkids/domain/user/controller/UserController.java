@@ -1,28 +1,38 @@
 package com.meta.ponkids.domain.user.controller;
 
-import com.meta.ponkids.domain.system.file.service.AtchFileService;
-import com.meta.ponkids.domain.system.role.repository.RoleRepository;
-import com.meta.ponkids.domain.user.dto.*;
-import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
-import com.meta.ponkids.domain.user.repository.UserRepository;
-import com.meta.ponkids.domain.user.service.UserChldrnService;
-import com.meta.ponkids.domain.user.service.UserService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import java.io.IOException;
+import java.time.LocalDateTime;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
+import com.meta.ponkids.domain.system.file.service.AtchFileService;
+import com.meta.ponkids.domain.system.role.repository.RoleRepository;
+import com.meta.ponkids.domain.user.dto.MultiUserChldrnSaveDto;
+import com.meta.ponkids.domain.user.dto.UserListDto;
+import com.meta.ponkids.domain.user.dto.UserModDto;
+import com.meta.ponkids.domain.user.dto.UserRoleModDto;
+import com.meta.ponkids.domain.user.dto.UserRoleSaveDto;
+import com.meta.ponkids.domain.user.dto.UserSaveDto;
+import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
+import com.meta.ponkids.domain.user.repository.UserRepository;
+import com.meta.ponkids.domain.user.service.UserService;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
+import lombok.RequiredArgsConstructor;
 
 /**
  * className      : UserController
@@ -39,7 +49,6 @@ import java.time.LocalDateTime;
 public class UserController {
     
     private final UserService userService;
-    private final UserChldrnService userChldrnService;
     private final UserChldrnRepository userChldrnRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
