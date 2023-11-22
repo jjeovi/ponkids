@@ -143,12 +143,13 @@ $(document).ready(function() {
      <div class="card my-4">
 		 <h5 class="card-header">댓글목록 </h5>
 		 <ul id = "reply-box" class = "list-group"   th:if = "${!replyList.isEmpty()}" th:each=" data : ${replyList} ">
-           <li>
+           <li th:if = "${data.step == 1}">
 			    <div class="form-group">
 				   <input class="form-control" type="input" id="registerId" name="registerId"
-                                       required  th:value="${data.registerId}"    disabled/><br/>
+                                         th:value="${data.registerId}"    disabled/><br/>
             		<textarea class="form-control" rows="3"  th:text="${data.nttReplyCn}"></textarea>
             	</div>
+            	<button type="submit" class="btn btn-primary">목록</button>
             	<button type="submit" class="btn btn-primary">수정</button>
             	<button type="submit" class="btn btn-primary">삭제</button>
                  
