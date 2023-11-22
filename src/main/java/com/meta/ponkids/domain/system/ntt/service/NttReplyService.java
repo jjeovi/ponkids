@@ -28,6 +28,8 @@ public class NttReplyService {
     public NttReplySaveReqDto save(NttReplySaveReqDto nttReplySaveReqDto) {
 
     
+    	int nttReplySeq =nttReplyRepository.MaxNttReplySeq(nttReplySaveReqDto.getNttSn());
+    	
     	// dto to entity 작업 (필수)
         NttReply nttReply = NttReply.builder()
         		.nttReplySn(nttReplySaveReqDto.getNttReplySn())
@@ -35,7 +37,7 @@ public class NttReplyService {
         		.step(nttReplySaveReqDto.getStep())
         		.parntsReplySn(nttReplySaveReqDto.getParntsReplySn())
         		.nttReplyCn(nttReplySaveReqDto.getNttReplyCn())
-        		.nttReplySeq(1)
+        		.nttReplySeq(nttReplySeq)
         		.openYn( "Y" )
                 .registerId("ehlee")
                 .registerIp("0.0.0.0")

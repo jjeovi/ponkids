@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttReplySaveReqDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttSaveReqDto;
+import com.meta.ponkids.domain.system.ntt.service.NttReplyService;
 import com.meta.ponkids.domain.system.ntt.service.NttService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +27,8 @@ public class NttController {
     
 
    private final NttService nttService;
+   private final NttReplyService nttReplyService;
+
 
    
    private final static String BASIC_PATH = "/admin/ntt";
@@ -119,12 +122,12 @@ public class NttController {
     
     
     
-    @PostMapping(BASIC_PATH  + "/nttReplySaveReqDto")
-    public String nttReplySaveReqDto( 
+    @PostMapping(BASIC_PATH  + "/nttReplyInsert")
+    public String nttReplyInsert( 
     		               @ModelAttribute NttReplySaveReqDto nttReplySaveReqDto, HttpServletRequest request
     		               , Model model) {
       // save
-         //nttService.replySave(nttReplySaveReqDto);
+         nttReplyService.save(nttReplySaveReqDto);
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 댓글이 등록되었습니다." );

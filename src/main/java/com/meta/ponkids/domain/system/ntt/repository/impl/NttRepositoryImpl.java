@@ -15,7 +15,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static com.meta.ponkids.domain.system.bbs.entity.QBbs.bbs;
 import static com.meta.ponkids.domain.system.ntt.entity.QNtt.ntt;
 
 @Repository
@@ -60,8 +59,8 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
     private BooleanExpression eqOption(String schOption, String schCntn){
         // 검색 옵션  A : 아이디 , B : 이름
         if (StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn )){
-                 if( schOption.equals("A")) return bbs.bbsNm.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
-            else if (schOption.equals("B")) return bbs.registerId.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+                 if( schOption.equals("A")) return ntt.nttNm.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+            else if (schOption.equals("B")) return ntt.registerId.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
             else                            return null;
         } else { return null; }
     }
