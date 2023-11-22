@@ -58,11 +58,11 @@ public class NttService {
     	
     	NttModDto nttModDto = new NttModDto();
     	nttModDto = nttModDto.toDto(ntt);
-    	
+
     	return nttModDto;
     	
     }
-    
+
     
     
 	

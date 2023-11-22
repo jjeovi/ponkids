@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
+import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttReplySaveReqDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttSaveReqDto;
 import com.meta.ponkids.domain.system.ntt.service.NttReplyService;
@@ -107,6 +108,12 @@ public class NttController {
       // target object 조회
       model.addAttribute("targetDto", nttService.findByNttSn(nttSn));
       
+      
+  	 // 댓글 목록 조회
+      List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
+      model.addAttribute( "replyList", replyList );
+      
+
       // 기본 경로 setting
       model.addAttribute("basicPath", BASIC_PATH);
       

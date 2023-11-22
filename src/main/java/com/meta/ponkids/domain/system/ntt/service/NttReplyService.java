@@ -10,6 +10,7 @@ import com.meta.ponkids.domain.system.bbs.dto.BbsModDto;
 import com.meta.ponkids.domain.system.bbs.entity.Bbs;
 import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttModDto;
+import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttReplySaveReqDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttSaveReqDto;
 import com.meta.ponkids.domain.system.ntt.entity.Ntt;
@@ -18,6 +19,7 @@ import com.meta.ponkids.domain.system.ntt.repository.NttReplyRepository;
 import com.meta.ponkids.domain.system.ntt.repository.NttRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +51,11 @@ public class NttReplyService {
 
         return nttReplySaveReqDto;
     }
+
+	public List<NttReplyListDto> getList(int nttSn) {
+		// TODO Auto-generated method stub
+		return nttReplyRepository.getList(nttSn);
+	}
 
     
 }
