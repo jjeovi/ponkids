@@ -129,6 +129,7 @@ public class UserModDto {
                 .build();
     }
     
+    // Entity to Dto 메소드는 DTO 내부에서 생성.
     public UserModDto toDto( User user ) {
         return UserModDto.builder()
                 .userSn( user.getUserSn() )

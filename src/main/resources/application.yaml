@@ -21,7 +21,7 @@ spring:
                         non_contextual_creation: 'true'
                 default_schema : ponkids_dev
         hibernate:
-            ddl-auto: update
+            ddl-auto: none
     thymeleaf:
         cache : false
     profiles :

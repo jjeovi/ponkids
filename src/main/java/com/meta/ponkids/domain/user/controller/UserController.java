@@ -216,7 +216,6 @@ public class UserController {
         
         // update 구현
         userService.update( modDto, userRoleModDto,  userChldrns, request );
-//        userService.save( saveDto, userRoleSaveDto, userChldrns, request );
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );

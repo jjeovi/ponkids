@@ -321,3 +321,31 @@ upload:
 
 *************
 </details>
+
+
+
+
+<details>
+
+<summary> 231122 : application.yaml 속성 변경, 및 domainCRUD_customizing 작업 진행</summary> 
+
+<!-- summary 아래 한칸 공백 두어야함 -->
+
+*************
+#### 
+- 231122 : application.yaml 속성 변경, 및 domainCRUD_customizing 작업 진행
+
+
+
+ - 기존  application.yaml 파일의 ddl-auto 값을 update 에서 none 으로 변경 했습니다.
+ 
+ 소스 수정하다보면 컬럼을 잘못 설정할 때가 있는데 이때 실제 db의 컬럼까지 변경이 되는 상황이 몇번 있었어서 소스의 수정에도 data의 설정은 변하지 않도록 none으로 수정했습니다.
+ 
+ 그리고 domainCRUD_customizing 를 만들어 docs에 올려놓았는데,, 이건 그냥 껍데기 만들어 주는 작업을 반복적으로 할 상황에 쓸려고 만들었는데, 
+ 필요한 상황이 엄청 많을 것 같진 않고, 우선 필요할것 같은 popup, menu, banner 3개는 생성해놓았습니다.
+ 
+ domainCRUD_customizing 조건대로 만들려면 테이블 의 구조와, 단순 CRUD 정도의 controller만 생성이 되는거라 여기서 추가적으로 작업은 필수로 해야합니다.  
+
+*************
+</details>
+
