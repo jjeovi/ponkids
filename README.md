@@ -277,3 +277,47 @@ upload:
 
 *************
 </details>
+
+
+<details>
+
+<summary> 231122 : html 에서 href 또는 action url 설정시 basicPath 활용</summary> 
+
+<!-- summary 아래 한칸 공백 두어야함 -->
+
+*************
+#### 
+- 231122 : html 에서 href 또는 action url 설정시 basicPath 활용
+
+
+
+ - 기존  
+ 
+ ```
+  	<a href="admin/user/regist" class="btn btn-white w120p">등록</a>
+  
+ ```
+ 
+ - 변경 
+ 
+ ```
+ 	<a th:href="@{ {basicPath}/regist ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">등록</a>
+ 
+ ```
+ 
+  	href 나 action 등의 url시 basicPath를 최대한 활용하여 (필수 : java에서 model에 basicPath값을 담아야 함 ) 
+
+	(sample)  
+ 
+	th:href="@{ {basicPath}/list ( basicPath = ${basicPath} ) }"
+	th:href="@{{basicPath}/modify ( basicPath = ${basicPath}, userSn = ${data.userSn} ) }"
+	th:action="@{ {basicPath}/insert ( basicPath = ${basicPath} ) }"
+
+	이런식으로 변경해서 사용합니다.
+
+ 
+변경작업은 시간 될때 ~~ 
+
+
+*************
+</details>

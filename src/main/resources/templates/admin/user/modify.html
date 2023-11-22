@@ -391,7 +391,7 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="updateForm" name="updateForm" method="post" th:action="@{/admin/user/update}" enctype="multipart/form-data">
+                    <form id="updateForm" name="updateForm" method="post" th:action="@{ {basicPath}/update ( basicPath = ${basicPath} ) }" enctype="multipart/form-data">
 	                    <!-- hidden type  -->
                         <input type="hidden" name="mngrConfmYn"     th:value="${targetDto.mngrConfmYn}" />
                         <input type="hidden" name="userSn" 		    th:value="${targetDto.userSn}" />
@@ -836,11 +836,11 @@
                         <div class="col-md-12">
                             <!-- bottom left area -->
                             <div class="col-md-2 col-sm-3 text-left">
-                                <a href="/admin/user/list" class="btn btn-white w120p">목록</a>
+                                <a th:href="@{ {basicPath}/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">목록</a>
                             </div>
                             <!-- bottom center area -->
                             <div class="col-md-8 col-sm-6 text-center">
-                                <a href="/admin/user/list" class="btn btn-white w120p">취소</a>
+                                <a th:href="@{ {basicPath}/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">취소</a>
                                 <button type="submit" class="btn btn-purple w120p">저장</button>
                             </div>
                             <!-- bottom right area -->

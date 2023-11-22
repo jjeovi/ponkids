@@ -36,11 +36,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 authorizeRequests( ( authorizeHttpRequests ) -> authorizeHttpRequests.
                         requestMatchers( new AntPathRequestMatcher( "/**" ) ).permitAll() )
                 .formLogin()
-                .loginPage( "/admin/login" )
-                .successHandler( customLoginSuccessHandler )    //  로그인 성공시 handle
-                .permitAll()
-                .and()
-                .logout()
+                .loginPage("/admin/login")   						// 사용자 정의 로그인 페이지
+    	        .defaultSuccessUrl("/home")							// 로그인 성공 후 이동 페이지
+//    	        .failureUrl("/login.html?error=true")	    		// 로그인 실패 후 이동 페이지
+//    	        .usernameParameter("username")						// 아이디 파라미터명 설정
+//    	        .passwordParameter("password")						// 패스워드 파라미터명 설정
+//    	        .loginProcessingUrl("/admin/user/list")						// 로그인 Form Action Url
+//    	        .successHandler(customLoginSuccessHandler)			// 로그인 성공 후 핸들러
+//    	        .failureHandler(loginFailureHandler())				// 로그인 실패 후 핸들러
+//                .loginPage( "/admin/login" )
+//                .defaultSuccessUrl("/dashboard")
+//                .successHandler( customLoginSuccessHandler )    //  로그인 성공시 handle
+//                .permitAll()
+//                .and()
+//                .logout()
                 .permitAll();
         
         
@@ -57,11 +66,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .dataSource( dataSource )
                 .passwordEncoder( passwordEncoder() )                                // password 암호화
                 .usersByUsernameQuery(
-                        "SELECT user_id as username" +
-                        "     , password"            +
-                        "     , '1' as enabled "     +
-                        "  FROM tb_user "            +
-                        "where user_id = ?" )
+                        "SELECT user_id as username"	+
+                        "     , password"           	+
+                        "     , '1' as enabled "    	+
+                        "  FROM tb_user "          		+
+                        " WHERE del_yn  = 'N'"			+
+                        "   AND mngr_yn = 'Y'"			+
+                        "   AND user_id = ?")
                 .authoritiesByUsernameQuery(
                         "SELECT tu.user_id as username\n"   +
                         "     , tr.role_nm as authority "   +
