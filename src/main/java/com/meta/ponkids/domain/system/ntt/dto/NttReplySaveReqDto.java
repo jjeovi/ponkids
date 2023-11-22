@@ -15,15 +15,15 @@ public class NttReplySaveReqDto {
 	
     @NotNull
 	private int nttSn;
-	private String step;
-	private String parntsReplySn;
+	private int step;
+	private int parntsReplySn;
 	
 	
-	private String nttReplySeq;
+	private int nttReplySeq;
 	
 	private String nttReplyCn;
 	
-	private int nttRdcnt;
+
 	private String openYn;
 
 	@NotNull
@@ -46,7 +46,7 @@ public class NttReplySaveReqDto {
 
     // builder 생성
     @Builder
-    public NttReplySaveReqDto( int nttReplySn ,int nttSn, String step, String parntsReplySn,String nttReplySeq, String nttReplyCn,
+    public NttReplySaveReqDto( int nttReplySn ,int nttSn, int step, int parntsReplySn,int nttReplySeq, String nttReplyCn,
     		String openYn,String delYn
     		,String registerId,String registerIp,LocalDateTime regDt ,String upduserId,String upduserIp,String updtDt) {
         this.nttReplySn = nttReplySn;
