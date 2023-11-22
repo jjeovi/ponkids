@@ -108,7 +108,7 @@ DB phpPgAdmin : http://db.jjeovi.gabia.io/pgadmin/?_gl=1*15jm1ly*_ga*ODI1NTQ5MzY
    
 -- 현재 유휴 세션 조회. state = idle  
 
-select * from pg_catalog.pg_stat_activity   
+select pid,application_name, client_addr, client_port, backend_start, query_start, state, query, backend_type  from pg_catalog.pg_stat_activity   
 where datname = 'dbjjeovi'
 and state = 'idle'
 order by backend_start asc;

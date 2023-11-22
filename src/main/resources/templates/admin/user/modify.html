@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <title layout:fragment="title">pioneerkids Admin - 회원 등록</title>
@@ -66,16 +66,21 @@
             // 자녀정보들 각각 값들을 배열화시켜 submit
             // div name : chldrnAddDiv / newForm 이 아닌 div 를 배열로 정리
             $("[name='chldrnAddDiv']").not('.newForm').each( function (index) {
-                // 자녀이름, 자녀성별, 자녀생년월일, 자녀이메일, 자녀연락처
-                $(this).find("input[name=chldrnNm]").attr("name", "userChldrns[" + index + "].chldrnNm");
-                $(this).find("input[name=chldrnGender]").attr("name", "userChldrns[" + index + "].chldrnGender");
-                $(this).find("input[name=chldrnBrdtDate]").attr("name", "userChldrns[" + index + "].chldrnBrdtDate");
-                $(this).find("input[name=chldrnEmail]").attr("name", "userChldrns[" + index + "].chldrnEmail");
-                $(this).find("input[name=chldrnTelNo]").attr("name", "userChldrns[" + index + "].chldrnTelNo");
+                // 첨부파일, userSn, 자녀순번, 자녀이름, 자녀성별, 자녀생년월일, 자녀이메일, 자녀연락처
+                $(this).find("input[name=atchFileSn]"		).attr("name", "userChldrns[" + index + "].atchFileSn");
+                $(this).find("input[name=userSn]"			).attr("name", "userChldrns[" + index + "].userSn");
+                $(this).find("input[name=userChldrnSeq]"	).attr("name", "userChldrns[" + index + "].userChldrnSeq");
+                $(this).find("input[name=chldrnNm]"			).attr("name", "userChldrns[" + index + "].chldrnNm");
+                $(this).find("input[name=chldrnGender]"		).attr("name", "userChldrns[" + index + "].chldrnGender");
+                $(this).find("input[name=chldrnBrdtDate]"	).attr("name", "userChldrns[" + index + "].chldrnBrdtDate");
+                $(this).find("input[name=chldrnEmail]"		).attr("name", "userChldrns[" + index + "].chldrnEmail");
+                $(this).find("input[name=chldrnTelNo]"		).attr("name", "userChldrns[" + index + "].chldrnTelNo");
+                $(this).find("input[name=file]"				).attr("name", "userChldrns[" + index + "].file");
+                
             });
 
 
-            // return false;
+//             return false;
             return !!validatorResult.valid;
 
         };
@@ -124,38 +129,10 @@
 
     } );
 
-    // 자녀 추가 버튼 클릭
+ // 자녀 추가 버튼 클릭
     function addChldrn() {
         // target 자녀 div
-        var $target_chldrn_div = $( "[name='chldrn_add_div'].new_form" );
-
-        // 이름, 성별 유효성 검사
-        if ( !chldrn_valid_check( $target_chldrn_div ) ) return false;
-
-        // 성별 (라디오) 값 hidden 태그에 저장
-        $target_chldrn_div.find("[name='chldrn_gender']").val($target_chldrn_div.find("[name='chldrn_gender_radio']:checked").val());
-
-        // 신규자녀정보를 chldrn_table 테이블에 표시 한 뒤  새로운 chldrn_add_div 생성
-        add_chldrn_row( $target_chldrn_div );    // 자녀정보테이블에추가
-
-        // 모든 chldrn_add_div new_form 제거
-        $( "[name='chldrn_add_div']" ).remove_class( "new_form" );
-        // 모든 chldrn_add_div 숨기기
-        $( "[name='chldrn_add_div']" ).hide();
-
-        // 새로운 폼 추가
-        var $new_chldrn_form = $( "<div name='chldrn_add_div' class='new_form'>" ).load( "/admin/user/add_chldrn_form.html" );
-        $( "#add_chldrn_modal_body" ).append( $new_chldrn_form );
-
-        // 모달창 닫기
-        $( "#add_chldrn_modal" ).modal( 'hide' );
-        return true;
-    }
-
-    // 자녀 수정 버튼 클릭 > 수정정보 tr에 현행화
-    function updateChldrn() {
-        // target 자녀 div
-        var $targetChldrnDiv = $( "[name='chldrnAddDiv'].modifyForm" );
+        var $targetChldrnDiv = $( "[name='chldrnAddDiv'].newForm" );
 
         // 이름, 성별 유효성 검사
         if ( !chldrnValidCheck( $targetChldrnDiv ) ) return false;
@@ -163,18 +140,81 @@
         // 성별 (라디오) 값 hidden 태그에 저장
         $targetChldrnDiv.find("[name='chldrnGender']").val($targetChldrnDiv.find("[name='chldrnGenderRadio']:checked").val());
 
-        // trNum 번째 chldrn 정보를 수정
-        modifyChldrnRow( $targetChldrnDiv );    // 자녀정보테이블에추가
+        // 신규자녀정보를 chldrnTable 테이블에 표시 한 뒤  새로운 chldrnAddDiv 생성
+        addChldrnRow( $targetChldrnDiv );    // 자녀정보테이블에추가
 
         // 모든 chldrnAddDiv newForm 제거
-        $( "[name='chldrnAddDiv']" ).removeClass( "modifyForm" );
+        $( "[name='chldrnAddDiv']" ).removeClass( "newForm" );
         // 모든 chldrnAddDiv 숨기기
         $( "[name='chldrnAddDiv']" ).hide();
-        // 신규 추가 모달 show
-        $( "[name='chldrnAddDiv'].newForm" ).show();
+
+        // 새로운 폼 추가
+        var $newChldrnForm = $( "<div name='chldrnAddDiv' class='newForm'>" ).load( "/admin/user/addChldrnForm.html" );
+        $( "#addChldrnModalBody" ).append( $newChldrnForm );
 
         // 모달창 닫기
         $( "#addChldrnModal" ).modal( 'hide' );
+        return true;
+    }
+
+    // 자녀 수정 버튼 클릭 > 수정정보 tr에 현행화
+    function updateChldrn() {
+    	
+    	// target 자녀 div setting
+		var $targetChldrnDiv = $( "[name='chldrnModDiv']" );
+    	
+		// 이름, 성별 유효성 검사
+		if ( !chldrnValidCheck( $targetChldrnDiv ) ) return false;
+		
+		// 성별 (라디오) 값 hidden 태그에 저장
+		$targetChldrnDiv.find("[name='chldrnGender']").val($targetChldrnDiv.find("[name='chldrnGenderRadio']:checked").val());
+		
+		
+		// S : trNum 번째 찾기 
+		var $trNumDiv = $( "[name='chldrnAddDiv'].modifyForm" );
+		var trNum = $trNumDiv.prevAll().length -1;
+		// E : trNum 번째 찾기
+		
+		// 자녀정보 테이블의 trNum 번째 자녀에 수정한 값을 매핑하여표시하기
+     	modifyChldrnRow( $targetChldrnDiv, trNum );    // 자녀정보테이블에추가
+     	
+     	// modifyForm 내용을 targetChldrnDiv 내용으로 교체
+     	var $cloneDiv = $targetChldrnDiv.clone();
+     	$cloneDiv = $cloneDiv.contents().unwrap();
+     	$trNumDiv.empty();
+     	$cloneDiv.appendTo($trNumDiv);
+     	
+     	// targetChldrnDiv 안의 내용 지우기
+     	$targetChldrnDiv.empty();
+     	
+     	// 모든 chldrnAddDiv modifyForm 제거
+		$( "[name='chldrnAddDiv']" ).removeClass( "modifyForm" );
+    	
+     	// 모달창 닫기
+     	$( "#addChldrnModal" ).modal( 'hide' );
+       
+    	
+//     	// target 자녀 div
+//         var $targetChldrnDiv = $( "[name='chldrnAddDiv'].modifyForm" );
+
+//         // 이름, 성별 유효성 검사
+//         if ( !chldrnValidCheck( $targetChldrnDiv ) ) return false;
+
+//         // 성별 (라디오) 값 hidden 태그에 저장
+//         $targetChldrnDiv.find("[name='chldrnGender']").val($targetChldrnDiv.find("[name='chldrnGenderRadio']:checked").val());
+
+//         // trNum 번째 chldrn 정보를 수정
+//         modifyChldrnRow( $targetChldrnDiv );    // 자녀정보테이블에추가
+
+//         // 모든 chldrnAddDiv newForm 제거
+//         $( "[name='chldrnAddDiv']" ).removeClass( "modifyForm" );
+//         // 모든 chldrnAddDiv 숨기기
+//         $( "[name='chldrnAddDiv']" ).hide();
+//         // 신규 추가 모달 show
+//         $( "[name='chldrnAddDiv'].newForm" ).show();
+
+//         // 모달창 닫기
+//         $( "#addChldrnModal" ).modal( 'hide' );
         return true;
 
     }
@@ -193,19 +233,16 @@
                 $( "<td>" ).attr( "name", "chldrnTelNo" ).append( $targetChldrnDiv.find( "[name='chldrnTelNo']" ).val() ),     // 연락처
                 $( "<td>" ).attr( "name", "chldrnEmail" ).append( $targetChldrnDiv.find( "[name='chldrnEmail']" ).val() ),     // 이메일
                 $( "<td>" ).append(                                                         // 관리
-                    $( "<button>" ).attr( "onclick", "modifyChldrn(this)" ).addClass( "btn btn-success btn-sm table-btn" ).append( "수정" ),
-                    $( "<button>" ).attr( "onclick", "deleteChldrn(this)" ).addClass( "btn btn-danger btn-sm table-btn" ).append( "삭제" )
+                    $( "<button>" ).attr( "onclick", "modifyChldrn(this)" ).attr("type","button").addClass( "btn btn-success btn-sm table-btn" ).append( "수정" ),
+                    $( "<button>" ).attr( "onclick", "deleteChldrn(this)" ).attr("type","button").addClass( "btn btn-danger btn-sm table-btn" ).append( "삭제" )
                 )
             )
         );
     }
+    
 
     // 자녀 정보 테이블에 add
-    function modifyChldrnRow( $targetChldrnDiv ) {
-        // $("#chldrnTableBody tr").length  // 현재 테이블 tr 개수
-
-        // $targetChldrnDiv 이 몇번째 div 인지 체크 (trNum set)
-        var trNum = $targetChldrnDiv.prevAll().length;
+    function modifyChldrnRow( $targetChldrnDiv, trNum ) {
 
         $modifyTr = $( "#chldrnTableBody tr" ).eq( trNum );
 
@@ -243,24 +280,36 @@
         // trNum 번째 chldrnAddDiv 를 show
         var trNum = $( e ).closest( 'tr' ).prevAll().length;
 
-        // 모든 chldrnAddDiv 숨기기
-        $( "[name='chldrnAddDiv']" ).hide();
-        // trNum 번째 chldrnAddDiv show
-        $( "[name='chldrnAddDiv']" ).eq( trNum ).show();
-        // 모든 chldrnAddDiv 에 modifyForm class 제거 후, trNum 번째에만 modifyForm class 추가
-        $( "[name='chldrnAddDiv']" ).removeClass( "modifyForm" );
-        $( "[name='chldrnAddDiv']" ).eq( trNum ).addClass( "modifyForm" );
+        // [name='chldrnModDiv'] div empty
+        $("[name='chldrnModDiv']").empty();
 
+        // contents().unwrap() : 하위항목들만 남기고 최상위태그 제거 ( 자식 요소를 그대로 둔 채 현재 태그를 제거 )
+//         $( "[name='chldrnAddDiv']" ).eq( trNum ).contents().unwrap().clone().appendTo("[name='chldrnModDiv']");
+        var $cloneDiv = $( "[name='chldrnAddDiv']" ).eq( trNum ).clone();
+        $cloneDiv = $cloneDiv.contents().unwrap();
+        
+        $cloneDiv.appendTo("[name='chldrnModDiv']");
+	    // 모든 chldrnAddDiv 숨기기
+		$( "[name='chldrnAddDiv']" ).hide();
+		// chldrnModDiv show
+     	$( "[name='chldrnModDiv']" ).show();
+		
+		// 모든 chldrnAddDiv 에 modifyForm class 제거 후, trNum 번째에만 modifyForm class 추가
+		$( "[name='chldrnAddDiv']" ).removeClass( "modifyForm" );
+		$( "[name='chldrnAddDiv']" ).eq( trNum ).addClass( "modifyForm" );
+        
         // 현재 선택한 라디오버튼 강제로 값 checked 처리 (안해주면 checked 처리가 풀려있음).
         // 남자 = M 여자 = F
         var chldrnGenderRadioVal = $( e ).parent().siblings( "[name='chldrnGenderRadio']" ).text() == "남자" ? "M" : "F";
         if ( chldrnGenderRadioVal == "M" ) {
-            $( "[name='chldrnAddDiv']" ).eq( trNum ).find( "[name='chldrnGenderRadio'][value='M']" ).prop( "checked", true );
+            $( "[name='chldrnModDiv']" ).find( "[name='chldrnGenderRadio'][value='M']" ).prop( "checked", true );
+            $( "[name='chldrnModDiv']" ).find( "[name='chldrnGenderRadio'][value='M']" ).trigger("click");
         } else if ( chldrnGenderRadioVal == "F" ) {
-            $( "[name='chldrnAddDiv']" ).eq( trNum ).find( "[name='chldrnGenderRadio'][value='F']" ).prop( "checked", true );
+            $( "[name='chldrnModDiv']" ).find( "[name='chldrnGenderRadio'][value='F']" ).prop( "checked", true );
+            $( "[name='chldrnModDiv']" ).find( "[name='chldrnGenderRadio'][value='F']" ).trigger("click");
         }
-
-        // 모달 창 show
+        
+        
         $( "#addChldrnModal" ).modal( 'show' );
     }
 
@@ -283,6 +332,7 @@
 
     }
 
+    // 모달 버튼 setting
     function setModalBtn( mode ) {
         if ( mode == "C" ) {
             // 모달창의 수정 버튼 숨기고 저장 버튼을 표시
@@ -341,11 +391,11 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="updateForm" name="updateForm" method="post" th:action="@{/admin/user/update}">
+                    <form id="updateForm" name="updateForm" method="post" th:action="@{/admin/user/update}" enctype="multipart/form-data">
 	                    <!-- hidden type  -->
-                        <input type="hidden" name="mngrConfmYn" th:value="${targetDto.mngrConfmYn}" />
-                        <input type="hidden" name="userSn" 		th:value="${targetDto.userSn}" />
-                        
+                        <input type="hidden" name="mngrConfmYn"     th:value="${targetDto.mngrConfmYn}" />
+                        <input type="hidden" name="userSn" 		    th:value="${targetDto.userSn}" />
+
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">프로필 이미지</label>
                             <div class="col-md-6 col-sm-6">
@@ -358,12 +408,16 @@
                                         </div>
                                     </div>
                                     <div class="upload-file-name">
-                                        <input class="input-file-name" value="선택된 파일 없음" disabled="disabled" >
+                                        <input class="input-file-name" value="" disabled="disabled" >
                                     </div>
                                     <div class="upload-btn mt_10p">
-                                        <label for="file" class="btn btn-purple">업로드</label>
+                                        <label class="btn btn-purple">업로드
+                                            <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" th:value="${targetDto.atchFileSn}" onchange="fileChange(this)">
+                                        </label>
+                                        <button type="button" class="btn btn-purple" id="removeImageBtn" onclick="removeImage(this);" th:if = 	"${targetDto.atchFileSn != null}">이미지제거</button>
                                     </div>
-                                    <input type="file" id="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;">
+                                    <input type="hidden" name="atchFileSn" 	    th:value="${targetDto.atchFileSn}" />
+                                    <input type="hidden" name="atchFileSnOri" 	th:value="${targetDto.atchFileSn}" />
                                 </div>
                             </div>
                         </div>
@@ -717,9 +771,15 @@
                                                                 <span aria-hidden="true">×</span></button>
                                                         </div>
                                                         <div class="modal-body" id="addChldrnModalBody">
+                                                        	<div name="chldrnModDiv" class="modForm" style="display: none;">
+                                                                <!-- 자녀 수정시 여기서 수정 작업 -->
+                                                            </div>
+                                                            <div name="chldrnAddDiv" 
+                                                            	th:replace="~{admin/user/modChldrnForm :: chldrnDiv(${targetChldrnDtoList}) }"
+                                                            ></div>
                                                             <div name="chldrnAddDiv" class="newForm"
                                                                  th:insert="/admin/user/addChldrnForm.html">
-                                                                <!-- 자녀 추가 모달 (/admin/user/addChldrnForm.html) -->
+                                                                <!-- 자녀 수정 모달 (/admin/user/addChldrnForm.html) -->
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
@@ -751,6 +811,17 @@
                                                 </thead>
                                                 <tbody id="chldrnTableBody">
                                                 <!-- 자녀 추가 테이블 -->
+                                                	<tr th:if = "${!targetChldrnDtoList.isEmpty()}" th:each=" data : ${targetChldrnDtoList} ">
+						                                <td name="trNum" th:text="${dataStat.count}"></td>
+						                                <td name="chldrnNm" th:text="${data.chldrnNm}"></td>
+						                                <td name="chldrnGenderRadio" th:text="${data.chldrnGender}"></td>
+						                                <td name="chldrnBrdtDate" th:text="${data.chldrnBrdtDate}"></td>
+						                                <td name="chldrnTelNo" th:text="${data.chldrnTelNo}"></td>
+						                                <td name="chldrnEmail" th:text="${data.chldrnEmail}"></td>
+						                                <td>
+						                                	<button onclick="modifyChldrn(this)" type="button" class="btn btn-success btn-sm table-btn">수정</button><button onclick="deleteChldrn(this)" type="button" class="btn btn-danger btn-sm table-btn">삭제</button>
+						                                </td>
+						                            </tr>
                                                 </tbody>
                                             </table>
                                         </div>

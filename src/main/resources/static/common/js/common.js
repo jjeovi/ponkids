@@ -5,10 +5,9 @@ const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // �
 $( function () {
 
     // 해당 데이터가 없으면 colspan값 th개수만큼 자동으로 set
-    if($("#noDataTd").length){
-        $("#noDataTd").attr("colspan",$('#listTable th').length);
+    if($(".noDataTd").length){
+        $(".noDataTd").attr("colspan",$('#listTable th').length);
     }
-
 
     // input type=radio 에서 readonly 를 주면
     // 해당 label에 readonly 클래스 추가
@@ -126,21 +125,22 @@ function deleteItem( delPk ){
 
 
 // S : file upload (img) 관련
-// 출처: https://webdir.tistory.com/435 [WEBDIR:티스토리]
 //preview image
-var imgTarget = $('.preview-image .upload-hidden');
-
-imgTarget.on('change', function(){
-    var parent = $(this).parent();
+function fileChange( e ){
+	{
+    var parent = $(e).parent().parent().parent();
     parent.children('.upload-display').remove();
     parent.children('.upload-file-name').remove();
 
-    if(window.FileReader && $(this)[0].files[0] != null){
+    // id값 제거
+    parent.children("[name='atchFileSn']").remove();
 
-        parent.prepend('<div class="upload-file-name"><input class="input-file-name" value="' + $(this)[0].files[0].name + '" disabled="disabled"></div>');
+    if(window.FileReader && $(e)[0].files[0] != null){
+
+        parent.prepend('<div class="upload-file-name"><input class="input-file-name" value="' + $(e)[0].files[0].name + '" disabled="disabled"></div>');
 
         //image 파일만
-        if (!$(this)[0].files[0].type.match(/image\//)) {
+        if (!$(e)[0].files[0].type.match(/image\//)) {
             parent.prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img class="upload-thumb noimg"></div></div>');
             return;
         }
@@ -150,16 +150,31 @@ imgTarget.on('change', function(){
             var src = e.target.result;
             parent.prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img src="'+src+'" class="upload-thumb"></div></div>');
         }
-        reader.readAsDataURL($(this)[0].files[0]);
+        reader.readAsDataURL($(e)[0].files[0]);
     } else {
-        // $(this)[0].select();
-        // $(this)[0].blur();
         // var imgSrc = document.selection.createRange().text;
         parent.prepend('<div class="upload-file-name"><input class="input-file-name" value="선택된 파일 없음" disabled="disabled"></div>');
         parent.prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img class="upload-thumb noimg"></div></div>');
         //
-        // var img = $(this).siblings('.upload-display').find('img');
         // img[0].style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\""+imgSrc+"\")";
     }
-});
+}
+}
 // E : file upload (img) 관련
+
+  
+// 프로필이미지 제거
+function removeImage( e ) {
+
+    // atchFileSn 값 제거
+    $( e ).parent().siblings("[name='atchFileSn']").remove();
+
+    // 이미지 썸네일 제거 및 파일명 제거작업
+    $( e ).parent().siblings('.upload-display').remove();
+    $( e ).parent().siblings('.upload-file-name').remove();
+    $( e ).parent().parent().prepend('<div class="upload-file-name"><input class="input-file-name" value="선택된 파일 없음" disabled="disabled"></div>');
+    $( e ).parent().parent().prepend('<div class="upload-display"><div class="upload-thumb-wrap"><img class="upload-thumb noimg"></div></div>');
+
+    // 이미지 제거 버튼 또한 제거
+    $( e ).remove();
+}

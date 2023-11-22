@@ -8,10 +8,10 @@ import java.util.List;
 
 
 /**
- * className      : MultiUserChldrnSaveDto
+ * className      : MultiUserChldrnModDto
  * author         : jjeoV
  * date           : 2023-11-19
- * description    : class of 자녀일괄등록 Dto
+ * description    : class of 자녀일괄 수정 Dto
  * ===========================================================
  * DATE              AUTHOR               NOTE
  * -----------------------------------------------------------
@@ -19,6 +19,6 @@ import java.util.List;
  */
 @NoArgsConstructor
 @Data
-public class MultiUserChldrnSaveDto {
-    public List<UserChldrnSaveDto> userChldrns;
+public class MultiUserChldrnModDto {
+    public List<UserChldrnModDto> userChldrns;
 }

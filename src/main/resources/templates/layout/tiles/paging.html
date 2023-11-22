@@ -1,9 +1,8 @@
 <!-- 페이징 -->
-<!-- 전역 변수 선언 -->
-
 <!-- paging ( *form , *resultList ) -->
 <!-- *form       : submit할 form의 name값 -->
 <!-- *resultList : 결과데이터 (Page<T> 오브젝트)-->
+<!-- 전역 변수 선언 -->
 <nav th:fragment = "paging(form,resultList)" th:if = "${!resultList.isEmpty()}"
      th:with = "
      pageNumber     = ${resultList.pageable.pageNumber},

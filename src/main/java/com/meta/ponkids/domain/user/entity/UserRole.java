@@ -49,10 +49,18 @@ public class UserRole extends BaseTimeEntity {
     private Long roleSn;
     
     @NotNull
+    @Column(updatable = false)
     private String registerId;
     
     @NotNull
+    @Column(updatable = false)
     private String registerIp;
+
+    @Column(insertable = false)
+    private String updusrId;
+    
+    @Column(insertable = false)
+    private String updusrIp;
     
     @ColumnDefault( "N" )
     private String delYn;

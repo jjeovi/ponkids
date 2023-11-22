@@ -3,7 +3,9 @@ package com.meta.ponkids.domain.user.controller;
 import com.meta.ponkids.domain.system.file.service.AtchFileService;
 import com.meta.ponkids.domain.system.role.repository.RoleRepository;
 import com.meta.ponkids.domain.user.dto.*;
+import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
 import com.meta.ponkids.domain.user.repository.UserRepository;
+import com.meta.ponkids.domain.user.service.UserChldrnService;
 import com.meta.ponkids.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,6 +39,8 @@ import java.time.LocalDateTime;
 public class UserController {
     
     private final UserService userService;
+    private final UserChldrnService userChldrnService;
+    private final UserChldrnRepository userChldrnRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final AtchFileService atchFileService;
@@ -90,16 +95,17 @@ public class UserController {
      * date           : 11/17/23
      * description    : user insert method
      */
+    @Transactional
     @PostMapping( BASIC_PATH + "/insert" )
     public String insert (
             @RequestParam("file") MultipartFile files,
-            @ModelAttribute UserSaveDto userSaveDto,
+            @ModelAttribute UserSaveDto saveDto,
             @ModelAttribute UserRoleSaveDto userRoleSaveDto,  // required false
             MultiUserChldrnSaveDto userChldrns,
             HttpServletRequest request,
             Model model ) throws IOException {
         
-        if ( userRepository.existsByUserId( userSaveDto.getUserId() ) ) {
+        if ( userRepository.existsByUserId( saveDto.getUserId() ) ) {
             // 중복 ID 존재시 가입 불가
             
             // 메시지 출력 및 url 이동 처리
@@ -113,16 +119,16 @@ public class UserController {
             
             // 첨부파일 존재시 파일 저장
             if(!files.isEmpty()){
-            	userSaveDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 ) 
+            	saveDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 ) 
             }
             
             // 관리자 승인여부 Y 이면 승인일시 now로 setting
-            if ( userSaveDto.getMngrConfmYn().equals( "Y" ) ) {
-                userSaveDto.setConfmDt( LocalDateTime.now() );
+            if ( saveDto.getMngrConfmYn().equals( "Y" ) ) {
+            	saveDto.setConfmDt( LocalDateTime.now() );
             }
             
             // save
-            userService.save( userSaveDto, userRoleSaveDto, userChldrns, request );
+            userService.save( saveDto, userRoleSaveDto, userChldrns, request );
         }
         
         // 메시지 출력 및 url 이동 처리
@@ -151,6 +157,9 @@ public class UserController {
         // target object 조회
         model.addAttribute( "targetDto", userService.findByUserSn( userSn ) );
         
+        // chldrn target object 조회
+        model.addAttribute("targetChldrnDtoList", userChldrnRepository.getListByUserSn( userSn ));
+        
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
@@ -168,13 +177,37 @@ public class UserController {
      * : 11/17/23
      * description    : user update method
      */
+    @Transactional
     @PostMapping( BASIC_PATH + "/update" )
     public String update(
+            @RequestParam("file") MultipartFile files,
             @ModelAttribute UserModDto modDto,
-            Model model ) {
+            @ModelAttribute UserRoleModDto userRoleModDto,  // required false
+            MultiUserChldrnSaveDto userChldrns,
+            HttpServletRequest request,
+            Model model ) throws IOException {
+        
+        // 첨부파일 존재시 파일 저장
+        if(!files.isEmpty()){
+            // 기존에 첨부파일 있을시 삭제
+            if( modDto.getAtchFileSnOri() != null ) {
+                atchFileService.delete(modDto.getAtchFileSnOri());
+            }
+            
+            // 첨부파일 저장
+            modDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 )
+        } else {
+            // 첨부파일 존재하지않을 때
+            // 기존 첨부파일이 있었는데 삭제됬다면 삭제처리
+            if( modDto.getAtchFileSnOri()!= null && modDto.getAtchFileSn() == null ) {
+                atchFileService.delete(modDto.getAtchFileSnOri());
+                modDto.setAtchFileSn( null );
+            }
+        }
         
         // update 구현
-        userService.update( modDto );
+        userService.update( modDto, userRoleModDto,  userChldrns, request );
+//        userService.save( saveDto, userRoleSaveDto, userChldrns, request );
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
@@ -196,6 +229,14 @@ public class UserController {
         
         // 삭제 처리
         userService.deleteAllByUserSn( userSn );
+        
+        
+        // 첨부파일 삭제
+        Long atchFileSn = userService.findByUserSn(userSn).getAtchFileSn();
+        if (atchFileSn != null ) {
+        	atchFileService.delete(atchFileSn);
+        };
+        
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );

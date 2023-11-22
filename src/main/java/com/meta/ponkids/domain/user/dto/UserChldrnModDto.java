@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 
 
 /**
- * className      : UserChldrnSaveDto
+ * className      : UserChldrnModDto
  * author         : jjeoV
  * date           : 2023-11-19
- * description    : class of 자녀등록 Dto
+ * description    : class of 자녀 수정 Dto
  * ===========================================================
  * DATE              AUTHOR               NOTE
  * -----------------------------------------------------------
@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 @Data
-public class UserChldrnSaveDto {
+public class UserChldrnModDto {
     
     private Long userSn;
     
@@ -39,15 +39,17 @@ public class UserChldrnSaveDto {
     
     private Long atchFileSn;
     
-    private String registerId;
+    private Long atchFileSnOri;
     
-    private String registerIp;
+    private String updusrId;
+    
+    private String updusrIp;
     
     private MultipartFile file;
     
     
     @Builder
-    public UserChldrnSaveDto( Long userSn, Long userChldrnSeq, String chldrnNm, String chldrnGender, String chldrnBrdtDate, String chldrnEmail, String chldrnTelNo, Long atchFileSn, String registerId, String registerIp ) {
+    public UserChldrnModDto( Long userSn, Long userChldrnSeq, String chldrnNm, String chldrnGender, String chldrnBrdtDate, String chldrnEmail, String chldrnTelNo, Long atchFileSn, String updusrId, String updusrIp ) {
         this.userSn = userSn;
         this.userChldrnSeq = userChldrnSeq;
         this.chldrnNm = chldrnNm;
@@ -56,8 +58,8 @@ public class UserChldrnSaveDto {
         this.chldrnEmail = chldrnEmail;
         this.chldrnTelNo = chldrnTelNo;
         this.atchFileSn = atchFileSn;
-        this.registerId = registerId;
-        this.registerIp = registerIp;
+        this.updusrId = updusrId;
+        this.updusrIp = updusrIp;
     }
     
     // DTO to Entity 메소드는 DTO 내부에서 생성.
@@ -71,8 +73,8 @@ public class UserChldrnSaveDto {
                 .chldrnEmail( chldrnEmail )
                 .chldrnTelNo( chldrnTelNo )
                 .atchFileSn( atchFileSn )
-                .registerId( registerId )
-                .registerIp( registerIp )
+                .updusrId( updusrId )
+                .updusrIp( updusrIp )
                 .build();
     }
 }

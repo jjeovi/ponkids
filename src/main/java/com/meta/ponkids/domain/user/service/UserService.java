@@ -1,8 +1,10 @@
 package com.meta.ponkids.domain.user.service;
 
+import com.meta.ponkids.domain.system.file.service.AtchFileService;
 import com.meta.ponkids.domain.user.dto.*;
 import com.meta.ponkids.domain.user.entity.User;
 import com.meta.ponkids.domain.user.entity.UserChldrn;
+import com.meta.ponkids.domain.user.entity.UserRole;
 import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
 import com.meta.ponkids.domain.user.repository.UserRepository;
 import com.meta.ponkids.domain.user.repository.UserRoleRepository;
@@ -16,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,9 +41,10 @@ public class UserService {
     private final UserChldrnRepository userChldrnRepository;
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;  // 패스워드 인코딩
+    private final AtchFileService atchFileService;
     
     @Transactional
-    public UserSaveDto save( UserSaveDto userSaveDto, UserRoleSaveDto userRoleSaveDto, MultiUserChldrnSaveDto userChldrns, HttpServletRequest request ) {
+    public UserSaveDto save( UserSaveDto userSaveDto, UserRoleSaveDto userRoleSaveDto, MultiUserChldrnSaveDto userChldrns, HttpServletRequest request ) throws IOException {
         
         userSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );                        // 회원 IP 저장
         userSaveDto.setPassword( passwordEncoder.encode( userSaveDto.getPassword() ) );   	// 비밀번호 암호화
@@ -67,6 +72,11 @@ public class UserService {
                 userChldrn.setRegisterIp( IpUtils.getClientIP( request ) );    									// 관리자 IP 저장
                 userChldrn.setRegisterId( "admin@test.com" );                   								// TODO : 현재 세션의 userId값으로 수정
                 
+                // 자녀 프로필 존재시 추가
+                if(!userChldrn.getFile().isEmpty()) {
+                	userChldrn.setAtchFileSn(atchFileService.save(userChldrn.getFile()));
+                }
+                
                 userChldrnList.add( userChldrn.toEntity() );      												// userlist add
             }
             
@@ -90,10 +100,21 @@ public class UserService {
         userModDto = userModDto.toDto( user );
         
         return userModDto;
-        
     }
     
-    public void update( UserModDto modDto ) {
+    
+    @Transactional
+//    public UserSaveDto save( UserSaveDto userSaveDto, UserRoleSaveDto userRoleSaveDto, MultiUserChldrnSaveDto userChldrns, HttpServletRequest request ) throws IOException {
+    public void update ( UserModDto modDto, UserRoleModDto userRoleModDto, MultiUserChldrnSaveDto userChldrns, HttpServletRequest request ) throws IOException {
+    	
+    	
+    	// 1. user 수정			: 회원수정
+    	// 2. userRole 수정		: 권한수정
+    	// 3. userChldrns 수정	: 자녀수정
+    	
+    	
+    	// 1. user 수정			: 회원수정
+    	// ================================================================================
         // target 조회
         User user = userRepository.findByUserSn( modDto.getUserSn() );
         
@@ -114,11 +135,80 @@ public class UserService {
         
         targetDto.setAtchFileSn( modDto.getAtchFileSn() );          											// 첨부파일 (첨부파일은 Null이어도 변경)
         
+        
+        // id,ip setting
+        targetDto.setUpdusrIp(IpUtils.getClientIP( request ));
+        targetDto.setUpdusrId("admin@test.com");
+        
         // target object 전환 ( dto to entity )
         user = targetDto.toEntity();
         
         // 수정사항 적용
         userRepository.save( user );
+        
+        
+        // 2. userRole 수정		: 권한수정
+    	// ================================================================================
+        
+        // target 조회
+        UserRole userRole = userRoleRepository.findByUserSn(modDto.getUserSn());
+        
+        // 사용자일경우 userRole == null 
+        if(userRole != null) {
+        	
+	        // target object 전환 ( entity to dto )
+	        UserRoleModDto userRoleTargetDto = new UserRoleModDto();
+	        userRoleTargetDto = userRoleTargetDto.toDto(userRole);
+	        
+	        // target object 에 수정사항 set
+	        // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
+	        if ( userRoleModDto.getRoleSn() != null ) userRoleTargetDto.setRoleSn( userRoleModDto.getRoleSn() );   // 권한
+	        
+	        // id,ip setting
+	        userRoleTargetDto.setUpdusrIp(IpUtils.getClientIP( request ));
+	        userRoleTargetDto.setUpdusrId("admin@test.com");
+	        
+	        // target object 전환 ( dto to entity )
+	        userRole = userRoleTargetDto.toEntity();
+	        
+	        // 수정사항 적용
+	        userRoleRepository.save(userRole);
+	        
+        }
+        
+        
+        // 3. userChldrns 수정	: 자녀수정
+    	// ================================================================================
+        // 기존자녀 ( existChldrns ) , 신규자녀 ( newChldrns)
+        // 기존 userChldrn 전부 삭제 후 
+        // 새로 save
+        
+        // 기존 userChldrn 삭제
+        userChldrnRepository.deleteAllByUserSn( modDto.getUserSn());
+        
+        // 새로 save
+        if ( userChldrns != null && userChldrns.getUserChldrns() != null && userChldrns.getUserChldrns().size() > 0 && modDto.getMngrYn().equals( "N" ) ) {
+        	List<UserChldrn> userChldrnList = new ArrayList<>();
+            for ( UserChldrnSaveDto userChldrn : userChldrns.getUserChldrns() ) {
+                
+                userChldrn.setUserSn( modDto.getUserSn() );													// 등록한 ID의 sn값 setting (newUser에서 값 호출)
+                userChldrn.setUserChldrnSeq( (long)userChldrns.getUserChldrns().indexOf( userChldrn ) + 1 );	// userChldrnSeq Setting
+                
+                userChldrn.setRegisterIp( IpUtils.getClientIP( request ) );    									// 관리자 IP 저장
+                userChldrn.setRegisterId( "admin@test.com" );                   								// TODO : 현재 세션의 userId값으로 수정
+                
+                // 자녀 프로필 존재시 추가
+                if(!userChldrn.getFile().isEmpty()) {
+                	userChldrn.setAtchFileSn(atchFileService.save(userChldrn.getFile()));
+                }
+                
+                userChldrnList.add( userChldrn.toEntity() );      												// userlist add
+            }
+            
+            userChldrnRepository.saveAll( userChldrnList );     												// * userChldrn save. 한꺼번에 save. 각각 save보다 빠르다.
+        }
+        
+        
     }
     
     
@@ -126,14 +216,13 @@ public class UserService {
     public void deleteAllByUserSn( Long userSn ) {
         
         // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
-        userRepository.deleteById( userSn );    // User.java 의 @SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y' WHERE user_id = ?") 를 수행
+        userRepository.deleteById( userSn );    // User.java 의 @SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y' WHERE user_sn = ?") 를 수행
         
         // 권한 삭제 : userRole delete 처리
         userRoleRepository.deleteByUserSn( userSn );
         
         // 자녀 삭제 : userchldrn delete 처리
         userChldrnRepository.deleteAllByUserSn( userSn );
-        
     }
     
 }

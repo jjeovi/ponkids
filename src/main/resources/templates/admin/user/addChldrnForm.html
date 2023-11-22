@@ -1,5 +1,26 @@
-<!-- TODO 자녀 프로필 이미지 추가 작업 -->
 <input type="hidden" name="chldrnGender" />
+<!-- TODO 자녀 프로필 이미지 추가 작업 -->
+<div class="field item form-group">
+    <label class="col-form-label col-md-2 col-sm-3 label-align">프로필 이미지</label>
+    <div class="col-md-6 col-sm-6">
+        <div class="filebox preview-image">
+            <div class="upload-display">
+                <div class="upload-thumb-wrap">
+                    <img alt="프로필 이미지" class="upload-thumb noimg">
+                </div>
+            </div>
+            <div class="upload-file-name">
+                <input class="input-file-name" value="선택된 파일 없음" disabled="disabled">
+            </div>
+            <div class="upload-btn mt_10p">
+                <label class="btn btn-purple">업로드
+                    <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)" >
+                </label>
+            </div>
+
+        </div>
+    </div>
+</div>
 <div class="field item form-group">
     <label class="col-form-label col-md-2 col-sm-3 label-align">
         이름<span class="required">*</span>

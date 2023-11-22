@@ -38,15 +38,6 @@ import lombok.NoArgsConstructor;
 @Table( name = "tb_atch_file_detail" )
 public class AtchFileDetail {
 	
-//	ATCH_FILE_SN	첨부파일일련번호
-//	FILE_SEQ	파일순번
-//	FILE_STRE_PATH	파일저장경로
-//	STRE_FILE_NM	저장파일이름
-//	ORIGNL_FILE_NM	원파일명
-//	FILE_EXTSN	파일확장자
-//	FILE_CN	파일내용
-//	FILE_SIZE	파일크기
-
 	
 	// 복합키 생성 ( AtchFileDetailPk.java 에서 2개 키를 미리 생성)
 	// private Long atchFileSn;						// 첨부 파일 일련번호

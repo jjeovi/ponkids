@@ -123,7 +123,7 @@
 	                                </td>
 	                            </tr>
 	                            <tr th:unless = "${!resultList.isEmpty()}">
-	                                <td id="noDataTd">
+	                                <td class="noDataTd">
 	                                    데이터가 없습니다.
 	                                </td>
 	                            </tr>
@@ -131,22 +131,18 @@
                         </table>
                     </div>
                     <!-- E : 테이블 -->
-                    <!-- S : 테이블 하단 페이징 -->
-                    <div class="col-md-12 col-sm-12 ">
-
-                    </div>
-                    <!-- E : 테이블 하단 페이징 -->
                     <!-- S : 하단 목록 -->
                     <div class="col-md-12 col-sm-12">
                         <!-- bottom left area -->
                         <div class="col-md-2 col-sm-3 text-left">
                             <a href="/admin/user/regist" class="btn btn-white w120p">등록</a>
                         </div>
-                        <!-- bottom center area (paging) -->
+                        <!-- S : 테이블 하단 페이징 -->
                         <div class="col-md-8 col-sm-6 text-center"
                              th:insert="~{layout/tiles/paging :: paging('listForm', ${resultList})}">
                             <!-- parameter : ( submit할 form 의 name값 ), ( ${resultList} 는 Page<T> 오브젝트 )  -->
                         </div>
+                        <!-- E : 테이블 하단 페이징 -->
                         <!-- bottom right area -->
                         <div class="col-md-2 col-sm-3 text-right">
                             <select class="form-control" name="size" onchange="searchListSize('listForm',this.value);">
