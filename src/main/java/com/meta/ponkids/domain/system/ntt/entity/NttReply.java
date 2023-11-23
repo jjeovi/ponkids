@@ -62,6 +62,10 @@ public class  NttReply extends BaseTimeEntity {
     @ColumnDefault("N")                             // del_yn 컬럼에 공통으로 추가
     @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가
     private String delYn;                           // 삭제 여부
+    
+    
+    
+
 
 }
 

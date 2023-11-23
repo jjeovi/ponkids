@@ -53,7 +53,7 @@ public class NttReplyService {
     }
 
 	public List<NttReplyListDto> getList(int nttSn) {
-		// TODO Auto-generated method stub
+
 		return nttReplyRepository.getList(nttSn);
 	}
 

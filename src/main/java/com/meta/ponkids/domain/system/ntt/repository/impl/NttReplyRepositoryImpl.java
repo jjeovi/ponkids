@@ -3,8 +3,8 @@ package com.meta.ponkids.domain.system.ntt.repository.impl;
 
 
 
-import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
-import com.meta.ponkids.domain.system.ntt.dto.QNttReplyListDto;
+//import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
+//import com.meta.ponkids.domain.system.ntt.dto.QNttReplyListDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -49,29 +49,23 @@ public class NttReplyRepositoryImpl    {
     
     
     
-    public List<NttReplyListDto>  getList(int nttSn) {
-    	
-		 List<NttReplyListDto> results = query.select(new QNttReplyListDto(
-				 nttReply.nttReplySn,
-				 nttReply.nttSn,
-				 nttReply.step,
-				 nttReply.parntsReplySn,
-				 nttReply.nttReplySeq,
-				 nttReply.nttReplyCn,
-				 nttReply.registerId
-				 ) ).from(nttReply)
-				 .where(
-						 eqOption( nttSn )
-	                )
-				   .orderBy( nttReply.nttReplySeq.desc() )
-	               .fetch();
-		 
-	
-	               
-	    	return results;
-	}
-
+	/*
+	 * public List<NttReplyListDto> getList(int nttSn) {
+	 * 
+	 * List<NttReplyListDto> results = query.select(new QNttReplyListDto(
+	 * nttReply.nttReplySn, nttReply.nttSn, nttReply.step, nttReply.parntsReplySn,
+	 * nttReply.nttReplySeq, nttReply.nttReplyCn, nttReply.registerId )
+	 * ).from(nttReply) .where( eqOption( nttSn ) ) .orderBy(
+	 * nttReply.nttReplySeq.desc() ) .fetch();
+	 * 
+	 * 
+	 * 
+	 * return results; }
+	 */
     
+    
+    
+
     
 
 

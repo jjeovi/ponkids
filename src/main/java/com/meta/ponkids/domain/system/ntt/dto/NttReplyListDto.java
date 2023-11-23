@@ -8,6 +8,7 @@ import com.querydsl.core.annotations.QueryProjection;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Value;
 
 @NoArgsConstructor
 @Data
@@ -25,11 +26,9 @@ public class NttReplyListDto {
 
      @NotNull
      private String registerId;
-
     
-    @QueryProjection
-    public NttReplyListDto( int nttReplySn ,int nttSn, int step, int parntsReplySn,int nttReplySeq, String nttReplyCn,
-        		String registerId) {
+
+     public NttReplyListDto( int nttReplySn, int nttSn, int step, int parntsReplySn ,int nttReplySeq, String nttReplyCn, String registerId) {
             this.nttReplySn = nttReplySn;
             this.nttSn = nttSn;
             this.step = step;
@@ -37,10 +36,6 @@ public class NttReplyListDto {
             this.nttReplySeq = nttReplySeq;
             this.nttReplyCn = nttReplyCn;
             this.registerId = registerId;
-
-        }
-        
-    
-    
+     }
     
 }
