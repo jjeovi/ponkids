@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<title layout:fragment="title">pioneerkids Admin - 회원 조회</title>
+<!-- S : Javascript functions	-->
+<script layout:fragment="script">
+
+    $(function(){
+    	
+    	
+    	// S : jstree
+        // 6 create an instance when the DOM is ready
+        $('#jstree').jstree();
+        // 7 bind to events triggered on the tree
+        $('#jstree').on("changed.jstree", function (e, data) {
+          console.log(data.selected);
+        });
+        // 8 interact with the tree - either way is OK
+        $('button').on('click', function () {
+          $('#jstree').jstree(true).select_node('child_node_1');
+          $('#jstree').jstree('select_node', 'child_node_1');
+          $.jstree.reference('#jstree').select_node('child_node_1');
+        });
+     	// E : jstree
+
+    });
+
+</script>
+<!-- E : Javascript functions	-->
+<div layout:fragment="content" class="right_col" role="main">
+
+    <!-- S : 상단 메뉴 명 -->
+    <!-- TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림. -->
+    <div class="title_top">
+        <h3>회원 조회</h3>
+        <hr class="t_top_line">
+    </div>
+    <!-- E : 상단 메뉴 명 -->
+
+    <!-- S : 메뉴 상세설명  -->
+    <div class="div_menu_detail row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>회원조회 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content" style="display: none;">
+                    <h4>상세설명 메뉴입니다.<small>메뉴는 회원 등록입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
+                                              설정가능합니다.)</small></h4>
+                    <div>
+                        <div class="starrr stars"></div>
+                        상세설명 메뉴입니다. <span class="stars-count">0123456789</span> star(s)
+                    </div>
+                    <p>The menu is membership registration. This part allows the administrator to enter text
+                       describing the menu. (It can be set in Menu Management.)</p>
+                    <div class="starrr stars-existing" data-rating="4"></div>
+                    You gave a rating of <span class="stars-count-existing">4</span> star(s)
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- E : 메뉴 상세설명 -->
+
+    <!-- S: content -->
+    <!-- S : 분류 영역 -->
+    <div class="div_menu_detail row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel category-area">
+            	<!-- 분류 영역 > 카테고리 그룹 영역 -->
+				<div class="col-md-9 col-sm-12 category-list-area">
+			        <div class="col-md-3 category-group-box lv1">
+			            <ul class="data-group">
+			                <li class="on">분류1-1</li>
+			                <li>분류1-2</li>
+			            </ul>
+			        </div>
+			        <div class="col-md-3 category-group-box lv2">
+			            <ul class="data-group">
+			                <li>분류2-1</li>
+			                <li>클릭시ajax로 데이터 조회 후</li>
+			                <li>다음 lv에 뿌려주기 구현</li>
+			                <li>내일함</li>
+			            </ul>
+			        </div>
+			        <div class="col-md-3 category-group-box lv3">
+			            <ul class="data-group">
+			                <li>클릭시 on class추가..</li>
+			                <li>작업중....</li>
+			            </ul>
+			        </div>
+			        <div class="col-md-3 category-group-box lv4">
+			            <ul class="data-group">
+			                <li>ㄱㅅㅇㅇ</li>
+			                <li>sdfsdf</li>
+			                <li>필요없으면 박스 지우면됨</li>
+			            </ul>
+			        </div>
+				</div>
+				<!-- 분류 영역 > 조회 영역 -->
+				<div class="col-md-3 col-sm-12 category-btn-area">
+					<div class="btn-group float-right" role="group">
+					    <button type="submit" class="btn btn-purple w120p">검색</button>
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+    <!-- E : 분류 영역 -->
+    
+    <div class="x_panel">
+        <div class="x_content">
+        	<div id="jstree">
+			    <!-- in this example the tree is populated from inline HTML -->
+			    <ul>
+			      <li>Root node 1
+			        <ul>
+			          <li id="child_node_1">Child node 1</li>
+			          <li>Child node 2</li>
+			        </ul>
+			      </li>
+			      <li>Root node 2</li>
+			    </ul>
+		  	</div>
+		  	<button>demo button</button>
+        </div>
+    </div>
+    <!-- E : content -->
+</div>
+</html>
