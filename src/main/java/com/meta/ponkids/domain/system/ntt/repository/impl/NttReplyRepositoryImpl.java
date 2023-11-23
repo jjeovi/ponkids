@@ -1,10 +1,8 @@
 package com.meta.ponkids.domain.system.ntt.repository.impl;
 
-
-
-
+import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
 //import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
-//import com.meta.ponkids.domain.system.ntt.dto.QNttReplyListDto;
+import com.meta.ponkids.domain.system.ntt.dto.QNttReplyListDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -30,7 +28,7 @@ public class NttReplyRepositoryImpl    {
     	int number = query.select(nttReply.nttReplySeq.max().coalesce(0))
     			     .from(nttReply)
     			     .where(
-    		                 eqOption( nttSn )
+    			    		 eqNttSnOption( nttSn )
     		                )
     			   .fetchOne();
 
@@ -43,25 +41,38 @@ public class NttReplyRepositoryImpl    {
     }
     
     // -------------------------------- WHERE 검색 옵션 setting --------------------------------
-    private BooleanExpression eqOption( int nttSn) {
+    private BooleanExpression eqNttSnOption( int nttSn) {
         return  nttReply.nttSn.eq( nttSn );
+    }
+    
+    private BooleanExpression eqStepOption(int step) {
+        return  nttReply.step.eq(step);
     }
     
     
     
-	/*
-	 * public List<NttReplyListDto> getList(int nttSn) {
-	 * 
-	 * List<NttReplyListDto> results = query.select(new QNttReplyListDto(
-	 * nttReply.nttReplySn, nttReply.nttSn, nttReply.step, nttReply.parntsReplySn,
-	 * nttReply.nttReplySeq, nttReply.nttReplyCn, nttReply.registerId )
-	 * ).from(nttReply) .where( eqOption( nttSn ) ) .orderBy(
-	 * nttReply.nttReplySeq.desc() ) .fetch();
-	 * 
-	 * 
-	 * 
-	 * return results; }
-	 */
+	
+	  public List<NttReplyListDto> getList(int nttSn) {
+	  
+	  List<NttReplyListDto> results = query.select(new QNttReplyListDto(
+													  nttReply.nttReplySn,
+													  nttReply.nttSn,
+													  nttReply.step,
+													  nttReply.parntsReplySn, 
+													  nttReply.nttReplyGroup,
+													  nttReply.nttReplySeq,
+													  nttReply.nttReplyCn,
+													  nttReply.registerId )
+													  ).from(nttReply)
+			                                         .where( eqNttSnOption( nttSn ), eqStepOption(1))
+			                                         .orderBy(
+													  nttReply.nttReplySeq.desc()
+													  ).fetch();
+	  
+	  
+	  
+	  return results; }
+	 
     
     
     
