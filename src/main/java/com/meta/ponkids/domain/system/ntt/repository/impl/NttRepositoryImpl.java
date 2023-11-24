@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 import static com.meta.ponkids.domain.system.ntt.entity.QNtt.ntt;
+import static com.meta.ponkids.domain.system.ntt.entity.QNttReply.nttReply;
 
 @Repository
 @RequiredArgsConstructor
@@ -87,6 +88,26 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
     private BooleanExpression eqNttSnOption( int nttSn) {
         return  ntt.nttSn.eq( nttSn );
     }
+
+
+	@Override
+	public int getExistsNtt(Long bbsSn) {
+    	int count = query.select(ntt.nttRdcnt.max().coalesce(0))
+			     .from(ntt)
+			     .where(
+			    		 eqBbsSnOption( bbsSn )
+		                )
+			   .fetchOne();
+
+	  return count;
+		
+	}
+	
+    private BooleanExpression eqBbsSnOption( Long bbsSn) {
+        return  ntt.bbsSn.eq( bbsSn );
+    }
+    
+    
     
 
 

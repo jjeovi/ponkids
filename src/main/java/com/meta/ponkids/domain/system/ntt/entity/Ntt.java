@@ -40,7 +40,7 @@ public class  Ntt extends BaseTimeEntity {
   
     
     @Column(updatable = false) 
-    private int bbsSn;       
+    private Long bbsSn;       
     
     @NotNull
     private int nttSeq;           

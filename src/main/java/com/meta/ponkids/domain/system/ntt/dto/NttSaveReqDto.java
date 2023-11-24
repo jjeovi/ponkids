@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
+import com.querydsl.jpa.impl.JPAQuery;
+
 @NoArgsConstructor
 @Data
 public class NttSaveReqDto {
@@ -14,7 +16,7 @@ public class NttSaveReqDto {
     private int nttSn;
 	
     @NotNull
-	private int bbsSn;
+	private Long bbsSn;
 	private String nttSeq;
 	private String nttNm;
 	private String nttCn;
@@ -47,7 +49,7 @@ public class NttSaveReqDto {
 
     // builder 생성
     @Builder
-    public NttSaveReqDto( int nttSn ,int bbsSn, String nttSeq, String nttNm,String nttCn, String atchFileSn, int nttRdcnt,String noticeSetYn, String noticeSeq,
+    public NttSaveReqDto( int nttSn ,Long bbsSn, String nttSeq, String nttNm,String nttCn, String atchFileSn, int nttRdcnt,String noticeSetYn, String noticeSeq,
     		String openYn,String delYn
     		,String registerId,String registerIp,LocalDateTime regDt ,String upduserId,String upduserIp,String updtDt) {
         this.nttSn = nttSn;

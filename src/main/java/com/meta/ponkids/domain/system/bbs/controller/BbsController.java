@@ -14,6 +14,8 @@ import com.meta.ponkids.domain.system.bbs.dto.BbsModDto;
 import com.meta.ponkids.domain.system.bbs.dto.BbsSaveReqDto;
 import com.meta.ponkids.domain.system.bbs.repository.BbsRepository;
 import com.meta.ponkids.domain.system.bbs.service.BbsService;
+import com.meta.ponkids.domain.system.ntt.service.NttService;
+import com.querydsl.jpa.impl.JPAQuery;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -25,6 +27,7 @@ public class BbsController {
     
    private final BbsService bbsService;
    private final BbsRepository bbsRepository;
+   private final NttService nttService;
    
    private final static String BASIC_PATH = "/admin/bbs";
     
@@ -125,15 +128,21 @@ public class BbsController {
     public String delete(
             @RequestParam(required = true) Long bbsSn,
             Model model ) {
-     
+    	
+     String msg = "";
      // 해당 게시판에 게시물 있는지 조회 없으시 삭제 처리 
-    	
-    	
-     // 삭제 처리
-      bbsService.deleteAllByBbsSn( bbsSn );
+      int count = nttService.getExistsNtt(bbsSn);
+    
+     if( count == 0 ) {
+         // 삭제 처리
+         bbsService.deleteAllByBbsSn( bbsSn );
+         msg = "정상적으로 삭제되었습니다.";
+     } else {
+    	 msg = "게시물이 존재합니다. 삭제 할수 없습니다.";
+     }
       
       // 메시지 출력 및 url 이동 처리
-      model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
+      model.addAttribute( "resultMsg", msg);
       model.addAttribute( "moveUrl", BASIC_PATH + "/list" );
       
       return "common/alert";

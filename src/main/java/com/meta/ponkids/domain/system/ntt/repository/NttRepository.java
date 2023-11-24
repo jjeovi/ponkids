@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.meta.ponkids.domain.system.ntt.entity.Ntt;
 import com.meta.ponkids.domain.system.ntt.repository.custom.NttRepositoryCustom;
+import com.querydsl.jpa.impl.JPAQuery;
 
 
 
@@ -17,6 +18,8 @@ public interface NttRepository extends JpaRepository< Ntt, Integer> , NttReposit
    public Ntt findByNttSn(int nttSn);
    
    public int getMaxNttRdcnt(int nttSn);
+   
+   public int getExistsNtt(Long bbsSn);
    
    
    @Modifying( clearAutomatically = true )

@@ -18,6 +18,7 @@ import com.meta.ponkids.domain.user.dto.MultiUserChldrnSaveDto;
 import com.meta.ponkids.domain.user.dto.UserModDto;
 import com.meta.ponkids.domain.user.dto.UserRoleModDto;
 import com.meta.ponkids.domain.user.entity.User;
+import com.querydsl.jpa.impl.JPAQuery;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -107,6 +108,13 @@ public class NttService {
         
     
     }
+    
+    
+    public int getExistsNtt(Long  bbsSn) {
+	  return nttRepository.getExistsNtt(bbsSn); 
+	
+	 }
+    
     
 
     

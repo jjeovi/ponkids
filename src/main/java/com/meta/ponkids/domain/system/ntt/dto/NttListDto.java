@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class NttListDto {
     
     private int nttSn;
-    private int bbsSn;
+    private Long bbsSn;
 	private String nttNm;
 	private String nttCn;
 	private int nttRdcnt;
@@ -30,7 +30,7 @@ public class NttListDto {
     
     
     @QueryProjection
-    public NttListDto( int nttSn ,int bbsSn ,String nttNm, String nttCn,  int nttRdcnt,String openYn,String registerId,LocalDateTime regDt) {
+    public NttListDto( int nttSn ,Long bbsSn ,String nttNm, String nttCn,  int nttRdcnt,String openYn,String registerId,LocalDateTime regDt) {
 
     	this.nttSn = nttSn; 
     	this.bbsSn = bbsSn;
