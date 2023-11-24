@@ -19,8 +19,9 @@ import com.meta.ponkids.domain.system.ntt.service.NttService;
 
 import javax.servlet.http.HttpServletRequest;
 
-
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -151,14 +152,12 @@ public class NttController {
      */
     @ResponseBody
     @RequestMapping( value = "/reply/answerReplyList", method = { RequestMethod.GET } )
-    public Model answerReplyList( @RequestParam( "nttReplySn" ) int nttReplySn , Model model) {
+    public List answerReplyList( @RequestParam( "nttReplySn" ) int nttReply) {
         
-    	
     	 // 댓글 목록 조회
-        List<NttReplyListDto> answerReplyList = nttReplyService.getAnswerReplyList(nttReplySn);
-        model.addAttribute( "answerReplyList", answerReplyList );
+        List<NttReplyListDto> answerReplyList = nttReplyService.getAnswerReplyList(nttReply);
         
-        return model;
+        return answerReplyList;
     }  
     
     
