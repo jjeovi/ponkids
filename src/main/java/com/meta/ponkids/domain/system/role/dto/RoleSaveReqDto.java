@@ -27,7 +27,7 @@ import javax.validation.constraints.NotNull;
 public class RoleSaveReqDto  {
 
     @NotNull
-    private int roleSn;          // 아이디
+    private long roleSn;          // 아이디
     
     private String userId;
     
@@ -39,7 +39,7 @@ public class RoleSaveReqDto  {
     
     // builder 생성
     @Builder
-    public RoleSaveReqDto( int roleSn, String registerId, String registerIp, String delYn ) {
+    public RoleSaveReqDto( long roleSn, String registerId, String registerIp, String delYn ) {
         this.roleSn = roleSn;
         this.registerId = registerId;
         this.registerIp = registerIp;

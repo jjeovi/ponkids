@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
-<title layout:fragment="title">pioneerkids Admin - 회원 조회</title>
+<title layout:fragment="title">pioneerkids Admin - 메뉴 조회</title>
 <!-- S : Javascript functions	-->
 <script layout:fragment="script">
 
     $(function(){
-    	
     	
     	// S : jstree
         // 6 create an instance when the DOM is ready
@@ -24,6 +23,33 @@
      	// E : jstree
 
     });
+    
+    
+    // key : 검색할 key
+    // e   : 다음단계 검색하기위한 this 
+    function getNextCateList(categorySn, e){
+    	var cateLv =  $(e).parent().prevAll().length +1;	// 카테고리 level ( 1부터 시작 )
+    	
+    	var data = {
+    		categorySn : categorySn //검색할 코드 (실제로 예제에서는 사용 안함)
+        }
+    	
+    	// 해당부분만 수정
+    	$.ajax( {
+            url: "/live/getMenuListAjax",
+            type: "GET",
+            dataType: "json",
+            data: data,
+            contentType: "application/json",
+            success: function ( result ) {
+            	console.log(result);
+                if ( !result ) dupCheckFlag = true;
+                idDupResult( dupCheckFlag, "checkResult" );
+            }
+        } );
+    	
+    	
+    }
 
 </script>
 <!-- E : Javascript functions	-->
@@ -32,7 +58,7 @@
     <!-- S : 상단 메뉴 명 -->
     <!-- TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림. -->
     <div class="title_top">
-        <h3>회원 조회</h3>
+        <h3>메뉴 조회</h3>
         <hr class="t_top_line">
     </div>
     <!-- E : 상단 메뉴 명 -->
@@ -42,14 +68,14 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>회원조회 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
+                    <h2>메뉴조회 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a></li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content" style="display: none;">
-                    <h4>상세설명 메뉴입니다.<small>메뉴는 회원 등록입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
+                    <h4>상세설명 메뉴입니다.<small>메뉴는 메뉴 조회입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
                                               설정가능합니다.)</small></h4>
                     <div>
                         <div class="starrr stars"></div>
@@ -72,45 +98,20 @@
             <div class="x_panel category-area">
             	<!-- 분류 영역 > 카테고리 그룹 영역 -->
 				<div class="col-md-10 category-list-area">
-			        <div class="col-sm-6 category-group-box lv1">
+			        <div class="category-group-box">
 			            <ul class="data-group">
-			                <li class="on">분류1-1</li>
-			                <li>분류1-2</li>
-			            </ul>
-			        </div>
-			        <div class="col-sm-6 category-group-box lv2">
-			            <ul class="data-group">
-			                <li>분류2-1</li>
-			                <li>클릭시ajax로 데이터 조회 후</li>
-			                <li>다음 lv에 뿌려주기 구현</li>
-			                <li>내일함</li>
-			            </ul>
-			        </div>
-			        <div class="col-sm-6 category-group-box lv3">
-			            <ul class="data-group">
-			                <li>클릭시 on class추가..</li>
-			                <li>작업중....</li>
-			            </ul>
-			        </div>
-			        <div class="col-sm-6 category-group-box lv4">
-			            <ul class="data-group">
-			                <li>ㄱㅅㅇㅇ</li>
-			                <li>sdfsdf</li>
-			                <li>필요없으면 박스 지우면됨</li>
-			            </ul>
-			        </div>
-			        <div class="col-sm-6 category-group-box lv5">
-			            <ul class="data-group">
-			                <li>ㄱㅅㅇㅇ</li>
-			                <li>sdfsdf</li>
-			                <li>필요없으면 박스 지우면됨</li>
+			            	<li th:each="data : ${cateList}" th:onclick="getNextCateList( [[${data.categorySn}]], this);" th:value="${data.categorySn}">[[${data.categoryNm}]]</li>
 			            </ul>
 			        </div>
 				</div>
-				<!-- 분류 영역 > 조회 영역 -->
-				<div class="col-md-2 col-sm-6 category-btn-area">
+				<!-- 분류 영역 > 우측영역 (선택된 카테고리검색, 버튼) -->
+				<div class="col-md-2 col-sm-6 category-right">
+					<div class="picked-cate" id="picked-cate">
+						<div class="cateLv1 blink"></div><div class="cateLv2 blink"></div><div class="cateLv3 blink"></div><div class="cateLv4 blink"></div><div class="cateLv5 blink"></div>
+					</div>
 					<div class="btn-group float-right" role="group">
 					    <button type="submit" class="btn btn-purple w120p">검색</button>
+<!-- 					    <button type="submit" class="btn btn-purple w120p">다운로드</button> -->
 					</div>
 				</div>
             </div>

@@ -93,17 +93,17 @@
                     <div class="col-md-12 col-sm-12 ">
                         <table id="listTable" class="table table-bordered text-center">
                             <thead>
-                            <tr>
-                                <th>순번</th>
-                                <th>아이디</th>
-                                <th>이름</th>
-                                <th>성별</th>
-                                <th>생년월일</th>
-                                <th>연락처</th>
-                                <th>거주지역</th>
-                                <th>관리자여부</th>
-                                <th>관리</th>
-                            </tr>
+	                            <tr>
+	                                <th>순번</th>
+	                                <th>아이디</th>
+	                                <th>이름</th>
+	                                <th>성별</th>
+	                                <th>생년월일</th>
+	                                <th>연락처</th>
+	                                <th>거주지역</th>
+	                                <th>관리자여부</th>
+	                                <th>관리</th>
+	                            </tr>
                             </thead>
                             <tbody>
 	                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">

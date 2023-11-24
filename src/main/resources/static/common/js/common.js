@@ -23,6 +23,29 @@ $( function () {
         // 변경 불가 처리
         $(this).attr("onclick","return false;");
     });
+    
+    
+    // category 영역 li 클릭시 이벤트 ( - on 클래스 추가, - 검색창 위에 텍스트 표시 )
+    $(".category-list-area .category-group-box ul li").click(function(){
+		// on class 추가
+		$(this).siblings().removeClass("on");
+		$(this).addClass("on");
+		
+		$ul = $(this).parent();			// 선택한 태그의 <ul class="data-group"> 을 선택
+		
+		var ulNum = $ul.prevAll().length+1;	// 몇번쨰 ul 인지 체크 (1부터 카운트..)
+		
+		
+		
+		// $(this).text();
+		$("#picked-cate").find(".cateLv" + ulNum ).empty();
+		$("#picked-cate").find(".cateLv" + ulNum ).text($(this).text());
+		$("#picked-cate").find(".cateLv" + ulNum ).removeClass("blink");
+		setTimeout(function() {
+			$("#picked-cate").find(".cateLv" + ulNum ).addClass("blink");
+		},100);
+		// picked-cate 태그 안에 해당 내용 삽입
+	});
 
     
 });

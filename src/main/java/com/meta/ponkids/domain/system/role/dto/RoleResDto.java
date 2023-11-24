@@ -12,13 +12,13 @@ import javax.validation.constraints.NotNull;
 public class RoleResDto {
     
     @NotNull
-    private String roleSn;      // 권한 일련번호
+    private long roleSn;      // 권한 일련번호
     
     @NotNull
     private String roleNm;      // 권한이름
     
     @Builder
-    public RoleResDto( String roleSn, String roleNm ) {
+    public RoleResDto( long roleSn, String roleNm ) {
         this.roleSn = roleSn;
         this.roleNm = roleNm;
     }

@@ -32,7 +32,7 @@ public class Role extends BaseTimeEntity {
     
     @Id
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_ROLE_SN" )
-    private int roleSn;
+    private long roleSn;
     
     private String roleNm;
     

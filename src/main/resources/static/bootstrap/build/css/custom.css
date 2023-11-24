@@ -5402,16 +5402,17 @@ ul.notifications {
 
 .category-area {
 	position: relative;
-    height: 251px;
+    height: 237px;
     padding-top: 23px;
     padding-left: 12px;
 }
 
 /* .category-list-area { */
 .category-group-box {
-    border: 1px solid #dbdde2;
-    width: calc(20% - 2px);
-    border-radius: 10px;
+/*     border: 1px solid #dbdde2; */
+/*     width: calc(20% - 2px); */
+    width: 100%;
+/*     border-radius: 10px; */
 }
 
 .category-list-area:after, .category-list-area:before {
@@ -5421,7 +5422,13 @@ ul.notifications {
 
 .category-list-area .category-group-box .data-group {
     padding: 10px 0 0;
-    height: 185px;
+    height: 188px;
+    width: calc(20% - 6px);
+    border: 1px solid #dbdde2;
+    display: inline-block;
+    border-radius: 10px;
+    padding-left : 10px;
+    padding-right : 10px;
 }
 .category-list-area .data-group {
     overflow: auto;
@@ -5451,7 +5458,7 @@ ul.notifications {
     right: 15px; 
     width: 4px;
     height: 8px;
-    background: url(images/kr/sp_icon_pc.png?d583baf…) no-repeat;
+/*     background: url(images/kr/sp_icon_pc.png?d583baf…) no-repeat; */
     background-position: -10px -10px;
     content: "";
 }
@@ -5461,17 +5468,52 @@ ul li {
 }
 
 
-.category-btn-area {
+.category-right {
 	border-left: 2px solid #d8d5dc;
     height: calc(100% - 13px);
 }
 
-.category-btn-area .btn-group {
+.category-right .btn-group {
 	position: absolute;
     bottom: 1px;
     right: 10px;
 }
 
+.category-right .btn-group .btn {
+    margin-right: 5px;
+}
+
+.category-right .picked-cate {
+	position: absolute;
+    text-decoration: underline;
+    bottom: 48px;
+    padding-left: 10px;
+    padding-bottom: 9px;
+    border-bottom: 2px solid #d8d5dc;
+    width: 90%;
+}
+
+@keyframes blink-effect {
+  50% {
+    opacity: 0;
+  }
+}
+
+.blink {
+  animation: blink-effect 0.4s step-end infinite;
+  animation-iteration-count : 2; /* n번 재생 */
+
+  /*
+  animation-name: blink-effect;
+  animation-duration: 1s;
+  animation-iteration-count:infinite;
+  animation-timing-function:step-end;
+  */
+}
+
 
 /* E : 메뉴 조회 > 카테고리 분류 영역 설정 */
+
+
+
 
