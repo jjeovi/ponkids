@@ -19,6 +19,7 @@ import com.meta.ponkids.domain.system.ntt.service.NttService;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +102,7 @@ public class NttController {
     
     @GetMapping(value= {  BASIC_PATH + "/modify" } )	 
       public String modify( @RequestParam(required = true) int nttSn,  Model model, 
-    		  HttpServletRequest request ) {
+    		  HttpServletRequest request ) throws IOException {
       
       // 권한 리스트
      // model.addAttribute( "authList", roleRepository.findAll() );
@@ -113,6 +114,9 @@ public class NttController {
   	 // 댓글 목록 조회
       List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
       model.addAttribute( "replyList", replyList );
+      
+      // 조회수 업데이트 
+      nttService.update(nttSn ,request);
       
 
       // 기본 경로 setting

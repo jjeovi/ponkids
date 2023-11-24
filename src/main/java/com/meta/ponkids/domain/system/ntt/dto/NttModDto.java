@@ -18,6 +18,8 @@ public class NttModDto {
 
 	@NotNull
     private int nttSn;
+	
+    private int nttRdcnt;
     
     private String nttNm;
     
@@ -28,12 +30,12 @@ public class NttModDto {
 
     // builder 생성
     @Builder
-    public NttModDto( int nttSn ,String nttNm, String nttCn) {
+    public NttModDto( int nttSn ,String nttNm, String nttCn, int nttRdcnt) {
 
         this.nttSn = nttSn;
         this.nttNm = nttNm;
         this.nttCn = nttCn;
-   
+        this.nttRdcnt = nttRdcnt;
    }
     
     
@@ -43,6 +45,7 @@ public class NttModDto {
                 .nttSn( nttSn )
                 .nttNm( nttNm )
                 .nttCn( nttCn )
+                .nttRdcnt( nttRdcnt )
                 .build();
     }
     
@@ -53,6 +56,7 @@ public class NttModDto {
         		.nttSn( ntt.getNttSn() )
                 .nttNm( ntt.getNttNm() )
                 .nttCn( ntt.getNttCn() )
+                .nttRdcnt( ntt.getNttRdcnt() )
                 .build();
     }
     

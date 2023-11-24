@@ -64,7 +64,30 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
             else                            return null;
         } else { return null; }
     }
-	 
+    
+    
+    
+    public Integer getMaxNttRdcnt(int nttSn) {
+    	int number = query.select(ntt.nttRdcnt.max().coalesce(0))
+    			     .from(ntt)
+    			     .where(
+    			    		 eqNttSnOption( nttSn )
+    		                )
+    			   .fetchOne();
+
+    	number= number +1;
+    	
+    	return number;
+    	
+    }
+    
+    
+    
+    // -------------------------------- WHERE 검색 옵션 setting --------------------------------
+    private BooleanExpression eqNttSnOption( int nttSn) {
+        return  ntt.nttSn.eq( nttSn );
+    }
+    
 
 
 }

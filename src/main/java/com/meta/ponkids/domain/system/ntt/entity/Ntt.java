@@ -36,28 +36,35 @@ public class  Ntt extends BaseTimeEntity {
     @Id
     @Column(insertable=false)
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_NTT_SN" )
-    private int nttSn;             // 게시판일련번호  
+    private int nttSn;           
   
-    @NotNull
-    private int bbsSn;        // 게시판구분코드
+    
+    @Column(updatable = false) 
+    private int bbsSn;       
     
     @NotNull
-    private int nttSeq;             //게시판이름
+    private int nttSeq;           
                         
-    private String nttNm;         // 게시판 안내문구   
+    private String nttNm;        
                                       
-    private String nttCn;          // 게시판 설명
+    private String nttCn;         
 
-    private String atchFileSn;   // 댓글 설정여부
+    private String atchFileSn;   
 
     private int nttRdcnt;         
-     
+    
+    @Column(updatable = false) 
     private String openYn;     
     
-    private String noticeSetYn;        
+    private String noticeSetYn; 
+    
+    @Column(updatable = false) 
     private String noticeSeq;        
-    private String registerId;         
-    private String registerIp;       
+    @Column(updatable = false) 
+    private String registerId; 
+    @Column(updatable = false) 
+    private String registerIp; 
+    @Column(updatable = false) 
     private LocalDateTime regDt;      
 
 

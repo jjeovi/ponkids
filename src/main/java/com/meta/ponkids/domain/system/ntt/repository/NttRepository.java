@@ -15,6 +15,8 @@ public interface NttRepository extends JpaRepository< Ntt, Integer> , NttReposit
    boolean existsByNttSn(int nttSn);
    
    public Ntt findByNttSn(int nttSn);
+   
+   public int getMaxNttRdcnt(int nttSn);
 
 
 
