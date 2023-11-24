@@ -245,13 +245,11 @@ public class UserController {
         // 삭제 처리
         userService.deleteAllByUserSn( userSn );
         
-        
         // 첨부파일 삭제
         Long atchFileSn = userService.findByUserSn(userSn).getAtchFileSn();
         if (atchFileSn != null ) {
         	atchFileService.delete(atchFileSn);
         };
-        
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );

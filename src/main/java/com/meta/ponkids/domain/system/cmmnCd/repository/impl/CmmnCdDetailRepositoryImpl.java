@@ -37,12 +37,17 @@ public class CmmnCdDetailRepositoryImpl implements CmmnCdDetailRepositoryCustom 
 		List<CmmnCdDetailListDto> results = query
 				// select
                 .select( new QCmmnCdDetailListDto(
-                		cmmnCdDetail.cdDetailSn
-//                		new CaseBuilder()
-//                		.when( user.gender.eq("M")).then("남자")
-//                		.when( user.gender.eq("F")).then("여자")
-//                		.otherwise("")
-//                		.as("gender"),
+                		cmmnCdDetail.cdDetailSn,
+                		cmmnCdDetail.cdSn,
+                		cmmnCdDetail.cdDetailSeq,
+                		cmmnCdDetail.cdDetailNm,
+                		cmmnCdDetail.cdDetailDc,
+                		cmmnCdDetail.cdDetailVal1,
+                		cmmnCdDetail.cdDetailVal2,
+                		cmmnCdDetail.cdDetailVal3,
+                		cmmnCdDetail.cdDetailVal4,
+                		cmmnCdDetail.cdDetailVal5,
+                		cmmnCdDetail.useYn
                 		) )					
                 .from( cmmnCdDetail )
                 // where
