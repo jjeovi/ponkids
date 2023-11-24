@@ -5394,3 +5394,84 @@ ul.notifications {
 .input-file-name {
   width:50%;
 }
+
+
+
+
+/* S : 메뉴 조회 > 카테고리 분류 영역 설정 */
+
+.category-area {
+	position: relative;
+    height: 251px;
+    padding-top: 23px;
+    padding-left: 12px;
+}
+
+/* .category-list-area { */
+.category-group-box {
+    border: 1px solid #dbdde2;
+    width: calc(20% - 2px);
+    border-radius: 10px;
+}
+
+.category-list-area:after, .category-list-area:before {
+    content: " ";
+    display: table;
+}
+
+.category-list-area .category-group-box .data-group {
+    padding: 10px 0 0;
+    height: 185px;
+}
+.category-list-area .data-group {
+    overflow: auto;
+    background: #fff;
+}
+
+.category-list-area .category-group-box .data-group li {
+    line-height: 33px;
+    height: 33px;
+    border-radius: 6px;
+    padding-left: 5px;
+    padding-right: 5px;
+    position: relative;
+}
+
+.category-list-area .data-group li:hover {
+    background-color : #f3ecf6;
+}
+
+.category-list-area .data-group li.on {
+    background-color : #ede5f0;
+}
+
+.category-list-area .category-group-box .data-group li:after {
+    position: absolute;
+    top: 12px;
+    right: 15px; 
+    width: 4px;
+    height: 8px;
+    background: url(images/kr/sp_icon_pc.png?d583baf…) no-repeat;
+    background-position: -10px -10px;
+    content: "";
+}
+
+ul li {
+    list-style: none;
+}
+
+
+.category-btn-area {
+	border-left: 2px solid #d8d5dc;
+    height: calc(100% - 13px);
+}
+
+.category-btn-area .btn-group {
+	position: absolute;
+    bottom: 1px;
+    right: 10px;
+}
+
+
+/* E : 메뉴 조회 > 카테고리 분류 영역 설정 */
+
