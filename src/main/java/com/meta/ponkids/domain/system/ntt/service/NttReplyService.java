@@ -38,7 +38,6 @@ public class NttReplyService {
         		.nttSn(nttReplySaveReqDto.getNttSn())
         		.step(nttReplySaveReqDto.getStep())
         		.parntsReplySn(nttReplySaveReqDto.getParntsReplySn())
-        		.nttReplyGroup(nttReplySaveReqDto.getNttReplyGroup())
         		.nttReplyCn(nttReplySaveReqDto.getNttReplyCn())
         		.nttReplySeq(nttReplySeq)
         		.openYn( "Y" )
@@ -57,7 +56,13 @@ public class NttReplyService {
 
 		return nttReplyRepository.getList(nttSn);
 	}
+	
+	
+	public List<NttReplyListDto> getAnswerReplyList(int nttReplySn) {
 
-    
+		return nttReplyRepository.getAnswerReplyList(nttReplySn);
+	}
+
+	
 }
 

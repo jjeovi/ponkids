@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface NttReplyRepositoryCustom {
 	List<NttReplyListDto> getList(int nttSn );
+	List<NttReplyListDto> getAnswerReplyList(int nttReplySn );
 	
 	
 

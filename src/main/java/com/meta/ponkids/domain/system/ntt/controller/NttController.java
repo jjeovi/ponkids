@@ -35,7 +35,7 @@ public class NttController {
    private final static String BASIC_PATH = "/admin/ntt";
  
     /**
-     * methodName    : bbsList
+     * methodName    : nttList
      * date           : 11/17/23
      * description    :
      */
@@ -142,6 +142,24 @@ public class NttController {
 
         return "common/alert";
   }
+    
+    
+    /**
+     * methodName    : answerReplyList
+     * date           : 11/24/23
+     * description    : id 답글조회 ajax
+     */
+    @ResponseBody
+    @RequestMapping( value = "/reply/answerReplyList", method = { RequestMethod.GET } )
+    public Model answerReplyList( @RequestParam( "nttReplySn" ) int nttReplySn , Model model) {
+        
+    	
+    	 // 댓글 목록 조회
+        List<NttReplyListDto> answerReplyList = nttReplyService.getAnswerReplyList(nttReplySn);
+        model.addAttribute( "answerReplyList", answerReplyList );
+        
+        return model;
+    }  
     
     
 }

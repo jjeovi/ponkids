@@ -21,7 +21,6 @@ public class NttReplyListDto {
 	 private int step;
      private int parntsReplySn;
      private int nttReplySeq;
- 	 private int nttReplyGroup;
      private String nttReplyCn;
      
 
@@ -31,13 +30,12 @@ public class NttReplyListDto {
 
     		 
      @QueryProjection
-     public NttReplyListDto( int nttReplySn, int nttSn, int step, int parntsReplySn ,int nttReplySeq ,int nttReplyGroup, String nttReplyCn, String registerId) {
+     public NttReplyListDto( int nttReplySn, int nttSn, int step, int parntsReplySn ,int nttReplySeq, String nttReplyCn, String registerId) {
             this.nttReplySn = nttReplySn;
             this.nttSn = nttSn;
             this.step = step;
             this.parntsReplySn = parntsReplySn;
             this.nttReplySeq = nttReplySeq;
-            this.nttReplyGroup = nttReplyGroup;
             this.nttReplyCn = nttReplyCn;
             this.registerId = registerId;
      }

@@ -46,7 +46,6 @@ public class  NttReply extends BaseTimeEntity {
 	private int nttReplySeq;
 	private String nttReplyCn;
 	private String openYn;
-	private int nttReplyGroup;
     @Column(updatable = false)
 	private String registerId;
     @Column(updatable = false)

@@ -17,14 +17,8 @@ public class NttReplySaveReqDto {
 	private int nttSn;
 	private int step;
 	private int parntsReplySn;
-	 private int nttReplyGroup;
-	
-	
 	private int nttReplySeq;
-	
 	private String nttReplyCn;
-	
-
 	private String openYn;
 
 	@NotNull
@@ -47,14 +41,13 @@ public class NttReplySaveReqDto {
 
     // builder 생성
     @Builder
-    public NttReplySaveReqDto( int nttReplySn ,int nttSn, int step, int parntsReplySn,int nttReplySeq, String nttReplyCn,  int nttReplyGroup,
+    public NttReplySaveReqDto( int nttReplySn ,int nttSn, int step, int parntsReplySn,int nttReplySeq, String nttReplyCn, 
     		String openYn,String delYn
     		,String registerId,String registerIp,LocalDateTime regDt ,String upduserId,String upduserIp,String updtDt) {
         this.nttReplySn = nttReplySn;
         this.nttSn = nttSn;
         this.step = step;
         this.parntsReplySn = parntsReplySn;
-        this.nttReplyGroup = nttReplyGroup;
         this.nttReplySeq = nttReplySeq;
         this.nttReplyCn = nttReplyCn;
         this.openYn = openYn;

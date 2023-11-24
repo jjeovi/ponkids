@@ -17,6 +17,7 @@ public interface NttReplyRepository extends JpaRepository< NttReply, Integer>  ,
 
 	 public int MaxNttReplySeq(int nttSn);
 	 public List<NttReplyListDto> getList(int nttSn); 
+	 public List<NttReplyListDto> getAnswerReplyList(int nttReplySn); 
 
 	 
 
