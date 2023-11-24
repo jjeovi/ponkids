@@ -17,6 +17,15 @@ public interface NttRepository extends JpaRepository< Ntt, Integer> , NttReposit
    public Ntt findByNttSn(int nttSn);
    
    public int getMaxNttRdcnt(int nttSn);
+   
+   
+   @Modifying( clearAutomatically = true )
+   @Query( value = "UPDATE tb_ntt "
+           + "      SET del_yn = 'Y'"
+           + "        , updt_dt = now() "
+           + "    WHERE ntt_sn = :nttSn", nativeQuery = true )
+       // nativeQuery true 없으면 error
+   int deleteAllByNttSn( @Param( "nttSn" ) int bbsSn );
 
 
 

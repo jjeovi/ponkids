@@ -16,6 +16,7 @@ import com.meta.ponkids.domain.system.bbs.repository.BbsRepository;
 import com.meta.ponkids.domain.system.bbs.service.BbsService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 
 @Controller
@@ -117,7 +118,29 @@ public class BbsController {
            return "common/alert";
     }
     
-
     
+    /**
+     * methodName    : delete
+     * date           : 11/24/23
+     * description    : user delete method
+     */
+    @Transactional
+    @PostMapping( BASIC_PATH + "/delete" )
+    public String delete(
+            @RequestParam(required = true) int bbsSn,
+            Model model ) {
+     
+    	// 해당 게시판에 게시물 있는지 조회 없으시 삭제 처리 
+    	
+    	
+     // 삭제 처리
+      bbsService.deleteAllByBbsSn( bbsSn );
+      
+      // 메시지 출력 및 url 이동 처리
+      model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
+      model.addAttribute( "moveUrl", BASIC_PATH + "/list" );
+      
+      return "common/alert";
 
+    }
 }

@@ -18,6 +18,7 @@ import com.meta.ponkids.domain.system.ntt.service.NttReplyService;
 import com.meta.ponkids.domain.system.ntt.service.NttService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -162,7 +163,35 @@ public class NttController {
         List<NttReplyListDto> answerReplyList = nttReplyService.getAnswerReplyList(nttReply);
         
         return answerReplyList;
-    }  
+    } 
+    
+    
+    
+    
+    /**
+     * methodName    : delete
+     * date           : 11/24/23
+     * description    : user delete method
+     */
+    @Transactional
+    @PostMapping( BASIC_PATH + "/delete" )
+    public String delete(
+            @RequestParam(required = true) int nttSn,
+            Model model ) {
+     
+    	// 해당 게시판에 게시물 있는지 조회 없으시 삭제 처리 
+    	
+    	
+     // 삭제 처리
+      nttService.deleteAllByNttSn( nttSn );
+      
+      // 메시지 출력 및 url 이동 처리
+      model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
+      model.addAttribute( "moveUrl", BASIC_PATH + "/list" );
+      
+      return "common/alert";
+
+    }
     
     
 }

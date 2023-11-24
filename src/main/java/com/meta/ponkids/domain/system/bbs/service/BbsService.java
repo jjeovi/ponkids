@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.meta.ponkids.domain.system.bbs.dto.BbsListDto;
@@ -102,6 +103,16 @@ public class BbsService {
         
         // 수정사항 적용
         bbsRepository.save( bbs );
+    }
+    
+    
+    @Transactional
+    public void deleteAllByBbsSn( int bbsSn ) {
+        
+        // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
+    	bbsRepository.deleteAllByBbsSn( bbsSn );    // User.java 의 @SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y' WHERE user_sn = ?") 를 수행
+        
+    
     }
     
     

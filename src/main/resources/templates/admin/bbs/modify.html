@@ -10,10 +10,6 @@
     $( function () {
      });		
 
-      
-
-
-
 </script>
 <!-- E : Javascript functions	-->
 <div layout:fragment="content" class="right_col" role="main">
@@ -61,7 +57,7 @@
                 <div class="x_content">
                     <form id="updateForm" name="updateForm" method="post" th:action="@{/admin/bbs/update}"
                         th:object="${modDto}">
-                        <input type="hidden" name="bbsSn" th:value="${targetDto.bbsSn}"/>
+                        <input type="hidden" name="bbsSn" id="bbsSn" th:value="${targetDto.bbsSn}"/>
                         <!-- TODO 프로필 이미지 추가 작업 -->
                        <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>게시판 구분</label>
@@ -152,7 +148,8 @@
                             </div>
                             <!-- bottom center area -->
                             <div class="col-md-8 col-sm-6 text-center">
-                                <a href="/admin/bbs/list" class="btn btn-white w120p">취소</a>
+								   <a th:href="'javascript:deleteItem(\'' + ${targetDto.bbsSn} + '\');'"
+	                                       class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>삭제</a>
                                 <button type="submit" class="btn btn-purple w120p">저장</button>
                             </div>
                             <!-- bottom right area -->
@@ -160,6 +157,9 @@
                             </div>
                         </div>
                     </form>
+                    <form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/delete ( basicPath = ${basicPath} ) }">
+            		     <input type="hidden" name="bbsSn" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+            	    </form>
                 </div>
             </div>
         </div>

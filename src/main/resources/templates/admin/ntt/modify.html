@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"  >
-<!--   layout:decorate="~{layout}" >-->
+<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"  
+  layout:decorate="~{layout}" >
 <title layout:fragment="title">pioneerkids (Admin-bbs) - 게시물 등록</title>
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="/common/js/common_eh.js"></script>
@@ -153,8 +153,6 @@ function fnAnswerReplyList(i){
                                   <textarea id="summernote" name="nttCn"  class="form-control"   th:value="${targetDto.nttCn}"   th:text="${targetDto.nttCn}"></textarea>
                             </div>
                         </div>
-         
-           
                         <div class="ln_solid"></div>
                         <!-- 저장버튼 -->
                        <div class="col-md-12">
@@ -164,7 +162,8 @@ function fnAnswerReplyList(i){
                             </div>
                             <!-- bottom center area -->
                             <div class="col-md-8 col-sm-6 text-center">
-                                <a href="/admin/bbs/list" class="btn btn-white w120p">취소</a>
+                                <a th:href="'javascript:deleteItem(\'' + ${targetDto.nttSn} + '\');'"
+	                                       class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>삭제</a>
                                 <button type="submit" class="btn btn-purple w120p">저장</button>
                             </div>
                             <!-- bottom right area -->
@@ -172,6 +171,9 @@ function fnAnswerReplyList(i){
                             </div>
                         </div>
                     </form>
+                     <form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/delete ( basicPath = ${basicPath} ) }">
+            		     <input type="hidden" name="nttSn" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+            	    </form>
                 </div>
             </div>
         </div>
