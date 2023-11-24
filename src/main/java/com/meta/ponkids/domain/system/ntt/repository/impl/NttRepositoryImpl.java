@@ -38,7 +38,8 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
                  ntt.regDt
 				 ) ).from(ntt)
 				 .where(
-	                   eqOption( nttListDto.getSchOption(), nttListDto.getSchCntn() )
+	                   eqOption( nttListDto.getSchOption(), nttListDto.getSchCntn() ) ,
+	                   eqBbsSnOption(nttListDto.getBbsSn())
 	                )
 				   .orderBy( ntt.nttSn.desc() )
 				   .offset( pageable.getOffset() )
@@ -65,6 +66,11 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
             else                            return null;
         } else { return null; }
     }
+    
+    private BooleanExpression eqStepOption(Long bbsSn) {
+        return  ntt.bbsSn.eq(bbsSn);
+    }
+    
     
     
     

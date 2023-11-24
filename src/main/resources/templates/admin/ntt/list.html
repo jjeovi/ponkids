@@ -80,14 +80,16 @@
                     </div>
                     <div class="col-md-11 col-sm-10 mb_10p">
                         <div class="btn-group float-right" role="group">
-                            <div class="vl ml_5p"></div>
+                         
                             <select class="form-control ml_5p" name="schOption" style="width: 55%;">
                                 <option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">제목</option>
                                 <option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">등록자</option>
                             </select>
+                            <div class="vl ml_5p"></div>
                             <input type="text" name="schCntn"
                                    class="form-control input-sm" placeholder="검색어 입력"
                                    aria-controls="datatable-responsive">
+                            <div class="vl ml_5p"></div>       
                             <button type="submit" class="btn btn-purple w250p">검색</button>
                         </div>
                     </div>

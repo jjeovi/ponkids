@@ -44,7 +44,7 @@ public class NttController {
      */
     @GetMapping( BASIC_PATH + "/list" )
     public String nttList(
-    		 @RequestParam(required = true) int bbsSn,
+    		 @RequestParam(required = true) Long bbsSn,
     		 @ModelAttribute NttListDto nttListDto, 
     					@PageableDefault( size = 10 ) Pageable pageable,
     					Model model ) {
@@ -52,6 +52,8 @@ public class NttController {
         
         // target object 조회
         model.addAttribute("bbsSn", bbsSn);
+        
+        nttListDto.setBbsSn(bbsSn);
         
     	//게시물 조회 
         //Page<NttListDto> nttList = nttService.getNttList( nttListDto);
