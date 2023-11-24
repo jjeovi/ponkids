@@ -36,7 +36,7 @@ public class  Bbs extends BaseTimeEntity {
     @Id
     @Column(insertable=false)
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_BBS_SN" )
-    private int bbsSn;           
+    private Long bbsSn;           
   
     @NotNull
     private String bbsSeCd;      
@@ -61,16 +61,17 @@ public class  Bbs extends BaseTimeEntity {
     private String registerIp; 
     
     @Column(updatable = false)
-    private LocalDateTime regDt;     
+    private LocalDateTime regDt;  
+
+    private String updusrId;      
+    private String updusrIp; 
+    private LocalDateTime updtDt;  
 
 
-    @ColumnDefault("N")                             // del_yn 컬럼에 공통으로 추가
+    @ColumnDefault("N")                             
     @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가
     private String delYn;                           // 삭제 여부
-    
 
-   // @ManyToMany
-   // private List<Bbs> bbsList = new ArrayList<>();
     
 
 }

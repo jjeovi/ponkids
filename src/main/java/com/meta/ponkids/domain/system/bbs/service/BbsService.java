@@ -34,29 +34,32 @@ public class BbsService {
 
     public BbsSaveReqDto save(BbsSaveReqDto bbsSaveReqDto ,HttpServletRequest request ) {
 
+    	
+    	//임시로 로그인 아이디 셋팅
+    	bbsSaveReqDto.setRegisterId("ehlee");
+    	
     	// dto to entity 작업 (필수)
         Bbs bbs = Bbs.builder()
-                .bbsSn(bbsSaveReqDto.getBbsSn())
-                .bbsSeCd(bbsSaveReqDto.getBbsSeCd())
-                .bbsNm(bbsSaveReqDto.getBbsNm())
-                .bbsGdcc(bbsSaveReqDto.getBbsGdcc())
-                .bbsDc(bbsSaveReqDto.getBbsDc())
-                .replySetYn(bbsSaveReqDto.getReplySetYn())
-                .useYn(bbsSaveReqDto.getUseYn())
-                .openYn(bbsSaveReqDto.getOpenYn())
-                .registerId("ehlee")
-                .registerIp( IpUtils.getClientIP( request ))
-               // .registerIp(bbsSaveReqDto.getRegisterIp())
-                 .regDt(LocalDateTime.now())
-              //  .upduserId(bbsSaveReqDto.getUpduserId())
-                //.upduserIp(bbsSaveReqDto.getUpduserIp())
-                //.updtDt(LocalDateTime.now())
-                .build();
+                     .bbsSn(bbsSaveReqDto.getBbsSn())
+                     .bbsSeCd(bbsSaveReqDto.getBbsSeCd())
+                     .bbsNm(bbsSaveReqDto.getBbsNm())
+                     .bbsGdcc(bbsSaveReqDto.getBbsGdcc())
+                     .bbsDc(bbsSaveReqDto.getBbsDc())
+                     .replySetYn(bbsSaveReqDto.getReplySetYn())
+                     .useYn(bbsSaveReqDto.getUseYn())
+                     .openYn(bbsSaveReqDto.getOpenYn())
+                     .registerId(bbsSaveReqDto.getRegisterId())
+                     .registerIp( IpUtils.getClientIP( request ))
+                     .regDt(LocalDateTime.now())
+                     .updusrId(bbsSaveReqDto.getRegisterId())
+                     .updusrIp( IpUtils.getClientIP( request ))
+                     .updtDt(LocalDateTime.now())
+                     .build();
 
-        // save
-        bbsRepository.save(bbs);
+          // save
+           bbsRepository.save(bbs);
 
-        return bbsSaveReqDto;
+           return bbsSaveReqDto;
     }
     
     
@@ -66,9 +69,10 @@ public class BbsService {
 	
 	 }
     
-    public BbsModDto findByBbsSn(int bbsSn) {
+    public BbsModDto findByBbsSn(Long bbsSn) {
     	
     	Bbs bbs = bbsRepository.findByBbsSn(bbsSn);
+    	
     	
     	BbsModDto bbsModDto = new BbsModDto();
     	bbsModDto = bbsModDto.toDto(bbs);
@@ -86,14 +90,14 @@ public class BbsService {
         BbsModDto targetDto = new BbsModDto();
         targetDto = targetDto.toDto( bbs );
         
-        modDto.setRegisterIp( IpUtils.getClientIP( request ));
+        modDto.setUpdusrIp( IpUtils.getClientIP( request ));
         
         // target object 에 수정사항 set
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
         if ( StringUtils.hasText( modDto.getBbsNm() ) ) targetDto.setBbsNm( modDto.getBbsNm() );          // 게시판 이름 
         if ( StringUtils.hasText( modDto.getBbsGdcc() ) ) targetDto.setBbsGdcc( modDto.getBbsGdcc() );    // 게시판 안내문구   
         if ( StringUtils.hasText( modDto.getBbsDc() ) ) targetDto.setBbsDc( modDto.getBbsDc() );          // 게시판 설명
-        if ( StringUtils.hasText( modDto.getReplySetYn() ) ) targetDto.setReplySetYn( modDto.getReplySetYn() );            // 댓글설정여부
+        if ( StringUtils.hasText( modDto.getReplySetYn() ) ) targetDto.setReplySetYn( modDto.getReplySetYn() );     // 댓글설정여부
         if ( StringUtils.hasText( modDto.getUseYn() ) ) targetDto.setUseYn( modDto.getUseYn() );          // 사용여부
         if ( StringUtils.hasText( modDto.getOpenYn() ) ) targetDto.setOpenYn( modDto.getOpenYn() );        // 공개여부여부
 
@@ -107,7 +111,7 @@ public class BbsService {
     
     
     @Transactional
-    public void deleteAllByBbsSn( int bbsSn ) {
+    public void deleteAllByBbsSn( Long bbsSn ) {
         
         // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
     	bbsRepository.deleteAllByBbsSn( bbsSn );    // User.java 의 @SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y' WHERE user_sn = ?") 를 수행

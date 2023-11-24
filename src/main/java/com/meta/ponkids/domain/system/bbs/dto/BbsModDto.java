@@ -15,33 +15,23 @@ import java.time.LocalDateTime;
 public class BbsModDto {
 
 	@NotNull
-    private int bbsSn;
-    
+    private Long bbsSn;
     private String bbsSeCd;
-    
     private String bbsNm;
-    
     private String replySetYn;
-    
     private String useYn;
-    
     private String openYn;
-
-	private String registerId;
-	
-	
-	private String registerIp;
-	
 	private String bbsGdcc;
-	
 	private String bbsDc;
-	
-	
+    private String updusrId;      
+    private String updusrIp; 
+    private LocalDateTime updtDt;  
 	
 
     // builder 생성
     @Builder
-    public BbsModDto( int bbsSn ,String bbsSeCd, String bbsNm,  String replySetYn, String useYn,String openYn	 ,String registerId  ,String registerIp ,String bbsGdcc, String bbsDc) {
+    public BbsModDto( Long bbsSn ,String bbsSeCd, String bbsNm,  String replySetYn, String useYn,String openYn,String bbsGdcc, String bbsDc
+    		          ,  String updusrId,String updusrIp, LocalDateTime updtDt)  {
 
         this.bbsSn = bbsSn;
         this.bbsSeCd = bbsSeCd;
@@ -49,42 +39,45 @@ public class BbsModDto {
         this.replySetYn = replySetYn;
         this.useYn = useYn;
         this.openYn = openYn;
-        this.registerId = registerId;
-        this.registerIp = registerIp;
         this.bbsGdcc = bbsGdcc;
         this.bbsDc = bbsDc;
+        this.updusrId = updusrId;
+        this.updusrIp = updusrIp;
+        this.updtDt = updtDt;
    }
     
     
     // DTO to Entity 메소드는 DTO 내부에서 생성.
     public Bbs toEntity() {
         return Bbs.builder()
-                .bbsSn( bbsSn )
-                .bbsSeCd( bbsSeCd )
-                .bbsNm( bbsNm )
-                .replySetYn( replySetYn )
-                .useYn( useYn )
-                .openYn( openYn )
-                .registerId( registerId )
-                .registerIp( registerIp )
-                .bbsGdcc( bbsGdcc )
-                .bbsDc( bbsDc )
+                .bbsSn(bbsSn)
+                .bbsSeCd(bbsSeCd)
+                .bbsNm(bbsNm)
+                .replySetYn(replySetYn)
+                .useYn(useYn)
+                .openYn(openYn)
+                .bbsGdcc(bbsGdcc)
+                .bbsDc(bbsDc)
+                .updusrId(updusrId)
+                .updusrIp(updusrIp)
+                .updtDt(updtDt)
                 .build();
     }
     
     
     public BbsModDto toDto(Bbs bbs) {
         return BbsModDto.builder()
-        		.bbsSn( bbs.getBbsSn() )
-                .bbsSeCd( bbs.getBbsSeCd() )
-                .bbsNm( bbs.getBbsNm() )
-                .replySetYn( bbs.getReplySetYn() )
-                .useYn( bbs.getUseYn() )
-                .openYn( bbs.getOpenYn() )
-                .registerId( bbs.getRegisterId() )
-                .registerIp( bbs.getRegisterIp() )
-                .bbsGdcc( bbs.getBbsGdcc() )
-                .bbsDc( bbs.getBbsDc() )
+        		.bbsSn(bbs.getBbsSn())
+                .bbsSeCd(bbs.getBbsSeCd())
+                .bbsNm(bbs.getBbsNm())
+                .replySetYn(bbs.getReplySetYn())
+                .useYn(bbs.getUseYn())
+                .openYn(bbs.getOpenYn())
+                .bbsGdcc(bbs.getBbsGdcc())
+                .bbsDc(bbs.getBbsDc())
+                .updusrId(bbs.getUpdusrId())
+                .updusrIp(bbs.getUpdusrIp())
+                .updtDt(bbs.getUpdtDt())
                 .build();
     }
     

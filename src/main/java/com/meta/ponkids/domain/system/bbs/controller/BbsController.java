@@ -37,7 +37,6 @@ public class BbsController {
    public String list( @ModelAttribute BbsListDto bbsListDto, 
    					@PageableDefault( size = 10 ) Pageable pageable,
    					Model model ) {
-       
        // 목록 조회
        Page<BbsListDto> resultList = bbsService.getList( bbsListDto, pageable );
        model.addAttribute( "resultList", resultList );
@@ -50,8 +49,6 @@ public class BbsController {
 
        return BASIC_PATH + "/list";
    }
-   
-    
     
     @GetMapping(  BASIC_PATH  + "/regist" )
     public String regist( Model model ) {
@@ -63,7 +60,6 @@ public class BbsController {
         
         return BASIC_PATH + "/regist";
     }
-    
     
     @PostMapping("/admin/bbs/insert")
     public String insert( 
@@ -81,7 +77,7 @@ public class BbsController {
     
     
     @GetMapping(value= {  BASIC_PATH + "/modify" } )	 
-      public String modify( @RequestParam(required = true) int bbsSn,  Model model, 
+      public String modify( @RequestParam(required = true) Long bbsSn,  Model model, 
     		  HttpServletRequest request ) {
       
       // 권한 리스트
@@ -127,10 +123,10 @@ public class BbsController {
     @Transactional
     @PostMapping( BASIC_PATH + "/delete" )
     public String delete(
-            @RequestParam(required = true) int bbsSn,
+            @RequestParam(required = true) Long bbsSn,
             Model model ) {
      
-    	// 해당 게시판에 게시물 있는지 조회 없으시 삭제 처리 
+     // 해당 게시판에 게시물 있는지 조회 없으시 삭제 처리 
     	
     	
      // 삭제 처리

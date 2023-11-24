@@ -2,6 +2,7 @@ package com.meta.ponkids.domain.system.bbs.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
@@ -9,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class BbsSaveReqDto {
     @NotNull
-    private int bbsSn;
+    private Long bbsSn;
 	
     @NotNull
 	private String bbsSeCd;
@@ -35,21 +36,21 @@ public class BbsSaveReqDto {
 	private String registerIp;
 	
 	@NotNull
-	private String regDt;
+	private LocalDateTime regDt;
 	
 	@NotNull
-	private String upduserId;
+	private String updusrId;
 	
-	private String upduserIp;
+	private String updusrIp;
 	
-	private String updtDt;
+	private LocalDateTime updtDt;
 	
 	private String delYn;
 
     // builder 생성
     @Builder
-    public BbsSaveReqDto( int bbsSn ,String bbsSeCd, String bbsNm, String bbsGdcc,String bbsDc, String replySetYn, String useYn,String openYn,String delYn
-    		,String registerId,String registerIp,String regDt ,String upduserId,String upduserIp,String updtDt) {
+    public BbsSaveReqDto( Long bbsSn ,String bbsSeCd, String bbsNm, String bbsGdcc,String bbsDc, String replySetYn, String useYn,String openYn,String delYn
+    		                  ,String registerId,String registerIp, LocalDateTime regDt ,String updusrId,String updusrIp,LocalDateTime updtDt) {
         this.bbsSn = bbsSn;
         this.bbsSeCd = bbsSeCd;
         this.bbsNm = bbsNm;
@@ -60,8 +61,8 @@ public class BbsSaveReqDto {
         this.registerId = registerId;
         this.registerIp = registerIp;
         this.regDt = regDt;
-        this.upduserId = upduserId;
-        this.upduserIp = upduserIp;
+        this.updusrId = updusrId;
+        this.updusrIp = updusrIp;
         this.updtDt = updtDt;
         this.delYn = delYn;
         this.bbsDc = bbsDc;
