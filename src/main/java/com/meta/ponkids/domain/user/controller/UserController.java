@@ -2,6 +2,7 @@ package com.meta.ponkids.domain.user.controller;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailListDto;
+import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 import com.meta.ponkids.domain.system.file.service.AtchFileService;
 import com.meta.ponkids.domain.system.role.repository.RoleRepository;
 import com.meta.ponkids.domain.user.dto.MultiUserChldrnSaveDto;
@@ -53,6 +56,7 @@ public class UserController {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final AtchFileService atchFileService;
+    private final CmmnCdDetailService cmmnCdDetailService;
     
     private final static String BASIC_PATH = "/admin/user";
     
@@ -89,6 +93,9 @@ public class UserController {
         
         // 권한 리스트
         model.addAttribute( "authList", roleRepository.findAll() );
+        
+        // 거주지역 리스트
+        model.addAttribute( "resideAreaList", cmmnCdDetailService.getList("RESIDE_AREA_CD") );
         
         // 가입 object 생성
         model.addAttribute( new UserSaveDto() );
