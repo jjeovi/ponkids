@@ -13,7 +13,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 public class NttSaveReqDto {
 
     @NotNull
-    private int nttSn;
+    private Long nttSn;
 	
     @NotNull
 	private Long bbsSn;
@@ -24,17 +24,13 @@ public class NttSaveReqDto {
 	private String atchFileSn;
 	
 	private int nttRdcnt;
-	private String openYn
-	;
+	private String openYn;
 	private String noticeSetYn;
 	private String noticeSeq;
-  
 	@NotNull
 	private String registerId;
-	
 	@NotNull
 	private String registerIp;
-	
 
 	private LocalDateTime regDt;
 	
@@ -49,7 +45,7 @@ public class NttSaveReqDto {
 
     // builder 생성
     @Builder
-    public NttSaveReqDto( int nttSn ,Long bbsSn, String nttSeq, String nttNm,String nttCn, String atchFileSn, int nttRdcnt,String noticeSetYn, String noticeSeq,
+    public NttSaveReqDto( Long nttSn ,Long bbsSn, String nttSeq, String nttNm,String nttCn, String atchFileSn, int nttRdcnt,String noticeSetYn, String noticeSeq,
     		String openYn,String delYn
     		,String registerId,String registerIp,LocalDateTime regDt ,String upduserId,String upduserIp,String updtDt) {
         this.nttSn = nttSn;

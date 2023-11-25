@@ -57,24 +57,12 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
 	    	return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
 	}
 	
-    
-    private BooleanExpression eqOption(String schOption, String schCntn){
-        // 검색 옵션  A : 아이디 , B : 이름
-        if (StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn )){
-                 if( schOption.equals("A")) return ntt.nttNm.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
-            else if (schOption.equals("B")) return ntt.registerId.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
-            else                            return null;
-        } else { return null; }
-    }
-    
-    private BooleanExpression eqStepOption(Long bbsSn) {
-        return  ntt.bbsSn.eq(bbsSn);
-    }
+
     
     
     
     
-    public Integer getMaxNttRdcnt(int nttSn) {
+    public Integer getMaxNttRdcnt(Long nttSn) {
     	int number = query.select(ntt.nttRdcnt.max().coalesce(0))
     			     .from(ntt)
     			     .where(
@@ -89,11 +77,34 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
     }
     
     
+    public Integer MaxNttSeq(Long bbsSn) {
+    	int number = query.select(ntt.nttSeq.max().coalesce(0))
+    			     .from(ntt)
+    			     .where(
+    			    		 eqBbsSnOption( bbsSn )
+    		                )
+    			   .fetchOne();
+
+    	number= number +1;
+    	
+    	return number;
+    	
+    	
+    
+    }
+    
+    
+    
     
     // -------------------------------- WHERE 검색 옵션 setting --------------------------------
-    private BooleanExpression eqNttSnOption( int nttSn) {
+    private BooleanExpression eqNttSnOption( Long nttSn) {
         return  ntt.nttSn.eq( nttSn );
     }
+    
+    private BooleanExpression eqBbsSnOption( Long bbsSn) {
+        return  ntt.bbsSn.eq( bbsSn );
+    }
+    
 
 
 	@Override
@@ -109,8 +120,19 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
 		
 	}
 	
-    private BooleanExpression eqBbsSnOption( Long bbsSn) {
-        return  ntt.bbsSn.eq( bbsSn );
+
+    
+    private BooleanExpression eqOption(String schOption, String schCntn){
+        // 검색 옵션  A : 아이디 , B : 이름
+        if (StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn )){
+                 if( schOption.equals("A")) return ntt.nttNm.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+            else if (schOption.equals("B")) return ntt.registerId.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+            else                            return null;
+        } else { return null; }
+    }
+    
+    private BooleanExpression eqStepOption(Long bbsSn) {
+        return  ntt.bbsSn.eq(bbsSn);
     }
     
     

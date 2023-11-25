@@ -13,11 +13,11 @@ import com.meta.ponkids.domain.system.ntt.repository.custom.NttReplyRepositoryCu
 
 
 
-public interface NttReplyRepository extends JpaRepository< NttReply, Integer>  , NttReplyRepositoryCustom {
+public interface NttReplyRepository extends JpaRepository< NttReply, Long>  , NttReplyRepositoryCustom {
 
-	 public int MaxNttReplySeq(int nttSn);
-	 public List<NttReplyListDto> getList(int nttSn); 
-	 public List<NttReplyListDto> getAnswerReplyList(int nttReplySn); 
+	 public int MaxNttReplySeq(Long nttSn);
+	 public List<NttReplyListDto> getList(Long nttSn); 
+	 public List<NttReplyListDto> getAnswerReplyList(Long nttReplySn); 
 
 	 
 

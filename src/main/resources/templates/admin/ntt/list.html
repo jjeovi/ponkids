@@ -51,24 +51,6 @@
 
     <!-- S: content -->
     <div class="x_panel">
-    <div class="form-group row">
-	    <label class="control-label col-md-3 col-sm-3 ">게시판 그룹</label>
-	    <div class="col-md-10 col-sm-10 ">
-	    	<select class="select2_multiple form-control" multiple="multiple">
-	    		<option>전체</option>
-	    		<option>포토형</option>
-	    		<option selected>리스트형</option>
-	    	</select>
-	    </div>
-	    <label class="control-label col-md-3 col-sm-3 ">게시판</label>
-	    <div class="col-md-10 col-sm-10 ">
-	    	<select class="select2_multiple form-control" multiple="multiple">
-	    	    <option>전체</option>
-	    		<option selected>공지사항</option>
-	    	</select>
-	   </div>
-	</div>
-
         <div class="x_content">
             <div class="row">
                 <form id="listForm" name="listForm" method="get" th:action="@{/admin/ntt/list}">
@@ -101,6 +83,7 @@
                                <tr>
                                   <th>순번</th>
                                   <th>제목</th>
+                                  <th>등록자</th>
                                   <th>등록일</th>
                                   <th>조회수</th>
                                   <th>관리</th>
@@ -110,11 +93,11 @@
                              <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
                                 <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
                                 <td th:text="${data.nttNm}"></td>
+                                <td th:text="${data.registerId}"></td>
                                 <td th:text="${data.regDt}"></td>
                                 <td th:text="${data.nttRdcnt}"></td>
                                 <td> 
-									<a th:href="@{/admin/ntt/modify(nttSn=${data.nttSn})}"
-	                                       class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
+									<a th:href="@{/admin/ntt/modify(nttSn=${data.nttSn})}"   class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
 								</td>
                             </tr>
                             <tr th:unless = "${!resultList.isEmpty()}">
@@ -135,8 +118,8 @@
                                        <!-- S : 하단 목록 -->
                      <div class="col-md-12 col-sm-12">
                         <div class="col-md-2 col-sm-3 text-left">
-							<a href="/admin/bbs/list" class="btn btn-white w120p">뒤로</a>
-                            <a href="/admin/ntt/regist" class="btn btn-white w120p">등록</a>
+							<a href="/admin/bbs/list"  class="btn btn-white w120p">뒤로</a>
+                            <a th:href="@{/admin/ntt/regist(bbsSn=${bbsSn})}"  class="btn btn-white w120p">등록</a>
                         </div>
                         <!-- bottom center area (paging) -->
                         <div class="col-md-8 col-sm-6 text-center"

@@ -11,12 +11,12 @@ import javax.validation.constraints.NotNull;
 public class NttReplySaveReqDto {
 
     @NotNull
-    private int nttReplySn;
+    private Long nttReplySn;
 	
     @NotNull
-	private int nttSn;
+	private Long nttSn;
 	private int step;
-	private int parntsReplySn;
+	private Long parntsReplySn;
 	private int nttReplySeq;
 	private String nttReplyCn;
 	private String openYn;
@@ -41,7 +41,7 @@ public class NttReplySaveReqDto {
 
     // builder 생성
     @Builder
-    public NttReplySaveReqDto( int nttReplySn ,int nttSn, int step, int parntsReplySn,int nttReplySeq, String nttReplyCn, 
+    public NttReplySaveReqDto( Long nttReplySn ,Long nttSn, int step, Long parntsReplySn,int nttReplySeq, String nttReplyCn, 
     		String openYn,String delYn
     		,String registerId,String registerIp,LocalDateTime regDt ,String upduserId,String upduserIp,String updtDt) {
         this.nttReplySn = nttReplySn;

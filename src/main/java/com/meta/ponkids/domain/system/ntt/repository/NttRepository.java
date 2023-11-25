@@ -11,13 +11,15 @@ import com.querydsl.jpa.impl.JPAQuery;
 
 
 
-public interface NttRepository extends JpaRepository< Ntt, Integer> , NttRepositoryCustom {
+public interface NttRepository extends JpaRepository< Ntt, Long> , NttRepositoryCustom {
 
-   boolean existsByNttSn(int nttSn);
+   boolean existsByNttSn(Long nttSn);
    
-   public Ntt findByNttSn(int nttSn);
+   public Ntt findByNttSn(Long nttSn);
    
-   public int getMaxNttRdcnt(int nttSn);
+   public int getMaxNttRdcnt(Long nttSn);
+   
+   public int MaxNttSeq(Long bbsSn);
    
    public int getExistsNtt(Long bbsSn);
    

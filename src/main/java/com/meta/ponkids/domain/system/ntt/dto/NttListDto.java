@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class NttListDto {
     
-    private int nttSn;
+    private Long nttSn;
     private Long bbsSn;
 	private String nttNm;
 	private String nttCn;
@@ -23,14 +23,13 @@ public class NttListDto {
 	private LocalDateTime regDt;
 	
     private String schOption;   // 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
-    
     private String schCntn;     // 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!
     
     
     
     
     @QueryProjection
-    public NttListDto( int nttSn ,Long bbsSn ,String nttNm, String nttCn,  int nttRdcnt,String openYn,String registerId,LocalDateTime regDt) {
+    public NttListDto( Long nttSn ,Long bbsSn ,String nttNm, String nttCn,  int nttRdcnt,String openYn,String registerId,LocalDateTime regDt) {
 
     	this.nttSn = nttSn; 
     	this.bbsSn = bbsSn;

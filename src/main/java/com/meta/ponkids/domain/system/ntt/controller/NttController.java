@@ -9,8 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-
+import com.meta.ponkids.domain.system.bbs.dto.BbsModDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
+import com.meta.ponkids.domain.system.ntt.dto.NttModDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttReplySaveReqDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttSaveReqDto;
@@ -76,10 +77,11 @@ public class NttController {
     
     
     @GetMapping(  BASIC_PATH  + "/regist" )
-    public String nttRegist( Model model ) {
+    public String nttRegist(  @RequestParam(required = true) Long bbsSn, Model model ) {
         
        // model.addAttribute( new BbsSaveReqDto() );
         
+        model.addAttribute( "bbsSn", bbsSn );
         // 기본 경로 setting
         model.addAttribute("basicPath", BASIC_PATH);
         
@@ -89,14 +91,16 @@ public class NttController {
     
     @PostMapping(BASIC_PATH  + "/insert")
     public String nttInsert( 
-    		               @ModelAttribute NttSaveReqDto nttSaveReqDto, HttpServletRequest request
-    		               , Model model) {
-      // save
-        nttService.save(nttSaveReqDto);
+    		               @ModelAttribute NttSaveReqDto nttSaveReqDto,
+    		               HttpServletRequest request , Model model ) {
+    	// save
+        nttService.save(nttSaveReqDto,request);
+        
+        Long bbsSn = nttSaveReqDto.getBbsSn();
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH +"/list" );
+        model.addAttribute( "moveUrl", BASIC_PATH +"/list?bbsSn="+ bbsSn);
 
         return "common/alert";
   }
@@ -104,7 +108,7 @@ public class NttController {
     
     
     @GetMapping(value= {  BASIC_PATH + "/modify" } )	 
-      public String modify( @RequestParam(required = true) int nttSn,  Model model, 
+      public String modify( @RequestParam(required = true) Long nttSn,  Model model, 
     		  HttpServletRequest request ) throws IOException {
       
       // 권한 리스트
@@ -133,7 +137,26 @@ public class NttController {
       
       
       return BASIC_PATH + "/" + remainPath;
-      }  
+      }
+    
+    
+    @PostMapping(BASIC_PATH + "/update")
+    public String update(
+    		@ModelAttribute  NttModDto modDto, HttpServletRequest request
+            ,
+    		Model model ) {
+    	
+    	   nttService.nttUpdate(modDto,request);
+    	   
+    	   Long bbsSn = modDto.getBbsSn();
+           
+           // 메시지 출력 및 url 이동 처리
+           model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
+           model.addAttribute( "moveUrl", BASIC_PATH +"/list?bbsSn="+ bbsSn);
+    
+
+           return "common/alert";
+    }
     
     
     
@@ -159,7 +182,7 @@ public class NttController {
      */
     @ResponseBody
     @RequestMapping( value = "/reply/answerReplyList", method = { RequestMethod.GET } )
-    public List answerReplyList( @RequestParam( "nttReplySn" ) int nttReply) {
+    public List answerReplyList( @RequestParam( "nttReplySn" ) Long nttReply) {
         
     	 // 댓글 목록 조회
         List<NttReplyListDto> answerReplyList = nttReplyService.getAnswerReplyList(nttReply);

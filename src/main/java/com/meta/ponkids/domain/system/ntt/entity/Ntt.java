@@ -34,9 +34,9 @@ import javax.validation.constraints.NotNull;
 public class  Ntt extends BaseTimeEntity {
     
     @Id
-    @Column(insertable=false)
+    @Column(insertable=true)
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_NTT_SN" )
-    private int nttSn;           
+    private Long nttSn;           
   
     
     @Column(updatable = false) 
@@ -59,13 +59,21 @@ public class  Ntt extends BaseTimeEntity {
     private String noticeSetYn; 
     
     @Column(updatable = false) 
-    private String noticeSeq;        
-    @Column(updatable = false) 
-    private String registerId; 
-    @Column(updatable = false) 
+    private String noticeSeq;  
+    
+    
+    @Column(updatable = false)
+    private String registerId;      
+    
+    @Column(updatable = false)
     private String registerIp; 
-    @Column(updatable = false) 
-    private LocalDateTime regDt;      
+    
+    @Column(updatable = false)
+    private LocalDateTime regDt;  
+
+    private String updusrId;      
+    private String updusrIp; 
+    private LocalDateTime updtDt;  
 
 
     @ColumnDefault("N")                             // del_yn 컬럼에 공통으로 추가

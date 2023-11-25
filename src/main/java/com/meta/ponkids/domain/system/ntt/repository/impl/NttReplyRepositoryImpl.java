@@ -24,7 +24,7 @@ import static com.meta.ponkids.domain.system.ntt.entity.QNttReply.nttReply;
 public class NttReplyRepositoryImpl    {
     private final JPAQueryFactory query;
 
-    public Integer MaxNttReplySeq(int nttSn) {
+    public Integer MaxNttReplySeq(Long nttSn) {
     	int number = query.select(nttReply.nttReplySeq.max().coalesce(0))
     			     .from(nttReply)
     			     .where(
@@ -41,7 +41,7 @@ public class NttReplyRepositoryImpl    {
     }
     
     // -------------------------------- WHERE 검색 옵션 setting --------------------------------
-    private BooleanExpression eqNttSnOption( int nttSn) {
+    private BooleanExpression eqNttSnOption( Long nttSn) {
         return  nttReply.nttSn.eq( nttSn );
     }
     
@@ -50,14 +50,14 @@ public class NttReplyRepositoryImpl    {
     }
     
     
-    private BooleanExpression eqParntsReplySnOption( int nttReplySn) {
+    private BooleanExpression eqParntsReplySnOption( Long nttReplySn) {
         return  nttReply.parntsReplySn.eq( nttReplySn );
     }
     
     
     
 	
-	  public List<NttReplyListDto> getList(int nttSn) {
+	  public List<NttReplyListDto> getList(Long nttSn) {
 	  
 	  List<NttReplyListDto> results = query.select(new QNttReplyListDto(
 													  nttReply.nttReplySn,
@@ -79,7 +79,7 @@ public class NttReplyRepositoryImpl    {
 	  
 	  
 	  
-	  public List<NttReplyListDto> getAnswerReplyList(int nttReplySn) {
+	  public List<NttReplyListDto> getAnswerReplyList(Long nttReplySn) {
 		  
 	  List<NttReplyListDto> results = query.select(new QNttReplyListDto(
 													  nttReply.nttReplySn,

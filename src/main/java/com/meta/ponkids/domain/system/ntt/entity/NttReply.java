@@ -37,12 +37,12 @@ public class  NttReply extends BaseTimeEntity {
 	@Id
     @Column(insertable=false)
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_NTT_REPLY_SN" )
-    private int nttReplySn;
+    private Long nttReplySn;
 	
     @NotNull
-	private int nttSn;
+	private Long nttSn;
 	private int step;
-	private int parntsReplySn;
+	private Long parntsReplySn;
 	private int nttReplySeq;
 	private String nttReplyCn;
 	private String openYn;

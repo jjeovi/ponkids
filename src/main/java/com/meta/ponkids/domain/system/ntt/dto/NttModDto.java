@@ -1,14 +1,13 @@
 package com.meta.ponkids.domain.system.ntt.dto;
 
-
-import com.meta.ponkids.domain.system.bbs.dto.BbsModDto;
-import com.meta.ponkids.domain.system.bbs.entity.Bbs;
 import com.meta.ponkids.domain.system.ntt.entity.Ntt;
-
 
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
 import javax.validation.constraints.NotNull;
 
 
@@ -17,35 +16,46 @@ import javax.validation.constraints.NotNull;
 public class NttModDto {
 
 	@NotNull
-    private int nttSn;
-	
+    private Long nttSn;
+	private Long bbsSn;
     private int nttRdcnt;
-    
     private String nttNm;
-    
     private String nttCn;
+    private String updusrId;      
+    private String updusrIp; 
+    private LocalDateTime updtDt;  
+	
     
 
 	
 
     // builder 생성
     @Builder
-    public NttModDto( int nttSn ,String nttNm, String nttCn, int nttRdcnt) {
+    public NttModDto( Long nttSn ,Long bbsSn,String nttNm, String nttCn, int nttRdcnt
+    		          ,String updusrId,String updusrIp, LocalDateTime updtDt) {
 
         this.nttSn = nttSn;
+        this.bbsSn = bbsSn;
         this.nttNm = nttNm;
         this.nttCn = nttCn;
         this.nttRdcnt = nttRdcnt;
+        this.updusrId = updusrId;
+        this.updusrIp = updusrIp;
+        this.updtDt = updtDt;
    }
     
     
     // DTO to Entity 메소드는 DTO 내부에서 생성.
     public Ntt toEntity() {
         return Ntt.builder()
-                .nttSn( nttSn )
-                .nttNm( nttNm )
-                .nttCn( nttCn )
-                .nttRdcnt( nttRdcnt )
+                .nttSn(nttSn)
+                .bbsSn(bbsSn)
+                .nttNm(nttNm)
+                .nttCn(nttCn)
+                .nttRdcnt(nttRdcnt)
+                .updusrId(updusrId)
+                .updusrIp(updusrIp)
+                .updtDt(updtDt)
                 .build();
     }
     
@@ -53,10 +63,14 @@ public class NttModDto {
     
     public NttModDto toDto(Ntt ntt) {
         return NttModDto.builder()
-        		.nttSn( ntt.getNttSn() )
-                .nttNm( ntt.getNttNm() )
-                .nttCn( ntt.getNttCn() )
-                .nttRdcnt( ntt.getNttRdcnt() )
+        		.nttSn(ntt.getNttSn())
+        		.bbsSn(ntt.getBbsSn())
+                .nttNm(ntt.getNttNm())
+                .nttCn(ntt.getNttCn())
+                .nttRdcnt( ntt.getNttRdcnt())
+                .updusrId(ntt.getUpdusrId())
+                .updusrIp(ntt.getUpdusrIp())
+                .updtDt(ntt.getUpdtDt())
                 .build();
     }
     

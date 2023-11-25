@@ -71,10 +71,8 @@ $(document).ready(function() {
                 <div class="x_content">
                     <form id="insertForm" name="insertForm" method="post" th:action="@{/admin/ntt/insert}"
                           th:object="${nttSaveReqDto}">
-                        <input type="hidden" name="bbsSn" value="100017"/>
-                        <input type="hidden" name="nttSn" value="100008"/>
+                        <input type="hidden" name="bbsSn" th:value="${bbsSn}"/>
                         <!-- TODO 프로필 이미지 추가 작업 -->
-      
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>제목</label>
                             <div class="col-md-6 col-sm-6">
@@ -100,7 +98,7 @@ $(document).ready(function() {
                        <div class="col-md-12">
                             <!-- bottom left area -->
                             <div class="col-md-2 col-sm-3 text-left">
-                                <a href="/admin/bbs/list" class="btn btn-white w120p">목록</a>
+								<a th:href="@{/admin/ntt/list(bbsSn=${bbsSn})}"  class="btn btn-white w120p">목록</a>
                             </div>
                             <!-- bottom center area -->
                             <div class="col-md-8 col-sm-6 text-center">

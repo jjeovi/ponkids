@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.meta.ponkids.domain.system.bbs.dto.BbsModDto;
 import com.meta.ponkids.domain.system.bbs.entity.Bbs;
@@ -14,13 +15,8 @@ import com.meta.ponkids.domain.system.ntt.dto.NttModDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttSaveReqDto;
 import com.meta.ponkids.domain.system.ntt.entity.Ntt;
 import com.meta.ponkids.domain.system.ntt.repository.NttRepository;
-import com.meta.ponkids.domain.user.dto.MultiUserChldrnSaveDto;
-import com.meta.ponkids.domain.user.dto.UserModDto;
-import com.meta.ponkids.domain.user.dto.UserRoleModDto;
-import com.meta.ponkids.domain.user.entity.User;
-import com.querydsl.jpa.impl.JPAQuery;
+import com.meta.ponkids.global.util.ip.IpUtils;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,24 +28,32 @@ public class NttService {
     private final NttRepository nttRepository;
 
 
-    public NttSaveReqDto save(NttSaveReqDto nttSaveReqDto) {
+    public NttSaveReqDto save(NttSaveReqDto nttSaveReqDto,HttpServletRequest request ) {
+    	
+    	//임시로 로그인 아이디 셋팅
+    	nttSaveReqDto.setRegisterId("ehlee");
+    	
+    	int nttSeq = nttRepository.MaxNttSeq(nttSaveReqDto.getBbsSn());
 
     	// dto to entity 작업 (필수)
-        Ntt bbsNtt = Ntt.builder()
+        Ntt ntt = Ntt.builder()
         		.nttSn(nttSaveReqDto.getNttSn())
         		.bbsSn(nttSaveReqDto.getBbsSn())
-        		.nttSeq(1)
+        		.nttSeq(nttSeq)
         		.nttNm(nttSaveReqDto.getNttNm())
         		.nttCn(nttSaveReqDto.getNttCn())
         		.nttRdcnt(1)
-                .registerId("ehlee")
                 .openYn( "Y" )
-                .registerIp("0.0.0.0")
+                .registerId(nttSaveReqDto.getRegisterId())
+                .registerIp( IpUtils.getClientIP( request ))
                 .regDt(LocalDateTime.now())
+                .updusrId(nttSaveReqDto.getRegisterId())
+                .updusrIp( IpUtils.getClientIP( request ))
+                .updtDt(LocalDateTime.now())
                 .build();
 
         // save
-        nttRepository.save(bbsNtt);
+        nttRepository.save(ntt);
 
         return nttSaveReqDto;
     }
@@ -61,7 +65,7 @@ public class NttService {
     
     
     
-    public NttModDto findByNttSn(int nttSn) {
+    public NttModDto findByNttSn(Long nttSn) {
     	
     	Ntt ntt = nttRepository.findByNttSn(nttSn);
     	
@@ -74,7 +78,7 @@ public class NttService {
     
     
     @Transactional
-	public void update(int nttSn, HttpServletRequest request) {
+	public void update(Long nttSn, HttpServletRequest request) {
 	
     	Ntt ntt  = nttRepository.findByNttSn(nttSn);
     	
@@ -93,11 +97,33 @@ public class NttService {
         
         //조회수 저장 
         nttRepository.save( ntt );
-        
-        
-    	
     	
 	}
+    
+    
+    public void nttUpdate( NttModDto modDto  ,HttpServletRequest request  ) {
+        // target 조회
+    	Ntt ntt  = nttRepository.findByNttSn(modDto.getNttSn()  );
+        
+        // target object 전환 ( entity to dto )
+        NttModDto targetDto = new NttModDto();
+        targetDto = targetDto.toDto( ntt );
+    	
+        
+        modDto.setUpdusrIp( IpUtils.getClientIP( request ));
+        
+        // target object 에 수정사항 set
+        // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
+        if ( StringUtils.hasText( modDto.getNttNm() ) ) targetDto.setNttNm( modDto.getNttNm() );          
+        if ( StringUtils.hasText( modDto.getNttCn() ) ) targetDto.setNttCn( modDto.getNttCn() );   
+
+        
+        // target object 전환 ( dto to entity )
+        ntt = targetDto.toEntity();
+        
+        // 수정사항 적용
+        nttRepository.save( ntt );
+    }
     
     
     @Transactional

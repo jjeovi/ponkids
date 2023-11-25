@@ -52,17 +52,17 @@ public class NttReplyService {
         return nttReplySaveReqDto;
     }
 
-	public List<NttReplyListDto> getList(int nttSn) {
+	public List<NttReplyListDto> getList(Long nttSn) {
 
 		return nttReplyRepository.getList(nttSn);
 	}
 	
 	
-	public List<NttReplyListDto> getAnswerReplyList(int nttReplySn) {
+	public List<NttReplyListDto> getAnswerReplyList(Long nttReplySn) {
 
 		return nttReplyRepository.getAnswerReplyList(nttReplySn);
 	}
 
-	
+
 }
 

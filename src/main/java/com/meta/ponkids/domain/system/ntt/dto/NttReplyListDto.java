@@ -14,12 +14,12 @@ import lombok.NoArgsConstructor;
 public class NttReplyListDto {
     
 	 @NotNull
-	 private int nttReplySn;
+	 private Long nttReplySn;
 		
 	 @NotNull
-	 private int nttSn;
+	 private Long nttSn;
 	 private int step;
-     private int parntsReplySn;
+     private Long parntsReplySn;
      private int nttReplySeq;
      private String nttReplyCn;
      
@@ -30,7 +30,7 @@ public class NttReplyListDto {
 
     		 
      @QueryProjection
-     public NttReplyListDto( int nttReplySn, int nttSn, int step, int parntsReplySn ,int nttReplySeq, String nttReplyCn, String registerId) {
+     public NttReplyListDto( Long nttReplySn, Long nttSn, int step, Long parntsReplySn ,int nttReplySeq, String nttReplyCn, String registerId) {
             this.nttReplySn = nttReplySn;
             this.nttSn = nttSn;
             this.step = step;
