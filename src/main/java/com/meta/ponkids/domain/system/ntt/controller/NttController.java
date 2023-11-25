@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.meta.ponkids.domain.system.bbs.dto.BbsModDto;
+import com.meta.ponkids.domain.system.bbs.service.BbsService;
 import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttModDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
@@ -32,6 +33,7 @@ public class NttController {
     
 
    private final NttService nttService;
+   private final BbsService bbsService;
    private final NttReplyService nttReplyService;
 
 
@@ -80,8 +82,7 @@ public class NttController {
     public String nttRegist(  @RequestParam(required = true) Long bbsSn, Model model ) {
         
        // model.addAttribute( new BbsSaveReqDto() );
-        
-        model.addAttribute( "bbsSn", bbsSn );
+        model.addAttribute("bbsSn", bbsSn);
         // 기본 경로 setting
         model.addAttribute("basicPath", BASIC_PATH);
         
@@ -113,14 +114,25 @@ public class NttController {
       
       // 권한 리스트
      // model.addAttribute( "authList", roleRepository.findAll() );
-      
+    	
+     NttModDto targetDto = nttService.findByNttSn(nttSn);
+    	
       // target object 조회
-      model.addAttribute("targetDto", nttService.findByNttSn(nttSn));
+      model.addAttribute("targetDto", targetDto);
       
-      
-  	 // 댓글 목록 조회
-      List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
-      model.addAttribute( "replyList", replyList );
+  	  //댓글 설정여부
+  	  String replySetYn = bbsService.getSetReplySetYn(targetDto.getBbsSn());
+  	  
+  	  model.addAttribute("replySetYn", replySetYn);
+  	  
+  	 //댓글 설정 Y일 경우 
+      if(replySetYn.equals("Y")) {
+     	 // 댓글 목록 조회
+    	  List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
+      	  model.addAttribute( "replyList", replyList );
+       }
+  	  
+
       
       // 조회수 업데이트 
       nttService.update(nttSn ,request);

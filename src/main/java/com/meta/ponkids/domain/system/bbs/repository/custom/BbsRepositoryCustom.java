@@ -8,5 +8,5 @@ import org.springframework.data.domain.Pageable;
 public interface BbsRepositoryCustom {
 	
 	Page<BbsListDto> getList( BbsListDto bbsListDto, Pageable pageable );
-
+	public String getSetReplySetYn(Long BbsSn);
 }

@@ -21,6 +21,7 @@ public class NttModDto {
     private int nttRdcnt;
     private String nttNm;
     private String nttCn;
+    private String noticeSetYn;
     private String updusrId;      
     private String updusrIp; 
     private LocalDateTime updtDt;  
@@ -31,13 +32,14 @@ public class NttModDto {
 
     // builder 생성
     @Builder
-    public NttModDto( Long nttSn ,Long bbsSn,String nttNm, String nttCn, int nttRdcnt
+    public NttModDto( Long nttSn ,Long bbsSn,String nttNm, String nttCn, String noticeSetYn, int nttRdcnt
     		          ,String updusrId,String updusrIp, LocalDateTime updtDt) {
 
         this.nttSn = nttSn;
         this.bbsSn = bbsSn;
         this.nttNm = nttNm;
         this.nttCn = nttCn;
+        this.noticeSetYn = noticeSetYn;
         this.nttRdcnt = nttRdcnt;
         this.updusrId = updusrId;
         this.updusrIp = updusrIp;
@@ -52,6 +54,7 @@ public class NttModDto {
                 .bbsSn(bbsSn)
                 .nttNm(nttNm)
                 .nttCn(nttCn)
+                .noticeSetYn(noticeSetYn)
                 .nttRdcnt(nttRdcnt)
                 .updusrId(updusrId)
                 .updusrIp(updusrIp)
@@ -67,6 +70,7 @@ public class NttModDto {
         		.bbsSn(ntt.getBbsSn())
                 .nttNm(ntt.getNttNm())
                 .nttCn(ntt.getNttCn())
+                .noticeSetYn(ntt.getNoticeSetYn())
                 .nttRdcnt( ntt.getNttRdcnt())
                 .updusrId(ntt.getUpdusrId())
                 .updusrIp(ntt.getUpdusrIp())

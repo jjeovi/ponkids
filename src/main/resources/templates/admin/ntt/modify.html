@@ -124,7 +124,7 @@ function fnAnswerReplyList(i){
     </div>
     <!-- E : 메뉴 상세설명 -->
 
-    <!-- S: 메인 등록 영역 -->
+
     <div class="row">
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
@@ -154,6 +154,25 @@ function fnAnswerReplyList(i){
                                   <textarea id="summernote" name="nttCn"  class="form-control"   th:value="${targetDto.nttCn}"   th:text="${targetDto.nttCn}"></textarea>
                             </div>
                         </div>
+                        
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>공지설정</label>
+                            <div class="col-md-6 col-sm-6 ">
+                                <div class="btn-group radiobox">
+                                    <input type="radio" id="noticeSetYn1" name="noticeSetYn" value="Y"   th:checked="${targetDto.noticeSetYn eq 'Y'}" class="join-btn" required>
+                                    <label for="noticeSetYn1" class="btn btn-outline-purple w100p"
+                                           data-toggle-class="btn-primary"
+                                           data-toggle-passive-class="btn-default">설정</label>
+                                    <input type="radio" id="noticeSetYn2" name="noticeSetYn" value="N"  th:checked="${targetDto.noticeSetYn eq 'N'}"  class="join-btn" required>
+                                    <label for="noticeSetYn2" class="btn btn-outline-purple w100p"
+                                           data-toggle-class="btn-primary"
+                                           data-toggle-passive-class="btn-default">미설정</label>
+                                </div>
+                            </div>
+                         </div>
+   
+   
+   
                         <div class="ln_solid"></div>
                         <!-- 저장버튼 -->
                        <div class="col-md-12">
@@ -180,9 +199,11 @@ function fnAnswerReplyList(i){
         </div>
     </div>
     <!-- E: 메인 등록 영역 -->
-    
+
+  <!--댓글 설정했을 경우 -->
+  <div  th:if = "${replySetYn == 'Y'}">    
   <!-- S: 댓글등록 -->
-  <div class="card mb-2">
+  <div class="card mb-2" >
   	 <div class="card-header bg-light">
   	         <i class="fa fa-comment fa"></i> 댓글 작성
   	 </div>
@@ -235,32 +256,9 @@ function fnAnswerReplyList(i){
 	    
 	     <!-- 대댓글 목록 -->
 	     <div style="display: none;" th:id="'R' + ${data.nttReplySn}">
-	    <!-- <div class="d-flex"  >
-			<div class="p-2"><i class="mt-3 fa fa-reply fa fa-rotate-180" aria-hidden="true"></i></div>
-				<div class="flex-fill">
-					<div class="card mt-2">
-						<div class="card-header">
-							<table>
-								<tbody>
-								    <tr class="align-middle">
-									   <td rowspan="2" class="pr-2"><i class="fa fa-user-o fa-2x"></i></td>
-										  <td class="ml">작성자</td>
-										</tr>
-										<tr>
-											<td>
-											    <font size="2">작성일시</font> 
-											</td>
-										</tr>
-								 </tbody>
-						   </table>
-					  </div>
-					 <div class="card-body">
-						<p class="card-text">댓글내용</p>
-					</div>
-			      </div>
-			</div>
-       </div>-->
+		 </div>	 
        </div>
+     </div>
 </div>
 	
 <!--</body>-->

@@ -42,6 +42,7 @@ public class NttService {
         		.nttSeq(nttSeq)
         		.nttNm(nttSaveReqDto.getNttNm())
         		.nttCn(nttSaveReqDto.getNttCn())
+        		.noticeSetYn(nttSaveReqDto.getNoticeSetYn())
         		.nttRdcnt(1)
                 .openYn( "Y" )
                 .registerId(nttSaveReqDto.getRegisterId())
@@ -116,6 +117,7 @@ public class NttService {
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
         if ( StringUtils.hasText( modDto.getNttNm() ) ) targetDto.setNttNm( modDto.getNttNm() );          
         if ( StringUtils.hasText( modDto.getNttCn() ) ) targetDto.setNttCn( modDto.getNttCn() );   
+        if ( StringUtils.hasText( modDto.getNoticeSetYn() ) ) targetDto.setNoticeSetYn( modDto.getNoticeSetYn() );   
 
         
         // target object 전환 ( dto to entity )

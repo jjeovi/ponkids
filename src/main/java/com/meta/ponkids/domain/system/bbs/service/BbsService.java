@@ -81,6 +81,14 @@ public class BbsService {
     	
     }
     
+    public String getSetReplySetYn(Long bbsSn) {
+    	
+    	String replySetYn = bbsRepository.getSetReplySetYn(bbsSn);
+    	
+    	return replySetYn;
+    	
+    }
+    
     
     public void update( BbsModDto modDto  ,HttpServletRequest request  ) {
         // target 조회
