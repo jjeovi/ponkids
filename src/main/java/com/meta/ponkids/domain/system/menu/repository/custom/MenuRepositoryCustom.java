@@ -1,12 +1,11 @@
 package com.meta.ponkids.domain.system.menu.repository.custom;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
+
+import java.util.List;
 
 public interface MenuRepositoryCustom {
 	
-	Page<MenuListDto> getList( MenuListDto listDto, Pageable pageable );
+	List<MenuListDto> getList( MenuListDto listDto );
 
 }

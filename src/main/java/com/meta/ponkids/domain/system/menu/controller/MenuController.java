@@ -1,34 +1,24 @@
 package com.meta.ponkids.domain.system.menu.controller;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
 import com.meta.ponkids.domain.system.menu.dto.MenuModDto;
 import com.meta.ponkids.domain.system.menu.dto.MenuSaveDto;
+import com.meta.ponkids.domain.system.menu.entity.Menu;
 import com.meta.ponkids.domain.system.menu.service.MenuService;
 import com.meta.ponkids.domain.system.role.repository.RoleRepository;
-import com.meta.ponkids.domain.system.role.service.RoleService;
-import com.meta.ponkids.global.common.dto.CategoryListDto;
-
+import com.meta.ponkids.global.common.dto.CategoryDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -42,23 +32,22 @@ public class MenuController {
 	
     @GetMapping( BASIC_PATH + "/list" )
     public String list( @ModelAttribute MenuListDto listDto,
-                        @PageableDefault( size = 10 ) Pageable pageable,
+//                        @PageableDefault( size = 10 ) Pageable pageable,
                         Model model ) {
     	
     	// S : 필요한 객체 setting
     	
     	// 목록 조회
-        Page<MenuListDto> resultList = menuService.getList( listDto, pageable );
+        List<MenuListDto> resultList = menuService.getList( listDto );
         model.addAttribute( "resultList", resultList );
         
         // 검색 dto setting
         model.addAttribute( "searchDTO", listDto );
         
         // 카테고리 리스트 ( lv1 )
-        model.addAttribute( "cateList", roleRepository.getList() );
+        model.addAttribute( "cateLv1List", roleRepository.getCateList() );
     	
     	// E : 필요한 객체 setting
-        
         
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
@@ -175,20 +164,17 @@ public class MenuController {
         
         return "common/alert";
     }
-    
-    
-//    @ResponseBody
-//    @RequestMapping( value = "/live/getMenuListAjax", method = { RequestMethod.GET } )
-//    public List<CategoryListDto> getMenuListAjax(@RequestParam("roleSn") Long roleSn ){
-    	
-//    	menuService.findByRoleSn
-    	
-    	
-    	
-//    	return 
-//    }
-    
-    
-	
+
+
+    @ResponseBody
+    @RequestMapping( value = "/live/getMenuListAjax", method = { RequestMethod.GET } )
+    public Map<String, Object> getMenuListAjax( @ModelAttribute MenuListDto listDto ) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        
+        // 메뉴 list 출력
+        result.put( "resultList", menuService.getList( listDto ) );
+        
+    	return result;
+    }
 
 }

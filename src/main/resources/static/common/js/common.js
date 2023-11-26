@@ -23,29 +23,11 @@ $( function () {
         // 변경 불가 처리
         $(this).attr("onclick","return false;");
     });
-    
-    
-    // category 영역 li 클릭시 이벤트 ( - on 클래스 추가, - 검색창 위에 텍스트 표시 )
-    $(".category-list-area .category-group-box ul li").click(function(){
-		// on class 추가
-		$(this).siblings().removeClass("on");
-		$(this).addClass("on");
-		
-		$ul = $(this).parent();			// 선택한 태그의 <ul class="data-group"> 을 선택
-		
-		var ulNum = $ul.prevAll().length+1;	// 몇번쨰 ul 인지 체크 (1부터 카운트..)
-		
-		
-		
-		// $(this).text();
-		$("#picked-cate").find(".cateLv" + ulNum ).empty();
-		$("#picked-cate").find(".cateLv" + ulNum ).text($(this).text());
-		$("#picked-cate").find(".cateLv" + ulNum ).removeClass("blink");
-		setTimeout(function() {
-			$("#picked-cate").find(".cateLv" + ulNum ).addClass("blink");
-		},100);
-		// picked-cate 태그 안에 해당 내용 삽입
-	});
+
+    // 카테고리 분류가 선택 되어있으면 picked-cate 에 뿌려준다.
+    if ( $(".category-list-area .category-group-box ul li.on").length ) {
+        $(".category-list-area .category-group-box ul li.on").trigger("click");
+    }
 
     
 });
@@ -200,4 +182,111 @@ function removeImage( e ) {
 
     // 이미지 제거 버튼 또한 제거
     $( e ).remove();
+}
+
+
+function emptyNextCateText(ulNum){
+
+}
+
+// 카테고리 박스 안 li 클릭시 이벤트
+function getCateNextLvList( url , e ) {
+    // on class 추가
+    if ( !$(e).hasClass( "on" ) ) {
+        $(e).siblings().removeClass("on");
+        $(e).addClass("on");
+
+        var $ul = $(e).parent();
+        var ulNum = $ul.prevAll().length;	// 몇번쨰 ul 인지 체크 (0부터 카운트..)
+
+        // 뒷단계 카테고리 전부 비움
+        // $(".category-list-area .category-group-box ul li.on").each(function(i,item){
+        $(".category-list-area .category-group-box ul").each(function(i,item){
+            if(i>ulNum){
+                $(this).empty();
+                $("#picked-cate").find(".cateLv" + i ).empty();
+            }
+        })
+
+        // $ul = $(e).parent()			// 선택한 태그의 <ul class="data-group"> 을 선택
+        // var ulNum = $ul.prevAll().length+1;	// 몇번쨰 ul 인지 체크 (1부터 카운트..)
+
+        // picked-cate 태그 안에 해당 내용 삽입
+        $("#picked-cate").find(".cateLv" + ulNum ).empty();
+        $("#picked-cate").find(".cateLv" + ulNum ).text($(e).text());
+
+        // 깜박임 class 지웠다 다시 실행해서 애니메이션 재실행
+        $("#picked-cate").find(".cateLv" + ulNum ).removeClass("blink");
+        setTimeout(function() {
+            $("#picked-cate").find(".cateLv" + ulNum ).addClass("blink");
+        },100);
+
+        var categorySn = $(e).val();
+
+        // 카테고리 박스 개수 체크하여
+        // 마지막 박스 클릭 아닌 경우에 다음 카테고리 조회 실행
+        var ulCnt = $(".category-list-area .category-group-box ul").length;
+        if( ulNum != (ulCnt -1) ) {
+
+            $.ajax({
+                url: url,
+                type: "GET",
+                dataType: "json",
+                async : false,
+                data: { categorySn : categorySn } , // 검색할 값
+                contentType: "application/json",
+                success: function ( result ) {
+                    // return type : List<CategoryDto>
+                    for ( let i in result ) {
+                        $(".category-list-area .category-group-box ul").eq(ulNum+1).append(
+                            $("<li>").attr( "onclick", "getCateNextLvList('" + url + "', this )" ).attr("value",result[i].categorySn).append( result[i].categoryNm )
+                        );
+                    }
+                }
+            });
+        }
+    }
+}
+
+// 카테고리 검색 버튼 function
+function searchCate( url ) {
+
+    if ( $(".category-list-area .category-group-box ul li.on").length ) {
+        var data = {};
+
+        $(".category-list-area .category-group-box ul li.on").each(function(i,item){
+            if( i== 0 ){
+                data['category.lv1Sn'] = $(this).val();
+            } else if ( i == 1 ) {
+                data['category.lv2Sn'] = $(this).val();
+            } else if ( i == 2 ) {
+                data['category.lv3Sn'] = $(this).val();
+            } else if ( i == 3 ) {
+                data['category.lv4Sn'] = $(this).val();
+            } else if ( i == 4 ) {
+                data['category.lv5Sn'] = $(this).val();
+            }
+        });
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            async : false,
+            data: data , // 검색할 값 listDto 안에 categoryDto 변수 추가
+            contentType: "application/json",
+            success: function ( result ) {
+                // callback 함수 연결 -> callback함수로 구현
+                searchCateCallback(result);
+            }
+        });
+
+    } else {
+        alert("검색 옵션을 선택해주세요.");
+    }
+}
+
+// 메뉴 구조 그리기
+function drawMenuTree ( resultList ) {
+
 }

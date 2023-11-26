@@ -1,24 +1,20 @@
 package com.meta.ponkids.domain.system.menu.repository.impl;
 
 
-import java.util.List;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.support.PageableExecutionUtils;
+import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
+import com.meta.ponkids.domain.system.menu.dto.QMenuListDto;
+import com.meta.ponkids.domain.system.menu.repository.custom.MenuRepositoryCustom;
+import com.meta.ponkids.global.common.dto.CategoryDto;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import com.meta.ponkids.domain.system.menu.dto.QMenuListDto;
-import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
-import com.meta.ponkids.domain.system.menu.repository.custom.MenuRepositoryCustom;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
 
-import lombok.RequiredArgsConstructor;
-
-import static com.meta.ponkids.domain.system.menu.entity.QMenu.menu;
+import static com.meta.ponkids.domain.system.menu.entity.QMenuHierarchy.menuHierarchy;
+import static com.meta.ponkids.domain.system.menu.entity.QMenuRole.menuRole;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,45 +23,78 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
 	private final JPAQueryFactory query;
 	
 	@Override
-	public Page<MenuListDto> getList( MenuListDto listDto, Pageable pageable ) {
+	public List<MenuListDto> getList( MenuListDto listDto ) {
 		
 		// TODO 구현
 		// (1) '결과list' 와 (2)'count' 를 2번에 걸쳐 조회
-        
-		// TODO
+		
+	//		select tmr.menu_sn
+	//				, tmr.role_sn
+	//				, vmh.upper_menu_sn
+	//				, vmh.menu_nm
+	//				, vmh.menu_cd
+	//				, vmh.menu_url
+	//				, vmh.parnts_menu_yn
+	//				, vmh.menu_seq
+	//				, vmh.menu_dc_set_yn
+	//				, vmh.menu_dc
+	//				, vmh.menu_detail_dc
+	//				, vmh.atch_file_sn
+	//				, vmh.use_yn
+	//				, vmh.new_window_yn
+	//		from tb_menu_role tmr
+	//		left join vw_menu_hierarchy vmh
+	//		on tmr.menu_sn = vmh.menu_sn
+	//		where tmr.role_sn = '100002';
+		
         // (1) 결과list (results).
 		List<MenuListDto> results = query
 				// select
                 .select( new QMenuListDto(
-                		menu.menuSn
+                		  menuRole.menuSn
+						, menuRole.roleSn
+						, menuHierarchy.upperMenuSn
+						, menuHierarchy.menuNm
+						, menuHierarchy.menuCd
+						, menuHierarchy.menuUrl
+						, menuHierarchy.parntsMenuYn
+						, menuHierarchy.menuSeq
+						, menuHierarchy.menuDcSetYn
+						, menuHierarchy.menuDc
+						, menuHierarchy.menuDetailDc
+						, menuHierarchy.atchFileSn
+						, menuHierarchy.useYn
+						, menuHierarchy.newWindowYn
 //                		new CaseBuilder()
 //                		.when( user.gender.eq("M")).then("남자")
 //                		.when( user.gender.eq("F")).then("여자")
 //                		.otherwise("")
 //                		.as("gender"),
                 		) )					
-                .from( menu )
-                // where
-                .where()
-//                .orderBy( menu.menuSn.desc())
-                .offset( pageable.getOffset() )
-                .limit( pageable.getPageSize() )
+                .from( menuRole )
+				.leftJoin( menuHierarchy )	// view : vw_menu_hierarchy
+				.on( menuRole.menuSn.eq( menuHierarchy.menuSn ) )
+                .where(
+						eqCateLv1( listDto.getCategory() )
+				)
                 .fetch();
 		
-		
-		// TODO
 		// (2) count
-        JPAQuery<Long> count = query.select( menu.count() )
-                .from( menu )									
-                .where(
-                        eqOption( listDto.getSchOption(), listDto.getSchCntn() ) );
-                
-				
+//        JPAQuery<Long> count = query.select( menu.count() )
+//                .from( menu )
+//                .where(
+//                        eqOption( listDto.getSchOption(), listDto.getSchCntn() ) );
 		
-		return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
+		return results;
 		
 	}
 	
+	// -------------------------------- WHERE 검색 옵션 setting --------------------------------
+	
+	// 카테고리 lv 1 검색 옵션
+	private BooleanExpression eqCateLv1( CategoryDto categoryDto ) {
+		return categoryDto != null  ? menuRole.roleSn.eq( categoryDto.getLv1Sn() ) : null;
+	}
 	
     private BooleanExpression eqOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨

@@ -1,22 +1,19 @@
 package com.meta.ponkids.domain.system.menu.service;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.meta.ponkids.domain.system.menu.dto.MenuModDto;
 import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
+import com.meta.ponkids.domain.system.menu.dto.MenuModDto;
 import com.meta.ponkids.domain.system.menu.dto.MenuSaveDto;
 import com.meta.ponkids.domain.system.menu.entity.Menu;
 import com.meta.ponkids.domain.system.menu.repository.MenuRepository;
 import com.meta.ponkids.global.util.ip.IpUtils;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,12 +32,15 @@ public class MenuService {
 		return saveDto;
 		
 	}
-	
 
-    public Page<MenuListDto> getList( MenuListDto listDto, Pageable pageable ) {
-        return menuRepository.getList( listDto, pageable );
+    public List<MenuListDto> getList( MenuListDto listDto ) {
+        // 메뉴 목록은 category lv1Sn 값이 설정되어있어야 조회 가능. 그렇지 않으면 null return
+        if (listDto.getCategory() != null && listDto.getCategory().getLv1Sn() != null ) {
+            return menuRepository.getList( listDto );
+        } else {
+            return Collections.emptyList(); // 빈 List<> 생성
+        }
     }
-    
     
     public MenuModDto findById( Long pk ) {	// TODO 타입 체크 필요
         
