@@ -45,6 +45,10 @@ public class  NttReply extends BaseTimeEntity {
 	private Long parntsReplySn;
 	private int nttReplySeq;
 	private String nttReplyCn;
+	
+	
+    @ColumnDefault("Y") 
+    @Column(updatable = false)  // del_yn 컬럼에 공통으로 추가
 	private String openYn;
     @Column(updatable = false)
 	private String registerId;
@@ -52,11 +56,11 @@ public class  NttReply extends BaseTimeEntity {
 	private String registerIp;
     @Column(updatable = false)
 	private LocalDateTime regDt;
-    @Column(insertable = false)
-	private String upduserId;
-    @Column(insertable = false)
-	private String upduserIp;
-    @Column(insertable = false)
+
+	private String updusrId;
+
+	private String updusrIp;
+
 	private LocalDateTime updtDt;
 
     @ColumnDefault("N")                             // del_yn 컬럼에 공통으로 추가

@@ -5,21 +5,27 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.meta.ponkids.domain.system.bbs.dto.BbsModDto;
 import com.meta.ponkids.domain.system.bbs.entity.Bbs;
 import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttModDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
+import com.meta.ponkids.domain.system.ntt.dto.NttReplyModDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttReplySaveReqDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttSaveReqDto;
 import com.meta.ponkids.domain.system.ntt.entity.Ntt;
 import com.meta.ponkids.domain.system.ntt.entity.NttReply;
 import com.meta.ponkids.domain.system.ntt.repository.NttReplyRepository;
 import com.meta.ponkids.domain.system.ntt.repository.NttRepository;
+import com.meta.ponkids.global.util.ip.IpUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +33,10 @@ public class NttReplyService {
 
     private final NttReplyRepository nttReplyRepository;
 
-    public NttReplySaveReqDto save(NttReplySaveReqDto nttReplySaveReqDto) {
-
+    public NttReplySaveReqDto save(NttReplySaveReqDto nttReplySaveReqDto ,HttpServletRequest request) {
+        
+      	//임시로 로그인 아이디 셋팅
+    	nttReplySaveReqDto.setRegisterId("ehlee");
     
     	int nttReplySeq =nttReplyRepository.MaxNttReplySeq(nttReplySaveReqDto.getNttSn());
     	
@@ -41,9 +49,12 @@ public class NttReplyService {
         		.nttReplyCn(nttReplySaveReqDto.getNttReplyCn())
         		.nttReplySeq(nttReplySeq)
         		.openYn( "Y" )
-                .registerId("ehlee")
-                .registerIp("0.0.0.0")
+                .registerId(nttReplySaveReqDto.getRegisterId())
+                .registerIp( IpUtils.getClientIP( request ))
                 .regDt(LocalDateTime.now())
+                .updusrId(nttReplySaveReqDto.getRegisterId())
+                .updusrIp( IpUtils.getClientIP( request ))
+                .updtDt(LocalDateTime.now())
                 .build();
 
         // save
@@ -62,6 +73,34 @@ public class NttReplyService {
 
 		return nttReplyRepository.getAnswerReplyList(nttReplySn);
 	}
+	
+
+	
+	
+	public void update(NttReplyModDto modDto, HttpServletRequest request) {
+		
+	    	NttReply nttReplySn  = nttReplyRepository.findByNttReplySn(modDto.getNttReplySn() );
+	    	
+	        // target object 전환 ( entity to dto )
+	        NttReplyModDto targetDto = new NttReplyModDto();
+	        targetDto = targetDto.toDto( nttReplySn );
+	        
+	        targetDto.setUpdusrIp( IpUtils.getClientIP( request ));
+	        targetDto.setUpdusrId("ehlee"); // 임시 셋팅
+	        targetDto.setUpdtDt( LocalDateTime.now());
+	        
+	        // target object 에 수정사항 set
+	        // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
+	        if ( StringUtils.hasText( modDto.getNttReplyCn() ) ) targetDto.setNttReplyCn( modDto.getNttReplyCn() );   
+	        
+	        // target object 전환 ( dto to entity )
+	        nttReplySn = targetDto.toEntity();
+	        
+	        // 수정사항 적용
+	        nttReplyRepository.save( nttReplySn );
+	    	
+	 }
+	    	
 
 
 }

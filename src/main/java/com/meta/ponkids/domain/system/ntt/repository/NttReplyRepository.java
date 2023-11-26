@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
+import com.meta.ponkids.domain.system.ntt.entity.Ntt;
 import com.meta.ponkids.domain.system.ntt.entity.NttReply;
 import com.meta.ponkids.domain.system.ntt.repository.custom.NttReplyRepositoryCustom;
 
@@ -18,8 +19,9 @@ public interface NttReplyRepository extends JpaRepository< NttReply, Long>  , Nt
 	 public int MaxNttReplySeq(Long nttSn);
 	 public List<NttReplyListDto> getList(Long nttSn); 
 	 public List<NttReplyListDto> getAnswerReplyList(Long nttReplySn); 
+     public NttReply findByNttReplySn(Long nttReplySn);
 
-	 
+
 
 	    
 

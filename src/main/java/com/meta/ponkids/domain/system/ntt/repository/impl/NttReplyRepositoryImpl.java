@@ -66,7 +66,8 @@ public class NttReplyRepositoryImpl    {
 													  nttReply.parntsReplySn, 
 													  nttReply.nttReplySeq,
 													  nttReply.nttReplyCn,
-													  nttReply.registerId )
+													  nttReply.registerId,
+													  nttReply.updtDt)
 													  ).from(nttReply)
 			                                         .where( eqNttSnOption( nttSn ), eqStepOption(1))
 			                                         .orderBy(
@@ -88,7 +89,8 @@ public class NttReplyRepositoryImpl    {
 													  nttReply.parntsReplySn, 
 													  nttReply.nttReplySeq,
 													  nttReply.nttReplyCn,
-													  nttReply.registerId )
+													  nttReply.registerId,
+													  nttReply.updtDt)
 													  ).from(nttReply)
 			                                         .where( eqParntsReplySnOption(nttReplySn))
 			                                         .orderBy(

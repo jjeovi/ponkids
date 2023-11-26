@@ -23,20 +23,13 @@ public class NttReplySaveReqDto {
 
 	@NotNull
 	private String registerId;
-	
 	@NotNull
 	private String registerIp;
-	
-
+	@NotNull
 	private LocalDateTime regDt;
-	
-
 	private String upduserId;
-	
 	private String upduserIp;
-	
 	private String updtDt;
-	
 	private String delYn;
 
     // builder 생성

@@ -14,6 +14,7 @@ import com.meta.ponkids.domain.system.bbs.service.BbsService;
 import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttModDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
+import com.meta.ponkids.domain.system.ntt.dto.NttReplyModDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttReplySaveReqDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttSaveReqDto;
 import com.meta.ponkids.domain.system.ntt.service.NttReplyService;
@@ -124,6 +125,7 @@ public class NttController {
   	  String replySetYn = bbsService.getSetReplySetYn(targetDto.getBbsSn());
   	  
   	  model.addAttribute("replySetYn", replySetYn);
+  	  model.addAttribute("nttSn", nttSn);
   	  
   	 //댓글 설정 Y일 경우 
       if(replySetYn.equals("Y")) {
@@ -131,8 +133,6 @@ public class NttController {
     	  List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
       	  model.addAttribute( "replyList", replyList );
        }
-  	  
-
       
       // 조회수 업데이트 
       nttService.update(nttSn ,request);
@@ -177,7 +177,7 @@ public class NttController {
     		               @ModelAttribute NttReplySaveReqDto nttReplySaveReqDto, HttpServletRequest request
     		               , Model model) {
       // save
-         nttReplyService.save(nttReplySaveReqDto);
+         nttReplyService.save(nttReplySaveReqDto,request);
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 댓글이 등록되었습니다." );
@@ -210,7 +210,7 @@ public class NttController {
      * date           : 11/24/23
      * description    : user delete method
      */
-    @Transactional
+    @Transactional 
     @PostMapping( BASIC_PATH + "/delete" )
     public String delete(
             @RequestParam(required = true) int nttSn,
@@ -229,6 +229,38 @@ public class NttController {
       return "common/alert";
 
     }
+    
+    
+    
+    /**
+     * methodName    : nttReplyUpdate
+     * date           : 11/24/23
+     * description    : id 답글조회 ajax
+     */
+    @ResponseBody
+    @RequestMapping( value = "/reply/nttReplyUpdate", method = { RequestMethod.GET } )
+    public String nttReplyUpdate( @RequestParam( "nttReplySn" ) Long nttReplySn , @RequestParam( "nttReplyCn" ) String nttReplyCn 
+    		    ,HttpServletRequest request ,Model model ) {
+          
+    	
+    	 NttReplyModDto modDto =   new NttReplyModDto();
+    	 
+    	 modDto.setNttReplySn(nttReplySn);
+    	 modDto.setNttReplyCn(nttReplyCn);
+    	 
+    	 // 댓글 수정
+           nttReplyService.update(modDto,request);
+           
+           // 메시지 출력 및 url 이동 처리
+           model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
+           model.addAttribute( "moveUrl", BASIC_PATH +"/modify?bbsSn="+ nttReplySn);
+    
+
+           return "common/alert";
+        
+      
+    } 
+    
     
     
 }
