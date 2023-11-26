@@ -12,12 +12,14 @@ import com.meta.ponkids.domain.system.bbs.dto.BbsModDto;
 import com.meta.ponkids.domain.system.bbs.entity.Bbs;
 import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttModDto;
+import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttSaveReqDto;
 import com.meta.ponkids.domain.system.ntt.entity.Ntt;
 import com.meta.ponkids.domain.system.ntt.repository.NttRepository;
 import com.meta.ponkids.global.util.ip.IpUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -145,6 +147,13 @@ public class NttService {
 	
 	 }
     
+    
+	public List<NttListDto> getNoticeList(Long bbsSn) {
+
+		return nttRepository.getNoticeList(bbsSn);
+	}
+	
+
     
 
     

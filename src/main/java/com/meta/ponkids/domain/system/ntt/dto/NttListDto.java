@@ -19,6 +19,7 @@ public class NttListDto {
 	private String nttCn;
 	private int nttRdcnt;
 	private String openYn;
+	private String noticeSetYn;
 	private String registerId;
 	private LocalDateTime regDt;
 	
@@ -29,7 +30,7 @@ public class NttListDto {
     
     
     @QueryProjection
-    public NttListDto( Long nttSn ,Long bbsSn ,String nttNm, String nttCn,  int nttRdcnt,String openYn,String registerId,LocalDateTime regDt) {
+    public NttListDto( Long nttSn ,Long bbsSn ,String nttNm, String nttCn,  int nttRdcnt,String openYn,String noticeSetYn,String registerId,LocalDateTime regDt) {
 
     	this.nttSn = nttSn; 
     	this.bbsSn = bbsSn;
@@ -37,6 +38,7 @@ public class NttListDto {
         this.nttCn = nttCn;
         this.nttRdcnt = nttRdcnt;
         this.openYn = openYn;
+        this.noticeSetYn = noticeSetYn;
         this.registerId = registerId;
         this.regDt = regDt;
      

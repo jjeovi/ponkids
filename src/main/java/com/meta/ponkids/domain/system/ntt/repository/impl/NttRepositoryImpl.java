@@ -2,6 +2,8 @@ package com.meta.ponkids.domain.system.ntt.repository.impl;
 
 import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
 import com.meta.ponkids.domain.system.ntt.dto.QNttListDto;
+
+
 import com.meta.ponkids.domain.system.ntt.repository.custom.NttRepositoryCustom;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -16,7 +18,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 import static com.meta.ponkids.domain.system.ntt.entity.QNtt.ntt;
-import static com.meta.ponkids.domain.system.ntt.entity.QNttReply.nttReply;
+
 
 @Repository
 @RequiredArgsConstructor
@@ -34,6 +36,7 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
 				 ntt.nttCn,
 				 ntt.nttRdcnt,
                  ntt.openYn,
+                 ntt.noticeSetYn,
                  ntt.registerId,
                  ntt.regDt
 				 ) ).from(ntt)
@@ -105,6 +108,10 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
         return  ntt.bbsSn.eq( bbsSn );
     }
     
+    private BooleanExpression eqNoticeSetYnOption( String noticeSetYn) {
+    	return  ntt.noticeSetYn.eq( noticeSetYn );
+    }
+    
 
 
 	@Override
@@ -135,6 +142,30 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
         return  ntt.bbsSn.eq(bbsSn);
     }
     
+    
+    
+    
+    public List<NttListDto> getNoticeList(Long bbsSn) {
+		  
+  	  List<NttListDto> results = query.select(new QNttListDto(
+										  			 ntt.nttSn,
+													 ntt.bbsSn,
+													 ntt.nttNm,
+													 ntt.nttCn,
+													 ntt.nttRdcnt,
+										            ntt.openYn,
+										            ntt.registerId,
+										            ntt.registerId,
+										            ntt.regDt
+													 ) ).from(ntt)
+  			                                         .where( eqBbsSnOption(bbsSn) ,
+  			                                           eqNoticeSetYnOption("Y"))
+  			                                         .orderBy(
+  													  ntt.noticeSeq.desc()
+  													  ).fetch();
+  	  
+  	      return results; 
+  	      }
     
     
 

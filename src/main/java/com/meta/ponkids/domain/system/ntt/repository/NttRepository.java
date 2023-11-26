@@ -1,10 +1,14 @@
 package com.meta.ponkids.domain.system.ntt.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
+import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
 import com.meta.ponkids.domain.system.ntt.entity.Ntt;
 import com.meta.ponkids.domain.system.ntt.repository.custom.NttRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -32,7 +36,6 @@ public interface NttRepository extends JpaRepository< Ntt, Long> , NttRepository
        // nativeQuery true 없으면 error
    int deleteAllByNttSn( @Param( "nttSn" ) Long bbsSn );
 
-
-
+   public List<NttListDto> getNoticeList(Long bbsSn); 
 	    
 }
