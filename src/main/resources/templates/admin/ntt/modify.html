@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"  
-  layout:decorate="~{layout}" >
+<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <title layout:fragment="title">pioneerkids (Admin-bbs) - 게시물 등록</title>
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="/common/js/common_eh.js"></script>
@@ -85,7 +85,6 @@ function fnAnswerReplyList(i){
 
 //댓글 수정
 function fnReReplyModifyOpen(i,val){
-	alert("수정");
       
 	if( val == 'mod') {
 
@@ -104,18 +103,15 @@ function fnReReplyModifyOpen(i,val){
 
 //댓글 수정 저장
 function fnReReplyModify(i){
-	alert("저장");
-     
-     var nttReplyCn =  "댓글수정111" 
-    // var nttReplyCn =  $("#nttReplyCnA"+i).value();
-     
-    /// alert(nttReplyCn);
+     alert($("#nttReplyCnA"+i).val());
+     var nttReplyCn =  $("#nttReplyCnA"+i).val();
+     var nttSn =  $("#nttSn").val();
       
      $.ajax( {
       url: "/reply/nttReplyUpdate",
       type: "GET",
       dataType: "json",
-      data: { nttReplySn: i ,  nttReplyCn : nttReplyCn},
+      data: { nttReplySn: i ,  nttReplyCn : nttReplyCn ,nttSn : nttSn},
       contentType: "application/json",
       success: function ( result ) {
           alert("답글이 수정되었습니다.");
@@ -128,6 +124,27 @@ function fnReReplyModify(i){
      );
 	
 }
+
+
+//댓글 삭제
+function fnReReplyDelete(i){
+	 var nttSn =  $("#nttSn").val();
+      
+     $.ajax( {
+      url: "/reply/nttReplyDelete",
+      type: "GET",
+      dataType: "json",
+      data: { nttReplySn: i ,nttSn : nttSn},
+      contentType: "application/json",
+      success: function ( result ) {
+          alert("답글이 삭제되었습니다.");
+      }}
+     );
+}
+
+
+
+
 </script>
 
 <!-- S : Javascript functions	-->
@@ -250,69 +267,70 @@ function fnReReplyModify(i){
 
   <!--댓글 설정했을 경우 -->
   <div  th:if = "${replySetYn == 'Y'}">    
-  <!-- S: 댓글등록 -->
-  <div class="card mb-2" >
-  	 <div class="card-header bg-light">
-  	         <i class="fa fa-comment fa"></i> 댓글 작성
-  	 </div>
-  	 <div class="card-body">
-  	 	<form  id="replyInsertForm" name="replyInsertForm" method="post" th:action="@{/admin/ntt/nttReplyInsert}"  th:object="${nttReplySaveReqDto}">
-  	         <input type="hidden" name="nttSn"  th:value="${nttSn}" />
-  	         <input type="hidden" name="parntsReplySn" value="0"/>
-  	         <input type="hidden" name="step" value="1"/>
-  	 		<ul class="list-group list-group-flush">
-  	 		    <li class="list-group-item">
-  	 			<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="nttReplyCn"></textarea>
-  	 			<button type="submit" class="btn btn-dark mt-3" >등록</button>
-  	 		    </li>
-  	 		</ul>
-  	 	 </form>
-  	 </div>
-  </div>
-  <!-- E: 댓글등록 -->
- 
-  <!-- S: 댓글목록 -->
-  <div class="card mt-2">
-	  <div class="card-header bg-light">
-  	         <i class"fa fa-comment fa"></i> 댓글 목록
-  	 </div>
-     <div  th:if = "${!replyList.isEmpty()}" th:each=" data : ${replyList} ">
-	  	 <div class="card-header p-2" >
-			<table>
-				<tbody>
-					<tr class="align-middle">
-					  <td rowspan="2" class="pr-2"><i class="fa fa-user-o fa-2x"></i></td>
-					  <td class="ml"  th:text="${data.registerId}"></td>
-					</tr>
-					<tr>
-					   <td>
-						  <font size="2"><span></span></font> 
-						  <span style="cursor:pointer" onclick="javascript:showDeleteReplyModal(176, 193);"><i class="fa fa-window-close fa" aria-hidden="true"></i></span>
-					  </td>
-				   </tr>
-				</tbody>
-		   </table>
-	    </div>
-	    <div class="card-body" >
-		   <p class="card-text"><span th:text="${data.nttReplyCn}"  th:id="'nttReplyCnB' + ${data.nttReplySn}" ></span> 
-		     <input class="ml" th:value="${data.nttReplyCn}"   th:id="'nttReplyCnA' + ${data.nttReplySn}" style="display: none;"></input>
-		   </p>
+	  <!-- S: 댓글등록 -->
+	  <div class="card mb-2" >
+	  	 <div class="card-header bg-light">
+	  	         <i class="fa fa-comment fa"></i> 댓글 작성
+	  	 </div>
+	  	 <div class="card-body">
+	  	 	<form  id="replyInsertForm" name="replyInsertForm" method="post" th:action="@{/admin/ntt/nttReplyInsert}"  th:object="${nttReplySaveReqDto}">
+	  	         <input type="hidden" name="nttSn" id="nttSn"  th:value="${nttSn}" />
+	  	         <input type="hidden" name="parntsReplySn" value="0"/>
+	  	         <input type="hidden" name="step" value="1"/>
+	  	 		<ul class="list-group list-group-flush">
+	  	 		    <li class="list-group-item">
+	  	 			<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="nttReplyCn"></textarea>
+	  	 			<button type="submit" class="btn btn-dark mt-3" >등록</button>
+	  	 		    </li>
+	  	 		</ul>
+	  	 	 </form>
+	  	 </div>
+	  </div>
+	  <!-- E: 댓글등록 -->
 	 
-		     <input type = "hidden" class="ml" th:vale="${ data.nttReplySn}"></input> 
-			 <span class="badge badge-dark" style="cursor:pointer"  th:id="'O' + ${data.nttReplySn}" ><a th:onclick="javascript:fnReReplyArea( [[${data.nttReplySn}]] ,'open');">답글</a></span>
-			 <span class="badge badge-dark" style="cursor:pointer; display: none;" th:id="'C' + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyArea( [[${data.nttReplySn}]] ,'close');">접기</a></span>
-			 <span class="badge badge-dark" style="cursor:pointer"  th:id="'mod' + ${data.nttReplySn}" ><a th:onclick="javascript:fnReReplyModifyOpen([[${data.nttReplySn}]],'mod');">수정</a></span>
-			 <span class="badge badge-dark" style="cursor:pointer; display: none;"  th:id="'save' + ${data.nttReplySn}"  ><a th:onclick="javascript:fnReReplyModify([[${data.nttReplySn}]]);">저장</a></span>
-			 <span class="badge badge-dark" style="cursor:pointer" id="" ><a th:onclick="javascript:fnReReplyDelete([[${data.nttReplySn}]]);">삭제</a></span>
-	    </div>
-	    
-	     <!-- 대댓글 목록 -->
-	     <div style="display: none;" th:id="'R' + ${data.nttReplySn}">
-		 </div>	 
-       </div>
-        <div th:unless = "${!replyList.isEmpty()}">
-              <p class="card-text">등록된 댓글이 없습니다. </p>     
-         </div>
+	  <!-- S: 댓글목록 -->
+	  <div class="card mt-2">
+		  <div class="card-header bg-light">
+	  	         <i class"fa fa-comment fa"></i> 댓글 목록
+	  	 </div>
+	     <div  th:if = "${!replyList.isEmpty()}" th:each=" data : ${replyList} ">
+		  	 <div class="card-header p-2" >
+				<table>
+					<tbody>
+						<tr class="align-middle">
+						  <td rowspan="2" class="pr-2"><i class="fa fa-user-o fa-2x"></i></td>
+						  <td class="ml"  th:text="${data.registerId}"></td>
+						</tr>
+						<tr>
+						   <td>
+							  <font size="2"><span></span></font> 
+							  <span style="cursor:pointer" onclick="javascript:showDeleteReplyModal(176, 193);"><i class="fa fa-window-close fa" aria-hidden="true"></i></span>
+						  </td>
+					   </tr>
+					</tbody>
+			   </table>
+		    </div>
+		    <div class="card-body" >
+			   <p class="card-text"><span th:text="${data.nttReplyCn}"  th:id="'nttReplyCnB' + ${data.nttReplySn}" ></span> 
+	
+			   </p>
+		 		 <input  type = "text"  class="ml" th:value="${data.nttReplyCn}"   th:id="'nttReplyCnA' + ${data.nttReplySn}" style="display: none;"/>
+			     <input type = "hidden" class="ml" th:vale="${ data.nttReplySn}"></input> 
+				 <span class="badge badge-dark" style="cursor:pointer"  th:id="'O' + ${data.nttReplySn}" ><a th:onclick="javascript:fnReReplyArea( [[${data.nttReplySn}]] ,'open');">답글</a></span>
+				 <span class="badge badge-dark" style="cursor:pointer; display: none;" th:id="'C' + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyArea( [[${data.nttReplySn}]] ,'close');">접기</a></span>
+				 <span class="badge badge-dark" style="cursor:pointer"  th:id="'mod' + ${data.nttReplySn}" ><a th:onclick="javascript:fnReReplyModifyOpen([[${data.nttReplySn}]],'mod');">수정</a></span>
+				 <span class="badge badge-dark" style="cursor:pointer; display: none;"  th:id="'save' + ${data.nttReplySn}"  ><a th:onclick="javascript:fnReReplyModify([[${data.nttReplySn}]]);">저장</a></span>
+				 <span class="badge badge-dark" style="cursor:pointer" id="" ><a th:onclick="javascript:fnReReplyDelete([[${data.nttReplySn}]]);">삭제</a></span>
+		    </div>
+		    
+		     <!-- 대댓글 목록 -->
+		     <div style="display: none;" th:id="'R' + ${data.nttReplySn}">
+			 </div>	 
+	       </div>
+	        <div th:unless = "${!replyList.isEmpty()}">
+	              <p class="card-text">등록된 댓글이 없습니다. </p>     
+	         </div>
+	     </div>
      </div>
 </div>
 	

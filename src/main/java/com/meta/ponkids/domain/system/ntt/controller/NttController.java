@@ -178,10 +178,12 @@ public class NttController {
     		               , Model model) {
       // save
          nttReplyService.save(nttReplySaveReqDto,request);
+         
+         Long nttSn = nttReplySaveReqDto.getNttSn();
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 댓글이 등록되었습니다." );
-        ///model.addAttribute( "moveUrl", BASIC_PATH +"/list" );
+    	model.addAttribute( "moveUrl", BASIC_PATH +"/modify?nttSn="+ nttSn);
 
         return "common/alert";
   }
@@ -213,7 +215,7 @@ public class NttController {
     @Transactional 
     @PostMapping( BASIC_PATH + "/delete" )
     public String delete(
-            @RequestParam(required = true) int nttSn,
+            @RequestParam(required = true) Long nttSn,
             Model model ) {
      
     	// 해당 게시판에 게시물 있는지 조회 없으시 삭제 처리 
@@ -234,12 +236,13 @@ public class NttController {
     
     /**
      * methodName    : nttReplyUpdate
-     * date           : 11/24/23
+     * date           : 11/26/23
      * description    : id 답글조회 ajax
      */
     @ResponseBody
     @RequestMapping( value = "/reply/nttReplyUpdate", method = { RequestMethod.GET } )
     public String nttReplyUpdate( @RequestParam( "nttReplySn" ) Long nttReplySn , @RequestParam( "nttReplyCn" ) String nttReplyCn 
+    		    ,@RequestParam( "nttSn" ) Long nttSn
     		    ,HttpServletRequest request ,Model model ) {
           
     	
@@ -249,16 +252,37 @@ public class NttController {
     	 modDto.setNttReplyCn(nttReplyCn);
     	 
     	 // 댓글 수정
-           nttReplyService.update(modDto,request);
+          nttReplyService.update(modDto,request);
            
-           // 메시지 출력 및 url 이동 처리
-           model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
-           model.addAttribute( "moveUrl", BASIC_PATH +"/modify?bbsSn="+ nttReplySn);
-    
-
-           return "common/alert";
-        
+ 	    String resultMsg = "정상적으로 수정되었습니다.";
+    	
+    	return resultMsg;
       
+    } 
+    
+    /**
+     * methodName    : nttReplyDelete
+     * date           : 11/26/23
+     * description    : id 댓글 삭제
+     */
+    @ResponseBody
+    @RequestMapping( value = "/reply/nttReplyDelete", method = { RequestMethod.GET } )
+    public String nttReplyUpdate( @RequestParam( "nttReplySn" ) Long nttReplySn  
+    		,@RequestParam( "nttSn" ) Long nttSn
+    		,HttpServletRequest request ,Model model ) {
+    	
+
+    	// 댓글 수정
+    	nttReplyService.deleteAllByNttReplySn(nttReplySn);
+    	
+    	// 메시지 출력 및 url 이동 처리
+    	//model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
+    	//model.addAttribute( "moveUrl", BASIC_PATH +"/modify?nttSn="+ nttSn);
+    	String resultMsg = "정상적으로 삭제되었습니다.";
+    	
+    	return resultMsg;
+    	
+    	
     } 
     
     

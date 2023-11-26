@@ -30,7 +30,7 @@ public interface NttRepository extends JpaRepository< Ntt, Long> , NttRepository
            + "        , updt_dt = now() "
            + "    WHERE ntt_sn = :nttSn", nativeQuery = true )
        // nativeQuery true 없으면 error
-   int deleteAllByNttSn( @Param( "nttSn" ) int bbsSn );
+   int deleteAllByNttSn( @Param( "nttSn" ) Long bbsSn );
 
 
 

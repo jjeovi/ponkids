@@ -131,7 +131,7 @@ public class NttService {
     
     
     @Transactional
-    public void deleteAllByNttSn( int nttSn ) {
+    public void deleteAllByNttSn( Long nttSn ) {
         
         // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
     	nttRepository.deleteAllByNttSn( nttSn );    // User.java 의 @SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y' WHERE user_sn = ?") 를 수행
