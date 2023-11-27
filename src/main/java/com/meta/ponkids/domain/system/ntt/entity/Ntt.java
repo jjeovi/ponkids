@@ -49,7 +49,7 @@ public class  Ntt extends BaseTimeEntity {
                                       
     private String nttCn;         
 
-    private String atchFileSn;   
+    private Long atchFileSn;   
 
     private int nttRdcnt;         
     

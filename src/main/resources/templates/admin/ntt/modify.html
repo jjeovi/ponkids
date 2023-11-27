@@ -213,6 +213,32 @@ function fnReReplyDelete(i){
                                 </span>
                             </div>
                         </div>
+                         <!--포토형일 경우 표시  -->
+                        <div  th:if = "${bbsSeCd == '01'}">
+	                      <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">게시판 사진</label>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="filebox preview-image">
+                                    <div class="upload-display">
+                                        <div class="upload-thumb-wrap">
+                                            <img alt="프로필 이미지" class="upload-thumb noimg">
+                                        </div>
+                                    </div>
+                                    <div class="upload-file-name">
+                                        <input class="input-file-name" value="" disabled="disabled">
+                                    </div>
+                                    <div class="upload-btn mt_10p">
+                                        <label class="btn btn-purple">업로드
+                                            <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
+                                        </label>
+                                        <button type="button" class="btn btn-purple" id="removeImageBtn" onclick="removeImage(this);" th:if = 	"${targetDto.atchFileSn != null}">이미지제거</button>
+                                    </div>
+                                    <input type="hidden" name="atchFileSn" 	    th:value="${targetDto.atchFileSn}" />
+                                    <input type="hidden" name="atchFileSnOri" 	th:value="${targetDto.atchFileSn}" />
+                                </div>
+                            </div>
+                           </div>   
+                        </div>
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>내용</label>
                             <div class="col-md-6 col-sm-6">

@@ -136,6 +136,19 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
     	
     
     }
+
+
+	@Override
+	public String getBbsSeCd(Long bbsSn) {
+		String bbsSeCd = query.select(bbs.bbsSeCd)
+			     .from(bbs)
+			     .where(
+			    		 eqBbsSn( bbsSn )
+		                )
+			   .fetchOne();
+
+	return bbsSeCd;
+	}
     
 
 

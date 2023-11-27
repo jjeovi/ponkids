@@ -89,6 +89,15 @@ public class BbsService {
     	
     }
     
+    public String getBbsSeCd(Long bbsSn) {
+    	
+    	String bbsSeCd = bbsRepository.getBbsSeCd(bbsSn);
+    	
+    	return bbsSeCd;
+    	
+    }
+    
+    
     
     public void update( BbsModDto modDto  ,HttpServletRequest request  ) {
         // target 조회

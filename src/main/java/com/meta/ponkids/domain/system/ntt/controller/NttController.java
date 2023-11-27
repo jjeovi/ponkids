@@ -8,9 +8,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.meta.ponkids.domain.system.bbs.dto.BbsModDto;
 import com.meta.ponkids.domain.system.bbs.service.BbsService;
+import com.meta.ponkids.domain.system.file.service.AtchFileService;
 import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttModDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
@@ -36,6 +38,7 @@ public class NttController {
    private final NttService nttService;
    private final BbsService bbsService;
    private final NttReplyService nttReplyService;
+   private final AtchFileService atchFileService;
 
 
    
@@ -59,14 +62,12 @@ public class NttController {
         
         nttListDto.setBbsSn(bbsSn);
         
-    	//게시물 조회 
+    	// 게시물 조회 
         //Page<NttListDto> nttList = nttService.getNttList( nttListDto);
        /// model.addAttribute( "nttList", nttList );
        
-        //공지설정
-   	 // 댓글 목록 조회
+        // 공지설정 목록 조회 
         List<NttListDto> noticeList = nttService.getNoticeList(bbsSn);
-        
         model.addAttribute( "noticeList", noticeList );
         
     	// 목록 조회
@@ -78,17 +79,29 @@ public class NttController {
         
         // 기본 경로 setting
         model.addAttribute("basicPath", BASIC_PATH);
+        
+        //리스트형, 포토형 화면 다름 .
+        String bbsSeCd = bbsService.getBbsSeCd(bbsSn);
+        String screen  = "";
+        if( bbsSeCd.equals("01")) { // 포토형
+        	screen = "/photolist.html";
+        } else {
+        	screen = "/list";
+        }
+        
 
-        return BASIC_PATH + "/list";
+        return BASIC_PATH + screen;
     }
     
     
     
     @GetMapping(  BASIC_PATH  + "/regist" )
-    public String nttRegist(  @RequestParam(required = true) Long bbsSn, Model model ) {
+    public String nttRegist(  @RequestParam(required = true) Long bbsSn,
+    	                      @RequestParam(required = true) String bbsSeCd, Model model ) {
         
        // model.addAttribute( new BbsSaveReqDto() );
         model.addAttribute("bbsSn", bbsSn);
+        model.addAttribute("bbsSeCd", bbsSeCd);
         // 기본 경로 setting
         model.addAttribute("basicPath", BASIC_PATH);
         
@@ -98,8 +111,16 @@ public class NttController {
     
     @PostMapping(BASIC_PATH  + "/insert")
     public String nttInsert( 
+    	                   @RequestParam("file") MultipartFile files,
     		               @ModelAttribute NttSaveReqDto nttSaveReqDto,
-    		               HttpServletRequest request , Model model ) {
+    		               HttpServletRequest request , Model model ) throws IOException {
+    	
+    	
+    	  // 첨부파일 존재시 파일 저장
+        if(!files.isEmpty()){
+        	nttSaveReqDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 ) 
+        }
+    	
     	// save
         nttService.save(nttSaveReqDto,request);
         
@@ -115,7 +136,7 @@ public class NttController {
     
     
     @GetMapping(value= {  BASIC_PATH + "/modify" } )	 
-      public String modify( @RequestParam(required = true) Long nttSn,  Model model, 
+      public String modify( @RequestParam(required = true) Long nttSn,   @RequestParam(required = true) String bbsSeCd, Model model, 
     		  HttpServletRequest request ) throws IOException {
       
       // 권한 리스트
@@ -131,6 +152,7 @@ public class NttController {
   	  
   	  model.addAttribute("replySetYn", replySetYn);
   	  model.addAttribute("nttSn", nttSn);
+  	  model.addAttribute("bbsSeCd", bbsSeCd);
   	  
   	 //댓글 설정 Y일 경우 
       if(replySetYn.equals("Y")) {
@@ -159,9 +181,21 @@ public class NttController {
     
     @PostMapping(BASIC_PATH + "/update")
     public String update(
+    		@RequestParam("file") MultipartFile files,
     		@ModelAttribute  NttModDto modDto, HttpServletRequest request
             ,
-    		Model model ) {
+    		Model model ) throws IOException {
+    	
+  	    // 첨부파일 존재시 파일 저장
+        if(!files.isEmpty()){
+        	 // 기존에 첨부파일 있을시 삭제
+            if( modDto.getAtchFileSnOri() != null ) {
+                atchFileService.delete(modDto.getAtchFileSnOri());
+            }
+            
+        	modDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 ) 
+        }
+    	
     	
     	   nttService.nttUpdate(modDto,request);
     	   

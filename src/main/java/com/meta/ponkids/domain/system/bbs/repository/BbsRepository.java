@@ -27,6 +27,7 @@ public interface BbsRepository extends JpaRepository< Bbs, Long> , BbsRepository
    
    
    public String getSetReplySetYn(Long bbsSn);
+   public String getBbsSeCd(Long bbsSn);
    
 
 	    
