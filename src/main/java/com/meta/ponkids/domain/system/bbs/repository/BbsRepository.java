@@ -24,6 +24,10 @@ public interface BbsRepository extends JpaRepository< Bbs, Long> , BbsRepository
            + "    WHERE bbs_sn = :bbsSn", nativeQuery = true )
        // nativeQuery true 없으면 error
    int deleteAllByBbsSn( @Param( "bbsSn" ) Long bbsSn );
+   
+   
+   public String getSetReplySetYn(Long bbsSn);
+   
 
 	    
 }

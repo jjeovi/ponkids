@@ -22,6 +22,7 @@ import java.util.List;
 
 
 import static com.meta.ponkids.domain.system.bbs.entity.QBbs.bbs;
+import static com.meta.ponkids.domain.system.ntt.entity.QNttReply.nttReply;
 
 @Repository
 @RequiredArgsConstructor
@@ -112,7 +113,33 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
             else                            return null;
         } else { return null; }
     }
-	 
+
+  
+    
+    private BooleanExpression eqBbsSn( Long bbsSn) {
+    	return bbs.bbsSn.eq( bbsSn );
+    }
+    
+
+	
+	@Override
+	public String getSetReplySetYn(Long bbsSn) {
+    	String replySetYn = query.select(bbs.replySetYn)
+    			     .from(bbs)
+    			     .where(
+    			    		 eqBbsSn( bbsSn )
+    		                )
+    			   .fetchOne();
+
+    	return replySetYn;
+    	
+    	
+    
+    }
+    
+
+
+
 
 
 }
