@@ -303,46 +303,34 @@ function drawMenuTree( resultList ) {
 
     var rootYn = false;
 
-    for ( let data of resultList ) {
-
-        if ( data.upperMenuSn == null ) {
-            // ROOT 메뉴 일 시,
-            $( "#menuStructureJsTree" ).append(
-                $( "<ul>" ).append(
-                    $( "<li>" ).attr( "id", "id" + data.menuSn ).attr( "class", "mcd" + data.menuCd ).append( data.menuNm )
-                )
-            );
-            rootYn = true;
-
-        } else if ( rootYn ) {
-            // root 구조가 없으면 메뉴를 그리지 않음.
-            // "#id" + data.upperMenuSn 밑에 ul 이 있으면, 하위 첫번째 ul 안에 li를 그리고
-            //                                 이 없으면, ul을 그린 뒤 그 안에 li를 그린다.
-            if ( $( "#id" + data.upperMenuSn ).find( "ul" ).length ) {
-                $( "#id" + data.upperMenuSn + " ul" ).eq( 0 ).append(
-                    $( "<li>" ).attr( "id", "id" + data.menuSn ).attr( "class", "mcd" + data.menuCd ).append( data.menuNm )
-                );
-            } else {
-                $( "#id" + data.upperMenuSn ).append(
-                    $( "<ul>" ).append(
-                        $( "<li>" ).attr( "id", "id" + data.menuSn ).attr( "class", "mcd" + data.menuCd ).append( data.menuNm )
-                    )
-                );
-            }
-
-        }
-    }
+    
+    var data = new Array();
+    $.each(resultList, function(idx, item){
+	if (item.upperMenuSn == null ) item.upperMenuSn = '#';
+	data[idx] = {id:item.menuSn, parent:item.upperMenuSn, text: item.menuNm, href: item.menuUrl, menuUseYn : item.useYn, level : item.level}
+	});
 
     // jstree 생성
-    $( '#menuStructureJsTree' ).jstree();
+     $( '#menuStructureJsTree' ).jstree( { 'core' : {'data' : data } } ).bind( "select_node.jstree", function( e , targetData ) {
+		var selectedMenu = targetData.node.original;
+		alert(selectedMenu);
+	
+	 });
+	
+	$("#menuStructureJsTree").jstree("close_all");
+	$("#menuStructureJsTree").jstree("destory");
+	$("#menuStructureJsTree").jstree(true).settings.core.data = data;
+	$("#menuStructureJsTree").jstree("loaded");
+	
+	$("#menuStructureJsTree").bind("refresh.jstree", function( e , data ) {
+		$(this).jstree("open_all");
+	})
+	$("#menuStructureJsTree").jstree(true).refresh();
 
-    // jstree 전부 open 하기
-    $("#menuStructureJsTree").jstree("open_all");
 
-
-    $( '#menuStructureJsTree' ).on( "changed.jstree", function ( e, data ) {
-        console.log( data.selected );
-    } );
+    // $( '#menuStructureJsTree' ).on( "changed.jstree", function ( e, data ) {
+    //     console.log( data.selected );
+    // } );
 
 
 }
