@@ -84,7 +84,7 @@ public class NttController {
         String bbsSeCd = bbsService.getBbsSeCd(bbsSn);
         String screen  = "";
         if( bbsSeCd.equals("01")) { // 포토형
-        	screen = "/photolist.html";
+        	screen = "/photoList.html";
         } else {
         	screen = "/list";
         }
