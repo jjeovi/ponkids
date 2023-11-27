@@ -19,6 +19,12 @@ public class MenuListDto {
 	
 	private String menuNm;
 	
+	private String menuPath;
+	
+	private String hierarchy;
+	
+	private String requiredMenu;
+	
 	private String menuCd;
 	
 	private String menuUrl;
@@ -46,11 +52,14 @@ public class MenuListDto {
 	private CategoryDto category;    // 카테고리 검색 : 생성자에는 추가하지 않음!
 	
 	@QueryProjection
-	public MenuListDto( Long menuSn, Long roleSn, Long upperMenuSn, String menuNm, String menuCd, String menuUrl, String parntsMenuYn, Long menuSeq, String menuDcSetYn, String menuDc, String menuDetailDc, Long atchFileSn, String useYn, String newWindowYn ) {
+	public MenuListDto( Long menuSn, Long roleSn, Long upperMenuSn, String menuNm, String menuPath, String hierarchy, String requiredMenu, String menuCd, String menuUrl, String parntsMenuYn, Long menuSeq, String menuDcSetYn, String menuDc, String menuDetailDc, Long atchFileSn, String useYn, String newWindowYn) {
 		this.menuSn = menuSn;
 		this.roleSn = roleSn;
 		this.upperMenuSn = upperMenuSn;
 		this.menuNm = menuNm;
+		this.menuPath = menuPath;
+		this.hierarchy = hierarchy;
+		this.requiredMenu = requiredMenu;
 		this.menuCd = menuCd;
 		this.menuUrl = menuUrl;
 		this.parntsMenuYn = parntsMenuYn;
@@ -61,26 +70,6 @@ public class MenuListDto {
 		this.atchFileSn = atchFileSn;
 		this.useYn = useYn;
 		this.newWindowYn = newWindowYn;
-	}
-	
-	// TODO 생성자();
-	public MenuListDto( Long menuSn, Long roleSn, Long upperMenuSn, String menuNm, String menuCd, String menuUrl, String parntsMenuYn, Long menuSeq, String menuDcSetYn, String menuDc, String menuDetailDc, Long atchFileSn, String useYn, String newWindowYn, String schOption, String schCntn, CategoryDto category ) {
-		this.menuSn = menuSn;
-		this.roleSn = roleSn;
-		this.upperMenuSn = upperMenuSn;
-		this.menuNm = menuNm;
-		this.menuCd = menuCd;
-		this.menuUrl = menuUrl;
-		this.parntsMenuYn = parntsMenuYn;
-		this.menuSeq = menuSeq;
-		this.menuDcSetYn = menuDcSetYn;
-		this.menuDc = menuDc;
-		this.menuDetailDc = menuDetailDc;
-		this.atchFileSn = atchFileSn;
-		this.useYn = useYn;
-		this.newWindowYn = newWindowYn;
-		this.schOption = schOption;
-		this.schCntn = schCntn;
-		this.category = category;
 	}
 }
+

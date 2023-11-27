@@ -33,7 +33,11 @@ public class MenuHierarchy {
     
     private String menuNm ;
     
+    private String menuPath ;
+    
     private String hierarchy ;
+    
+    private String requiredMenu ;
     
     private String menuCd ;
     

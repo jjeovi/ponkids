@@ -55,6 +55,9 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
 						, menuRole.roleSn
 						, menuHierarchy.upperMenuSn
 						, menuHierarchy.menuNm
+						, menuHierarchy.menuPath
+						, menuHierarchy.hierarchy
+						, menuHierarchy.requiredMenu
 						, menuHierarchy.menuCd
 						, menuHierarchy.menuUrl
 						, menuHierarchy.parntsMenuYn
@@ -93,8 +96,9 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
 	
 	// 카테고리 lv 1 검색 옵션
 	private BooleanExpression eqCateLv1( CategoryDto categoryDto ) {
-		return categoryDto != null  ? menuRole.roleSn.eq( categoryDto.getLv1Sn() ) : null;
+		return (categoryDto != null && categoryDto.getLv1Sn() != null && categoryDto.getLv1Sn() != 0 )   ? menuRole.roleSn.eq( categoryDto.getLv1Sn() ) : null;
 	}
+	
 	
     private BooleanExpression eqOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨
@@ -111,3 +115,4 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
     }
 
 }
+
