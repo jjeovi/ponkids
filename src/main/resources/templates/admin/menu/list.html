@@ -9,7 +9,7 @@
 
             // S : jstree
             // 6 create an instance when the DOM is ready
-            $('#menuStructureJsTree').jstree();
+            // $('#menuStructureJsTree').jstree();
             // 7 bind to events triggered on the tree
             $('#menuStructureJsTree').on("changed.jstree", function (e, data) {
               console.log(data.selected);
@@ -33,9 +33,7 @@
 
             if ( result.resultList != null && result.resultList.length != 0 ) {
                 // 데이터 있을 시
-
-                drawMenuTree(resultList);
-
+                drawMenuTree(result.resultList);
             } else {
                 // 데이터가 없을 시
 
@@ -98,7 +96,7 @@
                     <!-- 분류 영역 > 카테고리 그룹 영역 -->
                     <div class="col-md-10 category-list-area">
                         <div class="category-group-box">
-                            <ul class="data-group">
+                            <ul class="data-group" data-all-yn="Y">
                                  <!--  lv1 -->
                                 <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('', this );"  th:classappend="${ ( searchDTO.category != null ) && ( data.categorySn == searchDTO.category.lv1Sn ) } ? 'on' " th:value="${data.categorySn}">[[${data.categoryNm}]]</li>
                             </ul>
@@ -130,6 +128,15 @@
                     <div class="x_content" id="menuStructure">
                         <th:block th:if = "${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null )}">
                             <div id="menuStructureJsTree" th:if = "${!resultList.isEmpty()}">
+                                <ul>
+                                    <li>Root node 1
+                                        <ul>
+                                            <li id="child_node_1">Child node 1</li>
+                                            <li>Child node 2</li>
+                                        </ul>
+                                    </li>
+                                    <li>Root node 2</li>
+                                </ul>
                                 <!--                            <ul class="menu-tree">-->
                                 <!--                                <li>Root node 1-->
                                 <!--                                    <ul>-->
