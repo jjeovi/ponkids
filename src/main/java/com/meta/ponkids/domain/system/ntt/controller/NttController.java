@@ -192,11 +192,19 @@ public class NttController {
             if( modDto.getAtchFileSnOri() != null ) {
                 atchFileService.delete(modDto.getAtchFileSnOri());
             }
-            
+            // 첨부파일 저장
         	modDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 ) 
+
+        } else {
+        	 // 첨부파일 존재하지않을 때
+            // 기존 첨부파일이 있었는데 삭제됬다면 삭제처리
+            if( modDto.getAtchFileSnOri()!= null && modDto.getAtchFileSn() == null ) {
+                atchFileService.delete(modDto.getAtchFileSnOri());
+                modDto.setAtchFileSn( null );
+            }
         }
     	
-    	
+    	  // 게시물 업데이트
     	   nttService.nttUpdate(modDto,request);
     	   
     	   Long bbsSn = modDto.getBbsSn();
