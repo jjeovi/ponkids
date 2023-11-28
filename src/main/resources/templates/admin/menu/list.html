@@ -279,7 +279,7 @@
 									<th:block th:each="data : ${cateLv1List}" >
 										<label>
 											<input th:id="'otherAuthApplyToMenu'+${dataStat.count}" type="checkbox" name="otherAuthApplyToMenu" th:value="${data.categorySn}" />
-											<label>[[${data.categoryNm}]]</label>
+											<label th:for="'otherAuthApplyToMenu'+${dataStat.count}" class="inputChk">[[${data.categoryNm}]]</label>
 										</label>
 									</th:block>
                                 </div>
