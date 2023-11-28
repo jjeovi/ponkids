@@ -21,11 +21,11 @@ import javax.persistence.Table;
 //        "where tm.upper_menu_sn = mh.menu_sn\n" +
 //        ") select * from menu_hierarchy\n" +
 //        "order by hierarchy")
-@Table(name = "vw_menu_hierarchy")
+@Table(name = "vw_admin_menu_hierarchy")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MenuHierarchy {
+public class AdminMenuHierarchy {
     @Id
     private Long menuSn ;
     

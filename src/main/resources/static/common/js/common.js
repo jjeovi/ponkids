@@ -97,7 +97,16 @@ function validCheckName( name ) {
 
 // 라디오 버튼 클릭시 active 클래스 추가
 function clickRadioEvent( e ) {
-    // 라디오 버튼의 label들을 찾아 모든 label 에 active클래스를 제거 후, 클릭된 label 에 active클래스 추가
+    // 라디오 버튼의 label들을 찾아 모든 label 에 active 클래스를 제거 후, 클릭된 label 에 active클래스 추가
+    $( e ).parent().siblings( "label" ).removeClass( "active" );
+    $( e ).parent().addClass( "active" );
+}
+
+
+
+// 체크박스 버튼 클릭시 active 클래스 추가
+function clickCheckboxEvent( e ) {
+    // 체크박스 버튼의 label들을 찾아 모든 label 에 active 클래스를 제거 후, 클릭된 label 에 active클래스 추가
     $( e ).parent().siblings( "label" ).removeClass( "active" );
     $( e ).parent().addClass( "active" );
 }
@@ -293,6 +302,7 @@ function searchCate( url ) {
     }
 }
 
+
 // 메뉴 구조 그리기
 function drawMenuTree( resultList ) {
     // console.log( resultList );
@@ -336,12 +346,32 @@ function drawMenuTree( resultList ) {
     
     // jstree 생성
      $( '#menuStructureJsTree' ).jstree( { 'core' : {'data' : resultList } } ).bind( "select_node.jstree", function( e , targetData ) {
-		var target = targetData.node.original;
+		 // target 메뉴 setting
+		 var target = targetData.node.original;
+		 
+		// 해당 메뉴로 다른권한에서 연동 가능한지 여부 확인 (ajax)
+		$.ajax( {
+            url: "/live/getPossibleAuthListAjax",
+            type: "GET",
+            dataType: "json",
+            async: false,
+            data: { upperMenuSn : target.upperMenuSn }, // 검색할 값 listDto 안에 categoryDto 변수 추가
+            contentType: "application/json",
+            success: function ( result ) {
+                // callback 함수 연결 -> callback함수로 구현
+                
+                alert(authList);
+//                searchCateCallback( result );
+            }
+        } );
+		
+		
 
+		//formArea 전부 숨긴 뒤 updateForm 만 보이게
         $("#formArea").children().hide();
         $("#updateForm").show();
 
-        // S :  메뉴 수정 영역 setting
+        // S :  메뉴 updateform 항목 setting
         $("#updateForm [name='menuSn']"          ).val(target.menuSn);
         $("#updateForm [name='upperMenuSn']"     ).val(target.upperMenuSn);
         $("#updateForm [name='menuNm']"          ).val(target.menuNm);
@@ -355,10 +385,11 @@ function drawMenuTree( resultList ) {
         $("#updateForm [name='menuDetailDc']"    ).val(target.menuDetailDc);
         $("#updateForm [name='useYn']"           ).val(target.useYn);
         $("#updateForm [name='newWindowYn']"     ).val(target.newWindowYn);
-        // E :  메뉴 수정 영역 setting
+        // E :  메뉴 updateform 항목 setting
 
 	 });
 	
+	// S : 메뉴 jstree 생성 
 	$("#menuStructureJsTree").jstree("close_all");
 	$("#menuStructureJsTree").jstree("destory");
 	$("#menuStructureJsTree").jstree(true).settings.core.data = resultList;
@@ -368,11 +399,7 @@ function drawMenuTree( resultList ) {
 		$(this).jstree("open_all");
 	})
 	$("#menuStructureJsTree").jstree(true).refresh();
-
-
-    // $( '#menuStructureJsTree' ).on( "changed.jstree", function ( e, data ) {
-    //     console.log( data.selected );
-    // } );
+	// E : 메뉴 jstree 생성
 
 
 }

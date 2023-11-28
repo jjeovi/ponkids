@@ -6,7 +6,6 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// TODO Dto 항목 setting
 @Data
 @NoArgsConstructor
 public class MenuListDto {

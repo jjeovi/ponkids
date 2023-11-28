@@ -1,6 +1,5 @@
 package com.meta.ponkids.domain.system.role.entity;
 
-import com.meta.ponkids.domain.user.entity.User;
 import com.meta.ponkids.global.common.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,15 +11,14 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
-@Where( clause = "del_yn = 'N'")
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @DynamicInsert
+@Where( clause = "del_yn = 'N'" )
 @Table( name = "TB_ROLE" )
 @SequenceGenerator(
         name = "SEQ_TB_ROLE_SN",

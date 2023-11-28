@@ -136,7 +136,6 @@ public class MenuController {
     	
     	// E : 필요한 객체 setting
         
-        
         // update 구현
     	menuService.update( modDto, request );
 //        menuService.update( modDto, menuRoleModDto, request );
@@ -147,7 +146,6 @@ public class MenuController {
         
         return "common/alert";
     }
-    
     
     @Transactional
     @PostMapping( BASIC_PATH + "/delete" )
@@ -165,16 +163,29 @@ public class MenuController {
         return "common/alert";
     }
 
-
     @ResponseBody
-    @RequestMapping( value = "/live/getMenuListAjax", method = { RequestMethod.GET } )
+    @GetMapping("/live/getMenuListAjax")
     public Map<String, Object> getMenuListAjax( @ModelAttribute MenuListDto listDto ) {
         Map<String, Object> result = new HashMap<String, Object>();
         
         // 메뉴 list 출력
         result.put( "resultList", menuService.getList( listDto ) );
         
-        
+    	return result;
+    }
+    
+    @ResponseBody
+    @GetMapping("/live/getPossibleAuthListAjax")
+    public Map<String, Object> getPossibleAuthListAjax( @ModelAttribute MenuListDto listDto ) {
+    	// 메뉴 수정 시 
+    	// 해당 메뉴가 다른 권한에도 연동할 수 있도록
+    	// 해당 메뉴의 부모메뉴가 존재하는 권한 리스트 체크
+    	
+    	Map<String, Object> result = new HashMap<String, Object>();
+    	
+    	// 메뉴 list 출력
+    	result.put( "resultList", menuService.getPossibleAuthListAjax( listDto ) );
+    	
     	return result;
     }
 

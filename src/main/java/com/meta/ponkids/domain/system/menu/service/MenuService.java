@@ -5,6 +5,7 @@ import com.meta.ponkids.domain.system.menu.dto.MenuModDto;
 import com.meta.ponkids.domain.system.menu.dto.MenuSaveDto;
 import com.meta.ponkids.domain.system.menu.entity.Menu;
 import com.meta.ponkids.domain.system.menu.repository.MenuRepository;
+import com.meta.ponkids.domain.system.role.dto.RoleListDto;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -94,6 +95,10 @@ public class MenuService {
         // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
         menuRepository.deleteById( pk );    // Entity 의 @SQLDelete 를 수행
         
+    }
+    
+    public List<RoleListDto> getPossibleAuthListAjax( MenuListDto listDto ) {
+    	return menuRepository.getPossibleAuthListAjax( listDto );
     }
 	
 

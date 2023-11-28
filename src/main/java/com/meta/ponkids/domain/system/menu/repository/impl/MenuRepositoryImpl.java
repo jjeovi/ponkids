@@ -4,6 +4,8 @@ package com.meta.ponkids.domain.system.menu.repository.impl;
 import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
 import com.meta.ponkids.domain.system.menu.dto.QMenuListDto;
 import com.meta.ponkids.domain.system.menu.repository.custom.MenuRepositoryCustom;
+import com.meta.ponkids.domain.system.role.dto.QRoleListDto;
+import com.meta.ponkids.domain.system.role.dto.RoleListDto;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -14,8 +16,9 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static com.meta.ponkids.domain.system.menu.entity.QMenuHierarchy.menuHierarchy;
+import static com.meta.ponkids.domain.system.menu.entity.QAdminMenuHierarchy.adminMenuHierarchy;
 import static com.meta.ponkids.domain.system.menu.entity.QMenuRole.menuRole;
+import static com.meta.ponkids.domain.system.role.entity.QRole.role;
 
 @Repository
 @RequiredArgsConstructor
@@ -55,25 +58,25 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                 		  menuRole.menuSn
 						, menuRole.menuSn.as( "id" )	// menuSn 과 id 는 같은 값으로 mapping (jstree 의 변수 id를 매핑하기 위한 임시 변수)
 						, menuRole.roleSn
-						, menuHierarchy.upperMenuSn
+						, adminMenuHierarchy.upperMenuSn
 						, new CaseBuilder()
-						.when(menuHierarchy.upperMenuSn.isNull()).then( "#" )
-						.otherwise( menuHierarchy.upperMenuSn.stringValue() ).as("parent")	// upperMenuSn 과 parent 는 같은 값으로 mapping (jstree 의 변수 parent를 매핑하기 위한 임시 변수) parent 는 string 임에 유의한다.
-						, menuHierarchy.menuNm
-						, menuHierarchy.menuNm.as("text")	// menuNm 과 text 는 같은 값으로 mapping ( jstree 의 변수 text를 매핑하기 위한 임시 변수 )
-						, menuHierarchy.menuPath
-						, menuHierarchy.hierarchy
-						, menuHierarchy.requiredMenu
-						, menuHierarchy.menuCd
-						, menuHierarchy.menuUrl
-						, menuHierarchy.parntsMenuYn
-						, menuHierarchy.menuSeq
-						, menuHierarchy.menuDcSetYn
-						, menuHierarchy.menuDc
-						, menuHierarchy.menuDetailDc
-						, menuHierarchy.atchFileSn
-						, menuHierarchy.useYn
-						, menuHierarchy.newWindowYn
+						.when(adminMenuHierarchy.upperMenuSn.isNull()).then( "#" )
+						.otherwise( adminMenuHierarchy.upperMenuSn.stringValue() ).as("parent")	// upperMenuSn 과 parent 는 같은 값으로 mapping (jstree 의 변수 parent를 매핑하기 위한 임시 변수) parent 는 string 임에 유의한다.
+						, adminMenuHierarchy.menuNm
+						, adminMenuHierarchy.menuNm.as("text")	// menuNm 과 text 는 같은 값으로 mapping ( jstree 의 변수 text를 매핑하기 위한 임시 변수 )
+						, adminMenuHierarchy.menuPath
+						, adminMenuHierarchy.hierarchy
+						, adminMenuHierarchy.requiredMenu
+						, adminMenuHierarchy.menuCd
+						, adminMenuHierarchy.menuUrl
+						, adminMenuHierarchy.parntsMenuYn
+						, adminMenuHierarchy.menuSeq
+						, adminMenuHierarchy.menuDcSetYn
+						, adminMenuHierarchy.menuDc
+						, adminMenuHierarchy.menuDetailDc
+						, adminMenuHierarchy.atchFileSn
+						, adminMenuHierarchy.useYn
+						, adminMenuHierarchy.newWindowYn
 //                		new CaseBuilder()
 //                		.when( user.gender.eq("M")).then("남자")
 //                		.when( user.gender.eq("F")).then("여자")
@@ -81,8 +84,10 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
 //                		.as("gender"),
                 		) )					
                 .from( menuRole )
-				.leftJoin( menuHierarchy )	// view : vw_menu_hierarchy
-				.on( menuRole.menuSn.eq( menuHierarchy.menuSn ) )
+				.leftJoin( adminMenuHierarchy )	// view : vw_menu_hierarchy
+				.on( 
+						menuRole.menuSn.eq( adminMenuHierarchy.menuSn )
+						)
                 .where(
 						eqCateLv1( listDto.getCategory() )
 				)
@@ -98,11 +103,50 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
 		
 	}
 	
+
+	@Override
+	public List<RoleListDto> getPossibleAuthListAjax(MenuListDto listDto) {
+		
+//		select tmr.role_sn, tr.role_nm, tr.role_dc
+//	      from tb_menu_role tmr
+//	 left join tb_role  tr
+//	        on tmr.role_sn = tr.role_sn
+//	     where menu_sn = ?
+//	  order by role_sn
+		
+		List<RoleListDto> results = query
+				.select(
+						new QRoleListDto(
+								role.roleSn,
+								role.roleNm,
+								role.roleDc
+								)
+						
+						)
+				.from( menuRole )
+				.leftJoin( role )
+				.on( 
+						menuRole.roleSn.eq( role.roleSn ),
+						role.delYn.eq("N")
+					)
+				.where( eqMenuSn( listDto.getUpperMenuSn() ) )
+				.orderBy( menuRole.roleSn.asc() )
+				.fetch();
+				
+		return results;
+	}
+	
 	// -------------------------------- WHERE 검색 옵션 setting --------------------------------
 	
 	// 카테고리 lv 1 검색 옵션
 	private BooleanExpression eqCateLv1( CategoryDto categoryDto ) {
-		return (categoryDto != null && categoryDto.getLv1Sn() != null && categoryDto.getLv1Sn() != 0 )   ? menuRole.roleSn.eq( categoryDto.getLv1Sn() ) : null;
+		return (categoryDto != null && categoryDto.getLv1Sn() != null 
+				&& categoryDto.getLv1Sn() != 0 /* 0이 아닌 것은  검색 제외 */)   ? menuRole.roleSn.eq( categoryDto.getLv1Sn() ) : null;
+	}
+	
+	// menuSn 검색 ( upperMenuSn )
+	private BooleanExpression eqMenuSn( Long upperMenuSn ) {
+		return ( upperMenuSn != null && upperMenuSn != null ) ? menuRole.menuSn.eq( upperMenuSn ) : null;
 	}
 	
 	
@@ -119,6 +163,8 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
             return null;
         }
     }
+
+
 
 }
 

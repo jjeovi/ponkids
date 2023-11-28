@@ -5534,3 +5534,49 @@ ul li {
 }
 
 /* E : 메뉴 영역 */
+
+
+/* S : 체크박스 */
+/* input 숨겨준다 */
+input[type="checkbox"]{
+  display:none;
+  }
+
+input[type="checkbox"] + label{
+  cursor:pointer;
+ }
+
+input[type="checkbox"] + label > span{
+  vertical-align: middle;
+  padding-left: 5px;
+ }
+
+/* label:before에 체크하기 전 상태 CSS */
+input[type="checkbox"] + label:before{
+  content:"";
+  display:inline-block;
+  width:22px;
+  height:22px;
+  border:2px solid #9674f1;
+  border-radius: 4px;
+  vertical-align:middle;
+  }
+  
+/* label:before에 체크 된 상태 CSS */  
+input[type="checkbox"]:checked + label:before{
+  content:"";
+  background-color:#c8b3f4;
+  border-color:#9674f1;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  }
+  
+input[type="checkbox"].active{
+  content:"";
+  background-color:#c8b3f4;
+  border-color:#9674f1;
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+  
+  /* E : 체크박스 */
