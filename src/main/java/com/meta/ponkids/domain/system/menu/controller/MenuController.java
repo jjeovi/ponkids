@@ -174,6 +174,7 @@ public class MenuController {
         // 메뉴 list 출력
         result.put( "resultList", menuService.getList( listDto ) );
         
+        
     	return result;
     }
 

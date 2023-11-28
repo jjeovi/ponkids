@@ -6,6 +6,7 @@ import com.meta.ponkids.domain.system.menu.dto.QMenuListDto;
 import com.meta.ponkids.domain.system.menu.repository.custom.MenuRepositoryCustom;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -52,9 +53,14 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
 				// select
                 .select( new QMenuListDto(
                 		  menuRole.menuSn
+						, menuRole.menuSn.as( "id" )	// menuSn 과 id 는 같은 값으로 mapping (jstree 의 변수 id를 매핑하기 위한 임시 변수)
 						, menuRole.roleSn
 						, menuHierarchy.upperMenuSn
+						, new CaseBuilder()
+						.when(menuHierarchy.upperMenuSn.isNull()).then( "#" )
+						.otherwise( menuHierarchy.upperMenuSn.stringValue() ).as("parent")	// upperMenuSn 과 parent 는 같은 값으로 mapping (jstree 의 변수 parent를 매핑하기 위한 임시 변수) parent 는 string 임에 유의한다.
 						, menuHierarchy.menuNm
+						, menuHierarchy.menuNm.as("text")	// menuNm 과 text 는 같은 값으로 mapping ( jstree 의 변수 text를 매핑하기 위한 임시 변수 )
 						, menuHierarchy.menuPath
 						, menuHierarchy.hierarchy
 						, menuHierarchy.requiredMenu

@@ -301,25 +301,67 @@ function drawMenuTree( resultList ) {
         $( "<div>" ).attr( "id", "menuStructureJsTree" ).append()
     );
 
-    var rootYn = false;
+    // var rootYn = false;
+    //
+    // for ( let data of resultList ) {
+    //
+    //     if ( data.upperMenuSn == null ) {
+    //         // ROOT 메뉴 일 시,
+    //         $( "#menuStructureJsTree" ).append(
+    //             $( "<ul>" ).append(
+    //                 $( "<li>" ).attr( "id", "id" + data.menuSn ).attr( "class", "mcd" + data.menuCd ).append( data.menuNm )
+    //             )
+    //         );
+    //         rootYn = true;
+    //
+    //     } else if ( rootYn ) {
+    //         // root 구조가 없으면 메뉴를 그리지 않음.
+    //         // "#id" + data.upperMenuSn 밑에 ul 이 있으면, 하위 첫번째 ul 안에 li를 그리고
+    //         //                                 이 없으면, ul을 그린 뒤 그 안에 li를 그린다.
+    //         if ( $( "#id" + data.upperMenuSn ).find( "ul" ).length ) {
+    //             $( "#id" + data.upperMenuSn + " ul" ).eq( 0 ).append(
+    //                 $( "<li>" ).attr( "id", "id" + data.menuSn ).attr( "class", "mcd" + data.menuCd ).append( data.menuNm )
+    //             );
+    //         } else {
+    //             $( "#id" + data.upperMenuSn ).append(
+    //                 $( "<ul>" ).append(
+    //                     $( "<li>" ).attr( "id", "id" + data.menuSn ).attr( "class", "mcd" + data.menuCd ).append( data.menuNm )
+    //                 )
+    //             );
+    //         }
+    //
+    //     }
+    // }
 
     
-    var data = new Array();
-    $.each(resultList, function(idx, item){
-	if (item.upperMenuSn == null ) item.upperMenuSn = '#';
-	data[idx] = {id:item.menuSn, parent:item.upperMenuSn, text: item.menuNm, href: item.menuUrl, menuUseYn : item.useYn, level : item.level}
-	});
-
     // jstree 생성
-     $( '#menuStructureJsTree' ).jstree( { 'core' : {'data' : data } } ).bind( "select_node.jstree", function( e , targetData ) {
-		var selectedMenu = targetData.node.original;
-		alert(selectedMenu);
-	
+     $( '#menuStructureJsTree' ).jstree( { 'core' : {'data' : resultList } } ).bind( "select_node.jstree", function( e , targetData ) {
+		var target = targetData.node.original;
+
+        $("#formArea").children().hide();
+        $("#updateForm").show();
+
+        // S :  메뉴 수정 영역 setting
+        $("#updateForm [name='menuSn']"          ).val(target.menuSn);
+        $("#updateForm [name='upperMenuSn']"     ).val(target.upperMenuSn);
+        $("#updateForm [name='menuNm']"          ).val(target.menuNm);
+        $("#updateForm [name='menuPath']"        ).val(target.menuPath);
+        $("#updateForm [name='menuSeq']"         ).val(target.menuSeq);
+        $("#updateForm [name='menuCd']"          ).val(target.menuCd);
+        $("#updateForm [name='menuUrl']"         ).val(target.menuUrl);
+        $("#updateForm [name='parntsMenuYn']"    ).val(target.parntsMenuYn);
+        $("#updateForm [name='menuDcSetYn']"     ).val(target.menuDcSetYn);
+        $("#updateForm [name='menuDc']"          ).val(target.menuDc);
+        $("#updateForm [name='menuDetailDc']"    ).val(target.menuDetailDc);
+        $("#updateForm [name='useYn']"           ).val(target.useYn);
+        $("#updateForm [name='newWindowYn']"     ).val(target.newWindowYn);
+        // E :  메뉴 수정 영역 setting
+
 	 });
 	
 	$("#menuStructureJsTree").jstree("close_all");
 	$("#menuStructureJsTree").jstree("destory");
-	$("#menuStructureJsTree").jstree(true).settings.core.data = data;
+	$("#menuStructureJsTree").jstree(true).settings.core.data = resultList;
 	$("#menuStructureJsTree").jstree("loaded");
 	
 	$("#menuStructureJsTree").bind("refresh.jstree", function( e , data ) {
