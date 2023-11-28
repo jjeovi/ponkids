@@ -31,7 +31,10 @@ public class WebConfig implements WebMvcConfigurer {
         // templates 도 classpath 로 설정 ( /static/~ , /templates/~ 를 모두 정적으로 read 할 수 있다.
         registry.addResourceHandler("/**")
                 .addResourceLocations("classpath:/templates/", "classpath:/static/");
+        registry.addResourceHandler("/summernoteImage/**")
+                .addResourceLocations("file:///C:/summernote_image/");
         
     }
+    
     
 }

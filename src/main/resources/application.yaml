@@ -26,6 +26,10 @@ spring:
         cache : false
     profiles :
         active : local
+    mvc:                                                                                                                                                                                                                   
+      converters:
+       preferred-json-mapper: gson    
+         
        
 upload:
     path : C:/upload/    # 업로드 파일 저장 경로 ( window )
@@ -42,3 +46,7 @@ decorator:
     datasource:
         p6spy:
             enable-logging: true
+            
+            
+  
+        
