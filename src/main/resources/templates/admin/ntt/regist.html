@@ -73,6 +73,15 @@ $(document).ready(function() {
 		});
 	}
 
+
+
+$("div.note-editable").on('drop',function(e){
+         for(i=0; i< e.originalEvent.dataTransfer.files.length; i++){
+         	uploadSummernoteImageFile(e.originalEvent.dataTransfer.files[i],$("#summernote")[0]);
+         }
+        e.preventDefault();
+   })
+   
 </script>
 
 <!-- S : Javascript functions	-->
