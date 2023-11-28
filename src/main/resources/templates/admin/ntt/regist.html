@@ -61,11 +61,6 @@ $(document).ready(function() {
             },
 			contentType : false,
 			processData : false,
-	//		beforeSend: function (jqXHR, settings) {
-      //     var header = $("meta[name='_csrf_header']").attr("content");
-       //    var token = $("meta[name='_csrf']").attr("content");
-         //      jqXHR.setRequestHeader(header, token);
-           //   },
 			success : function(data) {
             	//항상 업로드된 파일의 url이 있어야 한다.
 				$(editor).summernote('insertImage', data.url);
