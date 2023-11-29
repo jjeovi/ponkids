@@ -10,6 +10,7 @@ import com.meta.ponkids.global.util.ip.IpUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -37,7 +38,15 @@ public class MenuService {
     public List<MenuListDto> getList( MenuListDto listDto ) {
         // 메뉴 목록은 category lv1Sn 값이 설정되어있어야 조회 가능. 그렇지 않으면 null return
         if (listDto.getCategory() != null && listDto.getCategory().getLv1Sn() != null ) {
-            return menuRepository.getList( listDto );
+        	
+        	// 전체 일때 쿼리는 다름
+        	if( listDto.getCategory().getLv1Sn() == 0 ) {
+        		// 전체 메뉴 list
+        		return menuRepository.getAllList( listDto );
+        	} else {
+        		// 특정 권한의 메뉴 list
+        		return menuRepository.getList( listDto );
+        	}
         } else {
             return Collections.emptyList(); // 빈 List<> 생성
         }
@@ -66,16 +75,19 @@ public class MenuService {
         
         // TODO target object 에 수정사항 set	
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
-//        if ( StringUtils.hasText( modDto.getUserNm() ) ) targetDto.setUserNm( modDto.getUserNm() );          	// 이름
-//        if ( StringUtils.hasText( modDto.getGender() ) ) targetDto.setGender( modDto.getGender() );          	// 성별
-//        if ( StringUtils.hasText( modDto.getBrdtDate() ) ) targetDto.setBrdtDate( modDto.getBrdtDate() );		// 생년월일
-//        if ( StringUtils.hasText( modDto.getTelNo() ) ) targetDto.setTelNo( modDto.getTelNo() );            	// 연락처
-//        if ( StringUtils.hasText( modDto.getResideArea() ) ) targetDto.setResideArea( modDto.getResideArea() );	// 거주지역
-//        if ( StringUtils.hasText( modDto.getRdnmAdr() ) ) targetDto.setRdnmAdr( modDto.getRdnmAdr() );        	// 주소
-//        if ( StringUtils.hasText( modDto.getZip() ) ) targetDto.setZip( modDto.getZip() );                		// 우편번호
-//        if ( StringUtils.hasText( modDto.getMngrYn() ) ) targetDto.setMngrYn( modDto.getMngrYn() );          	// 관리자여부
+        if ( modDto.getUpperMenuSn() != null ) targetDto.setUpperMenuSn( modDto.getUpperMenuSn() );          	// 부모메뉴
+        if ( StringUtils.hasText( modDto.getMenuNm() ) ) targetDto.setMenuNm( modDto.getMenuNm() );          	// 메뉴이름
+        if ( StringUtils.hasText( modDto.getMenuCd() ) ) targetDto.setMenuCd( modDto.getMenuCd() );          	// 메뉴코드
+        if ( modDto.getMenuUrl() != null ) targetDto.setMenuUrl( modDto.getMenuUrl() );          	// 메뉴URL
+        if ( StringUtils.hasText( modDto.getParntsMenuYn() ) ) targetDto.setParntsMenuYn( modDto.getParntsMenuYn() );          	// 부모메뉴여부
+        if ( modDto.getMenuSeq() != null ) targetDto.setMenuSeq( modDto.getMenuSeq() );          	// 메뉴순번
+        if ( StringUtils.hasText( modDto.getMenuDcSetYn() ) ) targetDto.setMenuDcSetYn( modDto.getMenuDcSetYn() );          	// 메뉴설명설정여부
+        if ( modDto.getMenuDc() != null ) targetDto.setMenuDc( modDto.getMenuDc() );          	// 메뉴설명
+        if ( modDto.getMenuDetailDc() != null  ) targetDto.setMenuDetailDc( modDto.getMenuDetailDc() );          	// 메뉴상세설명
+        if ( StringUtils.hasText( modDto.getUseYn() ) ) targetDto.setUseYn( modDto.getUseYn() );          	// 사용여부
+        if ( StringUtils.hasText( modDto.getNewWindowYn() ) ) targetDto.setNewWindowYn( modDto.getNewWindowYn() );          	// 새창여부
         
-//        targetDto.setAtchFileSn( modDto.getAtchFileSn() );          											// 첨부파일 (첨부파일은 Null이어도 변경)
+        targetDto.setAtchFileSn( modDto.getAtchFileSn() );          											// 첨부파일 (첨부파일은 Null이어도 변경)
         
         // id,ip setting
         targetDto.setUpdusrIp(IpUtils.getClientIP( request ));
@@ -86,7 +98,6 @@ public class MenuService {
         
         // 수정사항 적용
         menuRepository.save( menu );
-    	
     }
 
     @Transactional
@@ -97,8 +108,8 @@ public class MenuService {
         
     }
     
-    public List<RoleListDto> getPossibleAuthListAjax( MenuListDto listDto ) {
-    	return menuRepository.getPossibleAuthListAjax( listDto );
+    public List<RoleListDto> getPossibleRoleListAjax( MenuListDto listDto ) {
+    	return menuRepository.getPossibleRoleListAjax( listDto );
     }
 	
 

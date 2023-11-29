@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface MenuRepository extends JpaRepository<Menu, Long>, MenuRepositoryCustom {
 	
 	Optional<Menu> findById( Long pk );	// TODO PK(*ID) 체크
+	
 }

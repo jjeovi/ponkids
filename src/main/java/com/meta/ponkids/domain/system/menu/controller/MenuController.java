@@ -1,30 +1,38 @@
 package com.meta.ponkids.domain.system.menu.controller;
 
-import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
-import com.meta.ponkids.domain.system.menu.dto.MenuModDto;
-import com.meta.ponkids.domain.system.menu.dto.MenuSaveDto;
-import com.meta.ponkids.domain.system.menu.entity.Menu;
-import com.meta.ponkids.domain.system.menu.service.MenuService;
-import com.meta.ponkids.domain.system.role.repository.RoleRepository;
-import com.meta.ponkids.global.common.dto.CategoryDto;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
+import com.meta.ponkids.domain.system.menu.dto.MenuModDto;
+import com.meta.ponkids.domain.system.menu.dto.MenuSaveDto;
+import com.meta.ponkids.domain.system.menu.repository.MenuRepository;
+import com.meta.ponkids.domain.system.menu.service.MenuService;
+import com.meta.ponkids.domain.system.role.dto.RoleListDto;
+import com.meta.ponkids.domain.system.role.repository.RoleRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
 public class MenuController {
 	
 	private final MenuService menuService;
+	private final MenuRepository menuRepository;
 	private final RoleRepository roleRepository;
 	
 	private final static String BASIC_PATH = "/admin/menu";
@@ -138,7 +146,7 @@ public class MenuController {
         
         // update 구현
     	menuService.update( modDto, request );
-//        menuService.update( modDto, menuRoleModDto, request );
+    	//	menuService.update( modDto, menuRoleModDto, request );
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
@@ -163,14 +171,11 @@ public class MenuController {
         return "common/alert";
     }
 
-    
     @ResponseBody
     @GetMapping("/live/getMenuListAjax")
     public Map<String, Object> getMenuListAjax( @ModelAttribute MenuListDto listDto ) {
         // 해당 권한에 맞는 menuList 가져온 뒤 drawMenuTree 로 메뉴를 그린다.
         Map<String, Object> result = new HashMap<String, Object>();
-        
-        List<MenuListDto> menuListDtos = menuService.getList( listDto );
         
         // 메뉴 list 출력
         result.put( "resultList", menuService.getList( listDto ) );
@@ -179,23 +184,46 @@ public class MenuController {
     }
     
     @ResponseBody
-    @GetMapping("/live/getPossibleAuthListAjax")
-    public Map<String, Object> getPossibleAuthListAjax( @ModelAttribute MenuListDto listDto ) {
-    	// 메뉴 수정 시 
+    @GetMapping("/live/getPossibleRoleListAjax")
+    public Map<String, Object> getPossibleRoleListAjax( @ModelAttribute MenuListDto listDto ) {
+    	// 메뉴 수정 시 체크로직
     	// 해당 메뉴가 다른 권한에도 연동할 수 있도록
-        // (1) 해당 메뉴가 존재하는 권한 리스트
-        // (2) 해당 메뉴의 부모메뉴가 존재하는 권한 리스트
+        // (1) 해당 메뉴가 존재하는 권한 리스트 ( 이미 다른 권한에 있으면 '체크' 상태로 하기 위하여)
+    	// (2) 해당 메뉴의 부모메뉴가 존재하는 권한 리스트
        
     	Map<String, Object> result = new HashMap<String, Object>();
         
-        // (1) 해당 메뉴가 존재하는 권한 리스트
-    	result.put( "possibleAuthList", menuService.getPossibleAuthListAjax( listDto ) );
+        // (1) 해당 메뉴가 존재하는 권한 리스트 ( 이미 다른 권한에 있으면 '체크' 상태로 하기 위하여)
+    	List<RoleListDto> checkedRoleList = menuService.getPossibleRoleListAjax( listDto );
+    	result.put( "checkedRoleList", checkedRoleList );
         
-        // (2) 해당 메뉴의 부모메뉴가 존재하는 권한 리스트 ( 이미 다른 권한에 있으면 '체크' 상태로 하기 위하여)
+        // (2) 해당 메뉴의 부모메뉴가 존재하는 권한 리스트 
         listDto.setMenuSn( listDto.getUpperMenuSn() );
-        result.put( "checkedAuthList", menuService.getPossibleAuthListAjax( listDto ) );
+        
+        List<RoleListDto> possibleRoleList = menuService.getPossibleRoleListAjax( listDto );
+        result.put( "possibleRoleList", possibleRoleList );
     	
     	return result;
     }
+    
+    @ResponseBody
+    @GetMapping("/admin/live/menu/updateMenuAjax")
+    public Map<String, Object> updateMenuAjax( 
+    		@ModelAttribute MenuModDto modDto,
+    		HttpServletRequest request,
+    		Model model
+    		) throws IOException {
+    	
+    	// 메뉴 수정 (ajax)
+    	Map<String, Object> result = new HashMap<String, Object>();
+    	
+    	// update 구현
+    	menuService.update( modDto, request );
+    	
+    	// 메시지 출력 및 url 이동 처리 (ajax)
+    	result.put( "resultMsg", "정상적으로 수정되었습니다." );
+    	return result;
+    }
+    
 
 }

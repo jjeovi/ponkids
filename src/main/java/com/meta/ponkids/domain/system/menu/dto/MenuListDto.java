@@ -27,6 +27,8 @@ public class MenuListDto {
 	
 	private String requiredMenu;
 	
+	private Long childMenuCnt;	// 자녀 메뉴 개수
+	
 	private String menuCd;
 	
 	private String menuUrl;
@@ -57,7 +59,7 @@ public class MenuListDto {
 	private CategoryDto category;    // 카테고리 검색 : 생성자에는 추가하지 않음!
 	
 	@QueryProjection
-	public MenuListDto( Long menuSn, Long id,  Long roleSn, Long upperMenuSn, String parent, String menuNm, String text, String menuPath, String hierarchy, String requiredMenu, String menuCd, String menuUrl, String parntsMenuYn, String types, Long menuSeq, String menuDcSetYn, String menuDc, String menuDetailDc, Long atchFileSn, String useYn, String newWindowYn, Long level) {
+	public MenuListDto( Long menuSn, Long id,  Long roleSn, Long upperMenuSn, String parent, String menuNm, String text, String menuPath, String hierarchy, String requiredMenu, Long childMenuCnt, String menuCd, String menuUrl, String parntsMenuYn, String types, Long menuSeq, String menuDcSetYn, String menuDc, String menuDetailDc, Long atchFileSn, String useYn, String newWindowYn, Long level) {
 		this.menuSn = menuSn;
 		this.id = id;
 		this.roleSn = roleSn;
@@ -68,6 +70,7 @@ public class MenuListDto {
 		this.menuPath = menuPath;
 		this.hierarchy = hierarchy;
 		this.requiredMenu = requiredMenu;
+		this.childMenuCnt = childMenuCnt;
 		this.menuCd = menuCd;
 		this.menuUrl = menuUrl;
 		this.parntsMenuYn = parntsMenuYn;

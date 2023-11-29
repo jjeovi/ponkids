@@ -39,6 +39,8 @@ public class AdminMenuHierarchy {
     
     private String requiredMenu ;
     
+    private Long childMenuCnt ;
+    
     private String menuCd ;
     
     private String menuUrl ;

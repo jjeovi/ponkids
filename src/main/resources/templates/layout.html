@@ -135,7 +135,19 @@
 	<script src="/jstree/dist/jstree.js"></script>
    <!-- summernote 추가 -->
    <script src="/common/js/common_eh.js"></script>
-	
+   
+   <!-- 카테고리DTO (searchDTO) 정의 ( 재사용을위해 ) -->
+   <script th:inline="javascript">
+		/*<![CDATA[*/
+		// 카테고리DTO (searchDTO) 정의 ( 재사용을위해 )
+		let searchDTO;
+	  	$(function(){
+	  		searchDTO =  /*[[${searchDTO}]]*/;	// 상수선언
+	  		
+	  		
+       	});
+		/*]]>*/
+	</script>
 
 </div>
 <!--E: 스크립트-->

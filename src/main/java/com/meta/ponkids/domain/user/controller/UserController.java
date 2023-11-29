@@ -92,7 +92,7 @@ public class UserController {
     public String regist( Model model ) {
         
         // 권한 리스트
-        model.addAttribute( "authList", roleRepository.findAll() );
+        model.addAttribute( "roleList", roleRepository.findAll() );
         
         // 거주지역 리스트
         model.addAttribute( "resideAreaList", cmmnCdDetailService.getList("RESIDE_AREA_CD") );
@@ -168,7 +168,7 @@ public class UserController {
             HttpServletRequest request ) {
         
         // 권한 리스트
-        model.addAttribute( "authList", roleRepository.findAll() );
+        model.addAttribute( "roleList", roleRepository.findAll() );
         
         // target object 조회
         model.addAttribute( "targetDto", userService.findByUserSn( userSn ) );

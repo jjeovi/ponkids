@@ -9,6 +9,8 @@ public interface MenuRepositoryCustom {
 	
 	List<MenuListDto> getList( MenuListDto listDto );
 	
-	List<RoleListDto> getPossibleAuthListAjax( MenuListDto listDto );
+	List<MenuListDto> getAllList( MenuListDto listDto );
+	
+	List<RoleListDto> getPossibleRoleListAjax( MenuListDto listDto );
 
 }

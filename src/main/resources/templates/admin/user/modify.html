@@ -530,7 +530,7 @@
                             <div class="col-md-2 col-sm-4 ml_20p">
                                 <select class="form-control" name="roleSn" id="roleList" style="display: none;">
                                     <option value="">관리자 권한 선택</option>
-                                    <option th:each="item : ${authList}" th:value="${item.roleSn}">[[${item.roleDc}]]
+                                    <option th:each="item : ${roleList}" th:value="${item.roleSn}">[[${item.roleDc}]]
                                     </option>
                                 </select>
                             </div>

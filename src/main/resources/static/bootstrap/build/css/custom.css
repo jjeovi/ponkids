@@ -2976,7 +2976,8 @@ input.parsley-error, textarea.parsley-error, select.parsley-error {
 /* ***** /autocomplete *****/
 /* ***** buttons ********/
 .btn {
-  border-radius: 3px; }
+  border-radius: 4px;
+  }
 
 a.btn-success, a.btn-primary, a.btn-warning, a.btn-danger {
   color: #fff; }
@@ -3042,7 +3043,7 @@ a.btn-success, a.btn-primary, a.btn-warning, a.btn-danger {
 textarea {
   padding: 10px;
   vertical-align: top;
-  width: 200px; }
+  width: 100%; }
 
 textarea:focus {
   outline-style: solid;
@@ -5206,8 +5207,14 @@ ul.notifications {
 }
 .radiobox input[type=radio]:checked+label{
   color: #fff;
-  background-color: #9674f1;
+  background-color: #b098f2;
   border-color: #a08bd8;
+}
+
+input[type="radio"][disabled]:checked+label{
+  color: #fff;
+  background-color: #c5c5c5;
+  border-color: #684370;
 }
 
 .radiobox input[type=radio]:checked+label.readonly{
@@ -5576,22 +5583,22 @@ input[type="checkbox"] + label > span{
 
 /* label:before에 체크하기 전 상태 CSS */
 input[type="checkbox"] + label:before{
-  content:"";
-  display:inline-block;
-  width:22px;
-  height:22px;
-  border:2px solid #9674f1;
-  border-radius: 4px;
-  vertical-align:middle;
+  content: "";
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    border: 2px solid #b098f2;
+    border-radius: 4px;
+    vertical-align: middle;
   }
   
 /* label:before에 체크 된 상태 CSS */  
 input[type="checkbox"]:checked + label:before{
-  content:"";
-  background-color:#c8b3f4;
-  border-color:#9674f1;
-  background-repeat: no-repeat;
-  background-position: 50%;
+	content: "";
+	background-color: #b098f2;
+	border-color: #946ee6;
+	background-repeat: no-repeat;
+	background-position: 50%;
   }
   
 input[type="checkbox"].active{
@@ -5606,6 +5613,18 @@ input[type="checkbox"].active{
   padding-left:8px;
   padding-right:20px;
 
+}
+
+input[type="checkbox"][disabled] + label:before{
+	content: "";
+    background-color: #cdcdcd;
+    border-color: #888888;
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+  
+input[type="checkbox"][disabled] + label{
+    color: #ababab
 }
   
   /* E : 체크박스 */
