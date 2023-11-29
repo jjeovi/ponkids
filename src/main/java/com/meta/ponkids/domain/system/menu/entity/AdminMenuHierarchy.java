@@ -59,5 +59,5 @@ public class AdminMenuHierarchy {
     
     private String newWindowYn ;
     
-    private String level ;
+    private Long level ;
 }

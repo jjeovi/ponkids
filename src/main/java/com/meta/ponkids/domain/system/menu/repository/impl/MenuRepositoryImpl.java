@@ -70,6 +70,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
 						, adminMenuHierarchy.menuCd
 						, adminMenuHierarchy.menuUrl
 						, adminMenuHierarchy.parntsMenuYn
+						, adminMenuHierarchy.parntsMenuYn.as("types")
 						, adminMenuHierarchy.menuSeq
 						, adminMenuHierarchy.menuDcSetYn
 						, adminMenuHierarchy.menuDc
@@ -77,6 +78,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
 						, adminMenuHierarchy.atchFileSn
 						, adminMenuHierarchy.useYn
 						, adminMenuHierarchy.newWindowYn
+						, adminMenuHierarchy.level
 //                		new CaseBuilder()
 //                		.when( user.gender.eq("M")).then("남자")
 //                		.when( user.gender.eq("F")).then("여자")
@@ -129,7 +131,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
 						menuRole.roleSn.eq( role.roleSn ),
 						role.delYn.eq("N")
 					)
-				.where( eqMenuSn( listDto.getUpperMenuSn() ) )
+				.where( eqMenuSn( listDto.getMenuSn() ) )
 				.orderBy( menuRole.roleSn.asc() )
 				.fetch();
 				
@@ -145,8 +147,8 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
 	}
 	
 	// menuSn 검색 ( upperMenuSn )
-	private BooleanExpression eqMenuSn( Long upperMenuSn ) {
-		return ( upperMenuSn != null && upperMenuSn != null ) ? menuRole.menuSn.eq( upperMenuSn ) : null;
+	private BooleanExpression eqMenuSn( Long sn ) {
+		return ( sn != null && sn != null ) ? menuRole.menuSn.eq( sn ) : null;
 	}
 	
 	

@@ -163,10 +163,14 @@ public class MenuController {
         return "common/alert";
     }
 
+    
     @ResponseBody
     @GetMapping("/live/getMenuListAjax")
     public Map<String, Object> getMenuListAjax( @ModelAttribute MenuListDto listDto ) {
+        // 해당 권한에 맞는 menuList 가져온 뒤 drawMenuTree 로 메뉴를 그린다.
         Map<String, Object> result = new HashMap<String, Object>();
+        
+        List<MenuListDto> menuListDtos = menuService.getList( listDto );
         
         // 메뉴 list 출력
         result.put( "resultList", menuService.getList( listDto ) );
@@ -179,12 +183,17 @@ public class MenuController {
     public Map<String, Object> getPossibleAuthListAjax( @ModelAttribute MenuListDto listDto ) {
     	// 메뉴 수정 시 
     	// 해당 메뉴가 다른 권한에도 연동할 수 있도록
-    	// 해당 메뉴의 부모메뉴가 존재하는 권한 리스트 체크
-    	
+        // (1) 해당 메뉴가 존재하는 권한 리스트
+        // (2) 해당 메뉴의 부모메뉴가 존재하는 권한 리스트
+       
     	Map<String, Object> result = new HashMap<String, Object>();
-    	
-    	// 메뉴 list 출력
-    	result.put( "resultList", menuService.getPossibleAuthListAjax( listDto ) );
+        
+        // (1) 해당 메뉴가 존재하는 권한 리스트
+    	result.put( "possibleAuthList", menuService.getPossibleAuthListAjax( listDto ) );
+        
+        // (2) 해당 메뉴의 부모메뉴가 존재하는 권한 리스트 ( 이미 다른 권한에 있으면 '체크' 상태로 하기 위하여)
+        listDto.setMenuSn( listDto.getUpperMenuSn() );
+        result.put( "checkedAuthList", menuService.getPossibleAuthListAjax( listDto ) );
     	
     	return result;
     }

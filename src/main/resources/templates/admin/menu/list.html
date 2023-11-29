@@ -183,32 +183,29 @@
                             <input type="hidden" name="menuSn" />
                             <input type="hidden" name="upperMenuSn" />
                             <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>메뉴명</label>
-                                <div class="col-md-6 col-sm-6">
+                                <label class="col-form-label col-md-2 col-sm-3 label-align">메뉴명<span class="required"> * </span></label>
+                                <div class="col-md-10 col-sm-6">
                                     <input name="menuNm" id="menuNm" class="form-control" required="required"/>
-                                    <small class="font-gray-dark">
-                                        <b>비밀번호</b> 찾기 시 해당 이메일로 인증번호를 발송합니다. 정확한 이메일을 입력해주세요.
-                                    </small>
                                 </div>
                             </div>
                             <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>메뉴경로</label>
-                                <div class="col-md-6 col-sm-6">
+                                <label class="col-form-label col-md-2 col-sm-3 label-align">메뉴경로<span class="required"> * </span></label>
+                                <div class=" col-sm-10">
                                     <input name="menuPath" id="menuPath" class="form-control" required="required" readonly/>
                                 </div>
                             </div>
                             <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>메뉴순번</label>
-                                <div class="col-md-6 col-sm-6">
+                                <label class="col-form-label col-md-2 col-sm-3 label-align">메뉴순번<span class="required"> * </span></label>
+                                <div class="col-md-10 col-sm-6">
                                     <input name="menuSeq" id="menuSeq" class="form-control" required="required"/>
                                     <small class="font-gray-dark">
-                                        해당 메뉴 선택시 URL기능이 아닌 아코디언(접고펼쳐지는) 기능으로써의 역할이 됩니다. 해당 기능 선택시 메뉴 url은 설정할 수 없습니다.
+                                        <b>중복 불가</b> 같은 경로 하위에 있는 메뉴간의 레벨은 중복되면 안됩니다 유의해주세요.
                                     </small>
                                 </div>
                             </div>
                             <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>메뉴코드</label>
-                                <div class="col-md-6 col-sm-6">
+                                <label class="col-form-label col-md-2 col-sm-3 label-align">메뉴코드<span class="required"> * </span></label>
+                                <div class="col-md-10 col-sm-6">
                                     <input name="menuCd" id="menuCd" class="form-control" required="required"/>
                                     <small class="font-gray-dark">
                                         <b>유일한 값</b> 이어야 합니다. 다른 메뉴의 코드와 중복 되면 안됩니다.
@@ -216,14 +213,14 @@
                                 </div>
                             </div>
                             <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>메뉴url</label>
-                                <div class="col-md-6 col-sm-6">
+                                <label class="col-form-label col-md-2 col-sm-3 label-align">메뉴url<span class="required"> * </span></label>
+                                <div class="col-md-10 col-sm-6">
                                     <input name="menuUrl" id="menuUrl" class="form-control" required="required"/>
                                 </div>
                             </div>
                             <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>부모메뉴여부</label>
-                                <div class="col-md-6 col-sm-6">
+                                <label class="col-form-label col-md-2 col-sm-3 label-align">부모메뉴여부<span class="required"> * </span></label>
+                                <div class="col-md-10 col-sm-6">
                                     <input name="parntsMenuYn" id="parntsMenuYn" class="form-control" required="required"/>
                                     <small class="font-gray-dark">
                                         해당 메뉴 선택시 URL기능이 아닌 아코디언(접고펼쳐지는) 기능으로써의 역할이 됩니다. 해당 기능 선택시 메뉴 url은 설정할 수 없습니다.
@@ -231,8 +228,8 @@
                                 </div>
                             </div>
                             <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>메뉴설명설정여부</label>
-                                <div class="col-md-6 col-sm-6">
+                                <label class="col-form-label col-md-2 col-sm-3 label-align">메뉴설명설정여부<span class="required"> * </span></label>
+                                <div class="col-md-10 col-sm-6">
                                     <input name="menuDcSetYn" id="menuDcSetYn" class="form-control" required="required"/>
                                     <small class="font-gray-dark">
                                         해당 기능 사용시 메뉴에 진입하면 설명문구가 표출됩니다.
@@ -241,7 +238,7 @@
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-3 label-align">메뉴설명</label>
-                                <div class="col-md-6 col-sm-6">
+                                <div class="col-md-10 col-sm-6">
                                     <input name="menuDc" id="menuDc" class="form-control" />
                                     <small class="font-gray-dark">
                                         메뉴의 상단에 표시됩니다.
@@ -250,7 +247,7 @@
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-3 label-align">메뉴상세설명</label>
-                                <div class="col-md-6 col-sm-6">
+                                <div class="col-md-10 col-sm-6">
                                     <input name="menuDetailDc" id="menuDetailDc" class="form-control" />
                                     <small class="font-gray-dark">
                                         메뉴의 상단에 표시됩니다.
@@ -259,14 +256,14 @@
                             </div>
                             <!-- atch_file_sn (추후에..) -->
                             <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>사용여부</label>
-                                <div class="col-md-6 col-sm-6">
+                                <label class="col-form-label col-md-2 col-sm-3 label-align">사용여부<span class="required"> * </span></label>
+                                <div class="col-md-10 col-sm-6">
                                     <input name="useYn" id="useYn" class="form-control" required="required" />
                                 </div>
                             </div>
                             <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>새창여부</label>
-                                <div class="col-md-6 col-sm-6">
+                                <label class="col-form-label col-md-2 col-sm-3 label-align">새창여부<span class="required"> * </span></label>
+                                <div class="col-md-10 col-sm-6">
                                     <input name="newWindowYn" id="newWindowYn" class="form-control" required="required" />
                                     <small class="font-gray-dark">
                                         해당 기능 선택시 메뉴를 클릭하면 새창으로 띄워집니다.
@@ -274,14 +271,16 @@
                                 </div>
                             </div>
                             <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>다른 권한에도 적용</label>
-                                <div class="col-md-6 col-sm-6">
-									<th:block th:each="data : ${cateLv1List}" >
-										<label>
-											<input th:id="'otherAuthApplyToMenu'+${dataStat.count}" type="checkbox" name="otherAuthApplyToMenu" th:value="${data.categorySn}" />
-											<label th:for="'otherAuthApplyToMenu'+${dataStat.count}" class="inputChk">[[${data.categoryNm}]]</label>
-										</label>
-									</th:block>
+                                <label class="col-form-label col-md-2 col-sm-3 label-align">다른 권한에도 적용</label>
+                                <div class="col-md-10 col-sm-6 pt_5p">
+                                    <div class="possibleAuth">
+                                        <th:block th:each="data : ${cateLv1List}" >
+                                            <label>
+                                                <input th:id="'otherAuthApplyToMenu'+${dataStat.count}" type="checkbox" name="otherAuthApplyToMenu" th:value="${data.categorySn}" />
+                                                <label th:for="'otherAuthApplyToMenu'+${dataStat.count}" ><span class="cbTitle">[[${data.categoryNm}]]</span></label>
+                                            </label>
+                                        </th:block>
+                                    </div>
                                 </div>
                             </div>
 <!--                            + &#45;&#45;다른 권한에 추가. (불가): 특정 권한에 해당 메뉴의 부모메뉴가 존재하지 않을 때에는 추가할 수 없습니다.-->

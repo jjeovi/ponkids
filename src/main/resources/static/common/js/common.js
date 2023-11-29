@@ -305,47 +305,41 @@ function searchCate( url ) {
 
 // 메뉴 구조 그리기
 function drawMenuTree( resultList ) {
-    // console.log( resultList );
 
     $( "#menuStructure" ).append(
         $( "<div>" ).attr( "id", "menuStructureJsTree" ).append()
     );
 
-    // var rootYn = false;
-    //
-    // for ( let data of resultList ) {
-    //
-    //     if ( data.upperMenuSn == null ) {
-    //         // ROOT 메뉴 일 시,
-    //         $( "#menuStructureJsTree" ).append(
-    //             $( "<ul>" ).append(
-    //                 $( "<li>" ).attr( "id", "id" + data.menuSn ).attr( "class", "mcd" + data.menuCd ).append( data.menuNm )
-    //             )
-    //         );
-    //         rootYn = true;
-    //
-    //     } else if ( rootYn ) {
-    //         // root 구조가 없으면 메뉴를 그리지 않음.
-    //         // "#id" + data.upperMenuSn 밑에 ul 이 있으면, 하위 첫번째 ul 안에 li를 그리고
-    //         //                                 이 없으면, ul을 그린 뒤 그 안에 li를 그린다.
-    //         if ( $( "#id" + data.upperMenuSn ).find( "ul" ).length ) {
-    //             $( "#id" + data.upperMenuSn + " ul" ).eq( 0 ).append(
-    //                 $( "<li>" ).attr( "id", "id" + data.menuSn ).attr( "class", "mcd" + data.menuCd ).append( data.menuNm )
-    //             );
-    //         } else {
-    //             $( "#id" + data.upperMenuSn ).append(
-    //                 $( "<ul>" ).append(
-    //                     $( "<li>" ).attr( "id", "id" + data.menuSn ).attr( "class", "mcd" + data.menuCd ).append( data.menuNm )
-    //                 )
-    //             );
-    //         }
-    //
-    //     }
-    // }
-
-    
     // jstree 생성
-     $( '#menuStructureJsTree' ).jstree( { 'core' : {'data' : resultList } } ).bind( "select_node.jstree", function( e , targetData ) {
+    $( '#menuStructureJsTree' ).jstree( {
+        'plugins': [ "dnd", "wholerow" ], // plugin 목록에 추가
+         'core' : {
+                    "data"              : resultList,
+                    "themes"            : { "variant" : "large" },
+                    "check_callback"    : function(operation, node, node_parent, node_position, more) {
+
+                        // 드래그한 노드를 드롭할 때 실행되는 코드
+                        if (operation === "move_node" && more.ref === undefined) {
+
+                            // TO DO
+                            console.log("[node_parent] : "+JSON.stringify(node_parent)); // 선택한 노드에 대한 부모 노드 정보
+                            console.log("[node_position] : "+node_position); // Drop 위치
+                            console.log("[drop data] : "+JSON.stringify(node.original)); // Drop Data
+
+                            // [node.original.menuNm] 메뉴의 위치를 [node_parent.original.menuNm] 메뉴 하위의 [node_position+1] 번째 메뉴로 이동합니다.
+                            if ( confirm( "[" + node.original.menuNm + "]메뉴의 위치를 [" + node_parent.original.menuNm + "]메뉴 하위의 [" + (node_position+1) + "]번째 메뉴로 이동합니다.\n이동 후 원복은 불가능합니다." ) ) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+
+                        }
+
+                        return true;
+
+                        }
+                    }
+    } ).bind( "select_node.jstree", function( e , targetData ) {
 		 // target 메뉴 setting
 		 var target = targetData.node.original;
 		 
@@ -358,33 +352,33 @@ function drawMenuTree( resultList ) {
             data: { upperMenuSn : target.upperMenuSn }, // 검색할 값 listDto 안에 categoryDto 변수 추가
             contentType: "application/json",
             success: function ( result ) {
+                // result : 연동가능한 권한들의 list
+                // 권한 setting 함수
+                menuAuthSet( result );
                 // callback 함수 연결 -> callback함수로 구현
                 
-                alert(authList);
 //                searchCateCallback( result );
             }
         } );
-		
-		
 
 		//formArea 전부 숨긴 뒤 updateForm 만 보이게
         $("#formArea").children().hide();
         $("#updateForm").show();
 
         // S :  메뉴 updateform 항목 setting
-        $("#updateForm [name='menuSn']"          ).val(target.menuSn);
-        $("#updateForm [name='upperMenuSn']"     ).val(target.upperMenuSn);
-        $("#updateForm [name='menuNm']"          ).val(target.menuNm);
-        $("#updateForm [name='menuPath']"        ).val(target.menuPath);
-        $("#updateForm [name='menuSeq']"         ).val(target.menuSeq);
-        $("#updateForm [name='menuCd']"          ).val(target.menuCd);
-        $("#updateForm [name='menuUrl']"         ).val(target.menuUrl);
-        $("#updateForm [name='parntsMenuYn']"    ).val(target.parntsMenuYn);
-        $("#updateForm [name='menuDcSetYn']"     ).val(target.menuDcSetYn);
-        $("#updateForm [name='menuDc']"          ).val(target.menuDc);
-        $("#updateForm [name='menuDetailDc']"    ).val(target.menuDetailDc);
-        $("#updateForm [name='useYn']"           ).val(target.useYn);
-        $("#updateForm [name='newWindowYn']"     ).val(target.newWindowYn);
+        $( "#updateForm [name='menuSn']"        ).val( target.menuSn );
+        $( "#updateForm [name='upperMenuSn']"   ).val( target.upperMenuSn );
+        $( "#updateForm [name='menuNm']"        ).val( target.menuNm );
+        $( "#updateForm [name='menuPath']"      ).val( "(" + target.level + "레벨)  [ " + target.menuPath + " ]" );
+        $( "#updateForm [name='menuSeq']"       ).val( target.menuSeq );
+        $( "#updateForm [name='menuCd']"        ).val( target.menuCd );
+        $( "#updateForm [name='menuUrl']"       ).val( target.menuUrl );
+        $( "#updateForm [name='parntsMenuYn']"  ).val( target.parntsMenuYn );
+        $( "#updateForm [name='menuDcSetYn']"   ).val( target.menuDcSetYn );
+        $( "#updateForm [name='menuDc']"        ).val( target.menuDc );
+        $( "#updateForm [name='menuDetailDc']"  ).val( target.menuDetailDc );
+        $( "#updateForm [name='useYn']"         ).val( target.useYn );
+        $( "#updateForm [name='newWindowYn']"   ).val( target.newWindowYn );
         // E :  메뉴 updateform 항목 setting
 
 	 });
@@ -401,5 +395,18 @@ function drawMenuTree( resultList ) {
 	$("#menuStructureJsTree").jstree(true).refresh();
 	// E : 메뉴 jstree 생성
 
+}
+
+function menuAuthSet( result ) {
+    // 모든 권한 불가로 setting 후
+    $(".possibleAuth").find("[type='checkbox']").each( function ( i, item ) {
+        $(this).attr("disabled","disabled")
+    })
+
+    // result안의 권한들만 체크 가능한 상태로 setting
+
+    // possibleAuthList
+
+    // checkedAuthList
 
 }
