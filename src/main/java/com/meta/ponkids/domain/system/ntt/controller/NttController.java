@@ -56,15 +56,10 @@ public class NttController {
     					@PageableDefault( size = 10 ) Pageable pageable,
     					Model model ) {
         
-        
         // target object 조회
         model.addAttribute("bbsSn", bbsSn);
         
         nttListDto.setBbsSn(bbsSn);
-        
-    	// 게시물 조회 
-        //Page<NttListDto> nttList = nttService.getNttList( nttListDto);
-       /// model.addAttribute( "nttList", nttList );
        
         // 공지설정 목록 조회 
         List<NttListDto> noticeList = nttService.getNoticeList(bbsSn);
@@ -217,43 +212,6 @@ public class NttController {
            return "common/alert";
     }
     
-    
-    
-    @PostMapping(BASIC_PATH  + "/nttReplyInsert")
-    public String nttReplyInsert( 
-    		               @ModelAttribute NttReplySaveReqDto nttReplySaveReqDto, HttpServletRequest request
-    		               , Model model) {
-      // save
-         nttReplyService.save(nttReplySaveReqDto,request);
-         
-         Long nttSn = nttReplySaveReqDto.getNttSn();
-        
-        // 메시지 출력 및 url 이동 처리
-        model.addAttribute( "resultMsg", "정상적으로 댓글이 등록되었습니다." );
-    	model.addAttribute( "moveUrl", BASIC_PATH +"/modify?nttSn="+ nttSn);
-
-        return "common/alert";
-  }
-    
-    
-    /**
-     * methodName    : answerReplyList
-     * date           : 11/24/23
-     * description    : id 답글조회 ajax
-     */
-    @ResponseBody
-    @RequestMapping( value = "/reply/answerReplyList", method = { RequestMethod.GET } )
-    public List answerReplyList( @RequestParam( "nttReplySn" ) Long nttReply) {
-        
-    	 // 댓글 목록 조회
-        List<NttReplyListDto> answerReplyList = nttReplyService.getAnswerReplyList(nttReply);
-        
-        return answerReplyList;
-    } 
-    
-    
-    
-    
     /**
      * methodName    : delete
      * date           : 11/24/23
@@ -278,6 +236,53 @@ public class NttController {
       return "common/alert";
 
     }
+    
+    
+    /**
+     * methodName    : nttReplyInsert(댓글 등록)
+     * date           : 11/29/23
+     * description    : ntt nttReplyInsert method
+     */
+	/*
+	 * @PostMapping(BASIC_PATH + "/nttReplyInsert") public String nttReplyInsert(
+	 * 
+	 * @ModelAttribute NttReplySaveReqDto nttReplySaveReqDto, HttpServletRequest
+	 * request , Model model) { // save
+	 * nttReplyService.save(nttReplySaveReqDto,request);
+	 * 
+	 * Long nttSn = nttReplySaveReqDto.getNttSn();
+	 * 
+	 * // 메시지 출력 및 url 이동 처리 model.addAttribute( "resultMsg", "정상적으로 댓글이 등록되었습니다."
+	 * ); model.addAttribute( "moveUrl", BASIC_PATH +"/modify?nttSn="+ nttSn);
+	 * 
+	 * return "common/alert"; }
+	 */
+    /**
+     * methodName    : fnReplyInsert
+     * date           : 11/26/23
+     * description    : id 댓글등록 ajax
+     */
+    @ResponseBody
+    @RequestMapping( value = "/reply/nttReplyInsert", method = { RequestMethod.GET } )
+    public List nttReplyInsert(@RequestParam( "nttSn" ) Long nttSn,          
+    		                     @RequestParam( "nttReplyCn" ) String nttReplyCn 
+    		                     ,HttpServletRequest request ,Model model ) {
+    	
+    	NttReplySaveReqDto nttReplySaveReqDto =   new NttReplySaveReqDto();
+    	 
+    	nttReplySaveReqDto.setNttSn(nttSn);
+    	nttReplySaveReqDto.setNttReplyCn(nttReplyCn);
+    	 
+    	// 댓글 등록 
+    	nttReplyService.save(nttReplySaveReqDto,request);
+    	
+    	 // 댓글 목록 조회
+  	    List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
+    	model.addAttribute( "replyList", replyList );
+        
+        return replyList;
+      
+    } 
     
     
     
@@ -330,7 +335,25 @@ public class NttController {
     	return resultMsg;
     	
     	
+    }   
+    
+    
+    /**
+     * methodName    : answerReplyList
+     * date           : 11/24/23
+     * description    : id 답글조회 ajax
+     */
+    @ResponseBody
+    @RequestMapping( value = "/reply/answerReplyList", method = { RequestMethod.GET } )
+    public List answerReplyList( @RequestParam( "nttReplySn" ) Long nttReplySn) {
+        
+    	 // 댓글 목록 조회
+        List<NttReplyListDto> answerReplyList = nttReplyService.getAnswerReplyList(nttReplySn);
+        
+        return answerReplyList;
     } 
+    
+   
     
     
     
