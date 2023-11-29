@@ -74,6 +74,11 @@ public class NttReplyService {
 		return nttReplyRepository.getAnswerReplyList(nttReplySn);
 	}
 	
+	public List<NttReplyListDto> getInfoList(Long nttReplySn) {
+
+		return nttReplyRepository.getInfoList(nttReplySn);
+	}
+	
 
 	
 	

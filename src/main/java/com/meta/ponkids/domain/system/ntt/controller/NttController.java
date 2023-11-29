@@ -266,19 +266,16 @@ public class NttController {
     @RequestMapping( value = "/reply/nttReplyInsert", method = { RequestMethod.GET } )
     public List nttReplyInsert(@RequestParam( "nttSn" ) Long nttSn,          
     		                     @RequestParam( "nttReplyCn" ) String nttReplyCn 
-    		                     ,HttpServletRequest request ,Model model ) {
+    		                     ,HttpServletRequest request ) {
     	
     	NttReplySaveReqDto nttReplySaveReqDto =   new NttReplySaveReqDto();
-    	 
     	nttReplySaveReqDto.setNttSn(nttSn);
     	nttReplySaveReqDto.setNttReplyCn(nttReplyCn);
-    	 
+    	nttReplySaveReqDto.setStep(1);
     	// 댓글 등록 
     	nttReplyService.save(nttReplySaveReqDto,request);
-    	
     	 // 댓글 목록 조회
   	    List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
-    	model.addAttribute( "replyList", replyList );
         
         return replyList;
       
@@ -293,9 +290,9 @@ public class NttController {
      */
     @ResponseBody
     @RequestMapping( value = "/reply/nttReplyUpdate", method = { RequestMethod.GET } )
-    public String nttReplyUpdate( @RequestParam( "nttReplySn" ) Long nttReplySn , @RequestParam( "nttReplyCn" ) String nttReplyCn 
+    public List nttReplyUpdate( @RequestParam( "nttReplySn" ) Long nttReplySn , @RequestParam( "nttReplyCn" ) String nttReplyCn 
     		    ,@RequestParam( "nttSn" ) Long nttSn
-    		    ,HttpServletRequest request ,Model model ) {
+    		    ,HttpServletRequest request  ) {
           
     	
     	 NttReplyModDto modDto =   new NttReplyModDto();
@@ -305,10 +302,12 @@ public class NttController {
     	 
     	 // 댓글 수정
           nttReplyService.update(modDto,request);
-           
- 	    String resultMsg = "정상적으로 수정되었습니다.";
+          
+     	 // 댓글 목록 조회
+    	List<NttReplyListDto> replyList = nttReplyService.getInfoList(nttReplySn);
+
     	
-    	return resultMsg;
+    	return replyList;
       
     } 
     
@@ -319,20 +318,21 @@ public class NttController {
      */
     @ResponseBody
     @RequestMapping( value = "/reply/nttReplyDelete", method = { RequestMethod.GET } )
-    public String nttReplyUpdate( @RequestParam( "nttReplySn" ) Long nttReplySn  
+    public List nttReplyUpdate( @RequestParam( "nttReplySn" ) Long nttReplySn  
     		,@RequestParam( "nttSn" ) Long nttSn
-    		,HttpServletRequest request ,Model model ) {
+    		,HttpServletRequest request  ) {
     	
 
-    	// 댓글 수정
+    	// 댓글 삭제
     	nttReplyService.deleteAllByNttReplySn(nttReplySn);
     	
     	// 메시지 출력 및 url 이동 처리
     	//model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
     	//model.addAttribute( "moveUrl", BASIC_PATH +"/modify?nttSn="+ nttSn);
-    	String resultMsg = "정상적으로 삭제되었습니다.";
     	
-    	return resultMsg;
+        List<NttReplyListDto> replyList = nttReplyService.getInfoList(nttReplySn);
+    	
+    	return replyList;
     	
     	
     }   

@@ -54,8 +54,30 @@ public class NttReplyRepositoryImpl    {
         return  nttReply.parntsReplySn.eq( nttReplySn );
     }
     
+    private BooleanExpression eqNttReplySnOption( Long nttReplySn) {
+        return  nttReply.nttReplySn.eq( nttReplySn );
+    }
+    
+    public List<NttReplyListDto> getInfoList(Long nttReplySn) {
+  	  
+  	  List<NttReplyListDto> results = query.select(new QNttReplyListDto(
+  													  nttReply.nttReplySn,
+  													  nttReply.nttSn,
+  													  nttReply.step,
+  													  nttReply.parntsReplySn, 
+  													  nttReply.nttReplySeq,
+  													  nttReply.nttReplyCn,
+  													  nttReply.registerId,
+  													  nttReply.delYn
+  													   )
+  													  ).from(nttReply)
+  			                                         .where( eqNttReplySnOption( nttReplySn ))
+  			                                         .orderBy(
+  													  nttReply.nttReplySeq.desc()
+  													  ).fetch();
     
     
+  	  return results; }
 	
 	  public List<NttReplyListDto> getList(Long nttSn) {
 	  
@@ -67,7 +89,8 @@ public class NttReplyRepositoryImpl    {
 													  nttReply.nttReplySeq,
 													  nttReply.nttReplyCn,
 													  nttReply.registerId,
-													  nttReply.updtDt)
+  													  nttReply.delYn
+  													   )
 													  ).from(nttReply)
 			                                         .where( eqNttSnOption( nttSn ), eqStepOption(1))
 			                                         .orderBy(
@@ -90,7 +113,8 @@ public class NttReplyRepositoryImpl    {
 													  nttReply.nttReplySeq,
 													  nttReply.nttReplyCn,
 													  nttReply.registerId,
-													  nttReply.updtDt)
+  													  nttReply.delYn
+													  )
 													  ).from(nttReply)
 			                                         .where( eqParntsReplySnOption(nttReplySn))
 			                                         .orderBy(
