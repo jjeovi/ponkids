@@ -16,7 +16,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-
+import static com.meta.ponkids.domain.system.bbs.entity.QBbs.bbs;
 import static com.meta.ponkids.domain.system.ntt.entity.QNttReply.nttReply;
 
 @Repository
@@ -66,8 +66,8 @@ public class NttReplyRepositoryImpl    {
   													  nttReply.step,
   													  nttReply.parntsReplySn, 
   													  nttReply.nttReplySeq,
-  													  nttReply.nttReplyCn,
   													  nttReply.registerId,
+  													  nttReply.nttReplyCn,
   													  nttReply.delYn
   													   )
   													  ).from(nttReply)

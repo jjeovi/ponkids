@@ -29,7 +29,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
-@Where( clause = "del_yn = 'N'")
 @SQLDelete(sql = "UPDATE tb_ntt_reply SET del_yn ='Y', updt_dt = now() WHERE nttReplySn = ?")
 @Table( name = "TB_NTT_REPLY" )
 public class  NttReply extends BaseTimeEntity {

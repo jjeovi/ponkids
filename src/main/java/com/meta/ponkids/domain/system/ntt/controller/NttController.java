@@ -237,41 +237,34 @@ public class NttController {
 
     }
     
-    
-    /**
-     * methodName    : nttReplyInsert(댓글 등록)
-     * date           : 11/29/23
-     * description    : ntt nttReplyInsert method
-     */
-	/*
-	 * @PostMapping(BASIC_PATH + "/nttReplyInsert") public String nttReplyInsert(
-	 * 
-	 * @ModelAttribute NttReplySaveReqDto nttReplySaveReqDto, HttpServletRequest
-	 * request , Model model) { // save
-	 * nttReplyService.save(nttReplySaveReqDto,request);
-	 * 
-	 * Long nttSn = nttReplySaveReqDto.getNttSn();
-	 * 
-	 * // 메시지 출력 및 url 이동 처리 model.addAttribute( "resultMsg", "정상적으로 댓글이 등록되었습니다."
-	 * ); model.addAttribute( "moveUrl", BASIC_PATH +"/modify?nttSn="+ nttSn);
-	 * 
-	 * return "common/alert"; }
-	 */
+
     /**
      * methodName    : fnReplyInsert
      * date           : 11/26/23
      * description    : id 댓글등록 ajax
      */
     @ResponseBody
-    @RequestMapping( value = "/reply/nttReplyInsert", method = { RequestMethod.GET } )
-    public List nttReplyInsert(@RequestParam( "nttSn" ) Long nttSn,          
-    		                     @RequestParam( "nttReplyCn" ) String nttReplyCn 
+    @RequestMapping( value = "/reply/nttReplyInsert" )
+    public List nttReplyInsert(@RequestParam( "nttSn" ) Long nttSn, @RequestParam( "parntsReplySn" ) Long parntsReplySn,         
+    		                   @RequestParam( "nttReplyCn" ) String nttReplyCn ,   @RequestParam( "gubun" ) String gubun 
     		                     ,HttpServletRequest request ) {
     	
     	NttReplySaveReqDto nttReplySaveReqDto =   new NttReplySaveReqDto();
     	nttReplySaveReqDto.setNttSn(nttSn);
     	nttReplySaveReqDto.setNttReplyCn(nttReplyCn);
-    	nttReplySaveReqDto.setStep(1);
+    	
+    	
+     	int step = 0;
+     	
+    	if(gubun.equals("A")){
+    		 step = 1;
+    		 nttReplySaveReqDto.setParntsReplySn((long) 1);
+    	} else {
+    		 step = 2;
+    		 nttReplySaveReqDto.setParntsReplySn(parntsReplySn);
+    	}
+    	
+    	nttReplySaveReqDto.setStep(step);
     	// 댓글 등록 
     	nttReplyService.save(nttReplySaveReqDto,request);
     	 // 댓글 목록 조회
