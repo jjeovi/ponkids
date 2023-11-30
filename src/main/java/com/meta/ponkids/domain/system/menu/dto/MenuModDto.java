@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// TODO Dto 항목 setting
 @Data
 @NoArgsConstructor
 public class MenuModDto {
@@ -39,7 +38,7 @@ public class MenuModDto {
 	
 	private String newWindowYn;
 	
-	private List<Long> roleSnList;
+	private List<Long> roleSnList;		// 메뉴권한 (리스트)
 	
 	private String updusrId;      	// 수정자 ID
 	   
@@ -51,7 +50,6 @@ public class MenuModDto {
 	@Builder
 	public MenuModDto( Long menuSn, Long upperMenuSn, String menuNm, String menuCd, String menuUrl, String parntsMenuYn, Long menuSeq,
 			String menuDcSetYn, String menuDc, String menuDetailDc, Long atchFileSn, String useYn, String newWindowYn, String updusrId, String updusrIp, String delYn ) {
-		super();
 		this.menuSn = menuSn;
 		this.upperMenuSn = upperMenuSn;
 		this.menuNm = menuNm;

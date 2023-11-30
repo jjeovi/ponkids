@@ -1,56 +1,55 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
-    <title layout:fragment="title">pioneerkids Admin - 메뉴 조회</title>
-    <!-- S : Javascript functions	-->
-    <script layout:fragment="script">
-		let sel;
-		let ref;
-		let menuCreating = 'N';
+<title layout:fragment="title">pioneerkids Admin - 메뉴 조회</title>
+<!-- S : Javascript functions	-->
+<script layout:fragment="script">
+let sel;
+let ref;
+let menuCreating = 'N';
+
+      $(function(){
+      	
+	// searchDTO 는 layout.html에 선언
+	if ( 	searchDTO != null && 
+ 				searchDTO.category != undefined && 
+ 				searchDTO.category != null && 
+ 				searchDTO.category.lv1Sn != null
+ 			){
+		searchCate('/live/getMenuListAjax');
+	}
+
+	// 수정 button click event
+	$("[name='updateBtn']").click(function(){
 		
-        $(function(){
-        	
-			// searchDTO 는 layout.html에 선언
-			if ( 	searchDTO != null && 
-	  				searchDTO.category != undefined && 
-	  				searchDTO.category != null && 
-	  				searchDTO.category.lv1Sn != null
-	  			){
-				searchCate('/live/getMenuListAjax');
-			}
+		// 유효성 검사
+		var valid = requiredCheckForm($("#updateForm"));
+		
+		if ( valid && confirm("수정하시겠습니까?") ) {
+			
+			var params = $("#updateForm").serializeArray();
+			url = "/admin/live/menu/updateMenuAjax";
+			
+			menuAjax(params,url);
+		}
+	})
 
-			// 수정 button click event
-			$("[name='updateBtn']").click(function(){
-				
-				// 유효성 검사
-				var valid = requiredCheckForm($("#updateForm"));
-				
-				if ( valid && confirm("수정하시겠습니까?") ) {
-					
-					updateForm = getDataToJson( $("#updateForm") );
-					url = "/admin/live/menu/updateMenuAjax";
-					
-					// ajax START
-					$.ajax({
-		                url: url,
-		                type: "GET",
-		                dataType: "json",
-		                data : updateForm, // 검색할 값
-		                contentType: "application/json",
-		                success: function ( result ) {
-		                    // return type : result.resultMsg (String)
-		                    alert(result.resultMsg);
-		                    
-		                    // menulist 재 출력
-		                    searchCate('/live/getMenuListAjax');
-		                }
-		            });
-					// ajax END
-					
-				}
-			})
+	// 등록 button click event
+	$("[name='insertBtn']").click(function(){
+		
+		// 유효성 검사
+		var valid = requiredCheckForm($("#insertForm"));
+		
+		if ( valid && confirm("등록하시겠습니까?") ) {
+			
+			var params = $("#insertForm").serializeArray();
+			url = "/admin/live/menu/insertMenuAjax";
+			
+			menuAjax(params,url);
+		}
+	})
 
-        });
+    });
 
         
         function searchCateCallback(result) {
@@ -103,8 +102,8 @@
 			if ( parentNode.parntsMenuYn == 'N' ) {
 				alert( "부모메뉴로 설정되어있지 않는 메뉴 하위에는 메뉴를 등록할 수 없습니다." );
 				return false;
-			} else if ( parentNode.level > 3 ) {
-				alert( "레벨 이상의 경로에는 메뉴를 등록할 수 없습니다." );
+			} else if ( parentNode.level > 2 ) {
+				alert( "3레벨 이상의 경로에는 메뉴를 등록할 수 없습니다." );
 				return false;
 			}
 
@@ -146,7 +145,51 @@
 			}
 
 		};
-
+		
+		function menuDelete(){
+			
+			// 현재 삭제할 menuSn 있는지 체크
+			// menuSn = updateForm 에 있는 menuSn
+			
+			var menuSn = $("#updateForm").find("[name='menuSn']").val();
+			var parntsMenuYn = $("#updateForm").find("[name='parntsMenuYn']:checked").val();
+			
+			if(menuSn == null && menuSn == '' ) {
+				 alert("선택된 메뉴가 없습니다.");
+			} else if (parntsMenuYn == 'Y' ){
+				alert("부모메뉴로 설정되어있는 메뉴는 삭제가 불가능합니다. 하위 메뉴 부터 삭제해주세요.");
+			}
+			
+			if ( confirm("삭제하시겠습니까?") ) {
+				var params = $("#updateForm").serializeArray();
+				url = "/admin/live/menu/deleteMenuAjax";
+				
+				menuAjax(params,url);
+			}
+			
+		}
+		
+		function menuAjax( params, url ) {
+			
+			// ajax START
+			$.ajax({
+                url: url,
+                type: "GET",
+                dataType: "json",
+//	                data : updateForm, // 검색할 값
+                data : params, // 검색할 값
+                contentType: "application/json",
+                success: function ( result ) {
+                    // return type : result.resultMsg (String)
+                    alert(result.resultMsg);
+                    
+                    // menulist 재 출력
+                    searchCate('/live/getMenuListAjax');
+                }
+            });
+			// ajax END
+			
+		}
 
     </script>
     <!-- E : Javascript functions	-->
@@ -248,7 +291,7 @@
                         <!-- 버튼 영역 -->
                         <div class="btn-group float-left" role="group">
                             <button type="button" class="btn btn-purple" onclick="menuCreate()">메뉴 등록</button>
-                            <button type="button" class="btn btn-danger ml_10p  ">메뉴 삭제</button>
+                            <button type="button" class="btn btn-danger ml_10p" onclick="menuDelete();">메뉴 삭제</button>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -378,8 +421,8 @@
 										<div class="possibleRole">
 											<th:block th:each="data : ${cateLv1List}" >
 												<label>
-													<input th:id="'otherRoleApplyToMenu'+${dataStat.count}" type="checkbox" name="otherRoleApplyToMenu" th:value="${data.categorySn}" />
-													<label th:for="'otherRoleApplyToMenu'+${dataStat.count}" ><span class="cbTitle">[[${data.categoryNm}]]</span></label>
+													<input th:id="'roleSnList'+${dataStat.count}" type="checkbox" name="roleSnList" th:value="${data.categorySn}" />
+													<label th:for="'roleSnList'+${dataStat.count}" ><span class="cbTitle">[[${data.categoryNm}]]</span></label>
 												</label>
 											</th:block>
 										</div>
@@ -450,10 +493,10 @@
 	                                <label class="col-form-label col-md-2 col-sm-6 label-align">부모메뉴여부<span class="required"> * </span></label>
 	                                <div class="col-md-10 col-sm-6">
 	                                	<div class="btn-group radiobox">
-		                                    <input type="radio" name="parntsMenuYn" value="Y" class="join-btn" />
-		                                    <label for="parntsMenuYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">Y</label>
-		                                    <input type="radio" name="parntsMenuYn" value="N" class="join-btn" />
-		                                    <label for="parntsMenuYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">N</label>
+		                                    <input type="radio" id="parntsMenuYn3" name="parntsMenuYn" value="Y" class="join-btn" />
+		                                    <label for="parntsMenuYn3" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">Y</label>
+		                                    <input type="radio" id="parntsMenuYn4" name="parntsMenuYn" value="N" class="join-btn" />
+		                                    <label for="parntsMenuYn4" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">N</label>
 		                                </div>
 		                                <br>
 	                                    <small class="font-gray-dark">
@@ -465,10 +508,10 @@
 	                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명설정여부<span class="required"> * </span></label>
 	                                <div class="col-md-10 col-sm-6">
 	                                	<div class="btn-group radiobox">
-		                                    <input type="radio" name="menuDcSetYn" value="Y" class="join-btn" />
-		                                    <label for="menuDcSetYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">Y</label>
-		                                    <input type="radio" name="menuDcSetYn" value="N" class="join-btn" />
-		                                    <label for="menuDcSetYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">N</label>
+		                                    <input type="radio" id="menuDcSetYn3" name="menuDcSetYn" value="Y" class="join-btn" />
+		                                    <label for="menuDcSetYn3" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">Y</label>
+		                                    <input type="radio" id="menuDcSetYn4" name="menuDcSetYn" value="N" class="join-btn" />
+		                                    <label for="menuDcSetYn4" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">N</label>
 		                                </div>
 		                                <br>
 	                                    <small class="font-gray-dark">
@@ -499,10 +542,10 @@
 	                                <label class="col-form-label col-md-2 col-sm-6 label-align">사용여부<span class="required"> * </span></label>
 	                                <div class="col-md-10 col-sm-6">
 	                                	<div class="btn-group radiobox">
-		                                    <input type="radio" name="useYn" value="Y" class="join-btn" />
-		                                    <label for="useYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">Y</label>
-		                                    <input type="radio" name="useYn" value="N" class="join-btn" />
-		                                    <label for="useYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">N</label>
+		                                    <input type="radio" id="useYn3" name="useYn" value="Y" class="join-btn" />
+		                                    <label for="useYn3" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">Y</label>
+		                                    <input type="radio" id="useYn4" name="useYn" value="N" class="join-btn" />
+		                                    <label for="useYn4" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">N</label>
 		                                </div>
 	                                </div>
 	                            </div>
@@ -510,10 +553,10 @@
 	                                <label class="col-form-label col-md-2 col-sm-6 label-align">새창여부<span class="required"> * </span></label>
 	                                <div class="col-md-10 col-sm-6">
 	                                	<div class="btn-group radiobox">
-		                                    <input type="radio" name="newWindowYn" value="Y" class="join-btn" />
-		                                    <label for="newWindowYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">Y</label>
-		                                    <input type="radio" name="newWindowYn" value="N" class="join-btn" />
-		                                    <label for="newWindowYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">N</label>
+		                                    <input type="radio" id="newWindowYn3" name="newWindowYn" value="Y" class="join-btn" />
+		                                    <label for="newWindowYn3" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">Y</label>
+		                                    <input type="radio" id="newWindowYn4" name="newWindowYn" value="N" class="join-btn" />
+		                                    <label for="newWindowYn4" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">N</label>
 		                                </div>
 		                                <br>
 	                                    <small class="font-gray-dark">
@@ -527,8 +570,8 @@
 	                                    <div class="possibleRole">
 	                                        <th:block th:each="data : ${cateLv1List}" >
 	                                            <label>
-	                                                <input th:id="'otherRoleApplyToMenu'+${dataStat.count}" type="checkbox" name="otherRoleApplyToMenu" th:value="${data.categorySn}" />
-	                                                <label th:for="'otherRoleApplyToMenu'+${dataStat.count}" ><span class="cbTitle">[[${data.categoryNm}]]</span></label>
+	                                                <input th:id="'roleSnList' + ${dataStat.count} + '_U'" type="checkbox" name="roleSnList" th:value="${data.categorySn}" />
+	                                                <label th:for="'roleSnList' + ${dataStat.count} + '_U'" ><span class="cbTitle">[[${data.categoryNm}]]</span></label>
 	                                            </label>
 	                                        </th:block>
 	                                    </div>

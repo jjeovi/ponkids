@@ -431,7 +431,7 @@ function drawMenuTree( resultList ) {
 	
 	$("#menuStructureJsTree").bind("refresh.jstree", function( e , data ) {
 		$(this).jstree("open_all");
-	})
+	});
 	$("#menuStructureJsTree").jstree(true).refresh();
 	// E : 메뉴 jstree 생성
 
@@ -460,15 +460,15 @@ function menuRoleSet( result, mode  ) {
 
     // possibleRoleList
     for ( let item of result.possibleRoleList ) {
-        $("#" + form + " .possibleRole").find("[name='otherRoleApplyToMenu'][value='" + item.roleSn + "']").removeAttr("disabled");
+        $("#" + form + " .possibleRole").find("[name='roleSnList'][value='" + item.roleSn + "']").removeAttr("disabled");
     }
 
     if ( mode == 'U' ) {
         // checkedRoleList
         for ( let item of result.checkedRoleList ) {
-            $("#" + form + " .possibleRole").find( "[name='otherRoleApplyToMenu'][value='" + item.roleSn + "']" ).removeAttr( "disabled" );
-            $("#" + form + " .possibleRole").find( "[name='otherRoleApplyToMenu'][value='" + item.roleSn + "']" ).prop( "checked", true );
-            // $(".possibleRole").find("[name='otherRoleApplyToMenu'][value='" + item.roleSn + "']").prop('checked',true);
+            $("#" + form + " .possibleRole").find( "[name='roleSnList'][value='" + item.roleSn + "']" ).removeAttr( "disabled" );
+            $("#" + form + " .possibleRole").find( "[name='roleSnList'][value='" + item.roleSn + "']" ).prop( "checked", true );
+            // $(".possibleRole").find("[name='roleSnList'][value='" + item.roleSn + "']").prop('checked',true);
         }
     }
 

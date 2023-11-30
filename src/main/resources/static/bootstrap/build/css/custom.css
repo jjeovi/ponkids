@@ -5207,7 +5207,7 @@ ul.notifications {
 }
 .radiobox input[type=radio]:checked+label{
   color: #fff;
-  background-color: #b098f2;
+  background-color: #b098f2;;
   border-color: #a08bd8;
 }
 

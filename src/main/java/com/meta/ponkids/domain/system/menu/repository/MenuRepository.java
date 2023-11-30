@@ -11,4 +11,6 @@ public interface MenuRepository extends JpaRepository<Menu, Long>, MenuRepositor
 	
 	Optional<Menu> findById( Long pk );	// TODO PK(*ID) 체크
 	
+	void deleteByMenuSn(Long sn);
+	
 }

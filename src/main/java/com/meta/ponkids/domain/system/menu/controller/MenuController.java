@@ -19,11 +19,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
 import com.meta.ponkids.domain.system.menu.dto.MenuModDto;
+import com.meta.ponkids.domain.system.menu.dto.MenuRoleSaveDto;
 import com.meta.ponkids.domain.system.menu.dto.MenuSaveDto;
+import com.meta.ponkids.domain.system.menu.entity.Menu;
 import com.meta.ponkids.domain.system.menu.repository.MenuRepository;
+import com.meta.ponkids.domain.system.menu.repository.MenuRoleRepository;
 import com.meta.ponkids.domain.system.menu.service.MenuService;
 import com.meta.ponkids.domain.system.role.dto.RoleListDto;
 import com.meta.ponkids.domain.system.role.repository.RoleRepository;
+import com.meta.ponkids.global.util.ip.IpUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,8 +36,9 @@ import lombok.RequiredArgsConstructor;
 public class MenuController {
 	
 	private final MenuService menuService;
-	private final MenuRepository menuRepository;
 	private final RoleRepository roleRepository;
+	private final MenuRepository menuRepository;
+	private final MenuRoleRepository menuRoleRepository;
 	
 	private final static String BASIC_PATH = "/admin/menu";
 	
@@ -206,6 +211,34 @@ public class MenuController {
     	return result;
     }
     
+    @Transactional
+    @ResponseBody
+    @GetMapping("/admin/live/menu/insertMenuAjax")
+    public Map<String, Object> insertMenuAjax( 
+    		@ModelAttribute MenuSaveDto saveDto,
+    		HttpServletRequest request,
+    		Model model
+    		) throws IOException {
+    	
+    	// 메뉴 등록 (ajax)
+    	
+    	// insert 구현
+    	saveDto = menuService.save( saveDto, request );
+    	
+    	// 메뉴 권한 부여작업 update ( delete 후 insert )
+    	if (saveDto.getRoleSnList() != null && saveDto.getRoleSnList().size() > 0 ) {
+    		menuService.menuRoleUpdate(saveDto, request );
+    	}
+    	
+    	// 메시지 출력 및 url 이동 처리 (ajax)
+    	Map<String, Object> result = new HashMap<String, Object>();
+    	result.put( "resultMsg", "정상적으로 등록되었습니다." );
+    	return result;
+    }
+    
+    
+    
+    @Transactional
     @ResponseBody
     @GetMapping("/admin/live/menu/updateMenuAjax")
     public Map<String, Object> updateMenuAjax( 
@@ -220,8 +253,44 @@ public class MenuController {
     	// update 구현
     	menuService.update( modDto, request );
     	
+    	// 메뉴 권한 부여작업 update ( delete 후 insert )
+    	if (modDto.getRoleSnList() != null && modDto.getRoleSnList().size() > 0 ) {
+    		menuService.menuRoleUpdate(modDto, request );
+    	}
+    	
     	// 메시지 출력 및 url 이동 처리 (ajax)
     	result.put( "resultMsg", "정상적으로 수정되었습니다." );
+    	return result;
+    }
+    
+   
+    @Transactional
+    @ResponseBody
+    @GetMapping("/admin/live/menu/deleteMenuAjax")
+    public Map<String, Object> deleteMenuAjax( 
+    		@ModelAttribute MenuModDto modDto,
+    		HttpServletRequest request,
+    		Model model
+    		) throws IOException {
+    	// delete 구현
+    	
+    	// 메뉴 삭제 (ajax)
+    	
+    	// id, ip set
+    	modDto.setUpdusrId("admin@test.com");
+    	modDto.setUpdusrIp(IpUtils.getClientIP( request ) );			// Ip set)
+    	
+    	// menu 삭제
+    	Menu menu = modDto.toEntity(); 
+    	menuRepository.delete( menu );
+    	
+    	
+    	// menu 권한 삭제
+    	menuRoleRepository.deleteAllByMenuSn( menu.getMenuSn() );
+    	
+    	// 메시지 출력 및 url 이동 처리 (ajax)
+    	Map<String, Object> result = new HashMap<String, Object>();
+    	result.put( "resultMsg", "정상적으로 삭제되었습니다." );
     	return result;
     }
     
