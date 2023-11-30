@@ -297,7 +297,7 @@ public class NttController {
           nttReplyService.update(modDto,request);
           
      	 // 댓글 목록 조회
-    	List<NttReplyListDto> replyList = nttReplyService.getInfoList(nttReplySn);
+    	List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
 
     	
     	return replyList;
@@ -323,7 +323,7 @@ public class NttController {
     	//model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
     	//model.addAttribute( "moveUrl", BASIC_PATH +"/modify?nttSn="+ nttSn);
     	
-        List<NttReplyListDto> replyList = nttReplyService.getInfoList(nttReplySn);
+    	List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
     	
     	return replyList;
     	
