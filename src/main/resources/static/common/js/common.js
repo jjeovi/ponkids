@@ -313,7 +313,7 @@ function drawMenuTree( resultList ) {
 
     // jstree 생성
     $( '#menuStructureJsTree' ).jstree( {
-        'plugins': [ "dnd", "wholerow", "contextmenu" ], // plugin 목록에 추가
+        'plugins': [ "dnd", "wholerow",  "types" ], // plugin 목록에 추가
          'core' : {
                     "data"              : resultList,
                     "themes"            : { "variant" : "large" },
@@ -342,8 +342,6 @@ function drawMenuTree( resultList ) {
                             // [node.original.menuNm] 메뉴의 위치를 [node_parent.original.menuNm] 메뉴 하위의 [node_position+1] 번째 메뉴로 이동합니다.
                             if ( confirm( "[" + node.original.menuNm + "]메뉴의 위치를 [" + node_parent.original.menuNm + "]메뉴 하위의 [" + (node_position+1) + "]번째 메뉴로 이동합니다.\n이동 후 원복은 불가능합니다." ) ) {
 								// TODO  메뉴 이동 하여 및 같은 레벨의 순서 정렬 및 부모메뉴 업데이트  
-	
-	
                                 return true;
                             } else {
                                 return false;
@@ -355,46 +353,12 @@ function drawMenuTree( resultList ) {
 
                         }
                     },
-		'contextmenu' : 
-		{
-		"items" : {
-				"create" : { //사실상 "test"라는 이름은 변수에 가깝기 때문에 뭐든 상관없다 생각한다.
-	        		"separator_before" : false,
-					"separator_after" : true,
-					"label" : "신규메뉴",
-					"action" : function(obj){alert('메뉴테스트')}
-				},
-				"delete" : {
-					"separator_before" : false,
-					"separator_after" : true,
-					"label" : "신규메뉴2",
-					"action" : function(obj){alert('메뉴테스트2')}
-				}
-			}
-		}
-		
-		{
-                        		"items" : {
-                        		  "create" : { 
-                                		"separator_before" : false,
-                        				    "separator_after" : true,
-                        				    "label" : "메뉴추가",
-                        				    "action" : function(t){var i=$.jstree.reference(t.reference),r=i.get_node(t.reference);i.create_node(r,{},"last",(function(e){try{i.edit(e)}catch(t){setTimeout((function(){i.edit(e)}),0)}}))}
-                        			},
-                        			"rename" : {
-                        				    "separator_before" : false,
-                        				    "separator_after" : true,
-                        				    "label" : "이름바꾸기",
-                        				    "action" : function(t){var i=$.jstree.reference(t.reference),r=i.get_node(t.reference);i.edit(r)}
-                        			},
-                        			"remove" : {
-                        				    "separator_before" : false,
-                        				    "separator_after" : true,
-                        				    "label" : "삭제",
-                        				    "action" : function(t){var i=$.jstree.reference(t.reference),r=i.get_node(t.reference);i.is_selected(r)?i.delete_node(i.get_selected()):i.delete_node(r)}
-                        			}
-                        		}
-                        	}
+        'types': {
+            "#" : {
+                "max_depth" : 4,
+                "valid_children" : ["root"]
+            }
+        }
     } ).bind( "select_node.jstree", function( e , targetData ) {
 	
 	 	// form 내용 초기화 작업 및 노출 버튼 설정
@@ -402,10 +366,11 @@ function drawMenuTree( resultList ) {
 	
 		 // target 메뉴 setting
 		 var target = targetData.node.original;
+         var url = "/live/getPossibleRoleListAjax";
 		 
 		// 해당 메뉴로 다른권한에서 연동 가능한지 여부 확인 (ajax)
 		$.ajax( {
-            url: "/live/getPossibleRoleListAjax",
+            url: url,
             type: "GET",
             dataType: "json",
             async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
@@ -417,40 +382,46 @@ function drawMenuTree( resultList ) {
             success: function ( result ) {
                 // result : 연동가능한 권한들의 list
                 // 권한 setting 함수
-                menuRoleSet( result );
+                menuRoleSet( result, 'U' );
                 
             }
-        } );
+        });
+        // ajax END
         
 		
-        // S :  메뉴 menuFormDiv 항목 setting
+        // S :  메뉴 updateFormDiv 항목 setting
         
-        $( "#menuForm [name='menuSn']"        										).val( target.menuSn );
-        $( "#menuForm [name='upperMenuSn']"   										).val( target.upperMenuSn );
-        $( "#menuForm [name='menuNm']"        										).val( target.menuNm );
-        $( "#menuForm [name='menuPath']"      										).val( "(" + target.level + "레벨)  [ " + target.menuPath + " ]" );
-        $( "#menuForm [name='menuSeq']"       										).val( target.menuSeq );
-        $( "#menuForm [name='menuCd']"        										).val( target.menuCd );
-        $( "#menuForm [name='menuUrl']"        										).val( target.menuUrl );
-        $( "#menuForm [name='parntsMenuYn'][value='" + target.parntsMenuYn + "']"	).prop( "checked", true );
-        $( "#menuForm [name='menuDcSetYn'][value='" + target.menuDcSetYn + "']"     ).prop( "checked", true );
-        $( "#menuForm [name='menuDc']"        										).val( target.menuDc );
-        $( "#menuForm [name='menuDetailDc']"  										).val( target.menuDetailDc );
-        $( "#menuForm [name='useYn'][value='" + target.useYn + "']"       			).prop( "checked", true );
-        $( "#menuForm [name='newWindowYn'][value='" + target.newWindowYn + "']"     ).prop( "checked", true );
+        $( "#updateForm [name='menuSn']"        										).val( target.menuSn );
+        $( "#updateForm [name='upperMenuSn']"   										).val( target.upperMenuSn );
+        $( "#updateForm [name='menuNm']"        										).val( target.menuNm );
+        $( "#updateForm [name='menuPath']"      										).val( "(" + target.level + "레벨)  [ " + target.menuPath + " ]" );
+        $( "#updateForm [name='menuSeq']"       										).val( target.menuSeq );
+        $( "#updateForm [name='menuCd']"        										).val( target.menuCd );
+        $( "#updateForm [name='menuUrl']"        										).val( target.menuUrl );
+        $( "#updateForm [name='parntsMenuYn'][value='" + target.parntsMenuYn + "']"	).prop( "checked", true );
+        $( "#updateForm [name='menuDcSetYn'][value='" + target.menuDcSetYn + "']"     ).prop( "checked", true );
+        $( "#updateForm [name='menuDc']"        										).val( target.menuDc );
+        $( "#updateForm [name='menuDetailDc']"  										).val( target.menuDetailDc );
+        $( "#updateForm [name='useYn'][value='" + target.useYn + "']"       			).prop( "checked", true );
+        $( "#updateForm [name='newWindowYn'][value='" + target.newWindowYn + "']"     ).prop( "checked", true );
         
         // 하위메뉴 존재시, 부모메뉴여부 설정 변경 금지
         if(target.childMenuCnt > 0 ) { 
-			$( "#menuForm [name='parntsMenuYn']").attr("disabled","disabled");
-			$( "#menuForm [name='menuUrl']").prop("readonly", true );
+			$( "#updateForm [name='parntsMenuYn']").attr("disabled","disabled");
+			$( "#updateForm [name='menuUrl']").prop("readonly", true );
 		}
         
         // nowSelectMenuNm (현재선택메뉴) setting
-        $("#menuForm").find(".bottom-btn-group .text-left .nowSelectMenuNm").text( "선택: " + target.menuNm );
+        $("#updateForm").find(".bottom-btn-group .text-left .nowSelectMenuNm").text( "선택: " + target.menuNm );
         
-        // E :  메뉴 menuFormDiv 항목 setting
+        // E :  메뉴 updateFormDiv 항목 setting
 
-	 });
+	 }).bind("create_node.jstree",function ( node, parent, position ) {
+         console.log(node);
+         console.log(parent);
+         console.log(position);
+         alert("ㅅㄷㄴㅅ");
+    });
 	
 	// S : 메뉴 jstree 생성 
 	$("#menuStructureJsTree").jstree("close_all");
@@ -467,10 +438,20 @@ function drawMenuTree( resultList ) {
 }
 
 // 메뉴 권한 목록 (체크박스) 설정 함수
-function menuRoleSet( result ) {
-	
+function menuRoleSet( result, mode  ) {
+    // mode : C, U
+    // C : 등록 (create)
+    // U : 수정 (update)
+
+    var form ;
+    if( mode == 'C' ) {
+        form = 'insertForm';
+    } else if ( mode == 'U' ) {
+        form = 'updateForm';
+    }
+
     // 모든 권한 초기화 setting 모든권한에대해 disabled , checked 해제
-    $(".possibleRole").find("[type='checkbox']").each( function ( i, item ) {
+    $("#" + form + " .possibleRole").find("[type='checkbox']").each( function ( i, item ) {
         $(this).attr("disabled","disabled");
         $(this).prop("checked",false);
     })
@@ -479,14 +460,16 @@ function menuRoleSet( result ) {
 
     // possibleRoleList
     for ( let item of result.possibleRoleList ) {
-		$(".possibleRole").find("[name='otherRoleApplyToMenu'][value='" + item.roleSn + "']").removeAttr("disabled");
+        $("#" + form + " .possibleRole").find("[name='otherRoleApplyToMenu'][value='" + item.roleSn + "']").removeAttr("disabled");
     }
 
-    // checkedRoleList
-    for ( let item of result.checkedRoleList ) {
-		$(".possibleRole").find("[name='otherRoleApplyToMenu'][value='" + item.roleSn + "']").removeAttr("disabled");
-		$(".possibleRole").find("[name='otherRoleApplyToMenu'][value='" + item.roleSn + "']").prop("checked", true );
-		// $(".possibleRole").find("[name='otherRoleApplyToMenu'][value='" + item.roleSn + "']").prop('checked',true);
+    if ( mode == 'U' ) {
+        // checkedRoleList
+        for ( let item of result.checkedRoleList ) {
+            $("#" + form + " .possibleRole").find( "[name='otherRoleApplyToMenu'][value='" + item.roleSn + "']" ).removeAttr( "disabled" );
+            $("#" + form + " .possibleRole").find( "[name='otherRoleApplyToMenu'][value='" + item.roleSn + "']" ).prop( "checked", true );
+            // $(".possibleRole").find("[name='otherRoleApplyToMenu'][value='" + item.roleSn + "']").prop('checked',true);
+        }
     }
 
 }
@@ -501,30 +484,50 @@ function menuFormAreaInit( mode ) {
 	
 	if( mode == 'C' ) {
 	// C : 등록 (create)
+
+        // S :  form 내용 초기화 작업 및 노출 버튼 설정
+        $("#insertForm").clearForm();
+
+        // radio disabled 버튼 disabled 풀기
+        $( "#insertForm [name='parntsMenuYn']").removeAttr("disabled");
+        $( "#insertForm [name='menuUrl']").removeAttr("readonly");
+
+        // formArea 전부 숨긴 뒤 insertFormDiv 만 보이게
+        $("#formArea").children().hide();
+        $("#insertFormDiv").show();
+
+        // btn 설정
+        // insertFormDiv 안의 하단 버튼 모두 숨긴 뒤 등록 버튼만 보이게
+        $("#insertFormDiv").find(".bottom-btn-group .text-center").children().hide();
+        $("#insertFormDiv").find(".bottom-btn-group .text-center").find("[name='insertBtn']").show();
+
+        var parentNode = $("#menuStructureJsTree").jstree(true).get_node( sel ).original;
+        $( "#insertForm [name='menuPath']").val( "(" + (parentNode.level+1) + "레벨)  [ " + parentNode.menuPath + " > _______  ]");
+        $( "#insertForm [name='upperMenuSn']").val( parentNode.menuSn );
+
+        // E :  form 내용 초기화 작업 및 노출 버튼 설정
 		
 	} else if ( mode == 'U' ) {
 	// U : 수정 (update)
 	
 		// S :  form 내용 초기화 작업 및 노출 버튼 설정
-		$("#menuForm").clearForm();
+		$("#updateForm").clearForm();
 		
-		// radio disabled 버튼 disabled 풀
-		$( "#menuForm [name='parntsMenuYn']").removeAttr("disabled");
-		$( "#menuForm [name='menuUrl']").removeAttr("readonly");
+		// radio disabled 버튼 disabled 풀기
+		$( "#updateForm [name='parntsMenuYn']").removeAttr("disabled");
+		$( "#updateForm [name='menuUrl']").removeAttr("readonly");
 		
-		// formArea 전부 숨긴 뒤 menuFormDiv 만 보이게
+		// formArea 전부 숨긴 뒤 updateFormDiv 만 보이게
         $("#formArea").children().hide();
-        $("#menuFormDiv").show();
-        
-        
+        $("#updateFormDiv").show();
         
         // btn 설정
-        // menuFormDiv 안의 하단 버튼 모두 숨긴 뒤 수정 버튼만 보이게
-        $("#menuFormDiv").find(".bottom-btn-group .text-center").children().hide();
-        $("#menuFormDiv").find(".bottom-btn-group .text-center").find("[name='updateBtn']").show();
+        // updateFormDiv 안의 하단 버튼 모두 숨긴 뒤 수정 버튼만 보이게
+        $("#updateFormDiv").find(".bottom-btn-group .text-center").children().hide();
+        $("#updateFormDiv").find(".bottom-btn-group .text-center").find("[name='updateBtn']").show();
         
         // nowSelectMenuNm (현재선택메뉴) 초기화
-        $("#menuFormDiv").find(".bottom-btn-group .text-left .nowSelectMenuNm").empty();
+        $("#updateFormDiv").find(".bottom-btn-group .text-left .nowSelectMenuNm").empty();
         
         // E :  form 내용 초기화 작업 및 노출 버튼 설정
 		
@@ -532,13 +535,16 @@ function menuFormAreaInit( mode ) {
 	// E : 초기화상태 (모두지움) ( erase, empty)
 	
 		// S :  form 내용 초기화 작업 및 노출 버튼 설정
-		$("#menuForm").clearForm();
+		$("#insertForm").clearForm();
+        $("#updateForm").clearForm();
 		
 		// radio disabled 버튼 disabled 풀
-		$( "#menuForm [name='parntsMenuYn']").removeAttr("disabled");
-		$( "#menuForm [name='menuUrl']").removeAttr("readonly");
-		
-		// formArea 전부 숨긴 뒤 menuFormDiv 만 보이게
+		$( "#insertForm [name='parntsMenuYn']").removeAttr("disabled");
+		$( "#insertForm [name='menuUrl']").removeAttr("readonly");
+        $( "#updateForm [name='parntsMenuYn']").removeAttr("disabled");
+        $( "#updateForm [name='menuUrl']").removeAttr("readonly");
+
+		// formArea 전부 숨긴 뒤 updateFormDiv 만 보이게
         $("#formArea").children().hide();
         $("#formArea .noData").show();
         
@@ -637,7 +643,6 @@ function requiredCheckForm( e ){
 		
 	}); 
 	return result;
-
 
 }
 
