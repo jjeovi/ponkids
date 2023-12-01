@@ -1258,17 +1258,26 @@ function requiredCheckForm( e ) {
         var frm = $( e ).find( ":input" ).not( ":input[type=hidden]" );
 
         frm.each( function ( idx, ele ) {
-            if ( $( ele )[0].hasAttribute( "required" ) && $( ele )[0].value == "" ) {
-                alert( $( ele )[0].title + "을(를) 입력해주세요." );
-                $( ele ).focus();
-                result = false;
-                return false;
-            };
+            if( ele.type == "text" ) {
+                // ele : text 타입일 때
+                if ( ele.hasAttribute( "required" ) && ele.value == "" ) {
+                    alert( ele.title + "을(를) 입력해주세요." );
+                    ele.focus();
+                    result = false;
+                    return false;
+                };
+            } else if ( ele.type == "radio" || ele.type == "checkbox" ) {
+                // ele : radio 일 때
+                if ( ele.hasAttribute( "required" ) && !ele.checked ) {
+                    alert( ele.title + "을(를) 입력해주세요." );
+                    ele.focus();
+                    result = false;
+                    return false;
+                };
+            }
         });
         return result;
     }
-
-    return result;
 
 }
 

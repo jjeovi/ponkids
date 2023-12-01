@@ -10,18 +10,15 @@
 
     $( function () {
     	
-
     	// form validator 체크 ( blur , input , change 이벤트시에 유효성을 체크하여 뿌려준다)
-    	 var validator = new FormValidator({
+    	 var validatorInsert = new FormValidator({
              "events": [ 'blur', 'input', 'change' ]
          }, document.forms[0]);
-    	
-    	
+
      	// form validator 체크 ( blur , input , change 이벤트시에 유효성을 체크하여 뿌려준다)
-     	 var validator = new FormValidator({
+     	 var validatorUpdate = new FormValidator({
               "events": [ 'blur', 'input', 'change' ]
           }, document.forms[1]);
-     	
 
         // searchDTO 는 layout.html에 선언
         if ( searchDTO != null &&
@@ -94,6 +91,7 @@
         } else if ( ref == false ) {
             if ( confirm( "현재 권한에서 등록된 메뉴가 없습니다.\n관리자 메뉴를 시작하기 위한 루트메뉴를 등록하시겠습니까?" ) ) {
                 alert( "오예~" );
+                return false;
             } else {
                 return false;
             }
@@ -165,8 +163,10 @@
 
         if ( menuSn == null && menuSn == '' ) {
             alert( "선택된 메뉴가 없습니다." );
+            return false;
         } else if ( parntsMenuYn == 'Y' ) {
             alert( "부모메뉴로 설정되어있는 메뉴는 삭제가 불가능합니다. 하위 메뉴 부터 삭제해주세요." );
+            return false;
         }
 
         if ( confirm( "삭제하시겠습니까?" ) ) {
@@ -324,7 +324,7 @@
                                         class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
                                     <input name="menuNm" id="menuNm" class="form-control" title="메뉴명"
-                                           required="required"/>
+                                           required="required" data-parsley-minlength="1" />
                                 </div>
                             </div>
                             <div class="field item form-group">
@@ -342,7 +342,7 @@
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴순번<span class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
                                     <input name="menuSeq" id="menuSeq" class="form-control" title="메뉴순번"
-                                           required="required"/>
+                                           required="required" data-parsley-minlength="1" type="number"/>
                                     <small class="font-gray-dark">
                                         <b>중복 불가</b> 같은 부모경로를 가지고 있는 메뉴들간의 순서입니다. 중복되지 않도록 유의해주세요.
                                     </small>
@@ -352,7 +352,7 @@
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴코드<span class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
                                     <input name="menuCd" id="menuCd" class="form-control" title="메뉴코드"
-                                           required="required"/>
+                                           required="required" data-parsley-minlength="1"/>
                                     <small class="font-gray-dark">
                                         <b>유일한 값</b> 이어야 합니다. 다른 메뉴의 코드와 중복 되면 안됩니다.
                                     </small>
@@ -371,12 +371,12 @@
                                 <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
                                         <input type="radio" id="parntsMenuYn1" name="parntsMenuYn" value="Y"
-                                               class="join-btn"/>
+                                               class="join-btn" required/>
                                         <label for="parntsMenuYn1" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
                                                data-toggle-passive-class="btn-default">Y</label>
                                         <input type="radio" id="parntsMenuYn2" name="parntsMenuYn" value="N"
-                                               class="join-btn"/>
+                                               class="join-btn" required/>
                                         <label for="parntsMenuYn2" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
                                                data-toggle-passive-class="btn-default">N</label>
@@ -393,12 +393,12 @@
                                 <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
                                         <input type="radio" id="menuDcSetYn1" name="menuDcSetYn" value="Y"
-                                               class="join-btn"/>
+                                               class="join-btn" required/>
                                         <label for="menuDcSetYn1" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
                                                data-toggle-passive-class="btn-default">Y</label>
                                         <input type="radio" id="menuDcSetYn2" name="menuDcSetYn" value="N"
-                                               class="join-btn"/>
+                                               class="join-btn" required/>
                                         <label for="menuDcSetYn2" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
                                                data-toggle-passive-class="btn-default">N</label>
@@ -432,11 +432,11 @@
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">사용여부<span class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
-                                        <input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn"/>
+                                        <input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn" required/>
                                         <label for="useYn1" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default">Y</label>
-                                        <input type="radio" id="useYn2" name="useYn" value="N" class="join-btn"/>
+                                               data-toggle-passive-class="btn-default" >Y</label>
+                                        <input type="radio" id="useYn2" name="useYn" value="N" class="join-btn" required/>
                                         <label for="useYn2" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
                                                data-toggle-passive-class="btn-default">N</label>
@@ -448,12 +448,12 @@
                                 <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
                                         <input type="radio" id="newWindowYn1" name="newWindowYn" value="Y"
-                                               class="join-btn"/>
+                                               class="join-btn" required/>
                                         <label for="newWindowYn1" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
                                                data-toggle-passive-class="btn-default">Y</label>
                                         <input type="radio" id="newWindowYn2" name="newWindowYn" value="N"
-                                               class="join-btn"/>
+                                               class="join-btn" required/>
                                         <label for="newWindowYn2" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
                                                data-toggle-passive-class="btn-default">N</label>
@@ -503,7 +503,7 @@
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴명<span
                                         class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
-                                    <input name="menuNm" class="form-control" title="메뉴명" required="required"/>
+                                    <input name="menuNm" class="form-control" title="메뉴명" required="required" data-parsley-minlength="1"/>
                                 </div>
                             </div>
                             <div class="field item form-group">
@@ -515,12 +515,11 @@
                                         메뉴의 경로 변경은 왼쪽 트리구조에서 메뉴를 선택하여 드래그 해주세요.
                                     </small>
                                 </div>
-
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴순번<span class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
-                                    <input name="menuSeq" class="form-control" title="메뉴순번" required="required"/>
+                                    <input name="menuSeq" type="number" class="form-control" title="메뉴순번" required="required" data-parsley-minlength="1" />
                                     <small class="font-gray-dark">
                                         <b>중복 불가</b> 같은 부모경로를 가지고 있는 메뉴들간의 순서입니다. 중복되지 않도록 유의해주세요.
                                     </small>
@@ -529,7 +528,7 @@
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴코드<span class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
-                                    <input name="menuCd" class="form-control" title="메뉴코드" required="required"/>
+                                    <input name="menuCd" class="form-control" title="메뉴코드" required="required" data-parsley-minlength="1" />
                                     <small class="font-gray-dark">
                                         <b>유일한 값</b> 이어야 합니다. 다른 메뉴의 코드와 중복 되면 안됩니다.
                                     </small>

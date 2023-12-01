@@ -31,11 +31,11 @@
     FormValidator.prototype = {
         // Validation error texts
         texts : {
-            invalid         : 'inupt is not as expected',
+            invalid         : '유효하지 않습니다.',
             short           : 'input is too short',
             long            : 'input is too long',
             checked         : 'must be checked',
-            empty           : 'please put something here',
+            empty           : '필수 입력',
             select          : 'Please select an option',
             number_min      : 'too low',
             number_max      : 'too high',
