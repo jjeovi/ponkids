@@ -12,9 +12,9 @@
         // initialize a validator instance from the "FormValidator" constructor.
         // A "<form>" element is optionally passed as an argument, but is not a must
 
-        var validator = new FormValidator( {
+        var validator = new FormValidator({
             "events": [ 'blur', 'input', 'change' ]
-        }, document.forms[0] );
+        }, document.forms[0]);
         // on form "submit" event
         document.forms[0].onsubmit = function ( e ) { // 회원 등록시 유효성 검사.
             var submit = true,

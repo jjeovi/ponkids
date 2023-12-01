@@ -9,6 +9,19 @@
     let menuCreating = 'N';
 
     $( function () {
+    	
+
+    	// form validator 체크 ( blur , input , change 이벤트시에 유효성을 체크하여 뿌려준다)
+    	 var validator = new FormValidator({
+             "events": [ 'blur', 'input', 'change' ]
+         }, document.forms[0]);
+    	
+    	
+     	// form validator 체크 ( blur , input , change 이벤트시에 유효성을 체크하여 뿌려준다)
+     	 var validator = new FormValidator({
+              "events": [ 'blur', 'input', 'change' ]
+          }, document.forms[1]);
+     	
 
         // searchDTO 는 layout.html에 선언
         if ( searchDTO != null &&
@@ -309,14 +322,14 @@
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴명<span
                                         class="required"> * </span></label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <input name="menuNm" id="menuNm" class="form-control" title="메뉴명"
                                            required="required"/>
                                 </div>
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2  col-sm-6 label-align">메뉴경로<span class="required"> * </span></label>
-                                <div class=" col-sm-10">
+                                <div class="col-md-8 col-sm-6">
                                     <input name="menuPath" id="menuPath" title="메뉴경로" class="form-control"
                                            required="required" readonly/>
                                     <small class="font-gray-dark">
@@ -327,7 +340,7 @@
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴순번<span class="required"> * </span></label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <input name="menuSeq" id="menuSeq" class="form-control" title="메뉴순번"
                                            required="required"/>
                                     <small class="font-gray-dark">
@@ -337,7 +350,7 @@
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴코드<span class="required"> * </span></label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <input name="menuCd" id="menuCd" class="form-control" title="메뉴코드"
                                            required="required"/>
                                     <small class="font-gray-dark">
@@ -347,7 +360,7 @@
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴url<span class="required"> * </span></label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <input name="menuUrl" id="menuUrl" class="form-control"
                                            placeholder="부모메뉴 설정 시 url 설정이 불가능합니다."/>
                                 </div>
@@ -355,7 +368,7 @@
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">부모메뉴여부<span
                                         class="required"> * </span></label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
                                         <input type="radio" id="parntsMenuYn1" name="parntsMenuYn" value="Y"
                                                class="join-btn"/>
@@ -377,7 +390,7 @@
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명설정여부<span
                                         class="required"> * </span></label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
                                         <input type="radio" id="menuDcSetYn1" name="menuDcSetYn" value="Y"
                                                class="join-btn"/>
@@ -398,7 +411,7 @@
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명</label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <input name="menuDc" id="menuDc" class="form-control"/>
                                     <small class="font-gray-dark">
                                         메뉴의 상단에 표시됩니다. (1줄로 간단히 설명)
@@ -407,7 +420,7 @@
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴상세설명</label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <textarea rows="15" name="menuDetailDc" id="menuDetailDc"></textarea>
                                     <small class="font-gray-dark">
                                         메뉴의 상단에 상세보기를 펼쳤을 시 나오는 문구입니다.
@@ -417,7 +430,7 @@
                             <!-- atch_file_sn (추후에..) -->
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">사용여부<span class="required"> * </span></label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
                                         <input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn"/>
                                         <label for="useYn1" class="btn btn-outline-purple w100p"
@@ -432,7 +445,7 @@
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">새창여부<span class="required"> * </span></label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
                                         <input type="radio" id="newWindowYn1" name="newWindowYn" value="Y"
                                                class="join-btn"/>
@@ -453,7 +466,7 @@
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">권한 적용</label>
-                                <div class="col-md-10 col-sm-6 pt_5p">
+                                <div class="col-md-8 col-sm-6 pt_5p">
                                     <div class="possibleRole">
                                         <th:block th:each="data : ${cateLv1List}">
                                             <label>
@@ -489,13 +502,13 @@
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴명<span
                                         class="required"> * </span></label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <input name="menuNm" class="form-control" title="메뉴명" required="required"/>
                                 </div>
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2  col-sm-6 label-align">메뉴경로<span class="required"> * </span></label>
-                                <div class=" col-sm-10">
+                                <div class="col-md-8 col-sm-6">
                                     <input name="menuPath" title="메뉴경로" class="form-control" required="required"
                                            readonly/>
                                     <small class="font-gray-dark">
@@ -506,7 +519,7 @@
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴순번<span class="required"> * </span></label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <input name="menuSeq" class="form-control" title="메뉴순번" required="required"/>
                                     <small class="font-gray-dark">
                                         <b>중복 불가</b> 같은 부모경로를 가지고 있는 메뉴들간의 순서입니다. 중복되지 않도록 유의해주세요.
@@ -515,7 +528,7 @@
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴코드<span class="required"> * </span></label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <input name="menuCd" class="form-control" title="메뉴코드" required="required"/>
                                     <small class="font-gray-dark">
                                         <b>유일한 값</b> 이어야 합니다. 다른 메뉴의 코드와 중복 되면 안됩니다.
@@ -524,14 +537,14 @@
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴url<span class="required"> * </span></label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <input name="menuUrl" class="form-control" placeholder="부모메뉴 설정 시 url 설정이 불가능합니다."/>
                                 </div>
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">부모메뉴여부<span
                                         class="required"> * </span></label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
                                         <input type="radio" id="parntsMenuYn3" name="parntsMenuYn" value="Y"
                                                class="join-btn"/>
@@ -553,7 +566,7 @@
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명설정여부<span
                                         class="required"> * </span></label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
                                         <input type="radio" id="menuDcSetYn3" name="menuDcSetYn" value="Y"
                                                class="join-btn"/>
@@ -574,7 +587,7 @@
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명</label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <input name="menuDc" class="form-control"/>
                                     <small class="font-gray-dark">
                                         메뉴의 상단에 표시됩니다. (1줄로 간단히 설명)
@@ -583,7 +596,7 @@
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴상세설명</label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <textarea rows="15" name="menuDetailDc"></textarea>
                                     <small class="font-gray-dark">
                                         메뉴의 상단에 상세보기를 펼쳤을 시 나오는 문구입니다.
@@ -593,7 +606,7 @@
                             <!-- atch_file_sn (추후에..) -->
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">사용여부<span class="required"> * </span></label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
                                         <input type="radio" id="useYn3" name="useYn" value="Y" class="join-btn"/>
                                         <label for="useYn3" class="btn btn-outline-purple w100p"
@@ -608,7 +621,7 @@
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">새창여부<span class="required"> * </span></label>
-                                <div class="col-md-10 col-sm-6">
+                                <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
                                         <input type="radio" id="newWindowYn3" name="newWindowYn" value="Y"
                                                class="join-btn"/>
@@ -629,7 +642,7 @@
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">권한 적용</label>
-                                <div class="col-md-10 col-sm-6 pt_5p">
+                                <div class="col-md-8 col-sm-6 pt_5p">
                                     <div class="possibleRole">
                                         <th:block th:each="data : ${cateLv1List}">
                                             <label>
