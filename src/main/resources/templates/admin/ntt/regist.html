@@ -43,10 +43,8 @@ $(document).ready(function() {
 
 		data = new FormData();
 		data.append("file", file);
-		 var header = $("meta[name='_csrf_header']").attr("content");
-         var token = $("meta[name='_csrf']").attr("content");
-
-
+		var header = $("meta[name='_csrf_header']").attr("content");
+        var token = $("meta[name='_csrf']").attr("content");
        
 		$.ajax({
 			data : data,

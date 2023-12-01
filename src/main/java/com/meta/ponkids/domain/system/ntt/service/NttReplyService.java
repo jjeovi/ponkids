@@ -116,6 +116,13 @@ public class NttReplyService {
     
     }
     
+    
+    public Long getParntsReplySn ( Long nttReplySn ) {
+    	Long parntsReplySn = nttReplyRepository.getParntsReplySn( nttReplySn ); 
+    	return parntsReplySn;
+    }
+    
+    
 	    	
 
 

@@ -252,25 +252,31 @@ public class NttController {
     	NttReplySaveReqDto nttReplySaveReqDto =   new NttReplySaveReqDto();
     	nttReplySaveReqDto.setNttSn(nttSn);
     	nttReplySaveReqDto.setNttReplyCn(nttReplyCn);
-    	
-    	
-     	int step = 0;
+ 
      	
     	if(gubun.equals("A")){
-    		 step = 1;
-    		 nttReplySaveReqDto.setParntsReplySn((long) 1);
-    	} else {
-    		 step = 2;
-    		 nttReplySaveReqDto.setParntsReplySn(parntsReplySn);
-    	}
     	
-    	nttReplySaveReqDto.setStep(step);
-    	// 댓글 등록 
-    	nttReplyService.save(nttReplySaveReqDto,request);
-    	 // 댓글 목록 조회
-  	    List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
+    		 nttReplySaveReqDto.setParntsReplySn((long) 0);
+    		 nttReplySaveReqDto.setStep(1);
+    	     // 댓글 등록 
+    	     nttReplyService.save(nttReplySaveReqDto,request);
+    	     // 댓글 목록 조회
+    	  	 List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
+    	  	 
+    	  	 return replyList;
+    	} else {
+    		
+    		 nttReplySaveReqDto.setParntsReplySn(parntsReplySn);
+    		 nttReplySaveReqDto.setStep(2);
+    		 //답글 등록 
+ 	    	 nttReplyService.save(nttReplySaveReqDto,request);
+    		 // 답글 목록 조회
+    	     List<NttReplyListDto> answerReplyList = nttReplyService.getAnswerReplyList(parntsReplySn);
+    	        
+    	    return answerReplyList;
+    	}
         
-        return replyList;
+      
       
     } 
     
@@ -338,16 +344,24 @@ public class NttController {
      */
     @ResponseBody
     @RequestMapping( value = "/reply/answerReplyList", method = { RequestMethod.GET } )
-    public List answerReplyList( @RequestParam( "nttReplySn" ) Long nttReplySn) {
+    public List answerReplyList(   @RequestParam( "nttReplySn" ) Long nttReplySn
+    		                     , @RequestParam( "parntsReplySn" ) Long parntsReplySn
+    		                     , @RequestParam( "gubun" ) String gubun) {
         
-    	 // 댓글 목록 조회
-        List<NttReplyListDto> answerReplyList = nttReplyService.getAnswerReplyList(nttReplySn);
+       Long nttReplySn2 =  nttReplySn;
+    	
+    	if(gubun.equals("B")) {
+    		nttReplySn2 =  parntsReplySn;
+        }
+    	
+    	// 답글 목록 조회
+          List<NttReplyListDto> answerReplyList = nttReplyService.getAnswerReplyList(nttReplySn2); //부모 키 
+          
+          return answerReplyList;
         
-        return answerReplyList;
+       
+      
     } 
-    
-   
-    
     
     
 }

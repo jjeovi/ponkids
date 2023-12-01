@@ -16,7 +16,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static com.meta.ponkids.domain.system.bbs.entity.QBbs.bbs;
+
 import static com.meta.ponkids.domain.system.ntt.entity.QNttReply.nttReply;
 
 @Repository
@@ -39,6 +39,23 @@ public class NttReplyRepositoryImpl    {
     	
     
     }
+    
+    public Long getParntsReplySn(Long nttReplySn) {
+    	Long parntsReplySn = query.select(nttReply.parntsReplySn)
+    			     .from(nttReply)
+    			     .where(
+    			    		 eqNttReplySnOption( nttReplySn )
+    		                )
+    			   .fetchOne();
+
+    	
+    	
+    	return parntsReplySn;
+    	
+    	
+    
+    }
+    
     
     // -------------------------------- WHERE 검색 옵션 setting --------------------------------
     private BooleanExpression eqNttSnOption( Long nttSn) {
