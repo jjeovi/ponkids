@@ -1,14 +1,12 @@
 package com.meta.ponkids.domain.system.menu.dto;
 
-import java.util.List;
-
 import com.meta.ponkids.domain.system.menu.entity.Menu;
-
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//TODO Dto 항목 setting
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 public class MenuSaveDto {

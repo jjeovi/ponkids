@@ -8,9 +8,7 @@ import com.meta.ponkids.domain.system.menu.entity.Menu;
 import com.meta.ponkids.domain.system.menu.entity.MenuRole;
 import com.meta.ponkids.domain.system.menu.repository.MenuRepository;
 import com.meta.ponkids.domain.system.menu.repository.MenuRoleRepository;
-import com.meta.ponkids.domain.system.menu.repository.custom.MenuRoleRepositoryCustom;
 import com.meta.ponkids.domain.system.role.dto.RoleListDto;
-import com.meta.ponkids.domain.user.entity.UserChldrn;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,50 +19,49 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class MenuService {
-	private final MenuRepository menuRepository;	// repository setting
-	private final MenuRoleRepository menuRoleRepository;
-	
-	@Transactional
-	public MenuSaveDto save( MenuSaveDto saveDto, HttpServletRequest request ) throws IOException {
+    private final MenuRepository menuRepository;    // repository setting
+    private final MenuRoleRepository menuRoleRepository;
+    
+    @Transactional
+    public MenuSaveDto save( MenuSaveDto saveDto, HttpServletRequest request ) throws IOException {
 //    public MenuSaveDto save( MenuSaveDto saveDto, MenuRoleSaveDto menuRoleSaveDto, HttpServletRequest request ) throws IOException {
-		
-		saveDto.setRegisterId( "admin@test.com" );							// Id set
-		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set
-		
-		Menu newMenu = menuRepository.save( saveDto.toEntity() );			// ** save -> save된 정보 newXxx 로 저장
-		
-		saveDto.setMenuSn(newMenu.getMenuSn());
-		
-		return saveDto;
-		
-	}
-
+        
+        saveDto.setRegisterId( "admin@test.com" );                            // Id set
+        saveDto.setRegisterIp( IpUtils.getClientIP( request ) );            // Ip set
+        
+        Menu newMenu = menuRepository.save( saveDto.toEntity() );            // ** save -> save된 정보 newXxx 로 저장
+        
+        saveDto.setMenuSn( newMenu.getMenuSn() );
+        
+        return saveDto;
+        
+    }
+    
     public List<MenuListDto> getList( MenuListDto listDto ) {
         // 메뉴 목록은 category lv1Sn 값이 설정되어있어야 조회 가능. 그렇지 않으면 null return
-        if (listDto.getCategory() != null && listDto.getCategory().getLv1Sn() != null ) {
-        	
-        	// 전체 일때 쿼리는 다름
-        	if( listDto.getCategory().getLv1Sn() == 0 ) {
-        		// 전체 메뉴 list
-        		return menuRepository.getAllList( listDto );
-        	} else {
-        		// 특정 권한의 메뉴 list
-        		return menuRepository.getList( listDto );
-        	}
+        if ( listDto.getCategory() != null && listDto.getCategory().getLv1Sn() != null ) {
+            
+            // 전체 일때 쿼리는 다름
+            if ( listDto.getCategory().getLv1Sn() == 0 ) {
+                // 전체 메뉴 list
+                return menuRepository.getAllList( listDto );
+            } else {
+                // 특정 권한의 메뉴 list
+                return menuRepository.getList( listDto );
+            }
         } else {
             return Collections.emptyList(); // 빈 List<> 생성
         }
     }
     
-    public MenuModDto findById( Long pk ) {	// TODO 타입 체크 필요
+    public MenuModDto findById( Long pk ) {    // TODO 타입 체크 필요
         
-        Menu menu = menuRepository.findById( pk ).orElse(null);
+        Menu menu = menuRepository.findById( pk ).orElse( null );
         
         MenuModDto modDto = new MenuModDto();
         modDto = modDto.toDto( menu );
@@ -73,11 +70,11 @@ public class MenuService {
     }
     
     @Transactional
-    public void update ( MenuModDto modDto, HttpServletRequest request ) throws IOException {
+    public void update( MenuModDto modDto, HttpServletRequest request ) throws IOException {
 //    public void update ( MenuModDto modDto, MenuRoleModDto menuRoleModDto, HttpServletRequest request ) throws IOException {
-    	
-    	// target 조회
-        Menu menu = menuRepository.findById( modDto.getMenuSn() ).orElse(null);	// TODO PK 체크
+        
+        // target 조회
+        Menu menu = menuRepository.findById( modDto.getMenuSn() ).orElse( null );    // TODO PK 체크
         
         // target object 전환 ( entity to dto )
         MenuModDto targetDto = new MenuModDto();
@@ -85,23 +82,27 @@ public class MenuService {
         
         // TODO target object 에 수정사항 set	
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
-        if ( modDto.getUpperMenuSn() != null ) targetDto.setUpperMenuSn( modDto.getUpperMenuSn() );          	// 부모메뉴
-        if ( StringUtils.hasText( modDto.getMenuNm() ) ) targetDto.setMenuNm( modDto.getMenuNm() );          	// 메뉴이름
-        if ( StringUtils.hasText( modDto.getMenuCd() ) ) targetDto.setMenuCd( modDto.getMenuCd() );          	// 메뉴코드
-        if ( modDto.getMenuUrl() != null ) targetDto.setMenuUrl( modDto.getMenuUrl() );          	// 메뉴URL
-        if ( StringUtils.hasText( modDto.getParntsMenuYn() ) ) targetDto.setParntsMenuYn( modDto.getParntsMenuYn() );          	// 부모메뉴여부
-        if ( modDto.getMenuSeq() != null ) targetDto.setMenuSeq( modDto.getMenuSeq() );          	// 메뉴순번
-        if ( StringUtils.hasText( modDto.getMenuDcSetYn() ) ) targetDto.setMenuDcSetYn( modDto.getMenuDcSetYn() );          	// 메뉴설명설정여부
-        if ( modDto.getMenuDc() != null ) targetDto.setMenuDc( modDto.getMenuDc() );          	// 메뉴설명
-        if ( modDto.getMenuDetailDc() != null  ) targetDto.setMenuDetailDc( modDto.getMenuDetailDc() );          	// 메뉴상세설명
-        if ( StringUtils.hasText( modDto.getUseYn() ) ) targetDto.setUseYn( modDto.getUseYn() );          	// 사용여부
-        if ( StringUtils.hasText( modDto.getNewWindowYn() ) ) targetDto.setNewWindowYn( modDto.getNewWindowYn() );          	// 새창여부
+        if ( modDto.getUpperMenuSn() != null ) targetDto.setUpperMenuSn( modDto.getUpperMenuSn() );            // 부모메뉴
+        if ( StringUtils.hasText( modDto.getMenuNm() ) ) targetDto.setMenuNm( modDto.getMenuNm() );            // 메뉴이름
+        if ( StringUtils.hasText( modDto.getMenuCd() ) ) targetDto.setMenuCd( modDto.getMenuCd() );            // 메뉴코드
+        if ( modDto.getMenuUrl() != null ) targetDto.setMenuUrl( modDto.getMenuUrl() );            // 메뉴URL
+        if ( StringUtils.hasText( modDto.getParntsMenuYn() ) )
+            targetDto.setParntsMenuYn( modDto.getParntsMenuYn() );            // 부모메뉴여부
+        if ( modDto.getMenuSeq() != null ) targetDto.setMenuSeq( modDto.getMenuSeq() );            // 메뉴순번
+        if ( StringUtils.hasText( modDto.getMenuDcSetYn() ) )
+            targetDto.setMenuDcSetYn( modDto.getMenuDcSetYn() );            // 메뉴설명설정여부
+        if ( modDto.getMenuDc() != null ) targetDto.setMenuDc( modDto.getMenuDc() );            // 메뉴설명
+        if ( modDto.getMenuDetailDc() != null )
+            targetDto.setMenuDetailDc( modDto.getMenuDetailDc() );            // 메뉴상세설명
+        if ( StringUtils.hasText( modDto.getUseYn() ) ) targetDto.setUseYn( modDto.getUseYn() );            // 사용여부
+        if ( StringUtils.hasText( modDto.getNewWindowYn() ) )
+            targetDto.setNewWindowYn( modDto.getNewWindowYn() );            // 새창여부
         
-        targetDto.setAtchFileSn( modDto.getAtchFileSn() );          											// 첨부파일 (첨부파일은 Null이어도 변경)
+        targetDto.setAtchFileSn( modDto.getAtchFileSn() );                                                    // 첨부파일 (첨부파일은 Null이어도 변경)
         
         // id,ip setting
-        targetDto.setUpdusrIp(IpUtils.getClientIP( request ));
-        targetDto.setUpdusrId("admin@test.com");
+        targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
+        targetDto.setUpdusrId( "admin@test.com" );
         
         // target object 전환 ( dto to entity )
         menu = targetDto.toEntity();
@@ -110,81 +111,79 @@ public class MenuService {
         menuRepository.save( menu );
     }
     
-    
-    
     @Transactional
     public void menuRoleUpdate( MenuSaveDto saveDto, HttpServletRequest request ) throws IOException {
-    	
-    	// (1) tb_menu_role 테이블에 menu_sn 으로 해당되는 권한 모두 지운뒤
-    	// (2) tb_menu_role 에 modDto.roleSn 에 있는 값들을 모두 insert처리
-
-    	
-    	// (1) tb_menu_role 테이블에 menu_sn 으로 해당되는 권한 모두 지운뒤
-    	if( saveDto.getMenuSn() != null ) 
-    		menuRepository.deleteByMenuSn(saveDto.getMenuSn());
-    	
-    	// (2) tb_menu_role 에 modDto.roleSn 에 있는 값들을 모두 insert처리
-    	if( saveDto.getRoleSnList() != null && saveDto.getRoleSnList().size() > 0 ) {
-    		List<MenuRole> menuRoleList = new ArrayList<>();
-    		
-    		for (Long roleSn : saveDto.getRoleSnList()) {
-    			MenuRoleSaveDto menuRole = new MenuRoleSaveDto();
-    			
-    			menuRole.setMenuSn(saveDto.getMenuSn());
-    			menuRole.setRoleSn(roleSn);
-    			
-    			menuRoleList.add( menuRole.toEntity() );
-			}
-    		
-    		menuRoleRepository.saveAll(menuRoleList);
-    		
-    	}
-    	
+        
+        // (1) tb_menu_role 테이블에 menu_sn 으로 해당되는 권한 모두 지운뒤
+        // (2) tb_menu_role 에 modDto.roleSn 에 있는 값들을 모두 insert처리
+        
+        
+        // (1) tb_menu_role 테이블에 menu_sn 으로 해당되는 권한 모두 지운뒤
+        if ( saveDto.getMenuSn() != null )
+            menuRoleRepository.deleteAllByMenuSn( saveDto.getMenuSn() );
+        
+        // (2) tb_menu_role 에 modDto.roleSn 에 있는 값들을 모두 insert처리
+        if ( saveDto.getRoleSnList() != null ) {
+            List<MenuRole> menuRoleList = new ArrayList<>();
+            
+            for ( Long roleSn : saveDto.getRoleSnList() ) {
+                MenuRoleSaveDto menuRole = new MenuRoleSaveDto();
+                
+                menuRole.setRegisterId( IpUtils.getClientIP( request ) );
+                menuRole.setRegisterIp( "admin@test.com" );
+                
+                menuRole.setMenuSn( saveDto.getMenuSn() );
+                menuRole.setRoleSn( roleSn );
+                
+                
+                menuRoleList.add( menuRole.toEntity() );
+            }
+            
+            menuRoleRepository.saveAll( menuRoleList );
+        }
     }
-
-    
     
     @Transactional
-    public void menuRoleUpdate ( MenuModDto modDto, HttpServletRequest request ) throws IOException {
-    	
-    	// (1) tb_menu_role 테이블에 menu_sn 으로 해당되는 권한 모두 지운뒤
-    	// (2) tb_menu_role 에 modDto.roleSn 에 있는 값들을 모두 insert처리
-
-    	
-    	// (1) tb_menu_role 테이블에 menu_sn 으로 해당되는 권한 모두 지운뒤
-    	if(modDto.getMenuSn() != null ) 
-    		menuRepository.deleteByMenuSn(modDto.getMenuSn());
-    	
-    	// (2) tb_menu_role 에 modDto.roleSn 에 있는 값들을 모두 insert처리
-    	if( modDto.getRoleSnList() != null && modDto.getRoleSnList().size() > 0 ) {
-    		List<MenuRole> menuRoleList = new ArrayList<>();
-    		
-    		for (Long roleSn : modDto.getRoleSnList()) {
-    			MenuRoleSaveDto menuRole = new MenuRoleSaveDto();
-    			
-    			menuRole.setMenuSn(modDto.getMenuSn());
-    			menuRole.setRoleSn(roleSn);
-    			
-    			menuRoleList.add( menuRole.toEntity() );
-			}
-    		
-    		menuRoleRepository.saveAll(menuRoleList);
-    		
-    	}
-    	
+    public void menuRoleUpdate( MenuModDto modDto, HttpServletRequest request ) throws IOException {
+        
+        // (1) tb_menu_role 테이블에 menu_sn 으로 해당되는 권한 모두 지운뒤
+        // (2) tb_menu_role 에 modDto.roleSn 에 있는 값들을 모두 insert처리
+        
+        
+        // (1) tb_menu_role 테이블에 menu_sn 으로 해당되는 권한 모두 지운뒤
+        if ( modDto.getMenuSn() != null )
+            menuRoleRepository.deleteAllByMenuSn( modDto.getMenuSn() );
+        
+        // (2) tb_menu_role 에 modDto.roleSn 에 있는 값들을 모두 insert처리
+        if ( modDto.getRoleSnList() != null ) {
+            List<MenuRole> menuRoleList = new ArrayList<>();
+            
+            for ( Long roleSn : modDto.getRoleSnList() ) {
+                MenuRoleSaveDto menuRole = new MenuRoleSaveDto();
+                
+                menuRole.setRegisterId( IpUtils.getClientIP( request ) );
+                menuRole.setRegisterIp( "admin@test.com" );
+                
+                menuRole.setMenuSn( modDto.getMenuSn() );
+                menuRole.setRoleSn( roleSn );
+                
+                menuRoleList.add( menuRole.toEntity() );
+            }
+            
+            menuRoleRepository.saveAll( menuRoleList );
+        }
+        
     }
-
+    
     @Transactional
     public void deleteAllById( Long pk ) {
         
         // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
         menuRepository.deleteById( pk );    // Entity 의 @SQLDelete 를 수행
-        
     }
     
     public List<RoleListDto> getPossibleRoleListAjax( MenuListDto listDto ) {
-    	return menuRepository.getPossibleRoleListAjax( listDto );
+        return menuRepository.getPossibleRoleListAjax( listDto );
     }
-	
-
+    
 }

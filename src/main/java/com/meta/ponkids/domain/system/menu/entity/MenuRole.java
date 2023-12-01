@@ -48,11 +48,9 @@ public class MenuRole extends BaseTimeEntity {
     //    @NotNull
     private Long roleSn;
     
-    @NotNull
     @Column(updatable = false)
     private String registerId;
     
-    @NotNull
     @Column(updatable = false)
     private String registerIp;
 

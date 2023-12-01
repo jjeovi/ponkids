@@ -24,10 +24,8 @@ public class MenuRoleSaveDto {
     
     private Long roleSn;
     
-    @NotNull
     private String registerId;
     
-    @NotNull
     private String registerIp;
 
     private String updusrId;
