@@ -18,12 +18,24 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
 import static com.meta.ponkids.domain.system.bbs.entity.QBbs.bbs;
-import static com.meta.ponkids.domain.system.ntt.entity.QNttReply.nttReply;
 
+
+
+/**
+ * className      : BbsRepositoryImpl
+ * author         : ehlee
+ * date           : 2023-12-02
+ * description    : class of 게시판 RepositoryImpl
+ * ===========================================================
+ * DATE              AUTHOR               NOTE
+ * -----------------------------------------------------------
+ * 2023-12-02        ehlee             최초 생성
+ */
 @Repository
 @RequiredArgsConstructor
 public class BbsRepositoryImpl implements BbsRepositoryCustom   {
@@ -32,49 +44,49 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
     @Override
     public Page<BbsListDto> getList( BbsListDto bbsListDto, Pageable pageable ) { 
 	  
-    	  // (1) '결과list' 와 (2)'count' 를 2번에 걸쳐 조회
-	  
-    	  // (1) 결과list (results).
+    	// (1) '결과list' 와 (2)'count' 를 2번에 걸쳐 조회
+    	
+    
+    	// (1) 결과 list (results).
         List<BbsListDto> results = query
-                // select
-                .select( new QBbsListDto(
-                		bbs.bbsSn,
-                        new CaseBuilder()
-                                .when( bbs.bbsSeCd.eq( "01" ) ).then( "포토형" )
-                                .when(bbs.bbsSeCd.eq( "02" )).then( "리스트형" )
-                                .otherwise( "" )
-                                .as("bbsSeCd"),
-                                bbs.bbsNm,
-                                new CaseBuilder()
-                                .when( bbs.replySetYn.eq( "Y" ) ).then( "사용" )
-                                .when(bbs.replySetYn.eq( "N" )).then( "미사용" )
-                                .otherwise( "" )
-                                .as("replySetYn"),
-                                new CaseBuilder()
-                                .when( bbs.useYn.eq( "Y" ) ).then( "사용" )
-                                .when(bbs.useYn.eq( "N" )).then( "미사용" )
-                                .otherwise( "" )
-                                .as("useYn"),
-                                new CaseBuilder()
-                                .when( bbs.openYn.eq( "Y" ) ).then( "공개" )
-                                .when(bbs.openYn.eq( "N" )).then( "비공개" )
-                                .otherwise( "" )
-                                .as("openYn"),
-                                bbs.registerId,
-                                bbs.regDt      
-                	    )  ).from( bbs )
-                .orderBy( bbs.bbsSn.desc() )
-                // where
-                .where(
-                		eqReplySetYn( bbsListDto.getReplySetYn() ),
-                		eqUseYn( bbsListDto.getUseYn() ),
-                		eqOpenYn( bbsListDto.getOpenYn() ),
-                        eqOption( bbsListDto.getSchOption(), bbsListDto.getSchCntn() )
-                )
-                // paging
-                .offset( pageable.getOffset() )
-                .limit( pageable.getPageSize() )
-                .fetch();
+                                 // select
+                                 .select( new QBbsListDto(
+                                 		      bbs.bbsSn,
+                                          new CaseBuilder()
+                                             .when( bbs.bbsSeCd.eq( "01" ) ).then( "포토형" )
+                                             .when( bbs.bbsSeCd.eq( "02" )).then( "리스트형" )
+                                             .otherwise( "" )
+                                             .as("bbsSeCd"),
+                                              bbs.bbsNm,
+                                          new CaseBuilder()
+                                             .when( bbs.replySetYn.eq( "Y" ) ).then( "사용" )
+                                             .when( bbs.replySetYn.eq( "N" )).then( "미사용" )
+                                                 .otherwise( "" )
+                                                 .as("replySetYn"),
+                                                 new CaseBuilder()
+                                                 .when( bbs.useYn.eq( "Y" ) ).then( "사용" )
+                                                 .when( bbs.useYn.eq( "N" )).then( "미사용" )
+                                                 .otherwise( "" )
+                                                 .as("useYn"),
+                                                 new CaseBuilder()
+                                                 .when( bbs.openYn.eq( "Y" ) ).then( "공개" )
+                                                 .when( bbs.openYn.eq( "N" )).then( "비공개" )
+                                                 .otherwise( "" )
+                                                 .as("openYn"),
+                                                 bbs.registerId,
+                                                 bbs.regDt
+                	                          )).from( bbs )
+                                                .orderBy( bbs.bbsSn.desc() )
+                                                .where(
+                   	                            	   eqReplySetYn( bbsListDto.getReplySetYn() ),
+                   	                            	   eqUseYn(  bbsListDto.getUseYn() ),
+                   	                            	   eqOpenYn( bbsListDto.getOpenYn() ),
+                                                       eqOption( bbsListDto.getSchOption(), bbsListDto.getSchCntn() )
+                                                       )
+                                               // paging
+                                               .offset( pageable.getOffset() )
+                                               .limit( pageable.getPageSize() )
+                                               .fetch();
         
 	      
         // (2) count
@@ -88,7 +100,8 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
                 );
                
     	return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
-	 }
+	 
+    }
     
     
     // -------------------------------- WHERE 검색 옵션 setting --------------------------------
@@ -103,8 +116,6 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
     	return StringUtils.hasText( openYn ) ? bbs.openYn.eq( openYn ) : null;
     }
     
-
-    
     private BooleanExpression eqOption(String schOption, String schCntn){
         // 검색 옵션  A : 아이디 , B : 이름
         if (StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn )){
@@ -113,41 +124,35 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
             else                            return null;
         } else { return null; }
     }
-
-  
     
     private BooleanExpression eqBbsSn( Long bbsSn) {
     	return bbs.bbsSn.eq( bbsSn );
     }
     
 
-	
+	// 댓글 설정여부
 	@Override
 	public String getSetReplySetYn(Long bbsSn) {
     	String replySetYn = query.select(bbs.replySetYn)
-    			     .from(bbs)
-    			     .where(
-    			    		 eqBbsSn( bbsSn )
-    		                )
-    			   .fetchOne();
+    			                 .from(bbs)
+    			                 .where( eqBbsSn( bbsSn ))
+    			                 .fetchOne();
 
     	return replySetYn;
-    	
-    	
     
     }
 
-
+   // 게시판 구분코드
 	@Override
 	public String getBbsSeCd(Long bbsSn) {
 		String bbsSeCd = query.select(bbs.bbsSeCd)
-			     .from(bbs)
-			     .where(
-			    		 eqBbsSn( bbsSn )
-		                )
-			   .fetchOne();
-
-	return bbsSeCd;
+			                  .from(bbs)
+			                  .where( eqBbsSn( bbsSn ))
+			                  .fetchOne();
+	      
+		return bbsSeCd;
+  
+  
 	}
     
 

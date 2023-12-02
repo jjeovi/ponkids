@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.annotations.QueryProjection;
 
 import lombok.Data;
@@ -13,16 +16,26 @@ import lombok.NoArgsConstructor;
 @Data
 public class BbsListDto {
     
-    private Long bbsSn;
+    private  Long bbsSn;
+    
     private String bbsSeCd;
+    
     private String bbsNm;
+    
     private String replySetYn;
+    
     private String useYn;
+    
     private String openYn;
-	private String registerId;
-	//private String updusrIp;
-	private LocalDateTime regDt;
+	
+    private String registerId;
+	
+    //@DateTimeFormat(pattern = "yyyy-MM-DD")
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-DD", timezone = "Asia/Seoul")
+    private LocalDateTime regDt;
+    
     private String schOption;   // 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
+    
     private String schCntn;     // 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!
     
     

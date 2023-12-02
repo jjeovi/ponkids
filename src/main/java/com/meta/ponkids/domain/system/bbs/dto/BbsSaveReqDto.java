@@ -49,8 +49,8 @@ public class BbsSaveReqDto {
 
     // builder 생성
     @Builder
-    public BbsSaveReqDto( Long bbsSn ,String bbsSeCd, String bbsNm, String bbsGdcc,String bbsDc, String replySetYn, String useYn,String openYn,String delYn
-    		                  ,String registerId,String registerIp, LocalDateTime regDt ,String updusrId,String updusrIp,LocalDateTime updtDt) {
+    public BbsSaveReqDto( Long bbsSn ,String bbsSeCd, String bbsNm, String bbsGdcc, String bbsDc, String replySetYn, String useYn, String openYn,
+    		            String delYn ,String registerId, String registerIp, LocalDateTime regDt, String updusrId, String updusrIp, LocalDateTime updtDt) {
         this.bbsSn = bbsSn;
         this.bbsSeCd = bbsSeCd;
         this.bbsNm = bbsNm;

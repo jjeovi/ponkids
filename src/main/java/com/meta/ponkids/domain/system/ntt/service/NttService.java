@@ -142,13 +142,6 @@ public class NttService {
     
     }
     
-    
-    public int getExistsNtt(Long  bbsSn) {
-	  return nttRepository.getExistsNtt(bbsSn); 
-	
-	 }
-    
-    
 	public List<NttListDto> getNoticeList(Long bbsSn) {
 
 		return nttRepository.getNoticeList(bbsSn);

@@ -16,22 +16,32 @@ public class BbsModDto {
 
 	@NotNull
     private Long bbsSn;
+	
     private String bbsSeCd;
+    
     private String bbsNm;
+    
     private String replySetYn;
+    
     private String useYn;
+    
     private String openYn;
-	private String bbsGdcc;
-	private String bbsDc;
+	
+    private String bbsGdcc;
+	
+    private String bbsDc;
+    
     private String updusrId;      
+    
     private String updusrIp; 
+    
     private LocalDateTime updtDt;  
 	
 
     // builder 생성
     @Builder
-    public BbsModDto( Long bbsSn ,String bbsSeCd, String bbsNm,  String replySetYn, String useYn,String openYn,String bbsGdcc, String bbsDc
-    		          ,  String updusrId,String updusrIp, LocalDateTime updtDt)  {
+    public BbsModDto( Long bbsSn,  String bbsSeCd, String bbsNm, String replySetYn, String useYn, String openYn, String bbsGdcc,
+    		          String bbsDc, String updusrId, String updusrIp, LocalDateTime updtDt)  {
 
         this.bbsSn = bbsSn;
         this.bbsSeCd = bbsSeCd;

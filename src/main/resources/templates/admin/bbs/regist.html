@@ -53,31 +53,22 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="insertForm" name="insertForm" method="post" th:action="@{/admin/bbs/insert}"
-                          th:object="${bbsSaveReqDto}">
-                        <input type="hidden" name="mngrConfmYn" value="Y"/>
-                        <!-- TODO 프로필 이미지 추가 작업 -->
-                      <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>게시판 구분</label>
-                            <div class="col-md-6 col-sm-6 ">
-                                <div class="btn-group radiobox">
+                    <form id="insertForm" name="insertForm" method="post" th:action="@{/admin/bbs/insert}" th:object="${bbsSaveReqDto}">
+                       <div class="field item form-group">
+                           <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>게시판 구분</label>
+                           <div class="col-md-6 col-sm-6 ">
+                               <div class="btn-group radiobox">
                                     <input type="radio" id="bbsSeCd1" name="bbsSeCd" value="01" class="join-btn" required>
-                                    <label for="bbsSeCd1" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">포토형</label>
+                                    <label for="bbsSeCd1" class="btn btn-outline-purple w100p"  data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">포토형</label>
                                     <input type="radio" id="bbsSeCd2" name="bbsSeCd" value="02" class="join-btn" required>
-                                    <label for="bbsSeCd2" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">리스트형</label>
+                                    <label for="bbsSeCd2" class="btn btn-outline-purple w100p"  data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">리스트형</label>
                                 </div>
                             </div>
                         </div>
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>게시판 이름</label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="input" id="bbsNm" name="bbsNm"
-                                       title="Minimum 8 Characters Including An Upper And Lower Case Letter, A Number And A Unique Character"
-                                       required/>
+                                <input class="form-control" type="input" id="bbsNm" name="bbsNm" title="Minimum 8 Characters Including An Upper And Lower Case Letter, A Number And A Unique Character"  required/>
                                 <span style="position: absolute;right:15px;top:7px;" onclick="hideshow()">
 									<i id="slash" class="fa fa-eye-slash" style="display:none;"></i>
 									<i id="eye" class="fa fa-eye"></i>
@@ -104,13 +95,9 @@
                             <div class="col-md-2 col-sm-4">
 								 <div class="btn-group radiobox">
                                     <input type="radio" id="replySetYn1" name="replySetYn" value="Y" class="join-btn">
-                                    <label for="replySetYn1" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">사용</label>
+                                    <label for="replySetYn1" class="btn btn-outline-purple w100p"    data-toggle-class="btn-primary"  data-toggle-passive-class="btn-default">사용</label>
                                     <input type="radio" id="replySetYn2" name="replySetYn" value="N" class="join-btn">
-                                    <label for="replySetYn2" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">미사용</label>
+                                    <label for="replySetYn2" class="btn btn-outline-purple w100p"  data-toggle-class="btn-primary"   data-toggle-passive-class="btn-default">미사용</label>
                                 </div>
                             </div>
                         </div>
@@ -119,13 +106,9 @@
                             <div class="col-md-2 col-sm-4">
                             	 <div class="btn-group radiobox">
                                     <input type="radio" id="openYn1" name="openYn" value="Y" class="join-btn">
-                                    <label for="openYn1" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">공개</label>
+                                    <label for="openYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary"  data-toggle-passive-class="btn-default">공개</label>
                                     <input type="radio" id="openYn2" name="openYn" value="N" class="join-btn">
-                                    <label for="openYn2" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">비공개</label>
+                                    <label for="openYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary"  data-toggle-passive-class="btn-default">비공개</label>
                                 </div>
                              </div>   
                         </div>
@@ -134,13 +117,9 @@
                             <div class="col-md-2 col-sm-4">
 								 <div class="btn-group radiobox">
                                     <input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn">
-                                    <label for="useYn1" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">사용</label>
+                                    <label for="useYn1" class="btn btn-outline-purple w100p"  data-toggle-class="btn-primary"  data-toggle-passive-class="btn-default">사용</label>
                                     <input type="radio" id="useYn2" name="useYn" value="N" class="join-btn">
-                                    <label for="useYn2" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">미사용</label>
+                                    <label for="useYn2" class="btn btn-outline-purple w100p"  data-toggle-class="btn-primary"  data-toggle-passive-class="btn-default">미사용</label>
                                 </div>
                             </div>
                         </div>

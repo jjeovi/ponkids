@@ -8,7 +8,6 @@ import org.hibernate.annotations.*;
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -36,36 +35,38 @@ public class  Bbs extends BaseTimeEntity {
     @Id
     @Column(insertable=false)
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_BBS_SN" )
-    private Long bbsSn;           
+    private Long bbsSn;         // 게시판 일련번호    
   
     @NotNull
-    private String bbsSeCd;      
+    private String bbsSeCd;     // 게시판 구분코드 : 01 - 포토형 , 02 - 리스트형   
     
     @NotNull
-    private String bbsNm;            
+    private String bbsNm;       // 게시판 이름      
                         
-    private String bbsGdcc;       
+    private String bbsGdcc;     // 게시판 안내문구    
                                       
-    private String bbsDc;         
+    private String bbsDc;       //게시판 설정여부    
 
-    private String replySetYn;   
+    private String replySetYn;  // 댓글 설정여부  
 
-    private String useYn;        
-     
-    private String openYn;         
+    private String useYn;       // 사용여부 
+      
+    private String openYn;      // 공개여부       
+    
+    @Column(updatable = false) 
+    private String registerId;  // 등록자 ID     
     
     @Column(updatable = false)
-    private String registerId;      
+    private String registerIp;   // 등록자 IP
     
     @Column(updatable = false)
-    private String registerIp; 
-    
-    @Column(updatable = false)
-    private LocalDateTime regDt;  
+    private LocalDateTime regDt; // 등록일 
 
-    private String updusrId;      
-    private String updusrIp; 
-    private LocalDateTime updtDt;  
+    private String updusrId;      // 수정자 ID
+    
+    private String updusrIp;      // 수정자 IP
+    
+    private LocalDateTime updtDt; // 수정일
 
 
     @ColumnDefault("N")                             

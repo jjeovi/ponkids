@@ -345,17 +345,17 @@ public class NttController {
     @ResponseBody
     @RequestMapping( value = "/reply/answerReplyList", method = { RequestMethod.GET } )
     public List answerReplyList(   @RequestParam( "nttReplySn" ) Long nttReplySn
-    		                     , @RequestParam( "parntsReplySn" ) Long parntsReplySn
-    		                     , @RequestParam( "gubun" ) String gubun) {
+    		                   //  , @RequestParam( "parntsReplySn" ) Long parntsReplySn
+    		                     ) {
         
-       Long nttReplySn2 =  nttReplySn;
+      // Long nttReplySn2 =  nttReplySn;
     	
-    	if(gubun.equals("B")) {
-    		nttReplySn2 =  parntsReplySn;
-        }
+    	//if(!parntsReplySn.equals(0)) {
+    		//nttReplySn2 =  parntsReplySn;
+        //}
     	
     	// 답글 목록 조회
-          List<NttReplyListDto> answerReplyList = nttReplyService.getAnswerReplyList(nttReplySn2); //부모 키 
+          List<NttReplyListDto> answerReplyList = nttReplyService.getAnswerReplyList(nttReplySn); //부모 키 
           
           return answerReplyList;
         
