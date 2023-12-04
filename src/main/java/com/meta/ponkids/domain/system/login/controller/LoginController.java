@@ -28,17 +28,13 @@ public class LoginController {
                               Model model ) {
         
         // admin 접근시 경로 : /admin/login?auth=pon
-        if ( StringUtils.isEmpty( auth ) ) {
+        if ( StringUtils.hasText( auth ) ) {
             // 권한체크 실패
             return "/error/401";
         }
         
         String errCd = (String)session.getAttribute( "errCd" );
-        System.out.println("errCd : " + errCd);
-        System.out.println("errCd : " + errCd);
-        System.out.println("errCd : " + errCd);
-        System.out.println("errCd : " + errCd);
-        if ( !StringUtils.isEmpty( errCd ) ) {
+        if ( !StringUtils.hasText( errCd ) ) {
             session.removeAttribute( "errCd" );
             
             String errMsg = getErrorMessage( errCd );
@@ -58,13 +54,13 @@ public class LoginController {
                               Model model ) {
         
         // admin 접근시 경로 : /admin/login?auth=pon
-        if ( StringUtils.isEmpty( auth ) ) {
+        if ( StringUtils.hasText( auth ) ) {
             // 권한체크 실패
             return "/error/401";
         }
         
         String errCd = (String)session.getAttribute( "errCd" );
-        if ( !StringUtils.isEmpty( errCd ) ) {
+        if ( !StringUtils.hasText( errCd ) ) {
 //            session.removeAttribute( "errCd" );
             
             String errMsg = getErrorMessage( errCd );
@@ -82,7 +78,7 @@ public class LoginController {
     private String getErrorMessage( String errCd ) {
         String resultMsg = "";
         
-        if ( !StringUtils.isEmpty( errCd ) ) {
+        if ( !StringUtils.hasText( errCd ) ) {
             if ( errCd.equals( "E1" ) ) {
                 resultMsg = "아이디 또는 비밀번호가 맞지 않습니다. 다시 확인해 주세요.";
             } else if ( errCd.equals( "E2" ) ) {
