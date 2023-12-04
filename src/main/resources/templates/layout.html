@@ -131,6 +131,7 @@
 	<script src="/bootstrap/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 	<!-- jstree -->
 	<script src="/jstree/dist/jstree.js"></script>
+
    <!-- summernote 추가 -->
    <script src="/common/js/common_eh.js"></script>
    
@@ -164,11 +165,12 @@
                 <!-- S: 좌측 상단 프로필 부분 -->
                 <div class="profile clearfix">
                     <div class="profile_pic">
-                        <img src="/images/img.jpg" alt="..." class="img-circle profile_img">
+                        <img th:if="${#authentication.principal.atchFileSn == null }" src="/images/img.jpg" class="img-circle upload-thumb noimg" >
+                        <img th:unless="${#authentication.principal.atchFileSn == null }" th:src="@{/getImage(atchFileSn=${#authentication.principal.atchFileSn})}" class="img-circle upload-thumb" >
                     </div>
-                    <div class="profile_info">
+                    <div class="profile_info pl_20p">
                         <span>Welcome</span>
-                        <h2>John Doe</h2>
+                        <h2 sec:authentication="principal.userNm">회원 이름</h2>
                     </div>
                 </div>
                 <!-- E: 좌측 상단 프로필 부분 -->
@@ -176,34 +178,6 @@
                 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                     <div class="menu_section" th:insert="/admin/layout/tiles/sideMenuList">
                     </div>
-                    <div class="menu_section" >
-                        <ul class="nav side-menu">
-                            <li>
-                                <a><span class="menuNm">메뉴명»(1depth)</span> <span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li><a href="#level1_1">메뉴명(2depth)</a></li>
-                                    <li><a>메뉴명(2depth)<span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li class="sub_menu">
-                                                <a href="level2.html">메뉴명(3depth)</a>
-                                            </li>
-                                            <li>
-                                                <a href="#level2_1">메뉴명(3depth)</a>
-                                            </li>
-                                            <li class="current-page">
-                                                <a href="#level2_2">메뉴명(3depth)</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#level1_2">Level One</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a href="javascript:void(0)">Landing Page </a></li>
-                        </ul>
-                    </div>
-
                 </div>
                 <!-- E: 사이드바 메뉴 -->
             </div>
@@ -232,7 +206,8 @@
                         <li class="nav-item dropdown open" style="padding-left: 15px;">
                             <a href="javascript:;" class="user-profile" aria-haspopup="true" name="navbarDropdown"
                                data-toggle="dropdown" aria-expanded="false">
-                                <span>피오니</span> 님
+
+                                <span sec:authentication="principal.userNm">회원 이름</span> 님
                             </a>
                         </li>
                     </ul>

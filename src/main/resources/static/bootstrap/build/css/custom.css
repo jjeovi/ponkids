@@ -941,15 +941,18 @@
   float: left; }
 
 .profile_info span {
-  font-size: 13px;
+  font-size: 18px;
   line-height: 30px;
-  color: #BAB8B8; }
+  color: #ffff0e;
+}
 
 .profile_info h2 {
-  font-size: 14px;
-  color: #ECF0F1;
+  font-size: 17px;
+  color: #ffffff;
   margin: 0;
-  font-weight: 300; }
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
 
 .profile.img_2 {
   text-align: center; }
@@ -1414,7 +1417,7 @@ a:hover, a:focus {
   padding: 13px 15px 12px; }
 
 .nav.side-menu > li.current-page, .nav.side-menu > li.active {
-  border-right: 5px solid #1ABB9C; }
+  border-right: 5px solid #7865ae; }
 
 .nav li.current-page {
   background: rgba(255, 255, 255, 0.05); }
@@ -1423,7 +1426,9 @@ a:hover, a:focus {
   background: none; }
 
 .nav li li.current-page a {
-  color: #fff; }
+  color: #fff;
+  background-color: #835af294;
+}
 
 .nav.side-menu > li.active > a {
   text-shadow: rgba(0, 0, 0, 0.25) 0 -1px 0;
@@ -4856,7 +4861,12 @@ ul.notifications {
   border: 1px solid #ccc; }
 
 .img-circle {
-  border-radius: 50%; }
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  min-height: 80.49px;
+  min-width: 80.49px;
+}
 
 .display-layout {
   display: -webkit-box;
@@ -5405,6 +5415,8 @@ input[type="radio"][disabled]:checked+label{
 /* 프로필이미지 (이미지 없는 기본 Default 이미지) */
 .upload-thumb.noimg {
   content: url('/images/base/no-image.gif');
+  width: 100%;
+  height: 100%;
 }
 
 .input-file-name {

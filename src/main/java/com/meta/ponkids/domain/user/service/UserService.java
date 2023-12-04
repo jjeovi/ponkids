@@ -162,8 +162,11 @@ public class UserService {
 	        // target object 에 수정사항 set
 	        // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
 	        if ( userRoleModDto.getRoleSn() != null ) userRoleTargetDto.setRoleSn( userRoleModDto.getRoleSn() );   // 권한
-	        
-	        // id,ip setting
+            
+            // userRoleSn setting
+            userRoleTargetDto.setUserRoleSn( userRole.getUserRoleSn() );
+            
+            // id,ip setting
 	        userRoleTargetDto.setUpdusrIp(IpUtils.getClientIP( request ));
 	        userRoleTargetDto.setUpdusrId("admin@test.com");
 	        

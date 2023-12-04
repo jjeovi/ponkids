@@ -48,11 +48,9 @@ public class UserRole extends BaseTimeEntity {
     //    @NotNull
     private Long roleSn;
     
-    @NotNull
     @Column(updatable = false)
     private String registerId;
     
-    @NotNull
     @Column(updatable = false)
     private String registerIp;
 
@@ -63,6 +61,7 @@ public class UserRole extends BaseTimeEntity {
     private String updusrIp;
     
     @ColumnDefault( "N" )
+    @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가 (등록 시, 수정 시 해당컬럼 신경쓰지 않음.)
     private String delYn;
     
 }

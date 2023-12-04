@@ -46,11 +46,29 @@
 
         function currentPage( _menuCd, _currentPageUrl ) {
             if( _menuCd != null && _menuCd != '' && _currentPageUrl != null && _currentPageUrl != '' ) {
-                if(_currentPageUrl.startsWith("/")) {
-                    _currentPageUrl = _currentPageUrl.substring(1);
-                }
+
                 if ($( "a[href='" + _currentPageUrl + "']" ).parent().hasClass("li_"+_menuCd) ) {
+
+                    // current-page class 추가
                     $( "a[href='" + _currentPageUrl + "']" ).parent().addClass("current-page");
+
+                    // 해당 메뉴 펼치는 작업
+                    var $li = $( "a[href='" + _currentPageUrl + "']" );
+                    while( !$li.parent().find("[name='snb-menu']").length ) {
+                        // parent 로 올라가면서 li 이면 active 클래스 추가
+                        if ( $li[0].tagName == "LI") {
+                            $li.addClass("active");
+                        }
+
+                        // parent 로 올라가면서 ul 이면 display block추가
+                        if ( $li[0].tagName == "UL") {
+                            $li.css("display","block");
+                        }
+                        $li = $li.parent();
+
+
+                    }
+
                 }
             }
         }
