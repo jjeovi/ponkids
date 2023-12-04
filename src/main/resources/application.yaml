@@ -48,9 +48,9 @@ decorator:
 #########################################        System Variables           #########################################
 
 upload:
-    path : C:/upload/    # 업로드 파일 저장 경로 ( window )
-      #path : /Users/jjeoV/Desktop/jjeoV/2023/pioneerKids/upload/    # 업로드 파일 저장 경로 ( Mac )
-
+#    path : C:/upload/    # 업로드 파일 저장 경로 ( window )
+      path : /Users/jjeoV/Desktop/jjeoV/2023/pioneerKids/upload/    # 업로드 파일 저장 경로 ( Mac )
+      
 admin:
     auth :  pon
     
