@@ -34,9 +34,10 @@ public class NttReplySaveReqDto {
 
     // builder 생성
     @Builder
-    public NttReplySaveReqDto( Long nttReplySn ,Long nttSn, int step, Long parntsReplySn,int nttReplySeq, String nttReplyCn, 
-    		String openYn,String delYn
-    		,String registerId,String registerIp,LocalDateTime regDt ,String upduserId,String upduserIp,String updtDt) {
+    public NttReplySaveReqDto( Long nttReplySn ,Long nttSn, int step, Long parntsReplySn, int nttReplySeq, String nttReplyCn, 
+    		                  String openYn, String delYn, String registerId, String registerIp, LocalDateTime regDt,
+    		                  String upduserId, String upduserIp, String updtDt) {
+    	
         this.nttReplySn = nttReplySn;
         this.nttSn = nttSn;
         this.step = step;

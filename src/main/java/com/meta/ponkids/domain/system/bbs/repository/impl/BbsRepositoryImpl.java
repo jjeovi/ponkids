@@ -91,13 +91,13 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
 	      
         // (2) count
         JPAQuery<Long> count = query.select(bbs.count())
-                .from(bbs)
-                .where(
-                		eqReplySetYn( bbsListDto.getReplySetYn() ),
-                		eqUseYn( bbsListDto.getUseYn() ),
-                		eqOpenYn( bbsListDto.getOpenYn() ),
-                        eqOption( bbsListDto.getSchOption(), bbsListDto.getSchCntn() )
-                );
+                                    .from(bbs)
+                                    .where(
+                		                   eqReplySetYn( bbsListDto.getReplySetYn() ),
+                		                   eqUseYn( bbsListDto.getUseYn() ),
+                		                   eqOpenYn( bbsListDto.getOpenYn() ),
+                                           eqOption( bbsListDto.getSchOption(), bbsListDto.getSchCntn())
+                                           );
                
     	return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
 	 

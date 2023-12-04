@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.meta.ponkids.domain.system.bbs.dto.BbsModDto;
 import com.meta.ponkids.domain.system.bbs.service.BbsService;
 import com.meta.ponkids.domain.system.file.service.AtchFileService;
 import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
@@ -26,10 +25,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+/**
+ * className      : NttController
+ * author         : ehlee
+ * date           : 2023-12-01
+ * description    : class of 게시물관리 Controller
+ * ===========================================================
+ * DATE              AUTHOR               NOTE
+ * -----------------------------------------------------------
+ * 2023-12-01        ehlee             최초 생성
+ */
 @Controller
 @RequiredArgsConstructor
 public class NttController {
@@ -39,15 +46,13 @@ public class NttController {
    private final BbsService bbsService;
    private final NttReplyService nttReplyService;
    private final AtchFileService atchFileService;
-
-
    
    private final static String BASIC_PATH = "/admin/ntt";
  
     /**
      * methodName    : nttList
-     * date           : 11/17/23
-     * description    :
+     * date          : 23/12/04
+     * description   : ntt list method
      */
     @GetMapping( BASIC_PATH + "/list" )
     public String nttList(
@@ -78,6 +83,7 @@ public class NttController {
         //리스트형, 포토형 화면 다름 .
         String bbsSeCd = bbsService.getBbsSeCd(bbsSn);
         String screen  = "";
+        
         if( bbsSeCd.equals("01")) { // 포토형
         	screen = "/photoList.html";
         } else {
@@ -89,14 +95,19 @@ public class NttController {
     }
     
     
-    
+    /**
+     * methodName  : regist
+     * date        : 23/12/02
+     * description : ntt regist method
+     */
     @GetMapping(  BASIC_PATH  + "/regist" )
     public String nttRegist(  @RequestParam(required = true) Long bbsSn,
-    	                      @RequestParam(required = true) String bbsSeCd, Model model ) {
+    	                      @RequestParam(required = true) String bbsSeCd,
+    	                      Model model ) {
         
-       // model.addAttribute( new BbsSaveReqDto() );
         model.addAttribute("bbsSn", bbsSn);
         model.addAttribute("bbsSeCd", bbsSeCd);
+        
         // 기본 경로 setting
         model.addAttribute("basicPath", BASIC_PATH);
         
@@ -104,6 +115,13 @@ public class NttController {
     }
     
     
+    
+    /**
+     * methodName    : insert
+     * date          : 23/12/02
+     * description   : ntt insert method
+     */
+    @Transactional
     @PostMapping(BASIC_PATH  + "/insert")
     public String nttInsert( 
     	                   @RequestParam("file") MultipartFile files,
@@ -126,25 +144,31 @@ public class NttController {
         model.addAttribute( "moveUrl", BASIC_PATH +"/list?bbsSn="+ bbsSn);
 
         return "common/alert";
-  }
+     }
     
     
     
-    @GetMapping(value= {  BASIC_PATH + "/modify" } )	 
-      public String modify( @RequestParam(required = true) Long nttSn,   @RequestParam(required = true) String bbsSeCd, Model model, 
-    		  HttpServletRequest request ) throws IOException {
+    /**
+     * methodName    : modify
+     * date          : 23/12/02
+     * description   : ntt detail or ntt modify method
+     */
+    @GetMapping(value= {
+    		BASIC_PATH + "/detail" ,
+    		BASIC_PATH + "/modify" } )	 
+      public String modify( @RequestParam(required = true)  Long nttSn, 
+    		                 @RequestParam(required = true) String bbsSeCd, 
+    		                 Model model, 
+    		                HttpServletRequest request ) throws IOException {
       
-      // 권한 리스트
-     // model.addAttribute( "authList", roleRepository.findAll() );
-    	
-     NttModDto targetDto = nttService.findByNttSn(nttSn);
-    	
+     
       // target object 조회
-      model.addAttribute("targetDto", targetDto);
+      NttModDto targetDto = nttService.findByNttSn(nttSn);
       
   	  //댓글 설정여부
   	  String replySetYn = bbsService.getSetReplySetYn(targetDto.getBbsSn());
   	  
+  	  model.addAttribute("targetDto", targetDto);
   	  model.addAttribute("replySetYn", replySetYn);
   	  model.addAttribute("nttSn", nttSn);
   	  model.addAttribute("bbsSeCd", bbsSeCd);
@@ -158,7 +182,6 @@ public class NttController {
       
       // 조회수 업데이트 
       nttService.update(nttSn ,request);
-      
 
       // 기본 경로 setting
       model.addAttribute("basicPath", BASIC_PATH);
@@ -171,9 +194,16 @@ public class NttController {
       
       
       return BASIC_PATH + "/" + remainPath;
+      
       }
     
     
+    /**
+     * methodName    : update
+     * date          : 23/12/02
+     * description   : bbs update method
+     */
+    @Transactional
     @PostMapping(BASIC_PATH + "/update")
     public String update(
     		@RequestParam("file") MultipartFile files,
@@ -197,7 +227,7 @@ public class NttController {
                 atchFileService.delete(modDto.getAtchFileSnOri());
                 modDto.setAtchFileSn( null );
             }
-        }
+          }
     	
     	  // 게시물 업데이트
     	   nttService.nttUpdate(modDto,request);
@@ -212,10 +242,11 @@ public class NttController {
            return "common/alert";
     }
     
+    
     /**
      * methodName    : delete
-     * date           : 11/24/23
-     * description    : user delete method
+     * date          : 23/12/02
+     * description   : bbs delete method
      */
     @Transactional 
     @PostMapping( BASIC_PATH + "/delete" )
@@ -245,16 +276,18 @@ public class NttController {
      */
     @ResponseBody
     @RequestMapping( value = "/reply/nttReplyInsert" )
-    public List nttReplyInsert(@RequestParam( "nttSn" ) Long nttSn, @RequestParam( "parntsReplySn" ) Long parntsReplySn,         
-    		                   @RequestParam( "nttReplyCn" ) String nttReplyCn ,   @RequestParam( "gubun" ) String gubun 
-    		                     ,HttpServletRequest request ) {
+    public List nttReplyInsert(@RequestParam( "nttSn" ) Long nttSn,
+    		                   @RequestParam( "parntsReplySn" ) Long parntsReplySn,         
+    		                   @RequestParam( "nttReplyCn" ) String nttReplyCn,  
+    		                   @RequestParam( "gubun" ) String gubun, 
+    		                   HttpServletRequest request ) {
     	
     	NttReplySaveReqDto nttReplySaveReqDto =   new NttReplySaveReqDto();
     	nttReplySaveReqDto.setNttSn(nttSn);
     	nttReplySaveReqDto.setNttReplyCn(nttReplyCn);
  
      	
-    	if(gubun.equals("A")){
+    	if(gubun.equals("A")){ // A : 댓글 등록 
     	
     		 nttReplySaveReqDto.setParntsReplySn((long) 0);
     		 nttReplySaveReqDto.setStep(1);
@@ -264,7 +297,7 @@ public class NttController {
     	  	 List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
     	  	 
     	  	 return replyList;
-    	} else {
+    	} else {    //  B: 답글 등록
     		
     		 nttReplySaveReqDto.setParntsReplySn(parntsReplySn);
     		 nttReplySaveReqDto.setStep(2);
@@ -289,9 +322,10 @@ public class NttController {
      */
     @ResponseBody
     @RequestMapping( value = "/reply/nttReplyUpdate", method = { RequestMethod.GET } )
-    public List nttReplyUpdate( @RequestParam( "nttReplySn" ) Long nttReplySn , @RequestParam( "nttReplyCn" ) String nttReplyCn 
-    		    ,@RequestParam( "nttSn" ) Long nttSn
-    		    ,HttpServletRequest request  ) {
+    public List nttReplyUpdate( @RequestParam( "nttReplySn" ) Long nttReplySn,
+    		                    @RequestParam( "nttReplyCn" ) String nttReplyCn, 
+    		                    @RequestParam( "nttSn" ) Long nttSn,
+    		                    HttpServletRequest request  ) {
           
     	
     	 NttReplyModDto modDto =   new NttReplyModDto();
@@ -299,14 +333,14 @@ public class NttController {
     	 modDto.setNttReplySn(nttReplySn);
     	 modDto.setNttReplyCn(nttReplyCn);
     	 
-    	 // 댓글 수정
+    	 // 댓글 OR 답글 수정
           nttReplyService.update(modDto,request);
           
      	 // 댓글 목록 조회
-    	List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
+    	 List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
 
     	
-    	return replyList;
+    	 return replyList;
       
     } 
     
@@ -317,18 +351,13 @@ public class NttController {
      */
     @ResponseBody
     @RequestMapping( value = "/reply/nttReplyDelete", method = { RequestMethod.GET } )
-    public List nttReplyUpdate( @RequestParam( "nttReplySn" ) Long nttReplySn  
-    		,@RequestParam( "nttSn" ) Long nttSn
-    		,HttpServletRequest request  ) {
-    	
+    public List nttReplyUpdate( @RequestParam( "nttReplySn" ) Long nttReplySn,  
+    		                    @RequestParam( "nttSn" ) Long nttSn,
+    		                    HttpServletRequest request  ) {
 
     	// 댓글 삭제
     	nttReplyService.deleteAllByNttReplySn(nttReplySn);
-    	
-    	// 메시지 출력 및 url 이동 처리
-    	//model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
-    	//model.addAttribute( "moveUrl", BASIC_PATH +"/modify?nttSn="+ nttSn);
-    	
+
     	List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
     	
     	return replyList;
@@ -344,24 +373,13 @@ public class NttController {
      */
     @ResponseBody
     @RequestMapping( value = "/reply/answerReplyList", method = { RequestMethod.GET } )
-    public List answerReplyList(   @RequestParam( "nttReplySn" ) Long nttReplySn
-    		                   //  , @RequestParam( "parntsReplySn" ) Long parntsReplySn
-    		                     ) {
-        
-      // Long nttReplySn2 =  nttReplySn;
-    	
-    	//if(!parntsReplySn.equals(0)) {
-    		//nttReplySn2 =  parntsReplySn;
-        //}
-    	
+    public List answerReplyList(@RequestParam( "nttReplySn" ) Long nttReplySn) {
+
     	// 답글 목록 조회
-          List<NttReplyListDto> answerReplyList = nttReplyService.getAnswerReplyList(nttReplySn); //부모 키 
+        List<NttReplyListDto> answerReplyList = nttReplyService.getAnswerReplyList(nttReplySn); //부모 키 
           
-          return answerReplyList;
-        
-       
+        return answerReplyList;
       
     } 
-    
     
 }

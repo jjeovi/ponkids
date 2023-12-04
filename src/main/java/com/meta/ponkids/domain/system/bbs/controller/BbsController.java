@@ -12,11 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import com.meta.ponkids.domain.system.bbs.dto.BbsListDto;
 import com.meta.ponkids.domain.system.bbs.dto.BbsModDto;
 import com.meta.ponkids.domain.system.bbs.dto.BbsSaveReqDto;
-import com.meta.ponkids.domain.system.bbs.repository.BbsRepository;
 import com.meta.ponkids.domain.system.bbs.service.BbsService;
 import com.meta.ponkids.domain.system.ntt.repository.NttRepository;
-import com.meta.ponkids.domain.system.ntt.service.NttService;
-import com.querydsl.jpa.impl.JPAQuery;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -30,7 +27,7 @@ import javax.transaction.Transactional;
  * ===========================================================
  * DATE              AUTHOR               NOTE
  * -----------------------------------------------------------
- * 2023-12-01        jjeoV             최초 생성
+ * 2023-12-01        ehlee             최초 생성
  */
 @Controller
 @RequiredArgsConstructor
@@ -93,12 +90,12 @@ public class BbsController {
     	   @ModelAttribute BbsSaveReqDto bbsSaveReqDto, 
     	   HttpServletRequest request,
     	   Model model ) {
-      
+
       // 저장
       bbsService.save(bbsSaveReqDto, request);
-        
+    
       // 메시지 출력 및 url 이동 처리
-      model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
+      model.addAttribute( "resultMsg", " \"정상적으로 등록되었습니다" );
       model.addAttribute( "moveUrl", BASIC_PATH +"/list" );
 
       return "common/alert";
@@ -138,8 +135,9 @@ public class BbsController {
     /**
      * methodName    : update
      * date          : 23/12/02
-     * description   : user update method
+     * description   : bbs update method
      */
+    @Transactional
     @PostMapping(BASIC_PATH + "/update")
     public String update(
     	   @ModelAttribute  BbsModDto modDto,

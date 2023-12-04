@@ -26,7 +26,7 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel" style="height: auto;">
                 <div class="x_title">
-                    <h2>포토형 게시물 조회 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
+					 <h2> 포토형게시물 목록<small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a></li>
                     </ul>
@@ -93,21 +93,21 @@
                                </tr>
                             </thead>
                             <tbody>
-                             <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
-                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
-                                <td th:text="${data.nttNm}"></td>
-                                <td th:text="${data.registerId}"></td>
-                                <td th:text="${data.regDt}"></td>
-                                <td th:text="${data.nttRdcnt}"></td>
-                                <td> 
-									<a th:href="@{/admin/ntt/modify(nttSn=${data.nttSn},bbsSeCd='01')}"   class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
-								</td>
-                            </tr>
-                            <tr th:unless = "${!resultList.isEmpty()}">
-                                <td class="noDataTd">
+                               <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
+                                  <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
+                                  <td th:text="${data.nttNm}"></td>
+                                  <td th:text="${data.registerId}"></td>
+                                  <td th:text="${#temporals.format(data.regDt, 'yyyy-MM-dd')}"></td>
+                                  <td th:text="${data.nttRdcnt}"></td>
+                                  <td> 
+							  		<a th:href="@{ {basicPath}/modify ( basicPath = ${basicPath}, nttSn=${data.nttSn},bbsSeCd='01' ) }" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
+								  </td>
+                               </tr>
+                               <tr th:unless = "${!resultList.isEmpty()}">
+                                 <td class="noDataTd">
                                     데이터가 없습니다.
-                                </td>
-                            </tr>
+                                 </td>
+                               </tr>
                             </tbody>
                         </table>
                     </div>
@@ -122,7 +122,7 @@
                      <div class="col-md-12 col-sm-12">
                         <div class="col-md-2 col-sm-3 text-left">
 							<a href="/admin/bbs/list"  class="btn btn-white w120p">뒤로</a>
-                            <a th:href="@{/admin/ntt/regist(bbsSn=${bbsSn},bbsSeCd='01' ) }"  class="btn btn-white w120p">등록</a>
+							<a th:href="@{ {basicPath}/regist ( basicPath = ${basicPath}, bbsSn=${bbsSn},bbsSeCd='01' ) }" class="btn btn-white w120p">등록</a>
                         </div>
                         <!-- bottom center area (paging) -->
                         <div class="col-md-8 col-sm-6 text-center"

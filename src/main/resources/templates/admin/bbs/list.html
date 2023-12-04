@@ -49,7 +49,7 @@
     <div class="x_panel">
         <div class="x_content">
             <div class="row">
-                <form id="listForm" name="listForm" method="get" th:action="@{/admin/bbs/list}">
+                <form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/list ( basicPath = ${basicPath} ) }">
                     <input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
                     <!-- S : 테이블 상단 검색 창 -->
                     <!-- totalCount -->
@@ -103,7 +103,7 @@
                                 <td th:text="${data.useYn}"></td>
                                 <td th:text="${#temporals.format(data.regDt, 'yyyy-MM-dd')}"></td>
                                 <td> 
-									<a th:href="@{/admin/bbs/modify(bbsSn=${data.bbsSn})}" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
+									<a th:href="@{{basicPath}/modify ( basicPath = ${basicPath}, bbsSn = ${data.bbsSn} ) }" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
 	                                <a th:href="@{/admin/ntt/list(bbsSn=${data.bbsSn})}"   class="btn btn-danger btn-xs"><i class="fa fa-pencil"></i>게시물관리</a>      
 								</td>
                             </tr>
@@ -125,7 +125,7 @@
                                        <!-- S : 하단 목록 -->
                     <div class="col-md-12 col-sm-12">
                         <div class="col-md-2 col-sm-3 text-left">
-                            <a href="/admin/bbs/regist" class="btn btn-white w120p">등록</a>
+						    <a th:href="@{ {basicPath}/regist ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">등록</a>
                         </div>
                         <!-- bottom center area (paging) -->
                         <div class="col-md-8 col-sm-6 text-center"

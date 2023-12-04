@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 /**
  * InterfaceName  : BbsRepositoryCustom
- * author         : jjeoV
+ * author         : ehlee
  * date           : 2023-12-02
  * description    : interface of 게시판 RepositoryCustom
  * ===========================================================

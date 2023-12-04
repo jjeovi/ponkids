@@ -28,14 +28,11 @@ public class NttModDto {
     private Long atchFileSn;      	// 첨부파일 일련번호
     private Long atchFileSnOri;     // 첨부파일 일련번호
 	
-    
-
-	
 
     // builder 생성
     @Builder
-    public NttModDto( Long nttSn ,Long bbsSn,String nttNm, String nttCn, String noticeSetYn, int nttRdcnt
-    		          ,String updusrId,String updusrIp, LocalDateTime updtDt , Long atchFileSn) {
+    public NttModDto( Long nttSn, Long bbsSn, String nttNm, String nttCn, String noticeSetYn, 
+    		          int nttRdcnt,  String updusrId, String updusrIp, LocalDateTime updtDt, Long atchFileSn) {
 
         this.nttSn = nttSn;
         this.bbsSn = bbsSn;
@@ -70,17 +67,17 @@ public class NttModDto {
     
     public NttModDto toDto(Ntt ntt) {
         return NttModDto.builder()
-        		.nttSn(ntt.getNttSn())
-        		.bbsSn(ntt.getBbsSn())
-                .nttNm(ntt.getNttNm())
-                .nttCn(ntt.getNttCn())
-                .noticeSetYn(ntt.getNoticeSetYn())
-                .nttRdcnt( ntt.getNttRdcnt())
-                .updusrId(ntt.getUpdusrId())
-                .updusrIp(ntt.getUpdusrIp())
-                .updtDt(ntt.getUpdtDt())
-                .atchFileSn( ntt.getAtchFileSn() )
-                .build();
+        		        .nttSn(ntt.getNttSn())
+        		        .bbsSn(ntt.getBbsSn())
+                        .nttNm(ntt.getNttNm())
+                        .nttCn(ntt.getNttCn())
+                        .noticeSetYn(ntt.getNoticeSetYn())
+                        .nttRdcnt( ntt.getNttRdcnt())
+                        .updusrId(ntt.getUpdusrId())
+                        .updusrIp(ntt.getUpdusrIp())
+                        .updtDt(ntt.getUpdtDt())
+                        .atchFileSn( ntt.getAtchFileSn() )
+                        .build();
     }
     
 

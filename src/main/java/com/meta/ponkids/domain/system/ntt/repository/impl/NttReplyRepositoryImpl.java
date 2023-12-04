@@ -19,11 +19,25 @@ import java.util.List;
 
 import static com.meta.ponkids.domain.system.ntt.entity.QNttReply.nttReply;
 
+
+
+
+/**
+ * className      : NttReplyRepositoryImpl
+ * author         : ehlee
+ * date           : 2023-12-02
+ * description    : class of 게시물 댓글 RepositoryImpl
+ * ===========================================================
+ * DATE              AUTHOR               NOTE
+ * -----------------------------------------------------------
+ * 2023-12-02        ehlee             최초 생성
+ */
 @Repository
 @RequiredArgsConstructor
 public class NttReplyRepositoryImpl    {
     private final JPAQueryFactory query;
 
+    // 댓글 순번 + 1
     public Integer MaxNttReplySeq(Long nttSn) {
     	int number = query.select(nttReply.nttReplySeq.max().coalesce(0))
     			     .from(nttReply)
@@ -40,22 +54,7 @@ public class NttReplyRepositoryImpl    {
     
     }
     
-    public Long getParntsReplySn(Long nttReplySn) {
-    	Long parntsReplySn = query.select(nttReply.parntsReplySn)
-    			     .from(nttReply)
-    			     .where(
-    			    		 eqNttReplySnOption( nttReplySn )
-    		                )
-    			   .fetchOne();
 
-    	
-    	
-    	return parntsReplySn;
-    	
-    	
-    
-    }
-    
     
     // -------------------------------- WHERE 검색 옵션 setting --------------------------------
     private BooleanExpression eqNttSnOption( Long nttSn) {
@@ -70,83 +69,58 @@ public class NttReplyRepositoryImpl    {
     private BooleanExpression eqParntsReplySnOption( Long nttReplySn) {
         return  nttReply.parntsReplySn.eq( nttReplySn );
     }
-    
-    private BooleanExpression eqNttReplySnOption( Long nttReplySn) {
-        return  nttReply.nttReplySn.eq( nttReplySn );
-    }
-    
-    public List<NttReplyListDto> getInfoList(Long nttReplySn) {
-  	  
-  	  List<NttReplyListDto> results = query.select(new QNttReplyListDto(
-  													  nttReply.nttReplySn,
-  													  nttReply.nttSn,
-  													  nttReply.step,
-  													  nttReply.parntsReplySn, 
-  													  nttReply.nttReplySeq,
-  													  nttReply.registerId,
-  													  nttReply.nttReplyCn,
-  													  nttReply.delYn
-  													   )
-  													  ).from(nttReply)
-  			                                         .where( eqNttReplySnOption( nttReplySn ))
-  			                                         .orderBy(
-  													  nttReply.nttReplySeq.desc()
-  													  ).fetch();
-    
-    
-  	  return results; }
-	
-	  public List<NttReplyListDto> getList(Long nttSn) {
+ 
+	  // 댓글 목록
+      public List<NttReplyListDto> getList(Long nttSn) {
 	  
-	  List<NttReplyListDto> results = query.select(new QNttReplyListDto(
-													  nttReply.nttReplySn,
-													  nttReply.nttSn,
-													  nttReply.step,
-													  nttReply.parntsReplySn, 
-													  nttReply.nttReplySeq,
-													  nttReply.nttReplyCn,
-													  nttReply.registerId,
-  													  nttReply.delYn
-  													   )
-													  ).from(nttReply)
-			                                         .where( eqNttSnOption( nttSn ), eqStepOption(1))
-			                                         .orderBy(
-													  nttReply.nttReplySeq.desc()
-													  ).fetch();
+	  List<NttReplyListDto> results = query
+			                         .select(new QNttReplyListDto(
+													               nttReply.nttReplySn,
+													               nttReply.nttSn,
+													               nttReply.step,
+													               nttReply.parntsReplySn, 
+													               nttReply.nttReplySeq,
+													               nttReply.nttReplyCn,
+													               nttReply.registerId,
+													               nttReply.regDt,
+  													               nttReply.delYn
+  													               ))
+			                                            .from(nttReply)
+			                                            .where( eqNttSnOption( nttSn ), eqStepOption(1))
+			                                            .orderBy(nttReply.nttReplySeq.desc())
+			                                            .fetch();
 	  
 	  
 	  
-	  return results; }
+	       return results; 
+	       
+          }
 	  
 	  
-	  
+	  // 답글 목록
 	  public List<NttReplyListDto> getAnswerReplyList(Long nttReplySn) {
 		  
-	  List<NttReplyListDto> results = query.select(new QNttReplyListDto(
-													  nttReply.nttReplySn,
-													  nttReply.nttSn,
-													  nttReply.step,
-													  nttReply.parntsReplySn, 
-													  nttReply.nttReplySeq,
-													  nttReply.nttReplyCn,
-													  nttReply.registerId,
-  													  nttReply.delYn
-													  )
-													  ).from(nttReply)
+	  List<NttReplyListDto> results = query
+			                         .select(new QNttReplyListDto(
+													              nttReply.nttReplySn,
+													              nttReply.nttSn,
+													              nttReply.step,
+													              nttReply.parntsReplySn, 
+													              nttReply.nttReplySeq,
+													              nttReply.nttReplyCn,
+													              nttReply.registerId,
+													              nttReply.regDt,
+  													              nttReply.delYn
+													             ))
+			                                         .from(nttReply)
 			                                         .where( eqParntsReplySnOption(nttReplySn))
-			                                         .orderBy(
-													  nttReply.nttReplySeq.desc()
-													  ).fetch();
+			                                         .orderBy(nttReply.nttReplySeq.desc())
+			                                         .fetch();
 	  
 	  
 	  
-	  return results; }
-	 
-    
-    
-    
-
-    
+	  return results; 
+	  }
 
 
 }

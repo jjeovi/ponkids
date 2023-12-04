@@ -51,21 +51,21 @@ public class BbsService {
     	
       // dto to entity 작업 (필수)
          Bbs bbs = Bbs.builder()
-                     .bbsSn(bbsSaveReqDto.getBbsSn())
-                     .bbsSeCd(bbsSaveReqDto.getBbsSeCd())
-                     .bbsNm(bbsSaveReqDto.getBbsNm())
-                     .bbsGdcc(bbsSaveReqDto.getBbsGdcc())
-                     .bbsDc(bbsSaveReqDto.getBbsDc())
-                     .replySetYn(bbsSaveReqDto.getReplySetYn())
-                     .useYn(bbsSaveReqDto.getUseYn())
-                     .openYn(bbsSaveReqDto.getOpenYn())
-                     .registerId(bbsSaveReqDto.getRegisterId())
-                     .registerIp( IpUtils.getClientIP( request ))
-                     .regDt(LocalDateTime.now())
-                     .updusrId(bbsSaveReqDto.getRegisterId())
-                     .updusrIp( IpUtils.getClientIP( request ))
-                     .updtDt(LocalDateTime.now())
-                     .build();
+                      .bbsSn(bbsSaveReqDto.getBbsSn())
+                      .bbsSeCd(bbsSaveReqDto.getBbsSeCd())
+                      .bbsNm(bbsSaveReqDto.getBbsNm())
+                      .bbsGdcc(bbsSaveReqDto.getBbsGdcc())
+                      .bbsDc(bbsSaveReqDto.getBbsDc())
+                      .replySetYn(bbsSaveReqDto.getReplySetYn())
+                      .useYn(bbsSaveReqDto.getUseYn())
+                      .openYn(bbsSaveReqDto.getOpenYn())
+                      .registerId(bbsSaveReqDto.getRegisterId())
+                      .registerIp( IpUtils.getClientIP( request ))
+                      .regDt(LocalDateTime.now())
+                      .updusrId(bbsSaveReqDto.getRegisterId())
+                      .updusrIp( IpUtils.getClientIP( request ))
+                      .updtDt(LocalDateTime.now())
+                      .build();
 
          // 게시판 저장
          bbsRepository.save(bbs);

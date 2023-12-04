@@ -5,10 +5,6 @@
 <!-- S : Javascript functions	-->
 <script layout:fragment="script">
 
-    $(function(){
-
-    });
-
 </script>
 <!-- E : Javascript functions	-->
 <div layout:fragment="content" class="right_col" role="main">
@@ -16,7 +12,7 @@
     <!-- S : 상단 메뉴 명 -->
     <!-- TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림. -->
     <div class="title_top">
-        <h3>리스트형 게시물 조회</h3>
+        <h3>리스트형 게시물 목록</h3>
         <hr class="t_top_line">
     </div>
     <!-- E : 상단 메뉴 명 -->
@@ -26,7 +22,7 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel" style="height: auto;">
                 <div class="x_title">
-                    <h2>게시물 조회 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
+                    <h2>리스트형 게시물 목록<small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a></li>
                     </ul>
@@ -53,7 +49,8 @@
     <div class="x_panel">
         <div class="x_content">
             <div class="row">
-                <form id="listForm" name="listForm" method="get" th:action="@{/admin/ntt/list}">
+                <form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/list ( basicPath = ${basicPath} ) }">
+                    <input type="hidden" name="page"  th:value="${resultList.pageable.pageNumber}"/>
                     <input type="hidden" name="bbsSn" th:value="${bbsSn}"/>
                     <!-- S : 테이블 상단 검색 창 -->
                     <!-- totalCount -->
@@ -68,7 +65,7 @@
                                 <option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">등록자</option>
                             </select>
                             <div class="vl ml_5p"></div>
-                            <input type="text" name="schCntn"
+                            <input type="text" name="schCntn" th:value="${searchDTO.schCntn}"
                                    class="form-control input-sm" placeholder="검색어 입력"
                                    aria-controls="datatable-responsive">
                             <div class="vl ml_5p"></div>       
@@ -97,10 +94,10 @@
                                 <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
                                 <td th:text="${data.nttNm}"></td>
                                 <td th:text="${data.registerId}"></td>
-                                <td th:text="${data.regDt}"></td>
+                                <td th:text="${#temporals.format(data.regDt, 'yyyy-MM-dd')}"></td>
                                 <td th:text="${data.nttRdcnt}"></td>
                                 <td> 
-									<a th:href="@{/admin/ntt/modify(nttSn=${data.nttSn},bbsSeCd='02')}"   class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
+									<a th:href="@{ {basicPath}/modify ( basicPath = ${basicPath}, nttSn=${data.nttSn},bbsSeCd='02' ) }" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
 								</td>
                             </tr>
                             <tr th:unless = "${!resultList.isEmpty()}">
@@ -122,7 +119,7 @@
                      <div class="col-md-12 col-sm-12">
                         <div class="col-md-2 col-sm-3 text-left">
 							<a href="/admin/bbs/list"  class="btn btn-white w120p">뒤로</a>
-                            <a th:href="@{/admin/ntt/regist(bbsSn=${bbsSn},bbsSeCd='02')}"  class="btn btn-white w120p">등록</a>
+							<a th:href="@{ {basicPath}/regist ( basicPath = ${basicPath}, bbsSn=${bbsSn},bbsSeCd='02' ) }" class="btn btn-white w120p">등록</a>
                         </div>
                         <!-- bottom center area (paging) -->
                         <div class="col-md-8 col-sm-6 text-center"

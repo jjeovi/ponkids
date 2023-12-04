@@ -8,11 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.meta.ponkids.domain.system.bbs.dto.BbsModDto;
-import com.meta.ponkids.domain.system.bbs.entity.Bbs;
 import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttModDto;
-import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttSaveReqDto;
 import com.meta.ponkids.domain.system.ntt.entity.Ntt;
 import com.meta.ponkids.domain.system.ntt.repository.NttRepository;
@@ -23,13 +20,24 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+
+/**
+ * className      : NttService
+ * author         : ehlee
+ * date           : 2023-12-02
+ * description    : class of 게시물 Service
+ * ===========================================================
+ * DATE              AUTHOR               NOTE
+ * -----------------------------------------------------------
+ * 2023-12-02        ehlee             최초 생성
+ */
 @Service
 @RequiredArgsConstructor
 public class NttService {
 
     private final NttRepository nttRepository;
 
-
+    @Transactional
     public NttSaveReqDto save(NttSaveReqDto nttSaveReqDto,HttpServletRequest request ) {
     	
     	//임시로 로그인 아이디 셋팅
@@ -39,36 +47,38 @@ public class NttService {
 
     	// dto to entity 작업 (필수)
         Ntt ntt = Ntt.builder()
-        		.nttSn(nttSaveReqDto.getNttSn())
-        		.bbsSn(nttSaveReqDto.getBbsSn())
-        		.nttSeq(nttSeq)
-        		.nttNm(nttSaveReqDto.getNttNm())
-        		.nttCn(nttSaveReqDto.getNttCn())
-        		.noticeSetYn(nttSaveReqDto.getNoticeSetYn())
-        		.nttRdcnt(1)
-        		.openYn("Y")
-                .atchFileSn(nttSaveReqDto.getAtchFileSn())
-                .registerId(nttSaveReqDto.getRegisterId())
-                .registerIp( IpUtils.getClientIP( request ))
-                .regDt(LocalDateTime.now())
-                .updusrId(nttSaveReqDto.getRegisterId())
-                .updusrIp( IpUtils.getClientIP( request ))
-                .updtDt(LocalDateTime.now())
-                .build();
+        		     .nttSn(nttSaveReqDto.getNttSn())
+        		     .bbsSn(nttSaveReqDto.getBbsSn())
+        		     .nttSeq(nttSeq)
+        		     .nttNm(nttSaveReqDto.getNttNm())
+        		     .nttCn(nttSaveReqDto.getNttCn())
+        		     .noticeSetYn(nttSaveReqDto.getNoticeSetYn())
+        		     .nttRdcnt(1)
+        		     .openYn("Y")
+                     .atchFileSn(nttSaveReqDto.getAtchFileSn())
+                     .registerId(nttSaveReqDto.getRegisterId())
+                     .registerIp( IpUtils.getClientIP( request ))
+                     .regDt(LocalDateTime.now())
+                     .updusrId(nttSaveReqDto.getRegisterId())
+                     .updusrIp( IpUtils.getClientIP( request ))
+                     .updtDt(LocalDateTime.now())
+                     .build();
 
-        // save
-        nttRepository.save(ntt);
+         // 게시물 저장
+         nttRepository.save(ntt);
 
-        return nttSaveReqDto;
-    }
+         return nttSaveReqDto;
+     }
+   
     
+    // 게시물 목록 조회
     public Page<NttListDto> getList( NttListDto nttListDto, Pageable pageable ) {
 	  return nttRepository.getList(nttListDto, pageable); 
 	
 	 }
     
     
-    
+    // 게시물 수정시
     public NttModDto findByNttSn(Long nttSn) {
     	
     	Ntt ntt = nttRepository.findByNttSn(nttSn);
@@ -80,7 +90,7 @@ public class NttService {
     	
     }
     
-    
+    //조회수 업데이트
     @Transactional
 	public void update(Long nttSn, HttpServletRequest request) {
 	
@@ -97,14 +107,13 @@ public class NttService {
         // target object 전환 ( dto to entity )
         ntt = targetDto.toEntity();
         
-        // 수정사항 적용
-        
         //조회수 저장 
-        nttRepository.save( ntt );
+        nttRepository.save( ntt);
     	
 	}
     
-    
+    // 게시물 수정시
+    @Transactional
     public void nttUpdate( NttModDto modDto  ,HttpServletRequest request  ) {
         // target 조회
     	Ntt ntt  = nttRepository.findByNttSn(modDto.getNttSn()  );
@@ -132,7 +141,7 @@ public class NttService {
         nttRepository.save( ntt );
     }
     
-    
+    // 게시물 삭제
     @Transactional
     public void deleteAllByNttSn( Long nttSn ) {
         
@@ -142,13 +151,11 @@ public class NttService {
     
     }
     
+    // 공지 목록 조회
 	public List<NttListDto> getNoticeList(Long bbsSn) {
 
 		return nttRepository.getNoticeList(bbsSn);
 	}
-	
-
-    
 
     
 }

@@ -45,7 +45,7 @@ public class  Bbs extends BaseTimeEntity {
                         
     private String bbsGdcc;     // 게시판 안내문구    
                                       
-    private String bbsDc;       //게시판 설정여부    
+    private String bbsDc;       //게시판 설명 
 
     private String replySetYn;  // 댓글 설정여부  
 

@@ -25,10 +25,9 @@ public class NttReplyModDto {
      private Long parntsReplySn;
      private int nttReplySeq;
      private String nttReplyCn;
-     
-    private String updusrId;      
-    private String updusrIp; 
-    private LocalDateTime updtDt;  
+     private String updusrId;      
+     private String updusrIp; 
+     private LocalDateTime updtDt;  
 	
     
 
@@ -36,8 +35,8 @@ public class NttReplyModDto {
 
     // builder 생성
     @Builder
-    public NttReplyModDto( Long nttReplySn ,Long nttSn, int step, Long parntsReplySn, int nttReplySeq, String nttReplyCn
-    		          ,String updusrId,String updusrIp, LocalDateTime updtDt) {
+    public NttReplyModDto( Long nttReplySn, Long nttSn, int step, Long parntsReplySn, int nttReplySeq, String nttReplyCn,
+    		              String updusrId,  String updusrIp, LocalDateTime updtDt) {
 
         this.nttReplySn = nttReplySn;
         this.nttSn = nttSn;
@@ -54,32 +53,32 @@ public class NttReplyModDto {
     // DTO to Entity 메소드는 DTO 내부에서 생성.
     public NttReply toEntity() {
         return NttReply.builder()
-                .nttReplySn(nttReplySn)
-                .nttSn(nttSn)
-                .step(step)
-                .parntsReplySn(parntsReplySn)
-                .nttReplySeq(nttReplySeq)
-                .nttReplyCn(nttReplyCn)
-                .updusrId(updusrId)
-                .updusrIp(updusrIp)
-                .updtDt(updtDt)
-                .build();
+                       .nttReplySn(nttReplySn)
+                       .nttSn(nttSn)
+                       .step(step)
+                       .parntsReplySn(parntsReplySn)
+                       .nttReplySeq(nttReplySeq)
+                       .nttReplyCn(nttReplyCn)
+                       .updusrId(updusrId)
+                       .updusrIp(updusrIp)
+                       .updtDt(updtDt)
+                       .build();
     }
     
     
     
     public NttReplyModDto toDto(NttReply nttReply) {
         return NttReplyModDto.builder()
-        		.nttReplySn(nttReply.getNttReplySn())
-        		.nttSn(nttReply.getNttSn())
-                .step(nttReply.getStep())
-                .parntsReplySn(nttReply.getParntsReplySn())
-                .nttReplySeq(nttReply.getNttReplySeq())
-                .nttReplyCn( nttReply.getNttReplyCn())
-                .updusrId(nttReply.getUpdusrId())
-                .updusrIp(nttReply.getUpdusrIp())
-                .updtDt(nttReply.getUpdtDt())
-                .build();
+        		             .nttReplySn(nttReply.getNttReplySn())
+        		             .nttSn(nttReply.getNttSn())
+                             .step(nttReply.getStep())
+                             .parntsReplySn(nttReply.getParntsReplySn())
+                             .nttReplySeq(nttReply.getNttReplySeq())
+                             .nttReplyCn( nttReply.getNttReplyCn())
+                             .updusrId(nttReply.getUpdusrId())
+                             .updusrIp(nttReply.getUpdusrIp())
+                             .updtDt(nttReply.getUpdtDt())
+                             .build();
     }
     
 

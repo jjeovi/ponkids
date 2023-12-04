@@ -451,8 +451,22 @@ function fnAnswerReplyList( nttReplySn ) {
                                 </div>
                             </div>
                          </div>
-   
-   
+                         
+                          <div class="field item form-group">
+                             <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일</label>
+                               <div class="col-md-6 col-sm-6">
+                                  <div class="filebox preview-image">
+                                    <div class="upload-file-name">
+                                        <input class="input-file-name" value="선택된 파일 없음" disabled="disabled">
+                                    </div>
+                                    <div class="upload-btn mt_10p">
+                                        <label class="btn btn-purple">파일추가
+                                            <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>   
    
                         <div class="ln_solid"></div>
                         <!-- 저장버튼 -->

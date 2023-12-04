@@ -47,7 +47,7 @@ public class  NttReply extends BaseTimeEntity {
 	
 	
     @ColumnDefault("Y") 
-    @Column(updatable = false)  // del_yn 컬럼에 공통으로 추가
+    @Column(updatable = false)  
 	private String openYn;
     @Column(updatable = false)
 	private String registerId;
@@ -62,7 +62,7 @@ public class  NttReply extends BaseTimeEntity {
 
 	private LocalDateTime updtDt;
 
-    @ColumnDefault("N")                             // del_yn 컬럼에 공통으로 추가
+    @ColumnDefault("N")                             
     @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가
     private String delYn;                           // 삭제 여부
     

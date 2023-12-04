@@ -1,26 +1,23 @@
 <!DOCTYPE html>
 <html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"    layout:decorate="~{layout}">
 <title layout:fragment="title">pioneerkids (Admin-bbs) - 게시물 등록</title>
-<!--<script src="/common/js/lang/summernote-ko-KR.js"></script>-->
-
-<!--<link rel="stylesheet" href="/common/css/common_eh.css">-->
-
 
 <script  layout:fragment="script">
 $(document).ready(function() {
+	// `에디터 설정
 	$('#summernote').summernote({
 				height: 300,                 // 에디터 높이
 				minHeight: null,             // 최소 높이
 				maxHeight: null,             // 최대 높이
-				focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
-				lang: "ko-KR",					// 한글 설정
+				focus: true,                 // 에디터 로딩후 포커스를 맞출지 여부
+				lang: "ko-KR",				 // 한글 설정
 				placeholder: '최대 2048자까지 쓸 수 있습니다',	//placeholder 설정
 				
 				callbacks: {	//여기 부분이 이미지를 첨부하는 부분
 					onImageUpload : function(files) {
 					
 						uploadSummernoteImageFile(files[0],this);
-					},
+					 },
 					onPaste: function (e) {
 						var clipboardData = e.originalEvent.clipboardData;
 						if (clipboardData && clipboardData.items && clipboardData.items.length) {
@@ -32,42 +29,38 @@ $(document).ready(function() {
 					}
 				}
 	});
-        
-	
 });
 
-	/**
-	* 이미지 파일 업로드
-	*/
-	function uploadSummernoteImageFile(file, editor) {
+// 이미지 파일 업로드
+function uploadSummernoteImageFile(file, editor) {
 
-		data = new FormData();
-		data.append("file", file);
-		var header = $("meta[name='_csrf_header']").attr("content");
-        var token = $("meta[name='_csrf']").attr("content");
-       
-		$.ajax({
-			data : data,
-			type : "POST",
-			url : "/uploadSummernoteImageFile",
-			beforeSend: function(xhr){
-				
-			 if(header != null &&  token != null){
-				xhr.setRequestHeader(header, token);
-			 }
-      
-            },
-			contentType : false,
-			processData : false,
-			success : function(data) {
-            	//항상 업로드된 파일의 url이 있어야 한다.
-				$(editor).summernote('insertImage', data.url);
-			}
-		});
-	}
+	data = new FormData();
+	data.append("file", file);
+	var header = $("meta[name='_csrf_header']").attr("content");
+    var token = $("meta[name='_csrf']").attr("content");
+   
+	$.ajax({
+		data : data,
+		type : "POST",
+		url : "/uploadSummernoteImageFile",
+		beforeSend: function(xhr){
+			
+		 if(header != null &&  token != null){
+			xhr.setRequestHeader(header, token);
+		 }
+  
+        },
+		contentType : false,
+		processData : false,
+		success : function(data) {
+        	//항상 업로드된 파일의 url이 있어야 한다.
+			$(editor).summernote('insertImage', data.url);
+		}
+	});
+}
 
 
-
+// 첨부파일 드래그
 $("div.note-editable").on('drop',function(e){
          for(i=0; i< e.originalEvent.dataTransfer.files.length; i++){
          	uploadSummernoteImageFile(e.originalEvent.dataTransfer.files[i],$("#summernote")[0]);
@@ -122,7 +115,7 @@ $("div.note-editable").on('drop',function(e){
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="insertForm" name="insertForm" method="post" th:action="@{/admin/ntt/insert}"
+                    <form id="insertForm" name="insertForm" method="post"  th:action="@{ {basicPath}/insert ( basicPath = ${basicPath} ) }"
                           th:object="${nttSaveReqDto}"  enctype="multipart/form-data">
                         <input type="hidden" name="bbsSn" th:value="${bbsSn}"/>
                         <!-- TODO 프로필 이미지 추가 작업 -->
@@ -165,7 +158,7 @@ $("div.note-editable").on('drop',function(e){
                          <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>내용</label>
                             <div class="col-md-6 col-sm-6">
-                                 <textarea id="summernote" name="nttCn"  class="form-control"></textarea>
+                                 <textarea id="summernote" name="nttCn"  class="form-control"  required></textarea>
                             </div>
                          </div>
                           <div class="field item form-group">
@@ -199,17 +192,17 @@ $("div.note-editable").on('drop',function(e){
 
                                 </div>
                             </div>
-                           </div>   
+                          </div>   
                         <div class="ln_solid"></div>
                         <!-- 저장버튼 -->
                        <div class="col-md-12">
                             <!-- bottom left area -->
                             <div class="col-md-2 col-sm-3 text-left">
-								<a th:href="@{/admin/ntt/list(bbsSn=${bbsSn})}"  class="btn btn-white w120p">목록</a>
+								<a th:href="@{ {basicPath}/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">목록</a>
                             </div>
                             <!-- bottom center area -->
                             <div class="col-md-8 col-sm-6 text-center">
-                                <a href="/admin/bbs/list" class="btn btn-white w120p">취소</a>
+                               <a th:href="@{ {basicPath}/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">취소</a>
                                 <button type="submit" class="btn btn-purple w120p">저장</button>
                             </div>
                             <!-- bottom right area -->
