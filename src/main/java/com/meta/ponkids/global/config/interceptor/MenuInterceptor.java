@@ -44,10 +44,13 @@ public class MenuInterceptor implements HandlerInterceptor {
         List<MenuListDto> menuList = menuService.getList( listDto );
         
         // menuCd setting
-        String menuCd = (String)modelAndView.getModel().get( "menuCd" );
+        if(modelAndView != null ) {
+		    String menuCd = (String)modelAndView.getModel().get( "menuCd" );
+		    request.setAttribute("menuCd", menuCd);
+        }
+        
         
         request.setAttribute( "menuList", menuList );
-        request.setAttribute("menuCd", menuCd);
         request.setAttribute("currentPageUrl", requestUri);
         
     }
