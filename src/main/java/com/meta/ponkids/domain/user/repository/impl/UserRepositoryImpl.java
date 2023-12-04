@@ -1,5 +1,6 @@
 package com.meta.ponkids.domain.user.repository.impl;
 
+import com.meta.ponkids.domain.system.login.dto.LoginDto;
 import com.meta.ponkids.domain.user.dto.QUserListDto;
 import com.meta.ponkids.domain.user.dto.UserListDto;
 import com.meta.ponkids.domain.user.repository.custom.UserRepositoryCustom;
@@ -86,7 +87,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         
         return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
     }
-    
+   
     // -------------------------------- WHERE 검색 옵션 setting --------------------------------
     private BooleanExpression eqGender( String gender ) {
         return StringUtils.hasText( gender ) ? user.gender.eq( gender ) : null;

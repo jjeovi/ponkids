@@ -28,25 +28,33 @@ spring:
         active : local
     mvc:                                                                                                                                                                                                                   
       converters:
-       preferred-json-mapper: gson    
-         
+       preferred-json-mapper: gson
        
-upload:
-    path : C:/upload/    # 업로드 파일 저장 경로 ( window )
-    #path : /Users/jjeoV/Desktop/jjeoV/2023/pioneerKids/upload/    # 업로드 파일 저장 경로 ( Mac )
-
-                
 server:
-  error:
-      whitelabel:
-        enabled : true
-        
+    error:
+        whitelabel:
+            enabled : true
+    servlet :
+        session :
+            persistent : true          # 재기동 해도 스프링 관련 세션 유지.
+            timeout : 3600              # 세션 시간 (60분: 3600 )
+
 #p6spy query logging
 decorator:
     datasource:
         p6spy:
             enable-logging: true
             
-            
+#########################################        System Variables           #########################################
+
+upload:
+    path : C:/upload/    # 업로드 파일 저장 경로 ( window )
+      #path : /Users/jjeoV/Desktop/jjeoV/2023/pioneerKids/upload/    # 업로드 파일 저장 경로 ( Mac )
+
+admin:
+    auth :  pon
+    
+    
+######################################################################################################################
   
         

@@ -33,17 +33,19 @@ public class MenuController {
     private final MenuRoleRepository menuRoleRepository;
     
     private final static String BASIC_PATH = "/admin/menu";
-    
-    @GetMapping( BASIC_PATH + "/list" )
+
+    @GetMapping( BASIC_PATH + "/{menuCd}/list" )
     public String list( @ModelAttribute MenuListDto listDto,
-//                        @PageableDefault( size = 10 ) Pageable pageable,
+                        @PathVariable String menuCd,
                         Model model ) {
+        
+        model.addAttribute( "menuCd", menuCd );
         
         // S : 필요한 객체 setting
         
         // 목록 조회
-        List<MenuListDto> resultList = menuService.getList( listDto );
-        model.addAttribute( "resultList", resultList );
+//        List<MenuListDto> resultList = menuService.getList( listDto );
+//        model.addAttribute( "resultList", resultList );
         
         // 검색 dto setting
         model.addAttribute( "searchDTO", listDto );

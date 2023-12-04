@@ -1,34 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head th:replace="layout.html :: head"></head>
-  <body class="nav-md">
-    <div class="container body">
-      <div class="main_container">
-        <!--S: 좌측메뉴바-->
-        <div th:replace="layout.html :: left-menu-bar" class="col-md-3 left_col" >
-          ******* [ layout.html > left-menu-bar ] 대치 *********
-        </div>
-        <!--E: 좌측메뉴바-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<title layout:fragment="title">pioneerkids Admin - 메뉴 조회</title>
+<!-- S : Javascript functions	-->
 
-        <!--S: 상단 탑 바-->
-        <div th:replace="layout.html :: top-nav" class="top_nav" >
-          ******* [ layout.html > top-nav ] 대치 *********
-        </div>
-        <!--S: 상단 탑 바-->
+<!-- E : Javascript functions	-->
+<div layout:fragment="content" class="right_col" role="main">
 
-        <!-- S: 콘텐츠 -->
-        <div class="right_col" role="main">
 
-        </div>`
-        <!-- E: 콘텐츠 -->
 
-        <!-- S:푸터 -->
-        <footer th:replace="layout.html :: footer">
-          ******* [ layout.html > footer ] 대치 *********
-        </footer>
-        <!-- E:푸터 -->
-      </div>
-    </div>
-    <div th:replace="layout.html :: div-script"></div>
-  </body>
+</div>
 </html>

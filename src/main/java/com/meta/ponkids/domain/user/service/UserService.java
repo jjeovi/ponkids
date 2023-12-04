@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -208,7 +207,6 @@ public class UserService {
             userChldrnRepository.saveAll( userChldrnList );     												// * userChldrn save. 한꺼번에 save. 각각 save보다 빠르다.
         }
         
-        
     }
     
     
@@ -224,5 +222,5 @@ public class UserService {
         // 자녀 삭제 : userchldrn delete 처리
         userChldrnRepository.deleteAllByUserSn( userSn );
     }
-    
+   
 }

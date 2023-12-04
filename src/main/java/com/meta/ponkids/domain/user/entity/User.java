@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +19,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 /**
  * className      : User
@@ -44,7 +47,7 @@ import java.time.LocalDateTime;
 @Where( clause = "del_yn = 'N'") // DEFAULT 로 WHERE DEL_YN = 'N' 문을 추가하여 조회
 @SQLDelete(sql = "UPDATE tb_user SET del_yn ='Y', updt_dt = now() WHERE user_sn = ?") // delelte 시 실행 (ex ) ~Repository.deleteById)
 @Table( name = "TB_USER" )
-public class  User extends BaseTimeEntity {
+public class  User extends BaseTimeEntity  {
 	
 	@Id
 	@GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_USER_SN" )
@@ -106,12 +109,6 @@ public class  User extends BaseTimeEntity {
     @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가 (등록 시, 수정 시 해당컬럼 신경쓰지 않음.)
     private String delYn;                           // 삭제 여부
     
-//    @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE})
-//    @JoinTable(
-//            name = "tb_user_role",
-//            joinColumns = @JoinColumn(name="userId"),
-//            inverseJoinColumns = @JoinColumn(name="roleSn"))
-//    private final List<Role> roles = new ArrayList<>();
     
 }
 

@@ -29,7 +29,6 @@ public class MenuService {
     
     @Transactional
     public MenuSaveDto save( MenuSaveDto saveDto, HttpServletRequest request ) throws IOException {
-//    public MenuSaveDto save( MenuSaveDto saveDto, MenuRoleSaveDto menuRoleSaveDto, HttpServletRequest request ) throws IOException {
         
         saveDto.setRegisterId( "admin@test.com" );                            // Id set
         saveDto.setRegisterIp( IpUtils.getClientIP( request ) );            // Ip set
@@ -43,23 +42,66 @@ public class MenuService {
     }
     
     public List<MenuListDto> getList( MenuListDto listDto ) {
-        // 메뉴 목록은 category lv1Sn 값이 설정되어있어야 조회 가능. 그렇지 않으면 null return
+        
+        // 메뉴 목록은 category lv1Sn 값이 설정되어있어야 조회 가능. 그렇지 않으면 빈 List<> return
         if ( listDto.getCategory() != null && listDto.getCategory().getLv1Sn() != null ) {
+            // (1) 전체 권한 메뉴 리스트
+            // (2) 특정 권한 메뉴 리스트 를 구분한다.
             
-            // 전체 일때 쿼리는 다름
+            // 1. 마지막 업데이트 시간. (캐시로 저장)
+            // 2. 마지막 업데이트 시간 (캐시 저장하지 않음 - 계속 DB 조회)
+            
+            // 캐시로 저장된 마지막 업데이트 시간 (1) 과 캐시로 저장하지않고 계속 조회하는 마지막 업데이트 시간 (2) 을 비교해
+            // 같지 않으면, 캐시를 지우고 다시 조회
+            
+            // 1. 마지막 업데이트 시간. (캐시로 저장)
+            Menu updtDtMenuCache = menuRepository.findLastUpdtDtMenuCache( listDto.getCategory().getLv1Sn() );
+            // 2. 마지막 업데이트 시간 (캐시 저장하지 않음 - 계속 DB 조회)
+            Menu updtDtMenuNoCache = menuRepository.findLastUpdtDtMenuNoCache( listDto.getCategory().getLv1Sn() );
+            
             if ( listDto.getCategory().getLv1Sn() == 0 ) {
-                // 전체 메뉴 list
-                return menuRepository.getAllList( listDto );
+                // (1) 전체 메뉴 list
+                
+                if ( menuRenewalCheck( updtDtMenuCache, updtDtMenuNoCache ) ) {
+                    // 메뉴 의 수정이 감지 됬을 경우
+//                    System.out.println("변경 감지했습니다.");
+                    
+                    // 캐시로 저장된 마지막 업데이트 시간을 갱신한다.
+                    menuRepository.findLastUpdtDtMenuAgainCache( listDto.getCategory().getLv1Sn() );
+                    
+                    return menuRepository.getAllListAgain( listDto );
+                    
+                } else {
+                    // 변경이 없을 때 ( 캐시에 저장된 값 조회 , DB 읽지 않음)
+//                    System.out.println("변경이 감지되지 않았습니다. 혹은 최초 캐시 저장시입니다.");
+                    
+                    return menuRepository.getAllList( listDto );
+                }
+                
             } else {
-                // 특정 권한의 메뉴 list
-                return menuRepository.getList( listDto );
+                // (2) 특정 권한의 메뉴 list
+                
+                if ( menuRenewalCheck( updtDtMenuCache, updtDtMenuNoCache ) ) {
+                    // 메뉴 의 수정이 감지 됬을 경우
+//                    System.out.println("변경 감지했습니다.");
+                    
+                    // 캐시로 저장된 마지막 업데이트 시간을 갱신한다.
+                    menuRepository.findLastUpdtDtMenuAgainCache( listDto.getCategory().getLv1Sn() );
+                    
+                    return menuRepository.getListAgain( listDto );
+                } else {
+                    // 변경이 없을 때 ( 캐시에 저장된 값 조회 , DB 읽지 않음)
+//                    System.out.println("변경이 감지되지 않았습니다.");
+                    return menuRepository.getList( listDto );
+                }
+                
             }
         } else {
             return Collections.emptyList(); // 빈 List<> 생성
         }
     }
     
-    public MenuModDto findById( Long pk ) {    // TODO 타입 체크 필요
+    public MenuModDto findById( Long pk ) {
         
         Menu menu = menuRepository.findById( pk ).orElse( null );
         
@@ -71,16 +113,14 @@ public class MenuService {
     
     @Transactional
     public void update( MenuModDto modDto, HttpServletRequest request ) throws IOException {
-//    public void update ( MenuModDto modDto, MenuRoleModDto menuRoleModDto, HttpServletRequest request ) throws IOException {
         
         // target 조회
-        Menu menu = menuRepository.findById( modDto.getMenuSn() ).orElse( null );    // TODO PK 체크
+        Menu menu = menuRepository.findById( modDto.getMenuSn() ).orElse( null );
         
         // target object 전환 ( entity to dto )
         MenuModDto targetDto = new MenuModDto();
         targetDto = targetDto.toDto( menu );
         
-        // TODO target object 에 수정사항 set	
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
         if ( modDto.getUpperMenuSn() != null ) targetDto.setUpperMenuSn( modDto.getUpperMenuSn() );            // 부모메뉴
         if ( StringUtils.hasText( modDto.getMenuNm() ) ) targetDto.setMenuNm( modDto.getMenuNm() );            // 메뉴이름
@@ -185,5 +225,28 @@ public class MenuService {
     public List<RoleListDto> getPossibleRoleListAjax( MenuListDto listDto ) {
         return menuRepository.getPossibleRoleListAjax( listDto );
     }
+    
+    
+    private boolean menuRenewalCheck( Menu updtDtMenuCache, Menu updtDtMenuNoCache ) {
+        
+        if ( updtDtMenuCache != null && updtDtMenuNoCache != null ) {
+            if ( updtDtMenuCache.getUpdtDt() != null && updtDtMenuNoCache.getUpdtDt() != null ) {
+
+//                System.out.println( "updtDtMenuCache의   최종 수정시간 = " + updtDtMenuCache.getUpdtDt() );
+//                System.out.println( "updtDtMenuNoCache의 최종 수정시간 = " + updtDtMenuNoCache.getUpdtDt() );
+                
+                if ( !updtDtMenuCache.getUpdtDt().equals( updtDtMenuNoCache.getUpdtDt() ) ) {
+                    // 최종 수정 시간이 변경을 감지 했다면
+                    // 메뉴 리스트 의 캐시를 갱신해야함.
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        
+        return true;
+    }
+    
     
 }

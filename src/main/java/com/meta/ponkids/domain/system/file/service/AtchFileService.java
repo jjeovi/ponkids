@@ -1,7 +1,18 @@
 package com.meta.ponkids.domain.system.file.service;
 
-import com.meta.ponkids.domain.system.file.entity.pk.AtchFileDetailPk;
+import com.meta.ponkids.domain.system.file.dto.AtchFileDetailSaveDto;
+import com.meta.ponkids.domain.system.file.entity.AtchFile;
+import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
+import com.meta.ponkids.domain.system.file.repository.AtchFileDetailRepository;
+import com.meta.ponkids.domain.system.file.repository.AtchFileRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,21 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
-import javax.mail.Multipart;
-
-import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.meta.ponkids.domain.system.file.dto.AtchFileDetailSaveDto;
-import com.meta.ponkids.domain.system.file.entity.AtchFile;
-import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
-import com.meta.ponkids.domain.system.file.repository.AtchFileDetailRepository;
-import com.meta.ponkids.domain.system.file.repository.AtchFileRepository;
 
 
 /**
@@ -44,7 +40,7 @@ public class AtchFileService {
 	private final AtchFileDetailRepository atchFileDetailRepository;
 	
 	@Value("${upload.path}")
-	private String uploadPath;
+	private String UPLOAD_PATH;
 	
 	/**
 	 * methodName    : save
@@ -167,6 +163,6 @@ public class AtchFileService {
 	
 	// fullPath 만들기
 	private String getFullPath(String filename) {
-	    return uploadPath + filename;
+	    return UPLOAD_PATH + filename;
 	}
 }

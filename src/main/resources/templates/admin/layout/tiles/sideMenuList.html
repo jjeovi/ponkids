@@ -1,0 +1,63 @@
+<ul class="nav side-menu" name="snb-menu">
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        // 권한별 메뉴리스트
+        let _menuList;   // 상수 선언
+        let _menuCd = [[${menuCd}]];
+        let _currentPageUrl = [[${currentPageUrl}]];
+
+        $( function () {
+            _menuList =  /*[[${menuList}]]*/;
+            drawSNB( _menuList );      // 메뉴 그리기
+            currentPage(_menuCd,_currentPageUrl);
+        } );
+
+        function drawSNB( _menuList ) {
+
+            for ( const [ i, item ] of _menuList.entries() ) {
+
+                if ( i == 0 ) {
+                    $( "[name='snb-menu']" ).attr( "id", "ul_" + item.menuSn );
+                    // 최초 메뉴는 루트메뉴라서 표시 X
+                    continue;
+                }
+
+                if ( i > 0 ) {
+                    $( "#ul_" + item.upperMenuSn ).append(
+                        $( "<li>" ).attr( "id", "li_" + item.menuSn ).attr( "class", "li_"+item.menuCd ).append(
+                            $( "<a>" ).attr( "id", "a_" + item.menuSn ).append(
+                                $( "<span>" ).append( item.menuNm )
+                            )
+                        )
+                    );
+                    if ( item.parntsMenuYn == 'Y' ) {
+                        $( "#li_" + item.menuSn ).append(
+                            $( "<ul>" ).attr( "id", "ul_" + item.menuSn ).attr( "class", "nav child_menu" ).append()
+                        );
+                        $( "#a_" + item.menuSn ).append(
+                            $( "<span>" ).attr( "class", "fa fa-chevron-down" ).append( "" )
+                        )
+                    } else if (item.parntsMenuYn == 'N' ) {
+                        $( "#a_" + item.menuSn ).attr("href", item.menuUrl);
+                    }
+                }
+            }
+
+
+        }
+
+        function currentPage( _menuCd, _currentPageUrl ) {
+            if( _menuCd != null && _menuCd != '' && _currentPageUrl != null && _currentPageUrl != '' ) {
+                if(_currentPageUrl.startsWith("/")) {
+                    _currentPageUrl = _currentPageUrl.substring(1);
+                }
+                if ($( "a[href='" + _currentPageUrl + "']" ).parent().hasClass("li_"+_menuCd) ) {
+                    $( "a[href='" + _currentPageUrl + "']" ).parent().addClass("current-page");
+                }
+            }
+        }
+
+        /*]]>*/
+    </script>
+
+</ul>
