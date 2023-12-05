@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.meta.ponkids.domain.system.bbs.service.BbsService;
 import com.meta.ponkids.domain.system.file.service.AtchFileService;
@@ -125,13 +126,19 @@ public class NttController {
     @PostMapping(BASIC_PATH  + "/insert")
     public String nttInsert( 
     	                   @RequestParam("file") MultipartFile files,
+    	                   @RequestParam("fileList") MultipartHttpServletRequest fileList,
     		               @ModelAttribute NttSaveReqDto nttSaveReqDto,
     		               HttpServletRequest request , Model model ) throws IOException {
     	
     	
-    	  // 첨부파일 존재시 파일 저장
+    	// 썸네일 파일 존재시 파일 저장
         if(!files.isEmpty()){
         	nttSaveReqDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 ) 
+        }
+        
+        // 파일 리스트 저장
+        if(fileList.getReader() != null){
+        	//nttSaveReqDto.setAtchFileSn(atchFileService.saveList(fileList));	// 파일 save (파일 개수 여러개일 때 ) 
         }
     	
     	// save

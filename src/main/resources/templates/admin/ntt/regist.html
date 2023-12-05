@@ -67,7 +67,121 @@ $("div.note-editable").on('drop',function(e){
          }
         e.preventDefault();
    })
-   
+
+
+//파일 추가시
+$("#file_add").on('click',function(){ $('#multi-add').click(); });
+
+
+var $fileListArr = new Array();
+ var $totSize = 0;
+ var $keyNum = 0;
+ var $limit = 0;
+ 
+$("#multi-add").on('change',function(){
+	
+	alert("파일 테스트");
+
+	var files = $(this)[0].files;
+
+	var fileArr = new Array();
+
+	fileArr = $fileListArr;
+	$limit = $totSize;
+	for(var i = 0 ; i < files.length ; i++){
+		$limit = $limit + files[i].size;
+		if($limit > 20000000){
+			alert("첨부파일 용량은 20MB를 넘길수 없습니다.");
+			return false;
+		}
+	}
+
+	for(var i = 0 ; i < files.length ; i++){
+		 $('#file_table').append("<tr id=file"+ $keyNum +"><td class='txt-c'><button type='button' style='color: #A4A4A4; font-size: large;' class='deleteFile' >&#8861;</button></td>"+
+					"<td>"+ files[i].name +"</td>"+
+					"<td id='fileSize "+ $keyNum +"'><p class=file"+ $keyNum +">"+ Math.floor(files[i].size / 1000) +" KB</p></td>"+
+					"</tr>");
+		 $keyNum++;
+		 fileArr.push(files[i]);
+		 $totSize = $totSize + files[i].size;
+	}
+
+
+	$fileListArr = new Array();
+	$fileListArr = fileArr;
+	$('#totSize').text("");
+	$('#totSize').text(Math.floor($totSize / 1000000));
+});
+
+
+//파일 delete
+$(document).on("click" , '.deleteFile', function(){
+	//삭제할 파일의 아이디
+	var DeleteID = $(this).parent().parent().attr('id');
+
+	//삭제하려는 파일의 크기값(텍스트)
+	var DeleteFileSize = $(this).parent().next().next().children('p').text();
+
+	//삭제하는 파일의 크기값(바이트)
+	var fileSizeByteArr = new Array();
+	fileSizeByteArr = DeleteFileSize.split(' ');
+	var fileSize = Number(fileSizeByteArr[0]) * 1000;
+
+	//배열에서 삭제를 위한 번호
+	var DeleteArrNum = DeleteID.substring(DeleteID.length , DeleteID.length -1);
+
+	var fileArr = $fileListArr;
+
+	fileArr.splice(DeleteArrNum , 1);
+	$keyNum = 0
+	$fileListArr = new Array();
+	$('#file_table').children().remove();
+	 $totSize = 0;
+	for(var i = 0 ; i < fileArr.length ; i++){
+
+		 $('#file_table').append("<tr id=file"+ $keyNum +"><td class='txt-c'><button type='button' style='color:  #A4A4A4; font-size: large;' class='deleteFile' >&#8861;</button></td>"+
+					"<td>"+ fileArr[i].name +"</td>"+
+					"<td id='fileSize "+ $keyNum +"'><p class=file"+ $keyNum +">"+ Math.floor(fileArr[i].size / 1000) +" KB</p></td>"+
+					"</tr>");
+		 $keyNum++;
+		 $fileListArr.push(fileArr[i]);
+		 $totSize = $totSize + fileArr[i].size;
+	}
+
+	$limit = $totSize;
+	$('#totSize').text("");
+	$('#totSize').text(Math.floor($totSize / 1000000));
+
+});
+
+
+
+
+
+$('#submit').click(function(){
+
+		  
+		var formData = new FormData();
+		for(var i = 0; i < $fileListArr.length ; i++){
+			formData.append("uploadFile" , $fileListArr[i]);
+		}
+		
+		$.ajax({
+			url:"/file/fileUpload.do",
+			processData : false,
+			contentType : false,
+			data: formData ,
+			type : 'POST',
+			success : function(res){
+				location.href = '/file/List.do';
+			},
+			error: function(){
+				alert('에러');
+			}
+		});
+		   
+
+	 });   
 </script>
 
 <!-- S : Javascript functions	-->
@@ -179,18 +293,28 @@ $("div.note-editable").on('drop',function(e){
                          <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일</label>
                             <div class="col-md-6 col-sm-6">
-                                <div class="filebox preview-image">
+                             <form>
+								 <table  id= "file_table">
+									 
+									 
+								 </table>
+								 <span  id= "totSize"></span>
+								 <input type="file" id="multi-add" class="btn-add" multiple style="display: none;" name="file" >
+					             <button type="button" class="btn-add" id="file_add">파일추가</button>
+								 
+								 
+							 </form> 
                                    
-                                    <div class="upload-file-name">
-                                        <input class="input-file-name" value="선택된 파일 없음" disabled="disabled">
-                                    </div>
-                                    <div class="upload-btn mt_10p">
-                                        <label class="btn btn-purple">파일추가
+                            
+					
+					
+					
+                                      <!--  <label class="btn btn-purple">파일추가
                                             <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
-                                        </label>
-                                    </div>
+                                        </label>-->
+                                   
 
-                                </div>
+                               
                             </div>
                           </div>   
                         <div class="ln_solid"></div>
