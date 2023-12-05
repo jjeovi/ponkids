@@ -32,7 +32,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
     @Override
     public List<MenuListDto> getList( MenuListDto listDto ) {
         
-        System.out.println("캐시를 저장시에 사용합니다. 최초 이후로는 저장이 되지 않습니다.");
+//        System.out.println("캐시를 저장시에 사용합니다. 최초 이후로는 저장이 되지 않습니다.");
         //		   select tmr.menu_sn
         //				, tmr.role_sn
         //				, vmh.upper_menu_sn
@@ -84,18 +84,17 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                         , adminMenuHierarchy.useYn
                         , adminMenuHierarchy.newWindowYn
                         , adminMenuHierarchy.level
-                ) )
-                .from( menuRole )
-                .leftJoin( adminMenuHierarchy )    // view : vw_menu_hierarchy
-                .on(
-                        menuRole.menuSn.eq( adminMenuHierarchy.menuSn )
+                        )
                 )
+                .from( 		menuRole )
+                .leftJoin( 	adminMenuHierarchy )    // view : vw_menu_hierarchy
+                .on(		menuRole.menuSn.eq( adminMenuHierarchy.menuSn ) )
                 .where(
-                        eqCateLv1( listDto.getCategory() )
+                        eqCateLv1( listDto.getCategory()),
+                        eqUseYn(listDto.getUseYn())
                 )
-                .orderBy(
-                        adminMenuHierarchy.hierarchy.asc()
-                ).fetch();
+                .orderBy(	adminMenuHierarchy.hierarchy.asc() )
+                .fetch();
         
         return results;
         
@@ -103,14 +102,14 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
     
     @Override
     public List<MenuListDto> getListAgain( MenuListDto listDto ) {
-        System.out.println("캐시를 갱신할 때 사용됩니다.");
+//        System.out.println("캐시를 갱신할 때 사용됩니다.");
         return this.getList( listDto );
     }
     
     @Override
     public List<MenuListDto> getAllList( MenuListDto listDto ) {
         
-        System.out.println("캐시를 저장시에 사용합니다. 최초 이후로는 실행되지 않습니다..");
+//        System.out.println("캐시를 저장시에 사용합니다. 최초 이후로는 실행되지 않습니다..");
         
         //		   select tmr.menu_sn
         //				, tmr.role_sn
@@ -133,7 +132,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
         List<MenuListDto> results = query
                 // select
                 .select( new QMenuListDto(
-                        adminMenuHierarchy.menuSn
+                          adminMenuHierarchy.menuSn
                         , adminMenuHierarchy.menuSn.as( "id" )    // menuSn 과 id 는 같은 값으로 mapping (jstree 의 변수 id를 매핑하기 위한 임시 변수)
                         , Expressions.asString( "0" ).castToNum( Long.class ).as( "roleSn" ) // 0
                         , adminMenuHierarchy.upperMenuSn
@@ -160,8 +159,12 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                         , adminMenuHierarchy.useYn
                         , adminMenuHierarchy.newWindowYn
                         , adminMenuHierarchy.level
-                ) )
-                .from( adminMenuHierarchy )
+                        )
+                )
+                .from( 	adminMenuHierarchy )
+                .where(
+                		eqUseYn(listDto.getUseYn())
+                )
                 .orderBy(
                         adminMenuHierarchy.hierarchy.asc()
                 ).fetch();
@@ -172,7 +175,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
     
     @Override
     public List<MenuListDto> getAllListAgain( MenuListDto listDto ) {
-        System.out.println("캐시를 갱신할 때 사용됩니다.");
+//        System.out.println("캐시를 갱신할 때 사용됩니다.");
         return this.getAllList( listDto );
     }
     
@@ -190,43 +193,40 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
         List<RoleListDto> results = query
                 .select(
                         new QRoleListDto(
-                                role.roleSn,
+                        		role.roleSn,
                                 role.roleNm,
                                 role.roleDc
                         )
-                
                 )
-                .from( menuRole )
-                .leftJoin( role )
+                .from( 			menuRole )
+                .leftJoin( 		role )
                 .on(
-                        menuRole.roleSn.eq( role.roleSn ),
-                        role.delYn.eq( "N" )
-                )
-                .where( eqMenuSn( listDto.getMenuSn() ) )
-                .orderBy( menuRole.roleSn.asc() )
+                        		menuRole.roleSn.eq( role.roleSn ),
+                        		role.delYn.eq( "N" ) )
+                .where(			eqMenuSn( listDto.getMenuSn() ) )
+                .orderBy( 		menuRole.roleSn.asc() )
                 .fetch();
         
         return results;
     }
     
     
-    
     private Menu findLastUpdtDtMenu( long sn ) {
         
         Menu result = query
                 // select
-                .select( menu )
-                .from( menu )
-                .leftJoin( menuRole )
+                .select( 	menu )
+                .from( 		menu )
+                .leftJoin( 	menuRole )
                 .on(
-                        menu.menuSn.eq( menuRole.menuSn ),
-                        menuRole.delYn.eq( "N" )
+                        	menu.menuSn.eq( menuRole.menuSn ),
+                        	menuRole.delYn.eq( "N" )
                 )
                 .where( eqRoleSn( sn ),
-                        menu.updtDt.isNotNull()
+                        	menu.updtDt.isNotNull()
                 )
                 .orderBy(
-                        menu.updtDt.desc()
+                        	menu.updtDt.desc()
                 ).fetchFirst();
         return result;
     }
@@ -265,6 +265,11 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
         return ( sn != null && sn != 0 ) ? menuRole.roleSn.eq( sn ) : null;
     }
     
+    
+    private BooleanExpression eqUseYn( String yn ) {
+    	return ( StringUtils.hasText(yn)) ? adminMenuHierarchy.useYn.eq( yn ) : null;
+    }
+    
     private BooleanExpression eqOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨
         if ( StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn ) ) {
@@ -278,7 +283,6 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
             return null;
         }
     }
-    
     
 }
 

@@ -1,15 +1,16 @@
 package com.meta.ponkids.global.config.interceptor;
 
 
-import com.meta.ponkids.domain.system.login.dto.LoginDto;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import com.meta.ponkids.domain.system.login.dto.LoginDto;
 
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
@@ -21,6 +22,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     public boolean preHandle( HttpServletRequest request, HttpServletResponse response, Object handler ) throws Exception {
         
         String requestUri = request.getRequestURI();
+        String fullUrl = getFullURL(request);
         
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
@@ -38,7 +40,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 // loginDto 가 없을 시
                 
                 // 로그인 페이지로 이동
-                goToLogin(requestUri , request, response );
+                goToLogin(fullUrl , request, response );
                 return false;
             
             } else {
@@ -51,7 +53,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                     // 관리자가 아닐 때 or 관리자 승인이 아직 이루어지지 않았을 때
                     
                     // 로그인 페이지로 이동
-                    goToLogin(requestUri , request, response );
+                    goToLogin(fullUrl , request, response );
                     return false;
                 
                 }
@@ -59,19 +61,29 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         }
         
-        System.out.println( "prehandle() " + requestUri );
-        
+        System.out.println( "prehandle() " + fullUrl );
         
         return HandlerInterceptor.super.preHandle( request, response, handler );
     }
     
-    void goToLogin(String requestUri, HttpServletRequest request, HttpServletResponse response)  throws Exception  {
+    void goToLogin(String fullUrl, HttpServletRequest request, HttpServletResponse response)  throws Exception  {
         
         HttpSession session = request.getSession();
         session.setAttribute( "errCd", "E6" );
-        session.setAttribute( "loginAfterMoveUrl" , requestUri );
+        session.setAttribute( "loginAfterMoveUrl" , fullUrl );
         
         response.sendRedirect( "/admLogin?auth=" + AUTH ); // 인증이 성공한 후에는 root로 이동
         
+    }
+    
+    
+    String getFullURL(HttpServletRequest request ) { 
+    	StringBuffer requestURL = request.getRequestURL();
+    	String queryString = request.getQueryString();
+    	if (queryString == null )  {
+    		return requestURL.toString();
+    	} else {
+    		return requestURL.append("?").append(queryString).toString();
+    	}
     }
 }

@@ -36,7 +36,7 @@ server:
             enabled : true
     servlet :
         session :
-            persistent : true          # 재기동 해도 스프링 관련 세션 유지.
+            persistent : false          # 재기동 해도 스프링 관련 세션 유지.
             timeout : 3600              # 세션 시간 (60분: 3600 )
 
 #p6spy query logging
@@ -54,6 +54,9 @@ upload:
 admin:
     auth :  pon
     
+
+speficic:
+    menuCd : mcd    
     
 ######################################################################################################################
   

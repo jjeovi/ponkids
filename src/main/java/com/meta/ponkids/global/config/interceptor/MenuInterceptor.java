@@ -5,6 +5,7 @@ import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
 import com.meta.ponkids.domain.system.menu.service.MenuService;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,6 +17,10 @@ import java.util.List;
 
 @Component
 public class MenuInterceptor implements HandlerInterceptor {
+	
+
+	@Value("${speficic.menuCd}")
+	private String MCD;
     
     @Autowired
     private final MenuService menuService;
@@ -38,15 +43,16 @@ public class MenuInterceptor implements HandlerInterceptor {
         MenuListDto listDto = new MenuListDto();
         listDto.setCategory( new CategoryDto() );
         listDto.getCategory().setLv1Sn( loginDto.getRoleSn() );
+        listDto.setUseYn("Y");
         // listDto Setting
         
         // menuLit Setting
         List<MenuListDto> menuList = menuService.getList( listDto );
         
-        // menuCd setting
+        // mcd setting
         if(modelAndView != null ) {
-		    String menuCd = (String)modelAndView.getModel().get( "menuCd" );
-		    request.setAttribute("menuCd", menuCd);
+		    String mcd = (String)modelAndView.getModel().get( MCD );
+		    request.setAttribute("mcd", mcd);
         }
         
         

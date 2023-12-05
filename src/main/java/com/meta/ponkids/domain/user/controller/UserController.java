@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,6 +34,7 @@ import com.meta.ponkids.domain.user.dto.UserRoleSaveDto;
 import com.meta.ponkids.domain.user.dto.UserSaveDto;
 import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
 import com.meta.ponkids.domain.user.repository.UserRepository;
+import com.meta.ponkids.domain.user.service.UserRoleService;
 import com.meta.ponkids.domain.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -52,6 +54,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
     
     private final UserService userService;
+    private final UserRoleService userRoleService;
     private final UserChldrnRepository userChldrnRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -65,9 +68,10 @@ public class UserController {
      * date           : 11/17/23
      * description    : user list method
      */
-    @GetMapping( BASIC_PATH + "/list" )
+    @GetMapping( BASIC_PATH + "/{mcd}/list" )
     public String list( @ModelAttribute UserListDto userListDto,
                         @PageableDefault( size = 10 ) Pageable pageable,
+                        @PathVariable String mcd,
                         Model model ) {
         
         // 목록 조회
@@ -88,8 +92,8 @@ public class UserController {
      * date           : 11/17/23
      * description    : user regist method
      */
-    @GetMapping( BASIC_PATH + "/regist" )
-    public String regist( Model model ) {
+    @GetMapping( BASIC_PATH + "/{mcd}/regist" )
+    public String regist( @PathVariable String mcd, Model model ) {
         
         // 권한 리스트
         model.addAttribute( "roleList", roleRepository.findAll() );
@@ -160,10 +164,11 @@ public class UserController {
      * description    : user detail or user modify method
      */
     @GetMapping( value = { 
-    		BASIC_PATH + "/detail",
-            BASIC_PATH + "/modify" } )
+    		BASIC_PATH + "/{mcd}/detail",
+            BASIC_PATH + "/{mcd}/modify" } )
     public String detailOrModify(
             @RequestParam( required = true ) Long userSn,
+            @PathVariable String mcd,
             Model model,
             HttpServletRequest request ) {
         
@@ -171,7 +176,17 @@ public class UserController {
         model.addAttribute( "roleList", roleRepository.findAll() );
         
         // target object 조회
-        model.addAttribute( "targetDto", userService.findByUserSn( userSn ) );
+        UserModDto targetDto = userService.findByUserSn( userSn );
+        model.addAttribute( "targetDto", targetDto );
+        
+        // 거주지역 리스트
+        model.addAttribute( "resideAreaList", cmmnCdDetailService.getList("RESIDE_AREA_CD") );
+        
+        // roleDto 조회 
+        if(targetDto.getMngrYn().equals("Y")) {
+        	// 관리자일 경우에만 조회
+        	model.addAttribute("userRoleModDto", userRoleService.findByUserSn(userSn) );
+        }
         
         // chldrn target object 조회
         model.addAttribute("targetChldrnDtoList", userChldrnRepository.getListByUserSn( userSn ));
@@ -181,8 +196,8 @@ public class UserController {
         
         String urlPath = request.getServletPath();
         String remainPath = "";
-        if ( urlPath.split( BASIC_PATH )[ 1 ].startsWith( "/detail" ) ) remainPath = "detail";
-        if ( urlPath.split( BASIC_PATH )[ 1 ].startsWith( "/modify" ) ) remainPath = "modify";
+        if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/detail" ) ) remainPath = "detail";
+        if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/modify" ) ) remainPath = "modify";
         
         return BASIC_PATH + "/" + remainPath;
     }

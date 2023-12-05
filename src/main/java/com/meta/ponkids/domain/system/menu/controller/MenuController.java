@@ -34,12 +34,11 @@ public class MenuController {
     
     private final static String BASIC_PATH = "/admin/menu";
 
-    @GetMapping( BASIC_PATH + "/{menuCd}/list" )
+    @GetMapping( BASIC_PATH + "/{mcd}/list" )
     public String list( @ModelAttribute MenuListDto listDto,
-                        @PathVariable String menuCd,
+                        @PathVariable String mcd,
                         Model model ) {
         
-        model.addAttribute( "menuCd", menuCd );
         
         // S : 필요한 객체 setting
         
