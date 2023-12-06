@@ -126,7 +126,7 @@ public class NttController {
     @PostMapping(BASIC_PATH  + "/insert")
     public String nttInsert( 
     	                   @RequestParam("file") MultipartFile files,
-    	                   @RequestParam("fileList") MultipartHttpServletRequest fileList,
+    	                   @RequestParam("fileList") MultipartFile fileList,
     		               @ModelAttribute NttSaveReqDto nttSaveReqDto,
     		               HttpServletRequest request , Model model ) throws IOException {
     	
@@ -137,7 +137,7 @@ public class NttController {
         }
         
         // 파일 리스트 저장
-        if(fileList.getReader() != null){
+        if(fileList.isEmpty()){
         	//nttSaveReqDto.setAtchFileSn(atchFileService.saveList(fileList));	// 파일 save (파일 개수 여러개일 때 ) 
         }
     	

@@ -79,9 +79,6 @@ var $fileListArr = new Array();
  var $limit = 0;
  
 $("#multi-add").on('change',function(){
-	
-	alert("파일 테스트");
-
 	var files = $(this)[0].files;
 
 	var fileArr = new Array();
@@ -111,6 +108,15 @@ $("#multi-add").on('change',function(){
 	$fileListArr = fileArr;
 	$('#totSize').text("");
 	$('#totSize').text(Math.floor($totSize / 1000000));
+	
+	
+		var fileList = new FormData();
+		for(var i = 0; i < $fileListArr.length ; i++){
+			fileList.append("uploadFile" , $fileListArr[i]);
+			
+		}
+		$("#fileList").val(fileList);
+		
 });
 
 
@@ -161,16 +167,16 @@ $(document).on("click" , '.deleteFile', function(){
 $('#submit').click(function(){
 
 		  
-		var formData = new FormData();
+		var fileList = new FormData();
 		for(var i = 0; i < $fileListArr.length ; i++){
-			formData.append("uploadFile" , $fileListArr[i]);
+			fileList.append("uploadFile" , $fileListArr[i]);
 		}
 		
 		$.ajax({
 			url:"/file/fileUpload.do",
 			processData : false,
 			contentType : false,
-			data: formData ,
+			data: fileList ,
 			type : 'POST',
 			success : function(res){
 				location.href = '/file/List.do';
@@ -293,17 +299,15 @@ $('#submit').click(function(){
                          <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일</label>
                             <div class="col-md-6 col-sm-6">
-                             <form>
+                            <!-- <form>-->
 								 <table  id= "file_table">
-									 
 									 
 								 </table>
 								 <span  id= "totSize"></span>
 								 <input type="file" id="multi-add" class="btn-add" multiple style="display: none;" name="file" >
 					             <button type="button" class="btn-add" id="file_add">파일추가</button>
-								 
-								 
-							 </form> 
+								 <input type="hidden"   name="fileList"  id="fileList">
+						<!--	 </form> -->
                                    
                             
 					
