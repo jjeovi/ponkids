@@ -349,3 +349,122 @@ upload:
 *************
 </details>
 
+
+
+
+<details>
+
+<summary> 231206 : layout.html , tiles 패키지 경로 수정 ( admin 패키지 안으로 ) 함에 따라 작업해야하는 사항</summary> 
+
+
+<!-- summary 아래 한칸 공백 두어야함 -->
+
+*************
+#### 
+1. html 상단에 참조하는 layout 경로 수정
+
+================================================================================
+
+ ```
+before :
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+after : 
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+      
+ ```
+
+
+2. paging 파일 참조 하는 html 에서 paging 경로 수정
+
+================================================================================
+
+ ```
+before :
+<!-- S : 테이블 하단 페이징 -->
+                        <div class="col-md-8 col-sm-6 text-center"
+                             th:insert="~{layout/tiles/paging :: paging('listForm', ${resultList})}">
+                            <!-- parameter : ( submit할 form 의 name값 ), ( ${resultList} 는 Page<T> 오브젝트 )  -->
+                        </div>
+                        <!-- E : 테이블 하단 페이징 -->
+
+after : 
+<!-- S : 테이블 하단 페이징 -->
+                        <div class="col-md-8 col-sm-6 text-center"
+                             th:insert="~{admin/layout/tiles/paging :: paging('listForm', ${resultList})}">
+                            <!-- parameter : ( submit할 form 의 name값 ), ( ${resultList} 는 Page<T> 오브젝트 )  -->
+                        </div>
+                        <!-- E : 테이블 하단 페이징 -->
+                        
+ ```
+  -
+
+
+*************
+</details>
+
+
+<details>
+
+<summary> 231206 : mapping url 구조 변경 : 기존 {basicPath} / action  구조에서, {basicPath} / {mcd} / action 구조로 변경 하려고 합니다.</summary> 
+
+
+<!-- summary 아래 한칸 공백 두어야함 -->
+
+*************
+#### 
+디폴트로 /list, /regist, /modify, /update, /delete 에 {mcd} 값을 추가합니다. ( 화면을 접근 하는 URL 에는 수정 필요)
+
+조건 : 
+ - pathVariable 명은 mcd : {mcd} 이 변수 명을 mcd로 해주세요
+ - 메서드의 파라미터로 model 속성이 추가 되어 있어야 함
+ - url 구조가 '/admin' 으로 시작해야함
+
+
+
+예시
+
+================================================================================
+
+ ```
+before :
+ @GetMapping( BASIC_PATH + "/list" )
+    public String list( @ModelAttribute MenuListDto listDto,
+                        Model model ) {
+        
+
+after : 
+ @GetMapping( BASIC_PATH + "/{mcd}/list" )
+    public String list( @ModelAttribute MenuListDto listDto,
+                        @PathVariable String mcd,	// <-- 파라미터 name 을 'mcd'로 해주세요. 
+                        Model model ) { // <-- model 이 있어야 합니다. 없는 메소드는 추가를 해주세요.
+                        
+ ```
+ 
+  -
+
+
+이에 따라 html 에 url들의 수정이 필요합니다. 
+
+예시
+
+================================================================================
+
+ ```
+before :
+  <form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/list ( basicPath = ${basicPath} ) }">
+        
+
+after : 
+  <form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath} ) }">
+                        
+ ```
+ 
+  -
+
+
+*************
+</details>
+
