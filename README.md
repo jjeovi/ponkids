@@ -458,7 +458,9 @@ before :
         
 
 after : 
-  <form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath} ) }">
+  <form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }">
+
+  (mcd만 입력해도 알아서 코드찾아감)
                         
  ```
  

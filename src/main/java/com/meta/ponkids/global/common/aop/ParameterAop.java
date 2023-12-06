@@ -97,11 +97,11 @@ public class ParameterAop {
 	        String url = menuRepository.findBymenuUrlRegExp(srchUrlReg);
 	        
 	        if(!StringUtils.hasText(url)) {
-	        	 model.addAttribute(MCD, mcd.replace(MCD, ""));
-	        	 return ;
+	        	model.addAttribute(MCD,mcd);
+	        	return ;
 	        } else {
 	        	if ( equalCheck(requestUri, url, mcd) ) {
-	        		model.addAttribute(MCD, mcd.replace(MCD, ""));
+	        		model.addAttribute(MCD,mcd);
 	        		return ;
 	        	} else {
 	                HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();

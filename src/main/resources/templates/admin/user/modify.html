@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{admin/layout}">
 <title layout:fragment="title">pioneerkids Admin - 회원 등록</title>
 <!-- S : Javascript functions	-->
 <script layout:fragment="script">
@@ -410,7 +410,7 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="updateForm" name="updateForm" method="post" th:action="@{ {basicPath}/update ( basicPath = ${basicPath} ) }" enctype="multipart/form-data">
+                    <form id="updateForm" name="updateForm" method="post" th:action="@{ {basicPath}/{mcd}/update ( basicPath = ${basicPath}, mcd = ${mcd} ) }" enctype="multipart/form-data">
 	                    <!-- hidden type  -->
                         <input type="hidden" name="mngrConfmYn"     th:value="${targetDto.mngrConfmYn}" />
                         <input type="hidden" name="userSn" 		    th:value="${targetDto.userSn}" />
@@ -641,11 +641,11 @@
                         <div class="col-md-12">
                             <!-- bottom left area -->
                             <div class="col-md-2 col-sm-3 text-left">
-                                <a th:href="@{ {basicPath}/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">목록</a>
+                                <a th:href="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="btn btn-white w120p">목록</a>
                             </div>
                             <!-- bottom center area -->
                             <div class="col-md-8 col-sm-6 text-center">
-                                <a th:href="@{ {basicPath}/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">취소</a>
+                                <a th:href="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="btn btn-white w120p">취소</a>
                                 <button type="submit" class="btn btn-purple w120p">저장</button>
                             </div>
                             <!-- bottom right area -->
