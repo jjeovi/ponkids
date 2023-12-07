@@ -470,3 +470,95 @@ after :
 *************
 </details>
 
+
+
+
+<details>
+
+<summary> 231207 : layout 구조 에  메뉴명, 메뉴 설명, 메뉴 상세설명등을 추가 하면서 기존 html 을 수정해줘야 합니다. </summary> 
+
+
+<!-- summary 아래 한칸 공백 두어야함 -->
+
+*************
+#### 
+1. 기존 html 에서 추가되어있는 메뉴 관련 부분들은 삭제 
+
+
+
+================================================================================
+
+ ```
+before 
+    <!-- S : 상단 메뉴 명 -->
+    <!-- TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림. -->
+    <div class="title_top">
+        <h3>메뉴 조회</h3>
+        <hr class="t_top_line">
+    </div>
+    <!-- E : 상단 메뉴 명 -->
+
+    <!-- S : 메뉴 상세설명  -->
+    <div class="div_menu_detail row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>메뉴조회 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa purple fa-chevron-down"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content" style="display: none;">
+                    <h4>상세설명 메뉴입니다.<small>메뉴는 메뉴 조회입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
+                                          설정가능합니다.)</small></h4>
+                    <div>
+                        <div class="starrr stars"></div>
+                        상세설명 메뉴입니다. <span class="stars-count">0123456789</span> star(s)
+                    </div>
+                    <p>The menu is membership registration. This part allows the administrator to enter text
+                       describing the menu. (It can be set in Menu Management.)</p>
+                    <div class="starrr stars-existing" data-rating="4"></div>
+                    You gave a rating of <span class="stars-count-existing">4</span> star(s)
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- E : 메뉴 상세설명 -->
+
+after
+
+해당 부분 삭제 ( layout 에서 구현 )
+                        
+ ```
+ 
+  -
+
+
+2. content 부분 태그 수정 필요
+
+
+
+================================================================================
+
+ ```
+
+before 
+<div layout:fragment="content" class="right_col" role="main"> 
+
+</div> 
+
+after :
+<th:block layout:fragment="content">
+
+</th:block>
+                        
+ ```
+ 
+  -
+
+수정 부탁드립니다. 감사합니다 꾸벅 ( _ _ )
+
+*************
+</details>
+
