@@ -17,8 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -164,5 +167,92 @@ public class AtchFileService {
 	// fullPath 만들기
 	private String getFullPath(String filename) {
 	    return UPLOAD_PATH + filename;
+	}
+	
+	/**
+	 * methodName    : saves
+	 * date           : 12/07/23
+	 * description    : 다중 파일 생성 및 db 저장
+	 */
+	@Transactional
+	public Long listSave(List<MultipartFile> multiFileList) throws IOException {
+		// 파일 save 
+		// 1. 물리업로드 (hardUpload)   : 지정된 경로에 파일 저장
+		// 2. 소프트업로드 (softUpload)  : DB에 파일정보 저장
+
+ 		String root = "C:\\uploadFiles\\";	//저장될 외부 파일 경로
+ 		
+ 		File fileCheck = new File(root);
+ 		
+ 		if(!fileCheck.exists()) fileCheck.mkdirs();
+ 		
+ 		
+ 		List<Map<String, String>> fileList = new ArrayList<>();
+ 		
+		// 2. 소프트업로드 (softUpload)  : DB에 파일정보 저장
+		// ------------------------------------------------
+
+//		String contentType = file.getContentType();
+		AtchFile newAtchFile = atchFileRepository.save(new AtchFile());	// 신규 파일 생성
+		
+		// atchFileDetailSaveDto 생성
+		AtchFileDetailSaveDto atchFileDetailSaveDto = new AtchFileDetailSaveDto();
+		
+		
+		// atchFileDetailSaveDto 항목 setting
+ 		
+ 		for(int i = 0; i < multiFileList.size(); i++) {
+ 			String originFile = multiFileList.get(i).getOriginalFilename();
+ 			String ext = originFile.substring(originFile.lastIndexOf("."));
+ 			String changeFile = UUID.randomUUID().toString() + ext;
+ 			
+ 			
+ 			Map<String, String> map = new HashMap<>();
+ 			map.put("originFile", originFile);
+ 			map.put("changeFile", changeFile);
+ 			
+ 			fileList.add(map);
+ 			
+ 			atchFileDetailSaveDto.setAtchFileSn(newAtchFile.getAtchFileSn());	// atchFileDetail > atchFileSn		첨부파일일련번호
+ 			atchFileDetailSaveDto.setFileSeq((long)i+1);					    // atchFileDetail > fileSeq			파일순번
+ 			atchFileDetailSaveDto.setFileStrePath(getFullPath(changeFile));		// atchFileDetail > fileStrePath	파일저장경로
+ 			atchFileDetailSaveDto.setStreFileNm(changeFile);					// atchFileDetail > streFileNm		저장파일이름
+ 			atchFileDetailSaveDto.setOrignlFileNm(originFile);				    // atchFileDetail > orignlFileNm	원파일명
+ 			atchFileDetailSaveDto.setFileExtsn(extractExt(originFile));		    // atchFileDetail > fileExtsn		파일확장자
+ 			atchFileDetailSaveDto.setFileCn(originFile);						// atchFileDetail > fileCn			파일내용
+ 			atchFileDetailSaveDto.setFileSize(multiFileList.get(i).getSize());	 // atchFileDetail > fileSize		파일크기
+ 			
+ 			// atchFileDetail 로 dto to entity 
+ 			AtchFileDetail atchFileDetail = atchFileDetailSaveDto.toEntity();
+ 			
+ 			// 파일 상세 save
+ 			atchFileDetailRepository.save(atchFileDetail);
+ 			
+ 		}
+ 		
+ 		// 파일업로드
+ 		try {
+ 			for(int i = 0; i < multiFileList.size(); i++) {
+ 				File uploadFile = new File(root + "\\" + fileList.get(i).get("changeFile"));
+ 				multiFileList.get(i).transferTo(uploadFile);
+ 			}
+ 			
+ 			System.out.println("다중 파일 업로드 성공!");
+ 			
+ 		} catch (IllegalStateException | IOException e) {
+ 			System.out.println("다중 파일 업로드 실패 ㅠㅠ");
+ 			// 만약 업로드 실패하면 파일 삭제
+ 			for(int i = 0; i < multiFileList.size(); i++) {
+ 				new File(root + "\\" + fileList.get(i).get("changeFile")).delete();
+ 			}
+ 			
+ 			
+ 			e.printStackTrace();
+ 		}
+ 		
+		
+		
+		return newAtchFile.getAtchFileSn();
+	
 	}
 }

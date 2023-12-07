@@ -454,17 +454,23 @@ function fnAnswerReplyList( nttReplySn ) {
                          
                           <div class="field item form-group">
                              <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일</label>
+                               <div class="upload-thumb-wrap">
+                 
+                                     <input type="file"			th:unless = "${targetDto.cnAtchFileSn == null}" th:src="@{/getFileList(cnAtchFileSn=${targetDto.cnAtchFileSn})}"  >
+                                 </div>
+                              
+                              
                                <div class="col-md-6 col-sm-6">
-                                  <div class="filebox preview-image">
-                                    <div class="upload-file-name">
-                                        <input class="input-file-name" value="선택된 파일 없음" disabled="disabled">
-                                    </div>
-                                    <div class="upload-btn mt_10p">
-                                        <label class="btn btn-purple">파일추가
-                                            <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
-                                        </label>
-                                    </div>
-                                </div>
+								   
+								  <table  id= "file_table">
+									 
+								 </table>
+								 <span  id= "totSize"></span>
+								 <input type="file" id="multi-add" class="btn-add"   name="multiFile" multiple style="display: none;">
+					             <button type="button" class="btn-add" id="file_add">파일추가</button>
+								 <input type="hidden"   name="fileList"  id="fileList">
+								 
+								
                             </div>
                           </div>   
    

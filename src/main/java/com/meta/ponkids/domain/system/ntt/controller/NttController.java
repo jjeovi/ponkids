@@ -25,8 +25,13 @@ import com.meta.ponkids.domain.system.ntt.service.NttService;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * className      : NttController
@@ -126,19 +131,19 @@ public class NttController {
     @PostMapping(BASIC_PATH  + "/insert")
     public String nttInsert( 
     	                   @RequestParam("file") MultipartFile files,
-    	                   @RequestParam("fileList") MultipartFile fileList,
+    	                   @RequestParam("multiFile") List<MultipartFile> multiFileList,
     		               @ModelAttribute NttSaveReqDto nttSaveReqDto,
     		               HttpServletRequest request , Model model ) throws IOException {
     	
     	
-    	// 썸네일 파일 존재시 파일 저장
+    	// 썸네일 이미지 존재시 파일 저장
         if(!files.isEmpty()){
         	nttSaveReqDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 ) 
         }
         
-        // 파일 리스트 저장
-        if(fileList.isEmpty()){
-        	//nttSaveReqDto.setAtchFileSn(atchFileService.saveList(fileList));	// 파일 save (파일 개수 여러개일 때 ) 
+        // 첨부파일  존재시 파일 저장
+        if(!multiFileList.isEmpty()){
+        	nttSaveReqDto.setCnAtchFileSn(atchFileService.listSave(multiFileList));	// 파일 save (파일여러개 ) 
         }
     	
     	// save
@@ -164,7 +169,7 @@ public class NttController {
     		BASIC_PATH + "/detail" ,
     		BASIC_PATH + "/modify" } )	 
       public String modify( @RequestParam(required = true)  Long nttSn, 
-    		                 @RequestParam(required = true) String bbsSeCd, 
+    		                @RequestParam(required = true) String bbsSeCd, 
     		                 Model model, 
     		                HttpServletRequest request ) throws IOException {
       
@@ -186,6 +191,11 @@ public class NttController {
     	  List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
       	  model.addAttribute( "replyList", replyList );
        }
+      
+      //첨부파일 존재시 
+      if(targetDto.getCnAtchFileSn() != null) {
+    	  
+      }
       
       // 조회수 업데이트 
       nttService.update(nttSn ,request);

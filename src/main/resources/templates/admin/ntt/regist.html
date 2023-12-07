@@ -85,6 +85,7 @@ $("#multi-add").on('change',function(){
 
 	fileArr = $fileListArr;
 	$limit = $totSize;
+	alert( files.length);
 	for(var i = 0 ; i < files.length ; i++){
 		$limit = $limit + files[i].size;
 		if($limit > 20000000){
@@ -110,12 +111,7 @@ $("#multi-add").on('change',function(){
 	$('#totSize').text(Math.floor($totSize / 1000000));
 	
 	
-		var fileList = new FormData();
-		for(var i = 0; i < $fileListArr.length ; i++){
-			fileList.append("uploadFile" , $fileListArr[i]);
-			
-		}
-		$("#fileList").val(fileList);
+	
 		
 });
 
@@ -304,9 +300,14 @@ $('#submit').click(function(){
 									 
 								 </table>
 								 <span  id= "totSize"></span>
-								 <input type="file" id="multi-add" class="btn-add" multiple style="display: none;" name="file" >
+								 <input type="file" id="multi-add" class="btn-add"   name="multiFile" multiple style="display: none;">
 					             <button type="button" class="btn-add" id="file_add">파일추가</button>
 								 <input type="hidden"   name="fileList"  id="fileList">
+								 	
+							<!--	 	파일 : <input type="file" name="multiFile" multiple> <br>-->
+	                          	<!--파일 설명 : <input type="text" name="fileContent"><br>-->
+		
+		
 						<!--	 </form> -->
                                    
                             

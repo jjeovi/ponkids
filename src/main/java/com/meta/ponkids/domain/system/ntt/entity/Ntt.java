@@ -50,6 +50,9 @@ public class  Ntt extends BaseTimeEntity {
     private String nttCn;     // 게시물 내용    
 
     private Long atchFileSn;  // 썸네일 첨부파일
+    
+    private Long cnAtchFileSn;  // 첨부파일
+
 
     private int nttRdcnt;     // 조회수  
     

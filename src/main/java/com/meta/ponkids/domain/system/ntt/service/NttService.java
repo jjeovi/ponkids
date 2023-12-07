@@ -56,6 +56,7 @@ public class NttService {
         		     .nttRdcnt(1)
         		     .openYn("Y")
                      .atchFileSn(nttSaveReqDto.getAtchFileSn())
+                     .cnAtchFileSn(nttSaveReqDto.getCnAtchFileSn())
                      .registerId(nttSaveReqDto.getRegisterId())
                      .registerIp( IpUtils.getClientIP( request ))
                      .regDt(LocalDateTime.now())
@@ -131,8 +132,10 @@ public class NttService {
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
         if ( StringUtils.hasText( modDto.getNttNm() ) ) targetDto.setNttNm( modDto.getNttNm() );          
         if ( StringUtils.hasText( modDto.getNttCn() ) ) targetDto.setNttCn( modDto.getNttCn() );   
-        if ( StringUtils.hasText( modDto.getNoticeSetYn() ) ) targetDto.setNoticeSetYn( modDto.getNoticeSetYn() );   
-
+        if ( StringUtils.hasText( modDto.getNoticeSetYn() ) ) targetDto.setNoticeSetYn( modDto.getNoticeSetYn() );  
+        
+        targetDto.setAtchFileSn( modDto.getAtchFileSn() );          
+        targetDto.setCnAtchFileSn( modDto.getCnAtchFileSn() );   
         
         // target object 전환 ( dto to entity )
         ntt = targetDto.toEntity();
