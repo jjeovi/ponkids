@@ -1,14 +1,14 @@
 package com.meta.ponkids.global.error;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class CustomErrorController implements ErrorController {
@@ -56,7 +56,6 @@ public class CustomErrorController implements ErrorController {
     public String handleErrorDeliverCode( HttpServletRequest request, 
     		@PathVariable int statusCode,
     		Model model) {
-    	Object status = request.getAttribute( RequestDispatcher.ERROR_STATUS_CODE );
     	
     		model.addAttribute( "statusCode", statusCode );
     		
