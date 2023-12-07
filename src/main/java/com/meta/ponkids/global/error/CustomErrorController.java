@@ -26,22 +26,27 @@ public class CustomErrorController implements ErrorController {
             model.addAttribute( "statusCode", statusCode );
             
             if ( statusCode == HttpStatus.BAD_REQUEST.value() ) {
+            	
                 // 400 error
                 return DEFAULT_VIEW_PATH + "400";
                 
             } else if ( statusCode == HttpStatus.UNAUTHORIZED.value() ) {
+            	
                 // 401 error
                 return DEFAULT_VIEW_PATH + "401";
                 
             } else if ( statusCode == HttpStatus.NOT_FOUND.value() ) {
+            	
                 // 404 error
                 return DEFAULT_VIEW_PATH + "404";
                 
             } else if ( statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value() ) {
+            	
                 // 500 error
                 return DEFAULT_VIEW_PATH + "500";
                 
             } else {
+            	
                 // 그 외 모든 error
                 return DEFAULT_VIEW_PATH + "error";
                 
@@ -60,27 +65,31 @@ public class CustomErrorController implements ErrorController {
     		model.addAttribute( "statusCode", statusCode );
     		
     		if ( statusCode == HttpStatus.BAD_REQUEST.value() ) {
+    			
     			// 400 error
     			return DEFAULT_ADMIN_VIEW_PATH + "400";
     			
     		} else if ( statusCode == HttpStatus.UNAUTHORIZED.value() ) {
+    			
     			// 401 error
     			return DEFAULT_ADMIN_VIEW_PATH + "401";
     			
     		} else if ( statusCode == HttpStatus.NOT_FOUND.value() ) {
+    			
     			// 404 error
     			return DEFAULT_ADMIN_VIEW_PATH + "404";
     			
     		} else if ( statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value() ) {
+    			
     			// 500 error
     			return DEFAULT_ADMIN_VIEW_PATH + "500";
     			
     		} else {
+    			
     			// 그 외 모든 error
     			return DEFAULT_ADMIN_VIEW_PATH + "error";
     			
     		}
-    	
     }
     
 }

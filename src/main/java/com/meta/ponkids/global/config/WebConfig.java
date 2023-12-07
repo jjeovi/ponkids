@@ -1,12 +1,14 @@
 package com.meta.ponkids.global.config;
 
-import com.meta.ponkids.global.config.interceptor.AuthInterceptor;
-import com.meta.ponkids.global.config.interceptor.MenuInterceptor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.meta.ponkids.global.config.interceptor.AuthInterceptor;
+import com.meta.ponkids.global.config.interceptor.MenuInterceptor;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
@@ -38,9 +40,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers( final ResourceHandlerRegistry registry ) {
         // templates 도 classpath 로 설정 ( /static/~ , /templates/~ 를 모두 정적으로 read 할 수 있다.
     	
-    	
-//    	registry.addResourceHandler( "/summernoteImage/**" )
-//    	.addResourceLocations( "file:///C:/summernote_image/" );
+    	registry.addResourceHandler( "/summernoteImage/**" )
+    	.addResourceLocations( "file:///C:/summernote_image/" );
     	
     	registry.addResourceHandler( "/**" )
     	.addResourceLocations( "classpath:/templates/", "classpath:/static/" );

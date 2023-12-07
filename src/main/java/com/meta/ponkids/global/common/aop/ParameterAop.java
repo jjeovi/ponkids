@@ -101,34 +101,51 @@ public class ParameterAop {
 	        	
 	        String srchUrlReg = makeRegExp(requestUri, mcd);
 	        
+	        // 정규식 검색으로 조횧한 url (같은 url 여러개 있을 시, 최상위 1개만 조회)
 	        String url = menuRepository.findBymenuUrlRegExp(srchUrlReg);
 	        
 	        if(!StringUtils.hasText(url)) {
+	        	// 정규식 조회로 해당하는 url 이 없을 경우
+	        	// mcd 값만 model 에 추가한 후 그냥 return 함 ( mcd 값을 모델에 추가하는 이유는 html 에서 메뉴에 없는 url이라도 mcd를 참조하여 left menu에 연동 할 수 있기 때문에 )
+	        	
 	        	model.addAttribute(MCD,mcd);
 	        	return ;
+	        	
 	        } else {
+	        	// 정규식 조회로 해당하는 url 이 있을 경우
+	        	
+	        	// response 선언
 	        	HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
+	        	
 	        	if ( equalCheck(requestUri, url, mcd) ) {
+	        		// 내가 접속한 requestUri 와 db에서 조회한 url 이 정규식 뿐만 아니라 mcd까지 전체url이 같을 경우 (이 부분이 최종으로 return 되야 정상적으로 관리자URL에 접속 했다고 판단)
+	        		
+	        		// mcd 값 model 에 추가
 	        		model.addAttribute(MCD,mcd);
 	        		
-	        		// 권한 체크 (내 계정의 권한과 다른 권한이면 return)
+	        		// 권한 체크 (내 계정의 권한에 없는 url 일 경우 401 return)
 	        		if ( ! authCheckAop(requestUri) ) {
 	        			// 권한 없음 페이지 이동
-	        			
 		                response.sendRedirect( "/error/admin/401" ); // 권한없음
-	        			
 	        		}
+	        		
 	        		return ;
+	        		
 	        	} else {
+	        		// 내가 접속한 requestUri 와 db에서 조회한 url 이 정규화 되어있는 부분만 같고, mcd 부분이 다를 경우에는 , url에 존재하는mcd로 맞춰서 redirect 시킴 
+	        		// ex ) : 내가 접속한 url   : contextPath + "/admin/menu/mcd123/list"  (mcd123은 db에 저장되어있는 mcd값과 다름!)
+	        		//        db에서 조회한 url : contextPath + "/admin/menu/mcd712/list"  
+	        		//       일 경우, "/admin/menu/mcd712/list" 로 redirect 시켜 mcd값을 맞춘다.
+	        		
+	        		// -> mcd값을 잘 몰르땐 /admin/menu/mcd/list와 같이 mcd만 입력해도 알아서 db에 있는 mcd값으로 redirect 시킨다.
+	        		
+	        		
+	        		// mcd 값 db에 저장되어있는 url로 매핑시켜 redirect
 	                response.sendRedirect( makeRedirect(requestUri, url, mcd) ); // mcd를 맞춰서 redirect
 	        	}
-	        	
 	        }
-        
         }
-
     }
-    
     
     public boolean authCheckAop(String requestUri) throws Exception {
         
@@ -151,7 +168,6 @@ public class ParameterAop {
         	return true;
         }
     	
-    	
     }
     
     
@@ -161,7 +177,6 @@ public class ParameterAop {
     	return separateUrl[0] + MCD + ".*" + separateUrl[1];	// 정규식 표현 생성 
     }
     
-    
     private boolean equalCheck(String requestUri, String url, String mcd ) {
     	
     	String [] separateUrl = requestUri.split(mcd);
@@ -170,8 +185,6 @@ public class ParameterAop {
     	
     	return dbMcd.equals(mcd);
     }
-    
-    
     
     private String makeRedirect(String requestUri, String url, String mcd ) {
     	
