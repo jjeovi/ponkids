@@ -11,42 +11,7 @@
 
 </script>
 <!-- E : Javascript functions	-->
-<div layout:fragment="content" class="right_col" role="main">
-    <!-- S : 상단 메뉴 명 -->
-    <!-- TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림. -->
-    <div class="title_top">
-        <h3>회원 조회</h3>
-        <hr class="t_top_line">
-    </div>
-    <!-- E : 상단 메뉴 명 -->
-
-    <!-- S : 메뉴 상세설명  -->
-    <div class="div_menu_detail row">
-        <div class="col-md-12 col-sm-12 ">
-            <div class="x_panel">
-                <div class="x_title">
-                    <h2>회원조회 메뉴입니다. <small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a></li>
-                    </ul>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="x_content" style="display: none;">
-                    <h4>상세설명 메뉴입니다.<small>메뉴는 회원 등록입니다. 이 부분은 관리자가 메뉴를 설명하는 글을 입력할 수 있습니다. (메뉴 관리에서
-                                              설정가능합니다.)</small></h4>
-                    <div>
-                        <div class="starrr stars"></div>
-                        상세설명 메뉴입니다. <span class="stars-count">0123456789</span> star(s)
-                    </div>
-                    <p>The menu is membership registration. This part allows the administrator to enter text
-                       describing the menu. (It can be set in Menu Management.)</p>
-                    <div class="starrr stars-existing" data-rating="4"></div>
-                    You gave a rating of <span class="stars-count-existing">4</span> star(s)
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- E : 메뉴 상세설명 -->
+<th:block layout:fragment="content">
 
     <!-- S: content -->
     <div class="x_panel">
@@ -164,5 +129,5 @@
         </div>
     </div>
     <!-- E : content -->
-</div>
+</th:block>
 </html>

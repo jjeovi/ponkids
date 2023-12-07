@@ -20,7 +20,9 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.meta.ponkids.domain.system.login.dto.LoginDto;
+import com.meta.ponkids.domain.system.menu.dto.AdminMenuHierarchyDto;
 import com.meta.ponkids.domain.system.menu.repository.MenuRepository;
+import com.meta.ponkids.domain.system.menu.service.AdminMenuHierarchyService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,18 +32,15 @@ import lombok.RequiredArgsConstructor;
 public class ParameterAop {
 	
 	private final MenuRepository menuRepository;
+	private final AdminMenuHierarchyService adminMenuHierarchyService;
 
+	
 	@Value("${speficic.menuCd}")
 	private String MCD;
 
 	// 모든 controller mapping 조건이 기준 -> '/admin/' 으로 시작하는 url만 필터 (url필터는 소스로처리)
     @Pointcut("execution(* *..*Controller..*(..))")
     public void menuCdCheck() {}
-    
-    // 모든 controller mapping 조건이 기준 -> '/admin/' 으로 시작하는 url만 필터 (url필터는 소스로처리)
-    @Pointcut("execution(* *..*Controller..*(..))")
-    public void authCheck() {}
-
     
     // 메서드가 실행 되기 전에 실행이 됨.
     @Before("menuCdCheck()")
@@ -119,14 +118,21 @@ public class ParameterAop {
 	        	
 	        	if ( equalCheck(requestUri, url, mcd) ) {
 	        		// 내가 접속한 requestUri 와 db에서 조회한 url 이 정규식 뿐만 아니라 mcd까지 전체url이 같을 경우 (이 부분이 최종으로 return 되야 정상적으로 관리자URL에 접속 했다고 판단)
-	        		
-	        		// mcd 값 model 에 추가
-	        		model.addAttribute(MCD,mcd);
+	   
 	        		
 	        		// 권한 체크 (내 계정의 권한에 없는 url 일 경우 401 return)
 	        		if ( ! authCheckAop(requestUri) ) {
 	        			// 권한 없음 페이지 이동
 		                response.sendRedirect( "/error/admin/401" ); // 권한없음
+	        		} else {
+	             		
+		        		// mcd 값 model 에 추가
+		        		model.addAttribute(MCD,mcd);
+		        		
+		        		AdminMenuHierarchyDto presentMenuDto = adminMenuHierarchyService.findTop1ByMenuUrlOrderByMenuSn(requestUri);
+		        		// 현재 메뉴 정보 (currentMenu) model 에 추가
+		        		model.addAttribute("currentMenu",presentMenuDto);
+	        			
 	        		}
 	        		
 	        		return ;

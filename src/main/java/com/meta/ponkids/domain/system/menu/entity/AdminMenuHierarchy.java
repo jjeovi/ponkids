@@ -26,6 +26,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdminMenuHierarchy {
+	
     @Id
     private Long menuSn ;
     

@@ -1735,7 +1735,7 @@ h2 {
   display: block;
   text-overflow: ellipsis;
   overflow: hidden;
-  white-space: nowrap; }
+  white-space: break-spaces; }
 
 .x_title h2 small {
   margin-left: 10px; }
