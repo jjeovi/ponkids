@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.meta.ponkids.domain.system.bbs.service.BbsService;
+import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
+import com.meta.ponkids.domain.system.file.service.AtchFileDetailService;
 import com.meta.ponkids.domain.system.file.service.AtchFileService;
 import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttModDto;
@@ -52,6 +54,9 @@ public class NttController {
    private final BbsService bbsService;
    private final NttReplyService nttReplyService;
    private final AtchFileService atchFileService;
+   private final AtchFileDetailService atchFileDetailService;
+
+   
    
    private final static String BASIC_PATH = "/admin/ntt";
  
@@ -194,7 +199,8 @@ public class NttController {
       
       //첨부파일 존재시 
       if(targetDto.getCnAtchFileSn() != null) {
-    	  
+    	 List<AtchFileDetail>  atchFileList = atchFileDetailService.getList(targetDto.getCnAtchFileSn());
+         model.addAttribute("atchFileList", atchFileList);
       }
       
       // 조회수 업데이트 

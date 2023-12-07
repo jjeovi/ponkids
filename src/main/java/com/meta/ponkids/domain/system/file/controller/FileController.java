@@ -1,13 +1,19 @@
 package com.meta.ponkids.domain.system.file.controller;
 
+import java.awt.PageAttributes.MediaType;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
-
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriUtils;
 
 import com.google.gson.JsonObject;
 import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
@@ -29,9 +36,9 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class FileController {
-	
+
 	private final AtchFileDetailRepository atchFileDetailRepository;
-	
+
 	/**
      * methodName    : list
      * date           : 2023-11-20
@@ -67,38 +74,66 @@ public class FileController {
 		 return result;
 	}
 	
-	                    
-	@PostMapping(value="/uploadSummernoteImageFile", produces = "application/json")
+
+	/**
+	 * methodName : uploadSummernoteImageFile 
+	 *       date : 2023-11-20 
+	 *description : 에디터 이미지 업로드
+	 * 
+	 */
+	@PostMapping(value = "/uploadSummernoteImageFile", produces = "application/json")
 	@ResponseBody
 	public JsonObject uploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile) {
-		
+
 		JsonObject jsonObject = new JsonObject();
-		
-		String fileRoot = "C:\\summernote_image\\";	//저장될 외부 파일 경로
-		String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
-		String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
-				
-		String savedFileName = UUID.randomUUID() + extension;	//저장될 파일 명
-		
-		File targetFile = new File(fileRoot + savedFileName);	
-		
+
+		String fileRoot = "C:\\summernote_image\\"; // 저장될 외부 파일 경로
+		String originalFileName = multipartFile.getOriginalFilename(); // 오리지날 파일명
+		String extension = originalFileName.substring(originalFileName.lastIndexOf(".")); // 파일 확장자
+
+		String savedFileName = UUID.randomUUID() + extension; // 저장될 파일 명
+
+		File targetFile = new File(fileRoot + savedFileName);
+
 		try {
 			InputStream fileStream = multipartFile.getInputStream();
-			FileUtils.copyInputStreamToFile(fileStream, targetFile);	//파일 저장
-			
-			jsonObject.addProperty("url", "/summernoteImage/"+savedFileName);
+			FileUtils.copyInputStreamToFile(fileStream, targetFile); // 파일 저장
+
+			jsonObject.addProperty("url", "/summernoteImage/" + savedFileName);
 			jsonObject.addProperty("responseCode", "success");
-				
+
 		} catch (IOException e) {
-			FileUtils.deleteQuietly(targetFile);	//저장된 파일 삭제
+			FileUtils.deleteQuietly(targetFile); // 저장된 파일 삭제
 			jsonObject.addProperty("responseCode", "error");
 			e.printStackTrace();
 		}
-		
+
 		return jsonObject;
 	}
+
+	/**
+	 * methodName : fileDownload 
+	 *       date : 2023-11-20 
+	 *description : 첨부파일 다운로드
+	 * 
+	 */
+	@GetMapping("/fileDownload")
+	public ResponseEntity<Resource> fileDownload(@RequestParam("fileName") String fileName) {
+
+		
+		String originalFileName = fileName;
+		//String encodedOriginalFileName = UriUtils.encode(originalFileName, StandardCharsets.UTF_8);
+
+		
+		Resource resource = new FileSystemResource("C:\\uploadFiles\\" + originalFileName);
+
+
 	
-	
+		String contentDisposition = "attachment; filename=\"" + originalFileName + "\"";
+
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition).body(resource);
+	}
+
 	
 
 }
