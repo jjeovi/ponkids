@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 // TODO PK(*ID) 체크
@@ -26,5 +27,18 @@ public interface MenuRepository extends JpaRepository<Menu, Long>, MenuRepositor
     		+ 		"   and menu_url ~ :srchUrl"
     		+ 		" limit 1", 	nativeQuery = true )
     String findBymenuUrlRegExp(@Param("srchUrl" ) String srchUrl);
+    
+    
+    @Query( value =  "select tmr.role_sn "
+    		+ "         from ( select menu_sn"
+    		+ "                  from tb_menu"
+    		+ "                 where menu_url = :menuUrl"
+    		+ "                   and del_yn = 'N'"
+    		+ "                   and use_yn = 'Y'"
+    		+ "                 limit 1 ) tm"
+    		+ "    left join tb_menu_role tmr"
+    		+ "           on tm.menu_sn = tmr.menu_sn"
+    		+ "          and tmr.del_yn = 'N'", 	nativeQuery = true )
+    List<String> findRoleSnByMenuUrl(@Param("menuUrl" ) String menuUrl);
     
 }

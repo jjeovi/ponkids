@@ -1,6 +1,7 @@
 package com.meta.ponkids.global.common.aop;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,12 +12,14 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.meta.ponkids.domain.system.login.dto.LoginDto;
 import com.meta.ponkids.domain.system.menu.repository.MenuRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -35,10 +38,14 @@ public class ParameterAop {
     @Pointcut("execution(* *..*Controller..*(..))")
     public void menuCdCheck() {}
     
+    // 모든 controller mapping 조건이 기준 -> '/admin/' 으로 시작하는 url만 필터 (url필터는 소스로처리)
+    @Pointcut("execution(* *..*Controller..*(..))")
+    public void authCheck() {}
+
     
     // 메서드가 실행 되기 전에 실행이 됨.
     @Before("menuCdCheck()")
-    public void beforeAop(JoinPoint joinPoint) throws Exception {
+    public void mcdCheckAop(JoinPoint joinPoint) throws Exception {
 //    	-> 1. menuCd 값이 있는지 확인. (mcd로 시작하는 String값의 parameter가 존재하면 Y )
 //    	-> 1-1. menuCd 값이 없으면, end
 //    	-> 2. (menuCd 값이 있으면) requestUri 를 조회 후, 해당 requestUri 에서 
@@ -100,11 +107,19 @@ public class ParameterAop {
 	        	model.addAttribute(MCD,mcd);
 	        	return ;
 	        } else {
+	        	HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
 	        	if ( equalCheck(requestUri, url, mcd) ) {
 	        		model.addAttribute(MCD,mcd);
+	        		
+	        		// 권한 체크 (내 계정의 권한과 다른 권한이면 return)
+	        		if ( ! authCheckAop(requestUri) ) {
+	        			// 권한 없음 페이지 이동
+	        			
+		                response.sendRedirect( "/error/admin/401" ); // 권한없음
+	        			
+	        		}
 	        		return ;
 	        	} else {
-	                HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
 	                response.sendRedirect( makeRedirect(requestUri, url, mcd) ); // mcd를 맞춰서 redirect
 	        	}
 	        	
@@ -112,6 +127,31 @@ public class ParameterAop {
         
         }
 
+    }
+    
+    
+    public boolean authCheckAop(String requestUri) throws Exception {
+        
+        if(requestUri.startsWith("/admin/")) {
+        	
+        	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        	
+        	LoginDto loginDto = ( LoginDto ) principal;
+        	
+        	// 메뉴 url 로 권한 리스트 조회
+        	List<String> roleSnList = menuRepository.findRoleSnByMenuUrl(requestUri );
+        	
+        	if( roleSnList.contains( loginDto.getRoleSn().toString() ) ) {
+        		return true;
+        	} else {
+        		return false;
+        	}
+        
+        } else { 
+        	return true;
+        }
+    	
+    	
     }
     
     

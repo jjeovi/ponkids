@@ -52,7 +52,7 @@ public class MenuInterceptor implements HandlerInterceptor {
         // mcd setting
         if(modelAndView != null ) {
 		    String mcd = (String)modelAndView.getModel().get( MCD );
-		    request.setAttribute("mcd", mcd);
+		    request.setAttribute(MCD, mcd);
         }
         
         

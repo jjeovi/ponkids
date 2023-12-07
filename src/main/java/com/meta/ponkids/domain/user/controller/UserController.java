@@ -74,7 +74,7 @@ public class UserController {
                         @PathVariable String mcd,
                         Model model ) {
         
-        // 목록 조회
+    	// 목록 조회
         Page<UserListDto> resultList = userService.getList( userListDto, pageable );
         model.addAttribute( "resultList", resultList );
         
@@ -96,7 +96,7 @@ public class UserController {
     public String regist( @PathVariable String mcd, Model model ) {
         
         // 권한 리스트
-        model.addAttribute( "roleList", roleRepository.findAll() );
+        model.addAttribute( "roleList", roleRepository.findAllByOrderByRoleSn() );
         
         // 거주지역 리스트
         model.addAttribute( "resideAreaList", cmmnCdDetailService.getList("RESIDE_AREA_CD") );
@@ -116,11 +116,12 @@ public class UserController {
      * description    : user insert method
      */
     @Transactional
-    @PostMapping( BASIC_PATH + "/insert" )
+    @PostMapping( BASIC_PATH + "/{mcd}/insert" )
     public String insert (
             @RequestParam("file") MultipartFile files,
             @ModelAttribute UserSaveDto saveDto,
             @ModelAttribute UserRoleSaveDto userRoleSaveDto,  // required false
+            @PathVariable String mcd,
             MultiUserChldrnSaveDto userChldrns,
             HttpServletRequest request,
             Model model ) throws IOException {
@@ -130,7 +131,7 @@ public class UserController {
             
             // 메시지 출력 및 url 이동 처리
             model.addAttribute( "resultMsg", "해당ID로 가입된 ID가 있습니다. 다시 시도해주세요." );
-            model.addAttribute( "moveUrl", BASIC_PATH + "/list" );
+            model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
             
             return "common/alert";
             
@@ -153,7 +154,7 @@ public class UserController {
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/list" );
+        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
         
         return "common/alert";
     }
@@ -173,7 +174,7 @@ public class UserController {
             HttpServletRequest request ) {
         
         // 권한 리스트
-        model.addAttribute( "roleList", roleRepository.findAll() );
+        model.addAttribute( "roleList", roleRepository.findAllByOrderByRoleSn() );
         
         // target object 조회
         UserModDto targetDto = userService.findByUserSn( userSn );
@@ -209,11 +210,12 @@ public class UserController {
      * description    : user update method
      */
     @Transactional
-    @PostMapping( BASIC_PATH + "/update" )
+    @PostMapping( BASIC_PATH + "/{mcd}/update" )
     public String update(
             @RequestParam("file") MultipartFile files,
             @ModelAttribute UserModDto modDto,
             @ModelAttribute UserRoleModDto userRoleModDto,  // required false
+            @PathVariable String mcd,
             MultiUserChldrnSaveDto userChldrns,
             HttpServletRequest request,
             Model model ) throws IOException {
@@ -241,7 +243,7 @@ public class UserController {
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/list" );
+        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
         
         return "common/alert";
     }
@@ -252,9 +254,10 @@ public class UserController {
      * description    : user delete method
      */
     @Transactional
-    @PostMapping( BASIC_PATH + "/delete" )
+    @PostMapping( BASIC_PATH + "/{mcd}/delete" )
     public String delete(
             @RequestParam( required = true ) Long userSn,
+            @PathVariable String mcd,
             Model model ) {
         
         // 삭제 처리
@@ -268,7 +271,7 @@ public class UserController {
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/list" );
+        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
         
         return "common/alert";
     }

@@ -13,43 +13,45 @@
         } );
 
         function drawSNB( _menuList ) {
-
-            for ( const [ i, item ] of _menuList.entries() ) {
-
-                if ( i == 0 ) {
-                    $( "[name='snb-menu']" ).attr( "id", "ul_" + item.menuSn );
-                    // 최초 메뉴는 루트메뉴라서 표시 X
-                    continue;
-                }
-
-                if ( i > 0 ) {
-                    $( "#ul_" + item.upperMenuSn ).append(
-                        $( "<li>" ).attr( "id", "li_" + item.menuSn ).attr( "class", "li_mcd"+item.menuCd+" level_" + item.level ).append(
-                            $( "<a>" ).attr( "id", "a_" + item.menuSn ).append(
-                                $( "<span>" ).append( item.menuNm )
-                            )
-                        )
-                    );
-                    
-                    if ( item.parntsMenuYn == 'Y' ) {
-                    	// 부모 메뉴 설정이 Y 일 때
-                        $( "#li_" + item.menuSn ).append(
-                            $( "<ul>" ).attr( "id", "ul_" + item.menuSn ).attr( "class", "nav child_menu" ).append()
-                        );
-                        $( "#a_" + item.menuSn ).append(
-                            $( "<span>" ).attr( "class", "fa fa-chevron-down" ).append( "" )
-                        )
-                    } else if (item.parntsMenuYn == 'N' ) {
-                    	// 부모 메뉴 설정이 N 일 때
-                        $( "#a_" + item.menuSn ).attr("href", item.menuUrl);
-                        
-                        // 새창 열기 설정 적용
-                        if (item.newWindowYn == 'Y') {
-							$( "#a_" + item.menuSn ).attr("target", "_blank");	
-						}
-                    }
-                }
-            }
+        	
+        	if( _menuList != null ) {
+	            for ( const [ i, item ] of _menuList.entries() ) {
+	
+	                if ( i == 0 ) {
+	                    $( "[name='snb-menu']" ).attr( "id", "ul_" + item.menuSn );
+	                    // 최초 메뉴는 루트메뉴라서 표시 X
+	                    continue;
+	                }
+	
+	                if ( i > 0 ) {
+	                    $( "#ul_" + item.upperMenuSn ).append(
+	                        $( "<li>" ).attr( "id", "li_" + item.menuSn ).attr( "class", "li_mcd"+item.menuCd+" level_" + item.level ).append(
+	                            $( "<a>" ).attr( "id", "a_" + item.menuSn ).append(
+	                                $( "<span>" ).append( item.menuNm )
+	                            )
+	                        )
+	                    );
+	                    
+	                    if ( item.parntsMenuYn == 'Y' ) {
+	                    	// 부모 메뉴 설정이 Y 일 때
+	                        $( "#li_" + item.menuSn ).append(
+	                            $( "<ul>" ).attr( "id", "ul_" + item.menuSn ).attr( "class", "nav child_menu" ).append()
+	                        );
+	                        $( "#a_" + item.menuSn ).append(
+	                            $( "<span>" ).attr( "class", "fa fa-chevron-down" ).append( "" )
+	                        )
+	                    } else if (item.parntsMenuYn == 'N' ) {
+	                    	// 부모 메뉴 설정이 N 일 때
+	                        $( "#a_" + item.menuSn ).attr("href", item.menuUrl);
+	                        
+	                        // 새창 열기 설정 적용
+	                        if (item.newWindowYn == 'Y') {
+								$( "#a_" + item.menuSn ).attr("target", "_blank");	
+							}
+	                    }
+	                }
+	            }
+        	}
         }
 
         function currentPage( _mcd, _currentPageUrl ) {

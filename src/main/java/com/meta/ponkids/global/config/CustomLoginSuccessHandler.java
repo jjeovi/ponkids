@@ -1,35 +1,22 @@
 package com.meta.ponkids.global.config;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.savedrequest.RequestCache;
-import org.springframework.stereotype.Component;
+import java.io.IOException;
 
-import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
-
-//    @Override
-//    public void onAuthenticationSuccess( HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication ) throws IOException, ServletException {
-//        log.info("1---------------------------");
-//        log.info("-1--------------------------");
-//        log.info("--1-------------------------");
-//        log.info("---1------------------------");
-//        log.info("----1-----------------------");
-//        AuthenticationSuccessHandler.super.onAuthenticationSuccess( request, response, chain, authentication );
-//    }
-    
-    @Override
     public void onAuthenticationSuccess( HttpServletRequest request, HttpServletResponse response, Authentication authentication ) throws IOException, ServletException {
         log.info( "login Success!!!!!! : " + authentication.getName() );
         
@@ -45,7 +32,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
             response.sendRedirect( loginAfterMoveUrl );
         } else {
             // (2) loginAfterMoveUrl 세션값이 없으면 / 로 redirect
-            response.sendRedirect( "/" );
+            response.sendRedirect( "/admin/home" );
         }
         
     }
