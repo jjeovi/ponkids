@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+    <title layout:fragment="title">피오니키즈</title>
+
+    <!-- css -->
+    <link rel="stylesheet" href="/pon/common/css/reset.css">
+    <link rel="stylesheet" href="/pon/common/css/common.css">
+    <link rel="stylesheet" href="/pon/common/css/style.css">
+    <link rel="stylesheet" href="/pon/npm/swiper11/css/swiper-bundle.min.css">
+    
+</head>
+<!--S : script -->
+<div th:fragment="div-script">
+	
+	<!-- jquery -->
+	<script src="/pon/jquery/3.7.1/jquery.min.js"></script>
+	
+	<!-- swiper -->
+	<script src="/pon/npm/swiper11/js/swiper-bundle.min.js"></script>
+</div>
+<!--E : script -->
+
+<!--s: body-->
+<body>
+	<!-- S : header -->
+    <header class="header">
+		<!-- header 최상단 메뉴 4개 및 sns 버튼 -->
+        <div class="header_top">
+            <ol>
+                <li>
+                    <a href="class.html" >로그인</a>
+                </li>
+                <li>
+                    <a href="#">학부모 상담요청</a>
+                </li>
+                <li>
+                    <a href="#">제휴문의</a>
+                </li>
+                <li>
+                    <a href="#">강사지원</a>
+                </li>
+                <li>
+                    <div class="sns_list">
+                        <div class="sns_item">
+                            <img src="/pon/common/image/kakao_ico.svg" alt="">
+                        </div>
+                        <div class="sns_item">
+                            <img src="/pon/common/image/naver_ico.svg" alt="">
+                        </div>
+                        <div class="sns_item">
+                            <img src="/pon/common/image/insta_svg.svg" alt="">
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        </div>
+        <!-- header 최상단 메뉴 4개 및 sns 버튼 -->
+        
+        <!-- S : pon menu -->
+        <nav class="nav">
+			<ul>
+				<li>
+					<a href="index.html"><img src="/pon/common/image/logo.svg" alt=""></a>
+				</li>
+			</ul>
+            <ul class="pon_menu pc" >
+                <li>
+                    <a href="class.html" >TODO</a>
+<!--                    <a href="class.html" >클래스</a>-->
+                </li>
+                <li>
+                    <a href="review.html">메뉴동적연결</a>
+<!--                    <a href="review.html">수업후기</a>-->
+                </li>
+                <li>
+                    <a href="event.html">필요합니다.</a>
+<!--                    <a href="event.html">이벤트</a>-->
+                </li>
+                <li>
+                    <a href="introduction.html">피오니키즈 소개</a>
+                </li>
+                <li>
+                    <a href="notice.html" >공지사항</a>
+                </li>
+            </ul>
+            <div class="search_form">
+                <div class="search">
+                    <input type="text" placeholder="검색어를 입력해주세요">
+                </div>
+            </div>
+        </nav>
+        <!-- E : pon menu -->
+        
+        <!-- S : mobile header --> 
+        <nav class="mb_nav">
+            <div class="mb_logo">
+                <a href="index.html">
+                    <img src="/pon/common/image/logo.svg" alt="">
+                </a>
+            </div>
+            <div class="mb_ico">
+                <div class="mb_search">
+                    <img src="/pon/common/image/mb_search.svg" alt="">
+                </div>
+                <div class="mb_menu">
+                    <img src="/pon/common/image/menu_ico.svg" alt="">
+                </div>
+            </div>
+        </nav>
+        <div class="nav_wrap">
+            <div class="mb_nav_list">
+                <div class="mb_logo_box ">
+                    <div class="mb_logo">
+                        <a href="index.html">
+                            <img src="/pon/common/image/logo.svg" alt="">
+                        </a>
+                		<p class="login_txt">로그인이 필요합니다</p>
+                    </div>
+                    <div class="m_header_btns">
+                        <div class="m_btns_top">
+                            <button>버튼1</button>
+                            <button>버튼2</button>
+                            <button>버튼3</button>
+                        </div>
+                        <div class="m_btns_bot">
+                            <button>버튼4</button>
+                        </div>
+                    </div>
+                    <div class="close">
+                        <img src="/pon/common/image/close.svg" alt="">
+                    </div>
+                </div>
+                <ul class="pon_menu mb" >
+                    <li><a href="class.html">클래스</a></li>
+                    <li><a href="review.html">수업후기</a></li>
+                    <li><a href="event.html">이벤트</a></li>
+                    <li><a href="introduction.html">피오니키즈 소개</a></li>
+                    <li><a href="notice.html">공지사항</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="mb_search_form">
+            <input type="text" placeholder="검색어를 입력해주세요">
+        </div>
+        <div class="dark_bg"></div>
+        <!-- E : mobile header -->
+        
+    </header>
+    <!-- E : header -->
+    
+    
+    <!-- S : pon-contents -->
+    <div class="pon-conents">
+	    <div class="wrap">
+	        <section class=" visual_sec">
+	            <div class="swiper mySwiper visual_swiper">
+	                <div class="swiper-wrapper">
+	                  <div class="swiper-slide">
+	                    <div class="visual_box">
+	                        <div class="visual_img">
+	                            <img class="pc_visual" src="/pon/common/image/visual_img01.png" alt="">
+	                            <img class="mb_visual" src="/pon/common/image/mb_visual_img01.png" alt="">
+	                        </div>
+	                        <div class="visual_txt">
+	                            <div class="txt_img">
+	                                <img src="/pon/common/image/visual_txt01.png" alt="">
+	                            </div>
+	                            <p>영어로 쌓는 융합교육 과학 창의 인재 육성 교육 센터</p>
+	                        </div>
+	                    </div>
+	                  </div>
+	                  <div class="swiper-slide">
+	                    <div class="visual_box">
+	                        <div class="visual_img">
+	                            <img class="pc_visual" src="/pon/common/image/visual_img01.png" alt="">
+	                            <img class="mb_visual" src="/pon/common/image/mb_visual_img01.png" alt="">
+	                        </div>
+	                        <div class="visual_txt">
+	                            <div class="txt_img">
+	                                <img src="/pon/common/image/visual_txt01.png" alt="">
+	                            </div>
+	                            <p>영어로 쌓는 융합교육 과학 창의 인재 육성 교육 센터</p>
+	                        </div>
+	                    </div>
+	                  </div>
+	                  <div class="swiper-slide">
+	                    <div class="visual_box">
+	                        <div class="visual_img">
+	                            <img class="pc_visual" src="/pon/common/image/visual_img01.png" alt="">
+	                            <img class="mb_visual" src="/pon/common/image/mb_visual_img01.png" alt="">
+	                        </div>
+	                        <div class="visual_txt">
+	                            <div class="txt_img">
+	                                <img src="/pon/common/image/visual_txt01.png" alt="">
+	                            </div>
+	                            <p>영어로 쌓는 융합교육 과학 창의 인재 육성 교육 센터</p>
+	                        </div>
+	                    </div>
+	                    
+	                  </div>
+	                  <div class="swiper-slide">
+	                    <div class="visual_box">
+	                        <div class="visual_img">
+	                            <img class="pc_visual" src="/pon/common/image/visual_img01.png" alt="">
+	                            <img class="mb_visual" src="/pon/common/image/mb_visual_img01.png" alt="">
+	                        </div>
+	                        <div class="visual_txt">
+	                            <div class="txt_img">
+	                                <img src="/pon/common/image/visual_txt01.png" alt="">
+	                            </div>
+	                            <p>영어로 쌓는 융합교육 과학 창의 인재 육성 교육 센터</p>
+	                        </div>
+	                    </div>
+	                  </div>
+	                </div>
+	                <div class="swiper-button-next"></div>
+	                <div class="swiper-button-prev"></div>
+	                <div class="swiper-pagination"></div>
+	              </div>
+	        </section>
+	        <section class="sec sec02">
+	            <div class="sec_txt sec02_txt">
+	                <div class="star"><img src="/pon/common/image/star.svg" alt=""></div>
+	                <h3>  강력추천</h3>
+	                <span>피오니키즈에서만 만나볼 수 있는 특별한 클래스</span>
+	            </div>
+	            <div class="propose_box card_box">
+	                <div class="swiper mySwiper propose_swiper">
+	                    <div class="swiper-wrapper">
+	                      <div class="swiper-slide card_item">
+	                        <div class="item_img">
+	                            <img src="/pon/common/image/propose_img01.png" alt="">
+	                            <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                            <span>미취학</span>
+	                        </div>
+	                        <div class="item_info">
+	                            <span class="item_txt">소마미술관</span>
+	                            <p>한국근현대미술전! 엄마 우리나라에서
+	                                제일 비싼 그림은 누가 그렸어요?</p>
+	                            <span class="item_sale">63,000 원</span>
+	                            <span class="item_price">45,000 원</span>
+	                        </div>
+	                      </div>
+	                      <div class="swiper-slide card_item">
+	                        <div class="item_img">
+	                            <img src="/pon/common/image/propose_img02.png" alt="">
+	                            <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                            <span>초등</span>
+	                        </div>
+	                        <div class="item_info">
+	                            <span class="item_txt">소마미술관</span>
+	                            <p>한국근현대미술전! 엄마 우리나라에서
+	                                제일 비싼 그림은 누가 그렸어요?</p>
+	                            <span class="item_sale">63,000 원</span>
+	                            <span class="item_price">45,000 원</span>
+	                        </div>
+	                      </div>
+	                      <div class="swiper-slide card_item">
+	                        <div class="item_img">
+	                            <img src="/pon/common/image/propose_img03.png" alt="">
+	                            <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                            <span>초등</span>
+	                        </div>
+	                        <div class="item_info">
+	                            <span class="item_txt">소마미술관</span>
+	                            <p>한국근현대미술전! 엄마 우리나라에서
+	                                제일 비싼 그림은 누가 그렸어요?</p>
+	                            <span class="item_sale">63,000 원</span>
+	                            <span class="item_price">45,000 원</span>
+	                        </div>
+	                      </div>
+	                      <div class="swiper-slide card_item">
+	                        <div class="item_img">
+	                            <img src="/pon/common/image/propose_img04.png" alt="">
+	                            <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                            <span>미취학</span>
+	                        </div>
+	                        <div class="item_info">
+	                            <span class="item_txt">소마미술관</span>
+	                            <p>한국근현대미술전! 엄마 우리나라에서
+	                                제일 비싼 그림은 누가 그렸어요?</p>
+	                            <span class="item_sale">63,000 원</span>
+	                            <span class="item_price">45,000 원</span>
+	                        </div>
+	                      </div>
+	                      <div class="swiper-slide card_item">
+	                        <div class="item_img">
+	                            <img src="/pon/common/image/propose_img01.png" alt="">
+	                            <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                            <span>미취학</span>
+	                        </div>
+	                        <div class="item_info">
+	                            <span class="item_txt">소마미술관</span>
+	                            <p>한국근현대미술전! 엄마 우리나라에서
+	                                제일 비싼 그림은 누가 그렸어요?</p>
+	                            <span class="item_sale">63,000 원</span>
+	                            <span class="item_price">45,000 원</span>
+	                        </div>
+	                      </div>
+	                      <div class="swiper-slide card_item">
+	                        <div class="item_img">
+	                            <img src="/pon/common/image/propose_img02.png" alt="">
+	                            <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                            <span>초등</span>
+	                        </div>
+	                        <div class="item_info">
+	                            <span class="item_txt">소마미술관</span>
+	                            <p>한국근현대미술전! 엄마 우리나라에서
+	                                제일 비싼 그림은 누가 그렸어요?</p>
+	                            <span class="item_sale">63,000 원</span>
+	                            <span class="item_price">45,000 원</span>
+	                        </div>
+	                      </div>
+	                    </div>
+	                  </div>
+	                  <div class="swiper-button-next "></div>
+	                    <div class="swiper-button-prev "></div>
+	                  <div class="sec02_ico sec02_ico1">
+	                    <img src="/pon/common/image/bulb.png" alt="">
+	                  </div>
+	                  <div class="sec02_ico sec02_ico2">
+	                    <img src="/pon/common/image/book.png" alt="">
+	                  </div>
+	            </div>
+	        </section>
+	        <section class="sec sec03">
+	            <div class="sec03_wrap">
+	                <div class="sec_txt sec03_txt">
+	                    <div class="star"><img src="/pon/common/image/english_ico.svg" alt=""></div>
+	                    <h3>  영어</h3>
+	                    <span>유아/초등 영어와 친해지는 재미난 수업</span>
+	                </div>
+	                <div class="english_box card_box">
+	                    <div class="swiper mySwiper english_swiper">
+	                        <div class="swiper-wrapper">
+	                        <div class="swiper-slide card_item">
+	                            <div class="item_img">
+	                                <img src="/pon/common/image/propose_img01.png" alt="">
+	                                <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                                <span>미취학</span>
+	                            </div>
+	                            <div class="item_info">
+	                                <span class="item_txt">소마미술관</span>
+	                                <p>한국근현대미술전! 엄마 우리나라에서
+	                                    제일 비싼 그림은 누가 그렸어요?</p>
+	                                <span class="item_sale">63,000 원</span>
+	                                <span class="item_price">45,000 원</span>
+	                            </div>
+	                        </div>
+	                        <div class="swiper-slide card_item">
+	                            <div class="item_img">
+	                                <img src="/pon/common/image/propose_img02.png" alt="">
+	                                <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                                <span>초등</span>
+	                            </div>
+	                            <div class="item_info">
+	                                <span class="item_txt">소마미술관</span>
+	                                <p>한국근현대미술전! 엄마 우리나라에서
+	                                    제일 비싼 그림은 누가 그렸어요?</p>
+	                                <span class="item_sale">63,000 원</span>
+	                                <span class="item_price">45,000 원</span>
+	                            </div>
+	                        </div>
+	                        <div class="swiper-slide card_item">
+	                            <div class="item_img">
+	                                <img src="/pon/common/image/propose_img03.png" alt="">
+	                                <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                                <span>초등</span>
+	                            </div>
+	                            <div class="item_info">
+	                                <span class="item_txt">소마미술관</span>
+	                                <p>한국근현대미술전! 엄마 우리나라에서
+	                                    제일 비싼 그림은 누가 그렸어요?</p>
+	                                <span class="item_sale">63,000 원</span>
+	                                <span class="item_price">45,000 원</span>
+	                            </div>
+	                        </div>
+	                        <div class="swiper-slide card_item">
+	                            <div class="item_img">
+	                                <img src="/pon/common/image/propose_img04.png" alt="">
+	                                <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                                <span>미취학</span>
+	                            </div>
+	                            <div class="item_info">
+	                                <span class="item_txt">소마미술관</span>
+	                                <p>한국근현대미술전! 엄마 우리나라에서
+	                                    제일 비싼 그림은 누가 그렸어요?</p>
+	                                <span class="item_sale">63,000 원</span>
+	                                <span class="item_price">45,000 원</span>
+	                            </div>
+	                        </div>
+	                        <div class="swiper-slide card_item">
+	                            <div class="item_img">
+	                                <img src="/pon/common/image/propose_img01.png" alt="">
+	                                <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                                <span>미취학</span>
+	                            </div>
+	                            <div class="item_info">
+	                                <span class="item_txt">소마미술관</span>
+	                                <p>한국근현대미술전! 엄마 우리나라에서
+	                                    제일 비싼 그림은 누가 그렸어요?</p>
+	                                <span class="item_sale">63,000 원</span>
+	                                <span class="item_price">45,000 원</span>
+	                            </div>
+	                        </div>
+	                        <div class="swiper-slide card_item">
+	                            <div class="item_img">
+	                                <img src="/pon/common/image/propose_img02.png" alt="">
+	                                <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                                <span>초등</span>
+	                            </div>
+	                            <div class="item_info">
+	                                <span class="item_txt">소마미술관</span>
+	                                <p>한국근현대미술전! 엄마 우리나라에서
+	                                    제일 비싼 그림은 누가 그렸어요?</p>
+	                                <span class="item_sale">63,000 원</span>
+	                                <span class="item_price">45,000 원</span>
+	                            </div>
+	                        </div>
+	                        </div>
+	                        
+	                    </div>
+	                    <div class="swiper-button-next"></div>
+	                        <div class="swiper-button-prev"></div>
+	<!--                    <script>-->
+	<!--                        var swiper = new Swiper(".sec03 .english_swiper", {-->
+	<!--                            slidesPerView :4,-->
+	<!--                            spaceBetween:30,-->
+	<!--                        navigation: {-->
+	<!--                            nextEl: ".sec03 .swiper-button-next",-->
+	<!--                            prevEl: ".sec03 .swiper-button-prev",-->
+	<!--                        },-->
+	<!--                        breakpoints: {-->
+	<!--                        1240: {-->
+	<!--                        slidesPerView: 4,  -->
+	<!--                        spaceBetween: 30,-->
+	<!--                        },-->
+	<!--                        768: {-->
+	<!--                            slidesPerView: 3,  -->
+	<!--                            spaceBetween: 20,-->
+	<!--                        },-->
+	<!--                        365: {-->
+	<!--                            slidesPerView: 2,  -->
+	<!--                            spaceBetween: 20,-->
+	<!--                        },-->
+	<!--                      }-->
+	<!--                        });-->
+	<!--                    </script>-->
+	                    <div class="sec02_ico sec02_ico1">
+	                        <img src="/pon/common/image/english_book.png" alt="">
+	                    </div>
+	                </div>
+	                <div class="sec_bg"></div>
+	            </div>
+	        </section>
+	        <section class="sec sec04">
+	            <div class="sec04_wrap">
+	                <div class="sec_txt sec04_txt">
+	                    <div class="star"><img src="/pon/common/image/atom_ico.svg" alt=""></div>
+	                    <h3>과학</h3>
+	                    <span>피오니키즈에서만 만나볼 수 있는 특별한 클래스</span>
+	                </div>
+	                <div class="english_box card_box">
+	                    <div class="swiper mySwiper science_swiper">
+	                        <div class="swiper-wrapper">
+	                        <div class="swiper-slide card_item">
+	                            <div class="item_img">
+	                                <img src="/pon/common/image/propose_img01.png" alt="">
+	                                <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                                <span>미취학</span>
+	                            </div>
+	                            <div class="item_info">
+	                                <span class="item_txt">소마미술관</span>
+	                                <p>한국근현대미술전! 엄마 우리나라에서
+	                                    제일 비싼 그림은 누가 그렸어요?</p>
+	                                <span class="item_sale">63,000 원</span>
+	                                <span class="item_price">45,000 원</span>
+	                            </div>
+	                        </div>
+	                        <div class="swiper-slide card_item">
+	                            <div class="item_img">
+	                                <img src="/pon/common/image/propose_img02.png" alt="">
+	                                <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                                <span>초등</span>
+	                            </div>
+	                            <div class="item_info">
+	                                <span class="item_txt">소마미술관</span>
+	                                <p>한국근현대미술전! 엄마 우리나라에서
+	                                    제일 비싼 그림은 누가 그렸어요?</p>
+	                                <span class="item_sale">63,000 원</span>
+	                                <span class="item_price">45,000 원</span>
+	                            </div>
+	                        </div>
+	                        <div class="swiper-slide card_item">
+	                            <div class="item_img">
+	                                <img src="/pon/common/image/propose_img03.png" alt="">
+	                                <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                                <span>초등</span>
+	                            </div>
+	                            <div class="item_info">
+	                                <span class="item_txt">소마미술관</span>
+	                                <p>한국근현대미술전! 엄마 우리나라에서
+	                                    제일 비싼 그림은 누가 그렸어요?</p>
+	                                <span class="item_sale">63,000 원</span>
+	                                <span class="item_price">45,000 원</span>
+	                            </div>
+	                        </div>
+	                        <div class="swiper-slide card_item">
+	                            <div class="item_img">
+	                                <img src="/pon/common/image/propose_img04.png" alt="">
+	                                <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                                <span>미취학</span>
+	                            </div>
+	                            <div class="item_info">
+	                                <span class="item_txt">소마미술관</span>
+	                                <p>한국근현대미술전! 엄마 우리나라에서
+	                                    제일 비싼 그림은 누가 그렸어요?</p>
+	                                <span class="item_sale">63,000 원</span>
+	                                <span class="item_price">45,000 원</span>
+	                            </div>
+	                        </div>
+	                        <div class="swiper-slide card_item">
+	                            <div class="item_img">
+	                                <img src="/pon/common/image/propose_img01.png" alt="">
+	                                <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                                <span>미취학</span>
+	                            </div>
+	                            <div class="item_info">
+	                                <span class="item_txt">소마미술관</span>
+	                                <p>한국근현대미술전! 엄마 우리나라에서
+	                                    제일 비싼 그림은 누가 그렸어요?</p>
+	                                <span class="item_sale">63,000 원</span>
+	                                <span class="item_price">45,000 원</span>
+	                            </div>
+	                        </div>
+	                        <div class="swiper-slide card_item">
+	                            <div class="item_img">
+	                                <img src="/pon/common/image/propose_img02.png" alt="">
+	                                <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="">
+	                                <span>초등</span>
+	                            </div>
+	                            <div class="item_info">
+	                                <span class="item_txt">소마미술관</span>
+	                                <p>한국근현대미술전! 엄마 우리나라에서
+	                                    제일 비싼 그림은 누가 그렸어요?</p>
+	                                <span class="item_sale">63,000 원</span>
+	                                <span class="item_price">45,000 원</span>
+	                            </div>
+	                        </div>
+	                        </div>
+	                        
+	                    </div>
+	                    <div class="swiper-button-next"></div>
+	                        <div class="swiper-button-prev"></div>
+	<!--                    <script>-->
+	<!--                        var swiper = new Swiper(".sec04 .science_swiper", {-->
+	<!--                            slidesPerView :4,-->
+	<!--                            spaceBetween:30,-->
+	<!--                        navigation: {-->
+	<!--                            nextEl: ".sec04 .swiper-button-next",-->
+	<!--                            prevEl: ".sec04 .swiper-button-prev",-->
+	<!--                        },-->
+	<!--                        breakpoints: {-->
+	<!--                        1240: {-->
+	<!--                        slidesPerView: 4,  -->
+	<!--                        spaceBetween: 30,-->
+	<!--                        },-->
+	<!--                        768: {-->
+	<!--                            slidesPerView: 3,  -->
+	<!--                            spaceBetween: 20,-->
+	<!--                        },-->
+	<!--                        365: {-->
+	<!--                            slidesPerView: 2,  -->
+	<!--                            spaceBetween: 20,-->
+	<!--                        },-->
+	<!--                      }-->
+	<!--                        });-->
+	<!--                    </script>-->
+	                </div>
+	            </div>
+	            <div class="sec02_ico sec04_ico2">
+	                <img src="/pon/common/image/atom.png" alt="">
+	            </div>
+	        </section>
+	        <th:block layout:fragment="content">
+			    
+			</th:block> 
+	        <section class="sec sec05">
+	            <div class="sec05_wrap">
+	                <div class="sec05_box">
+	                    <div class="sec05_left">
+	                        <div class="sec05_left_box">
+	                            <h3>왜 피오니키즈일까요?</h3>
+	                            <div>
+	                                <div class="book_n_ico">
+	                                        <img src="/pon/common/image/book_one.svg" alt="">
+	                                </div>   
+	                                <p>미국 교과과정을 현지 선생님과 함께하는 <br>
+	                                    미국형 온라인 홈스쿨링랩이니까!
+	                                </p>
+	                            </div>
+	                            <div>
+	                                <div class="book_n_ico">
+	                                        <img src="/pon/common/image/book_two.svg" alt="">
+	                                </div>   
+	                                <p>미래형 개척자로서 성장할 수 있도록 영양 가득한 <br>
+	                                    교육을 제공하니까!
+	                                </p>
+	                            </div>
+	                            <div>
+	                                <div class="book_n_ico">
+	                                        <img src="/pon/common/image/book_thr.svg" alt="">
+	                                </div>   
+	                                <p>배움의 즐거움을 일깨워주는 기회를 제공하니까!</p>
+	                            </div>
+	                            </div>
+	                            <div class="sec05_ico sec05_ico1">
+	                                <img src="/pon/common/image/book_3d.png" alt="">
+	                            </div>
+	                            <div class="sec05_ico sec05_ico2">
+	                                <img src="/pon/common/image/sec_ico_bu.svg" alt="">
+	                            </div>
+	                    </div>
+	                    <div class="sec05_right">
+	                        <img src="/pon/common/image/sec05_img.png" alt="">
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="sec05_bg">
+	                <img src="/pon/common/image/sec05_bg.png" alt="">
+	            </div> 
+	        </section>
+	        <section class="sec sec06">
+	            <div class="sec06_wrap">
+	                <div class="sec06_tit">
+	                    <h2>피오니키즈 수업리뷰</h2>
+	                    <img src="/pon/common/image/pen.svg" alt="">
+	                </div>
+	                <div class="review_box">
+	                    <div class="review_item">
+	                        <div class="review_tit">
+	                            <div class="img">
+	                                <img src="/pon/common/image/review_ca1.svg" alt="">
+	                            </div>
+	                            <h5>김**</h5>
+	                            <span>9세 남아 부모님</span>
+	                        </div>
+	                        <p>수업이 재밌대요. 수업중 밖에서 들어보면 우렁차게 잘 대답 하더라구요. 수업 마치면 Homework가 있다고 끝나자마자 아주 오리고 붙이고 바쁘네요 일단 어른이 봐도 수업자료가 아주 재밌어보여요 저희 아이는 숙제가 끝난 후에도 자료를 가지고 게임하듯이 놀더라구요.</p>
+	                    </div>
+	                    <div class="review_item">
+	                        <div class="review_tit">
+	                            <div class="img">
+	                                <img src="/pon/common/image/review_ca2.svg" alt="">
+	                            </div>
+	                            <h5>J***</h5>
+	                            <span>10세 여아 부모님</span>
+	                        </div>
+	                        <p>저희 아이는 국제학교를 다니고 있어서 아이를 위한 수업을 찾다가 듣게 되었는데 너무 만족합니다 활기차고 노련한 수업이였어요^^ 아이들과 소통해주시는 센스있는 선생님입니다 아이도 너무 재미있었다고 즐거워 했어요 다른 수업들도 꼭 다시 듣고 싶어요! 🥰</p>
+	                    </div>
+	                    <div class="review_item">
+	                        <div class="review_tit">
+	                            <div class="img">
+	                                <img src="/pon/common/image/review_ca3.svg" alt="">
+	                            </div>
+	                            <h5>남**</h5>
+	                            <span>8세 여 아 부모님</span>
+	                        </div>
+	                        <p>정말 이 가격이 맞나요? 너무너무 좋았어요 영어로 교과목을 배우다니. 선생님이며 수업 자료며 커리큘럼이며 퀄리티도 너무 좋구요 아이들 흥미를 유발하는 자료들까지~ 수업 수준 너무 좋았어요❤️ 온라인 수업중 최고였어요~ 당장 다른 수업도 등록 해야겠어요</p>
+	                    </div>
+	                    <div class="review_item review_item_mb">
+	                        <div class="review_tit">
+	                            <div class="img">
+	                                <img src="/pon/common/image/review_ca4.svg" alt="">
+	                            </div>
+	                            <h5>A***</h5>
+	                            <span>7세 여아 부모님</span>
+	                        </div>
+	                        <p>아이가 전해달래요"Thank you so much for today's lesson! I had so much fun. I would like to see you again." 저희 아이같은 리터니들에게 꼭 필요한 수업 과정같아요 국내에선 접하기 힘든 수업이라 넘 만족해요</p>
+	                    </div>
+	                    <div class="review_item review_item_mb">
+	                        <div class="review_tit">
+	                            <div class="img">
+	                                <img src="/pon/common/image/review_ca5.svg" alt="">
+	                            </div>
+	                            <h5>박***</h5>
+	                            <span>9세 여아 부모님</span>
+	                        </div>
+	                        <p>외국인 학교 재학중이고 영어가 모국어인 아이입니다. 엄마 입장에서 너무 탐나고 아끼는 수업입니다. 우리아이만 알고싶은^^ 자체적인 커리큘럼이 있다는 점과 정통 미국식 교육의 색이 강하고 확실한 수업인 점이 가장 마음에 듭니다.</p>
+	                    </div>
+	                    <div class="review_item review_item_mb">
+	                        <div class="review_tit">
+	                            <div class="img">
+	                                <img src="/pon/common/image/review_ca6.svg" alt="">
+	                            </div>
+	                            <h5>최**</h5>
+	                            <span>8세 남아 부모님</span>
+	                        </div>
+	                        <p>열정적으로 수업해 주셔서 고맙습니다 제이든이 정말 좋아했어요! 수업 끝나고 배운것을 엄마에게 신나서 알려주네요^^ 남자아이고 활발한 아이라 오래 앉아있기가 힘든데 1시간 꼼짝 않고 집중하더라구요 아이가 만족하니 엄마는 대만족입니다!</p>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="sec06_bg">
+	                <img src="/pon/common/image/sec06_bg.png">
+	            </div>
+	        </section>
+	        <section class="sec sec07">
+	            <img class="sec07_bg_pc" src="/pon/common/image/sec07_bg.png" alt="">
+	            <img class="sec07_bg_mb" src="/pon/common/image/mb_sec07_bg.png" alt="">
+	            <div class="sec07_info">
+	                <h1>세상에 없던 우리 아이를 위한 맞춤수업 <strong>PIONEER KIDS</strong> </h1>
+	            </div>
+	        </section>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer_top">
+            <div class="footer_logo">
+                PIONEER KIDS
+            </div>
+            <ul class="footer_link">
+                <li>
+                    <a href="#">회사소개</a>
+                </li>
+                <li>
+                    <a href="#">1:1 문의</a>
+                </li>
+                <li>
+                    <a href="#">이용약관</a>
+                </li>
+                <li>
+                    <a href="#">개인정보처리방침</a>
+                </li>
+            </ul>
+        </div>
+        <div class="footer_info">
+            <div class="txt_wrap">
+                <span>PIONEER KIDS LLC  </span>
+                <span>주소 : 미국 버지니아 센터빌, 20121 </span>
+                <span>대표 : 노빈</span>
+            </div>
+            <div class="txt_wrap">
+                <span>사업자등록번호 : 92-1451459 </span>
+                <span>개인정보관리책임자 : 노빈  </span>
+                <span>전화 : 571-451-8210 </span>
+                <span>이메일 : admin@mypsel.com</span>
+            </div>
+            <div class="txt_wrap">
+                <span>PIONEER KIDS LLC ALL RIGHTS RESERVED.</span>
+            </div>
+        </div>
+    </footer>
+    <div class="chatWrap">
+        <div class="chat_box">
+            <div class="chat_top">
+                <div class="chat_top_box">
+                    <div class="chat_logo">
+                        <img src="/pon/common/image/logo.svg" alt="">
+                    </div>
+                    <div class="chat_inquiry">
+                        <button>문의하기</button>
+                    </div>
+                </div>
+            </div>
+            <div class="chat_content">
+                <div class="tabcontent">
+                    <div id="tab01">
+                        <div class="chat_form_box">
+                            <div class="chat_tit_form">
+                                <input type="text" placeholder="제목">
+                            </div>
+                            <div class="chat_disc_form">
+                                <textarea name="" id="" cols="30" rows="10" placeholder="내용"></textarea>
+                            </div>
+                            <div class="send_btn">
+                                <button>보내기</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab02">area2</div>
+                    <div id="tab03">area3</div>
+                  </div>
+            </div>
+            <div class="chat_nav">
+                <div class="tab">
+                    <ul class="tabnav">
+                      <li>
+                        <a href="#tab01">
+                            <div class="chat_nav_ico ">
+                                <img class="" src="/pon/common/image/home_ico.svg" alt="">
+                                <img class="" src="/pon/common/image/home_ico_active.svg" alt="">
+                            </div>
+                            <span>문의하기</span>
+                        </a>
+                        </li>
+                        <li>
+                            <a href="#tab02">
+                                <div class="chat_nav_ico ">
+                                    <img class="" src="/pon/common/image/chat_ico.svg" alt="">
+                                    <img class="" src="/pon/common/image/chat_ico_active.svg" alt="">
+                                </div>
+                                <span>내 문의내역</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#tab03">
+                                <div class="chat_nav_ico ">
+                                    <img class="" src="/pon/common/image/gear_ico.svg" alt="">
+                                    <img class="" src="/pon/common/image/gear_ico_active.svg" alt="">
+                                </div>
+                                <span>FAQ</span>
+                        </a>
+                        </li>
+                    </ul>
+                  </div>
+            </div>
+        </div>
+    </div>
+    <div class="chat_close">
+        <img src="/pon/common/image/chat_close.svg" alt="">
+    </div>
+    <div class="inquiry">
+        <img src="/pon/common/image/inquiry.svg" alt="">
+    </div>
+</body>
+</body>
+<!--e: body-->
+<!--S : script -->
+	
+
+<!-- main -->
+<script src="/pon/common/js/main.js"></script>
+
+<script layout:fragment="script">
+    // script 내용 작성
+</script>
+<!--E : script -->
+</html>
