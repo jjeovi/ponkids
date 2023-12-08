@@ -216,14 +216,47 @@
         </div>
         <!--E: 상단 탑 바-->
         <!-- page content -->
-        <th:block layout:fragment="content">
-        </th:block>
+        <div class="right_col" role="main">
+        
+		    <th:block th:if="${currentMenu != null}">
+        	<!-- S : 상단 메뉴 명 -->
+		    <!-- TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림. -->
+		    <div class="title_top">
+		        <h3 th:text="${currentMenu.menuNm}">메뉴명</h3>
+		        <hr class="t_top_line">
+		    </div>
+		    <!-- E : 상단 메뉴 명 -->
+		
+		    <!-- S : 메뉴 상세설명  -->
+		    <div class="div_menu_detail row" th:if="${currentMenu.menuDcSetYn == 'Y'}">
+		        <div class="col-md-12 col-sm-12 ">
+		            <div class="x_panel">
+		                <div class="x_title">
+		                    <h2> [[${currentMenu.menuDc}]]<small>오른쪽 화살표를 클릭하여 상세설명을 보실 수 있습니다.</small></h2>
+		                    <ul class="nav navbar-right panel_toolbox">
+		                        <li><a class="collapse-link"><i class="fa purple fa-chevron-down"></i></a></li>
+		                    </ul>
+		                    <div class="clearfix"></div>
+		                </div>
+		                <div class="x_content" th:utext="${currentMenu.menuDetailDc}" style="display: none;">
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		    <!-- E : 메뉴 상세설명 -->
+		    </th:block>
+		    
+		    <th:block layout:fragment="content">
+		    
+		    </th:block> 
+        </div>
+        
         <!-- /page content -->
 
         <!-- S:푸터 -->
         <footer th:fragment="footer">
             <div class="pull-right">
-                pioneerkids Admin Template by meta</a>
+                <a>pioneerkids Admin Template by meta</a>
             </div>
             <div class="clearfix"></div>
         </footer>
