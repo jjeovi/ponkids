@@ -1,6 +1,6 @@
 package com.meta.ponkids.domain.system.file.controller;
 
-import java.awt.PageAttributes.MediaType;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,11 +11,13 @@ import java.nio.file.Files;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.MediaType;
+
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +32,7 @@ import org.springframework.web.util.UriUtils;
 import com.google.gson.JsonObject;
 import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
 import com.meta.ponkids.domain.system.file.repository.AtchFileDetailRepository;
+import com.meta.ponkids.domain.system.file.service.AtchFileService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,6 +41,8 @@ import lombok.RequiredArgsConstructor;
 public class FileController {
 
 	private final AtchFileDetailRepository atchFileDetailRepository;
+	private final AtchFileService    atchFileService;
+	
 
 	/**
      * methodName    : list
@@ -118,22 +123,63 @@ public class FileController {
 	 * 
 	 */
 	@GetMapping("/fileDownload")
-	public ResponseEntity<Resource> fileDownload(@RequestParam("fileName") String fileName) {
-
+    public ResponseEntity<Resource>  fileDownload(@RequestParam(required = true ) Long atchFileSn,
+			                                     @RequestParam(required = true  ) Long fileSeq,
+			                                     Model model) throws IOException {
+			
 		
-		String originalFileName = fileName;
-		//String encodedOriginalFileName = UriUtils.encode(originalFileName, StandardCharsets.UTF_8);
+        
+        // 파일 정보 가져오기
+        AtchFileDetail atchFileDetail = atchFileDetailRepository.getTarget( atchFileSn,fileSeq );
+        
+        UrlResource resource;
+        
+        try{
+            resource = new UrlResource("file:"+ atchFileDetail.getFileStrePath());
+        }catch (MalformedURLException e){
+          
+            e.getStackTrace();
+            throw new RuntimeException("the given URL path is not valid");
+        }
+        
+        String originalFileName   = atchFileDetail.getOrignlFileNm();
+        //Long fileSize = atchFileDetail.getFileSize();
+        
+        String encodedOriginalFileName = UriUtils.encode(originalFileName, StandardCharsets.UTF_8);
 
-		
-		Resource resource = new FileSystemResource("C:\\uploadFiles\\" + originalFileName);
-
+        String contentDisposition = "attachment; filename=\"" + encodedOriginalFileName + "\"";
+        
+   			  
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,contentDisposition)
+                .body(resource);
 
 	
-		String contentDisposition = "attachment; filename=\"" + originalFileName + "\"";
+	}
+	
+	
+	
+	/**
+	 * methodName : fileDownload 
+	 *       date : 2023-12-09 
+	 *description : 첨부파일 삭제
+	 * 
+	 */
+	@GetMapping("/fileDelete")
+    public  String fileDelete(@RequestParam(required = true ) Long atchFileSn,
+			                @RequestParam(required = true  ) Long fileSeq,
+			                Model model) throws IOException {
+		
+		   atchFileService.deleteFile(atchFileSn,fileSeq);
+		   
+		   model.addAttribute("resultMsg", "정상적으로 파일이 삭제 되었습니다." );
+	       model.addAttribute("moveUrl", "/admin/ntt/modify?nttSn=100051&bbsSeCd=01" );
 
-		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition).body(resource);
+	       return "common/alert";
+	
 	}
 
-	
+    	
 
 }

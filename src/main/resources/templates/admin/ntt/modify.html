@@ -334,24 +334,106 @@ function fnAnswerReplyList( nttReplySn ) {
 }
 
 
-//첨부파일 다운로드
-function fnFileDownload( fileName ){
+//파일 추가시
+$("#file_add").on('click',function(){ $('#multi-add').click(); });
 
+
+var $fileListArr = new Array();
+ var $totSize = 0;
+ var $keyNum = 0;
+ var $limit = 0;
  
- 		$.ajax({
-			url:"/fileDownload",
-	        type: "GET",
-            dataType: "json",
-			data: {fileName : fileName},
-			contentType: "application/json",
-			success : function(res){
-				 alert("파일 다운로드 성공");
-			},
-			error: function(){
-				alert('에러');
-			}
-		});
+$("#multi-add").on('change',function(){
+	var files = $(this)[0].files;
+
+	var fileArr = new Array();
+
+	fileArr = $fileListArr;
+	$limit = $totSize;
+	for(var i = 0 ; i < files.length ; i++){
+		$limit = $limit + files[i].size;
+		if($limit > 20000000){
+			alert("첨부파일 용량은 20MB를 넘길수 없습니다.");
+			return false;
+		}
+	}
+
+	for(var i = 0 ; i < files.length ; i++){
+		 $('#file_table').append("<tr id=file"+ $keyNum +"><td class='txt-c'><button type='button' style='color: #A4A4A4; font-size: large;' class='deleteFile' >&#8861;</button></td>"+
+					"<td>"+ files[i].name +"</td>"+
+					//"<td id='fileSize "+ $keyNum +"'><p class=file"+ $keyNum +">"+ Math.floor(files[i].size / 1000) +" KB</p></td>"+
+					"</tr>");
+		 $keyNum++;
+		 fileArr.push(files[i]);
+		 $totSize = $totSize + files[i].size;
+	}
+
+
+	$fileListArr = new Array();
+	$fileListArr = fileArr;
+	$('#totSize').text("");
+	$('#totSize').text(Math.floor($totSize / 1000000));
+	
+	
+		var fileList = new FormData();
+		for(var i = 0; i < $fileListArr.length ; i++){
+			fileList.append("uploadFile" , $fileListArr[i]);
+			
+		}
+		//$("#multiFile").val(fileList);
+		//alert($("#multiFile").val());
+		
+});
+
+
+//파일 delete
+$(document).on("click" , '.deleteFile', function(){
+	//삭제할 파일의 아이디
+	var DeleteID = $(this).parent().parent().attr('id');
+
+	//삭제하려는 파일의 크기값(텍스트)
+	var DeleteFileSize = $(this).parent().next().next().children('p').text();
+
+	//삭제하는 파일의 크기값(바이트)
+	var fileSizeByteArr = new Array();
+	fileSizeByteArr = DeleteFileSize.split(' ');
+	var fileSize = Number(fileSizeByteArr[0]) * 1000;
+
+	//배열에서 삭제를 위한 번호
+	var DeleteArrNum = DeleteID.substring(DeleteID.length , DeleteID.length -1);
+
+	var fileArr = $fileListArr;
+
+	fileArr.splice(DeleteArrNum , 1);
+	$keyNum = 0
+	$fileListArr = new Array();
+	$('#file_table').children().remove();
+	 $totSize = 0;
+	for(var i = 0 ; i < fileArr.length ; i++){
+
+		 $('#file_table').append("<tr id=file"+ $keyNum +"><td class='txt-c'><button type='button' style='color:  #A4A4A4; font-size: large;' class='deleteFile' >&#8861;</button></td>"+
+					"<td>"+ fileArr[i].name +"</td>"+
+					"<td id='fileSize "+ $keyNum +"'><p class=file"+ $keyNum +">"+ Math.floor(fileArr[i].size / 1000) +" KB</p></td>"+
+					"</tr>");
+		 $keyNum++;
+		 $fileListArr.push(fileArr[i]);
+		 $totSize = $totSize + fileArr[i].size;
+	}
+
+	$limit = $totSize;
+	$('#totSize').text("");
+	$('#totSize').text(Math.floor($totSize / 1000000));
+
+});
+
+function fnDelFile(fileSeq){
+
+			fileDelList.append("uploadFile" ,fileSeq);
+			
+		
+		$("#multiFile").val(fileDelList);
 }
+
 
 </script>
 
@@ -437,40 +519,35 @@ function fnFileDownload( fileName ){
                          </div>
                          
                           <div class="field item form-group">
-                             <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일</label>
-                               <div class="upload-thumb-wrap">
-								   <table  th:if = "${targetDto.cnAtchFileSn != null}">
-									<thead>
-										<tr>
-											<th>No</th>
-											<th>첨부파일명</th>
-											<th>다운로드</th>
-											<th>삭제</th>
-										</tr>
-									</thead>   
-								    <tr  th:if = "${!atchFileList.isEmpty()}" th:each=" data : ${atchFileList} ">
-										<td th:text="${dataStat.index }"></td>
-					                    <td th:text="${data.orignlFileNm}"></td>
-					                    <td class='txt-c'>
-										   <span class="badge badge-dark" style="cursor:pointer"  ><a th:onclick="fnFileDownload([[${data.streFileNm}]]);">다운로드</a></span>
-										</td>	
-					                    <td class='txt-c'>
-											<span class="badge badge-dark" style="cursor:pointer"  ><a onclick="fnFileDownload:fnReReplyArea();">삭제</a></span>
-										</td>	
-					               </tr>
-							      </table>
+                             <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일 목록</label>
+                               <div class="upload-thumb-wrap" th:if = "${targetDto.cnAtchFileSn != null}" >
+								    <input type="hidden" id="cnAtchFileSn" name="cnAtchFileSn"    th:value="${targetDto.cnAtchFileSn}">
+								    <div  th:if = "${!atchFileList.isEmpty()}" th:each=" data : ${atchFileList} ">
+								         <span th:text="${data.orignlFileNm}"></span>
+								         <span class="badge badge-dark" style="cursor:pointer" ><a  th:href="@{/fileDownload(atchFileSn=${data.AtchFileDetailPk.atchFileSn}, fileSeq=${data.AtchFileDetailPk.fileSeq})}">다운로드</a></span>
+								         <span class="badge badge-dark" style="cursor:pointer"  ><a  th:href="@{/fileDelete(atchFileSn=${data.AtchFileDetailPk.atchFileSn}, fileSeq=${data.AtchFileDetailPk.fileSeq})}">삭제</a></span>
+					                </div>
+					                
                                </div>
-                               
-                              <br/>
-                               <div class="col-md-6 col-sm-6">
-								  <table  id= "file_table">
+                                <div lass="upload-thumb-wrap"  th:if = "${targetDto.cnAtchFileSn == null}" >
+								        <p class="card-text">
+						                  <span>첨부파일이 없습니다.</span> 
+					                      </p>
+						
+					                </div>
+                          </div>
+                        <div class="field item form-group">
+							   <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일 추가</label>
+                             <div class="col-md-6 col-sm-6" style="border: 1; border-color: blueviolet;">
+ 								  <table  id= "file_table" >
 								 </table>
-								 <span  id= "totSize"></span>
-								 <input type="file" id="multi-add" class="btn-add"   name="multiFile" multiple style="display: none;">
+								 
+						
+								 <input type="file" id="multi-add" class="btn-add"  value="선택된 파일 없음"  name="multiFile" multiple style="display: none;">
 					             <button type="button" class="btn-add" id="file_add">파일추가</button>
-								 <input type="hidden"   name="fileList"  id="fileList">
+								
                             </div>
-                          </div>   
+					    </div>   
    
                         <div class="ln_solid"></div>
                         <!-- 저장버튼 -->

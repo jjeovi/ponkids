@@ -175,32 +175,28 @@ public class AtchFileService {
 	 * description    : 다중 파일 생성 및 db 저장
 	 */
 	@Transactional
-	public Long listSave(List<MultipartFile> multiFileList) throws IOException {
+	public Long multifileSave(List<MultipartFile> multiFileList ,Long cnAtchFileSn) throws IOException {
 		// 파일 save 
 		// 1. 물리업로드 (hardUpload)   : 지정된 경로에 파일 저장
 		// 2. 소프트업로드 (softUpload)  : DB에 파일정보 저장
-
- 		String root = "C:\\uploadFiles\\";	//저장될 외부 파일 경로
- 		
- 		File fileCheck = new File(root);
- 		
- 		if(!fileCheck.exists()) fileCheck.mkdirs();
- 		
- 		
- 		List<Map<String, String>> fileList = new ArrayList<>();
- 		
-		// 2. 소프트업로드 (softUpload)  : DB에 파일정보 저장
 		// ------------------------------------------------
 
-//		String contentType = file.getContentType();
-		AtchFile newAtchFile = atchFileRepository.save(new AtchFile());	// 신규 파일 생성
+ 		File fileCheck = new File(UPLOAD_PATH);
+ 		if(!fileCheck.exists()) fileCheck.mkdirs();
+ 		
+ 		List<Map<String, String>> fileList = new ArrayList<>();
+
+ 		String newAtchFileYn = "N"; // 신규파일 여부
+ 		if(cnAtchFileSn == null) {
+ 			AtchFile newAtchFile = atchFileRepository.save(new AtchFile());	// 신규 파일 생성
+ 			cnAtchFileSn = newAtchFile.getAtchFileSn();
+ 			newAtchFileYn = "Y";
+ 		}
 		
 		// atchFileDetailSaveDto 생성
 		AtchFileDetailSaveDto atchFileDetailSaveDto = new AtchFileDetailSaveDto();
 		
-		
 		// atchFileDetailSaveDto 항목 setting
- 		
  		for(int i = 0; i < multiFileList.size(); i++) {
  			String originFile = multiFileList.get(i).getOriginalFilename();
  			String ext = originFile.substring(originFile.lastIndexOf("."));
@@ -213,8 +209,14 @@ public class AtchFileService {
  			
  			fileList.add(map);
  			
- 			atchFileDetailSaveDto.setAtchFileSn(newAtchFile.getAtchFileSn());	// atchFileDetail > atchFileSn		첨부파일일련번호
- 			atchFileDetailSaveDto.setFileSeq((long)i+1);					    // atchFileDetail > fileSeq			파일순번
+ 			atchFileDetailSaveDto.setAtchFileSn(cnAtchFileSn);	                    // atchFileDetail > atchFileSn		첨부파일일련번호
+ 			
+ 			if(newAtchFileYn == "Y") {
+ 			       atchFileDetailSaveDto.setFileSeq((long)i+1);					    // atchFileDetail > fileSeq			파일순번
+ 			} else {
+ 	 			atchFileDetailSaveDto.setFileSeq(atchFileDetailRepository.maxFileSeq(cnAtchFileSn));  
+ 			}
+ 			
  			atchFileDetailSaveDto.setFileStrePath(getFullPath(changeFile));		// atchFileDetail > fileStrePath	파일저장경로
  			atchFileDetailSaveDto.setStreFileNm(changeFile);					// atchFileDetail > streFileNm		저장파일이름
  			atchFileDetailSaveDto.setOrignlFileNm(originFile);				    // atchFileDetail > orignlFileNm	원파일명
@@ -233,7 +235,7 @@ public class AtchFileService {
  		// 파일업로드
  		try {
  			for(int i = 0; i < multiFileList.size(); i++) {
- 				File uploadFile = new File(root + "\\" + fileList.get(i).get("changeFile"));
+ 				File uploadFile = new File(UPLOAD_PATH + "\\" + fileList.get(i).get("changeFile"));
  				multiFileList.get(i).transferTo(uploadFile);
  			}
  			
@@ -243,7 +245,7 @@ public class AtchFileService {
  			System.out.println("다중 파일 업로드 실패 ㅠㅠ");
  			// 만약 업로드 실패하면 파일 삭제
  			for(int i = 0; i < multiFileList.size(); i++) {
- 				new File(root + "\\" + fileList.get(i).get("changeFile")).delete();
+ 				new File(UPLOAD_PATH + "\\" + fileList.get(i).get("changeFile")).delete();
  			}
  			
  			
@@ -252,7 +254,33 @@ public class AtchFileService {
  		
 		
 		
-		return newAtchFile.getAtchFileSn();
+		return cnAtchFileSn;
 	
 	}
+	
+	
+	
+	
+	
+	/**
+	 * methodName    : delete
+	 * date           : 11/21/23
+	 * description    : 파일 삭제 ( 서버상의 파일을 물리적 삭제 처리 + db 정보 삭제 )
+	 */
+	@Transactional
+	public void deleteFile( Long atchFileSn , Long fileSeq) throws EmptyResultDataAccessException {
+		
+
+		
+		try {
+			// DB상의 파일 삭제
+			atchFileDetailRepository.deleteByAtchFileDetailPk(atchFileSn,fileSeq);
+			//atchFileDetailRepository.deleteByAtchFileDetailPk_AtchFileSn(atchFileSn);
+			//모든 파일 다 삭제시 부모 테이블도 삭제 
+			//atchFileRepository.deleteById( atchFileSn );
+		} catch (EmptyResultDataAccessException e) {
+			log.info("error 발생", e);
+		}
+	}
+	
 }

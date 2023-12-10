@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.meta.ponkids.domain.system.file.entity.QAtchFileDetail.atchFileDetail;
+import static com.meta.ponkids.domain.system.ntt.entity.QNttReply.nttReply;
 
 @Repository
 @RequiredArgsConstructor
@@ -40,4 +41,22 @@ public class AtchFileDetailRepositoryImpl implements AtchFileDetailRepositoryCus
                 .where( atchFileDetail.atchFileDetailPk.atchFileSn.eq( atchFileSn ))
                 .fetch();
     }
+    
+    
+    // 댓글 순번 + 1
+    public Long maxFileSeq(Long atchFileSn) {
+    	Long fileSeq = query.select(atchFileDetail.atchFileDetailPk.fileSeq.max().coalesce((long) 0))
+    			     .from(atchFileDetail) 
+    			     .where(
+    			    		 atchFileDetail.atchFileDetailPk.atchFileSn.eq( atchFileSn ) )
+    			   .fetchOne();
+
+    	fileSeq= fileSeq +1;
+    	
+    	return fileSeq;
+    	
+    	
+    
+    }
+    
 }

@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.meta.ponkids.domain.system.bbs.service.BbsService;
 import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
+import com.meta.ponkids.domain.system.file.repository.AtchFileDetailRepository;
 import com.meta.ponkids.domain.system.file.service.AtchFileDetailService;
 import com.meta.ponkids.domain.system.file.service.AtchFileService;
 import com.meta.ponkids.domain.system.ntt.dto.NttListDto;
@@ -55,6 +56,7 @@ public class NttController {
    private final NttReplyService nttReplyService;
    private final AtchFileService atchFileService;
    private final AtchFileDetailService atchFileDetailService;
+   private final AtchFileDetailRepository  atchFileDetailRepository;
 
    
    
@@ -148,7 +150,8 @@ public class NttController {
         
         // 첨부파일  존재시 파일 저장
         if(!multiFileList.isEmpty()){
-        	nttSaveReqDto.setCnAtchFileSn(atchFileService.listSave(multiFileList));	// 파일 save (파일여러개 ) 
+        	
+        	nttSaveReqDto.setCnAtchFileSn(atchFileService.multifileSave(multiFileList,null));	// 파일 save (파일여러개 ) 
         }
     	
     	// save
@@ -197,11 +200,13 @@ public class NttController {
       	  model.addAttribute( "replyList", replyList );
        }
       
+     // List<AtchFileDetail>  atchFileList = null;
       //첨부파일 존재시 
       if(targetDto.getCnAtchFileSn() != null) {
-    	 List<AtchFileDetail>  atchFileList = atchFileDetailService.getList(targetDto.getCnAtchFileSn());
-         model.addAttribute("atchFileList", atchFileList);
+    	  List<AtchFileDetail>  atchFileList = atchFileDetailService.getList(targetDto.getCnAtchFileSn());
+          model.addAttribute("atchFileList", atchFileList);
       }
+
       
       // 조회수 업데이트 
       nttService.update(nttSn ,request);
@@ -230,28 +235,52 @@ public class NttController {
     @PostMapping(BASIC_PATH + "/update")
     public String update(
     		@RequestParam("file") MultipartFile files,
-    		@ModelAttribute  NttModDto modDto, HttpServletRequest request
-            ,
+    	    @RequestParam("multiFile") List<MultipartFile> multiFileList,
+    		@ModelAttribute  NttModDto modDto, HttpServletRequest request,
     		Model model ) throws IOException {
     	
-  	    // 첨부파일 존재시 파일 저장
-        if(!files.isEmpty()){
-        	 // 기존에 첨부파일 있을시 삭제
-            if( modDto.getAtchFileSnOri() != null ) {
-                atchFileService.delete(modDto.getAtchFileSnOri());
-            }
+  	    // 썸네일 존재시 파일 저장
+      //  if(!files.isEmpty()){
+        	 // 기존에 썸네일 파일 있을시 삭제
+           // if( modDto.getAtchFileSnOri() != null ) {
+               // atchFileService.delete(modDto.getAtchFileSnOri());
+            //}
             // 첨부파일 저장
-        	modDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 ) 
+        	//modDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 ) 
 
-        } else {
-        	 // 첨부파일 존재하지않을 때
-            // 기존 첨부파일이 있었는데 삭제됬다면 삭제처리
-            if( modDto.getAtchFileSnOri()!= null && modDto.getAtchFileSn() == null ) {
-                atchFileService.delete(modDto.getAtchFileSnOri());
-                modDto.setAtchFileSn( null );
+       // } else {
+        	 // 썸네일 존재하지않을 때
+            // 기존 썸네일 있었는데 삭제됬다면 삭제처리
+         //   if( modDto.getAtchFileSnOri()!= null && modDto.getAtchFileSn() == null ) {
+              //  atchFileService.delete(modDto.getAtchFileSnOri());
+               // modDto.setAtchFileSn( null );
+           // }
+         // }
+        
+        Long cnAtchFileSn = modDto.getCnAtchFileSn();
+     	
+  	    // 첨부파일  존재시 파일 저장
+        if( cnAtchFileSn != null){ // 기존 첨부파일 있을시
+        	 // 첨부파일  존재시 파일 저장
+        	 if(  multiFileList.get(0).getSize() != 0){
+            	atchFileService.multifileSave(multiFileList,cnAtchFileSn);	// 파일 save (파일여러개 ) + 추가 저장
+            } else {
+            	// 기존 첨부파일 모두 삭제 됬을 경우?
+              	List<AtchFileDetail>  atchFileList = atchFileDetailService.getList(cnAtchFileSn);
+                if(atchFileList.isEmpty()) {
+                	atchFileDetailRepository.deleteByAtchFileDetailPk_AtchFileSn(cnAtchFileSn); // 부모 테이블 삭제 처리
+                   	modDto.setCnAtchFileSn(null);	// 파일 save (파일여러개 ) 
+                }
             }
-          }
-    	
+
+        } else { //기존 첨부파일 없을시 신규로 추가
+        	
+            // 첨부파일  존재시 파일 저장
+        	 if(  multiFileList.get(0).getSize() != 0){
+            	modDto.setCnAtchFileSn(atchFileService.multifileSave(multiFileList,null));
+            }
+  
+        }
     	  // 게시물 업데이트
     	   nttService.nttUpdate(modDto,request);
     	   
