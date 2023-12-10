@@ -60,7 +60,7 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
 				                                  )).from(ntt)
 				                         .where(
 	                                            eqOption( nttListDto.getSchOption(), nttListDto.getSchCntn()),
-	                                            eqBbsSnOption(nttListDto.getBbsSn())
+	                                             ntt.bbsSn.eq( nttListDto.getBbsSn())
 	                                            )
 				                         .orderBy( ntt.nttSn.desc() )
 				                         .offset( pageable.getOffset() )
@@ -72,7 +72,7 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
 	                .from(ntt)
 	                .where(
 	 	                   eqOption( nttListDto.getSchOption(), nttListDto.getSchCntn() ),
-	 	                   eqBbsSnOption(nttListDto.getBbsSn())
+	 	                  ntt.bbsSn.eq( nttListDto.getBbsSn()) 
 	 	                );
 	             
 	    	return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
@@ -81,18 +81,7 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
    
     
     // -------------------------------- WHERE 검색 옵션 setting --------------------------------
-    private BooleanExpression eqNttSnOption( Long nttSn) {
-        return  ntt.nttSn.eq( nttSn );
-    }
-    
-    private BooleanExpression eqBbsSnOption( Long bbsSn) {
-        return  ntt.bbsSn.eq( bbsSn );
-    }
-    
-    private BooleanExpression eqNoticeSetYnOption( String noticeSetYn) {
-    	return  ntt.noticeSetYn.eq( noticeSetYn );
-    }
-    
+
     private BooleanExpression eqOption(String schOption, String schCntn){
         // 검색 옵션  A : 아이디 , B : 이름
         if (StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn )){
@@ -107,7 +96,7 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
     	int number = query.select(ntt.nttRdcnt.max().coalesce(0))
     			           .from(ntt)
     			           .where(
-    			    		       eqNttSnOption( nttSn )
+    			    		       ntt.nttSn.eq( nttSn )
     		                      )
     			           .fetchOne();
 
@@ -122,7 +111,7 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
     	int number = query.select(ntt.nttSeq.max().coalesce(0))
     			     .from(ntt)
     			     .where(
-    			    		 eqBbsSnOption( bbsSn )
+    			    		   ntt.bbsSn.eq( bbsSn ) 
     		                )
     			   .fetchOne();
 
@@ -138,7 +127,7 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
     	int count = query.select(ntt.nttRdcnt.max().coalesce(0))
 			     .from(ntt)
 			     .where(
-			    		 eqBbsSnOption( bbsSn )
+			    		  ntt.bbsSn.eq( bbsSn ) 
 		                )
 			   .fetchOne();
 
@@ -163,8 +152,8 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
 										                 ntt.regDt
 													     ))
   			                                         .from(ntt)
-  			                                         .where( eqBbsSnOption(bbsSn) ,
-  			                                                 eqNoticeSetYnOption("Y"))
+  			                                         .where(  ntt.bbsSn.eq( bbsSn ) ,
+  			                                        		  ntt.noticeSetYn.eq( "Y" )  )
   			                                         .orderBy(ntt.noticeSeq.desc())
   			                                         .fetch();
   	  

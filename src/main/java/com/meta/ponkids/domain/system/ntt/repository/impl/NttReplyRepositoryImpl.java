@@ -42,7 +42,7 @@ public class NttReplyRepositoryImpl    {
     	int number = query.select(nttReply.nttReplySeq.max().coalesce(0))
     			     .from(nttReply)
     			     .where(
-    			    		 eqNttSnOption( nttSn )
+    			    		 nttReply.nttSn.eq( nttSn )
     		                )
     			   .fetchOne();
 
@@ -53,23 +53,7 @@ public class NttReplyRepositoryImpl    {
     	
     
     }
-    
 
-    
-    // -------------------------------- WHERE 검색 옵션 setting --------------------------------
-    private BooleanExpression eqNttSnOption( Long nttSn) {
-        return  nttReply.nttSn.eq( nttSn );
-    }
-    
-    private BooleanExpression eqStepOption(int step) {
-        return  nttReply.step.eq(step);
-    }
-    
-    
-    private BooleanExpression eqParntsReplySnOption( Long nttReplySn) {
-        return  nttReply.parntsReplySn.eq( nttReplySn );
-    }
- 
 	  // 댓글 목록
       public List<NttReplyListDto> getList(Long nttSn) {
 	  
@@ -86,7 +70,8 @@ public class NttReplyRepositoryImpl    {
   													               nttReply.delYn
   													               ))
 			                                            .from(nttReply)
-			                                            .where( eqNttSnOption( nttSn ), eqStepOption(1))
+			                                            .where( nttReply.nttSn.eq( nttSn ),
+			                                            		nttReply.step.eq(1))
 			                                            .orderBy(nttReply.nttReplySeq.desc())
 			                                            .fetch();
 	  
@@ -113,7 +98,7 @@ public class NttReplyRepositoryImpl    {
   													              nttReply.delYn
 													             ))
 			                                         .from(nttReply)
-			                                         .where( eqParntsReplySnOption(nttReplySn))
+			                                         .where( nttReply.parntsReplySn.eq(nttReplySn))
 			                                         .orderBy(nttReply.nttReplySeq.desc())
 			                                         .fetch();
 	  

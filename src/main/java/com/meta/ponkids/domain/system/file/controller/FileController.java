@@ -8,7 +8,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.http.MediaType;
@@ -24,6 +27,8 @@ import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,7 +37,9 @@ import org.springframework.web.util.UriUtils;
 import com.google.gson.JsonObject;
 import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
 import com.meta.ponkids.domain.system.file.repository.AtchFileDetailRepository;
+import com.meta.ponkids.domain.system.file.service.AtchFileDetailService;
 import com.meta.ponkids.domain.system.file.service.AtchFileService;
+import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,8 +47,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FileController {
 
-	private final AtchFileDetailRepository atchFileDetailRepository;
-	private final AtchFileService    atchFileService;
+	
+   private final AtchFileService    atchFileService;
+   private final AtchFileDetailService atchFileDetailService;
+   private final AtchFileDetailRepository atchFileDetailRepository;
 	
 
 	/**
@@ -126,8 +135,6 @@ public class FileController {
     public ResponseEntity<Resource>  fileDownload(@RequestParam(required = true ) Long atchFileSn,
 			                                     @RequestParam(required = true  ) Long fileSeq,
 			                                     Model model) throws IOException {
-			
-		
         
         // 파일 정보 가져오기
         AtchFileDetail atchFileDetail = atchFileDetailRepository.getTarget( atchFileSn,fileSeq );
@@ -136,6 +143,7 @@ public class FileController {
         
         try{
             resource = new UrlResource("file:"+ atchFileDetail.getFileStrePath());
+        
         }catch (MalformedURLException e){
           
             e.getStackTrace();
@@ -143,8 +151,6 @@ public class FileController {
         }
         
         String originalFileName   = atchFileDetail.getOrignlFileNm();
-        //Long fileSize = atchFileDetail.getFileSize();
-        
         String encodedOriginalFileName = UriUtils.encode(originalFileName, StandardCharsets.UTF_8);
 
         String contentDisposition = "attachment; filename=\"" + encodedOriginalFileName + "\"";
@@ -161,24 +167,26 @@ public class FileController {
 	
 	
 	/**
-	 * methodName : fileDownload 
+	 * methodName : fileDelete 
 	 *       date : 2023-12-09 
 	 *description : 첨부파일 삭제
 	 * 
 	 */
-	@GetMapping("/fileDelete")
-    public  String fileDelete(@RequestParam(required = true ) Long atchFileSn,
-			                @RequestParam(required = true  ) Long fileSeq,
-			                Model model) throws IOException {
-		
-		   atchFileService.deleteFile(atchFileSn,fileSeq);
-		   
-		   model.addAttribute("resultMsg", "정상적으로 파일이 삭제 되었습니다." );
-	       model.addAttribute("moveUrl", "/admin/ntt/modify?nttSn=100051&bbsSeCd=01" );
+    @ResponseBody
+    @RequestMapping( value = "/file/fileDelete", method = { RequestMethod.GET } )
+    public List fileDelete( @RequestParam(required = true ) Long atchFileSn,  
+    		                    @RequestParam( required = true ) Long fileSeq,
+    		                    HttpServletRequest request  ) {
 
-	       return "common/alert";
-	
-	}
+    	// 파일 삭제
+    	atchFileService.deleteFile(atchFileSn,fileSeq);
+
+     	List<AtchFileDetail>  atchFileList = atchFileDetailService.getList(atchFileSn);
+    	
+    	return atchFileList;
+    	
+    	
+    }   
 
     	
 

@@ -3,7 +3,7 @@
 <title layout:fragment="title">pioneerkids (Admin-bbs) - 게시물 등록</title>
 
 <script  layout:fragment="script">
-
+	var fileList = new FormData();
 $(document).ready(function() {
 	
 	// 에디터 초기 설정
@@ -374,8 +374,6 @@ $("#multi-add").on('change',function(){
 	$('#totSize').text("");
 	$('#totSize').text(Math.floor($totSize / 1000000));
 	
-	
-		var fileList = new FormData();
 		for(var i = 0; i < $fileListArr.length ; i++){
 			fileList.append("uploadFile" , $fileListArr[i]);
 			
@@ -426,12 +424,44 @@ $(document).on("click" , '.deleteFile', function(){
 
 });
 
-function fnDelFile(fileSeq){
+//파일 삭제 
+function fnfileDelete( atchFileSn, fileSeq ){
 
-			fileDelList.append("uploadFile" ,fileSeq);
-			
-		
-		$("#multiFile").val(fileDelList);
+   $.ajax( {
+      url: "/file/fileDelete",
+      type: "GET",
+      dataType: "json",
+      data: { atchFileSn:  atchFileSn , fileSeq : fileSeq },
+      contentType: "application/json",
+      success: function ( result ) {
+	       
+	       alert("파일이 정상적으로 삭제 되었습니다.")
+	       
+	    
+	      var html  = "";   
+			  html += "<div id='attachFileList'><div lass='upload-thumb-wrap'>";   
+	      
+	        if( result.length > 0 ) { 
+	              html  +=" </div>"
+	           for ( i = 0 ; i < result.length ; i++ ) {
+		           html +='<div>';  
+		           html += '<span>'  + result[i].orignlFileNm +'</span>'; 
+		           html += '<span  class="badge badge-dark"  style="cursor:pointer"> <a href="/fileDownloand?atchFileSn=\'' +  result[i].atchFileDetailPk.atchFileSn + '\'&fileSeq=\''+  result[i].atchFileDetailPk.fileSeq    + '\');">다운로드</a></span>'; 
+		           html += '<span  class="badge badge-dark"  style="cursor:pointer"> <a onclick="javascript:fnfileDelete(\'' +  result[i].atchFileDetailPk.atchFileSn + '\',\'' +  result[i].atchFileDetailPk.fileSeq + '\');" >삭제</a></span>';
+		           html += "</div>";  
+		               
+		               
+	           }	 
+	  
+	        } else {
+				   html += "<p class='card-text'>등록된 답글이 없습니다.</p>";  
+			}
+	      
+	      html  +="</div></div>"
+	      alert(html);
+		 $("#attachFileDiv").html(html); // 답글목록 셋팅
+      }
+    });
 }
 
 
@@ -520,21 +550,23 @@ function fnDelFile(fileSeq){
                          
                           <div class="field item form-group">
                              <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일 목록</label>
-                               <div class="upload-thumb-wrap" th:if = "${targetDto.cnAtchFileSn != null}" >
-								    <input type="hidden" id="cnAtchFileSn" name="cnAtchFileSn"    th:value="${targetDto.cnAtchFileSn}">
-								    <div  th:if = "${!atchFileList.isEmpty()}" th:each=" data : ${atchFileList} ">
-								         <span th:text="${data.orignlFileNm}"></span>
-								         <span class="badge badge-dark" style="cursor:pointer" ><a  th:href="@{/fileDownload(atchFileSn=${data.AtchFileDetailPk.atchFileSn}, fileSeq=${data.AtchFileDetailPk.fileSeq})}">다운로드</a></span>
-								         <span class="badge badge-dark" style="cursor:pointer"  ><a  th:href="@{/fileDelete(atchFileSn=${data.AtchFileDetailPk.atchFileSn}, fileSeq=${data.AtchFileDetailPk.fileSeq})}">삭제</a></span>
-					                </div>
-					                
-                               </div>
-                                <div lass="upload-thumb-wrap"  th:if = "${targetDto.cnAtchFileSn == null}" >
-								        <p class="card-text">
-						                  <span>첨부파일이 없습니다.</span> 
-					                      </p>
-						
-					                </div>
+                               <div id="attachFileList">
+								   <div id="attachFileDiv">
+	                               <div class="upload-thumb-wrap" th:if = "${targetDto.cnAtchFileSn != null}" >
+									    <input type="hidden" id="cnAtchFileSn" name="cnAtchFileSn"    th:value="${targetDto.cnAtchFileSn}">
+									    <div  th:if = "${!atchFileList.isEmpty()}" th:each=" data : ${atchFileList} ">
+									         <span th:text="${data.orignlFileNm}"></span>
+									         <span class="badge badge-dark" style="cursor:pointer" ><a th:href="@{/fileDownload(atchFileSn=${data.AtchFileDetailPk.atchFileSn}, fileSeq=${data.AtchFileDetailPk.fileSeq})}">다운로드</a></span>
+									         <span class="badge badge-dark" style="cursor:pointer" ><a th:onclick="javascript:fnfileDelete([[${data.AtchFileDetailPk.atchFileSn}]],[[${data.AtchFileDetailPk.fileSeq}]]);">삭제</a></span>
+						                </div>
+	                               </div>
+	                                <div lass="upload-thumb-wrap"  th:if = "${targetDto.cnAtchFileSn == null}" >
+									    <p class="card-text">
+							               <span>첨부파일이 없습니다.</span> 
+						                 </p>
+						           </div>
+						           </div>
+					            </div>
                           </div>
                         <div class="field item form-group">
 							   <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일 추가</label>

@@ -124,18 +124,13 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
             else                            return null;
         } else { return null; }
     }
-    
-    private BooleanExpression eqBbsSn( Long bbsSn) {
-    	return bbs.bbsSn.eq( bbsSn );
-    }
-    
 
 	// 댓글 설정여부
 	@Override
 	public String getSetReplySetYn(Long bbsSn) {
     	String replySetYn = query.select(bbs.replySetYn)
     			                 .from(bbs)
-    			                 .where( eqBbsSn( bbsSn ))
+    			                 .where( bbs.bbsSn.eq( bbsSn ))
     			                 .fetchOne();
 
     	return replySetYn;
@@ -147,7 +142,7 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
 	public String getBbsSeCd(Long bbsSn) {
 		String bbsSeCd = query.select(bbs.bbsSeCd)
 			                  .from(bbs)
-			                  .where( eqBbsSn( bbsSn ))
+			                  .where(  bbs.bbsSn.eq( bbsSn ))
 			                  .fetchOne();
 	      
 		return bbsSeCd;
