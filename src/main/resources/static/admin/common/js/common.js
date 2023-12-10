@@ -366,7 +366,7 @@ const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // �
 
             // target 메뉴 setting
             var target = targetData.node.original;
-            var url = "/live/getPossibleRoleListAjax";
+            var url = "/admin/menu/live/getPossibleRoleListAjax";
 
             // 해당 메뉴로 다른권한에서 연동 가능한지 여부 확인 (ajax)
             $.ajax( {
@@ -525,6 +525,7 @@ const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // �
             // updateFormDiv 안의 하단 버튼 모두 숨긴 뒤 수정 버튼만 보이게
             $( "#updateFormDiv" ).find( ".bottom-btn-group .text-center" ).children().hide();
             $( "#updateFormDiv" ).find( ".bottom-btn-group .text-center" ).find( "[name='updateBtn']" ).show();
+            $( "#updateFormDiv" ).find( ".bottom-btn-group .text-center" ).find( "[name='deleteBtn']" ).show();
 
             // nowSelectMenuNm (현재선택메뉴) 초기화
             $( "#updateFormDiv" ).find( ".bottom-btn-group .text-left .nowSelectMenuNm" ).empty();
@@ -618,9 +619,10 @@ const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // �
     function requiredCheckForm( e ) {
 
         var result = true;
-        var frm = $( e ).find( ":input" ).not( ":input[type=hidden]" );
+        var inputList = $( e ).find( ":input" ).not( ":input[type=hidden]" );
+        var form = $( e );
 
-        frm.each( function ( idx, ele ) {
+            inputList.each( function ( idx, ele ) {
             if( ele.type == "text" ) {
                 // ele : text 타입일 때
                 if ( ele.hasAttribute( "required" ) && ele.value == "" ) {
@@ -630,8 +632,9 @@ const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // �
                     return false;
                 };
             } else if ( ele.type == "radio" || ele.type == "checkbox" ) {
+
                 // ele : radio 일 때
-                if ( ele.hasAttribute( "required" ) && !ele.checked ) {
+                if ( ele.hasAttribute( "required" ) && !form.find("[name='" + ele.name + "']").is(":checked") ) {
                     alert( ele.title + "을(를) 입력해주세요." );
                     ele.focus();
                     result = false;

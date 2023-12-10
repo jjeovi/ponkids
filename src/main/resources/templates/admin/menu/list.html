@@ -14,49 +14,43 @@
     $( function () {
 
         // form validator 체크 ( blur , input , change 이벤트시에 유효성을 체크하여 뿌려준다)
-        var validatorInsert = new FormValidator({
+        var validatorInsert = new FormValidator( {
             "events": [ 'blur', 'input', 'change' ]
-        }, document.forms[0]);
+        }, document.forms[0] );
 
         // form validator 체크 ( blur , input , change 이벤트시에 유효성을 체크하여 뿌려준다)
-        var validatorUpdate = new FormValidator({
+        var validatorUpdate = new FormValidator( {
             "events": [ 'blur', 'input', 'change' ]
-        }, document.forms[1]);
+        }, document.forms[1] );
 
         // searchDTO 는 layout.html에 선언
         if ( searchDTO != null &&
             searchDTO.category != undefined &&
             searchDTO.category != null &&
-            searchDTO.category.lv1Sn != null
+            searchDTO.category.lv1Sn != null &&
+            type == typeAdm
         ) {
-            if ( type == typeAdm ) {
-                searchCate( '/live/' + type + '/getMenuListAjax' );
-
-            } else if ( type == typeUser ) {
-
-                // ajax START
-                $.ajax( {
-                    url: '/live/' + type + '/getMenuListAjax',
-                    type: "GET",
-                    dataType: "json",
-                    async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-                    // data: data, // 검색할 값 listDto 안에 categoryDto 변수 추가
-                    contentType: "application/json",
-                    success: function ( result ) {
-                        // callback 함수 연결 -> callback함수로 구현
-                        if ( typeof searchCateCallback === 'function' ) {
-                            searchCateCallback( result );
-                        } else {
-                            console.log( 'searchCateCallback( result ) funnction is required. searchCateCallback( result ) 콜백함수 not found!' );
-                        }
+            searchCate( '/admin/menu/live/' + type + '/getMenuListAjax' );
+        } else if ( type == typeUser ) {
+            // ajax START
+            $.ajax( {
+                url: '/admin/menu/live/' + type + '/getMenuListAjax',
+                type: "GET",
+                dataType: "json",
+                async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+                // data: data, // 검색할 값 listDto 안에 categoryDto 변수 추가
+                contentType: "application/json",
+                success: function ( result ) {
+                    // callback 함수 연결 -> callback함수로 구현
+                    if ( typeof searchCateCallback === 'function' ) {
+                        searchCateCallback( result );
+                    } else {
+                        console.log( 'searchCateCallback( result ) funnction is required. searchCateCallback( result ) 콜백함수 not found!' );
                     }
-                });
-                // ajax END
-
-            }
-
+                }
+            } );
+            // ajax END
         }
-
 
         // 수정 button click event
         $( "[name='updateBtn']" ).click( function () {
@@ -67,11 +61,11 @@
             if ( valid && confirm( "수정하시겠습니까?" ) ) {
 
                 var params = $( "#updateForm" ).serializeArray();
-                url = "/admin/live/menu/updateMenuAjax";
+                url = "/admin/menu/live/" + type + "/updateMenuAjax";
 
                 menuAjax( params, url );
             }
-        })
+        } )
 
         // 등록 button click event
         $( "[name='insertBtn']" ).click( function () {
@@ -81,11 +75,11 @@
 
             if ( valid && confirm( "등록하시겠습니까?" ) ) {
                 var params = $( "#insertForm" ).serializeArray();
-                url = "/admin/live/menu/insertMenuAjax";
+                url = "/admin/menu/live/" + type + "/insertMenuAjax";
 
                 menuAjax( params, url );
             }
-        })
+        } )
     } );
 
     function searchCateCallback( result ) {
@@ -118,12 +112,53 @@
             alert( "권한을 선택해 주세요." );
             return false;
         } else if ( ref == false ) {
-            if ( confirm( "현재 권한에서 등록된 메뉴가 없습니다.\n관리자 메뉴를 시작하기 위한 루트메뉴를 등록하시겠습니까?" ) ) {
-                alert( "오예~" );
-                return false;
+
+            confirmMsg = ""
+
+            if ( type == typeAdm ) {
+                confirmMsg = "현재 권한에서 등록된 메뉴가 없습니다.\n관리자 메뉴를 시작하기 위한 루트메뉴를 등록하시겠습니까?";
+            } else if ( type == typeUser ) {
+                confirmMsg = "등록된 메뉴가 없습니다.\n사용자 메뉴를 시작하기 위한 루트메뉴를 등록하시겠습니까?";
+            }
+
+            if ( type != null ) {
+
+                if ( confirm( confirmMsg ) ) {
+                    // ajax url setting
+
+                    var url = "/admin/menu/live/" + type + "/rootMenuInsertAjax";
+
+                    var params = {};
+
+                    if( type == typeAdm ) {
+
+                        if ( $( ".category-list-area .category-group-box ul li.on" ).length ) {
+
+                            $( ".category-list-area .category-group-box ul li.on" ).each( function ( i, item ) {
+                                if ( i == 0 ) {
+                                    params['roleSnList[0]'] = $( this ).val();
+                                }
+                            } );
+
+                        } else {
+                            alert( "검색 옵션을 선택해주세요." );
+                        }
+                        // data['roleSn'] =
+                    }
+
+                    menuAjax( params, url );
+
+                    // ajax END
+                    return false;
+                } else {
+                    return false;
+                }
+
             } else {
+                alert( "화면타입을 확인해 주세요." )
                 return false;
             }
+
         }
 
         sel = ref.get_selected();
@@ -158,27 +193,30 @@
             menuFormAreaInit( 'C' );
 
             // target 메뉴 setting
-            parentNode.upperMenuSn = parentNode.menuSn;
-            var url = "/live/getPossibleRoleListAjax";
+            if ( type == typeAdm ) {
+                parentNode.upperMenuSn = parentNode.menuSn;
+                var url = "/admin/menu/live/getPossibleRoleListAjax";
 
-            // 해당 메뉴로 다른권한에서 연동 가능한지 여부 확인 (ajax)
-            $.ajax( {
-                url: url,
-                type: "GET",
-                dataType: "json",
-                async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-                data: {
-                    upperMenuSn: parentNode.upperMenuSn,
-                    menuSn: parentNode.menuSn
-                }, // 검색할 값 listDtok 안에 조회 변수 set
-                contentType: "application/json",
-                success: function ( result ) {
-                    // result : 연동가능한 권한들의 list
-                    // 권한 setting 함수
-                    menuRoleSet( result, 'C' );
-                }
-            } );
-            // ajax END
+                // 해당 메뉴로 다른권한에서 연동 가능한지 여부 확인 (ajax)
+                $.ajax( {
+                    url: url,
+                    type: "GET",
+                    dataType: "json",
+                    async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+                    data: {
+                        upperMenuSn: parentNode.upperMenuSn,
+                        menuSn: parentNode.menuSn
+                    }, // 검색할 값 listDtok 안에 조회 변수 set
+                    contentType: "application/json",
+                    success: function ( result ) {
+                        // result : 연동가능한 권한들의 list
+                        // 권한 setting 함수
+                        menuRoleSet( result, 'C' );
+                    }
+                } );
+                // ajax END
+            }
+
         }
     };
 
@@ -199,9 +237,9 @@
         }
 
         if ( confirm( "삭제하시겠습니까?" ) ) {
-            var params = $( "#updateForm" ).serializeArray();
-            url = "/admin/live/menu/deleteMenuAjax";
 
+            var params = $( "#updateForm" ).serializeArray();
+            url = "/admin/menu/live/" + type + "/deleteMenuAjax";
             menuAjax( params, url );
         }
     }
@@ -219,8 +257,31 @@
                 // return type : result.resultMsg (String)
                 alert( result.resultMsg );
 
-                // menulist 재 출력
-                searchCate( '/live/getMenuListAjax' );
+                if ( type == typeAdm ) {
+                    // menulist 재 출력
+                    searchCate( '/admin/menu/live/' + type + '/getMenuListAjax' );
+
+                } else if ( type == typeUser ) {
+
+                    // ajax START
+                    $.ajax( {
+                        url: '/admin/menu/live/' + type + '/getMenuListAjax',
+                        type: "GET",
+                        dataType: "json",
+                        async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+                        // data: data, // 검색할 값 listDto 안에 categoryDto 변수 추가
+                        contentType: "application/json",
+                        success: function ( result ) {
+                            // callback 함수 연결 -> callback함수로 구현
+                            if ( typeof searchCateCallback === 'function' ) {
+                                searchCateCallback( result );
+                            } else {
+                                console.log( 'searchCateCallback( result ) funnction is required. searchCateCallback( result ) 콜백함수 not found!' );
+                            }
+                        }
+                    } );
+                    // ajax END
+                }
             }
         } );
         // ajax END
@@ -264,9 +325,9 @@
                     </div>
                     <div class="btn-group float-right" role="group">
                         <button name="searchCateBtn" type="button" class="btn btn-purple w120p"
-                                onclick="searchCate('/live/${type}/getMenuListAjax');">보기
+                                th:data-search-cate-url="|/admin/menu/live/${type}/getMenuListAjax|"
+                                th:onclick="searchCate( this.getAttribute('data-search-cate-url') )">보기
                         </button>
-                        <!-- 					    <button type="button" class="btn btn-purple w120p">다운로드</button> -->
                     </div>
                 </div>
             </div>
@@ -284,8 +345,8 @@
                 </div>
                 <div class="x_content" id="menuStructure">
                     <th:block th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null )}">
-<!--                        <div id="menuStructureJsTree" th:if="${!resultList != null }">-->
-<!--                        </div>-->
+                        <!--                        <div id="menuStructureJsTree" th:if="${!resultList != null }">-->
+                        <!--                        </div>-->
                         <div class="noData">
                             <span>등록된 메뉴가 없습니다. <br/>메뉴를 등록해주세요.</span>
                         </div>
@@ -318,7 +379,7 @@
                                         class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
                                     <input name="menuNm" id="menuNm" class="form-control" title="메뉴명"
-                                           required="required" data-parsley-minlength="1" />
+                                           required="required" data-parsley-minlength="1"/>
                                 </div>
                             </div>
                             <div class="field item form-group">
@@ -353,7 +414,7 @@
                                 </div>
                             </div>
                             <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴url<span class="required"> * </span></label>
+                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴url</label>
                                 <div class="col-md-8 col-sm-6">
                                     <input name="menuUrl" id="menuUrl" class="form-control"
                                            placeholder="부모메뉴 설정 시 url 설정이 불가능합니다."/>
@@ -364,12 +425,12 @@
                                         class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
-                                        <input type="radio" id="parntsMenuYn1" name="parntsMenuYn" value="Y"
+                                        <input type="radio" id="parntsMenuYn1" name="parntsMenuYn" value="Y" title="부모메뉴여부"
                                                class="join-btn" required/>
                                         <label for="parntsMenuYn1" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
                                                data-toggle-passive-class="btn-default">Y</label>
-                                        <input type="radio" id="parntsMenuYn2" name="parntsMenuYn" value="N"
+                                        <input type="radio" id="parntsMenuYn2" name="parntsMenuYn" value="N" title="부모메뉴여부"
                                                class="join-btn" required/>
                                         <label for="parntsMenuYn2" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
@@ -381,17 +442,17 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="field item form-group">
+                            <div class="field item form-group" th:if="${type == 'adm'}">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명설정여부<span
                                         class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
-                                        <input type="radio" id="menuDcSetYn1" name="menuDcSetYn" value="Y"
+                                        <input type="radio" id="menuDcSetYn1" name="menuDcSetYn" value="Y" title="메뉴설명설정여부"
                                                class="join-btn" required/>
                                         <label for="menuDcSetYn1" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
                                                data-toggle-passive-class="btn-default">Y</label>
-                                        <input type="radio" id="menuDcSetYn2" name="menuDcSetYn" value="N"
+                                        <input type="radio" id="menuDcSetYn2" name="menuDcSetYn" value="N" title="메뉴설명설정여부"
                                                class="join-btn" required/>
                                         <label for="menuDcSetYn2" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
@@ -403,7 +464,7 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="field item form-group">
+                            <div class="field item form-group" th:if="${type == 'adm'}">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명</label>
                                 <div class="col-md-8 col-sm-6">
                                     <input name="menuDc" id="menuDc" class="form-control"/>
@@ -412,7 +473,7 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="field item form-group">
+                            <div class="field item form-group" th:if="${type == 'adm'}">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴상세설명</label>
                                 <div class="col-md-8 col-sm-6">
                                     <textarea rows="15" name="menuDetailDc" id="menuDetailDc"></textarea>
@@ -426,11 +487,13 @@
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">사용여부<span class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
-                                        <input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn" required/>
+                                        <input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn" title="사용여부"
+                                               required/>
                                         <label for="useYn1" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default" >Y</label>
-                                        <input type="radio" id="useYn2" name="useYn" value="N" class="join-btn" required/>
+                                               data-toggle-passive-class="btn-default">Y</label>
+                                        <input type="radio" id="useYn2" name="useYn" value="N" class="join-btn" title="사용여부"
+                                               required/>
                                         <label for="useYn2" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
                                                data-toggle-passive-class="btn-default">N</label>
@@ -441,12 +504,12 @@
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">새창여부<span class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
-                                        <input type="radio" id="newWindowYn1" name="newWindowYn" value="Y"
+                                        <input type="radio" id="newWindowYn1" name="newWindowYn" value="Y" title="새창여부"
                                                class="join-btn" required/>
                                         <label for="newWindowYn1" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
                                                data-toggle-passive-class="btn-default">Y</label>
-                                        <input type="radio" id="newWindowYn2" name="newWindowYn" value="N"
+                                        <input type="radio" id="newWindowYn2" name="newWindowYn" value="N" title="새창여부"
                                                class="join-btn" required/>
                                         <label for="newWindowYn2" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
@@ -458,7 +521,7 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="field item form-group">
+                            <div class="field item form-group" th:if="${type == 'adm'}">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">권한 적용</label>
                                 <div class="col-md-8 col-sm-6 pt_5p">
                                     <div class="possibleRole">
@@ -497,7 +560,8 @@
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴명<span
                                         class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
-                                    <input name="menuNm" class="form-control" title="메뉴명" required="required" data-parsley-minlength="1"/>
+                                    <input name="menuNm" class="form-control" title="메뉴명" required="required"
+                                           data-parsley-minlength="1"/>
                                 </div>
                             </div>
                             <div class="field item form-group">
@@ -513,7 +577,8 @@
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴순번<span class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
-                                    <input name="menuSeq" type="number" class="form-control" title="메뉴순번" required="required" data-parsley-minlength="1" />
+                                    <input name="menuSeq" type="number" class="form-control" title="메뉴순번"
+                                           required="required" data-parsley-minlength="1"/>
                                     <small class="font-gray-dark">
                                         <b>중복 불가</b> 같은 부모경로를 가지고 있는 메뉴들간의 순서입니다. 중복되지 않도록 유의해주세요.
                                     </small>
@@ -522,14 +587,15 @@
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴코드<span class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
-                                    <input name="menuCd" class="form-control" title="메뉴코드" required="required" data-parsley-minlength="1" />
+                                    <input name="menuCd" class="form-control" title="메뉴코드" required="required"
+                                           data-parsley-minlength="1"/>
                                     <small class="font-gray-dark">
                                         <b>유일한 값</b> 이어야 합니다. 다른 메뉴의 코드와 중복 되면 안됩니다.
                                     </small>
                                 </div>
                             </div>
                             <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴url<span class="required"> * </span></label>
+                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴url</label>
                                 <div class="col-md-8 col-sm-6">
                                     <input name="menuUrl" class="form-control" placeholder="부모메뉴 설정 시 url 설정이 불가능합니다."/>
                                 </div>
@@ -539,12 +605,12 @@
                                         class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
-                                        <input type="radio" id="parntsMenuYn3" name="parntsMenuYn" value="Y"
+                                        <input type="radio" id="parntsMenuYn3" name="parntsMenuYn" value="Y" title="부모메뉴여부"
                                                class="join-btn"/>
                                         <label for="parntsMenuYn3" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
                                                data-toggle-passive-class="btn-default">Y</label>
-                                        <input type="radio" id="parntsMenuYn4" name="parntsMenuYn" value="N"
+                                        <input type="radio" id="parntsMenuYn4" name="parntsMenuYn" value="N" title="부모메뉴여부"
                                                class="join-btn"/>
                                         <label for="parntsMenuYn4" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
@@ -556,17 +622,17 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="field item form-group">
+                            <div class="field item form-group" th:if="${type == 'adm'}">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명설정여부<span
                                         class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
-                                        <input type="radio" id="menuDcSetYn3" name="menuDcSetYn" value="Y"
+                                        <input type="radio" id="menuDcSetYn3" name="menuDcSetYn" value="Y" title="메뉴설명설정여부"
                                                class="join-btn"/>
                                         <label for="menuDcSetYn3" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
                                                data-toggle-passive-class="btn-default">Y</label>
-                                        <input type="radio" id="menuDcSetYn4" name="menuDcSetYn" value="N"
+                                        <input type="radio" id="menuDcSetYn4" name="menuDcSetYn" value="N" title="메뉴설명설정여부"
                                                class="join-btn"/>
                                         <label for="menuDcSetYn4" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
@@ -578,7 +644,7 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="field item form-group">
+                            <div class="field item form-group" th:if="${type == 'adm'}">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명</label>
                                 <div class="col-md-8 col-sm-6">
                                     <input name="menuDc" class="form-control"/>
@@ -587,7 +653,7 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="field item form-group">
+                            <div class="field item form-group" th:if="${type == 'adm'}">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴상세설명</label>
                                 <div class="col-md-8 col-sm-6">
                                     <textarea rows="15" name="menuDetailDc"></textarea>
@@ -601,11 +667,11 @@
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">사용여부<span class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
-                                        <input type="radio" id="useYn3" name="useYn" value="Y" class="join-btn"/>
+                                        <input type="radio" id="useYn3" name="useYn" value="Y" class="join-btn" title="사용여부" />
                                         <label for="useYn3" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
                                                data-toggle-passive-class="btn-default">Y</label>
-                                        <input type="radio" id="useYn4" name="useYn" value="N" class="join-btn"/>
+                                        <input type="radio" id="useYn4" name="useYn" value="N" class="join-btn" title="사용여부" />
                                         <label for="useYn4" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
                                                data-toggle-passive-class="btn-default">N</label>
@@ -616,12 +682,12 @@
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">새창여부<span class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
                                     <div class="btn-group radiobox">
-                                        <input type="radio" id="newWindowYn3" name="newWindowYn" value="Y"
+                                        <input type="radio" id="newWindowYn3" name="newWindowYn" value="Y" title="새창여부"
                                                class="join-btn"/>
                                         <label for="newWindowYn3" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
                                                data-toggle-passive-class="btn-default">Y</label>
-                                        <input type="radio" id="newWindowYn4" name="newWindowYn" value="N"
+                                        <input type="radio" id="newWindowYn4" name="newWindowYn" value="N" title="새창여부"
                                                class="join-btn"/>
                                         <label for="newWindowYn4" class="btn btn-outline-purple w100p"
                                                data-toggle-class="btn-primary"
@@ -633,7 +699,7 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="field item form-group">
+                            <div class="field item form-group" th:if="${type == 'adm'}">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">권한 적용</label>
                                 <div class="col-md-8 col-sm-6 pt_5p">
                                     <div class="possibleRole">
@@ -660,6 +726,7 @@
                                 <!-- bottom center area -->
                                 <div class="col-md-8 col-sm-6 text-center">
                                     <button name="updateBtn" type="button" class="btn btn-purple w120p">수정</button>
+                                    <button name="deleteBtn" type="button" class="btn btn-danger ml_10p w120p" onclick="menuDelete();">삭제</button>
                                 </div>
                                 <!-- bottom right area -->
                                 <div class="col-md-2 col-sm-3 text-right">

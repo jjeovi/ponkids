@@ -36,7 +36,7 @@ server :
             enabled : true
     servlet :
         session :
-            persistent : false          # 재기동 해도 스프링 관련 세션 유지.
+            persistent : true          # 재기동 해도 스프링 관련 세션 유지.
             timeout : 3600              # 세션 시간 (60분: 3600 )
 
 #p6spy query logging
@@ -49,17 +49,19 @@ decorator :
 
 key :
     default :
-        admin : adm             # 관리자 화면 기본 변수 key
-        user  : pon             # 사용자 화면 기본 변수 key
+        admin : adm                 # 관리자 화면 기본 변수 key
+        adminRootMenuSn : 100       # 관리자 루트 메뉴sn
+        user  : pon                 # 사용자 화면 기본 변수 key
+        userRootMenuSn  : 200       # 사용자 루트 메뉴sn
     upload :
-        path : C:/upload/       # 업로드 파일 저장 경로 ( 개발용 ) ( window )
+        path : C:/upload/           # 업로드 파일 저장 경로 ( 개발용 ) ( window )
 #        path : /Users/jjeoV/Desktop/jjeoV/2023/pioneerKids/upload/    # 업로드 파일 저장 경로 ( 개발용 ) ( Mac )
     admin :
-        auth : pon              # 로그인 인증용 key
+        auth : pon                  # 로그인 인증용 key
     menuCd :
-        auth : mcd              # 메뉴코드 인증용 key
+        auth : mcd                  # 메뉴코드 인증용 key
         
 upload :
-    path : C:/upload/       # 업로드 파일 저장 경로 ( 개발용 ) ( window )
+    path : C:/upload/               # 업로드 파일 저장 경로 ( 개발용 ) ( window )
         
 ######################################################################################################################

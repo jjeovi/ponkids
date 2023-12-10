@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class MenuSaveDto {
+public class MenuSaveDto extends MenuDto {
 	
 	private Long menuSn;
 	
@@ -45,9 +45,13 @@ public class MenuSaveDto {
 	    
 	private String delYn;           // 삭제여부
 	
+	private String updusrId;            // 수정자 ID
+	
+	private String updusrIp;            // 수정자 IP
+	
 	@Builder
 	public MenuSaveDto( Long menuSn, Long upperMenuSn, String menuNm, String menuCd, String menuUrl, String parntsMenuYn, Long menuSeq,
-			String menuDcSetYn, String menuDc, String menuDetailDc, Long atchFileSn, String useYn, String newWindowYn, String registerId, String registerIp) {
+			String menuDcSetYn, String menuDc, String menuDetailDc, Long atchFileSn, String useYn, String newWindowYn, String registerId, String registerIp, String updusrId, String updusrIp) {
 		this.menuSn = menuSn;
 		this.upperMenuSn = upperMenuSn;
 		this.menuNm = menuNm;
@@ -63,6 +67,8 @@ public class MenuSaveDto {
 		this.newWindowYn = newWindowYn;
         this.registerId = registerId;
         this.registerIp = registerIp;
+		this.updusrId = updusrId;
+		this.updusrIp = updusrIp;
 	}
 	
 	// Dto to Entity 메소드 생성
@@ -83,6 +89,8 @@ public class MenuSaveDto {
 				.newWindowYn(newWindowYn)
 				.registerId( registerId)
                 .registerIp( registerIp)
+				.updusrId( updusrId )
+				.updusrIp( updusrIp )
 				.build();
 	}
 

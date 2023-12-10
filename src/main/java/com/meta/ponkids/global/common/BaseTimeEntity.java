@@ -34,7 +34,7 @@ public abstract class BaseTimeEntity {
     private LocalDateTime regDt;
     
     @Comment( value = "수정일시")
-    @Column(insertable = false)
+//    @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경
     @LastModifiedDate
     private LocalDateTime updtDt;
     

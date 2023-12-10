@@ -1,9 +1,6 @@
 package com.meta.ponkids.domain.system.menu.service;
 
-import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
-import com.meta.ponkids.domain.system.menu.dto.MenuModDto;
-import com.meta.ponkids.domain.system.menu.dto.MenuRoleSaveDto;
-import com.meta.ponkids.domain.system.menu.dto.MenuSaveDto;
+import com.meta.ponkids.domain.system.menu.dto.*;
 import com.meta.ponkids.domain.system.menu.entity.*;
 import com.meta.ponkids.domain.system.menu.repository.MenuRepository;
 import com.meta.ponkids.domain.system.menu.repository.MenuRoleRepository;
@@ -29,8 +26,10 @@ public class MenuService {
     @Transactional
     public MenuSaveDto save( MenuSaveDto saveDto, HttpServletRequest request ) throws IOException {
         
-        saveDto.setRegisterId( "admin@test.com" );                            // Id set
-        saveDto.setRegisterIp( IpUtils.getClientIP( request ) );            // Ip set
+        saveDto.setRegisterId( "admin@test.com" );                         // Id set
+        saveDto.setRegisterIp( IpUtils.getClientIP( request ) );           // Ip set
+        saveDto.setUpdusrId( "admin@test.com"  );
+        saveDto.setUpdusrIp(  IpUtils.getClientIP( request ) );
         
         Menu newMenu = menuRepository.save( saveDto.toEntity() );            // ** save -> save된 정보 newXxx 로 저장
         
@@ -76,7 +75,6 @@ public class MenuService {
                     
                     return menuRepository.getAllList( listDto );
                 }
-                
             } else {
                 // (2) 특정 권한의 메뉴 list
                 
@@ -93,7 +91,6 @@ public class MenuService {
 //                    System.out.println("변경이 감지되지 않았습니다.");
                     return menuRepository.getList( listDto );
                 }
-                
             }
         } else {
             return Collections.emptyList(); // 빈 List<> 생성
@@ -111,46 +108,24 @@ public class MenuService {
         // 같지 않으면, 캐시를 지우고 다시 조회
         
         // 1. 마지막 업데이트 시간. (캐시로 저장)
-        UserMenuHierarchy updtDtMenuCache = menuRepository.findLastUpdtDtUserMenuCache( listDto.getCategory().getLv1Sn() );
+        UserMenuHierarchy updtDtMenuCache = menuRepository.findLastUpdtDtUserMenuCache();
         // 2. 마지막 업데이트 시간 (캐시 저장하지 않음 - 계속 DB 조회)
-        UserMenuHierarchy updtDtMenuNoCache = menuRepository.findLastUpdtDtUserMenuNoCache( listDto.getCategory().getLv1Sn() );
+        UserMenuHierarchy updtDtMenuNoCache = menuRepository.findLastUpdtDtUserMenuNoCache();
         
-        if ( listDto.getCategory().getLv1Sn() == 0 ) {
-            // (1) 전체 메뉴 list
-            
-            if ( menuRenewalCheck( updtDtMenuCache, updtDtMenuNoCache ) ) {
-                // 메뉴 의 수정이 감지 됬을 경우
+        if ( menuRenewalCheck( updtDtMenuCache, updtDtMenuNoCache ) ) {
+            // 메뉴 의 수정이 감지 됬을 경우
 //                    System.out.println("변경 감지했습니다.");
-                
-                // 캐시로 저장된 마지막 업데이트 시간을 갱신한다.
-                menuRepository.findLastUpdtDtUserMenuAgainCache( listDto.getCategory().getLv1Sn() );
-                
-                return menuRepository.getAllListAgain( listDto );
-                
-            } else {
-                // 변경이 없을 때 ( 캐시에 저장된 값 조회 , DB 읽지 않음)
-//                    System.out.println("변경이 감지되지 않았습니다. 혹은 최초 캐시 저장시입니다.");
-                
-                return menuRepository.getAllList( listDto );
-            }
+            
+            // 캐시로 저장된 마지막 업데이트 시간을 갱신한다.
+            menuRepository.findLastUpdtDtUserMenuAgainCache();
+            
+            return menuRepository.getUserMenuListAgain( listDto );
             
         } else {
-            // (2) 특정 권한의 메뉴 list
+            // 변경이 없을 때 ( 캐시에 저장된 값 조회 , DB 읽지 않음)
+//                    System.out.println("변경이 감지되지 않았습니다. 혹은 최초 캐시 저장시입니다.");
             
-            if ( menuRenewalCheck( updtDtMenuCache, updtDtMenuNoCache ) ) {
-                // 메뉴 의 수정이 감지 됬을 경우
-//                    System.out.println("변경 감지했습니다.");
-                
-                // 캐시로 저장된 마지막 업데이트 시간을 갱신한다.
-                menuRepository.findLastUpdtDtUserMenuAgainCache( listDto.getCategory().getLv1Sn() );
-                
-                return menuRepository.getListAgain( listDto );
-            } else {
-                // 변경이 없을 때 ( 캐시에 저장된 값 조회 , DB 읽지 않음)
-//                    System.out.println("변경이 감지되지 않았습니다.");
-                return menuRepository.getList( listDto );
-            }
-            
+            return menuRepository.getUserMenuList( listDto );
         }
     }
     
@@ -205,27 +180,27 @@ public class MenuService {
     }
     
     @Transactional
-    public void menuRoleUpdate( MenuSaveDto saveDto, HttpServletRequest request ) throws IOException {
+    public void menuRoleUpdate( MenuDto menuDto, HttpServletRequest request ) throws IOException {
         
         // (1) tb_menu_role 테이블에 menu_sn 으로 해당되는 권한 모두 지운뒤
         // (2) tb_menu_role 에 modDto.roleSn 에 있는 값들을 모두 insert처리
         
         
         // (1) tb_menu_role 테이블에 menu_sn 으로 해당되는 권한 모두 지운뒤
-        if ( saveDto.getMenuSn() != null )
-            menuRoleRepository.deleteAllByMenuSn( saveDto.getMenuSn() );
+        if ( menuDto.getMenuSn() != null )
+            menuRoleRepository.deleteAllByMenuSn( menuDto.getMenuSn() );
         
         // (2) tb_menu_role 에 modDto.roleSn 에 있는 값들을 모두 insert처리
-        if ( saveDto.getRoleSnList() != null ) {
+        if ( menuDto.getRoleSnList() != null ) {
             List<MenuRole> menuRoleList = new ArrayList<>();
             
-            for ( Long roleSn : saveDto.getRoleSnList() ) {
+            for ( Long roleSn : menuDto.getRoleSnList() ) {
                 MenuRoleSaveDto menuRole = new MenuRoleSaveDto();
                 
                 menuRole.setRegisterId( IpUtils.getClientIP( request ) );
                 menuRole.setRegisterIp( "admin@test.com" );
                 
-                menuRole.setMenuSn( saveDto.getMenuSn() );
+                menuRole.setMenuSn( menuDto.getMenuSn() );
                 menuRole.setRoleSn( roleSn );
                 
                 
@@ -237,35 +212,29 @@ public class MenuService {
     }
     
     @Transactional
-    public void menuRoleUpdate( MenuModDto modDto, HttpServletRequest request ) throws IOException {
+    public void menuRoleRootUpdate( MenuDto menuDto, HttpServletRequest request ) throws IOException {
         
-        // (1) tb_menu_role 테이블에 menu_sn 으로 해당되는 권한 모두 지운뒤
-        // (2) tb_menu_role 에 modDto.roleSn 에 있는 값들을 모두 insert처리
-        
-        
-        // (1) tb_menu_role 테이블에 menu_sn 으로 해당되는 권한 모두 지운뒤
-        if ( modDto.getMenuSn() != null )
-            menuRoleRepository.deleteAllByMenuSn( modDto.getMenuSn() );
+        // (1) tb_menu_role 에 modDto.roleSn 에 있는 값들을 모두 insert처리 . root 메뉴라서 추가만 . 제거는 하지 않음
         
         // (2) tb_menu_role 에 modDto.roleSn 에 있는 값들을 모두 insert처리
-        if ( modDto.getRoleSnList() != null ) {
+        if ( menuDto.getRoleSnList() != null ) {
             List<MenuRole> menuRoleList = new ArrayList<>();
             
-            for ( Long roleSn : modDto.getRoleSnList() ) {
+            for ( Long roleSn : menuDto.getRoleSnList() ) {
                 MenuRoleSaveDto menuRole = new MenuRoleSaveDto();
                 
                 menuRole.setRegisterId( IpUtils.getClientIP( request ) );
                 menuRole.setRegisterIp( "admin@test.com" );
                 
-                menuRole.setMenuSn( modDto.getMenuSn() );
+                menuRole.setMenuSn( menuDto.getMenuSn() );
                 menuRole.setRoleSn( roleSn );
+                
                 
                 menuRoleList.add( menuRole.toEntity() );
             }
             
             menuRoleRepository.saveAll( menuRoleList );
         }
-        
     }
     
     @Transactional

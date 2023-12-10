@@ -92,7 +92,8 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                 .on(		menuRole.menuSn.eq( adminMenuHierarchy.menuSn ) )
                 .where(
                         eqCateLv1( listDto.getCategory()),
-                        eqAdminMenuUseYn( listDto.getUseYn() )
+                        eqAdminMenuUseYn( listDto.getUseYn() ),
+                        adminMenuHierarchy.delYn.eq("N")
                 )
                 .orderBy(	adminMenuHierarchy.hierarchy.asc() )
                 .fetch();
@@ -138,7 +139,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                 .select( new QMenuListDto(
                                 userMenuHierarchy.menuSn
                                 , userMenuHierarchy.menuSn.as( "id" )    // menuSn 과 id 는 같은 값으로 mapping (jstree 의 변수 id를 매핑하기 위한 임시 변수)
-                                , menuRole.roleSn
+                                , Expressions.asString( "0" ).castToNum( Long.class ).as( "roleSn" ) // 0
                                 , userMenuHierarchy.upperMenuSn
                                 , new CaseBuilder()
                                 .when( userMenuHierarchy.upperMenuSn.isNull() ).then( "#" )
@@ -165,12 +166,10 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                                 , userMenuHierarchy.level
                         )
                 )
-                .from( 		menuRole )
-                .leftJoin( 	userMenuHierarchy )    // view : vw_menu_hierarchy
-                .on(		menuRole.menuSn.eq( userMenuHierarchy.menuSn ) )
+                .from( 		userMenuHierarchy )
                 .where(
-                        eqCateLv1( listDto.getCategory()),
-                        eqUserMenuUseYn(listDto.getUseYn())
+                        eqUserMenuUseYn( listDto.getUseYn() ),
+                        userMenuHierarchy.delYn.eq("N")
                 )
                 .orderBy(	userMenuHierarchy.hierarchy.asc() )
                 .fetch();
@@ -184,8 +183,6 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
 //        System.out.println("캐시를 갱신할 때 사용됩니다.");
         return this.getUserMenuList( listDto );
     }
-    
-    
     
     @Override
     public List<MenuListDto> getAllList( MenuListDto listDto ) {
@@ -244,7 +241,8 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                 )
                 .from( 	adminMenuHierarchy )
                 .where(
-                        eqAdminMenuUseYn(listDto.getUseYn())
+                        eqAdminMenuUseYn(listDto.getUseYn()),
+                        adminMenuHierarchy.delYn.eq("N")
                 )
                 .orderBy(
                         adminMenuHierarchy.hierarchy.asc()
@@ -328,7 +326,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
     }
     
     
-    private UserMenuHierarchy findLastUpdtDtUserMenu( long sn ) {
+    private UserMenuHierarchy findLastUpdtDtUserMenu( ) {
         
         UserMenuHierarchy result = query
                 // select
@@ -339,7 +337,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                         userMenuHierarchy.menuSn.eq( menuRole.menuSn ),
                         menuRole.delYn.eq( "N" )
                 )
-                .where( eqRoleSn( sn ),
+                .where(
                         userMenuHierarchy.updtDt.isNotNull()
                 )
                 .orderBy(
@@ -349,18 +347,18 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
     }
     
     @Override
-    public UserMenuHierarchy findLastUpdtDtUserMenuCache( long sn ) {
-        return this.findLastUpdtDtUserMenu(sn);
+    public UserMenuHierarchy findLastUpdtDtUserMenuCache(  ) {
+        return this.findLastUpdtDtUserMenu();
     }
     
     @Override
-    public UserMenuHierarchy findLastUpdtDtUserMenuNoCache( long sn ) {
-        return this.findLastUpdtDtUserMenu(sn);
+    public UserMenuHierarchy findLastUpdtDtUserMenuNoCache( ) {
+        return this.findLastUpdtDtUserMenu();
     }
     
     @Override
-    public UserMenuHierarchy findLastUpdtDtUserMenuAgainCache( long sn ) {
-        return this.findLastUpdtDtUserMenu(sn);
+    public UserMenuHierarchy findLastUpdtDtUserMenuAgainCache( ) {
+        return this.findLastUpdtDtUserMenu();
     }
     
     
@@ -388,7 +386,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
     }
     
     private BooleanExpression eqUserMenuUseYn( String yn ) {
-        return ( StringUtils.hasText(yn)) ? adminMenuHierarchy.useYn.eq( yn ) : null;
+        return ( StringUtils.hasText(yn)) ? userMenuHierarchy.useYn.eq( yn ) : null;
     }
     
     private BooleanExpression eqOption( String schOption, String schCntn ) {
@@ -404,6 +402,4 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
             return null;
         }
     }
-    
 }
-

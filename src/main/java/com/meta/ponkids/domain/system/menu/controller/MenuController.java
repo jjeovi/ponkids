@@ -42,6 +42,12 @@ public class MenuController {
     @Value("${key.default.user}")
     private String TYPE_USER;
     
+    @Value("${key.default.adminRootMenuSn}")
+    private Long ADMIN_ROOT_MENU_SN;
+    
+    @Value("${key.default.userRootMenuSn}")
+    private Long USER_ROOT_MENU_SN;
+    
     @GetMapping( BASIC_PATH + "/{mcd}/{type}/list" )
     public String list( @ModelAttribute MenuListDto listDto,
                         @PathVariable String mcd,
@@ -178,7 +184,7 @@ public class MenuController {
     }
     
     @ResponseBody
-    @GetMapping( "/live/{type}/getMenuListAjax" )
+    @GetMapping( BASIC_PATH + "/live/{type}/getMenuListAjax" )
     public Map<String, Object> getMenuListAjax( @ModelAttribute MenuListDto listDto,
                                                 @PathVariable String type ) {
         // 해당 권한에 맞는 menuList 가져온 뒤 drawMenuTree 로 메뉴를 그린다.
@@ -198,7 +204,7 @@ public class MenuController {
     }
     
     @ResponseBody
-    @GetMapping( "/live/getPossibleRoleListAjax" )
+    @GetMapping( BASIC_PATH + "/live/getPossibleRoleListAjax" )
     public Map<String, Object> getPossibleRoleListAjax( @ModelAttribute MenuListDto listDto ) {
         // 메뉴 수정 시 체크로직
         // 해당 메뉴가 다른 권한에도 연동할 수 있도록
@@ -222,9 +228,10 @@ public class MenuController {
     
     @Transactional
     @ResponseBody
-    @GetMapping( "/admin/live/menu/insertMenuAjax" )
+    @GetMapping( BASIC_PATH + "/live/{type}/insertMenuAjax" )
     public Map<String, Object> insertMenuAjax(
             @ModelAttribute MenuSaveDto saveDto,
+            @PathVariable String type,
             HttpServletRequest request,
             Model model
     ) throws IOException {
@@ -234,9 +241,11 @@ public class MenuController {
         // insert 구현
         saveDto = menuService.save( saveDto, request );
         
-        // 메뉴 권한 부여작업 update ( delete 후 insert )
-        menuService.menuRoleUpdate( saveDto, request );
         
+        if( type.equals(TYPE_ADMIN) ) {
+            // 메뉴 권한 부여작업 update ( delete 후 insert )
+            menuService.menuRoleUpdate( saveDto, request );
+        }
         
         // 메시지 출력 및 url 이동 처리 (ajax)
         Map<String, Object> result = new HashMap<String, Object>();
@@ -246,9 +255,10 @@ public class MenuController {
     
     @Transactional
     @ResponseBody
-    @GetMapping( "/admin/live/menu/updateMenuAjax" )
+    @GetMapping( BASIC_PATH + "/live/{type}/updateMenuAjax" )
     public Map<String, Object> updateMenuAjax(
             @ModelAttribute MenuModDto modDto,
+            @PathVariable String type,
             HttpServletRequest request,
             Model model
     ) throws IOException {
@@ -259,8 +269,10 @@ public class MenuController {
         // update 구현
         menuService.update( modDto, request );
         
-        // 메뉴 권한 부여작업 update ( delete 후 insert )
-        menuService.menuRoleUpdate( modDto, request );
+        if( type.equals(TYPE_ADMIN) ) {
+            // 메뉴 권한 부여작업 update ( delete 후 insert )
+            menuService.menuRoleUpdate( modDto, request );
+        }
         
         // 메시지 출력 및 url 이동 처리 (ajax)
         result.put( "resultMsg", "정상적으로 수정되었습니다." );
@@ -269,9 +281,10 @@ public class MenuController {
     
     @Transactional
     @ResponseBody
-    @GetMapping( "/admin/live/menu/deleteMenuAjax" )
+    @GetMapping( BASIC_PATH + "/live/{type}/deleteMenuAjax" )
     public Map<String, Object> deleteMenuAjax(
             @ModelAttribute MenuModDto modDto,
+            @PathVariable String type,
             HttpServletRequest request,
             Model model
     ) throws IOException {
@@ -287,13 +300,77 @@ public class MenuController {
         Menu menu = modDto.toEntity();
         menuRepository.delete( menu );
         
-        // menu 권한 삭제
-        menuRoleRepository.deleteAllByMenuSn( menu.getMenuSn() );
+        
+        if( type.equals(TYPE_ADMIN) ) {
+            // menu 권한 삭제
+            menuRoleRepository.deleteAllByMenuSn( menu.getMenuSn() );
+        }
         
         // 메시지 출력 및 url 이동 처리 (ajax)
         Map<String, Object> result = new HashMap<String, Object>();
         result.put( "resultMsg", "정상적으로 삭제되었습니다." );
         return result;
     }
+    
+    
+    @Transactional
+    @ResponseBody
+    @GetMapping( BASIC_PATH + "/live/{type}/rootMenuInsertAjax" )
+    public Map<String, Object> rootMenuInsertAjax(
+            @ModelAttribute MenuSaveDto saveDto,
+            @PathVariable String type,
+            HttpServletRequest request,
+            Model model
+    ) throws IOException {
+        
+        // 메뉴 등록 (ajax)
+        // rootMenuCreate
+        // 각 타입에 맞는 rootMenu 생성
+        saveDto = rootMenuCreate(saveDto, type);
+        
+        if( type.equals(TYPE_ADMIN) ) {
+            //
+            MenuModDto rootMenu = menuService.findById(USER_ROOT_MENU_SN);
+            if(rootMenu.getMenuSn() == null ) {
+                saveDto = menuService.save( saveDto, request );
+            }
+            
+            // 메뉴 권한 부여작업 update ( delete 작업 없이 바로  insert )
+            menuService.menuRoleRootUpdate( saveDto, request );
+            
+        } else if ( type.equals(TYPE_USER) ) {
+            saveDto = menuService.save( saveDto, request );
+        }
+        
+        // 메시지 출력 및 url 이동 처리 (ajax)
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put( "resultMsg", "정상적으로 등록되었습니다." );
+        return result;
+    }
+    
+    private MenuSaveDto rootMenuCreate(MenuSaveDto saveDto, String type ) {
+        
+        if ( type.equals( TYPE_ADMIN ) ) {
+            // 루트 관리자 메뉴 생성
+            saveDto.setMenuSn(ADMIN_ROOT_MENU_SN);
+            saveDto.setMenuNm("피오니키즈 관리자");
+            saveDto.setMenuCd("");
+            saveDto.setParntsMenuYn("Y");
+            saveDto.setMenuSeq((long)1);
+            saveDto.setUseYn("Y");
+            
+        } else if ( type.equals( TYPE_USER ) ) {
+            // 루트 사용자 메뉴 생성
+            saveDto.setMenuSn(USER_ROOT_MENU_SN);
+            saveDto.setMenuNm("피오니키즈 사용자");
+            saveDto.setMenuCd("");
+            saveDto.setParntsMenuYn("Y");
+            saveDto.setMenuSeq((long)1);
+            saveDto.setUseYn("Y");
+        }
+        
+        return saveDto;
+    }
+    
     
 }

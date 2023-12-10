@@ -53,6 +53,8 @@ public class AdminMenuHierarchy extends MenuHierarchy{
     
     private String newWindowYn ;
     
+    private String delYn ;
+    
     private Long level ;
     
     private LocalDateTime updtDt;

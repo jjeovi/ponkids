@@ -42,6 +42,8 @@ public class UserMenuHierarchyDto {
 	    private String useYn ;
 	    
 	    private String newWindowYn ;
+		
+		private String delYn;
 	    
 	    private Long level ;
 		
@@ -49,7 +51,7 @@ public class UserMenuHierarchyDto {
 	    public UserMenuHierarchyDto( Long menuSn, Long upperMenuSn, String menuNm, String menuPath, String hierarchy,
                                      String requiredMenu, Long childMenuCnt, String menuCd, String menuUrl, String parntsMenuYn,
                                      Long menuSeq, String menuDcSetYn, String menuDc, String menuDetailDc, Long atchFileSn, String useYn,
-                                     String newWindowYn, Long level ) {
+                                     String newWindowYn, String delYn, Long level ) {
 	    	this.menuSn 		= menuSn;
 			this.upperMenuSn 	= upperMenuSn;
 			this.menuNm 		= menuNm;
@@ -67,6 +69,7 @@ public class UserMenuHierarchyDto {
 			this.atchFileSn 	= atchFileSn;
 			this.useYn 			= useYn;
 			this.newWindowYn 	= newWindowYn;
+			this.delYn			= delYn;
 			this.level 			= level;
 		}
 	    
@@ -90,6 +93,7 @@ public class UserMenuHierarchyDto {
 					.atchFileSn(userMenuHierarchy.getAtchFileSn())
 					.useYn(userMenuHierarchy.getUseYn())
 					.newWindowYn(userMenuHierarchy.getNewWindowYn())
+					.delYn(userMenuHierarchy.getDelYn())
 					.level(userMenuHierarchy.getLevel())
 					.build();
 	    }

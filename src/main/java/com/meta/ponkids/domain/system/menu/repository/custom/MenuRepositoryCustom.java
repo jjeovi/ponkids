@@ -42,11 +42,11 @@ public interface MenuRepositoryCustom {
 	
 	
 	@Cacheable("lastUpdtDtUserMenuCache")
-	UserMenuHierarchy findLastUpdtDtUserMenuCache( long sn);
+	UserMenuHierarchy findLastUpdtDtUserMenuCache( );
 	
-	UserMenuHierarchy findLastUpdtDtUserMenuNoCache(long sn);
+	UserMenuHierarchy findLastUpdtDtUserMenuNoCache();
 	
 	@CachePut("lastUpdtDtUserMenuCache")
-	UserMenuHierarchy findLastUpdtDtUserMenuAgainCache(long sn);
+	UserMenuHierarchy findLastUpdtDtUserMenuAgainCache();
 	
 }

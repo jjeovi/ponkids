@@ -4,13 +4,15 @@ import java.util.List;
 
 import com.meta.ponkids.domain.system.menu.entity.Menu;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class MenuModDto {
+public class MenuModDto extends MenuDto {
 	
 	private Long menuSn;
 	
