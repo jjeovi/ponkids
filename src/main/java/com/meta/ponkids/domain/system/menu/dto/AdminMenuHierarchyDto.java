@@ -46,7 +46,6 @@ public class AdminMenuHierarchyDto {
 	    
 	    private Long level ;
 		
-		
 	    @Builder
 	    public AdminMenuHierarchyDto(Long menuSn, Long upperMenuSn, String menuNm, String menuPath, String hierarchy,
 					String requiredMenu, Long childMenuCnt, String menuCd, String menuUrl, String parntsMenuYn,
@@ -94,13 +93,6 @@ public class AdminMenuHierarchyDto {
 					.newWindowYn(adminMenuHierarchy.getNewWindowYn())
 					.level(adminMenuHierarchy.getLevel())
 					.build();
-	    	
 	    }
-	    
-	    
-
-	    
-	    
-	
 
 }

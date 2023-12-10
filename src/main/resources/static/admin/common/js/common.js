@@ -261,7 +261,9 @@ const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // �
 // 카테고리 검색 버튼 function
     function searchCate( url ) {
 
+
         if ( $( ".category-list-area .category-group-box ul li.on" ).length ) {
+
             var data = {};
 
             $( ".category-list-area .category-group-box ul li.on" ).each( function ( i, item ) {

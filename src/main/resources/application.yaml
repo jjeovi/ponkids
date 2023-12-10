@@ -1,38 +1,38 @@
-spring:
+spring :
     servlet :
         multipart :
             maxFileSize : 10MB      # 파일 하나의 최대 크기
             maxRequestSize : 30MB   # 한 번에 최대 업로드 가능 용량
-    devtools:
-        livereload:
+    devtools :
+        livereload :
             enabled : true
-        restart:
+        restart :
             enabled : true
-    datasource:
-        driver-class-name: org.postgresql.Driver
-        url: jdbc:postgresql://db.jjeovi.gabia.io:5432/dbjjeovi
-        username: jjeovi
-        password: ponkids2023!
-    jpa:
-        properties:
-            hibernate:
-                jdbc:
-                    lob:
-                        non_contextual_creation: 'true'
+    datasource :
+        driver-class-name : org.postgresql.Driver
+        url : jdbc:postgresql://db.jjeovi.gabia.io:5432/dbjjeovi
+        username : jjeovi
+        password : ponkids2023!
+    jpa :
+        properties :
+            hibernate :
+                jdbc :
+                    lob :
+                        non_contextual_creation : 'true'
                 default_schema : ponkids_dev
-        hibernate:
-            ddl-auto: none
-    thymeleaf:
+        hibernate :
+            ddl-auto : none
+    thymeleaf :
         cache : false
     profiles :
         active : local
-    mvc:                                                                                                                                                                                                                   
-      converters:
-       preferred-json-mapper: gson
-       
-server:
-    error:
-        whitelabel:
+    mvc :
+        converters :
+            preferred-json-mapper : gson
+
+server :
+    error :
+        whitelabel :
             enabled : true
     servlet :
         session :
@@ -40,24 +40,26 @@ server:
             timeout : 3600              # 세션 시간 (60분: 3600 )
 
 #p6spy query logging
-decorator:
-    datasource:
-        p6spy:
-            enable-logging: true
-            
+decorator :
+    datasource :
+        p6spy :
+            enable-logging : true
+
 #########################################        System Variables           #########################################
 
-upload:
-#    path : C:/upload/    # 업로드 파일 저장 경로 ( window )
-      path : /Users/jjeoV/Desktop/jjeoV/2023/pioneerKids/upload/    # 업로드 파일 저장 경로 ( Mac )
-      
-admin:
-    auth :  pon
-    
-
-speficic:
-    menuCd : mcd    
-    
-######################################################################################################################
-  
+key :
+    default :
+        admin : adm             # 관리자 화면 기본 변수 key
+        user  : pon             # 사용자 화면 기본 변수 key
+    upload :
+        path : C:/upload/       # 업로드 파일 저장 경로 ( 개발용 ) ( window )
+#        path : /Users/jjeoV/Desktop/jjeoV/2023/pioneerKids/upload/    # 업로드 파일 저장 경로 ( 개발용 ) ( Mac )
+    admin :
+        auth : pon              # 로그인 인증용 key
+    menuCd :
+        auth : mcd              # 메뉴코드 인증용 key
         
+upload :
+    path : C:/upload/       # 업로드 파일 저장 경로 ( 개발용 ) ( window )
+        
+######################################################################################################################

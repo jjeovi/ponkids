@@ -21,7 +21,7 @@ import java.io.IOException;
 public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
     
     
-    @Value("${admin.auth}")
+    @Value("${key.admin.auth}")
     private String AUTH;
     // 로그인 시 체크변수 pon 로 고정
     

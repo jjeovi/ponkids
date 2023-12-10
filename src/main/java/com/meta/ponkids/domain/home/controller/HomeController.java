@@ -9,16 +9,16 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
-	
-	
-	@GetMapping("/admin/home")
-	public String list( Model model ) {
-		
-		// S : 필요한 객체 setting
-		
-		// E : 필요한 객체 setting
-	
-		return "/admin/home";
-	}
-
+    
+    
+    @GetMapping( "/admin/home" )
+    public String list( Model model ) {
+        
+        // S : 필요한 객체 setting
+        
+        // E : 필요한 객체 setting
+        
+        return "/admin/home";
+    }
+    
 }

@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Immutable
-@Table(name = "vw_admin_menu_hierarchy")
+@Table(name = "vw_user_menu_hierarchy")
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminMenuHierarchy extends MenuHierarchy{
+public class UserMenuHierarchy extends MenuHierarchy {
 	
     @Id
     private Long menuSn ;

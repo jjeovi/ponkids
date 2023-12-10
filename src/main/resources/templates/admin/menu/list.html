@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout}">
+      layout:decorate="~{admin/layout/layout}">
 <title layout:fragment="title">pioneerkids Admin - 메뉴 조회</title>
 <!-- S : Javascript functions	-->
 <script layout:fragment="script">
+    let typeAdm = '[[${@environment.getProperty('key.default.admin')}]]';
+    let typeUser = '[[${@environment.getProperty('key.default.user')}]]';
+    let type = '[[${type}]]';
     let sel;
     let ref;
     let menuCreating = 'N';
 
     $( function () {
-    	
-    	// form validator 체크 ( blur , input , change 이벤트시에 유효성을 체크하여 뿌려준다)
-    	 var validatorInsert = new FormValidator({
-             "events": [ 'blur', 'input', 'change' ]
-         }, document.forms[0]);
 
-     	// form validator 체크 ( blur , input , change 이벤트시에 유효성을 체크하여 뿌려준다)
-     	 var validatorUpdate = new FormValidator({
-              "events": [ 'blur', 'input', 'change' ]
-          }, document.forms[1]);
+        // form validator 체크 ( blur , input , change 이벤트시에 유효성을 체크하여 뿌려준다)
+        var validatorInsert = new FormValidator({
+            "events": [ 'blur', 'input', 'change' ]
+        }, document.forms[0]);
+
+        // form validator 체크 ( blur , input , change 이벤트시에 유효성을 체크하여 뿌려준다)
+        var validatorUpdate = new FormValidator({
+            "events": [ 'blur', 'input', 'change' ]
+        }, document.forms[1]);
 
         // searchDTO 는 layout.html에 선언
         if ( searchDTO != null &&
@@ -26,8 +29,34 @@
             searchDTO.category != null &&
             searchDTO.category.lv1Sn != null
         ) {
-            searchCate( '/live/getMenuListAjax' );
+            if ( type == typeAdm ) {
+                searchCate( '/live/' + type + '/getMenuListAjax' );
+
+            } else if ( type == typeUser ) {
+
+                // ajax START
+                $.ajax( {
+                    url: '/live/' + type + '/getMenuListAjax',
+                    type: "GET",
+                    dataType: "json",
+                    async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+                    // data: data, // 검색할 값 listDto 안에 categoryDto 변수 추가
+                    contentType: "application/json",
+                    success: function ( result ) {
+                        // callback 함수 연결 -> callback함수로 구현
+                        if ( typeof searchCateCallback === 'function' ) {
+                            searchCateCallback( result );
+                        } else {
+                            console.log( 'searchCateCallback( result ) funnction is required. searchCateCallback( result ) 콜백함수 not found!' );
+                        }
+                    }
+                });
+                // ajax END
+
+            }
+
         }
+
 
         // 수정 button click event
         $( "[name='updateBtn']" ).click( function () {
@@ -199,12 +228,13 @@
 
 </script>
 <!-- E : Javascript functions	-->
+
 <th:block layout:fragment="content">
 
     <!-- S: content -->
 
     <!-- S : 분류 영역 -->
-    <div class="div_menu_detail row">
+    <div class="div_menu_detail row" th:if="${ type == @environment.getProperty('key.default.admin') }">
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel category-area">
                 <!-- 분류 영역 > 카테고리 그룹 영역 -->
@@ -234,7 +264,7 @@
                     </div>
                     <div class="btn-group float-right" role="group">
                         <button name="searchCateBtn" type="button" class="btn btn-purple w120p"
-                                onclick="searchCate('/live/getMenuListAjax');">보기
+                                onclick="searchCate('/live/${type}/getMenuListAjax');">보기
                         </button>
                         <!-- 					    <button type="button" class="btn btn-purple w120p">다운로드</button> -->
                     </div>

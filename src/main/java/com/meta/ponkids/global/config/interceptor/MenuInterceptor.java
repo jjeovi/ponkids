@@ -19,7 +19,7 @@ import java.util.List;
 public class MenuInterceptor implements HandlerInterceptor {
 	
 
-	@Value("${speficic.menuCd}")
+	@Value("${key.menuCd.auth}")
 	private String MCD;
     
     @Autowired

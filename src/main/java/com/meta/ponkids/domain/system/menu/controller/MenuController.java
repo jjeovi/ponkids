@@ -11,6 +11,7 @@ import com.meta.ponkids.domain.system.role.dto.RoleListDto;
 import com.meta.ponkids.domain.system.role.repository.RoleRepository;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,12 +34,19 @@ public class MenuController {
     private final MenuRoleRepository menuRoleRepository;
     
     private final static String BASIC_PATH = "/admin/menu";
-
-    @GetMapping( BASIC_PATH + "/{mcd}/list" )
+    
+    
+    @Value("${key.default.admin}")
+    private String TYPE_ADMIN;
+    
+    @Value("${key.default.user}")
+    private String TYPE_USER;
+    
+    @GetMapping( BASIC_PATH + "/{mcd}/{type}/list" )
     public String list( @ModelAttribute MenuListDto listDto,
                         @PathVariable String mcd,
+                        @PathVariable String type,
                         Model model ) {
-        
         
         // S : 필요한 객체 setting
         
@@ -56,6 +64,7 @@ public class MenuController {
         
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
+        model.addAttribute( "type", type );
         
         return BASIC_PATH + "/list";
     }
@@ -169,13 +178,21 @@ public class MenuController {
     }
     
     @ResponseBody
-    @GetMapping( "/live/getMenuListAjax" )
-    public Map<String, Object> getMenuListAjax( @ModelAttribute MenuListDto listDto ) {
+    @GetMapping( "/live/{type}/getMenuListAjax" )
+    public Map<String, Object> getMenuListAjax( @ModelAttribute MenuListDto listDto,
+                                                @PathVariable String type ) {
         // 해당 권한에 맞는 menuList 가져온 뒤 drawMenuTree 로 메뉴를 그린다.
         Map<String, Object> result = new HashMap<String, Object>();
         
         // 메뉴 list 출력
-        result.put( "resultList", menuService.getList( listDto ) );
+        if( type.equals( TYPE_ADMIN ) ) {
+            
+            result.put( "resultList", menuService.getList( listDto ) );
+            
+        } else if ( type.equals( TYPE_USER ) ) {
+            result.put( "resultList", menuService.getUserMenuList( listDto ) );
+            
+        }
         
         return result;
     }

@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
     
     // 로그인 시 체크변수 pon 로 고정
-    @Value("${admin.auth}")
+    @Value("${key.admin.auth}")
     private String AUTH;
     
     @GetMapping( "/admLogin" )

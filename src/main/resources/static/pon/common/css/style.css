@@ -1,5 +1,5 @@
 /*! sec01*/
-.wrap{font-family: "NanumSquare";}
+.wrap{font-family: "NanumSquare"; min-height:605px;}
 .visual_sec .visual_box{position: relative;}
 .visual_sec .visual_txt{position: absolute; top: 25%; left: 20%; color: #fff; font-weight: 700; font-size: 22px; }
 .visual_sec .visual_txt p{margin-top: 20px;}
@@ -538,7 +538,6 @@
     .detail_review_item_box .review_txt{-webkit-line-clamp: 2;}
     
 }
-
 
 @media(max-width:500px){
     .item_img img:first-child{height: 140px;}

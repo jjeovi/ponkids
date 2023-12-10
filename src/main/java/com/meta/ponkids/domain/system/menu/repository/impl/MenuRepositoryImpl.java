@@ -3,7 +3,8 @@ package com.meta.ponkids.domain.system.menu.repository.impl;
 
 import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
 import com.meta.ponkids.domain.system.menu.dto.QMenuListDto;
-import com.meta.ponkids.domain.system.menu.entity.Menu;
+import com.meta.ponkids.domain.system.menu.entity.AdminMenuHierarchy;
+import com.meta.ponkids.domain.system.menu.entity.UserMenuHierarchy;
 import com.meta.ponkids.domain.system.menu.repository.custom.MenuRepositoryCustom;
 import com.meta.ponkids.domain.system.role.dto.QRoleListDto;
 import com.meta.ponkids.domain.system.role.dto.RoleListDto;
@@ -19,8 +20,8 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 import static com.meta.ponkids.domain.system.menu.entity.QAdminMenuHierarchy.adminMenuHierarchy;
-import static com.meta.ponkids.domain.system.menu.entity.QMenu.menu;
 import static com.meta.ponkids.domain.system.menu.entity.QMenuRole.menuRole;
+import static com.meta.ponkids.domain.system.menu.entity.QUserMenuHierarchy.userMenuHierarchy;
 import static com.meta.ponkids.domain.system.role.entity.QRole.role;
 
 @Repository
@@ -57,33 +58,33 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
         List<MenuListDto> results = query
                 // select
                 .select( new QMenuListDto(
-                        adminMenuHierarchy.menuSn
-                        , adminMenuHierarchy.menuSn.as( "id" )    // menuSn 과 id 는 같은 값으로 mapping (jstree 의 변수 id를 매핑하기 위한 임시 변수)
-                        , menuRole.roleSn
-                        , adminMenuHierarchy.upperMenuSn
-                        , new CaseBuilder()
-                        .when( adminMenuHierarchy.upperMenuSn.isNull() ).then( "#" )
-                        .otherwise( adminMenuHierarchy.upperMenuSn.stringValue() ).as( "parent" )
-                        // upperMenuSn 과 parent 는 같은 값으로 mapping (jstree 의 변수 parent를 매핑하기 위한 임시 변수)
-                        // parent 는 string 임에 유의한다. parent가 null 이면 jstree가 error 발생하여 null 을 # 로 치환
-                        , adminMenuHierarchy.menuNm
-                        , adminMenuHierarchy.menuNm.concat( " [" ).concat( adminMenuHierarchy.menuSeq.stringValue() ).concat( "]" ).as( "text" )    // menuNm 과 text 는 같은 값으로 mapping ( jstree 의 변수 text를 매핑하기 위한 임시 변수 )
-                        , adminMenuHierarchy.menuPath
-                        , adminMenuHierarchy.hierarchy
-                        , adminMenuHierarchy.requiredMenu
-                        , adminMenuHierarchy.childMenuCnt
-                        , adminMenuHierarchy.menuCd
-                        , adminMenuHierarchy.menuUrl
-                        , adminMenuHierarchy.parntsMenuYn
-                        , adminMenuHierarchy.parntsMenuYn.as( "types" )
-                        , adminMenuHierarchy.menuSeq
-                        , adminMenuHierarchy.menuDcSetYn
-                        , adminMenuHierarchy.menuDc
-                        , adminMenuHierarchy.menuDetailDc
-                        , adminMenuHierarchy.atchFileSn
-                        , adminMenuHierarchy.useYn
-                        , adminMenuHierarchy.newWindowYn
-                        , adminMenuHierarchy.level
+                                adminMenuHierarchy.menuSn
+                                , adminMenuHierarchy.menuSn.as( "id" )    // menuSn 과 id 는 같은 값으로 mapping (jstree 의 변수 id를 매핑하기 위한 임시 변수)
+                                , menuRole.roleSn
+                                , adminMenuHierarchy.upperMenuSn
+                                , new CaseBuilder()
+                                .when( adminMenuHierarchy.upperMenuSn.isNull() ).then( "#" )
+                                .otherwise( adminMenuHierarchy.upperMenuSn.stringValue() ).as( "parent" )
+                                // upperMenuSn 과 parent 는 같은 값으로 mapping (jstree 의 변수 parent를 매핑하기 위한 임시 변수)
+                                // parent 는 string 임에 유의한다. parent가 null 이면 jstree가 error 발생하여 null 을 # 로 치환
+                                , adminMenuHierarchy.menuNm
+                                , adminMenuHierarchy.menuNm.concat( " [" ).concat( adminMenuHierarchy.menuSeq.stringValue() ).concat( "]" ).as( "text" )    // menuNm 과 text 는 같은 값으로 mapping ( jstree 의 변수 text를 매핑하기 위한 임시 변수 )
+                                , adminMenuHierarchy.menuPath
+                                , adminMenuHierarchy.hierarchy
+                                , adminMenuHierarchy.requiredMenu
+                                , adminMenuHierarchy.childMenuCnt
+                                , adminMenuHierarchy.menuCd
+                                , adminMenuHierarchy.menuUrl
+                                , adminMenuHierarchy.parntsMenuYn
+                                , adminMenuHierarchy.parntsMenuYn.as( "types" )
+                                , adminMenuHierarchy.menuSeq
+                                , adminMenuHierarchy.menuDcSetYn
+                                , adminMenuHierarchy.menuDc
+                                , adminMenuHierarchy.menuDetailDc
+                                , adminMenuHierarchy.atchFileSn
+                                , adminMenuHierarchy.useYn
+                                , adminMenuHierarchy.newWindowYn
+                                , adminMenuHierarchy.level
                         )
                 )
                 .from( 		menuRole )
@@ -91,7 +92,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                 .on(		menuRole.menuSn.eq( adminMenuHierarchy.menuSn ) )
                 .where(
                         eqCateLv1( listDto.getCategory()),
-                        eqUseYn(listDto.getUseYn())
+                        eqAdminMenuUseYn( listDto.getUseYn() )
                 )
                 .orderBy(	adminMenuHierarchy.hierarchy.asc() )
                 .fetch();
@@ -100,11 +101,91 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
         
     }
     
+    
     @Override
     public List<MenuListDto> getListAgain( MenuListDto listDto ) {
 //        System.out.println("캐시를 갱신할 때 사용됩니다.");
         return this.getList( listDto );
     }
+    
+    @Override
+    public List<MenuListDto> getUserMenuList( MenuListDto listDto ) {
+
+//        System.out.println("캐시를 저장시에 사용합니다. 최초 이후로는 저장이 되지 않습니다.");
+        //		   select tmr.menu_sn
+        //				, tmr.role_sn
+        //				, vmh.upper_menu_sn
+        //				, vmh.menu_nm
+        //				, vmh.menu_cd
+        //				, vmh.menu_url
+        //				, vmh.parnts_menu_yn
+        //				, vmh.menu_seq
+        //				, vmh.menu_dc_set_yn
+        //				, vmh.menu_dc
+        //				, vmh.menu_detail_dc
+        //				, vmh.atch_file_sn
+        //				, vmh.use_yn
+        //				, vmh.new_window_yn
+        //		     from tb_menu_role tmr
+        //	   	     left join vw_menu_hierarchy vmh
+        //		       on tmr.menu_sn = vmh.menu_sn
+        //		    where tmr.role_sn = '100002'
+        //          order by vmh."hierarchy" asc;
+        
+        // (1) 결과list (results).
+        List<MenuListDto> results = query
+                // select
+                .select( new QMenuListDto(
+                                userMenuHierarchy.menuSn
+                                , userMenuHierarchy.menuSn.as( "id" )    // menuSn 과 id 는 같은 값으로 mapping (jstree 의 변수 id를 매핑하기 위한 임시 변수)
+                                , menuRole.roleSn
+                                , userMenuHierarchy.upperMenuSn
+                                , new CaseBuilder()
+                                .when( userMenuHierarchy.upperMenuSn.isNull() ).then( "#" )
+                                .otherwise( userMenuHierarchy.upperMenuSn.stringValue() ).as( "parent" )
+                                // upperMenuSn 과 parent 는 같은 값으로 mapping (jstree 의 변수 parent를 매핑하기 위한 임시 변수)
+                                // parent 는 string 임에 유의한다. parent가 null 이면 jstree가 error 발생하여 null 을 # 로 치환
+                                , userMenuHierarchy.menuNm
+                                , userMenuHierarchy.menuNm.concat( " [" ).concat( userMenuHierarchy.menuSeq.stringValue() ).concat( "]" ).as( "text" )    // menuNm 과 text 는 같은 값으로 mapping ( jstree 의 변수 text를 매핑하기 위한 임시 변수 )
+                                , userMenuHierarchy.menuPath
+                                , userMenuHierarchy.hierarchy
+                                , userMenuHierarchy.requiredMenu
+                                , userMenuHierarchy.childMenuCnt
+                                , userMenuHierarchy.menuCd
+                                , userMenuHierarchy.menuUrl
+                                , userMenuHierarchy.parntsMenuYn
+                                , userMenuHierarchy.parntsMenuYn.as( "types" )
+                                , userMenuHierarchy.menuSeq
+                                , userMenuHierarchy.menuDcSetYn
+                                , userMenuHierarchy.menuDc
+                                , userMenuHierarchy.menuDetailDc
+                                , userMenuHierarchy.atchFileSn
+                                , userMenuHierarchy.useYn
+                                , userMenuHierarchy.newWindowYn
+                                , userMenuHierarchy.level
+                        )
+                )
+                .from( 		menuRole )
+                .leftJoin( 	userMenuHierarchy )    // view : vw_menu_hierarchy
+                .on(		menuRole.menuSn.eq( userMenuHierarchy.menuSn ) )
+                .where(
+                        eqCateLv1( listDto.getCategory()),
+                        eqUserMenuUseYn(listDto.getUseYn())
+                )
+                .orderBy(	userMenuHierarchy.hierarchy.asc() )
+                .fetch();
+        
+        return results;
+        
+    }
+    
+    @Override
+    public List<MenuListDto> getUserMenuListAgain( MenuListDto listDto ) {
+//        System.out.println("캐시를 갱신할 때 사용됩니다.");
+        return this.getUserMenuList( listDto );
+    }
+    
+    
     
     @Override
     public List<MenuListDto> getAllList( MenuListDto listDto ) {
@@ -163,7 +244,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                 )
                 .from( 	adminMenuHierarchy )
                 .where(
-                		eqUseYn(listDto.getUseYn())
+                        eqAdminMenuUseYn(listDto.getUseYn())
                 )
                 .orderBy(
                         adminMenuHierarchy.hierarchy.asc()
@@ -211,39 +292,75 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
     }
     
     
-    private Menu findLastUpdtDtMenu( long sn ) {
+    private AdminMenuHierarchy findLastUpdtDtAdminMenu( long sn ) {
         
-        Menu result = query
+        AdminMenuHierarchy result = query
                 // select
-                .select( 	menu )
-                .from( 		menu )
+                .select( 	adminMenuHierarchy )
+                .from( 		adminMenuHierarchy )
                 .leftJoin( 	menuRole )
                 .on(
-                        	menu.menuSn.eq( menuRole.menuSn ),
-                        	menuRole.delYn.eq( "N" )
+                        adminMenuHierarchy.menuSn.eq( menuRole.menuSn ),
+                        menuRole.delYn.eq( "N" )
                 )
                 .where( eqRoleSn( sn ),
-                        	menu.updtDt.isNotNull()
+                        adminMenuHierarchy.updtDt.isNotNull()
                 )
                 .orderBy(
-                        	menu.updtDt.desc()
+                        adminMenuHierarchy.updtDt.desc()
                 ).fetchFirst();
         return result;
     }
     
     @Override
-    public Menu findLastUpdtDtMenuCache( long sn ) {
-        return this.findLastUpdtDtMenu(sn);
+    public AdminMenuHierarchy findLastUpdtDtAdminMenuCache( long sn ) {
+        return this.findLastUpdtDtAdminMenu(sn);
     }
     
     @Override
-    public Menu findLastUpdtDtMenuNoCache( long sn ) {
-        return this.findLastUpdtDtMenu(sn);
+    public AdminMenuHierarchy findLastUpdtDtAdminMenuNoCache( long sn ) {
+        return this.findLastUpdtDtAdminMenu(sn);
     }
     
     @Override
-    public Menu findLastUpdtDtMenuAgainCache( long sn ) {
-        return this.findLastUpdtDtMenu(sn);
+    public AdminMenuHierarchy findLastUpdtDtAdminMenuAgainCache( long sn ) {
+        return this.findLastUpdtDtAdminMenu(sn);
+    }
+    
+    
+    private UserMenuHierarchy findLastUpdtDtUserMenu( long sn ) {
+        
+        UserMenuHierarchy result = query
+                // select
+                .select( 	userMenuHierarchy )
+                .from( 		userMenuHierarchy )
+                .leftJoin( 	menuRole )
+                .on(
+                        userMenuHierarchy.menuSn.eq( menuRole.menuSn ),
+                        menuRole.delYn.eq( "N" )
+                )
+                .where( eqRoleSn( sn ),
+                        userMenuHierarchy.updtDt.isNotNull()
+                )
+                .orderBy(
+                        userMenuHierarchy.updtDt.desc()
+                ).fetchFirst();
+        return result;
+    }
+    
+    @Override
+    public UserMenuHierarchy findLastUpdtDtUserMenuCache( long sn ) {
+        return this.findLastUpdtDtUserMenu(sn);
+    }
+    
+    @Override
+    public UserMenuHierarchy findLastUpdtDtUserMenuNoCache( long sn ) {
+        return this.findLastUpdtDtUserMenu(sn);
+    }
+    
+    @Override
+    public UserMenuHierarchy findLastUpdtDtUserMenuAgainCache( long sn ) {
+        return this.findLastUpdtDtUserMenu(sn);
     }
     
     
@@ -266,8 +383,12 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
     }
     
     
-    private BooleanExpression eqUseYn( String yn ) {
+    private BooleanExpression eqAdminMenuUseYn( String yn ) {
     	return ( StringUtils.hasText(yn)) ? adminMenuHierarchy.useYn.eq( yn ) : null;
+    }
+    
+    private BooleanExpression eqUserMenuUseYn( String yn ) {
+        return ( StringUtils.hasText(yn)) ? adminMenuHierarchy.useYn.eq( yn ) : null;
     }
     
     private BooleanExpression eqOption( String schOption, String schCntn ) {

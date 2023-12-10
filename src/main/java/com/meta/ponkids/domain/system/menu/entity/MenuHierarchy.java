@@ -1,22 +1,16 @@
 package com.meta.ponkids.domain.system.menu.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Immutable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
-@Immutable
-@Table(name = "vw_admin_menu_hierarchy")
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminMenuHierarchy extends MenuHierarchy{
+public class MenuHierarchy {
 	
     @Id
     private Long menuSn ;

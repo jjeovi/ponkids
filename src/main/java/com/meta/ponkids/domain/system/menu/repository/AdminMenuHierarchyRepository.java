@@ -1,8 +1,7 @@
 package com.meta.ponkids.domain.system.menu.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.meta.ponkids.domain.system.menu.entity.AdminMenuHierarchy;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AdminMenuHierarchyRepository extends JpaRepository<AdminMenuHierarchy, Long> {
 	

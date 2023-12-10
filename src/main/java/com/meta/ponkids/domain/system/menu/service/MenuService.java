@@ -4,8 +4,7 @@ import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
 import com.meta.ponkids.domain.system.menu.dto.MenuModDto;
 import com.meta.ponkids.domain.system.menu.dto.MenuRoleSaveDto;
 import com.meta.ponkids.domain.system.menu.dto.MenuSaveDto;
-import com.meta.ponkids.domain.system.menu.entity.Menu;
-import com.meta.ponkids.domain.system.menu.entity.MenuRole;
+import com.meta.ponkids.domain.system.menu.entity.*;
 import com.meta.ponkids.domain.system.menu.repository.MenuRepository;
 import com.meta.ponkids.domain.system.menu.repository.MenuRoleRepository;
 import com.meta.ponkids.domain.system.role.dto.RoleListDto;
@@ -55,9 +54,9 @@ public class MenuService {
             // 같지 않으면, 캐시를 지우고 다시 조회
             
             // 1. 마지막 업데이트 시간. (캐시로 저장)
-            Menu updtDtMenuCache = menuRepository.findLastUpdtDtMenuCache( listDto.getCategory().getLv1Sn() );
+            AdminMenuHierarchy updtDtMenuCache = menuRepository.findLastUpdtDtAdminMenuCache( listDto.getCategory().getLv1Sn() );
             // 2. 마지막 업데이트 시간 (캐시 저장하지 않음 - 계속 DB 조회)
-            Menu updtDtMenuNoCache = menuRepository.findLastUpdtDtMenuNoCache( listDto.getCategory().getLv1Sn() );
+            AdminMenuHierarchy updtDtMenuNoCache = menuRepository.findLastUpdtDtAdminMenuNoCache( listDto.getCategory().getLv1Sn() );
             
             if ( listDto.getCategory().getLv1Sn() == 0 ) {
                 // (1) 전체 메뉴 list
@@ -67,7 +66,7 @@ public class MenuService {
 //                    System.out.println("변경 감지했습니다.");
                     
                     // 캐시로 저장된 마지막 업데이트 시간을 갱신한다.
-                    menuRepository.findLastUpdtDtMenuAgainCache( listDto.getCategory().getLv1Sn() );
+                    menuRepository.findLastUpdtDtAdminMenuAgainCache( listDto.getCategory().getLv1Sn() );
                     
                     return menuRepository.getAllListAgain( listDto );
                     
@@ -86,7 +85,7 @@ public class MenuService {
 //                    System.out.println("변경 감지했습니다.");
                     
                     // 캐시로 저장된 마지막 업데이트 시간을 갱신한다.
-                    menuRepository.findLastUpdtDtMenuAgainCache( listDto.getCategory().getLv1Sn() );
+                    menuRepository.findLastUpdtDtAdminMenuAgainCache( listDto.getCategory().getLv1Sn() );
                     
                     return menuRepository.getListAgain( listDto );
                 } else {
@@ -98,6 +97,60 @@ public class MenuService {
             }
         } else {
             return Collections.emptyList(); // 빈 List<> 생성
+        }
+    }
+    public List<MenuListDto> getUserMenuList( MenuListDto listDto ) {
+        
+        // (1) 전체 권한 메뉴 리스트
+        // (2) 특정 권한 메뉴 리스트 를 구분한다.
+        
+        // 1. 마지막 업데이트 시간. (캐시로 저장)
+        // 2. 마지막 업데이트 시간 (캐시 저장하지 않음 - 계속 DB 조회)
+        
+        // 캐시로 저장된 마지막 업데이트 시간 (1) 과 캐시로 저장하지않고 계속 조회하는 마지막 업데이트 시간 (2) 을 비교해
+        // 같지 않으면, 캐시를 지우고 다시 조회
+        
+        // 1. 마지막 업데이트 시간. (캐시로 저장)
+        UserMenuHierarchy updtDtMenuCache = menuRepository.findLastUpdtDtUserMenuCache( listDto.getCategory().getLv1Sn() );
+        // 2. 마지막 업데이트 시간 (캐시 저장하지 않음 - 계속 DB 조회)
+        UserMenuHierarchy updtDtMenuNoCache = menuRepository.findLastUpdtDtUserMenuNoCache( listDto.getCategory().getLv1Sn() );
+        
+        if ( listDto.getCategory().getLv1Sn() == 0 ) {
+            // (1) 전체 메뉴 list
+            
+            if ( menuRenewalCheck( updtDtMenuCache, updtDtMenuNoCache ) ) {
+                // 메뉴 의 수정이 감지 됬을 경우
+//                    System.out.println("변경 감지했습니다.");
+                
+                // 캐시로 저장된 마지막 업데이트 시간을 갱신한다.
+                menuRepository.findLastUpdtDtUserMenuAgainCache( listDto.getCategory().getLv1Sn() );
+                
+                return menuRepository.getAllListAgain( listDto );
+                
+            } else {
+                // 변경이 없을 때 ( 캐시에 저장된 값 조회 , DB 읽지 않음)
+//                    System.out.println("변경이 감지되지 않았습니다. 혹은 최초 캐시 저장시입니다.");
+                
+                return menuRepository.getAllList( listDto );
+            }
+            
+        } else {
+            // (2) 특정 권한의 메뉴 list
+            
+            if ( menuRenewalCheck( updtDtMenuCache, updtDtMenuNoCache ) ) {
+                // 메뉴 의 수정이 감지 됬을 경우
+//                    System.out.println("변경 감지했습니다.");
+                
+                // 캐시로 저장된 마지막 업데이트 시간을 갱신한다.
+                menuRepository.findLastUpdtDtUserMenuAgainCache( listDto.getCategory().getLv1Sn() );
+                
+                return menuRepository.getListAgain( listDto );
+            } else {
+                // 변경이 없을 때 ( 캐시에 저장된 값 조회 , DB 읽지 않음)
+//                    System.out.println("변경이 감지되지 않았습니다.");
+                return menuRepository.getList( listDto );
+            }
+            
         }
     }
     
@@ -227,7 +280,7 @@ public class MenuService {
     }
     
     
-    private boolean menuRenewalCheck( Menu updtDtMenuCache, Menu updtDtMenuNoCache ) {
+    private boolean menuRenewalCheck( MenuHierarchy updtDtMenuCache, MenuHierarchy updtDtMenuNoCache ) {
         
         if ( updtDtMenuCache != null && updtDtMenuNoCache != null ) {
             if ( updtDtMenuCache.getUpdtDt() != null && updtDtMenuNoCache.getUpdtDt() != null ) {
@@ -247,6 +300,7 @@ public class MenuService {
         
         return true;
     }
+    
     
     
 }

@@ -16,7 +16,7 @@ import com.meta.ponkids.domain.system.login.dto.LoginDto;
 public class AuthInterceptor implements HandlerInterceptor {
     
     // 로그인 시 체크변수 pon 로 고정
-    @Value("${admin.auth}")
+    @Value("${key.admin.auth}")
     private String AUTH;
     @Override
     public boolean preHandle( HttpServletRequest request, HttpServletResponse response, Object handler ) throws Exception {
