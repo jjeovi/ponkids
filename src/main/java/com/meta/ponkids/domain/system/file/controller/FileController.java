@@ -175,8 +175,8 @@ public class FileController {
     @ResponseBody
     @RequestMapping( value = "/file/fileDelete", method = { RequestMethod.GET } )
     public List fileDelete( @RequestParam(required = true ) Long atchFileSn,  
-    		                    @RequestParam( required = true ) Long fileSeq,
-    		                    HttpServletRequest request  ) {
+    		                @RequestParam( required = true ) Long fileSeq,
+    		                HttpServletRequest request) {
 
     	// 파일 삭제
     	atchFileService.deleteFile(atchFileSn,fileSeq);
