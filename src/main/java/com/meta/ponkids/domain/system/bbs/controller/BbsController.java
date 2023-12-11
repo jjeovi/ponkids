@@ -40,13 +40,14 @@ public class BbsController {
     
    /**
     * methodName    : bbsList
-    * date          : 23/12/02
+    * date          : 23/12/11
     * description   : bbs list method
     */
-   @GetMapping( BASIC_PATH + "/list" )
+   @GetMapping( BASIC_PATH + "/{mcd}/list" )
    public String list( @ModelAttribute BbsListDto bbsListDto, 
-   					@PageableDefault( size = 10 ) Pageable pageable,
-   					Model model ) {
+   					   @PageableDefault( size = 10 ) Pageable pageable,
+   				       @PathVariable String mcd,
+   					   Model model ) {
        // 목록 조회
        Page<BbsListDto> resultList = bbsService.getList( bbsListDto, pageable );
        model.addAttribute( "resultList", resultList );
@@ -64,9 +65,9 @@ public class BbsController {
    /**
     * methodName  : regist
     * date        : 23/12/02
-    * description : bbs regist method
+    * description : bbs regist method 
     */
-    @GetMapping(  BASIC_PATH  + "/regist" )
+    @GetMapping(  BASIC_PATH  + "/{mcd}/regist" )
     public String regist( Model model ) {
         
         model.addAttribute( new BbsSaveReqDto() );
@@ -85,18 +86,19 @@ public class BbsController {
      * description   : bbs insert method
      */
     @Transactional
-    @PostMapping("/admin/bbs/insert")
+    @PostMapping( BASIC_PATH + "/{mcd}/insert" )
     public String insert( 
-    	   @ModelAttribute BbsSaveReqDto bbsSaveReqDto, 
-    	   HttpServletRequest request,
-    	   Model model ) {
+    	                 @ModelAttribute BbsSaveReqDto bbsSaveReqDto,
+    	                 @PathVariable String mcd,
+    	                 HttpServletRequest request,
+    	                 Model model ) {
 
       // 저장
       bbsService.save(bbsSaveReqDto, request);
     
       // 메시지 출력 및 url 이동 처리
       model.addAttribute( "resultMsg", " \"정상적으로 등록되었습니다" );
-      model.addAttribute( "moveUrl", BASIC_PATH +"/list" );
+      model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
 
       return "common/alert";
      }
@@ -108,12 +110,13 @@ public class BbsController {
      * description   : bbs detail or bbs modify method
      */
     @GetMapping(value= { 
-    		BASIC_PATH + "/detail" ,
-            BASIC_PATH + "/modify" } ) 
+    		BASIC_PATH + "/{mcd}/detail",
+            BASIC_PATH + "/{mcd}/modify" } )
     public String modify( 
-    	   @RequestParam(required = true) Long bbsSn,
-    	   HttpServletRequest request, 
-    	   Model model ) {
+    	                 @RequestParam(required = true) Long bbsSn,
+    	                 @PathVariable String mcd,
+    	                 HttpServletRequest request, 
+    	                 Model model ) {
       
       // target object 조회
       model.addAttribute("targetDto", bbsService.findByBbsSn(bbsSn));
@@ -125,7 +128,8 @@ public class BbsController {
       String urlPath = request.getServletPath();
       String remainPath = ""; 
 
-      if ( urlPath.split(BASIC_PATH)[1].startsWith("/modify") ) remainPath = "modify";
+      if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/detail" ) ) remainPath = "detail";
+      if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/modify" ) ) remainPath = "modify";
       
       
       return BASIC_PATH + "/" + remainPath;
@@ -138,17 +142,18 @@ public class BbsController {
      * description   : bbs update method
      */
     @Transactional
-    @PostMapping(BASIC_PATH + "/update")
+    @PostMapping( BASIC_PATH + "/{mcd}/update" )
     public String update(
-    	   @ModelAttribute  BbsModDto modDto,
-    	   HttpServletRequest request,
-    	   Model model ) {
+    	                  @ModelAttribute  BbsModDto modDto,
+                          @PathVariable String mcd,
+    	                  HttpServletRequest request,
+    	                  Model model ) {
     	
       bbsService.update(modDto,request);
            
       // 메시지 출력 및 url 이동 처리
       model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
-      model.addAttribute( "moveUrl", BASIC_PATH +"/list" );
+      model.addAttribute( "moveUrl", BASIC_PATH  + "/" + mcd + "/list" );
 
       return "common/alert";
     }
@@ -160,10 +165,11 @@ public class BbsController {
      * description   : bbs delete method
      */
     @Transactional
-    @PostMapping( BASIC_PATH + "/delete" )
+    @PostMapping( BASIC_PATH + "/{mcd}/delete" )
     public String delete(
-            @RequestParam(required = true) Long bbsSn,
-            Model model ) {
+                         @RequestParam(required = true) Long bbsSn,
+                         @PathVariable String mcd,
+                         Model model ) {
     	
      String msg = "";
     
@@ -180,7 +186,7 @@ public class BbsController {
       
       // 메시지 출력 및 url 이동 처리
       model.addAttribute( "resultMsg", msg);
-      model.addAttribute( "moveUrl", BASIC_PATH + "/list" );
+      model.addAttribute( "moveUrl", BASIC_PATH +   "/" + mcd +"/list" );
       
       return "common/alert";
 

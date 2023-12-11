@@ -37,12 +37,20 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
 		List<BannerListDto> results = query
 				// select
                 .select( new QBannerListDto(
-                		banner.bannerSn
-//                		new CaseBuilder()
-//                		.when( user.gender.eq("M")).then("남자")
-//                		.when( user.gender.eq("F")).then("여자")
-//                		.otherwise("")
-//                		.as("gender"),
+                		banner.bannerSn,
+                		banner.bannerClCd,
+                		banner.bannerClDetailCd,
+                		banner.bannerExpsrOrdr,
+                		banner.bannerNm,
+                		banner.bannerDc,
+                		banner.atchFileSn,
+                		banner.url,
+                		banner.classMapngYn,
+                		banner.classSn,
+                		banner.useYn,
+                		banner.bannerPdSetYn,
+                		banner.bannerBeginDt,
+                		banner.bannerEndDt
                 		) )					
                 .from( banner )
                 // where

@@ -72,10 +72,10 @@ public class CmmnCd extends BaseTimeEntity {
 	private String registerIp;
 	
 	
-	@Column(insertable = false) 
+//  @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경 
 	private String updusrId;
 	
-	@Column(insertable = false) 
+//  @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경
 	private String updusrIp;
 	
 

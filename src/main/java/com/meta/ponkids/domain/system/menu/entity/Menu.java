@@ -67,10 +67,10 @@ public class Menu extends BaseTimeEntity {
 	@Column(updatable = false)
 	private String registerIp;          // 등록자 IP
 	
-//	@Column(insertable = false)
+//  @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경
 	private String updusrId;            // 수정자 ID
 	
-//	@Column(insertable = false)
+//  @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경
 	private String updusrIp;            // 수정자 IP
 	
 	@ColumnDefault("N")                             // del_yn 컬럼에 공통으로 추가
