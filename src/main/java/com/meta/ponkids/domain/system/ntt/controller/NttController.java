@@ -67,12 +67,12 @@ public class NttController {
      * date          : 23/12/04
      * description   : ntt list method
      */
-    @GetMapping( BASIC_PATH + "/list" )
-    public String nttList(
-    		 @RequestParam(required = true) Long bbsSn,
-    		 @ModelAttribute NttListDto nttListDto, 
-    					@PageableDefault( size = 10 ) Pageable pageable,
-    					Model model ) {
+    @GetMapping( BASIC_PATH + "/{mcd}/list" )
+    public String nttList( @RequestParam(required = true) Long bbsSn,
+    		               @ModelAttribute NttListDto nttListDto, 
+    		               @PathVariable String mcd,
+    					   @PageableDefault( size = 10 ) Pageable pageable,
+    					  Model model ) {
         
         // target object 조회
         model.addAttribute("bbsSn", bbsSn);
@@ -113,7 +113,7 @@ public class NttController {
      * date        : 23/12/02
      * description : ntt regist method
      */
-    @GetMapping(  BASIC_PATH  + "/regist" )
+    @GetMapping(  BASIC_PATH  + "/{mcd}/regist" )
     public String nttRegist(  @RequestParam(required = true) Long bbsSn,
     	                      @RequestParam(required = true) String bbsSeCd,
     	                      Model model ) {
@@ -135,23 +135,27 @@ public class NttController {
      * description   : ntt insert method
      */
     @Transactional
-    @PostMapping(BASIC_PATH  + "/insert")
+    @PostMapping(BASIC_PATH  + "/{mcd}/insert")
     public String nttInsert( 
-    	                   @RequestParam("file") MultipartFile files,
-    	                   @RequestParam("multiFile") List<MultipartFile> multiFileList,
+    	                   //@RequestParam("file") MultipartFile files,
+    	                   //@RequestParam("multiFile") List<MultipartFile> multiFileList,
+    	                   
+    	                   @RequestParam(required = false , defaultValue= "") MultipartFile file,
+    	                   @RequestParam(required = false , defaultValue= "") List<MultipartFile> multiFile,
     		               @ModelAttribute NttSaveReqDto nttSaveReqDto,
+    		               @PathVariable String mcd,
     		               HttpServletRequest request , Model model ) throws IOException {
     	
     	
     	// 썸네일 이미지 존재시 파일 저장
-        if(!files.isEmpty()){
-        	nttSaveReqDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 ) 
+        if(!file.isEmpty()){
+        	nttSaveReqDto.setAtchFileSn(atchFileService.save(file));	// 파일 save (파일 개수 1개일 때 ) 
         }
         
         // 첨부파일  존재시 파일 저장
-        if(!multiFileList.isEmpty()){
+        if(!multiFile.isEmpty()){
         	
-        	nttSaveReqDto.setCnAtchFileSn(atchFileService.multifileSave(multiFileList,null));	// 파일 save (파일여러개 ) 
+        	nttSaveReqDto.setCnAtchFileSn(atchFileService.multifileSave(multiFile,null));	// 파일 save (파일여러개 ) 
         }
     	
     	// save
@@ -161,7 +165,7 @@ public class NttController {
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH +"/list?bbsSn="+ bbsSn);
+        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd +"/list?bbsSn="+ bbsSn);
 
         return "common/alert";
      }
@@ -174,14 +178,14 @@ public class NttController {
      * description   : ntt detail or ntt modify method
      */
     @GetMapping(value= {
-    		BASIC_PATH + "/detail" ,
-    		BASIC_PATH + "/modify" } )	 
+    		BASIC_PATH + "/{mcd}/detail",
+            BASIC_PATH + "/{mcd}/modify" } )
       public String modify( @RequestParam(required = true)  Long nttSn, 
     		                @RequestParam(required = true) String bbsSeCd, 
-    		                 Model model, 
+    		                @PathVariable String mcd,
+    		                Model model, 
     		                HttpServletRequest request ) throws IOException {
       
-     
       // target object 조회
       NttModDto targetDto = nttService.findByNttSn(nttSn);
       
@@ -218,7 +222,8 @@ public class NttController {
       String urlPath = request.getServletPath();
       String remainPath = ""; 
 
-      if ( urlPath.split(BASIC_PATH)[1].startsWith("/modify") ) remainPath = "modify";
+      if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/detail" ) ) remainPath = "detail";
+      if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/modify" ) ) remainPath = "modify";
       
       
       return BASIC_PATH + "/" + remainPath;
@@ -232,12 +237,13 @@ public class NttController {
      * description   : bbs update method
      */
     @Transactional
-    @PostMapping(BASIC_PATH + "/update")
+    @PostMapping(BASIC_PATH + "/{mcd}/update")
     public String update(
-    		@RequestParam("file") MultipartFile files,
-    	    @RequestParam("multiFile") List<MultipartFile> multiFileList,
-    		@ModelAttribute  NttModDto modDto, HttpServletRequest request,
-    		Model model ) throws IOException {
+    		             @RequestParam("file") MultipartFile files,
+    	                 @RequestParam("multiFile") List<MultipartFile> multiFileList,
+                         @PathVariable String mcd,
+    		             @ModelAttribute  NttModDto modDto, HttpServletRequest request,
+    		             Model model ) throws IOException {
     	
         // 첨부파일 존재시 파일 저장
         if(!files.isEmpty()){
@@ -289,7 +295,7 @@ public class NttController {
            
            // 메시지 출력 및 url 이동 처리
            model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
-           model.addAttribute( "moveUrl", BASIC_PATH +"/list?bbsSn="+ bbsSn);
+           model.addAttribute( "moveUrl", BASIC_PATH  + "/" + mcd +"/list?bbsSn="+ bbsSn);
     
 
            return "common/alert";
@@ -302,9 +308,10 @@ public class NttController {
      * description   : bbs delete method
      */
     @Transactional 
-    @PostMapping( BASIC_PATH + "/delete" )
+    @PostMapping( BASIC_PATH + "/{mcd}/delete" )
     public String delete(
             @RequestParam(required = true) Long nttSn,
+            @PathVariable String mcd,
             Model model ) {
      
     	// 해당 게시판에 게시물 있는지 조회 없으시 삭제 처리 
@@ -315,7 +322,7 @@ public class NttController {
       
       // 메시지 출력 및 url 이동 처리
       model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
-      model.addAttribute( "moveUrl", BASIC_PATH + "/list" );
+      model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
       
       return "common/alert";
 

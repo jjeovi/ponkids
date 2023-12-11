@@ -4,186 +4,11 @@
 
 <script  layout:fragment="script">
 $(document).ready(function() {
-	// `에디터 설정
-	$('#summernote').summernote({
-				height: 300,                 // 에디터 높이
-				minHeight: null,             // 최소 높이
-				maxHeight: null,             // 최대 높이
-				focus: true,                 // 에디터 로딩후 포커스를 맞출지 여부
-				lang: "ko-KR",				 // 한글 설정
-				placeholder: '최대 2048자까지 쓸 수 있습니다',	//placeholder 설정
-				
-				callbacks: {	//여기 부분이 이미지를 첨부하는 부분
-					onImageUpload : function(files) {
-					
-						uploadSummernoteImageFile(files[0],this);
-					 },
-					onPaste: function (e) {
-						var clipboardData = e.originalEvent.clipboardData;
-						if (clipboardData && clipboardData.items && clipboardData.items.length) {
-							var item = clipboardData.items[0];
-							if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
-								e.preventDefault();
-							}
-						}
-					}
-				}
-	});
+	
+	// 에디터 설정
+	fnSummernoteCall();
 });
 
-// 이미지 파일 업로드
-function uploadSummernoteImageFile(file, editor) {
-
-	data = new FormData();
-	data.append("file", file);
-	var header = $("meta[name='_csrf_header']").attr("content");
-    var token = $("meta[name='_csrf']").attr("content");
-   
-	$.ajax({
-		data : data,
-		type : "POST",
-		url : "/uploadSummernoteImageFile",
-		beforeSend: function(xhr){
-			
-		 if(header != null &&  token != null){
-			xhr.setRequestHeader(header, token);
-		 }
-  
-        },
-		contentType : false,
-		processData : false,
-		success : function(data) {
-        	//항상 업로드된 파일의 url이 있어야 한다.
-			$(editor).summernote('insertImage', data.url);
-		}
-	});
-}
-
-
-// 첨부파일 드래그
-$("div.note-editable").on('drop',function(e){
-         for(i=0; i< e.originalEvent.dataTransfer.files.length; i++){
-         	uploadSummernoteImageFile(e.originalEvent.dataTransfer.files[i],$("#summernote")[0]);
-         }
-        e.preventDefault();
-   })
-
-
-//파일 추가시
-$("#file_add").on('click',function(){ $('#multi-add').click(); });
-
-
-var $fileListArr = new Array();
- var $totSize = 0;
- var $keyNum = 0;
- var $limit = 0;
- 
-$("#multi-add").on('change',function(){
-	var files = $(this)[0].files;
-
-	var fileArr = new Array();
-
-	fileArr = $fileListArr;
-	$limit = $totSize;
-	alert( files.length);
-	for(var i = 0 ; i < files.length ; i++){
-		$limit = $limit + files[i].size;
-		if($limit > 20000000){
-			alert("첨부파일 용량은 20MB를 넘길수 없습니다.");
-			return false;
-		}
-	}
-
-	for(var i = 0 ; i < files.length ; i++){
-		 $('#file_table').append("<tr id=file"+ $keyNum +"><td class='txt-c'><button type='button' style='color: #A4A4A4; font-size: large;' class='deleteFile' >&#8861;</button></td>"+
-					"<td>"+ files[i].name +"</td>"+
-					"<td id='fileSize "+ $keyNum +"'><p class=file"+ $keyNum +">"+ Math.floor(files[i].size / 1000) +" KB</p></td>"+
-					"</tr>");
-		 $keyNum++;
-		 fileArr.push(files[i]);
-		 $totSize = $totSize + files[i].size;
-	}
-
-
-	$fileListArr = new Array();
-	$fileListArr = fileArr;
-	$('#totSize').text("");
-	$('#totSize').text(Math.floor($totSize / 1000000));
-	
-	
-	
-		
-});
-
-
-//파일 delete
-$(document).on("click" , '.deleteFile', function(){
-	//삭제할 파일의 아이디
-	var DeleteID = $(this).parent().parent().attr('id');
-
-	//삭제하려는 파일의 크기값(텍스트)
-	var DeleteFileSize = $(this).parent().next().next().children('p').text();
-
-	//삭제하는 파일의 크기값(바이트)
-	var fileSizeByteArr = new Array();
-	fileSizeByteArr = DeleteFileSize.split(' ');
-	var fileSize = Number(fileSizeByteArr[0]) * 1000;
-
-	//배열에서 삭제를 위한 번호
-	var DeleteArrNum = DeleteID.substring(DeleteID.length , DeleteID.length -1);
-
-	var fileArr = $fileListArr;
-
-	fileArr.splice(DeleteArrNum , 1);
-	$keyNum = 0
-	$fileListArr = new Array();
-	$('#file_table').children().remove();
-	 $totSize = 0;
-	for(var i = 0 ; i < fileArr.length ; i++){
-
-		 $('#file_table').append("<tr id=file"+ $keyNum +"><td class='txt-c'><button type='button' style='color:  #A4A4A4; font-size: large;' class='deleteFile' >&#8861;</button></td>"+
-					"<td>"+ fileArr[i].name +"</td>"+
-					"<td id='fileSize "+ $keyNum +"'><p class=file"+ $keyNum +">"+ Math.floor(fileArr[i].size / 1000) +" KB</p></td>"+
-					"</tr>");
-		 $keyNum++;
-		 $fileListArr.push(fileArr[i]);
-		 $totSize = $totSize + fileArr[i].size;
-	}
-
-	$limit = $totSize;
-	$('#totSize').text("");
-	$('#totSize').text(Math.floor($totSize / 1000000));
-
-});
-
-
-
-
-
-$('#submit').click(function(){
-
-		  
-		var fileList = new FormData();
-		for(var i = 0; i < $fileListArr.length ; i++){
-			fileList.append("uploadFile" , $fileListArr[i]);
-		}
-		
-		$.ajax({
-			url:"/file/fileUpload.do",
-			processData : false,
-			contentType : false,
-			data: fileList ,
-			type : 'POST',
-			success : function(res){
-				location.href = '/file/List.do';
-			},
-			error: function(){
-				alert('에러');
-			}
-		});
-		   
-
-	 });   
 </script>
 
 <!-- S : Javascript functions	-->
@@ -195,7 +20,7 @@ $('#submit').click(function(){
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="insertForm" name="insertForm" method="post"  th:action="@{ {basicPath}/insert ( basicPath = ${basicPath} ) }"
+                    <form id="insertForm" name="insertForm" method="post"  th:action="@{ {basicPath}/mcd/insert ( basicPath = ${basicPath} ) }"
                           th:object="${nttSaveReqDto}"  enctype="multipart/form-data">
                         <input type="hidden" name="bbsSn" th:value="${bbsSn}"/>
                         <!-- TODO 프로필 이미지 추가 작업 -->
@@ -235,6 +60,9 @@ $('#submit').click(function(){
                             </div>
                            </div>   
                         </div>
+                         <div  th:if = "${bbsSeCd == '02'}">
+                             <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
+                        </div>
                          <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>내용</label>
                             <div class="col-md-6 col-sm-6">
@@ -249,7 +77,7 @@ $('#submit').click(function(){
                                     <label for="noticeSetYn1" class="btn btn-outline-purple w100p"
                                            data-toggle-class="btn-primary"
                                            data-toggle-passive-class="btn-default">설정</label>
-                                    <input type="radio" id="noticeSetYn2" name="noticeSetYn" value="N" class="join-btn" required>
+                                    <input type="radio" id="noticeSetYn2" name="noticeSetYn" value="N" class="join-btn" required checked>
                                     <label for="noticeSetYn2" class="btn btn-outline-purple w100p"
                                            data-toggle-class="btn-primary"
                                            data-toggle-passive-class="btn-default">미설정</label>
@@ -291,11 +119,11 @@ $('#submit').click(function(){
                        <div class="col-md-12">
                             <!-- bottom left area -->
                             <div class="col-md-2 col-sm-3 text-left">
-								<a th:href="@{ {basicPath}/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">목록</a>
+								<a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">목록</a>
                             </div>
                             <!-- bottom center area -->
                             <div class="col-md-8 col-sm-6 text-center">
-                               <a th:href="@{ {basicPath}/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">취소</a>
+                               <a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">취소</a>
                                 <button type="submit" class="btn btn-purple w120p">저장</button>
                             </div>
                             <!-- bottom right area -->

@@ -20,7 +20,7 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="insertForm" name="insertForm" method="post"  th:action="@{ {basicPath}/insert ( basicPath = ${basicPath} ) }" th:object="${bbsSaveReqDto}">
+                    <form id="insertForm" name="insertForm" method="post"  th:action="@{ {basicPath}/mcd/insert ( basicPath = ${basicPath} ) }" th:object="${bbsSaveReqDto}">
                        <div class="field item form-group">
                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>게시판 구분</label>
                            <div class="col-md-6 col-sm-6 ">
@@ -92,15 +92,15 @@
                         </div>
 
                         <div class="ln_solid"></div>
-                        <!-- 저장버튼 -->
-                       <div class="col-md-12">
+                         <!-- 저장버튼 -->
+                        <div class="col-md-12 bottom-btn-group">
                             <!-- bottom left area -->
                             <div class="col-md-2 col-sm-3 text-left">
-								<a th:href="@{ {basicPath}/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">목록</a>
+                                <a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >목록</a>
                             </div>
                             <!-- bottom center area -->
                             <div class="col-md-8 col-sm-6 text-center">
-                                <a th:href="@{ {basicPath}/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">취소</a> 
+                                <a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >취소</a>
                                 <button type="submit" class="btn btn-purple w120p">저장</button>
                             </div>
                             <!-- bottom right area -->
