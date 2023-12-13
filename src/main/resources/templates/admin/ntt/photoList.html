@@ -12,6 +12,7 @@
         <div class="x_content">
             <div class="row">
                 <form id="listForm" name="listForm" method="get"   th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd}) }">
+                    <input type="hidden" name="page"  th:value="${resultList.pageable.pageNumber}"/>
                     <input type="hidden" name="bbsSn" th:value="${bbsSn}"/>
                     <!-- S : 테이블 상단 검색 창 -->
                     <!-- totalCount -->
