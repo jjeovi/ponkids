@@ -68,7 +68,7 @@ public class BbsController {
     * description : bbs regist method 
     */
     @GetMapping(  BASIC_PATH  + "/{mcd}/regist" )
-    public String regist( Model model ) {
+    public String regist( Model model ,@PathVariable String mcd ) {
         
         model.addAttribute( new BbsSaveReqDto() );
         

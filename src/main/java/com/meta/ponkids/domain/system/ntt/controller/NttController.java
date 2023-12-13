@@ -320,9 +320,13 @@ public class NttController {
      // 삭제 처리
       nttService.deleteAllByNttSn( nttSn );
       
+      NttModDto targetDto = nttService.findByNttSn(nttSn);
+      
+      Long bbsSn  = targetDto.getBbsSn();
+      
       // 메시지 출력 및 url 이동 처리
       model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
-      model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+      model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list?bbsSn=" + bbsSn );
       
       return "common/alert";
 

@@ -4,11 +4,6 @@
 <title layout:fragment="title">pioneerkids Admin - 포토형 게시물 조회</title>
 <!-- S : Javascript functions	-->
 <script layout:fragment="script">
-
-    $(function(){
-
-    });
-
 </script>
 <!-- E : Javascript functions	-->
 <th:block layout:fragment="content">
@@ -16,7 +11,7 @@
     <div class="x_panel">
         <div class="x_content">
             <div class="row">
-                <form id="listForm" name="listForm" method="get" th:action="@{/admin/ntt/list}">
+                <form id="listForm" name="listForm" method="get"   th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd}) }">
                     <input type="hidden" name="bbsSn" th:value="${bbsSn}"/>
                     <!-- S : 테이블 상단 검색 창 -->
                     <!-- totalCount -->
@@ -63,7 +58,7 @@
                                   <td th:text="${#temporals.format(data.regDt, 'yyyy-MM-dd')}"></td>
                                   <td th:text="${data.nttRdcnt}"></td>
                                   <td> 
-							  		<a th:href="@{ {basicPath}/modify ( basicPath = ${basicPath}, nttSn=${data.nttSn},bbsSeCd='01' ) }" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
+							  		<a th:href="@{ {basicPath}/mcd/modify ( basicPath = ${basicPath}, nttSn=${data.nttSn},bbsSeCd='01' ) }" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
 								  </td>
                                </tr>
                                <tr th:unless = "${!resultList.isEmpty()}">
@@ -84,8 +79,8 @@
                                        <!-- S : 하단 목록 -->
                      <div class="col-md-12 col-sm-12">
                         <div class="col-md-2 col-sm-3 text-left">
-							<a href="/admin/bbs/list"  class="btn btn-white w120p">뒤로</a>
-							<a th:href="@{ {basicPath}/regist ( basicPath = ${basicPath}, bbsSn=${bbsSn},bbsSeCd='01' ) }" class="btn btn-white w120p">등록</a>
+							<a href="/admin/bbs/mcd/list"  class="btn btn-white w120p">뒤로</a>
+							<a th:href="@{ {basicPath}/mcd/regist ( basicPath = ${basicPath}, bbsSn=${bbsSn},bbsSeCd='01' ) }" class="btn btn-white w120p">등록</a>
                         </div>
                         <!-- bottom center area (paging) -->
                         <div class="col-md-8 col-sm-6 text-center"

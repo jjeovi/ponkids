@@ -286,7 +286,7 @@ function fnAnswerReplyList( nttReplySn ) {
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="updateForm" name="updateForm" method="post" th:action="@{/admin/ntt/update}"
+                    <form id="updateForm" name="updateForm" method="post" th:action="@{ {basicPath}/mcd/update ( basicPath = ${basicPath} ) }"
                           th:object="${nttSaveReqDto}"  enctype="multipart/form-data">
                         <input type="hidden" name="bbsSn"  th:value="${targetDto.bbsSn}"/>
                         <input type="hidden" name="nttSn"  th:value="${targetDto.nttSn}" />
@@ -395,12 +395,11 @@ function fnAnswerReplyList( nttReplySn ) {
                        <div class="col-md-12">
                             <!-- bottom left area -->
                             <div class="col-md-2 col-sm-3 text-left">
-							    <a th:href="@{/admin/ntt/list(bbsSn=${targetDto.bbsSn})}"  class="btn btn-white w120p"> 목록</a>
+								<a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath}  , bbsSn =  ${targetDto.bbsSn} ) }" class="btn btn-white w120p">목록</a>
                             </div>
                             <!-- bottom center area -->
                             <div class="col-md-8 col-sm-6 text-center">
-                                <a th:href="'javascript:deleteItem(\'' + ${targetDto.nttSn} + '\');'"
-	                                       class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>삭제</a>
+                                <a th:href="'javascript:deleteItem(\'' + ${targetDto.nttSn} + '\');'"   class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>삭제</a>
                                 <button type="submit" class="btn btn-purple w120p">저장</button>
                             </div>
                             <!-- bottom right area -->
@@ -408,7 +407,7 @@ function fnAnswerReplyList( nttReplySn ) {
                             </div>
                         </div>
                     </form>
-                     <form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/delete ( basicPath = ${basicPath} ) }">
+                     <form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/mcd/delete ( basicPath = ${basicPath} ) }">
             		     <input type="hidden" name="nttSn" id="delPk" /> <!-- delPk 문자 수정 금지 -->
             	    </form>
                 </div>

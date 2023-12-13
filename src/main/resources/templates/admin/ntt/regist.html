@@ -4,7 +4,6 @@
 
 <script  layout:fragment="script">
 $(document).ready(function() {
-	
 	// 에디터 설정
 	fnSummernoteCall();
 });
@@ -60,7 +59,7 @@ $(document).ready(function() {
                             </div>
                            </div>   
                         </div>
-                         <div  th:if = "${bbsSeCd == '02'}">
+                        <div  th:if = "${bbsSeCd == '02'}">
                              <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
                         </div>
                          <div class="field item form-group">
@@ -87,31 +86,10 @@ $(document).ready(function() {
                          <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일</label>
                             <div class="col-md-6 col-sm-6">
-                            <!-- <form>-->
-								 <table  id= "file_table">
-									 
-								 </table>
-								 <span  id= "totSize"></span>
-								 <input type="file" id="multi-add" class="btn-add"   name="multiFile" multiple style="display: none;">
-					             <button type="button" class="btn-add" id="file_add">파일추가</button>
-								 <input type="hidden"   name="fileList"  id="fileList">
-								 	
-							<!--	 	파일 : <input type="file" name="multiFile" multiple> <br>-->
-	                          	<!--파일 설명 : <input type="text" name="fileContent"><br>-->
-		
-		
-						<!--	 </form> -->
-                                   
-                            
-					
-					
-					
-                                      <!--  <label class="btn btn-purple">파일추가
-                                            <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
-                                        </label>-->
-                                   
-
-                               
+							   <table  id= "file_table">
+							   </table>
+							   <input type="file" id="multi-add" class="btn-add"   name="multiFile" value="" multiple style="">
+					        <!--   <button type="button" class="btn-add" id="file_add">파일추가</button>-->
                             </div>
                           </div>   
                         <div class="ln_solid"></div>
@@ -119,11 +97,11 @@ $(document).ready(function() {
                        <div class="col-md-12">
                             <!-- bottom left area -->
                             <div class="col-md-2 col-sm-3 text-left">
-								<a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">목록</a>
+								<a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath}  , bbsSn =  ${bbsSn} ) }" class="btn btn-white w120p">목록</a>
                             </div>
                             <!-- bottom center area -->
                             <div class="col-md-8 col-sm-6 text-center">
-                               <a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">취소</a>
+                               	<a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath}  , bbsSn =  ${bbsSn} ) }" class="btn btn-white w120p">취소</a>
                                 <button type="submit" class="btn btn-purple w120p">저장</button>
                             </div>
                             <!-- bottom right area -->
