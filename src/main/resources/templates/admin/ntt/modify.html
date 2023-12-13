@@ -333,6 +333,9 @@ function fnAnswerReplyList( nttReplySn ) {
                             </div>
                            </div>   
                         </div>
+                        <div  th:if = "${bbsSeCd == '02'}">
+                             <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
+                        </div>
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>내용</label>
                             <div class="col-md-6 col-sm-6">

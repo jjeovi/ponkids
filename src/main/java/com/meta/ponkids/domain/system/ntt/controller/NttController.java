@@ -313,15 +313,12 @@ public class NttController {
             @RequestParam(required = true) Long nttSn,
             @PathVariable String mcd,
             Model model ) {
-     
-    	// 해당 게시판에 게시물 있는지 조회 없으시 삭제 처리 
     	
-    	
+     NttModDto targetDto = nttService.findByNttSn(nttSn);
      // 삭제 처리
       nttService.deleteAllByNttSn( nttSn );
       
-      NttModDto targetDto = nttService.findByNttSn(nttSn);
-      
+
       Long bbsSn  = targetDto.getBbsSn();
       
       // 메시지 출력 및 url 이동 처리
