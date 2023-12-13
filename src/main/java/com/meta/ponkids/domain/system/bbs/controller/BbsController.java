@@ -186,7 +186,7 @@ public class BbsController {
       
       // 메시지 출력 및 url 이동 처리
       model.addAttribute( "resultMsg", msg);
-      model.addAttribute( "moveUrl", BASIC_PATH +   "/" + mcd +"/list" );
+      model.addAttribute( "moveUrl", BASIC_PATH +   "/" + mcd + "/list" );
       
       return "common/alert";
 
