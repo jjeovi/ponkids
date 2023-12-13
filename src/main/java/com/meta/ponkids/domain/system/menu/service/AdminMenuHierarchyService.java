@@ -18,10 +18,29 @@ public class AdminMenuHierarchyService {
 		
 		AdminMenuHierarchy adminMenuHierarchy = adminMenuHierarchyRepository.findTop1ByMenuUrlOrderByMenuSn(menuUrl);
 		
-		AdminMenuHierarchyDto adminMenuHierarchyDto = new AdminMenuHierarchyDto();
-		adminMenuHierarchyDto = adminMenuHierarchyDto.toDto(adminMenuHierarchy);
+		if (adminMenuHierarchy == null ) {
+			return null;
+		} else {
+			AdminMenuHierarchyDto adminMenuHierarchyDto = new AdminMenuHierarchyDto();
+			adminMenuHierarchyDto = adminMenuHierarchyDto.toDto(adminMenuHierarchy);
+			
+			return adminMenuHierarchyDto;
+		}
 		
-		return adminMenuHierarchyDto;
+	}
+	
+	public AdminMenuHierarchyDto findTop1ByMenuCdOrderByMenuSn(String menuCd) {
+		
+		AdminMenuHierarchy adminMenuHierarchy = adminMenuHierarchyRepository.findTop1ByMenuCdOrderByMenuSn(menuCd);
+		
+		if (adminMenuHierarchy == null ) {
+			return null;
+		} else {
+			AdminMenuHierarchyDto adminMenuHierarchyDto = new AdminMenuHierarchyDto();
+			adminMenuHierarchyDto = adminMenuHierarchyDto.toDto(adminMenuHierarchy);
+			
+			return adminMenuHierarchyDto;
+		}
 		
 	}
 }

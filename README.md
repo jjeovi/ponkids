@@ -368,7 +368,7 @@ upload:
  ```
 before :
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{admin/layout/layout}">
 
 after : 
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -385,7 +385,7 @@ after :
 before :
 <!-- S : 테이블 하단 페이징 -->
                         <div class="col-md-8 col-sm-6 text-center"
-                             th:insert="~{layout/tiles/paging :: paging('listForm', ${resultList})}">
+                             th:insert="~{admin/layout/tiles/paging :: paging('listForm', ${resultList})}">
                             <!-- parameter : ( submit할 form 의 name값 ), ( ${resultList} 는 Page<T> 오브젝트 )  -->
                         </div>
                         <!-- E : 테이블 하단 페이징 -->

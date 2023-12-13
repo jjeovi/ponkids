@@ -7,6 +7,9 @@ public interface AdminMenuHierarchyRepository extends JpaRepository<AdminMenuHie
 	
 	AdminMenuHierarchy findTop1ByMenuUrlOrderByMenuSn(String menuUrl);
 	
+	
+	AdminMenuHierarchy findTop1ByMenuCdOrderByMenuSn(String menuCd);
+	
 	void deleteByMenuSn (Long sn);
 
 }

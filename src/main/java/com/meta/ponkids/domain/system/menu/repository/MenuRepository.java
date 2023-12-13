@@ -22,7 +22,6 @@ public interface MenuRepository extends JpaRepository<Menu, Long>, MenuRepositor
     @Query( value = "select menu_url"
     		+		"  from tb_menu"
     		+ 		" where del_yn = 'N'"
-    		+ 		"   and use_yn = 'Y'"
     		+ 		"   and menu_url ~ :srchUrl"
     		+ 		" limit 1", 	nativeQuery = true )
     String findBymenuUrlRegExp(@Param("srchUrl" ) String srchUrl);
@@ -33,7 +32,7 @@ public interface MenuRepository extends JpaRepository<Menu, Long>, MenuRepositor
     		+ "                  from tb_menu"
     		+ "                 where menu_url = :menuUrl"
     		+ "                   and del_yn = 'N'"
-    		+ "                   and use_yn = 'Y'"
+    		//+ "                   and use_yn = 'Y'"
     		+ "                 limit 1 ) tm"
     		+ "    left join tb_menu_role tmr"
     		+ "           on tm.menu_sn = tmr.menu_sn"

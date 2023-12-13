@@ -1,14 +1,19 @@
 package com.meta.ponkids.domain.system.menu.dto;
 
-import com.meta.ponkids.domain.system.menu.entity.Menu;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.List;
 
+import com.meta.ponkids.domain.system.menu.entity.Menu;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 public class MenuSaveDto extends MenuDto {
 	
 	private Long menuSn;

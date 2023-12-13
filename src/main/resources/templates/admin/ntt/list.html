@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+      layout:decorate="~{admin/layout/layout}">
 <title layout:fragment="title">pioneerkids Admin - 리스트형 게시물 조회</title>
 <!-- S : Javascript functions	-->
 <script layout:fragment="script">
@@ -86,7 +86,7 @@
                         </div>
                         <!-- bottom center area (paging) -->
                         <div class="col-md-8 col-sm-6 text-center"
-                             th:insert="~{layout/tiles/paging :: paging('listForm', ${resultList})}">
+                             th:insert="~{admin/layout/tiles/paging :: paging('listForm', ${resultList})}">
                             <!-- parameter : ( submit할 form 의 name값 ), ( ${resultList} 는 Page<T> 오브젝트 )  -->
                         </div>
                         <!-- bottom right area -->

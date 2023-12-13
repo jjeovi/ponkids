@@ -76,7 +76,6 @@ public class AuthInterceptor implements HandlerInterceptor {
         
     }
     
-    
     String getFullURL(HttpServletRequest request ) { 
     	StringBuffer requestURL = request.getRequestURL();
     	String queryString = request.getQueryString();

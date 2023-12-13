@@ -7,11 +7,13 @@ import com.meta.ponkids.domain.system.menu.entity.Menu;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 public class MenuModDto extends MenuDto {
 	
 	private Long menuSn;

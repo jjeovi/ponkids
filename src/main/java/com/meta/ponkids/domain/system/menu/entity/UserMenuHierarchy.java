@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @Immutable
 @Table(name = "vw_user_menu_hierarchy")
+@Where( clause = "del_yn = 'N'") // DEFAULT 로 WHERE DEL_YN = 'N' 문을 추가하여 조회
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserMenuHierarchy extends MenuHierarchy {
