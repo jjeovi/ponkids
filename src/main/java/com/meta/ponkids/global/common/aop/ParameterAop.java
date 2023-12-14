@@ -170,14 +170,16 @@ public class ParameterAop {
                     return;
                 	
                 } else {
+
+                    model.addAttribute( MCD, mcd );
+                    
+                    AdminMenuHierarchyDto presentMenuDto = adminMenuHierarchyService.findTop1ByMenuUrlOrderByMenuSn( fullUri  );
+                    // 현재 메뉴 정보 (currentMenu) model 에 추가
+                    model.addAttribute( "currentMenu", presentMenuDto );
+                    
+                    return;
                 	
                 }
-                
-                AdminMenuHierarchyDto presentMenuDto = adminMenuHierarchyService.findTop1ByMenuUrlOrderByMenuSn( fullUri  );
-                // 현재 메뉴 정보 (currentMenu) model 에 추가
-                model.addAttribute( "currentMenu", presentMenuDto );
-                
-                return;
             	
             }
             

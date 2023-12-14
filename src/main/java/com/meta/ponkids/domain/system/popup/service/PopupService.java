@@ -15,6 +15,7 @@ import com.meta.ponkids.domain.system.popup.dto.PopupSaveDto;
 import com.meta.ponkids.domain.system.popup.entity.Popup;
 import com.meta.ponkids.domain.system.popup.repository.PopupRepository;
 import com.meta.ponkids.global.util.ip.IpUtils;
+import com.meta.ponkids.global.util.session.SessionUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,7 +28,7 @@ public class PopupService {
 	public PopupSaveDto save( PopupSaveDto saveDto, HttpServletRequest request ) throws IOException {
 //    public PopupSaveDto save( PopupSaveDto saveDto, PopupRoleSaveDto popupRoleSaveDto, HttpServletRequest request ) throws IOException {
 		
-		saveDto.setRegisterId( "admin@test.com" );							// Id set
+		saveDto.setRegisterId( SessionUtils.getClientId() );							// Id set
 		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set
 		
 		Popup newPopup = popupRepository.save( saveDto.toEntity() );			// ** save -> save된 정보 newXxx 로 저장

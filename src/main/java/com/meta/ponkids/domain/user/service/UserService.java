@@ -9,6 +9,8 @@ import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
 import com.meta.ponkids.domain.user.repository.UserRepository;
 import com.meta.ponkids.domain.user.repository.UserRoleRepository;
 import com.meta.ponkids.global.util.ip.IpUtils;
+import com.meta.ponkids.global.util.session.SessionUtils;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,7 +56,7 @@ public class UserService {
         if ( userSaveDto.getMngrYn().equals( "Y" ) ) {
         	userRoleSaveDto.setUserSn(newUser.getUserSn());						 			// 등록한 ID의 sn값 바로 호출 (newUser에서 값 호출)
             userRoleSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );     			// 관리자 IP 저장
-            userRoleSaveDto.setRegisterId( "admin@test.com" );                   			// TODO : 현재 세션의 userId값으로 수정
+            userRoleSaveDto.setRegisterId( SessionUtils.getClientId() );                   			// TODO : 현재 세션의 userId값으로 수정
             
             userRoleRepository.save( userRoleSaveDto.toEntity() );							// * 권한 save
         }
@@ -69,7 +71,7 @@ public class UserService {
                 userChldrn.setUserChldrnSeq( (long)userChldrns.getUserChldrns().indexOf( userChldrn ) + 1 );	// userChldrnSeq Setting
                 
                 userChldrn.setRegisterIp( IpUtils.getClientIP( request ) );    									// 관리자 IP 저장
-                userChldrn.setRegisterId( "admin@test.com" );                   								// TODO : 현재 세션의 userId값으로 수정
+                userChldrn.setRegisterId( SessionUtils.getClientId() );                   								// TODO : 현재 세션의 userId값으로 수정
                 
                 // 자녀 프로필 존재시 추가
                 if(!userChldrn.getFile().isEmpty()) {
@@ -197,7 +199,7 @@ public class UserService {
                 userChldrn.setUserChldrnSeq( (long)userChldrns.getUserChldrns().indexOf( userChldrn ) + 1 );	// userChldrnSeq Setting
                 
                 userChldrn.setRegisterIp( IpUtils.getClientIP( request ) );    									// 관리자 IP 저장
-                userChldrn.setRegisterId( "admin@test.com" );                   								// TODO : 현재 세션의 userId값으로 수정
+                userChldrn.setRegisterId( SessionUtils.getClientId() );                   								// TODO : 현재 세션의 userId값으로 수정
                 
                 // 자녀 프로필 존재시 추가
                 if(!userChldrn.getFile().isEmpty()) {
