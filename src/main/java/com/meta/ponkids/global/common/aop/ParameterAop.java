@@ -62,8 +62,10 @@ public class ParameterAop {
         
         // request 선언
         HttpServletRequest request = ( ( ServletRequestAttributes ) RequestContextHolder.currentRequestAttributes() ).getRequest();
+        // response 선언
+        HttpServletResponse response = ( ( ServletRequestAttributes ) RequestContextHolder.currentRequestAttributes() ).getResponse();
         String requestUri = request.getRequestURI();
-        String fullUrl = getFullURLExp(request);
+        String fullUri = getfullUriExp(request);
         String queryString = request.getQueryString();
         
         
@@ -97,7 +99,6 @@ public class ParameterAop {
             // model 이 null 이라면 return !
             if ( model == null ) return;
             
-            
             // mcd 값이 url에 존재하지 않으면 return
             if ( !requestUri.contains( mcd ) ) return;
             
@@ -106,22 +107,54 @@ public class ParameterAop {
             // 정규식 검색으로 조회한 url (같은 url 여러개 있을 시, 최상위 1개만 조회)
             String url = menuRepository.findBymenuUrlRegExp( srchUrlReg );
             
-
-        	
             // 만약 메뉴 url이 변수가 존재하는 url 이라면 
-            String url2 = menuRepository.findBymenuUrlRegExp( srchUrlReg +"\\?" );
+            String url_Q = menuRepository.findBymenuUrlRegExp( makeRegExpEndFree( requestUri, mcd ) +"\\?" );
             
-            if(StringUtils.hasText( url2 )) {
-                
-                String srchUrl2Reg = makeRegExp( fullUrl, mcd );
+            if(StringUtils.hasText( url_Q )) {
+            	
+            	String srchUrlParamReg = makeRegExp( fullUri, mcd );
                 
                 // 정규식 검색으로 조회한 url (같은 url 여러개 있을 시, 최상위 1개만 조회)
-                String url3 = menuRepository.findBymenuUrlRegExp( srchUrl2Reg );
+                String url_param = menuRepository.findBymenuUrlRegExp( srchUrlParamReg );
                 
-                if(StringUtils.hasText( url3 )) {
+                if(StringUtils.hasText( url_param )) {
                 	
                 	// 정규식 조회로 해당하는 url 이 없을 경우
                     // mcd 값만 model 에 추가한 후 그냥 return 함 ( mcd 값을 모델에 추가하는 이유는 html 에서 메뉴에 없는 url이라도 mcd를 참조하여 left menu에 연동 할 수 있기 때문에 )
+                	
+                	if ( equalCheck( fullUri.replaceAll("\\\\", ""), url_param, mcd ) ) {
+                        // 내가 접속한 requestUri 와 db에서 조회한 url 이 정규식 뿐만 아니라 mcd까지 전체url이 같을 경우 (이 부분이 최종으로 return 되야 정상적으로 관리자URL에 접속 했다고 판단)
+                        
+                        
+                        // 권한 체크 (내 계정의 권한에 없는 url 일 경우 401 return)
+                        if ( !authCheckAop( fullUri.replaceAll("\\\\", "") ) ) {
+                            // 권한 없음 페이지 이동
+                            response.sendRedirect( "/error/admin/401" ); // 권한없음 ( 401 )
+                        } else {
+                            
+                            // mcd 값 model 에 추가
+                            model.addAttribute( MCD, mcd );
+                            
+                            AdminMenuHierarchyDto presentMenuDto = adminMenuHierarchyService.findTop1ByMenuUrlOrderByMenuSn( fullUri.replaceAll("\\\\", "")  );
+                            // 현재 메뉴 정보 (currentMenu) model 에 추가
+                            model.addAttribute( "currentMenu", presentMenuDto );
+                            
+                        }
+                        
+                        return;
+                        
+                    } else {
+                        // 내가 접속한 requestUri 와 db에서 조회한 url 이 정규화 되어있는 부분만 같고, mcd 부분이 다를 경우에는 , url에 존재하는mcd로 맞춰서 redirect 시킴
+                        // ex ) : 내가 접속한 url   : contextPath + "/admin/menu/mcd123/list"  (mcd123은 db에 저장되어있는 mcd값과 다름!)
+                        //        db에서 조회한 url : contextPath + "/admin/menu/mcd712/list"
+                        //       일 경우, "/admin/menu/mcd712/list" 로 redirect 시켜 mcd값을 맞춘다.
+                        
+                        // -> mcd값을 잘 몰르땐 /admin/menu/mcd/list와 같이 mcd만 입력해도 알아서 db에 있는 mcd값으로 redirect 시킨다.
+                        
+                        
+                        // mcd 값 db에 저장되어있는 url로 매핑시켜 redirect
+                        response.sendRedirect( makeRedirect( fullUri.replaceAll("\\\\", ""), url_param, mcd) ); // mcd를 맞춰서 redirect
+                    }
                     
                     model.addAttribute( MCD, mcd );
                     
@@ -140,7 +173,7 @@ public class ParameterAop {
                 	
                 }
                 
-                AdminMenuHierarchyDto presentMenuDto = adminMenuHierarchyService.findTop1ByMenuUrlOrderByMenuSn( fullUrl  );
+                AdminMenuHierarchyDto presentMenuDto = adminMenuHierarchyService.findTop1ByMenuUrlOrderByMenuSn( fullUri  );
                 // 현재 메뉴 정보 (currentMenu) model 에 추가
                 model.addAttribute( "currentMenu", presentMenuDto );
                 
@@ -169,9 +202,6 @@ public class ParameterAop {
             } else {
                 // 정규식 조회로 해당하는 url 이 있을 경우
     
-                
-                // response 선언
-                HttpServletResponse response = ( ( ServletRequestAttributes ) RequestContextHolder.currentRequestAttributes() ).getResponse();
                 
                 if ( equalCheck( requestUri, url, mcd ) ) {
                     // 내가 접속한 requestUri 와 db에서 조회한 url 이 정규식 뿐만 아니라 mcd까지 전체url이 같을 경우 (이 부분이 최종으로 return 되야 정상적으로 관리자URL에 접속 했다고 판단)
@@ -205,7 +235,7 @@ public class ParameterAop {
                     
                     
                     // mcd 값 db에 저장되어있는 url로 매핑시켜 redirect
-                    response.sendRedirect( makeRedirect( requestUri, url, mcd , queryString ) ); // mcd를 맞춰서 redirect
+                    response.sendRedirect( makeRedirect( requestUri, url, mcd ) ); // mcd를 맞춰서 redirect
                 }
             }
         }
@@ -238,7 +268,14 @@ public class ParameterAop {
     private String makeRegExp( String requestUri, String mcd ) {
         
         String[] separateUrl = requestUri.split( mcd );
-        return separateUrl[ 0 ] + MCD + ".*" + separateUrl[ 1 ];    // 정규식 표현 생성
+        return "^" + separateUrl[ 0 ] + MCD + ".*" + separateUrl[ 1 ] + "$";    // 정규식 표현 생성
+    }
+    
+    
+    private String makeRegExpEndFree( String requestUri, String mcd ) {
+    	
+    	String[] separateUrl = requestUri.split( mcd );
+    	return "^" + separateUrl[ 0 ] + MCD + ".*" + separateUrl[ 1 ] ;    // 정규식 표현 생성
     }
     
     private boolean equalCheck( String requestUri, String url, String mcd ) {
@@ -250,22 +287,19 @@ public class ParameterAop {
         return dbMcd.equals( mcd );
     }
     
-    private String makeRedirect( String requestUri, String url, String mcd, String queryString ) {
+    private String makeRedirect( String requestUri, String url, String mcd) {
     	
         
         String[] separateUrl = requestUri.split( mcd );	
         String dbMcd = url.replace( separateUrl[ 0 ], "" );
         dbMcd = dbMcd.replace( separateUrl[ 1 ], "" );
         
-        if (queryString == null )  {
-        	return separateUrl[ 0 ] + dbMcd + separateUrl[ 1 ];
-    	} else {
-    		return separateUrl[ 0 ] + dbMcd + separateUrl[ 1 ] + "?" + queryString;
-    	}
+        
+        return separateUrl[ 0 ] + dbMcd + separateUrl[ 1 ];
         
     }
     
-    String getFullURLExp(HttpServletRequest request ) { 
+    String getfullUriExp(HttpServletRequest request ) { 
     	String requestURi = request.getRequestURI();
     	String queryString = request.getQueryString();
     	if (queryString == null )  {

@@ -1286,7 +1286,9 @@ table.no-margin .progress {
 
 .row {
   margin-right: -10px;
-  margin-left: -10px; }
+  margin-left: -10px;
+  justify-content: center;
+  }
 
 .grid_slider .col-md-6 {
   padding: 0 40px; }
@@ -5693,4 +5695,10 @@ input[type="checkbox"][disabled] + label{
 .required {
   color: #af0024;
   font-weight: bold;
+}
+
+
+
+.row > .form {
+	width:100%;
 }
