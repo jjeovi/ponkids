@@ -23,7 +23,6 @@ public class NttReplyListDto {
      private int nttReplySeq;
      private String nttReplyCn;
      private String delYn;     
-     
 
      @NotNull
      private String registerId;
@@ -45,6 +44,7 @@ public class NttReplyListDto {
             this.registerId = registerId;
             this.delYn = delYn;
             this.regDt = regDt;
+            
      }
     
 }

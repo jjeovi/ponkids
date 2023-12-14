@@ -1,6 +1,7 @@
 package com.meta.ponkids.domain.system.ntt.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.meta.ponkids.global.common.BaseTimeEntity;
 import lombok.*;
 import org.hibernate.annotations.*;
@@ -53,13 +54,12 @@ public class  NttReply extends BaseTimeEntity {
 	private String registerId;
     @Column(updatable = false)
 	private String registerIp;
+
     @Column(updatable = false)
 	private LocalDateTime regDt;
 
 	private String updusrId;
-
 	private String updusrIp;
-
 	private LocalDateTime updtDt;
 
     @ColumnDefault("N")                             

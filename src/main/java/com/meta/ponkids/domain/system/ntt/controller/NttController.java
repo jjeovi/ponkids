@@ -139,25 +139,20 @@ public class NttController {
     @Transactional
     @PostMapping(BASIC_PATH  + "/{mcd}/insert")
     public String nttInsert( 
-    	                   //@RequestParam("file") MultipartFile files,
-    	                   //@RequestParam("multiFile") List<MultipartFile> multiFileList,
-    	                   
-    	                   @RequestParam(required = false , defaultValue= "") MultipartFile file,
-    	                   @RequestParam(required = false , defaultValue= "") List<MultipartFile> multiFile,
-    		               @ModelAttribute NttSaveReqDto nttSaveReqDto,
-    		               @PathVariable String mcd,
-    		               HttpServletRequest request , Model model ) throws IOException {
-    	
+    	                    @RequestParam("file") MultipartFile files,
+                            @RequestParam("multiFile") List<MultipartFile> multiFileList,
+    		                @ModelAttribute NttSaveReqDto nttSaveReqDto,
+    		                @PathVariable String mcd,
+    		                HttpServletRequest request , Model model ) throws IOException {
     	
     	// 썸네일 이미지 존재시 파일 저장
-        if(!file.isEmpty()){
-        	nttSaveReqDto.setAtchFileSn(atchFileService.save(file));	// 파일 save (파일 개수 1개일 때 ) 
+        if(!files.isEmpty()){
+        	nttSaveReqDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 ) 
         }
         
         // 첨부파일  존재시 파일 저장
-        if(!multiFile.isEmpty()){
-        	
-        	nttSaveReqDto.setCnAtchFileSn(atchFileService.multifileSave(multiFile,null));	// 파일 save (파일여러개 ) 
+        if(  multiFileList.get(0).getSize() != 0){
+        	nttSaveReqDto.setCnAtchFileSn(atchFileService.multifileSave(multiFileList,null));	// 파일 save (파일여러개 ) 
         }
     	
     	// save
@@ -358,6 +353,8 @@ public class NttController {
     	     nttReplyService.save(nttReplySaveReqDto,request);
     	     // 댓글 목록 조회
     	  	 List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
+    	  	 
+    	  	
     	  	 
     	  	 return replyList;
     	} else {    //  B: 답글 등록

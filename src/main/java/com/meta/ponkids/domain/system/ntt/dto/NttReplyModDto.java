@@ -28,10 +28,6 @@ public class NttReplyModDto {
      private String updusrId;      
      private String updusrIp; 
      private LocalDateTime updtDt;  
-	
-    
-
-	
 
     // builder 생성
     @Builder
