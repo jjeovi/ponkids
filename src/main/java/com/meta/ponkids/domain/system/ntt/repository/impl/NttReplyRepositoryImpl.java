@@ -67,7 +67,7 @@ public class NttReplyRepositoryImpl    {
 													               nttReply.nttReplyCn,
 													               nttReply.registerId,
 													               nttReply.writerDt,
-  													               nttReply.delYn
+  													               nttReply.delYn 
   													               ))
 			                                            .from(nttReply)
 			                                            .where( nttReply.nttSn.eq( nttSn ),
