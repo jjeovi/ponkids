@@ -1,7 +1,6 @@
 package com.meta.ponkids.domain.system.ntt.repository.impl;
 
 import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
-//import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
 import com.meta.ponkids.domain.system.ntt.dto.QNttReplyListDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -14,6 +13,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -66,7 +66,7 @@ public class NttReplyRepositoryImpl    {
 													               nttReply.nttReplySeq,
 													               nttReply.nttReplyCn,
 													               nttReply.registerId,
-													               nttReply.regDt,
+													               nttReply.writerDt,
   													               nttReply.delYn
   													               ))
 			                                            .from(nttReply)
@@ -94,7 +94,7 @@ public class NttReplyRepositoryImpl    {
 													              nttReply.nttReplySeq,
 													              nttReply.nttReplyCn,
 													              nttReply.registerId,
-													              nttReply.regDt,
+													              nttReply.writerDt,
   													              nttReply.delYn
 													             ))
 			                                         .from(nttReply)

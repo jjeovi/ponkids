@@ -15,6 +15,7 @@ import com.meta.ponkids.domain.system.ntt.repository.NttRepository;
 import com.meta.ponkids.global.util.ip.IpUtils;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,6 +64,7 @@ public class NttReplyService {
                                     .updusrId(nttReplySaveReqDto.getRegisterId())
                                     .updusrIp( IpUtils.getClientIP( request ))
                                     .updtDt(LocalDateTime.now())
+                                    .writerDt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                                     .build();
 
         // save
@@ -97,7 +99,8 @@ public class NttReplyService {
 	        targetDto.setUpdusrIp( IpUtils.getClientIP( request ));
 	        targetDto.setUpdusrId("ehlee"); // 임시 셋팅
 	        targetDto.setUpdtDt( LocalDateTime.now());
-	        
+	        targetDto.setWriterDt( LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
 	        // target object 에 수정사항 set
 	        // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
 	        if ( StringUtils.hasText( modDto.getNttReplyCn() ) ) targetDto.setNttReplyCn( modDto.getNttReplyCn() );   

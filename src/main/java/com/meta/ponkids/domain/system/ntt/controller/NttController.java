@@ -2,6 +2,7 @@ package com.meta.ponkids.domain.system.ntt.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -32,6 +33,7 @@ import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttReplyModDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttReplySaveReqDto;
 import com.meta.ponkids.domain.system.ntt.dto.NttSaveReqDto;
+import com.meta.ponkids.domain.system.ntt.entity.NttReply;
 import com.meta.ponkids.domain.system.ntt.service.NttReplyService;
 import com.meta.ponkids.domain.system.ntt.service.NttService;
 
@@ -333,42 +335,36 @@ public class NttController {
      * description    : id 댓글등록 ajax
      */
     @ResponseBody
-    @RequestMapping( value = "/reply/nttReplyInsert" )
-    public List nttReplyInsert(@RequestParam( "nttSn" ) Long nttSn,
-    		                   @RequestParam( "parntsReplySn" ) Long parntsReplySn,         
-    		                   @RequestParam( "nttReplyCn" ) String nttReplyCn,  
-    		                   @RequestParam( "gubun" ) String gubun, 
-    		                   HttpServletRequest request ) {
+    @RequestMapping(value = "/reply/nttReplyInsert", method = { RequestMethod.POST })
+    public String nttReplyInsert( @RequestParam Map<String ,Object> map,
+    		                      HttpServletRequest request ) {
     	
     	NttReplySaveReqDto nttReplySaveReqDto =   new NttReplySaveReqDto();
-    	nttReplySaveReqDto.setNttSn(nttSn);
-    	nttReplySaveReqDto.setNttReplyCn(nttReplyCn);
+    	
+
+    	String gubun = (String) map.get("gubun");
+    	
+    	nttReplySaveReqDto.setNttSn(Long.parseLong((String)map.get("nttSn")));
+    	nttReplySaveReqDto.setNttReplyCn((String) map.get("nttReplyCn"));
  
      	
-    	if(gubun.equals("A")){ // A : 댓글 등록 
+    	if( gubun.equals("R")){ // R : 댓글 등록 
     	
     		 nttReplySaveReqDto.setParntsReplySn((long) 0);
     		 nttReplySaveReqDto.setStep(1);
     	     // 댓글 등록 
     	     nttReplyService.save(nttReplySaveReqDto,request);
-    	     // 댓글 목록 조회
-    	  	 List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
+   
     	  	 
-    	  	
-    	  	 
-    	  	 return replyList;
-    	} else {    //  B: 답글 등록
+    	  } else {    //  A: 답글 등록
     		
-    		 nttReplySaveReqDto.setParntsReplySn(parntsReplySn);
-    		 nttReplySaveReqDto.setStep(2);
+    		nttReplySaveReqDto.setParntsReplySn(Long.parseLong((String) map.get("parntsReplySn")));
+    	    nttReplySaveReqDto.setStep(2);
     		 //답글 등록 
  	    	 nttReplyService.save(nttReplySaveReqDto,request);
-    		 // 답글 목록 조회
-    	     List<NttReplyListDto> answerReplyList = nttReplyService.getAnswerReplyList(parntsReplySn);
-    	        
-    	    return answerReplyList;
-    	}
-        
+    	  }
+    	
+    	return "success";
       
       
     } 
@@ -381,26 +377,20 @@ public class NttController {
      * description    : id 답글조회 ajax
      */
     @ResponseBody
-    @RequestMapping( value = "/reply/nttReplyUpdate", method = { RequestMethod.GET } )
-    public List nttReplyUpdate( @RequestParam( "nttReplySn" ) Long nttReplySn,
-    		                    @RequestParam( "nttReplyCn" ) String nttReplyCn, 
-    		                    @RequestParam( "nttSn" ) Long nttSn,
-    		                    HttpServletRequest request  ) {
-          
+    @RequestMapping( value = "/reply/nttReplyUpdate", method = { RequestMethod.POST } )
+    public String nttReplyUpdate( @RequestParam Map<String ,Object> map,
+                                 HttpServletRequest request ) {
     	
     	 NttReplyModDto modDto =   new NttReplyModDto();
     	 
-    	 modDto.setNttReplySn(nttReplySn);
-    	 modDto.setNttReplyCn(nttReplyCn);
+    	 modDto.setNttReplySn(Long.parseLong((String)map.get("nttReplySn")) );
+    	 modDto.setNttReplyCn((String) map.get("nttReplyCn"));
     	 
     	 // 댓글 OR 답글 수정
           nttReplyService.update(modDto,request);
-          
-     	 // 댓글 목록 조회
-    	 List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
-
-    	
-    	 return replyList;
+    	  	
+     	return "success";
+     	
       
     } 
     
@@ -410,20 +400,34 @@ public class NttController {
      * description    : id 댓글 삭제
      */
     @ResponseBody
-    @RequestMapping( value = "/reply/nttReplyDelete", method = { RequestMethod.GET } )
-    public List nttReplyUpdate( @RequestParam( "nttReplySn" ) Long nttReplySn,  
-    		                    @RequestParam( "nttSn" ) Long nttSn,
-    		                    HttpServletRequest request  ) {
+    @RequestMapping( value = "/reply/nttReplyDelete", method = { RequestMethod.POST } )
+    public String nttReplyUpdate( @RequestParam( "nttReplySn" ) Long nttReplySn,  
+    		                      HttpServletRequest request  ) {
 
     	// 댓글 삭제
     	nttReplyService.deleteAllByNttReplySn(nttReplySn);
+    	
+    	return "success";
+    	
+    	
+    } 
+    
+    
+    /**
+     * methodName    : answerReplyList
+     * date           : 11/24/23
+     * description    : id 답글조회 ajax
+     */
+    @ResponseBody
+    @RequestMapping( value = "/reply/nttReplyList", method = { RequestMethod.GET } )
+    public List nttReplyList(@RequestParam( "nttSn" ) Long nttSn) {
 
-    	List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
-    	
-    	return replyList;
-    	
-    	
-    }   
+    	// 답글 목록 조회
+        List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
+          
+        return replyList;
+      
+    } 
     
     
     /**

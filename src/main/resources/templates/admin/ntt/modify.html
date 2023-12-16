@@ -3,53 +3,56 @@
 <title layout:fragment="title">pioneerkids (Admin-bbs) - 게시물 등록</title>
 
 <script  layout:fragment="script">
-
+	var header = $("meta[name='_csrf_header']").attr("content");
+    var token = $("meta[name='_csrf']").attr("content");
 $(document).ready(function() {
-	
 	// 에디터 설정
 	fnSummernoteCall();
 });
 
-//댓글 및 답글 입력
+
+
+//댓글(Reply) 및 답글(AnswerReply) 등록
 function fnReplyInsert( parntsReplySn ){
-     var nttReplyCn =  "";
-     var nttSn =  $("#nttSn").val();
-     var gubun = "";
-     var html = "";
+    
+    var nttReplyCn =  "";
+    var nttSn =  $("#nttSn").val();
+    var gubun = "";
+    var html = "";
      
-     if(parntsReplySn == 0){
-		 gubun = "A"; // 댓글 
+    if( parntsReplySn == 0 ) {
+		 gubun = "R"; // 댓글 
 		 nttReplyCn =  $("#nttReplyCn").val();
-	 } else {
-		 gubun = "B"; // 답글  
+	} else {
+		 gubun = "A"; // 답글  
 		 nttReplyCn =  $("#AR" +parntsReplySn).val();
-	 }
-      
+	}
      $.ajax( {
       url: "/reply/nttReplyInsert",
-      type: "get",
-      dataType:'json',
-      data: { parntsReplySn: parntsReplySn ,  nttReplyCn : nttReplyCn ,nttSn : nttSn ,gubun : gubun},
-      contentType: "application/json",
+      	beforeSend: function(xhr){
+			
+		 if(header != null &&  token != null){
+			xhr.setRequestHeader(header, token);
+		 }
+  
+        },
+      type: "post",
+      data:  { parntsReplySn: parntsReplySn ,  nttReplyCn : nttReplyCn ,nttSn : nttSn ,gubun : gubun},
       success: function ( result ) {
-          
-          if( gubun == "A" ) {
-			  alert("댓글이 정상적으로 등록되었습니다.");
+		  if( result == "success" ) {
+			  if( gubun == "R" ) {
+			      alert("댓글이 정상적으로 등록되었습니다.");
+                  $("#nttReplyCn").val("");
               
-              $("#nttReplyCn").val("");
-              
-              fnReplyListRefresh( result);
-            
-		  } else {
-			  alert("답글이 정상적으로 등록되었습니다.");
-			  $("#AR" +parntsReplySn ).val("");
-			  
-			   //대댓글 목록 조회
-	           fnAnswerReplyList(parntsReplySn);
-		  }
-      
+                  fnReplyList( nttSn ); // 댓글 목록 조회
+		        } else {
+			       alert("답글이 정상적으로 등록되었습니다.");
+			       $("#AR" +parntsReplySn ).val("");
+			  	    fnAnswerReplyList(parntsReplySn); // 답글 목록 조회
+		      } 
+		   }
       }}
-     );
+    );
 }
 
 
@@ -59,47 +62,52 @@ function fnReReplyModifyOpen( nttReplySn , type ) {
       
 	if( type == 'mod') {
 
-	  $("#nttReplyCnA" + nttReplySn).show();
-	  $("#nttReplyCnB" + nttReplySn).hide();
-	  $("#save" + nttReplySn).show();	
-	  $("#mod"  + nttReplySn).hide();
+	  $("#nttReplyCn_A" + nttReplySn).show();
+	  $("#nttReplyCn_R" + nttReplySn).hide();
+	  $("#save" + nttReplySn).show();	 // 저장버튼 표시
+	  $("#mod"  + nttReplySn).hide();    // 수정버튼 숨김
 	} else {
 		
-	  $("#nttReplyCnA" + nttReplySn).hide();
-	  $("#nttReplyCnB" + nttReplySn).show();
-	  $("#save" + nttReplySn).hide();	
-	  $("#mod"  + nttReplySn).show();
+	  $("#nttReplyCn_A" + nttReplySn).hide();
+	  $("#nttReplyCn_R" + nttReplySn).show();
+	  $("#save" + nttReplySn).hide();	  // 저장버튼 숨김
+	  $("#mod"  + nttReplySn).show();     // 수정버튼 표시
 	}
 	
 }
 
 
-//댓글,답글 수정 : gubun -A 댓글 , B- 답글 
+//댓글,답글 수정 : gubun -R 댓글 , A- 답글 
 function fnReReplyModify(nttReplySn, gubun,parntsReplySn){
     
-     var nttReplyCn =  $("#nttReplyCnA" + nttReplySn ).val();
+     var nttReplyCn =  $("#nttReplyCn_A" + nttReplySn ).val();
      var nttSn =  $("#nttSn").val();
      var html = "";
       
      $.ajax( {
       url: "/reply/nttReplyUpdate",
-      type: "GET",
-      dataType: "json",
-      data: { nttReplySn: nttReplySn ,  nttReplyCn : nttReplyCn ,nttSn : nttSn},
-      contentType: "application/json",
+      beforeSend: function(xhr){
+		 if(header != null &&  token != null){
+			xhr.setRequestHeader(header, token);
+		 }
+        },
+      type: "post",
+      data: { nttReplySn: nttReplySn ,  nttReplyCn : nttReplyCn},
       success: function ( result ) {
 		  
-		    $("#nttReplyCnA" + nttReplySn).hide();
-	        $("#nttReplyCnB" + nttReplySn).show();
+		    $("#nttReplyCn_A" + nttReplySn).hide();
+	        $("#nttReplyCn_R" + nttReplySn).show();
 	        $("#save"+ nttReplySn).hide();	
 	        $("#mod" + nttReplySn).show();
-	          
-           if( gubun == "A" ) {
-			  alert("댓글이 수정되었습니다.");
-	          fnReplyListRefresh(result); 
-           } else {
-			  alert("답글이 수정되었습니다.");
-	          fnAnswerReplyList(parntsReplySn);      // 답글 목록 조회 
+	        
+	     if( result == "success" ) {      
+            if( gubun == "R" ) {
+			   alert("댓글이 수정되었습니다.");
+	           fnReplyList(nttSn); 
+            } else {
+			   alert("답글이 수정되었습니다.");
+	           fnAnswerReplyList(parntsReplySn);     
+		   }
 		  }
       }}
      );
@@ -112,15 +120,20 @@ function fnReReplyDelete(nttReplySn, gubun,parntsReplySn){
       
    $.ajax({
     url: "/reply/nttReplyDelete",
-    type: "GET",
-    dataType: "json",
-    data: { nttReplySn: nttReplySn , nttSn : nttSn},
-    contentType: "application/json",
+    	beforeSend: function(xhr){
+			
+		 if(header != null &&  token != null){
+			xhr.setRequestHeader(header, token);
+		 }
+  
+        },
+    type: "post",
+    data: { nttReplySn: nttReplySn},
     success: function ( result ) {
        
-       if( gubun == "A" ){
+       if( gubun == "R" ){
 		 alert("댓글이 정삭적으로 삭제되었습니다.");
-		 fnReplyListRefresh(result);  // 댓글 목록 조회 
+		 fnReplyList(nttSn);  // 댓글 목록 조회 
 	   } else {
 		 alert("답글이 정삭적으로 삭제되었습니다.");
 		 fnAnswerReplyList(parntsReplySn);   // 답글 목록 조회 
@@ -130,73 +143,78 @@ function fnReReplyDelete(nttReplySn, gubun,parntsReplySn){
   );
 
 }
-
-// 댓글목록 조회 : 새로고침
-function fnReplyListRefresh( result ){
-	
-    var html = "";	
-    $("#replyAddList").remove(); // 댓글 목록 지우기
-	           
-	 html +="<div id='replyAddList'>";
-	     
-	 for( i = 0 ; i < result.length ; i++ ) {
-		 html += "<div class='card-header p-2'>";
-		 html += "   <table>";
-		 html += "        <tbody>";
-		 html += "             <tr class='align-middle'>";
-		 html += "                  <td rowspan='2' class='pr-2'><i class='fa fa-user-o fa-2x'></i></td>";
-		 html += "                  <td class='ml' >"+  result[i].registerId +"</td>";
-		 html += "             </tr>";
-		 html += "         </tbody>";
-		 html += "   </table>";
-		 html += "</div>";
-		 html += "<div class='card-body'>";
-		 
-		 if( result[i].delYn == 'N') {
-			  html +=  "<p class='card-text'>";
-			  html +=  "    <span id='nttReplyCnB" + result[i].nttReplySn  + "'>" + result[i].nttReplyCn  +  "</span>";
-              html +=  "</p>";
-		      html +=  "<input type = 'text'   class='ml'   id='nttReplyCnA" + result[i].nttReplySn  + "'  style='display: none;' value='" + result[i].nttReplyCn  + "'/>"; 
-		      html +=  "<input type = 'hidden' class='ml'   value='" +  result[i].nttReplyCn  + "'/>" ;
-		      // 버튼
-		      html += '<span class="badge badge-dark" style="cursor:pointer"  id="O' +   result[i].nttReplySn + '">                 <a onclick="fnReReplyArea(' +  result[i].nttReplySn  + ',\'open\');"     >답글</a></span>';
-		      html += '<span class="badge badge-dark" style="cursor:pointer; display: none;"  id="C'+  result[i].nttReplySn +'">    <a onclick="fnReReplyArea(\'' + result[i].nttReplySn + '\',\'close\');"      >접기</a></span>';
-		      html += '<span class="badge badge-dark" style="cursor:pointer"  id="mod' + result[i].nttReplySn +	'">                 <a onclick="fnReReplyModifyOpen(\'' +  result[i].nttReplySn + '\',\'mod\');" >수정</a></span>';
-		      html += '<span class="badge badge-dark" style="cursor:pointer; display: none;" id="save' + result[i].nttReplySn  + '"><a onclick="fnReReplyModify(\'' + result[i].nttReplySn   + '\',\'A\',\'0\');"      >저장</a></span>';
-		      html += '<span class="badge badge-dark" style="cursor:pointer"  id="del' + result[i].nttReplySn +  '">                <a onclick="fnReReplyDelete(\''  + result[i].nttReplySn + '\',\'A\',\'0\');"     >삭제</a></span>';
-		
-		 } else {
-			  html += "<p class='card-text''><span>댓글이 작성자에 의해 삭제되었습니다.</span> </p>";
-		 }
-		
-		 html += "</div>";
-		 html += "<div style='display: none;' id='R" + result[i].nttReplySn +"'></div>";
-	   }
-	  html += "</div>";   
-		    
-     $("#replyDiv").html(html); // 댓글 목록 리프레쉬
-		  
-}
    
 // 답글  구역 조회
 function fnReReplyArea( nttReplySn ,type ) {
 
 	if( type == 'open') {
-
-	  $("#O"+nttReplySn).hide();
-	  $("#C"+nttReplySn).show();		
+	  $("#open"+nttReplySn).hide();   // 답글 버튼 숨길
+	  $("#close"+nttReplySn).show();  // 접기 버튼 표시		
 	  
 	  //답글 목록 조회
 	  fnAnswerReplyList(nttReplySn);
 	  
 	} else {
-	  $("#O" + nttReplySn).show();
-	  $("#C" + nttReplySn).hide();		
-      $("#R" + nttReplySn).hide();
+	  $("#open" + nttReplySn).show();   // 답글 버튼 표시
+	  $("#close" + nttReplySn).hide();  // 접기 버튼 숨김	
+      $("#Answer" + nttReplySn).hide(); // 답글 구역 숨김
 	}
 
 }
 
+// 댓글목록 조회 
+function fnReplyList( nttSn ) {
+	    
+      $.ajax( {
+      url: "/reply/nttReplyList",
+      type: "GET",
+      dataType: "json",
+      data: { nttSn:  nttSn},
+      contentType: "application/json",
+      success: function ( result ) {
+		var html = "";	
+               
+        $("#replyAddList").remove(); // 댓글 목록 지우기
+	           
+	    html +="<div id='replyAddList'>";
+	    for( i = 0 ; i < result.length ; i++ ) {
+	   	         html += "<div class='card-header p-2'>";
+	   	         html += "   <table>";
+	   	         html += "        <tbody>";
+	   	         html += "             <tr class='align-middle'>";
+	   	         html += "                 <td rowspan='2' class='pr-2'><i class='fa fa-user-o fa-2x'></i></td>";
+	   	        html += "                  <td class='ml' >작성자 : "+  result[i].registerId  + "&nbsp;&nbsp;&nbsp;&nbsp;작성일 : "  +  result[i].writerDt + "</td>";
+	   	         html += "             </tr>";
+	   	         html += "         </tbody>";
+	   	         html += "   </table>";
+	   	         html += "</div>";
+	   	         html += "<div class='card-body'>";
+	   	 
+	   	   if( result[i].delYn == 'N') {
+	   		      html +=  "<p class='card-text'>";
+	   		      html +=  "    <span id='nttReplyCn_R" + result[i].nttReplySn  + "'>" + result[i].nttReplyCn  +  "</span>";
+                  html +=  "</p>";
+	   	          html +=  "<input type = 'text'   class='ml'   id='nttReplyCn_A" + result[i].nttReplySn  + "'  style='display: none;' value='" + result[i].nttReplyCn  + "'/>"; 
+	   	          html +=  "<input type = 'hidden' class='ml'   value='" +  result[i].nttReplyCn  + "'/>" ;
+	   	          // 버튼
+	   	          html += '<span class="badge badge-dark" style="cursor:pointer"  id="open' +   result[i].nttReplySn + '">                 <a onclick="fnReReplyArea(' +  result[i].nttReplySn  + ',\'open\');"     >답글</a></span>';
+	   	          html += '<span class="badge badge-dark" style="cursor:pointer;  display: none;"  id="close'+  result[i].nttReplySn +'">    <a onclick="fnReReplyArea(\'' + result[i].nttReplySn + '\',\'close\');"      >접기</a></span>';
+	   	          html += '<span class="badge badge-dark" style="cursor:pointer"  id="mod' + result[i].nttReplySn +	'">                 <a onclick="fnReReplyModifyOpen(\'' +  result[i].nttReplySn + '\',\'mod\');" >수정</a></span>';
+	   	          html += '<span class="badge badge-dark" style="cursor:pointer;  display: none;" id="save' + result[i].nttReplySn  + '"><a onclick="fnReReplyModify(\'' + result[i].nttReplySn   + '\',\'R\',\'0\');"      >저장</a></span>';
+	   	          html += '<span class="badge badge-dark" style="cursor:pointer"  id="del' + result[i].nttReplySn +  '">                <a onclick="fnReReplyDelete(\''  + result[i].nttReplySn + '\',\'R\',\'0\');"     >삭제</a></span>';
+	   	
+	   	      } else {
+	   		  html += "<p class='card-text''><span>댓글이 작성자에 의해 삭제되었습니다.</span> </p>";
+	   	       }
+	   	     html += "</div>";
+	   	     html += "<div style='display: none;' id='R" + result[i].nttReplySn +"'></div>";
+	     }
+	     html += "</div>";   
+	   	    
+        $("#replyDiv").html(html); // 댓글 목록 리프레쉬
+	   }
+     })
+}
 
 //답글 목록 조회
 function fnAnswerReplyList( nttReplySn ) {
@@ -242,7 +260,7 @@ function fnAnswerReplyList( nttReplySn ) {
 		   html2 += "        <tbody>";
 		   html2 += "             <tr class='align-middle'>";
 		   html2 += "                  <td rowspan='2' class='pr-2'><i class='fa fa-user-o fa-2x'></i></td>";
-		   html2 += "                  <td class='ml' >"+  result[i].registerId +"</td>";
+		   html2 += "                  <td class='ml' >작성자 : "+  result[i].registerId  + "&nbsp;&nbsp;&nbsp;&nbsp;작성일 : "  +  result[i].writerDt + "</td>";
 		   html2 += "             </tr>";
 		   html2 += "         </tbody>";
 		   html2 += "   </table>";
@@ -251,16 +269,16 @@ function fnAnswerReplyList( nttReplySn ) {
 		 
 		 if( result[i].delYn == 'N') {
 			  html2 +=  "<p class='card-text'>";
-			  html2 +=  "    <span id='nttReplyCnB" + result[i].nttReplySn  + "'>" + result[i].nttReplyCn  +  "</span>";
+			  html2 +=  "    <span id='nttReplyCn_R" + result[i].nttReplySn  + "'>" + result[i].nttReplyCn  +  "</span>";
               html2 +=  "</p>";
-		      html2 +=  "<input type = 'text'   class='ml'   id='nttReplyCnA" + result[i].nttReplySn  + "'  style='display: none;' value='" + result[i].nttReplyCn  + "'/>"; 
+		      html2 +=  "<input type = 'text'   class='ml'   id='nttReplyCn_A" + result[i].nttReplySn  + "'  style='display: none;' value='" + result[i].nttReplyCn  + "'/>"; 
 		      html2 +=  "<input type = 'hidden' class='ml'   value='" +  result[i].nttReplyCn  + "'/>" ;
 		      // 버튼                                                                                                                             
 		      html2 += '<span class="badge badge-dark" style="cursor:pointer"  id="mod' + result[i].nttReplySn +	'">              <a onclick="fnReReplyModifyOpen(\'' +  result[i].nttReplySn + '\',\'mod\');" >수정</a></span>';
 		      html2 += '<span class="badge badge-dark" style="cursor:pointer; display: none;" id="save' + result[i].nttReplySn  + '"><a onclick="fnReReplyModify(\'' + result[i].nttReplySn   + '\',\'B\',\'' +  result[i].parntsReplySn  +  '\');">저장</a></span>';
 		      html2 += '<span class="badge badge-dark" style="cursor:pointer"  id="del' + result[i].nttReplySn +  '">                <a onclick="fnReReplyDelete(\''  + result[i].nttReplySn  + '\',\'B\',\'' +  result[i].parntsReplySn  +  '\');">삭제</a></span>';
 		 } else {
-			  html2 += "<p class='card-text''><span>댓글이 작성자에 의해 삭제되었습니다.</span></p>";
+			  html2 += "<p class='card-text''><span>답글이 작성자에 의해 삭제되었습니다.</span></p>";
 		 }
 		    html2 += "</div>";
 	     }
@@ -427,15 +445,13 @@ function fnAnswerReplyList( nttReplySn ) {
 	  	         <i class="fa fa-comment fa"></i> 댓글 작성
 	  	 </div>
 	  	 <div class="card-body">
-	  	 <!--	<form  id="replyInsertForm" name="replyInsertForm">-->
-	  	         <input type="hidden" name="nttSn" id="nttSn"  th:value="${nttSn}" />
-	  	 		<ul class="list-group list-group-flush">
-	  	 		    <li class="list-group-item">
-	  	 			<textarea class="form-control" id="nttReplyCn" rows="3" name="nttReplyCn"></textarea>
-	  	 			<button type="button" class="btn btn-dark mt-3" onclick="fnReplyInsert(0);" >등록</button>
-	  	 		    </li>
-	  	 		</ul>
-	  	 	<!-- </form>-->
+	  	    <input type="hidden" name="nttSn" id="nttSn"  th:value="${nttSn}" />
+	  	    <ul class="list-group list-group-flush">
+	  	 	   <li class="list-group-item">
+	  	 		  <textarea class="form-control" id="nttReplyCn" rows="3" name="nttReplyCn"></textarea>
+	  	 		  <button type="button" class="btn btn-dark mt-3" onclick="fnReplyInsert(0);" >등록</button>
+	  	 		</li>
+	  	     </ul>
 	  	 </div>
 	  </div>
 	  <!-- E: 댓글등록 -->
@@ -454,7 +470,7 @@ function fnAnswerReplyList( nttReplySn ) {
 							<tbody>
 								<tr class="align-middle">
 								  <td rowspan="2" class="pr-2"><i class="fa fa-user-o fa-2x"></i></td>
-								  <td class="ml" >  <span   th:id="'registerId' + ${data.nttReplySn}"   th:text="${data.registerId}"></span> <!-- <br/><span  th:text="${data.regDt}"></span>--> </td>
+								  <td class="ml" > 작성자 : <span   th:id="'registerId' + ${data.nttReplySn}" th:text="${data.registerId}"></span> &nbsp;&nbsp;&nbsp;&nbsp;작성일 : <span  th:text="${data.writerDt}"></span> </td>
 								</tr>
 							</tbody>
 					   </table>
@@ -462,29 +478,25 @@ function fnAnswerReplyList( nttReplySn ) {
 				    <div class="card-body" >
 					   <div  th:if = "${data.delYn == 'N'}" >
 						  <p class="card-text" >
-						    <span th:text="${data.nttReplyCn}"  th:id="'nttReplyCnB' + ${data.nttReplySn}" ></span> 
+						    <span th:text="${data.nttReplyCn}"  th:id="'nttReplyCn_R' + ${data.nttReplySn}" ></span> 
 					      </p>
-					      <input  type = "text"  class="ml" th:value="${data.nttReplyCn}"   th:id="'nttReplyCnA' + ${data.nttReplySn}" style="display: none;"/>
+					      <input type = "text"   class="ml" th:value="${data.nttReplyCn}"   th:id="'nttReplyCn_A' + ${data.nttReplySn}" style="display: none;"/>
 					      <input type = "hidden" class="ml" th:vale="${ data.nttReplySn}"></input> 
-						  <span class="badge badge-dark" style="cursor:pointer"  th:id="'O' + ${data.nttReplySn}" ><a th:onclick="javascript:fnReReplyArea( [[${data.nttReplySn}]] ,'open');">답글</a></span>
-						  <span class="badge badge-dark" style="cursor:pointer; display: none;" th:id="'C' + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyArea( [[${data.nttReplySn}]] ,'close');">접기</a></span>
-						  <span class="badge badge-dark" style="cursor:pointer"  th:id="'mod' + ${data.nttReplySn}" ><a th:onclick="javascript:fnReReplyModifyOpen([[${data.nttReplySn}]],'mod');">수정</a></span>
-						  <span class="badge badge-dark" style="cursor:pointer; display: none;"  th:id="'save' + ${data.nttReplySn}"  ><a th:onclick="javascript:fnReReplyModify([[${data.nttReplySn}]],'A',0);">저장</a></span>
-						  <span class="badge badge-dark" style="cursor:pointer;" th:id="'del' + ${data.nttReplySn}" ><a th:onclick="javascript:fnReReplyDelete([[${data.nttReplySn}]],'A',0);">삭제</a></span>
+						  <span class="badge badge-dark" style="cursor:pointer"                  th:id="'open'  + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyArea( [[${data.nttReplySn}]] ,'open');">   답글</a></span>
+						  <span class="badge badge-dark" style="cursor:pointer;  display: none;" th:id="'close' + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyArea( [[${data.nttReplySn}]] ,'close');">  접기</a></span>
+						  <span class="badge badge-dark" style="cursor:pointer"                  th:id="'mod'   + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyModifyOpen([[${data.nttReplySn}]],'mod');">수정</a></span>
+						  <span class="badge badge-dark" style="cursor:pointer;  display: none;" th:id="'save'  + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyModify([[${data.nttReplySn}]],'R',0);">    저장</a></span>
+						  <span class="badge badge-dark" style="cursor:pointer;"                 th:id="'del'   + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyDelete([[${data.nttReplySn}]],'R',0);">    삭제</a></span>
 				       </div>
 				      <div  th:if = "${data.delYn == 'Y'}" >
 						  <p class="card-text">
 						   <span>댓글이 작성자에 의해 삭제되었습니다.</span> 
 					     </p>
 				      </div>
-				   
-				    
 				     <!-- 답글 구역 S-->
-				     <div style="display: none;" th:id="'R' + ${data.nttReplySn}">
-						
+				     <div style="display: none;" th:id="'Answer' + ${data.nttReplySn}">
 					 </div>
-					  <!-- 답글 구역 E-->	 
-					 
+					 <!-- 답글 구역 E-->	 
 			       </div>
 			     </div>
 		         <div class="card-body"  th:unless = "${!replyList.isEmpty()}" id="replyNone">

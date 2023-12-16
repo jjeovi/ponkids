@@ -61,6 +61,8 @@ public class  NttReply extends BaseTimeEntity {
 	private String updusrId;
 	private String updusrIp;
 	private LocalDateTime updtDt;
+	
+	private String writerDt;
 
     @ColumnDefault("N")                             
     @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가
