@@ -1,11 +1,7 @@
 package com.meta.ponkids.domain.system.banner.dto;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
+import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.annotations.QueryProjection;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -41,12 +37,12 @@ public class BannerListDto {
 	
 	private String bannerEndDt;          	// 배너 종료 일시
 	
-	
 	private String schOption;   // 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
     
     private String schCntn;     // 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!
+	
+	private CategoryDto category;    // 카테고리 검색 : 생성자에는 추가하지 않음!
 
-    
  	@QueryProjection
 	public BannerListDto(Long bannerSn, String bannerClCd, String bannerClDetailCd, Long bannerExpsrOrdr,
 			String bannerNm, String bannerDc, Long atchFileSn, String url, String classMapngYn, String classSn,

@@ -78,8 +78,8 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
     private BooleanExpression eqOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨
         if ( StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn ) ) {
-//            if ( schOption.equals( "A" ) )
-//                return banner.bannerSn.contains( schCntn ); // TODO LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+            if ( schOption.equals( "A" ) )
+                return banner.bannerNm.contains( schCntn );
 //            else if ( schOption.equals( "B" ) )
 //                return banner.bannerNm.contains( schCntn ); // TODO LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
 //            else return null;

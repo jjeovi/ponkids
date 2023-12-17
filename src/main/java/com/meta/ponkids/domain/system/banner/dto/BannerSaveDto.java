@@ -38,13 +38,13 @@ public class BannerSaveDto {
 	
 	private String bannerEndDt;          	// 배너 종료 일시
 	
-	private String registerId;      // 등록자 id
+	private String registerId;      		// 등록자 id
 	
-	private String registerIp;      // 등록자 ip
+	private String registerIp;      		// 등록자 ip
 	
-    private String updusrId;      	// 수정자 ID
+    private String updusrId;      			// 수정자 ID
     
-    private String updusrIp;      	// 수정자 IP
+    private String updusrIp;      			// 수정자 IP
 	
 	@Builder
 	public BannerSaveDto(Long bannerSn, String bannerClCd, String bannerClDetailCd, Long bannerExpsrOrdr,
@@ -95,6 +95,4 @@ public class BannerSaveDto {
 				.updusrIp(updusrIp)
 				.build();
 	}
-
-
 }
