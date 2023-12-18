@@ -56,7 +56,7 @@ public class UserService {
         if ( userSaveDto.getMngrYn().equals( "Y" ) ) {
         	userRoleSaveDto.setUserSn(newUser.getUserSn());						 			// 등록한 ID의 sn값 바로 호출 (newUser에서 값 호출)
             userRoleSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );     			// 관리자 IP 저장
-            userRoleSaveDto.setRegisterId( SessionUtils.getClientId() );                   			// TODO : 현재 세션의 userId값으로 수정
+            userRoleSaveDto.setRegisterId( SessionUtils.getClientId() );                   	// TODO : 현재 세션의 userId값으로 수정
             
             userRoleRepository.save( userRoleSaveDto.toEntity() );							// * 권한 save
         }
