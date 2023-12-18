@@ -6,8 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-// TODO PK(*ID) 체크
 public interface ClassRepository extends JpaRepository<Class, Long>, ClassRepositoryCustom {
 	
-	Optional<Class> findById( Long pk );	// TODO PK(*ID) 체크
+	Optional<Class> findById( Long pk );
 }

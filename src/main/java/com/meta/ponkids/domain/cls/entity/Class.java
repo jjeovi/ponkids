@@ -18,7 +18,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @DynamicInsert // insert 구문 시 null 이 아닌 값들만 insert
 @DynamicUpdate // update 구문 시 null 이 아닌 값들만 update
-@SequenceGenerator(	// TODO SEQUENCE setting
+@SequenceGenerator(
         name = "SEQ_TB_CLASS_SN",
         sequenceName = "SEQ_TB_CLASS_SN",
         initialValue = 1,

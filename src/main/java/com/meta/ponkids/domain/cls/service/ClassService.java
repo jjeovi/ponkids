@@ -37,7 +37,7 @@ public class ClassService {
     }
     
     
-    public ClassModDto findById( Long pk ) {	// TODO 타입 체크 필요
+    public ClassModDto findById( Long pk ) {
         
         Class banner = classRepository.findById( pk ).orElse(null);
         
@@ -51,7 +51,7 @@ public class ClassService {
     public void update ( ClassModDto modDto, HttpServletRequest request ) throws IOException {
     	
     	// target 조회
-        Class banner = classRepository.findById( modDto.getClassSn() ).orElse(null);	// TODO PK 체크
+        Class banner = classRepository.findById( modDto.getClassSn() ).orElse(null);
         
         // target object 전환 ( entity to dto )
         ClassModDto targetDto = new ClassModDto();

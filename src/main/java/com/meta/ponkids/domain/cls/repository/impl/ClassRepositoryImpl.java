@@ -27,7 +27,6 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
 	@Override
 	public Page<ClassListDto> getList( ClassListDto listDto, Pageable pageable ) {
 		
-		// TODO 구현
 		// (1) '결과list' 와 (2)'count' 를 2번에 걸쳐 조회
 		
 		
@@ -45,7 +44,7 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
 //		this. = thumbAtchFileSn;
 //		this. = atchFileSn;
 //		this. = classExpsrYn;
-		// TODO
+		
         // (1) 결과list (results).
 		List<ClassListDto> results = query
 				// select
@@ -73,7 +72,6 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 .limit( pageable.getPageSize() )
                 .fetch();
 		
-		// TODO
 		// (2) count
         JPAQuery<Long> count = query.select( class$.count() )
                 .from( class$ )
