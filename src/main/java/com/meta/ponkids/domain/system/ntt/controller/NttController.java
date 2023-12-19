@@ -332,7 +332,7 @@ public class NttController {
     /**
      * methodName    : fnReplyInsert
      * date           : 11/26/23
-     * description    : id 댓글등록 ajax
+     * description    : id 댓글,답글 등록 ajax
      */
     @ResponseBody
     @RequestMapping(value = "/reply/nttReplyInsert", method = { RequestMethod.POST })
@@ -374,7 +374,7 @@ public class NttController {
     /**
      * methodName    : nttReplyUpdate
      * date           : 11/26/23
-     * description    : id 답글조회 ajax
+     * description    : 댓글, 답글 수정 ajax
      */
     @ResponseBody
     @RequestMapping( value = "/reply/nttReplyUpdate", method = { RequestMethod.POST } )
@@ -401,7 +401,7 @@ public class NttController {
      */
     @ResponseBody
     @RequestMapping( value = "/reply/nttReplyDelete", method = { RequestMethod.POST } )
-    public String nttReplyUpdate( @RequestParam( "nttReplySn" ) Long nttReplySn,  
+    public String nttReplyDelete( @RequestParam( "nttReplySn" ) Long nttReplySn,  
     		                      HttpServletRequest request  ) {
 
     	// 댓글 삭제
