@@ -4,7 +4,6 @@ package com.meta.ponkids.domain.system.file.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -14,7 +13,6 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
-import org.springframework.http.MediaType;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -39,7 +37,6 @@ import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
 import com.meta.ponkids.domain.system.file.repository.AtchFileDetailRepository;
 import com.meta.ponkids.domain.system.file.service.AtchFileDetailService;
 import com.meta.ponkids.domain.system.file.service.AtchFileService;
-import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
 
 import lombok.RequiredArgsConstructor;
 

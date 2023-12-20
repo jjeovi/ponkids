@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.meta.ponkids.domain.system.file.entity.QAtchFileDetail.atchFileDetail;
-import static com.meta.ponkids.domain.system.ntt.entity.QNttReply.nttReply;
+import static com.meta.ponkids.domain.ntt.entity.QNttReply.nttReply;
 
 @Repository
 @RequiredArgsConstructor

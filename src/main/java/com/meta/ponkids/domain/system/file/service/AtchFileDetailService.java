@@ -2,7 +2,6 @@ package com.meta.ponkids.domain.system.file.service;
 
 import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
 import com.meta.ponkids.domain.system.file.repository.AtchFileDetailRepository;
-import com.meta.ponkids.domain.system.ntt.dto.NttReplyListDto;
 
 import lombok.RequiredArgsConstructor;
 
