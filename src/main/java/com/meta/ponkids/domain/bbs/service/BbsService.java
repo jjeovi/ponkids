@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.meta.ponkids.global.util.ip.IpUtils;
+import com.meta.ponkids.global.util.session.SessionUtils;
 
 import java.time.LocalDateTime;
 
@@ -39,9 +40,6 @@ public class BbsService {
     @Transactional
     public BbsSaveReqDto save( BbsSaveReqDto bbsSaveReqDto , HttpServletRequest request ) {
     	
-      // 임시로 로그인 아이디 셋팅 > 추후 변경 필요 
-      bbsSaveReqDto.setRegisterId("ehlee");
-    	
       // dto to entity 작업 (필수)
          Bbs bbs = Bbs.builder()
                       .bbsSn(bbsSaveReqDto.getBbsSn())
@@ -52,10 +50,10 @@ public class BbsService {
                       .replySetYn(bbsSaveReqDto.getReplySetYn())
                       .useYn(bbsSaveReqDto.getUseYn())
                       .openYn(bbsSaveReqDto.getOpenYn())
-                      .registerId(bbsSaveReqDto.getRegisterId())
+                      .registerId(SessionUtils.getClientId())
                       .registerIp( IpUtils.getClientIP( request ))
                       .regDt(LocalDateTime.now())
-                      .updusrId(bbsSaveReqDto.getRegisterId())
+                      .updusrId(SessionUtils.getClientId())
                       .updusrIp( IpUtils.getClientIP( request ))
                       .updtDt(LocalDateTime.now())
                       .build();

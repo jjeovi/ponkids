@@ -2,8 +2,6 @@ package com.meta.ponkids.domain.ntt.dto;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 import javax.validation.constraints.NotNull;
 
 @NoArgsConstructor

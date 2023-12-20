@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import com.meta.ponkids.domain.ntt.dto.NttListDto;
 import com.meta.ponkids.domain.ntt.dto.NttModDto;
 import com.meta.ponkids.global.util.ip.IpUtils;
+import com.meta.ponkids.global.util.session.SessionUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,9 +41,6 @@ public class NttService {
     @Transactional
     public NttSaveReqDto save( NttSaveReqDto nttSaveReqDto, HttpServletRequest request ) {
     	
-    	//임시로 로그인 아이디 셋팅
-    	nttSaveReqDto.setRegisterId("ehlee");
-    	
     	int nttSeq = nttRepository.MaxNttSeq(nttSaveReqDto.getBbsSn());
 
     	// dto to entity 작업 (필수)
@@ -57,10 +55,10 @@ public class NttService {
         		     .openYn("Y")
                      .atchFileSn(nttSaveReqDto.getAtchFileSn())
                      .cnAtchFileSn(nttSaveReqDto.getCnAtchFileSn())
-                     .registerId(nttSaveReqDto.getRegisterId())
+                     .registerId(SessionUtils.getClientId())
                      .registerIp( IpUtils.getClientIP( request ))
                      .regDt(LocalDateTime.now())
-                     .updusrId(nttSaveReqDto.getRegisterId())
+                     .updusrId(SessionUtils.getClientId())
                      .updusrIp( IpUtils.getClientIP( request ))
                      .updtDt(LocalDateTime.now())
                      .build();

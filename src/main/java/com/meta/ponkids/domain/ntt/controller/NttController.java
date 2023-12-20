@@ -419,7 +419,7 @@ public class NttController {
      */
     @ResponseBody
     @RequestMapping( value = "/reply/nttReplyList", method = { RequestMethod.GET } )
-    public List nttReplyList(@RequestParam( "nttSn" ) Long nttSn) {
+    public List<NttReplyListDto> nttReplyList(@RequestParam( "nttSn" ) Long nttSn) {
 
     	// 답글 목록 조회
         List<NttReplyListDto> replyList = nttReplyService.getList(nttSn);
@@ -436,7 +436,7 @@ public class NttController {
      */
     @ResponseBody
     @RequestMapping( value = "/reply/answerReplyList", method = { RequestMethod.GET } )
-    public List answerReplyList(@RequestParam( "nttReplySn" ) Long nttReplySn) {
+    public List<NttReplyListDto> answerReplyList(@RequestParam( "nttReplySn" ) Long nttReplySn) {
 
     	// 답글 목록 조회
         List<NttReplyListDto> answerReplyList = nttReplyService.getAnswerReplyList(nttReplySn); //부모 키 

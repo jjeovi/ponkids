@@ -6,8 +6,6 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
-import com.querydsl.jpa.impl.JPAQuery;
-
 @NoArgsConstructor
 @Data
 public class NttSaveReqDto {

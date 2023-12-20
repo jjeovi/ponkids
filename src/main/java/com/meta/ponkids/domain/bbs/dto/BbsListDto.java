@@ -1,12 +1,6 @@
 package com.meta.ponkids.domain.bbs.dto;
 
 import java.time.LocalDateTime;
-
-import javax.validation.constraints.NotNull;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.annotations.QueryProjection;
 
 import lombok.Data;
@@ -29,9 +23,7 @@ public class BbsListDto {
     private String openYn;
 	
     private String registerId;
-	
-    //@DateTimeFormat(pattern = "yyyy-MM-DD")
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-DD", timezone = "Asia/Seoul")
+
     private LocalDateTime regDt;
     
     private String schOption;   // 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!

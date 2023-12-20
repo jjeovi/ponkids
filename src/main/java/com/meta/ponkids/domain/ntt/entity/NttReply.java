@@ -1,7 +1,5 @@
 package com.meta.ponkids.domain.ntt.entity;
 
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.meta.ponkids.global.common.BaseTimeEntity;
 import lombok.*;
 import org.hibernate.annotations.*;
@@ -9,11 +7,9 @@ import org.hibernate.annotations.*;
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-
 
 
 

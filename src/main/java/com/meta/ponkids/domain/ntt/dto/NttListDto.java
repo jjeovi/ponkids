@@ -1,9 +1,6 @@
 package com.meta.ponkids.domain.ntt.dto;
 
 import java.time.LocalDateTime;
-
-import javax.validation.constraints.NotNull;
-
 import com.querydsl.core.annotations.QueryProjection;
 
 import lombok.Data;

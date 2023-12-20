@@ -12,6 +12,7 @@ import com.meta.ponkids.domain.ntt.dto.NttReplyListDto;
 import com.meta.ponkids.domain.ntt.dto.NttReplyModDto;
 import com.meta.ponkids.domain.ntt.dto.NttReplySaveReqDto;
 import com.meta.ponkids.global.util.ip.IpUtils;
+import com.meta.ponkids.global.util.session.SessionUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -42,9 +43,6 @@ public class NttReplyService {
    
     @Transactional
     public NttReplySaveReqDto save(NttReplySaveReqDto nttReplySaveReqDto ,HttpServletRequest request) {
-        
-      	//임시로 로그인 아이디 셋팅
-    	nttReplySaveReqDto.setRegisterId("ehlee");
     
     	int nttReplySeq =nttReplyRepository.MaxNttReplySeq(nttReplySaveReqDto.getNttSn());
     	
@@ -57,10 +55,10 @@ public class NttReplyService {
         		                    .nttReplyCn(nttReplySaveReqDto.getNttReplyCn())
         		                    .nttReplySeq(nttReplySeq)
         		                    .openYn( "Y" )
-                                    .registerId(nttReplySaveReqDto.getRegisterId())
+                                    .registerId(SessionUtils.getClientId())
                                     .registerIp( IpUtils.getClientIP( request ))
                                     .regDt(LocalDateTime.now())
-                                    .updusrId(nttReplySaveReqDto.getRegisterId())
+                                    .updusrId(SessionUtils.getClientId())
                                     .updusrIp( IpUtils.getClientIP( request ))
                                     .updtDt(LocalDateTime.now())
                                     .writerDt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
