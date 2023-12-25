@@ -47,10 +47,6 @@ public class ClassCategoryCl01Controller {
         // 검색 dto setting
         model.addAttribute( "searchDTO", listDto );
         
-        // 카테고리 리스트 ( lv1 )
-        // 클래스 카테고리 분류1 list setting
-        model.addAttribute("classCategoryCl01List", classCategoryCl01Service.findAll());
-        
         // E : 필요한 객체 setting
         
         // 기본 경로 setting

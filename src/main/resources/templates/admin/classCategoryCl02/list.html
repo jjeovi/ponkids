@@ -9,17 +9,111 @@
     $( function () {
 
     });
+    
+    
+    // 분류영역 보기 버튼 클릭 event
+    function searchCate( url ){
+
+        if ( $( ".category-list-area .category-group-box ul li.on" ).length ) {
+
+            var data = {};
+
+            $( ".category-list-area .category-group-box ul li.on" ).each( function ( i, item ) {
+                if ( i == 0 ) {
+                    data['category.lv1Sn'] = $( this ).val();
+                } else if ( i == 1 ) {
+                    data['category.lv2Sn'] = $( this ).val();
+                } else if ( i == 2 ) {
+                    data['category.lv3Sn'] = $( this ).val();
+                } else if ( i == 3 ) {
+                    data['category.lv4Sn'] = $( this ).val();
+                } else if ( i == 4 ) {
+                    data['category.lv5Sn'] = $( this ).val();
+                }
+            } );
+            
+            // 카테고리 1 setting
+            var lv1Sn = data['category.lv1Sn'];
+            
+            if( lv1Sn != null && lv1Sn != '' ) {
+	            // url setting 
+	            // replace를 사용하여 부분적으로 치환
+	            url = url.replace('parntsClSn', lv1Sn);
+	            
+	            location.replace(url);	// 현재 페이지 내에서 뒤로가기를 적용시키지 않을 거라 location.href 대신 location.repalce를 사용
+            }
+
+        } else {
+            alert( "검색 옵션을 선택해주세요." );
+        }
+    	
+    }
 
 </script>
 <!-- E : Javascript functions	-->
 <th:block layout:fragment="content">
 
+ 	<!-- S : 분류 영역 -->
+    <div class="div_menu_detail row">
+        <div class="col-md-12 col-sm-12 ">
+            <div class="x_panel category-area">
+                <!-- 분류 영역 > 카테고리 그룹 영역 -->
+                <div class="col-md-10 category-list-area">
+                    <div class="category-group-box">
+                        <ul class="data-group" data-all-yn="Y">
+                            <!--  lv1 -->
+                            <li onclick="getCateNextLvList('', this );"
+                                th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'on'"
+                                value="0">전체
+                            </li>
+                            <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('', this );"
+                                th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) } ? 'on'"
+                                th:value="${data.clSn}">[[${data.clNm}]]
+                            </li>
+                        </ul>
+<!--                         <ul class="data-group" data-all-yn="Y" data-search-url="">  data-all-yn : 전체 여부 , data-search-url : 검색조회용 url (ajax0) -->
+<!--                              lv2 -->
+<!--                         </ul> -->
+<!--                         <ul class="data-group" data-all-yn="Y" data-search-url="">  data-all-yn : 전체 여부 , data-search-url : 검색조회용 url (ajax0) -->
+<!--                              lv3 -->
+<!--                         </ul> -->
+<!--                         <ul class="data-group" data-all-yn="Y" data-search-url="">  data-all-yn : 전체 여부 , data-search-url : 검색조회용 url (ajax0) -->
+<!--                              lv4 -->
+<!--                         </ul> -->
+<!--                         <ul class="data-group" data-all-yn="Y" data-search-url="">  data-all-yn : 전체 여부 , data-search-url : 검색조회용 url (ajax0) -->
+<!--                              lv5 -->
+<!--                         </ul> -->
+                    </div>
+                </div>
+                <!-- 분류 영역 > 우측영역 ( 선택한 카테고리 텍스트 표출, 카테고리검색 버튼) -->
+                <div class="col-md-2 col-sm-6 category-right">
+                    <div class="picked-cate" id="picked-cate">
+                        <div class="cateLv0 blink"></div>
+                        <div class="cateLv1 blink"></div>
+                        <div class="cateLv2 blink"></div>
+                        <div class="cateLv3 blink"></div>
+                        <div class="cateLv4 blink"></div>
+                    </div>
+                    <div class="btn-group float-right" role="group">
+                        <button name="searchCateBtn" type="button" class="btn btn-purple w120p"
+                                th:data-search-cate-url="|${basicPath}/${mcd}/parntsClSn/list|"
+                                th:onclick="searchCate( this.getAttribute('data-search-cate-url') )">보기
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- E : 분류 영역 -->
 
     <!-- S: content -->
     <div class="x_panel">
         <div class="x_content">
             <div class="row">
                 <form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd}) }" class="form">
+                	<h2 class="pl_15p" th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null ) && ( searchDTO.category.lv1Sn != 0 ) }">
+	            		클래스 카테고리 : [[${searchDTO.category.lv1Nm}]]
+	            	</h2>
                     <input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
                     <!-- S : 테이블 상단 검색 창 -->
                     <!-- totalCount -->

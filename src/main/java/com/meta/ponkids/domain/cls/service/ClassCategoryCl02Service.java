@@ -11,11 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.meta.ponkids.domain.cls.dto.ClassCategoryCl01ListDto;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ListDto;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ModDto;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02SaveDto;
-import com.meta.ponkids.domain.cls.entity.ClassCategoryCl01;
 import com.meta.ponkids.domain.cls.entity.ClassCategoryCl02;
 import com.meta.ponkids.domain.cls.repository.ClassCategoryCl02Repository;
 import com.meta.ponkids.global.util.ip.IpUtils;
@@ -49,10 +47,16 @@ public class ClassCategoryCl02Service {
         
         ClassCategoryCl02 classCategoryCl02 = classCategoryCl02Repository.findById( pk ).orElse(null);
         
-        ClassCategoryCl02ModDto modDto = new ClassCategoryCl02ModDto();
-        modDto = modDto.toDto( classCategoryCl02 );
-        
-        return modDto;
+        if ( classCategoryCl02 == null ) {
+        	
+        	return null;
+        	
+        } else {
+        	ClassCategoryCl02ModDto modDto = new ClassCategoryCl02ModDto();
+        	modDto = modDto.toDto( classCategoryCl02 );
+        	
+        	return modDto;
+        }
     }
     
     

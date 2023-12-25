@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ClassCategoryCl01ModDto {
+public class ClassCategoryCl01ModDto{
     
 	private Long clSn;			// 분류1 일련번호
 	

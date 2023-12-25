@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ClassCategoryCl01ListDto {
+public class ClassCategoryCl01ListDto{
     
 	private Long clSn;			// 분류1 일련번호
 	

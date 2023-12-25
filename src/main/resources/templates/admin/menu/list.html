@@ -30,7 +30,7 @@
             searchDTO.category.lv1Sn != null &&
             type == typeAdm
         ) {
-            searchCate( '/admin/menu/live/' + type + '/getMenuListAjax' );
+            searchCateAjax( '/admin/menu/live/' + type + '/getMenuListAjax' );
         } else if ( type == typeUser ) {
             // ajax START
             $.ajax( {
@@ -42,10 +42,10 @@
                 contentType: "application/json",
                 success: function ( result ) {
                     // callback 함수 연결 -> callback함수로 구현
-                    if ( typeof searchCateCallback === 'function' ) {
-                        searchCateCallback( result );
+                    if ( typeof searchCateAjaxCallback === 'function' ) {
+                        searchCateAjaxCallback( result );
                     } else {
-                        console.log( 'searchCateCallback( result ) funnction is required. searchCateCallback( result ) 콜백함수 not found!' );
+                        console.log( 'searchCateAjaxCallback( result ) funnction is required. searchCateAjaxCallback( result ) 콜백함수 not found!' );
                     }
                 }
             } );
@@ -82,7 +82,7 @@
         } )
     } );
 
-    function searchCateCallback( result ) {
+    function searchCateAjaxCallback( result ) {
         // 메뉴 리스트 jstree구조로 뿌리기  ( 데이터 없을시는 문구 표출 )
 
         // menuStructure 내부 html 비움
@@ -106,8 +106,8 @@
 
     function menuCreate() {
 
-        ref = $( '#menuStructureJsTree' ).jstree( true )
-
+        ref = $( '#menuStructureJsTree' ).jstree( true );
+        
         if ( $( ".noSelect" ).length ) {
             alert( "권한을 선택해 주세요." );
             return false;
@@ -259,7 +259,7 @@
 
                 if ( type == typeAdm ) {
                     // menulist 재 출력
-                    searchCate( '/admin/menu/live/' + type + '/getMenuListAjax' );
+                    searchCateAjax( '/admin/menu/live/' + type + '/getMenuListAjax' );
 
                 } else if ( type == typeUser ) {
 
@@ -273,10 +273,10 @@
                         contentType: "application/json",
                         success: function ( result ) {
                             // callback 함수 연결 -> callback함수로 구현
-                            if ( typeof searchCateCallback === 'function' ) {
-                                searchCateCallback( result );
+                            if ( typeof searchCateAjaxCallback === 'function' ) {
+                                searchCateAjaxCallback( result );
                             } else {
-                                console.log( 'searchCateCallback( result ) funnction is required. searchCateCallback( result ) 콜백함수 not found!' );
+                                console.log( 'searchCateAjaxCallback( result ) funnction is required. searchCateAjaxCallback( result ) 콜백함수 not found!' );
                             }
                         }
                     } );
@@ -325,8 +325,8 @@
                     </div>
                     <div class="btn-group float-right" role="group">
                         <button name="searchCateBtn" type="button" class="btn btn-purple w120p"
-                                th:data-search-cate-url="|/admin/menu/live/${type}/getMenuListAjax|"
-                                th:onclick="searchCate( this.getAttribute('data-search-cate-url') )">보기
+                                th:data-search-cate-url="|/admin/menu/live/${type}/getMenuListAjax|"	<!-- 검색 url setting -->
+                                th:onclick="searchCateAjax( this.getAttribute('data-search-cate-url') )">보기
                         </button>
                     </div>
                 </div>

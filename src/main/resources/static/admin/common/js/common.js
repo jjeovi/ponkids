@@ -265,8 +265,7 @@ const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // �
     }
 
 // 카테고리 검색 버튼 function
-    function searchCate( url ) {
-
+    function searchCateAjax( url ) {
 
         if ( $( ".category-list-area .category-group-box ul li.on" ).length ) {
 
@@ -295,10 +294,10 @@ const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // �
                 contentType: "application/json",
                 success: function ( result ) {
                     // callback 함수 연결 -> callback함수로 구현
-                    if ( typeof searchCateCallback === 'function' ) {
-                        searchCateCallback( result );
+                    if ( typeof searchCateAjaxCallback === 'function' ) {
+                        searchCateAjaxCallback( result );
                     } else {
-                        console.log( 'searchCateCallback( result ) funnction is required. searchCateCallback( result ) 콜백함수 not found!' );
+                        console.log( 'searchCateAjaxCallback( result ) funnction is required. searchCateAjaxCallback( result ) 콜백함수 not found!' );
                     }
                 }
             } );
@@ -306,6 +305,7 @@ const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // �
         } else {
             alert( "검색 옵션을 선택해주세요." );
         }
+        
     }
 
 
@@ -426,21 +426,22 @@ const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // �
             console.log( node );
             console.log( parent );
             console.log( position );
-            alert( "ㅅㄷㄴㅅ" );
         } );
-
+        
+        
         // S : 메뉴 jstree 생성
         $( "#menuStructureJsTree" ).jstree( "close_all" );
         $( "#menuStructureJsTree" ).jstree( "destory" );
         $( "#menuStructureJsTree" ).jstree( true ).settings.core.data = resultList;
         $( "#menuStructureJsTree" ).jstree( "loaded" );
+        
 
         $( "#menuStructureJsTree" ).bind( "refresh.jstree", function ( e, data ) {
             $( this ).jstree( "open_all" );
         } );
         $( "#menuStructureJsTree" ).jstree( true ).refresh();
         // E : 메뉴 jstree 생성
-
+        
     }
 
 // 메뉴 권한 목록 (체크박스) 설정 함수

@@ -56,7 +56,7 @@ public class ClassController {
         
         // 카테고리 리스트 ( lv1 )
         // 클래스 카테고리 분류1 list setting
-        model.addAttribute("classCategoryCl01List", classCategoryCl01Service.findAll());
+        model.addAttribute("cateLv1List", classCategoryCl01Service.findAll());
         
         // E : 필요한 객체 setting
         

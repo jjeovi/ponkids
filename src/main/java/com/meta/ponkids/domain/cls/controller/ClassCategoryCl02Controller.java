@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.meta.ponkids.domain.cls.dto.ClassCategoryCl01ModDto;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ListDto;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ModDto;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02SaveDto;
 import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
+import com.meta.ponkids.domain.cls.service.ClassCategoryCl01Service;
 import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
+import com.meta.ponkids.global.common.dto.CategoryDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,17 +33,33 @@ import lombok.RequiredArgsConstructor;
 public class ClassCategoryCl02Controller {
     
     private final ClassCategoryCl02Service classCategoryCl02Service;
+    private final ClassCategoryCl01Service classCategoryCl01Service;
     
     private final static String BASIC_PATH = "/admin/classCategoryCl02";
     
-    @GetMapping( BASIC_PATH + "/{mcd}/list" )
+    @GetMapping( BASIC_PATH + "/{mcd}/{parntsClSn}/list" )
     public String list( @ModelAttribute ClassCategoryCl02ListDto listDto,
                         @PageableDefault( size = 10 ) Pageable pageable,
                         @PathVariable String mcd,
+                        @PathVariable Long parntsClSn,
                         Model model ) {
         
         // S : 필요한 객체 setting
-        
+    	
+    	// parntsClSn setting
+    	if( parntsClSn != null ) {
+    	
+    		
+    		// parntsClsn
+    		listDto.setParntsClSn(parntsClSn);
+    		// category set 
+    		categorySet(listDto, parntsClSn);
+    		
+    	} else {
+    		// TODO : return error
+    		
+    	}
+    	
         // 목록 조회
         Page<ClassCategoryCl02ListDto> resultList = classCategoryCl02Service.getList( listDto, pageable );
         model.addAttribute( "resultList", resultList );
@@ -50,7 +69,7 @@ public class ClassCategoryCl02Controller {
         
         // 카테고리 리스트 ( lv1 )
         // 클래스 카테고리 분류1 list setting
-        model.addAttribute("classCategoryCl02List", classCategoryCl02Service.findAll());
+        model.addAttribute("cateLv1List", classCategoryCl01Service.findAll());
         
         // E : 필요한 객체 setting
         
@@ -171,6 +190,32 @@ public class ClassCategoryCl02Controller {
         model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
         
         return "common/alert";
+    }
+    
+    
+    
+    public void categorySet(ClassCategoryCl02ListDto listDto, long parntsClSn) {
+    	
+    	ClassCategoryCl01ModDto classCategoryCl01ModDto = classCategoryCl01Service.findById(parntsClSn);
+    	
+    	if(classCategoryCl01ModDto != null ) {
+    		
+    		if ( listDto.getCategory() != null ) {
+        		
+        		listDto.getCategory().setLv1Sn(parntsClSn);
+        		listDto.getCategory().setLv1Nm(classCategoryCl01ModDto.getClNm());
+        		
+        	} else {
+        		CategoryDto categoryDto = new CategoryDto();
+        		
+        		categoryDto.setLv1Sn(parntsClSn);
+        		categoryDto.setLv1Nm(classCategoryCl01ModDto.getClNm());
+        		listDto.setCategory(categoryDto);
+        		
+        	}
+    		
+    	} 
+    	
     }
     
 }

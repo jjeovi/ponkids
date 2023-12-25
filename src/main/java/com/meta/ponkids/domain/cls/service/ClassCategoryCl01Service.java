@@ -47,10 +47,18 @@ public class ClassCategoryCl01Service {
         
         ClassCategoryCl01 classCategoryCl01 = classCategoryCl01Repository.findById( pk ).orElse(null);
         
-        ClassCategoryCl01ModDto modDto = new ClassCategoryCl01ModDto();
-        modDto = modDto.toDto( classCategoryCl01 );
+        if( classCategoryCl01 == null ) {
+        	
+        	return null;
+        	
+        } else {
+        	
+        	ClassCategoryCl01ModDto modDto = new ClassCategoryCl01ModDto();
+        	modDto = modDto.toDto( classCategoryCl01 );
+        	
+        	return modDto;
+        }
         
-        return modDto;
     }
     
     public List<ClassCategoryCl01ListDto> findAll() {	// TODO 타입 체크 필요

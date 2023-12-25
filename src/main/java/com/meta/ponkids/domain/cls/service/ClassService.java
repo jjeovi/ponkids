@@ -39,23 +39,30 @@ public class ClassService {
     
     public ClassModDto findById( Long pk ) {
         
-        Class banner = classRepository.findById( pk ).orElse(null);
+        Class clas = classRepository.findById( pk ).orElse(null);
         
-        ClassModDto modDto = new ClassModDto();
-        modDto = modDto.toDto( banner );
+        if ( clas == null ) { 
+        	
+        	return null;
+        	
+        } else {
+        	ClassModDto modDto = new ClassModDto();
+        	modDto = modDto.toDto( clas );
+        	
+        	return modDto;
+        }
         
-        return modDto;
     }
     
     @Transactional
     public void update( ClassModDto modDto, HttpServletRequest request ) throws IOException {
     	
     	// target 조회
-        Class banner = classRepository.findById( modDto.getClassSn() ).orElse(null);
+        Class clas = classRepository.findById( modDto.getClassSn() ).orElse(null);
         
         // target object 전환 ( entity to dto )
         ClassModDto targetDto = new ClassModDto();
-        targetDto = targetDto.toDto( banner );
+        targetDto = targetDto.toDto( clas );
         
         // TODO target object 에 수정사항 set	
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
@@ -75,10 +82,10 @@ public class ClassService {
         targetDto.setUpdusrId("admin@test.com");
         
         // target object 전환 ( dto to entity )
-        banner = targetDto.toEntity();
+        clas = targetDto.toEntity();
         
         // 수정사항 적용
-        classRepository.save( banner );
+        classRepository.save( clas );
     	
     }
 

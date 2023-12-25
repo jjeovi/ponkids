@@ -1,7 +1,6 @@
 package com.meta.ponkids.domain.cls.repository.impl;
 
 
-import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl01.classCategoryCl01;
 import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategoryCl02;
 
 import java.util.List;
@@ -16,6 +15,7 @@ import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ListDto;
 import com.meta.ponkids.domain.cls.dto.QClassCategoryCl02ListDto;
 import com.meta.ponkids.domain.cls.repository.custom.ClassCategoryCl02RepositoryCustom;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -59,7 +59,9 @@ public class ClassCategoryCl02RepositoryImpl implements ClassCategoryCl02Reposit
                 		) )
                 .from( classCategoryCl02 )
                 // where
-                .where()
+                .where(
+                		eqParntsClSn( classCategoryCl02.parntsClSn )
+                		)
 //                .orderBy( clas.classSn.desc())
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )
@@ -69,11 +71,16 @@ public class ClassCategoryCl02RepositoryImpl implements ClassCategoryCl02Reposit
         JPAQuery<Long> count = query.select( classCategoryCl02.count() )
                 .from( classCategoryCl02 )
                 .where(
+                		eqParntsClSn( classCategoryCl02.parntsClSn ),
                         eqOption( listDto.getSchOption(), listDto.getSchCntn() ) );
                 
 		return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
 		
 	}
+	
+    private BooleanExpression eqParntsClSn( NumberPath<Long> parntsClSn ) {
+        return parntsClSn != null ? classCategoryCl02.parntsClSn.eq( parntsClSn ) : null;
+    }
 	
     private BooleanExpression eqOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨
