@@ -242,6 +242,12 @@ const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // �
                     success: function ( result ) {
                         // return type : List<CategoryDto>
                         var allYn = $ul.data( 'allYn' );
+                        var searchUrl = $ul.data( 'searchUrl' );
+                        
+                        if(searchUrl != null && searchUrl != '' ) {
+							url = searchUrl;
+						}
+						
                         if ( allYn != null && allYn == 'Y' ) {
                             $( ".category-list-area .category-group-box ul" ).eq( ulNum + 1 ).append(
                                 $( "<li>" ).attr( "onclick", "getCateNextLvList('" + url + "', this )" ).attr( "value", "" ).append( "전체" )

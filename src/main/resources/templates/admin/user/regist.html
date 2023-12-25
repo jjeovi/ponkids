@@ -190,7 +190,7 @@
         $( "[name='chldrnAddDiv']" ).hide();
 
         // 새로운 폼 추가
-        var $newChldrnForm = $( "<div name='chldrnAddDiv' class='newForm'>" ).load( "/admin/user/addChldrnForm.html" );
+        var $newChldrnForm = $( "<div name='chldrnAddDiv' class='newForm'>" ).load( "/admin/user/addChldrnFormModal.html" );
         $( "#addChldrnModalBody" ).append( $newChldrnForm );
 
         // 모달창 닫기
@@ -561,8 +561,8 @@
                                                                 <!-- 자녀 수정시 여기서 수정 작업 -->
                                                             </div>
                                                             <div name="chldrnAddDiv" class="newForm"
-                                                                 th:insert="/admin/user/addChldrnForm.html">
-                                                                <!-- 자녀 추가 모달 (/admin/user/addChldrnForm.html) -->
+                                                                 th:insert="/admin/user/addChldrnFormModal.html">
+                                                                <!-- 자녀 추가 모달 (/admin/user/addChldrnFormModal.html) -->
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">

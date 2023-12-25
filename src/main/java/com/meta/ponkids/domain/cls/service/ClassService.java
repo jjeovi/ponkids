@@ -48,7 +48,7 @@ public class ClassService {
     }
     
     @Transactional
-    public void update ( ClassModDto modDto, HttpServletRequest request ) throws IOException {
+    public void update( ClassModDto modDto, HttpServletRequest request ) throws IOException {
     	
     	// target 조회
         Class banner = classRepository.findById( modDto.getClassSn() ).orElse(null);

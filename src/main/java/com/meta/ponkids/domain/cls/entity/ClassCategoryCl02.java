@@ -19,23 +19,25 @@ import javax.persistence.*;
 @DynamicInsert // insert 구문 시 null 이 아닌 값들만 insert
 @DynamicUpdate // update 구문 시 null 이 아닌 값들만 update
 @SequenceGenerator(
-        name = "SEQ_TB_CLASS_CATEGORY_CL01_SN",
-        sequenceName = "SEQ_TB_CLASS_CATEGORY_CL01_SN",
+        name = "SEQ_TB_CLASS_CATEGORY_CL02_SN",
+        sequenceName = "SEQ_TB_CLASS_CATEGORY_CL02_SN",
         initialValue = 1,
         allocationSize = 1
 )
 @Where( clause = "del_yn = 'N'") // DEFAULT 로 WHERE DEL_YN = 'N' 문을 추가하여 조회
-@SQLDelete(sql = "UPDATE tb_class_category_cl01 SET del_yn ='Y', updt_dt = now() WHERE cl_sn = ?") // delelte 시 실행 (ex ) ~Repository.deleteById)
-@Table( name = "tb_class_category_cl01" )
-public class ClassCategoryCl01 extends BaseTimeEntity {
+@SQLDelete(sql = "UPDATE tb_class_category_cl02 SET del_yn ='Y', updt_dt = now() WHERE cl_sn = ?") // delelte 시 실행 (ex ) ~Repository.deleteById)
+@Table( name = "tb_class_category_cl02" )
+public class ClassCategoryCl02 extends BaseTimeEntity {
 	
 	@Id
-	@GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_CLASS_CATEGORY_CL01_SN" )
-	private Long clSn;							// 분류1 일련번호
+	@GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_CLASS_CATEGORY_CL02_SN" )
+	private Long clSn;							// 분류2 일련번호
 	
-	private String clNm;						// 분류1 이름
+	private Long parntsClSn;							// 분류1 일련번호
 	
-	private Long clSeq;							// 분류1 순번
+	private String clNm;							// 분류2 이름
+	
+	private Long clSeq;							// 분류2 순번
 	
 	@Column(updatable = false)
 	private String registerId;						// 등록자ID

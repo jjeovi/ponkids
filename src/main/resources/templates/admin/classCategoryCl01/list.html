@@ -14,58 +14,6 @@
 <!-- E : Javascript functions	-->
 <th:block layout:fragment="content">
 
-    <!-- S : 분류 영역 -->
-    <div class="div_menu_detail row">
-        <div class="col-md-12 col-sm-12 ">
-            <div class="x_panel category-area">
-                <!-- 분류 영역 > 카테고리 그룹 영역 -->
-                <div class="col-md-10 category-list-area">
-                    <div class="category-group-box">
-                        <ul class="data-group" data-all-yn="Y">
-                            <!--  lv1 -->
-                            <li onclick="getCateNextLvList('', this );"
-                                th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'on'"
-                                value="0">전체
-                            </li>
-                            <li th:each="data : ${classCategoryCl01List}" th:onclick="getCateNextLvList('', this );"
-                                th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.cl1_sn ) } ? 'on'"
-                                th:value="${data.clSn}">[[${data.clNm}]]
-                            </li>
-                        </ul>
-                        <ul class="data-group" data-all-yn="Y" data-search-url=""> <!--  data-all-yn : 전체 여부 , data-search-url : 검색조회용 url (ajax0) -->
-                            <!--  lv2 -->
-                        </ul>
-                        <ul class="data-group" data-all-yn="Y" data-search-url=""> <!--  data-all-yn : 전체 여부 , data-search-url : 검색조회용 url (ajax0) -->
-                            <!--  lv3 -->
-                        </ul>
-                        <ul class="data-group" data-all-yn="Y" data-search-url=""> <!--  data-all-yn : 전체 여부 , data-search-url : 검색조회용 url (ajax0) -->
-                            <!--  lv4 -->
-                        </ul>
-                        <ul class="data-group" data-all-yn="Y" data-search-url=""> <!--  data-all-yn : 전체 여부 , data-search-url : 검색조회용 url (ajax0) -->
-                            <!--  lv5 -->
-                        </ul>
-                    </div>
-                </div>
-                <!-- 분류 영역 > 우측영역 ( 선택한 카테고리 텍스트 표출, 카테고리검색 버튼) -->
-                <div class="col-md-2 col-sm-6 category-right">
-                    <div class="picked-cate" id="picked-cate">
-                        <div class="cateLv0 blink"></div>
-                        <div class="cateLv1 blink"></div>
-                        <div class="cateLv2 blink"></div>
-                        <div class="cateLv3 blink"></div>
-                        <div class="cateLv4 blink"></div>
-                    </div>
-                    <div class="btn-group float-right" role="group">
-                        <button name="searchCateBtn" type="button" class="btn btn-purple w120p"
-                                th:data-search-cate-url="|/admin/menu/live/${type}/getMenuListAjax|"
-                                th:onclick="searchCate( this.getAttribute('data-search-cate-url') )">보기
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- E : 분류 영역 -->
 
     <!-- S: content -->
     <div class="x_panel">
@@ -80,12 +28,6 @@
                     </div>
                     <div class="col-md-11 col-sm-10 mb_10p">
                         <div class="btn-group float-right" role="group">
-                            <select class="form-control" name="mngrConfmYn">
-                                <option value="">표시여부</option>
-                                <option value="Y" th:selected=" ${searchDTO.classExpsrYn} == 'Y' ">표시</option>
-                                <option value="N" th:selected=" ${searchDTO.classExpsrYn} == 'N' ">미표시</option>
-                            </select>
-                            <div class="vl ml_5p"></div>
                             <select class="form-control ml_5p w_55r" name="schOption">
                                 <option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">제목</option>
 <!--                                <option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">이름</option>-->
@@ -103,26 +45,26 @@
                             <thead>
 	                            <tr>
 	                                <th>순번</th>
-	                                <th>분류</th>
-	                                <th>제목</th>
-	                                <th>금액</th>
-	                                <th>표시</th>
-	                                <th>표시기간</th>
+	                                <th>이름</th>
+	                                <th>분류순서</th>
+	                                <th>등록자</th>
+	                                <th>등록일</th>
 	                                <th>관리</th>
 	                            </tr>
                             </thead>
                             <tbody>
 	                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
 	                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
-	                                <td th:text="${data.gender}"></td>
-	                                <td th:text="${data.brdtDate}"></td>
-	                                <td th:text="${data.telNo}"></td>
-	                                <td th:text="${data.resideArea}"></td>
-	                                <td th:text="${data.mngrYn}"></td>
+	                                <td th:text="${data.clNm}"></td>
+	                                <td th:text="${data.clSeq}"></td>
+	                                <td th:text="${data.registerId}"></td>
+	                                <td th:text="${#temporals.format(data.regDt, 'yyyy-MM-dd HH:MM:SS')}"></td>
 	                                <td>
-	                                    <a th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, userSn = ${data.userSn} ) }"
+	                                    <a th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.clSn} ) }"
 	                                       class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
-	                                    <a th:href="'javascript:deleteItem(\'' + ${data.userSn} + '\');'"
+	                                    <a th:href="@{/admin/classCategoryCl02/{mcd}/{pk}/list ( mcd = ${mcd}, pk = ${data.clSn} ) }"
+	                                       class="btn btn-success btn-xs"><i class="fa fa-pencil"></i>항목보기</a>
+	                                    <a th:href="'javascript:deleteItem(\'' + ${data.clSn} + '\');'"
 	                                       class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>삭제</a>
 	                                </td>
 	                            </tr>
@@ -163,7 +105,7 @@
                     </div>
                 </form>
                 <form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/{mcd}/delete ( basicPath = ${basicPath}, mcd = ${mcd} ) }">
-            		<input type="hidden" name="userSn" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+            		<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
             	</form>
             </div>
         </div>

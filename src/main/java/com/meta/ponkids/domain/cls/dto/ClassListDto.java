@@ -1,5 +1,7 @@
 package com.meta.ponkids.domain.cls.dto;
 
+import java.time.LocalDateTime;
+
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
@@ -37,6 +39,10 @@ public class ClassListDto {
     
     private String classExpsrYn;         // 클래스표시여부
     
+    private String registerId;      // 등록자 ID
+    
+    private LocalDateTime regDt;	// 등록일자
+    
     private String schOption;   // 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
     
     private String schCntn;     // 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!
@@ -44,7 +50,7 @@ public class ClassListDto {
     private CategoryDto category;    // 카테고리 검색 : 생성자에는 추가하지 않음!
     
     @QueryProjection
-    public ClassListDto( Long classSn, String ctgryCd, String crseCd, String classSj, String classSumry, String classDc, String classAmt, String classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn ) {
+    public ClassListDto( Long classSn, String ctgryCd, String crseCd, String classSj, String classSumry, String classDc, String classAmt, String classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn,  String registerId, LocalDateTime regDt) {
         this.classSn = classSn;
         this.ctgryCd = ctgryCd;
         this.crseCd = crseCd;
@@ -59,5 +65,7 @@ public class ClassListDto {
         this.thumbAtchFileSn = thumbAtchFileSn;
         this.atchFileSn = atchFileSn;
         this.classExpsrYn = classExpsrYn;
+		this.registerId = registerId;
+		this.regDt = regDt;
     }
 }

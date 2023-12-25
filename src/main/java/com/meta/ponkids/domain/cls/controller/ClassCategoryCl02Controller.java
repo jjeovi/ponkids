@@ -17,30 +17,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.meta.ponkids.domain.cls.dto.ClassListDto;
-import com.meta.ponkids.domain.cls.dto.ClassModDto;
+import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ListDto;
+import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ModDto;
+import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02SaveDto;
 import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
-import com.meta.ponkids.domain.cls.service.ClassCategoryCl01Service;
 import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
-import com.meta.ponkids.domain.cls.service.ClassService;
-import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 
 import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-public class ClassController {
+public class ClassCategoryCl02Controller {
     
-    private final ClassService classService;
-    private final ClassCategoryCl01Service classCategoryCl01Service;
     private final ClassCategoryCl02Service classCategoryCl02Service;
-    private final CmmnCdDetailService cmmnCdDetailService;
     
-    
-    private final static String BASIC_PATH = "/admin/class";
+    private final static String BASIC_PATH = "/admin/classCategoryCl02";
     
     @GetMapping( BASIC_PATH + "/{mcd}/list" )
-    public String list( @ModelAttribute ClassListDto listDto,
+    public String list( @ModelAttribute ClassCategoryCl02ListDto listDto,
                         @PageableDefault( size = 10 ) Pageable pageable,
                         @PathVariable String mcd,
                         Model model ) {
@@ -48,7 +42,7 @@ public class ClassController {
         // S : 필요한 객체 setting
         
         // 목록 조회
-        Page<ClassListDto> resultList = classService.getList( listDto, pageable );
+        Page<ClassCategoryCl02ListDto> resultList = classCategoryCl02Service.getList( listDto, pageable );
         model.addAttribute( "resultList", resultList );
         
         // 검색 dto setting
@@ -56,7 +50,7 @@ public class ClassController {
         
         // 카테고리 리스트 ( lv1 )
         // 클래스 카테고리 분류1 list setting
-        model.addAttribute("classCategoryCl01List", classCategoryCl01Service.findAll());
+        model.addAttribute("classCategoryCl02List", classCategoryCl02Service.findAll());
         
         // E : 필요한 객체 setting
         
@@ -75,11 +69,8 @@ public class ClassController {
         // 가입 object 생성
         model.addAttribute( "saveDto", new ClassSaveDto() );
         
-        // 요일 List add
-        model.addAttribute( "day7List", cmmnCdDetailService.getList( "DAY_7_CD" ) );    // 요일리스트
-        
         // 클래스 카테고리 분류1 list setting
-        model.addAttribute("classCategoryCl01List", classCategoryCl01Service.findAll());
+        model.addAttribute("classCategoryCl02List", classCategoryCl02Service.findAll());
         
         // E : 필요한 객체 setting
         
@@ -92,7 +83,7 @@ public class ClassController {
     @Transactional
     @PostMapping( BASIC_PATH + "/{mcd}/insert" )
     public String insert(
-            @ModelAttribute ClassSaveDto saveDto,
+            @ModelAttribute ClassCategoryCl02SaveDto saveDto,
             @PathVariable String mcd,
             HttpServletRequest request,
             Model model ) throws IOException {
@@ -104,7 +95,7 @@ public class ClassController {
         // 등록 처리
         
         // save
-        classService.save( saveDto, request );
+    	classCategoryCl02Service.save( saveDto, request );
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
@@ -125,7 +116,7 @@ public class ClassController {
         // S : 필요한 객체 setting
         
         // target object 조회
-        model.addAttribute( "targetDto", classService.findById( pk ) );
+        model.addAttribute( "targetDto", classCategoryCl02Service.findById( pk ) );
         
         // E : 필요한 객체 setting
         
@@ -146,7 +137,7 @@ public class ClassController {
     public String update(
             @RequestParam( "file" ) MultipartFile files,        // 첨부파일 필요시
             @PathVariable String mcd,
-            @ModelAttribute ClassModDto modDto,
+            @ModelAttribute ClassCategoryCl02ModDto modDto,
             HttpServletRequest request,
             Model model ) throws IOException {
         
@@ -156,7 +147,7 @@ public class ClassController {
         
         
         // update 구현
-        classService.update( modDto, request );
+    	classCategoryCl02Service.update( modDto, request );
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
@@ -173,7 +164,7 @@ public class ClassController {
             Model model ) {
         
         // 삭제 처리
-        classService.deleteAllById( pk );        // By 뒤에는 custom
+    	classCategoryCl02Service.deleteAllById( pk );        // By 뒤에는 custom
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );

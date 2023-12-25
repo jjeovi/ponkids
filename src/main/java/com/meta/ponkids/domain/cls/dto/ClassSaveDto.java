@@ -45,6 +45,7 @@ public class ClassSaveDto {
     
     private String updusrIp;      			// 수정자 IP
 	
+    @Builder
 	public ClassSaveDto( Long classSn, String ctgryCd, String crseCd, String classSj, String classSumry, String classDc, String classAmt, String classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String registerId, String registerIp, String updusrId, String updusrIp ) {
 		this.classSn = classSn;
 		this.ctgryCd = ctgryCd;
@@ -65,9 +66,6 @@ public class ClassSaveDto {
 		this.updusrId = updusrId;
 		this.updusrIp = updusrIp;
 	}
-	
-	@Builder
-	
 	
 	// Dto to Entity 메소드 생성
 	public Class toEntity() {
