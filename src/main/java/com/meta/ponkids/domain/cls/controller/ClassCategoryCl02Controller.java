@@ -1,6 +1,8 @@
 package com.meta.ponkids.domain.cls.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -15,13 +17,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl01ModDto;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ListDto;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ModDto;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02SaveDto;
 import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
+import com.meta.ponkids.domain.cls.repository.ClassCategoryCl02Repository;
 import com.meta.ponkids.domain.cls.service.ClassCategoryCl01Service;
 import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
 import com.meta.ponkids.global.common.dto.CategoryDto;
@@ -34,6 +37,7 @@ public class ClassCategoryCl02Controller {
     
     private final ClassCategoryCl02Service classCategoryCl02Service;
     private final ClassCategoryCl01Service classCategoryCl01Service;
+    private final ClassCategoryCl02Repository classCategoryCl02Repository;
     
     private final static String BASIC_PATH = "/admin/classCategoryCl02";
     
@@ -280,11 +284,26 @@ public class ClassCategoryCl02Controller {
         		categoryDto.setLv1Sn(parntsClSn);
         		categoryDto.setLv1Nm(classCategoryCl01ModDto.getClNm());
         		listDto.setCategory(categoryDto);
-        		
         	}
     		
     	} 
     	
+    }
+    
+
+    @ResponseBody
+    @GetMapping( BASIC_PATH + "/live/getListByParntsClSnAjax" )
+    public Map<String, Object> getListByParntsClSnAjax( @ModelAttribute ClassCategoryCl02ListDto listDto) {
+    	// 카테고리(parntsClSn) 로 커리큘럼 검색
+    
+    	Map<String, Object> result = new HashMap<String, Object>();
+    	
+    	listDto.setParntsClSn((long)100003);
+    	
+        // list put
+        result.put( "resultList", classCategoryCl02Repository.findByParntsClSnOrderByClSeq( listDto.getParntsClSn() ) );
+        
+        return result;
     }
     
 }

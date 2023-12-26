@@ -132,13 +132,14 @@
 	<!-- summernote 추가 -->
 	<script src="/common/summernote/js/summernote-lite.js"></script>
    
-   <!-- 카테고리DTO (searchDTO) 정의 ( 재사용을위해 ) -->
+   <!-- 상수 항목 정의 ( 재사용을위해 ) -->
    <script th:inline="javascript">
 		/*<![CDATA[*/
-		// 카테고리DTO (searchDTO) 정의 ( 재사용을위해 )
-		let searchDTO;
+		let searchDTO;	// 카테고리DTO (searchDTO) 정의 
+		let basicPath;	// 기본경로 
 	  	$(function(){
 	  		searchDTO =  /*[[${searchDTO}]]*/;	// 상수선언
+	  		basicPath =  /*[[${basicPath}]]*/;	// 상수선언
        	});
 		/*]]>*/
 	</script>

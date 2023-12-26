@@ -15,4 +15,6 @@ public interface ClassCategoryCl02Repository extends JpaRepository<ClassCategory
 	boolean existsByparntsClSn( Long pk );
 	
 	List<ClassCategoryCl02> findAll();
+	
+	List<ClassCategoryCl02> findByParntsClSnOrderByClSeq( long parntsClSn );
 }
