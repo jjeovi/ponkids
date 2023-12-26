@@ -116,7 +116,7 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom   {
     }
     
     private BooleanExpression eqOption(String schOption, String schCntn){
-        // 검색 옵션  A : 아이디 , B : 이름
+        // 검색 옵션  A : 아이디 , B : 이름 (대소문자 구분없이 조회)
         if (StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn )){
                  if( schOption.equals("A")) return bbs.bbsNm.toUpperCase().contains( schCntn.toUpperCase() ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
             else if (schOption.equals("B")) return bbs.registerId.toUpperCase().contains( schCntn.toUpperCase() ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
