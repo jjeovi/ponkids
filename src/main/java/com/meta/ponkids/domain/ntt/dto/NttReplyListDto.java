@@ -25,13 +25,14 @@ public class NttReplyListDto {
      @NotNull
      private String registerId;
  	 private String writerDt;
+ 	 private Long nttReplyCnt;
     
 
     		 
      @QueryProjection
      public NttReplyListDto( Long nttReplySn, Long nttSn, int step, Long parntsReplySn, 
     		                 int nttReplySeq, String nttReplyCn, String registerId,
-    		                 String writerDt,String delYn) {
+    		                 String writerDt,String delYn , Long nttReplyCnt) {
     		
             this.nttReplySn = nttReplySn;
             this.nttSn = nttSn;
@@ -42,6 +43,7 @@ public class NttReplyListDto {
             this.registerId = registerId;
             this.delYn = delYn;
             this.writerDt = writerDt;
+            this.nttReplyCnt = nttReplyCnt;
             
      }
     

@@ -2,14 +2,15 @@ package com.meta.ponkids.domain.ntt.repository.impl;
 
 import com.meta.ponkids.domain.ntt.dto.NttReplyListDto;
 import com.meta.ponkids.domain.ntt.dto.QNttReplyListDto;
+import com.meta.ponkids.domain.ntt.entity.QNttReply;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
-
 import static com.meta.ponkids.domain.ntt.entity.QNttReply.nttReply;
 
 
@@ -50,6 +51,7 @@ public class NttReplyRepositoryImpl    {
 	  // 댓글 목록
       public List<NttReplyListDto> getList(Long nttSn) {
 	  
+      QNttReply subNttReply = new QNttReply("subNttReply");
 	  List<NttReplyListDto> results = query
 			                         .select(new QNttReplyListDto(
 													               nttReply.nttReplySn,
@@ -60,8 +62,12 @@ public class NttReplyRepositoryImpl    {
 													               nttReply.nttReplyCn,
 													               nttReply.registerId,
 													               nttReply.writerDt,
-  													               nttReply.delYn 
-  													               ))
+  													               nttReply.delYn,
+  													               ExpressionUtils.as( JPAExpressions.select( subNttReply.count() )
+  											                            .from(subNttReply)
+  											                      .where( subNttReply.parntsReplySn.eq(nttReply.nttReplySn)) , "nttReplyCnt" )
+  											  									
+			                        		                         ))
 			                                            .from(nttReply)
 			                                            .where( nttReply.nttSn.eq( nttSn ),
 			                                            		nttReply.step.eq(1))
@@ -78,6 +84,8 @@ public class NttReplyRepositoryImpl    {
 	  // 답글 목록
 	  public List<NttReplyListDto> getAnswerReplyList(Long nttReplySn) {
 		  
+	  QNttReply subNttReply = new QNttReply("subNttReply");
+		  
 	  List<NttReplyListDto> results = query
 			                         .select(new QNttReplyListDto(
 													              nttReply.nttReplySn,
@@ -88,7 +96,10 @@ public class NttReplyRepositoryImpl    {
 													              nttReply.nttReplyCn,
 													              nttReply.registerId,
 													              nttReply.writerDt,
-  													              nttReply.delYn
+  													              nttReply.delYn,
+  													              ExpressionUtils.as( JPAExpressions.select( subNttReply.count() )
+  											                            .from(subNttReply)
+  											                      .where( subNttReply.parntsReplySn.eq(nttReply.nttReplySn)) , "nttReplyCnt" )
 													             ))
 			                                         .from(nttReply)
 			                                         .where( nttReply.parntsReplySn.eq(nttReplySn))

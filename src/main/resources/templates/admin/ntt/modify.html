@@ -197,7 +197,7 @@ function fnReplyList( nttSn ) {
 	   	          html +=  "<input type = 'text'   class='ml'   id='nttReplyCn_Editor" + result[i].nttReplySn  + "'  style='display: none;' value='" + result[i].nttReplyCn  + "'/>"; 
 	   	          html +=  "<input type = 'hidden' class='ml'   value='" +  result[i].nttReplyCn  + "'/>" ;
 	   	          // 버튼
-	   	          html += '<span class="badge badge-dark" style="cursor:pointer"  id="open' +   result[i].nttReplySn + '">                 <a onclick="fnReReplyArea(' +  result[i].nttReplySn  + ',\'open\');"     >답글</a></span>';
+	   	          html += '<span class="badge badge-dark" style="cursor:pointer"  id="open' +   result[i].nttReplySn + '">                 <a onclick="fnReReplyArea(' +  result[i].nttReplySn  + ',\'open\');"     >답글(' +  result[i].nttReplyCnt + '  )</a></span>';
 	   	          html += '<span class="badge badge-dark" style="cursor:pointer;  display: none;"  id="close'+  result[i].nttReplySn +'">    <a onclick="fnReReplyArea(\'' + result[i].nttReplySn + '\',\'close\');"      >접기</a></span>';
 	   	          html += '<span class="badge badge-dark" style="cursor:pointer"  id="mod' + result[i].nttReplySn +	'">                 <a onclick="fnReReplyModifyOpen(\'' +  result[i].nttReplySn + '\',\'mod\');" >수정</a></span>';
 	   	          html += '<span class="badge badge-dark" style="cursor:pointer;  display: none;" id="save' + result[i].nttReplySn  + '"><a onclick="fnReReplyModify(\'' + result[i].nttReplySn   + '\',\'R\',\'0\');"      >저장</a></span>';
@@ -478,7 +478,7 @@ function fnAnswerReplyList( nttReplySn ) {
 					      </p>
 					      <input type = "text"   class="ml" th:value="${data.nttReplyCn}"   th:id="'nttReplyCn_Editor' + ${data.nttReplySn}" style="display: none;"/>
 					      <input type = "hidden" class="ml" th:value="${ data.nttReplySn}"></input> 
-						  <span class="badge badge-dark" style="cursor:pointer"                  th:id="'open'  + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyArea( [[${data.nttReplySn}]] ,'open');">   답글</a></span>
+						  <span class="badge badge-dark" style="cursor:pointer"                  th:id="'open'  + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyArea( [[${data.nttReplySn}]] ,'open');">   답글([[${data.nttReplyCnt}]])</a></span>
 						  <span class="badge badge-dark" style="cursor:pointer;  display: none;" th:id="'close' + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyArea( [[${data.nttReplySn}]] ,'close');">  접기</a></span>
 						  <span class="badge badge-dark" style="cursor:pointer"                  th:id="'mod'   + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyModifyOpen([[${data.nttReplySn}]],'mod');">수정</a></span>
 						  <span class="badge badge-dark" style="cursor:pointer;  display: none;" th:id="'save'  + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyModify([[${data.nttReplySn}]],'R',0);">    저장</a></span>

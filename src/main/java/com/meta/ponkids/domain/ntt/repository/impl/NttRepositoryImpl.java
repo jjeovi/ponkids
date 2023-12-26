@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+
 import static com.meta.ponkids.domain.ntt.entity.QNtt.ntt;
 
 
@@ -57,7 +58,7 @@ public class NttRepositoryImpl implements NttRepositoryCustom   {
                                                   ntt.noticeSetYn,
                                                   ntt.registerId,
                                                   ntt.regDt
-				                                  )).from(ntt)
+				                           )).from(ntt)
 				                         .where(
 	                                            eqOption( nttListDto.getSchOption(), nttListDto.getSchCntn()),
 	                                             ntt.bbsSn.eq( nttListDto.getBbsSn())
