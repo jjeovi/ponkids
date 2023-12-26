@@ -183,31 +183,31 @@ function fnReplyList( nttSn ) {
 	   	         html += "        <tbody>";
 	   	         html += "             <tr class='align-middle'>";
 	   	         html += "                 <td rowspan='2' class='pr-2'><i class='fa fa-user-o fa-2x'></i></td>";
-	   	        html += "                  <td class='ml' >작성자 : "+  result[i].registerId  + "&nbsp;&nbsp;&nbsp;&nbsp;작성일 : "  +  result[i].writerDt + "</td>";
+	   	         html += "                  <td class='ml' >작성자 : "+  result[i].registerId  + "&nbsp;&nbsp;&nbsp;&nbsp;작성일 : "  +  result[i].updtDt + "</td>";
 	   	         html += "             </tr>";
 	   	         html += "         </tbody>";
 	   	         html += "   </table>";
 	   	         html += "</div>";
 	   	         html += "<div class='card-body'>";
-	   	 
-	   	   if( result[i].delYn == 'N') {
-	   		      html +=  "<p class='card-text'>";
-	   		      html +=  "    <span id='nttReplyCn_Read" + result[i].nttReplySn  + "'>" + result[i].nttReplyCn  +  "</span>";
-                  html +=  "</p>";
-	   	          html +=  "<input type = 'text'   class='ml'   id='nttReplyCn_Editor" + result[i].nttReplySn  + "'  style='display: none;' value='" + result[i].nttReplyCn  + "'/>"; 
-	   	          html +=  "<input type = 'hidden' class='ml'   value='" +  result[i].nttReplyCn  + "'/>" ;
-	   	          // 버튼
-	   	          html += '<span class="badge badge-dark" style="cursor:pointer"  id="open' +   result[i].nttReplySn + '">                 <a onclick="fnReReplyArea(' +  result[i].nttReplySn  + ',\'open\');"     >답글(' +  result[i].nttReplyCnt + '  )</a></span>';
-	   	          html += '<span class="badge badge-dark" style="cursor:pointer;  display: none;"  id="close'+  result[i].nttReplySn +'">    <a onclick="fnReReplyArea(\'' + result[i].nttReplySn + '\',\'close\');"      >접기</a></span>';
-	   	          html += '<span class="badge badge-dark" style="cursor:pointer"  id="mod' + result[i].nttReplySn +	'">                 <a onclick="fnReReplyModifyOpen(\'' +  result[i].nttReplySn + '\',\'mod\');" >수정</a></span>';
-	   	          html += '<span class="badge badge-dark" style="cursor:pointer;  display: none;" id="save' + result[i].nttReplySn  + '"><a onclick="fnReReplyModify(\'' + result[i].nttReplySn   + '\',\'R\',\'0\');"      >저장</a></span>';
-	   	          html += '<span class="badge badge-dark" style="cursor:pointer"  id="del' + result[i].nttReplySn +  '">                <a onclick="fnReReplyDelete(\''  + result[i].nttReplySn + '\',\'R\',\'0\');"     >삭제</a></span>';
-	   	
-	   	      } else {
-	   		  html += "<p class='card-text''><span>댓글이 작성자에 의해 삭제되었습니다.</span> </p>";
-	   	       }
+					 if( result[i].delYn == 'N') {
+						  html +=  "<div>";
+						  html +=  "   <p class='card-text'>";
+						  html +=  "   <span id='nttReplyCn_Read" + result[i].nttReplySn  + "'>" + result[i].nttReplyCn  +  "</span>";
+					      html +=  "   </p>";
+						  html +=  "   <input type = 'text'   class='ml'   id='nttReplyCn_Editor" + result[i].nttReplySn  + "'  style='display: none;' value='" + result[i].nttReplyCn  + "'/>"; 
+						  html +=  "   <input type = 'hidden' class='ml'   value='" +  result[i].nttReplyCn  + "'/>" ;
+						  // 버튼
+						  html += '    <span class="badge badge-dark" style="cursor:pointer"                   id="open' +  result[i].nttReplySn + '"><a onclick="fnReReplyArea('    +  result[i].nttReplySn  + ',\'open\');"          >답글(' +  result[i].nttReplyCnt + ')</a></span>';
+						  html += '    <span class="badge badge-dark" style="cursor:pointer;  display: none;"  id="close'+  result[i].nttReplySn + '"><a onclick="fnReReplyArea(\''  + result[i].nttReplySn + '\',\'close\');"         >접기</a></span>';
+						  html += '    <span class="badge badge-dark" style="cursor:pointer"                   id="mod'  +  result[i].nttReplySn + '"><a onclick="fnReReplyModifyOpen(\'' +  result[i].nttReplySn + '\',\'mod\');"     >수정</a></span>';
+						  html += '    <span class="badge badge-dark" style="cursor:pointer;  display: none;"  id="save' +  result[i].nttReplySn + '"><a onclick="fnReReplyModify(\''     + result[i].nttReplySn   + '\',\'R\',\'0\');">저장</a></span>';
+						  html += '    <span class="badge badge-dark" style="cursor:pointer"                   id="del'  +  result[i].nttReplySn + '"><a onclick="fnReReplyDelete(\''     + result[i].nttReplySn + '\',\'R\',\'0\');"  >삭제</a></span>';
+						  html += "</div>";
+						} else {
+						  html += "<p class='card-text''><span>댓글이 작성자에 의해 삭제되었습니다.</span> </p>";
+						}
 	   	     html += "</div>";
-	   	     html += "<div style='display: none;' id='R" + result[i].nttReplySn +"'></div>";
+	   	     html += "<div style='display: none;' id='answer" + result[i].nttReplySn +"'></div>";
 	     }
 	     html += "</div>";   
 	   	    
@@ -218,7 +218,6 @@ function fnReplyList( nttSn ) {
 
 //답글 목록 조회
 function fnAnswerReplyList( nttReplySn ) {
-      
       $.ajax( {
       url: "/reply/answerReplyList",
       type: "GET",
@@ -248,7 +247,6 @@ function fnAnswerReplyList( nttReplySn ) {
 		   html  += '       <div id="answer' + nttReplySn + '"></div> ';                
 		   html  += '       <div id="answerList' + nttReplySn + '" class="card-body"></div> ';                  
 		   html  += '</div> ';  
-			  	
 	
 	  	 $("#answer" + nttReplySn).html(html); // 답글구역 셋팅
 
@@ -260,7 +258,7 @@ function fnAnswerReplyList( nttReplySn ) {
 		   html2 += "        <tbody>";
 		   html2 += "             <tr class='align-middle'>";
 		   html2 += "                  <td rowspan='2' class='pr-2'><i class='fa fa-user-o fa-2x'></i></td>";
-		   html2 += "                  <td class='ml' >작성자 : "+  result[i].registerId  + "&nbsp;&nbsp;&nbsp;&nbsp;작성일 : "  +  result[i].writerDt + "</td>";
+		   html2 += "                  <td class='ml' >작성자 : "+  result[i].registerId  + "&nbsp;&nbsp;&nbsp;&nbsp;작성일 : "  +  result[i].updtDt + "</td>";
 		   html2 += "             </tr>";
 		   html2 += "         </tbody>";
 		   html2 += "   </table>";
@@ -466,7 +464,7 @@ function fnAnswerReplyList( nttReplySn ) {
 							<tbody>
 								<tr class="align-middle">
 								  <td rowspan="2" class="pr-2"><i class="fa fa-user-o fa-2x"></i></td>
-								  <td class="ml" > 작성자 : <span   th:id="'registerId' + ${data.nttReplySn}" th:text="${data.registerId}"></span> &nbsp;&nbsp;&nbsp;&nbsp;작성일 : <span  th:text="${data.writerDt}"></span> </td>
+								  <td class="ml" > 작성자 : <span   th:id="'registerId' + ${data.nttReplySn}" th:text="${data.registerId}"></span> &nbsp;&nbsp;&nbsp;&nbsp;작성일 : <span  th:text="${data.updtDt}"></span> </td>
 								</tr>
 							</tbody>
 					   </table>

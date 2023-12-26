@@ -1,5 +1,7 @@
 package com.meta.ponkids.domain.ntt.dto;
 
+import java.time.LocalDateTime;
+
 import javax.validation.constraints.NotNull;
 
 import com.querydsl.core.annotations.QueryProjection;
@@ -24,7 +26,7 @@ public class NttReplyListDto {
 
      @NotNull
      private String registerId;
- 	 private String writerDt;
+ 	 private String updtDt;
  	 private Long nttReplyCnt;  // 답글 갯수
     
 
@@ -32,7 +34,7 @@ public class NttReplyListDto {
      @QueryProjection
      public NttReplyListDto( Long nttReplySn, Long nttSn, int step, Long parntsReplySn, 
     		                 int nttReplySeq, String nttReplyCn, String registerId,
-    		                 String writerDt,String delYn , Long nttReplyCnt) {
+    		                 String updtDt,String delYn , Long nttReplyCnt) {
     		
             this.nttReplySn = nttReplySn;
             this.nttSn = nttSn;
@@ -42,7 +44,7 @@ public class NttReplyListDto {
             this.nttReplyCn = nttReplyCn;
             this.registerId = registerId;
             this.delYn = delYn;
-            this.writerDt = writerDt;
+            this.updtDt = updtDt;
             this.nttReplyCnt = nttReplyCnt;
             
      }

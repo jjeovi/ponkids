@@ -28,12 +28,12 @@ public class NttReplyModDto {
      private String updusrId;      
      private String updusrIp; 
      private LocalDateTime updtDt;
- 	 private String writerDt;
+
 
     // builder 생성
     @Builder
     public NttReplyModDto( Long nttReplySn, Long nttSn, int step, Long parntsReplySn, int nttReplySeq, String nttReplyCn,
-    		              String updusrId,  String updusrIp, LocalDateTime updtDt,String writerDt) {
+    		              String updusrId,  String updusrIp, LocalDateTime updtDt) {
 
         this.nttReplySn = nttReplySn;
         this.nttSn = nttSn;
@@ -44,7 +44,6 @@ public class NttReplyModDto {
         this.updusrId = updusrId;
         this.updusrIp = updusrIp;
         this.updtDt = updtDt;
-        this.writerDt = writerDt;
    }
     
     
@@ -60,7 +59,6 @@ public class NttReplyModDto {
                        .updusrId(updusrId)
                        .updusrIp(updusrIp)
                        .updtDt(updtDt)
-                       .writerDt(writerDt)
                        .build();
     }
     
@@ -77,7 +75,6 @@ public class NttReplyModDto {
                              .updusrId(nttReply.getUpdusrId())
                              .updusrIp(nttReply.getUpdusrIp())
                              .updtDt(nttReply.getUpdtDt())
-                             .writerDt(nttReply.getWriterDt())
                              .build();
     }
     

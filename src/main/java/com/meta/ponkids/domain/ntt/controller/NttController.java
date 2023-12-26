@@ -334,7 +334,8 @@ public class NttController {
      * description    : id 댓글,답글 등록 ajax
      */
     @ResponseBody
-    @RequestMapping(value = "/reply/nttReplyInsert", method = { RequestMethod.POST })
+    @PostMapping("/reply/nttReplyInsert")
+    //@RequestMapping(value = "/reply/nttReplyInsert", method = { RequestMethod.POST })
     public String nttReplyInsert( @RequestParam Map<String ,Object> map,
     		                      HttpServletRequest request ) {
     	
@@ -376,7 +377,7 @@ public class NttController {
      * description    : 댓글, 답글 수정 ajax
      */
     @ResponseBody
-    @RequestMapping( value = "/reply/nttReplyUpdate", method = { RequestMethod.POST } )
+    @PostMapping("/reply/nttReplyUpdate")
     public String nttReplyUpdate( @RequestParam Map<String ,Object> map,
                                  HttpServletRequest request ) {
     	
@@ -399,7 +400,8 @@ public class NttController {
      * description    : id 댓글 삭제
      */
     @ResponseBody
-    @RequestMapping( value = "/reply/nttReplyDelete", method = { RequestMethod.POST } )
+    @PostMapping("/reply/nttReplyDelete")
+    //@RequestMapping( value = "/reply/nttReplyDelete", method = { RequestMethod.POST } )
     public String nttReplyDelete( @RequestParam( "nttReplySn" ) Long nttReplySn,  
     		                      HttpServletRequest request  ) {
 
@@ -418,7 +420,7 @@ public class NttController {
      * description    : id 답글조회 ajax
      */
     @ResponseBody
-    @RequestMapping( value = "/reply/nttReplyList", method = { RequestMethod.GET } )
+    @GetMapping("/reply/nttReplyList")
     public List<NttReplyListDto> nttReplyList(@RequestParam( "nttSn" ) Long nttSn) {
 
     	// 답글 목록 조회
@@ -435,7 +437,7 @@ public class NttController {
      * description    : id 답글조회 ajax
      */
     @ResponseBody
-    @RequestMapping( value = "/reply/answerReplyList", method = { RequestMethod.GET } )
+    @GetMapping("/reply/answerReplyList")
     public List<NttReplyListDto> answerReplyList(@RequestParam( "nttReplySn" ) Long nttReplySn) {
 
     	// 답글 목록 조회

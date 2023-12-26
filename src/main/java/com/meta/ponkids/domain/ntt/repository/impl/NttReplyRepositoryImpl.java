@@ -4,6 +4,7 @@ import com.meta.ponkids.domain.ntt.dto.NttReplyListDto;
 import com.meta.ponkids.domain.ntt.dto.QNttReplyListDto;
 import com.meta.ponkids.domain.ntt.entity.QNttReply;
 import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
+import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategoryCl02;
 import static com.meta.ponkids.domain.ntt.entity.QNttReply.nttReply;
 
 
@@ -61,12 +64,11 @@ public class NttReplyRepositoryImpl    {
 													               nttReply.nttReplySeq,
 													               nttReply.nttReplyCn,
 													               nttReply.registerId,
-													               nttReply.writerDt,
+													               Expressions.stringTemplate("to_char({0}, '{1s}')", nttReply.updtDt, "YYYY-MM-DD HH:MM:SS"),
   													               nttReply.delYn,
   													               ExpressionUtils.as( JPAExpressions.select( subNttReply.count() )
-  											                            .from(subNttReply)
-  											                      .where( subNttReply.parntsReplySn.eq(nttReply.nttReplySn)) , "nttReplyCnt" )
-  											  									
+  											                       .from(subNttReply)
+  											                       .where( subNttReply.parntsReplySn.eq(nttReply.nttReplySn)) , "nttReplyCnt" )
 			                        		                         ))
 			                                            .from(nttReply)
 			                                            .where( nttReply.nttSn.eq( nttSn ),
@@ -95,10 +97,10 @@ public class NttReplyRepositoryImpl    {
 													              nttReply.nttReplySeq,
 													              nttReply.nttReplyCn,
 													              nttReply.registerId,
-													              nttReply.writerDt,
+													              Expressions.stringTemplate("to_char({0}, '{1s}')", nttReply.updtDt, "YYYY-MM-DD HH:MM:SS"),
   													              nttReply.delYn,
   													              ExpressionUtils.as( JPAExpressions.select( subNttReply.count() )
-  											                            .from(subNttReply)
+  											                      .from(subNttReply)
   											                      .where( subNttReply.parntsReplySn.eq(nttReply.nttReplySn)) , "nttReplyCnt" )
 													             ))
 			                                         .from(nttReply)
