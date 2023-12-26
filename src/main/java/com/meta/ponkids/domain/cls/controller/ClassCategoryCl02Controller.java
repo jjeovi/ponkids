@@ -303,8 +303,7 @@ public class ClassCategoryCl02Controller {
     
     	Map<String, Object> result = new HashMap<String, Object>();
     	
-    	listDto.setParntsClSn((long)100003);
-    	
+    	// 부모 클래스 일련번호로 커리큘럼검색
     	List<ClassCategoryCl02ListDto> listDtos = classCategoryCl02Service.findByParntsClSnOrderByClSeq( listDto );
     	
         // list put
