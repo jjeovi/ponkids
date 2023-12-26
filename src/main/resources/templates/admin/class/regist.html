@@ -25,8 +25,8 @@
     		
     		// 커리큘럼 검색 ajax
     		// ajax START
-//     		var url = '/admin/classCategoryCl02/live/getListByParntsClSnAjax';
-    		var url = '/admin/menu/live/pon/getMenuListAjax';
+    		var url = '/admin/classCategoryCl02/live/getListByParntsClSnAjax';
+//     		var url = '/admin/menu/live/pon/getMenuListAjax';
     		
 //             $.ajax( {
 //                 url: url,
@@ -57,8 +57,16 @@
                         searchCateAjaxCallback( result );
                     } else {
                         console.log( 'searchCateAjaxCallback( result ) funnction is required. searchCateAjaxCallback( result ) 콜백함수 not found!' );
+                        console.log( 'searchCateAjaxCallback( result ) funnction is required. searchCateAjaxCallback( result ) 콜백함수 not found!' );
+                        console.log( 'searchCateAjaxCallback( result ) funnction is required. searchCateAjaxCallback( result ) 콜백함수 not found!' );
                     }
-                }
+                    
+                },
+                error : function (jqXHR, textStatus, errorThrown){
+            		console.log(jqXHR);  //응답 메시지
+            		console.log(textStatus); //"error"로 고정인듯함
+            		console.log(errorThrown);
+            	} 
             } );
             // ajax END
             // ajax END

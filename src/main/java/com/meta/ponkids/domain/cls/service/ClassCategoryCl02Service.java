@@ -46,6 +46,16 @@ public class ClassCategoryCl02Service {
         return classCategoryCl02Repository.getList( listDto, pageable );
     }
     
+    
+    public List<ClassCategoryCl02ListDto> findByParntsClSnOrderByClSeq( ClassCategoryCl02ListDto listDto ) {
+    	List<ClassCategoryCl02> classCategoryCl02List = classCategoryCl02Repository.findByParntsClSnOrderByClSeq( listDto.getParntsClSn() );
+    			
+    	ClassCategoryCl02ListDto classCategoryCl02ListDto = new ClassCategoryCl02ListDto();	// new로 listDto 생성
+    	List<ClassCategoryCl02ListDto> listDtoList = classCategoryCl02List.stream().map(m -> classCategoryCl02ListDto.toDto(m)).collect(Collectors.toList());
+    			
+    	return listDtoList;
+    }
+    
     public ClassCategoryCl02ModDto findById( Long pk ) {
         
         ClassCategoryCl02 classCategoryCl02 = classCategoryCl02Repository.findById( pk ).orElse(null);

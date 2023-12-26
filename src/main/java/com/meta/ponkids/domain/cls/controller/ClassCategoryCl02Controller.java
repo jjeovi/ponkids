@@ -2,6 +2,7 @@ package com.meta.ponkids.domain.cls.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +28,8 @@ import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
 import com.meta.ponkids.domain.cls.repository.ClassCategoryCl02Repository;
 import com.meta.ponkids.domain.cls.service.ClassCategoryCl01Service;
 import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
+import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
+import com.meta.ponkids.domain.system.menu.service.MenuService;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 
 import lombok.RequiredArgsConstructor;
@@ -38,6 +41,8 @@ public class ClassCategoryCl02Controller {
     private final ClassCategoryCl02Service classCategoryCl02Service;
     private final ClassCategoryCl01Service classCategoryCl01Service;
     private final ClassCategoryCl02Repository classCategoryCl02Repository;
+    
+    private final MenuService menuService;
     
     private final static String BASIC_PATH = "/admin/classCategoryCl02";
     
@@ -300,10 +305,12 @@ public class ClassCategoryCl02Controller {
     	
     	listDto.setParntsClSn((long)100003);
     	
+    	List<ClassCategoryCl02ListDto> listDtos = classCategoryCl02Service.findByParntsClSnOrderByClSeq( listDto );
+    	
         // list put
-        result.put( "resultList", classCategoryCl02Repository.findByParntsClSnOrderByClSeq( listDto.getParntsClSn() ) );
+        result.put( "resultList", listDtos);
         
-        return result;
+        return result; 
     }
     
 }
