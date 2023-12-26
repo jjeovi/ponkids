@@ -11,9 +11,7 @@ $(document).ready(function() {
 </script>
 
 <!-- S : Javascript functions	-->
-<body>
 <th:block layout:fragment="content">
-
     <!-- S: 메인 등록 영역 -->
     <div class="row">
         <div class="col-md-12 col-sm-12 ">
@@ -24,7 +22,7 @@ $(document).ready(function() {
                         <input type="hidden" name="bbsSn" th:value="${bbsSn}"/>
                         <!-- TODO 프로필 이미지 추가 작업 -->
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>제목</label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">제목<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="input" id="nttNm" name="nttNm"
                                        title="Minimum 8 Characters Including An Upper And Lower Case Letter, A Number And A Unique Character"
@@ -38,7 +36,7 @@ $(document).ready(function() {
                         <!--포토형일 경우 표시  -->
                         <div  th:if = "${bbsSeCd == '01'}">
 	                      <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>썸네일 이미지</label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">썸네일 이미지<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <div class="filebox preview-image">
                                     <div class="upload-display">
@@ -62,14 +60,14 @@ $(document).ready(function() {
                         <div  th:if = "${bbsSeCd == '02'}">
                              <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
                         </div>
-                       <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>내용</label>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">내용<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                 <textarea id="summernote" name="nttCn"  class="form-control"  required></textarea>
+                                  <textarea id="summernote" name="nttCn"  class="form-control"></textarea>
                             </div>
-                         </div>
-                          <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>공지설정</label>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">공지설정<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6 ">
                                 <div class="btn-group radiobox">
                                     <input type="radio" id="noticeSetYn1" name="noticeSetYn" value="Y" class="join-btn" required>
@@ -88,10 +86,9 @@ $(document).ready(function() {
                             <div class="col-md-6 col-sm-6">
 							   <table  id= "file_table">
 							   </table>
-							   <input type="file" id="multi-add" class="btn-add"   name="multiFile" value="" multiple style="">
-					        <!--   <button type="button" class="btn-add" id="file_add">파일추가</button>-->
+							   <input type="file" id="multi-add" class="btn-add"   name="multiFile" value="" multiple>
                             </div>
-                          </div>   
+                         </div>   
                         <div class="ln_solid"></div>
                         <!-- 저장버튼 -->
                        <div class="col-md-12">
@@ -112,12 +109,8 @@ $(document).ready(function() {
                 </div>
             </div>
         </div>
-        
-        
-        
     </div>
     <!-- E: 메인 등록 영역 -->
-</div>
 </th:block>
 <!-- E : Javascript functions	-->
 </html>

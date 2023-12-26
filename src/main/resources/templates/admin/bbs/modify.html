@@ -22,7 +22,7 @@
                         <input type="hidden" name="bbsSn" id="bbsSn" th:value="${targetDto.bbsSn}"/>
                         <!-- TODO 프로필 이미지 추가 작업 -->
                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>게시판 구분</label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">게시판 구분<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6 ">
                                 <div class="btn-group radiobox">
                                     <input type="radio" id="bbsSeCd1" name="bbsSeCd" value="01" class="join-btn"    th:checked="${targetDto.bbsSeCd eq '01'}"  disabled>
@@ -34,7 +34,7 @@
                         </div>
                         
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>게시판 이름</label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">게시판 이름<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="input" id="bbsNm" name="bbsNm"
                                        title="Minimum 8 Characters Including An Upper And Lower Case Letter, A Number And A Unique Character"
@@ -47,23 +47,21 @@
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>게시판 안내문구</label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">게시판 안내문구</label>
                             <div class="col-md-6 col-sm-6">
-								<textarea id="message" required="required" class="form-control" name="message" data-parsley-trigger="keyup" data-parsley-minlength="20" data-parsley-maxlength="100" data-parsley-minlength-message="Come on! You need to enter at least a 20 caracters long comment.."
-								 data-parsley-bbsGdcc-threshold="10"  th:value="${targetDto.bbsGdcc}"  th:text="${targetDto.bbsGdcc}"></textarea>
+								<textarea id="message" required="required" class="form-control" name="message"  th:value="${targetDto.bbsGdcc}"  th:text="${targetDto.bbsGdcc}"></textarea>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>게시판 설명</label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">게시판 설명</label>
                             <div class="col-md-6 col-sm-6">
-                                <textarea class="form-control" required="required"
-                                       placeholder="게시판 설명을 입력해주세요." id="bbsDc"  name="bbsDc"  th:value="${targetDto.bbsDc}"   th:text="${targetDto.bbsDc}">
+                                <textarea class="form-control" required="required" placeholder="게시판 설명을 입력해주세요." id="bbsDc"  name="bbsDc"  th:value="${targetDto.bbsDc}"   th:text="${targetDto.bbsDc}">
                                 </textarea>
                             </div>
                         </div>
                         
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>댓글여부</label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">댓글여부<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6 ">
                                 <div class="btn-group radiobox">
                                     <input type="radio" id="replySetYn1" name="replySetYn" value="Y" class="join-btn" th:checked="${targetDto.replySetYn eq 'Y'}" required >
@@ -75,7 +73,7 @@
                         </div>
                         
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>공개여부</label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">공개여부<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6 ">
                                 <div class="btn-group radiobox">
                                     <input type="radio" id="openYn1" name="openYn" value="Y" class="join-btn" th:checked="${targetDto.openYn eq 'Y'}" required >
@@ -88,7 +86,7 @@
                         
                         
                          <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>사용여부</label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">사용여부<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6 ">
                                 <div class="btn-group radiobox">
                                     <input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn" th:checked="${targetDto.useYn eq 'Y'}" required >

@@ -295,11 +295,7 @@ function fnAnswerReplyList( nttReplySn ) {
 
 <!-- S : Javascript functions	-->
 <!--<body>-->
-	
-
 <th:block layout:fragment="content">
-
-
     <div class="row">
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
@@ -312,7 +308,7 @@ function fnAnswerReplyList( nttReplySn ) {
                         <!-- TODO 프로필 이미지 추가 작업 -->
       
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>제목</label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">제목<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="input" id="nttNm" name="nttNm"
                                      th:value="${targetDto.nttNm}"
@@ -326,7 +322,7 @@ function fnAnswerReplyList( nttReplySn ) {
                          <!--포토형일 경우 표시  -->
                         <div  th:if = "${bbsSeCd == '01'}">
 	                      <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>썸네일 이미지 </label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">썸네일 이미지<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <div class="filebox preview-image">
                                     <div class="upload-display">
@@ -355,14 +351,14 @@ function fnAnswerReplyList( nttReplySn ) {
                              <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>내용</label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">내용<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                   <textarea id="summernote" name="nttCn"  class="form-control"   th:value="${targetDto.nttCn}"   th:text="${targetDto.nttCn}"></textarea>
                             </div>
                         </div>
                         
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>공지설정</label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">공지설정<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6 ">
                                 <div class="btn-group radiobox">
                                     <input type="radio" id="noticeSetYn1" name="noticeSetYn" value="Y"   th:checked="${targetDto.noticeSetYn eq 'Y'}" class="join-btn" required>

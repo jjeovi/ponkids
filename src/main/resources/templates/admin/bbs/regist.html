@@ -22,7 +22,7 @@
                 <div class="x_content">
                     <form id="insertForm" name="insertForm" method="post"  th:action="@{ {basicPath}/mcd/insert ( basicPath = ${basicPath} ) }" th:object="${bbsSaveReqDto}">
                        <div class="field item form-group">
-                           <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>게시판 구분</label>
+                           <label class="col-form-label col-md-2 col-sm-3 label-align">게시판 구분<span class="required">*</span></label>
                            <div class="col-md-6 col-sm-6 ">
                                <div class="btn-group radiobox">
                                     <input type="radio" id="bbsSeCd1" name="bbsSeCd" value="01" class="join-btn" required>
@@ -33,7 +33,7 @@
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>게시판 이름</label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">게시판 이름<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="input" id="bbsNm" name="bbsNm" title="Minimum 8 Characters Including An Upper And Lower Case Letter, A Number And A Unique Character"  required/>
                                 <span style="position: absolute;right:15px;top:7px;" onclick="hideshow()">
@@ -43,14 +43,14 @@
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>게시판 안내문구</label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">게시판 안내문구</label>
                             <div class="col-md-6 col-sm-6">
                                 <textarea class="form-control"  name="bbsGdcc" id="bbsGdcc"  required>
                                 </textarea>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>게시판 설명</label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">게시판 설명</label>
                             <div class="col-md-6 col-sm-6">
                                 <textarea class="form-control" required
                                        placeholder="게시판 설명을 입력해주세요." id="bbsDc"  name="bbsDc">
@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>댓글 여부</label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">댓글 여부<span class="required">*</span></label>
                             <div class="col-md-2 col-sm-4">
 								 <div class="btn-group radiobox">
                                     <input type="radio" id="replySetYn1" name="replySetYn" value="Y" class="join-btn" required>
@@ -69,7 +69,7 @@
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span  class="required">*</span>공개 여부</label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">공개 여부<span class="required">*</span></label>
                             <div class="col-md-2 col-sm-4">
                             	 <div class="btn-group radiobox">
                                     <input type="radio" id="openYn1" name="openYn" value="Y" class="join-btn" required>
@@ -80,7 +80,7 @@
                              </div>   
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>사용 여부</label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">사용 여부<span class="required">*</span></label>
                             <div class="col-md-2 col-sm-4">
 								 <div class="btn-group radiobox">
                                     <input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn" required>
