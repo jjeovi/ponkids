@@ -17,6 +17,8 @@ public class ClassCategoryCl02ListDto {
 	private Long clSn;				// 분류2 일련번호
 	
 	private Long parntsClSn;		// 분류1 일련번호
+
+	private String parntsClNm;		// 분류1 이름
 	
 	private String clNm;			// 분류2 이름
 	
@@ -34,9 +36,10 @@ public class ClassCategoryCl02ListDto {
 
     @Builder
     @QueryProjection
-	public ClassCategoryCl02ListDto( Long clSn, Long parntsClSn, String clNm, Long clSeq, String registerId, LocalDateTime regDt) {
+	public ClassCategoryCl02ListDto( Long clSn, Long parntsClSn, String parntsClNm, String clNm, Long clSeq, String registerId, LocalDateTime regDt) {
     	this.clSn = clSn;
 		this.parntsClSn = parntsClSn;
+		this.parntsClNm = parntsClNm;
 		this.clNm = clNm;
 		this.clSeq = clSeq;
 		this.registerId = registerId;

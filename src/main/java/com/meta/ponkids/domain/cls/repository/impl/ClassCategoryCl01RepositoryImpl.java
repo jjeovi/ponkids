@@ -2,9 +2,11 @@ package com.meta.ponkids.domain.cls.repository.impl;
 
 
 import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl01.classCategoryCl01;
+import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategoryCl02;
 
 import java.util.List;
 
+import org.hibernate.query.criteria.internal.expression.function.AggregationFunction.COUNT;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -14,7 +16,11 @@ import org.springframework.util.StringUtils;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl01ListDto;
 import com.meta.ponkids.domain.cls.dto.QClassCategoryCl01ListDto;
 import com.meta.ponkids.domain.cls.repository.custom.ClassCategoryCl01RepositoryCustom;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -54,13 +60,17 @@ public class ClassCategoryCl01RepositoryImpl implements ClassCategoryCl01Reposit
                 		classCategoryCl01.clSn,
                 		classCategoryCl01.clNm,
                 		classCategoryCl01.clSeq,
+                		ExpressionUtils.as( JPAExpressions.select(classCategoryCl02.count())
+                										.from(classCategoryCl02)
+                										.where( classCategoryCl02.parntsClSn.eq(classCategoryCl01.clSn) ) , "childCateCnt" ),
                 		classCategoryCl01.registerId,
                 		classCategoryCl01.regDt
-                		) )
+                		) ) 
                 .from( classCategoryCl01 )
                 // where
-                .where()
-                .orderBy( classCategoryCl01.clSn.desc())
+                .where( eqOption(listDto.getSchOption(), listDto.getSchCntn()) )
+                // order by
+                .orderBy( classCategoryCl01.clSeq.asc() )
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )
                 .fetch();
@@ -79,8 +89,8 @@ public class ClassCategoryCl01RepositoryImpl implements ClassCategoryCl01Reposit
     private BooleanExpression eqOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨
         if ( StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn ) ) {
-//            if ( schOption.equals( "A" ) )
-//                return classCategoryCl01.classSj.contains( schCntn );
+            if ( schOption.equals( "A" ) )
+                return classCategoryCl01.clNm.contains( schCntn );
 //            else if ( schOption.equals( "B" ) )
 //                return clas.classNm.contains( schCntn ); // TODO LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
 //            else return null;

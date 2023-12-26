@@ -12,5 +12,7 @@ public interface ClassCategoryCl02Repository extends JpaRepository<ClassCategory
 	
 	Optional<ClassCategoryCl02> findById( Long pk );
 	
+	boolean existsByparntsClSn( Long pk );
+	
 	List<ClassCategoryCl02> findAll();
 }

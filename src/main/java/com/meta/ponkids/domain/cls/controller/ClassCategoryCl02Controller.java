@@ -151,20 +151,37 @@ public class ClassCategoryCl02Controller {
         // S : 필요한 객체 setting
         
         // target object 조회
-        model.addAttribute( "targetDto", classCategoryCl02Service.findById( pk ) );
+    	ClassCategoryCl02ModDto targetDto = classCategoryCl02Service.findById( pk ) ;
+        model.addAttribute( "targetDto", targetDto );
         
         // 부모 카테고리 값 가져오기
-    	ClassCategoryCl01ModDto classCategoryCl01ModDto = classCategoryCl01Service.findById(parntsClSn);
-    	
-    	// 부모 카테고리 값 ( sn, nm ) model 에 setting
-    	if(classCategoryCl01ModDto != null ) {
-    		 model.addAttribute("parntsClSn", parntsClSn);
-    		 model.addAttribute("parntsClNm", classCategoryCl01ModDto.getClNm());
-    		
-    	} else {
-    		// TODO : return error
-    		
-    	}
+        if (parntsClSn == 0 &&  targetDto != null && targetDto.getParntsClSn() != null ) {
+        	ClassCategoryCl01ModDto classCategoryCl01ModDto = classCategoryCl01Service.findById(targetDto.getParntsClSn());
+	    	
+	    	// 부모 카테고리 값 ( sn, nm ) model 에 setting
+	    	if(classCategoryCl01ModDto != null ) {
+	    		 model.addAttribute("parntsClSn", parntsClSn);
+	    		 model.addAttribute("parntsClNm", classCategoryCl01ModDto.getClNm());
+	    		
+	    	} else {
+	    		// TODO : return error
+	    		
+	    	}
+        	
+        	
+        } else {
+	    	ClassCategoryCl01ModDto classCategoryCl01ModDto = classCategoryCl01Service.findById(parntsClSn);
+	    	
+	    	// 부모 카테고리 값 ( sn, nm ) model 에 setting
+	    	if(classCategoryCl01ModDto != null ) {
+	    		 model.addAttribute("parntsClSn", parntsClSn);
+	    		 model.addAttribute("parntsClNm", classCategoryCl01ModDto.getClNm());
+	    		
+	    	} else {
+	    		// TODO : return error
+	    		
+	    	}
+        }
         
         // E : 필요한 객체 setting
         
@@ -229,6 +246,24 @@ public class ClassCategoryCl02Controller {
     
     // 카테고리 setting method
     public void categorySet(ClassCategoryCl02ListDto listDto, long parntsClSn) {
+    	
+    	// 전체 검색 일 경우 전체로 setting
+    	if(parntsClSn == 0 ) {
+    		if ( listDto.getCategory() != null ) {
+        		
+        		listDto.getCategory().setLv1Sn(parntsClSn);
+        		listDto.getCategory().setLv1Nm("전체");
+        		
+        	} else {
+        		CategoryDto categoryDto = new CategoryDto();
+        		
+        		categoryDto.setLv1Sn(parntsClSn);
+        		categoryDto.setLv1Nm("전체");
+        		listDto.setCategory(categoryDto);
+        		
+        	}
+    	}
+    	
     	
     	ClassCategoryCl01ModDto classCategoryCl01ModDto = classCategoryCl01Service.findById(parntsClSn);
     	

@@ -34,7 +34,7 @@
             // 카테고리 1 setting
             var lv1Sn = data['category.lv1Sn'];
             
-            if( lv1Sn != null && lv1Sn != '' ) {
+            if( lv1Sn != null && lv1Sn !== '' ) {
 	            // url setting 
 	            // replace를 사용하여 부분적으로 치환
 	            url = url.replace('parntsClSn', lv1Sn);
@@ -110,8 +110,15 @@
         <div class="x_content">
             <div class="row">
                 <form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/{parntsClSn}/list ( basicPath = ${basicPath}, mcd = ${mcd}, parntsClSn = ${parntsClSn}) }" class="form">
-                	<h2 class="pl_15p" th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null ) && ( searchDTO.category.lv1Sn != 0 ) }">
-	            		클래스 카테고리 : [[${searchDTO.category.lv1Nm}]]
+                	<!-- S : 카테고리 목록 으로 이동 -->
+                	<div class="col-md-12 col-sm-12 pb_20p">
+                        <div class="col-md-2 col-sm-3 text-left">
+                            <a th:href="@{ /admin/classCategoryCl01/{mcd}/list ( mcd = ${mcd} ) }" class="btn btn-white">카테고리 관리</a>
+                        </div>
+                    </div>
+                    <!-- E : 카테고리 목록 으로 이동 -->
+                	<h2 class="pl_15p" th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null ) }">
+	            		대분류 : [[${searchDTO.category.lv1Nm}]]
 	            	</h2>
                     <input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
                     <!-- S : 테이블 상단 검색 창 -->
@@ -138,6 +145,7 @@
                             <thead>
 	                        	<tr>
 	                                <th>순번</th>
+	                                <th>대분류</th>
 	                                <th>이름</th>
 	                                <th>분류순서</th>
 	                                <th>등록자</th>
@@ -148,6 +156,7 @@
                             <tbody>
 	                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
 	                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
+	                                <td th:text="${data.parntsClNm}"></td>
 	                                <td th:text="${data.clNm}"></td>
 	                                <td th:text="${data.clSeq}"></td>
 	                                <td th:text="${data.registerId}"></td>

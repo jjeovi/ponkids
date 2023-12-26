@@ -20,11 +20,11 @@ public class ClassCategoryCl01ListDto{
 	
 	private Long clSeq;			// 분류1 순번
 	
+	private Long childCateCnt;		// 하위항목개수
+	
     private String registerId;      // 등록자 ID
     
     private LocalDateTime regDt;	// 등록일자
-    
-    private String updusrIp;        // 수정자 IP
     
     private String schOption;   	// 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
     
@@ -34,10 +34,11 @@ public class ClassCategoryCl01ListDto{
 
     @Builder
     @QueryProjection
-	public ClassCategoryCl01ListDto(Long clSn, String clNm, Long clSeq, String registerId, LocalDateTime regDt) {
+	public ClassCategoryCl01ListDto(Long clSn, String clNm, Long clSeq, Long childCateCnt, String registerId, LocalDateTime regDt) {
 		this.clSn = clSn;
 		this.clNm = clNm;
 		this.clSeq = clSeq;
+		this.childCateCnt = childCateCnt;
 		this.registerId = registerId;
 		this.regDt = regDt;
 	}

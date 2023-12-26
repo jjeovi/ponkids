@@ -20,7 +20,9 @@ import com.meta.ponkids.domain.cls.dto.ClassCategoryCl01ListDto;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl01ModDto;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl01SaveDto;
 import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
+import com.meta.ponkids.domain.cls.repository.ClassCategoryCl02Repository;
 import com.meta.ponkids.domain.cls.service.ClassCategoryCl01Service;
+import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class ClassCategoryCl01Controller {
     
     private final ClassCategoryCl01Service classCategoryCl01Service;
+    private final ClassCategoryCl02Repository classCategoryCl02Repository;
     
     private final static String BASIC_PATH = "/admin/classCategoryCl01";
     
@@ -115,7 +118,6 @@ public class ClassCategoryCl01Controller {
         
         // E : 필요한 객체 setting
         
-        
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
@@ -139,7 +141,6 @@ public class ClassCategoryCl01Controller {
         
         // E : 필요한 객체 setting
         
-        
         // update 구현
     	classCategoryCl01Service.update( modDto, request );
         
@@ -156,6 +157,20 @@ public class ClassCategoryCl01Controller {
             @RequestParam( required = true ) Long pk,
             @PathVariable String mcd,
             Model model ) {
+    	
+    	// 하위항목 개수 체크 후
+    	// 하위항목 존재하면 삭제 할 수 없음.
+    	if( classCategoryCl02Repository.existsByparntsClSn( pk ) ) {
+    		// 메시지 출력 및 url 이동 처리
+            model.addAttribute( "resultMsg", "항목이 존재하는 카테고리는 삭제할 수 없습니다." );
+            model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+            return "common/alert";
+    	}
+    	
+    	// 하위항목 개수 체크 후
+    	
+    	// 하위항목 존재하면 삭제 할 수 없음.
+    	
         
         // 삭제 처리
     	classCategoryCl01Service.deleteAllById( pk );        // By 뒤에는 custom

@@ -42,7 +42,9 @@ public class ClassCategoryCl01Service {
 	}
 	
     public Page<ClassCategoryCl01ListDto> getList( ClassCategoryCl01ListDto listDto, Pageable pageable ) {
+    	
         return classCategoryCl01Repository.getList( listDto, pageable );
+        
     }
     
     public ClassCategoryCl01ModDto findById( Long pk ) {	// TODO 타입 체크 필요
@@ -65,7 +67,7 @@ public class ClassCategoryCl01Service {
     
     public List<ClassCategoryCl01ListDto> findAll() {	// TODO 타입 체크 필요
         
-    	List<ClassCategoryCl01> classCategoryCl01List = classCategoryCl01Repository.findAll();
+    	List<ClassCategoryCl01> classCategoryCl01List = classCategoryCl01Repository.findAllByOrderByClSeq();
         
     	
     	// entity to dto (List) 전환

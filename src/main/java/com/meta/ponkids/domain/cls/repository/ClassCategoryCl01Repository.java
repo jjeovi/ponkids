@@ -13,4 +13,7 @@ public interface ClassCategoryCl01Repository extends JpaRepository<ClassCategory
 	Optional<ClassCategoryCl01> findById( Long pk );
 	
 	List<ClassCategoryCl01> findAll();
+	
+	List<ClassCategoryCl01> findAllByOrderByClSeq();
+	
 }
