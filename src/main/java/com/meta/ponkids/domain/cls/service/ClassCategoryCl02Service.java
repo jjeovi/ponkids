@@ -46,7 +46,6 @@ public class ClassCategoryCl02Service {
         return classCategoryCl02Repository.getList( listDto, pageable );
     }
     
-    
     public List<ClassCategoryCl02ListDto> findByParntsClSnOrderByClSeq( ClassCategoryCl02ListDto listDto ) {
     	List<ClassCategoryCl02> classCategoryCl02List = classCategoryCl02Repository.findByParntsClSnOrderByClSeq( listDto.getParntsClSn() );
     			
@@ -71,7 +70,6 @@ public class ClassCategoryCl02Service {
         	return modDto;
         }
     }
-    
     
     public List<ClassCategoryCl02ListDto> findAll() {
         
