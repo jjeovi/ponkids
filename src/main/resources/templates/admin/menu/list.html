@@ -29,11 +29,11 @@
             searchDTO.category.lv1Sn != null &&
             type == typeAdm
         ) {
-            searchCateAjax( '/admin/menu/live/' + type + '/getMenuListAjax' );
+            searchCateAjax( basicPath + '/live/' + type + '/getMenuListAjax' );
         } else if ( type == typeUser ) {
             // ajax START
             $.ajax( {
-                url: '/admin/menu/live/' + type + '/getMenuListAjax',
+                url: basicPath + '/live/' + type + '/getMenuListAjax',
                 type: "GET",
                 dataType: "json",
                 async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
@@ -60,7 +60,7 @@
             if ( valid && confirm( "수정하시겠습니까?" ) ) {
 
                 var params = $( "#updateForm" ).serializeArray();
-                url = "/admin/menu/live/" + type + "/updateMenuAjax";
+                url = basicPath + "/live/" + type + "/updateMenuAjax";
 
                 menuAjax( params, url );
             }
@@ -74,7 +74,7 @@
 
             if ( valid && confirm( "등록하시겠습니까?" ) ) {
                 var params = $( "#insertForm" ).serializeArray();
-                url = "/admin/menu/live/" + type + "/insertMenuAjax";
+                url = basicPath + "/live/" + type + "/insertMenuAjax";
 
                 menuAjax( params, url );
             }
@@ -125,7 +125,7 @@
                 if ( confirm( confirmMsg ) ) {
                     // ajax url setting
 
-                    var url = "/admin/menu/live/" + type + "/rootMenuInsertAjax";
+                    var url = basicPath + "/live/" + type + "/rootMenuInsertAjax";
 
                     var params = {};
 
@@ -194,7 +194,7 @@
             // target 메뉴 setting
             if ( type == typeAdm ) {
                 parentNode.upperMenuSn = parentNode.menuSn;
-                var url = "/admin/menu/live/getPossibleRoleListAjax";
+                var url = basicPath + "/live/getPossibleRoleListAjax";
 
                 // 해당 메뉴로 다른권한에서 연동 가능한지 여부 확인 (ajax)
                 $.ajax( {
@@ -238,7 +238,7 @@
         if ( confirm( "삭제하시겠습니까?" ) ) {
 
             var params = $( "#updateForm" ).serializeArray();
-            url = "/admin/menu/live/" + type + "/deleteMenuAjax";
+            url = basicPath + "/live/" + type + "/deleteMenuAjax";
             menuAjax( params, url );
         }
     }
@@ -258,13 +258,13 @@
 
                 if ( type == typeAdm ) {
                     // menulist 재 출력
-                    searchCateAjax( '/admin/menu/live/' + type + '/getMenuListAjax' );
+                    searchCateAjax( basicPath + '/live/' + type + '/getMenuListAjax' );
 
                 } else if ( type == typeUser ) {
 
                     // ajax START
                     $.ajax( {
-                        url: '/admin/menu/live/' + type + '/getMenuListAjax',
+                        url: basicPath + '/live/' + type + '/getMenuListAjax',
                         type: "GET",
                         dataType: "json",
                         async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
@@ -325,7 +325,7 @@
                     <div class="btn-group float-right" role="group">
                     	<!-- th:data-search-cate-url : 검색 url setting -->
                         <button name="searchCateBtn" type="button" class="btn btn-purple w120p"
-                                th:data-search-cate-url="|/admin/menu/live/${type}/getMenuListAjax|"	
+                                th:data-search-cate-url="|${basicPath}/live/${type}/getMenuListAjax|"	
                                 th:onclick="searchCateAjax( this.getAttribute('data-search-cate-url') )">보기
                         </button>
                     </div>

@@ -2,12 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{admin/layout/layout}">
 <!-- S : Javascript functions	-->
+<script src="/common/bootstrap/vendors/jquery/dist/jquery-3.5.1.min.js"></script>
 <script layout:fragment="script">
 
     // DOM 준비 된 이후 실행
     $( function () {
     	
-    	 // 표시기간 선택시 표시기간 표출 처리
+    	// 표시기간 선택시 표시기간 표출 처리
         $( "input:radio[name='classPdSetYn']" ).change( function () {
             if ( $( this ).val() == 'Y' ) {
                 $( "#expsrPeriodDiv" ).show();
@@ -15,9 +16,82 @@
                 $( "#expsrPeriodDiv" ).hide();
             }
         });
+    	
+    	
+    	// 카테고리 선택시 커리큘럼 재정렬 
+    	$("[name='ctgryCd']").change( function() {
+    		
+    		var parntsClSn = $(this).val();
+    		
+    		// 커리큘럼 검색 ajax
+    		// ajax START
+//     		var url = '/admin/classCategoryCl02/live/getListByParntsClSnAjax';
+    		var url = '/admin/menu/live/pon/getMenuListAjax';
+    		
+//             $.ajax( {
+//                 url: url,
+//                 type: "GET",
+//                 dataType: "json",
+//                 async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+//                 data: { parntsClSn: parntsClSn }, // 검색할 값 listDto 안에 categoryDto 변수 추가
+//                 contentType: "application/json",
+//                 success: function ( result ) {
+//                     // callback 함수 연결 -> callback함수로 구현
+//                     if ( typeof getListByParntsClSnAjaxCallback === 'function' ) {
+//                     	getListByParntsClSnAjaxCallback( result );
+//                     } else {
+//                         console.log( 'getListByParntsClSnAjaxCallback( result ) funnction is required. getListByParntsClSnAjaxCallback( result ) 콜백함수 not found!' );
+//                     }
+//                 }
+//             } );
+            $.ajax( {
+                url: url, 
+                type: "GET",
+                dataType: "json",
+                async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+                // data: data, // 검색할 값 listDto 안에 categoryDto 변수 추가
+                contentType: "application/json",
+                success: function ( result ) {
+                    // callback 함수 연결 -> callback함수로 구현
+                    if ( typeof searchCateAjaxCallback === 'function' ) {
+                        searchCateAjaxCallback( result );
+                    } else {
+                        console.log( 'searchCateAjaxCallback( result ) funnction is required. searchCateAjaxCallback( result ) 콜백함수 not found!' );
+                    }
+                }
+            } );
+            // ajax END
+            // ajax END
+    		
+    	});
+    	 
 
     });
     // $( function () {}); end
+    
+    function getListByParntsClSnAjaxCallback( result ) {
+    	
+    	// rearrange CrseCd 
+    	
+    	// 커리큘럼 전체 삭제
+    	$("[name='crseCd']").remove();
+    	
+    	// 커리큘럼 추가
+    	
+//     	crseCd
+    	if ( result.resultList != null && result.resultList.length != 0 ) {
+            // 데이터 있을 시
+            drawMenuTree( result.resultList );
+        } else {
+            // 데이터가 없을 시
+            $( "#menuStructure" ).append(
+                $( "<div>" ).attr( "class", "noData" ).append(
+                    $( "<span>" ).append( "등록된 메뉴가 없습니다. <br /> 메뉴를 등록해주세요. " )
+                )
+            );
+        }
+    	
+    }
     
 </script>
 <!-- E : Javascript functions	-->
@@ -31,15 +105,14 @@
                     	<div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">분류<span class="required">*</span></label>
                             <div class="col-md-2 col-sm-6">
-                            	<select class="form-control" name="otherResideArea" id="countryList" >
+                            	<select class="form-control" name="ctgryCd" id="classCategoryCl01List" >
                                     <option value="">카테고리 선택</option>
                                     <option th:each="item : ${classCategoryCl01List}" th:value="${item.clSn}">[[${item.clNm}]]
                                 </select>
                             </div>
                             <div class="col-md-2 col-sm-6">
-                            	<select class="form-control" name="otherResideArea" id="countryList" >
+                            	<select class="form-control" name="crseCd" id="classCategoryCl02List" >
                                     <option value="">커리큘럼 선택</option>
-                                    <option th:each="item : ${resideAreaList}" th:value="${item.cdDetailVal1}">[[${item.cdDetailNm}]]
                                 </select>
                             </div>
                         </div>
@@ -89,7 +162,7 @@
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">할인전 금액(필수아님)</label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">할인전 금액</label>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control"name="userNm" required="required" placeholder="할인전금액 입력" type="number"/>
                                 <small class="font-gray-dark">
