@@ -6,7 +6,6 @@ import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategor
 
 import java.util.List;
 
-import org.hibernate.query.criteria.internal.expression.function.AggregationFunction.COUNT;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -16,10 +15,8 @@ import org.springframework.util.StringUtils;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl01ListDto;
 import com.meta.ponkids.domain.cls.dto.QClassCategoryCl01ListDto;
 import com.meta.ponkids.domain.cls.repository.custom.ClassCategoryCl01RepositoryCustom;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -90,7 +87,8 @@ public class ClassCategoryCl01RepositoryImpl implements ClassCategoryCl01Reposit
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨
         if ( StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn ) ) {
             if ( schOption.equals( "A" ) )
-                return classCategoryCl01.clNm.contains( schCntn );
+//                return classCategoryCl01.clNm.contains( schCntn );
+            	return classCategoryCl01.clNm.toUpperCase().contains( schCntn.toUpperCase() );
 //            else if ( schOption.equals( "B" ) )
 //                return clas.classNm.contains( schCntn ); // TODO LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
 //            else return null;

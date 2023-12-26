@@ -17,7 +17,6 @@ import com.meta.ponkids.domain.cls.dto.QClassCategoryCl02ListDto;
 import com.meta.ponkids.domain.cls.repository.custom.ClassCategoryCl02RepositoryCustom;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;

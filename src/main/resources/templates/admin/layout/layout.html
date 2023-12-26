@@ -13,7 +13,8 @@
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
 
-    <title layout:fragment="title">pioneerkids Admin</title>
+    <title layout:fragment="title" th:if="${currentMenu != null}" >pioneerkids Admin - [[${currentMenu.menuNm}]]</title>
+    <title layout:fragment="title" th:unless="${currentMenu != null}" >pioneerkids Admin</title>
 
     <!-- Bootstrap -->
     <link href="/common/bootstrap/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
