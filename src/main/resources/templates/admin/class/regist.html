@@ -7,6 +7,11 @@
 
     // DOM 준비 된 이후 실행
     $( function () {
+
+    	// summernote editor 설정
+    	fnSummernoteCall('summernote');
+    	fnSummernoteCall('summernote2');
+    	
     	
     	// 표시기간 선택시 표시기간 표출 처리
         $( "input:radio[name='classPdSetYn']" ).change( function () {
@@ -26,24 +31,6 @@
     		// 커리큘럼 검색 ajax
     		// ajax START
     		var url = '/admin/classCategoryCl02/live/getListByParntsClSnAjax';
-//     		var url = '/admin/menu/live/pon/getMenuListAjax';
-    		
-//             $.ajax( {
-//                 url: url,
-//                 type: "GET",
-//                 dataType: "json",
-//                 async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-//                 data: { parntsClSn: parntsClSn }, // 검색할 값 listDto 안에 categoryDto 변수 추가
-//                 contentType: "application/json",
-//                 success: function ( result ) {
-//                     // callback 함수 연결 -> callback함수로 구현
-//                     if ( typeof getListByParntsClSnAjaxCallback === 'function' ) {
-//                     	getListByParntsClSnAjaxCallback( result );
-//                     } else {
-//                         console.log( 'getListByParntsClSnAjaxCallback( result ) funnction is required. getListByParntsClSnAjaxCallback( result ) 콜백함수 not found!' );
-//                     }
-//                 }
-//             } );
             $.ajax( {
                 url: url, 
                 type: "GET",
@@ -52,14 +39,12 @@
                 // data: data, // 검색할 값 listDto 안에 categoryDto 변수 추가
                 contentType: "application/json",
                 success: function ( result ) {
-                    // callback 함수 연결 -> callback함수로 구현
-                    if ( typeof searchCateAjaxCallback === 'function' ) {
-                        searchCateAjaxCallback( result );
-                    } else {
-                        console.log( 'searchCateAjaxCallback( result ) funnction is required. searchCateAjaxCallback( result ) 콜백함수 not found!' );
-                        console.log( 'searchCateAjaxCallback( result ) funnction is required. searchCateAjaxCallback( result ) 콜백함수 not found!' );
-                        console.log( 'searchCateAjaxCallback( result ) funnction is required. searchCateAjaxCallback( result ) 콜백함수 not found!' );
-                    }
+                 // callback 함수 연결 -> callback함수로 구현
+                 if ( typeof getListByParntsClSnAjaxCallback === 'function' ) {
+                 	getListByParntsClSnAjaxCallback( result );
+                 } else {
+                     console.log( 'getListByParntsClSnAjaxCallback( result ) funnction is required. getListByParntsClSnAjaxCallback( result ) 콜백함수 not found!' );
+                 }
                     
                 },
                 error : function (jqXHR, textStatus, errorThrown){
@@ -68,7 +53,6 @@
             		console.log(errorThrown);
             	} 
             } );
-            // ajax END
             // ajax END
     		
     	});
@@ -82,21 +66,14 @@
     	// rearrange CrseCd 
     	
     	// 커리큘럼 전체 삭제
-    	$("[name='crseCd']").remove();
+    	$("[name='crseCd']").empty();
+    	
+    	// 커리큘럼 추가 (전체)
+    	$("[name='crseCd']").append("<option value=''>선택안함</option>");
     	
     	// 커리큘럼 추가
-    	
-//     	crseCd
-    	if ( result.resultList != null && result.resultList.length != 0 ) {
-            // 데이터 있을 시
-            drawMenuTree( result.resultList );
-        } else {
-            // 데이터가 없을 시
-            $( "#menuStructure" ).append(
-                $( "<div>" ).attr( "class", "noData" ).append(
-                    $( "<span>" ).append( "등록된 메뉴가 없습니다. <br /> 메뉴를 등록해주세요. " )
-                )
-            );
+    	 for ( let item of result.resultList ) {
+    		 $("[name='crseCd']").append("<option value='" + item.clSn + "'>" + item.clNm + "</option>");
         }
     	
     }
@@ -113,7 +90,7 @@
                     	<div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">분류<span class="required">*</span></label>
                             <div class="col-md-2 col-sm-6">
-                            	<select class="form-control" name="ctgryCd" id="classCategoryCl01List" >
+                            	<select class="form-control" name="ctgryCd" id="classCategoryCl01List" required="required">
                                     <option value="">카테고리 선택</option>
                                     <option th:each="item : ${classCategoryCl01List}" th:value="${item.clSn}">[[${item.clNm}]]
                                 </select>
@@ -148,31 +125,34 @@
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">클래스 제목<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control"name="userNm" required="required" placeholder="클래스 제목을 입력해주세요."/>
+                                <input class="form-control"name="classSj" required="required" placeholder="클래스 제목을 입력해주세요."/>
                             </div>
                         </div>
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">클래스 요약<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control"name="userNm" required="required" placeholder="클래스 제목을 입력해주세요."/>
-                                <small class="font-gray-dark">
-                                    클래스 조회화면 상단에 표시될 간략한 내용을 입력해주세요. 
-                                </small>
+                            	<textarea id="summernote" name="nttCn"  class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">클래스 설명<span class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6">
+                            	<textarea id="summernote2" name="nttCn"  class="form-control"></textarea>
                             </div>
                         </div>
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">금액<span class="required">*</span></label>
                             <div class="col-md-4 col-sm-6">
-                                <input class="form-control"name="userNm" required="required" placeholder="금액 입력" type="number" />
+                                <input class="form-control"name="classAmt" required="required" placeholder="금액 입력" type="number" />
                                 <small class="font-gray-dark">
-                                    클래스 조회화면 상단에 표시될 간략한 내용을 입력해주세요. 
+                                    금액을 입력해주세요. 숫자만 입력 가능  
                                 </small>
                             </div>
                         </div>
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">할인전 금액</label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control"name="userNm" required="required" placeholder="할인전금액 입력" type="number"/>
+                                <input class="form-control"name="classDscntBfeAmt" required="required" placeholder="할인전금액 입력" type="number"/>
                                 <small class="font-gray-dark">
                                     할인 적용시 할인하기 전 금액을 입력해주세요. 금액보다 큰 값이어야 합니다.
                                 </small>

@@ -31,13 +31,11 @@ import java.time.LocalDateTime;
 @EntityListeners( AuditingEntityListener.class )
 public abstract class BaseTimeEntity {
     
-	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm", timezone="Asia/Seoul")
     @Comment( value = "등록일시")
     @Column(updatable = false)
     @CreatedDate
     private LocalDateTime regDt;
     
-	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm", timezone="Asia/Seoul")
     @Comment( value = "수정일시")
 //    @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경
     @LastModifiedDate

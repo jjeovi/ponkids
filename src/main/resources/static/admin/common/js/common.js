@@ -657,9 +657,10 @@ const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // �
 
 
 //에디터 설정
-function fnSummernoteCall(){
+function fnSummernoteCall(id){
+	// id : summernote 적용할 id 값 
 	
-	$('#summernote').summernote({
+	$('#'+ id).summernote({
 				height: 300,                 // 에디터 높이
 				minHeight: null,             // 최소 높이
 				maxHeight: null,             // 최대 높이
