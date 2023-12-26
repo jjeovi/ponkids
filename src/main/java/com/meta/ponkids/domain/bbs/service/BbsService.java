@@ -40,7 +40,7 @@ public class BbsService {
     @Transactional
     public BbsSaveReqDto save( BbsSaveReqDto bbsSaveReqDto , HttpServletRequest request ) {
     	
-      // dto to entity 작업 (필수)
+         // dto to entity 작업 (필수)
          Bbs bbs = Bbs.builder()
                       .bbsSn(bbsSaveReqDto.getBbsSn())
                       .bbsSeCd(bbsSaveReqDto.getBbsSeCd())
