@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategoryCl02;
 import static com.meta.ponkids.domain.ntt.entity.QNttReply.nttReply;
 
 

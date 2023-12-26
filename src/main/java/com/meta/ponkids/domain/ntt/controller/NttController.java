@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -335,7 +333,6 @@ public class NttController {
      */
     @ResponseBody
     @PostMapping("/reply/nttReplyInsert")
-    //@RequestMapping(value = "/reply/nttReplyInsert", method = { RequestMethod.POST })
     public String nttReplyInsert( @RequestParam Map<String ,Object> map,
     		                      HttpServletRequest request ) {
     	
@@ -401,7 +398,6 @@ public class NttController {
      */
     @ResponseBody
     @PostMapping("/reply/nttReplyDelete")
-    //@RequestMapping( value = "/reply/nttReplyDelete", method = { RequestMethod.POST } )
     public String nttReplyDelete( @RequestParam( "nttReplySn" ) Long nttReplySn,  
     		                      HttpServletRequest request  ) {
 
