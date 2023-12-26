@@ -43,7 +43,6 @@ public class ClassCategoryCl01ListDto{
 		this.regDt = regDt;
 	}
     
-    
     // Dto to Entity 메소드 생성
     public ClassCategoryCl01 toEntity() {
         return ClassCategoryCl01.builder()
@@ -65,6 +64,4 @@ public class ClassCategoryCl01ListDto{
 //                .regDt( classCategoryCl01.getRegDt() )
                 .build();
     }
-    
-    
 }

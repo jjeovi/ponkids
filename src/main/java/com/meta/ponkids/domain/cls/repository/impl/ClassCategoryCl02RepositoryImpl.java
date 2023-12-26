@@ -4,6 +4,7 @@ package com.meta.ponkids.domain.cls.repository.impl;
 import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl01.classCategoryCl01;
 import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategoryCl02;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -15,8 +16,10 @@ import org.springframework.util.StringUtils;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ListDto;
 import com.meta.ponkids.domain.cls.dto.QClassCategoryCl02ListDto;
 import com.meta.ponkids.domain.cls.repository.custom.ClassCategoryCl02RepositoryCustom;
+import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -61,7 +64,9 @@ public class ClassCategoryCl02RepositoryImpl implements ClassCategoryCl02Reposit
                 		classCategoryCl02.clNm,
                 		classCategoryCl02.clSeq,
                 		classCategoryCl02.registerId,
-                		classCategoryCl02.regDt
+                		Expressions.stringTemplate("to_char({0}, '{1s}')", classCategoryCl02.regDt, "YYYY-MM-DD HH:MM:SS")
+//                		Expressions.stringTemplate("DATE_FORMAT({0}, '%Y-%m-%d')", classCategoryCl02.regDt)
+//                		Expressions.dateTemplate(Timestamp.class, "DATE_FORMAT({0}, '%Y-%m-%d')", classCategoryCl02.regDt)
                 		) )
                 .from( classCategoryCl02 )
                 // where

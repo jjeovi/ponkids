@@ -2,6 +2,9 @@ package com.meta.ponkids.domain.cls.dto;
 
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.meta.ponkids.domain.cls.entity.ClassCategoryCl02;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.annotations.QueryProjection;
@@ -26,7 +29,7 @@ public class ClassCategoryCl02ListDto {
 	
     private String registerId;      // 등록자 ID
     
-    private LocalDateTime regDt;	// 등록일자
+    private String regDt;			// 등록일자
     
     private String schOption;   	// 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
     
@@ -36,7 +39,7 @@ public class ClassCategoryCl02ListDto {
 
     @Builder
     @QueryProjection
-	public ClassCategoryCl02ListDto( Long clSn, Long parntsClSn, String parntsClNm, String clNm, Long clSeq, String registerId, LocalDateTime regDt) {
+	public ClassCategoryCl02ListDto( Long clSn, Long parntsClSn, String parntsClNm, String clNm, Long clSeq, String registerId, String regDt) {
     	this.clSn = clSn;
 		this.parntsClSn = parntsClSn;
 		this.parntsClNm = parntsClNm;
@@ -63,6 +66,7 @@ public class ClassCategoryCl02ListDto {
                 .parntsClSn( classCategoryCl02.getParntsClSn() )
                 .clNm( classCategoryCl02.getClNm() )
                 .clSeq( classCategoryCl02.getClSeq() )
+                .regDt( classCategoryCl02.getRegDt().toString())
                 .build();
     }
     
