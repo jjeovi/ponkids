@@ -28,8 +28,10 @@ public class PopupService {
 	public PopupSaveDto save( PopupSaveDto saveDto, HttpServletRequest request ) throws IOException {
 //    public PopupSaveDto save( PopupSaveDto saveDto, PopupRoleSaveDto popupRoleSaveDto, HttpServletRequest request ) throws IOException {
 		
-		saveDto.setRegisterId( SessionUtils.getClientId() );							// Id set
-		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set
+		saveDto.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
+		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
+		saveDto.setUpdusrId( SessionUtils.getClientId() );					// Id set : update
+		saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
 		
 		Popup newPopup = popupRepository.save( saveDto.toEntity() );			// ** save -> save된 정보 newXxx 로 저장
 		

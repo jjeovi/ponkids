@@ -31,8 +31,10 @@ public class ClassCategoryCl01Service {
 	public ClassCategoryCl01SaveDto save( ClassCategoryCl01SaveDto saveDto, HttpServletRequest request ) throws IOException {
 //    public ClassCategoryCl01SaveDto save( ClassCategoryCl01SaveDto saveDto, ClassCategoryCl01RoleSaveDto classCategoryCl01RoleSaveDto, HttpServletRequest request ) throws IOException {
 		
-		saveDto.setRegisterId( SessionUtils.getClientId() );				// Id set
-		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set
+		saveDto.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
+		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
+		saveDto.setUpdusrId( SessionUtils.getClientId() );					// Id set : update
+		saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
 		
 		ClassCategoryCl01 newClassCategoryCl01 = classCategoryCl01Repository.save( saveDto.toEntity() );			// ** save -> save된 정보 newXxx 로 저장
 		

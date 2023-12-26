@@ -10,7 +10,6 @@
 
     });
     
-    
     // 분류영역 보기 버튼 클릭 event
     function searchCate( url ){
 
@@ -110,7 +109,7 @@
     <div class="x_panel">
         <div class="x_content">
             <div class="row">
-                <form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd}) }" class="form">
+                <form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/{parntsClSn}/list ( basicPath = ${basicPath}, mcd = ${mcd}, parntsClSn = ${parntsClSn}) }" class="form">
                 	<h2 class="pl_15p" th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null ) && ( searchDTO.category.lv1Sn != 0 ) }">
 	            		클래스 카테고리 : [[${searchDTO.category.lv1Nm}]]
 	            	</h2>
@@ -137,9 +136,10 @@
                     <div class="col-md-12 col-sm-12 ">
                         <table id="listTable" class="table table-bordered text-center">
                             <thead>
-	                            <tr>
+	                        	<tr>
 	                                <th>순번</th>
 	                                <th>이름</th>
+	                                <th>분류순서</th>
 	                                <th>등록자</th>
 	                                <th>등록일</th>
 	                                <th>관리</th>
@@ -149,10 +149,11 @@
 	                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
 	                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
 	                                <td th:text="${data.clNm}"></td>
-	                                <td th:text="${data.clNm}"></td>
-	                                <td th:text="${data.clNm}"></td>
+	                                <td th:text="${data.clSeq}"></td>
+	                                <td th:text="${data.registerId}"></td>
+	                                <td th:text="${#temporals.format(data.regDt, 'yyyy-MM-dd HH:MM:SS')}"></td>
 	                                <td>
-	                                    <a th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, clSn = ${data.clSn} ) }"
+	                                    <a th:href="@{{basicPath}/{mcd}/{parntsClSn}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, parntsClSn = ${parntsClSn}, pk = ${data.clSn} ) }"
 	                                       class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
 	                                    <a th:href="'javascript:deleteItem(\'' + ${data.clSn} + '\');'"
 	                                       class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>삭제</a>
@@ -171,7 +172,7 @@
                     <div class="col-md-12 col-sm-12">
                         <!-- bottom left area -->
                         <div class="col-md-2 col-sm-3 text-left">
-                            <a th:href="@{ {basicPath}/mcd/regist ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">등록</a>
+                            <a th:href="@{ {basicPath}/{mcd}/{parntsClSn}/regist ( basicPath = ${basicPath}, mcd = ${mcd}, parntsClSn = ${parntsClSn} ) }" class="btn btn-white w120p">등록</a>
                         </div>
                         <!-- S : 테이블 하단 페이징 -->
                         <div class="col-md-8 col-sm-6 text-center"
@@ -194,8 +195,8 @@
                         </div>
                     </div>
                 </form>
-                <form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/{mcd}/delete ( basicPath = ${basicPath}, mcd = ${mcd} ) }">
-            		<input type="hidden" name="clSn" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+                <form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/{mcd}/{parntsClSn}/delete ( basicPath = ${basicPath}, mcd = ${mcd}, parntsClSn = ${parntsClSn} ) }">
+            		<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
             	</form>
             </div>
         </div>

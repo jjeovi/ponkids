@@ -68,11 +68,15 @@ public class UserSaveDto {
     
     private String registerIp;      // 등록자 IP
     
+    private String updusrId;      	// 수정자 ID
+    
+    private String updusrIp;      	// 수정자 IP
+    
     private String delYn;           // 삭제여부
     
     // builder 생성
     @Builder
-    public UserSaveDto( String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSns, String registerIp, String delYn ) {
+    public UserSaveDto( String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSns, String registerIp, String updusrId, String updusrIp, String delYn ) {
         this.userId = userId;
         this.password = password;
         this.userNm = userNm;
@@ -91,6 +95,8 @@ public class UserSaveDto {
         this.confmDt = confmDt;
         this.cntnSns = cntnSns;
         this.registerIp = registerIp;
+		this.updusrId = updusrId;
+		this.updusrIp = updusrIp;
         this.delYn = delYn;
     }
     

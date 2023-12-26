@@ -19,6 +19,7 @@ import com.meta.ponkids.domain.system.cmmnCd.entity.CmmnCdDetail;
 import com.meta.ponkids.domain.system.cmmnCd.repository.CmmnCdDetailRepository;
 import com.meta.ponkids.domain.system.cmmnCd.repository.CmmnCdRepository;
 import com.meta.ponkids.global.util.ip.IpUtils;
+import com.meta.ponkids.global.util.session.SessionUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,8 +34,10 @@ public class CmmnCdDetailService {
 	public CmmnCdDetailSaveDto save( CmmnCdDetailSaveDto saveDto, HttpServletRequest request ) throws IOException {
 //    public CmmnCdDetailSaveDto save( CmmnCdDetailSaveDto saveDto, CmmnCdDetailRoleSaveDto cmmnCdDetailRoleSaveDto, HttpServletRequest request ) throws IOException {
 		
-		saveDto.setRegisterId( "admin@test.com" );							// Id set
-		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set
+		saveDto.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
+		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
+		saveDto.setUpdusrId( SessionUtils.getClientId() );					// Id set : update
+		saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
 		
 		CmmnCdDetail newCmmnCdDetail = cmmnCdDetailRepository.save( saveDto.toEntity() );			// ** save -> save된 정보 newXxx 로 저장
 		

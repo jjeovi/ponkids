@@ -76,20 +76,34 @@ public class ClassCategoryCl02Controller {
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
+        // 경로 추가
+        model.addAttribute("parntsClSn", parntsClSn);
+        
         return BASIC_PATH + "/list";
     }
     
-    @GetMapping( BASIC_PATH + "/{mcd}/regist" )
-    public String regist( @PathVariable String mcd,
-                          Model model ) {
+    @GetMapping( BASIC_PATH + "/{mcd}/{parntsClSn}/regist" )
+    public String regist( 	@PathVariable String mcd,
+    						@PathVariable Long parntsClSn,
+    						Model model ) {
         
         // S : 필요한 객체 setting
-        
+    	
         // 가입 object 생성
         model.addAttribute( "saveDto", new ClassSaveDto() );
         
-        // 클래스 카테고리 분류1 list setting
-        model.addAttribute("classCategoryCl02List", classCategoryCl02Service.findAll());
+        // 부모 카테고리 값 가져오기
+    	ClassCategoryCl01ModDto classCategoryCl01ModDto = classCategoryCl01Service.findById(parntsClSn);
+    	
+    	// 부모 카테고리 값 ( sn, nm ) model 에 setting
+    	if(classCategoryCl01ModDto != null ) {
+    		 model.addAttribute("parntsClSn", parntsClSn);
+    		 model.addAttribute("parntsClNm", classCategoryCl01ModDto.getClNm());
+    		
+    	} else {
+    		// TODO : return error
+    		
+    	}
         
         // E : 필요한 객체 setting
         
@@ -100,10 +114,11 @@ public class ClassCategoryCl02Controller {
     }
     
     @Transactional
-    @PostMapping( BASIC_PATH + "/{mcd}/insert" )
+    @PostMapping( BASIC_PATH + "/{mcd}/{parntsClSn}/insert" )
     public String insert(
             @ModelAttribute ClassCategoryCl02SaveDto saveDto,
             @PathVariable String mcd,
+            @PathVariable Long parntsClSn,
             HttpServletRequest request,
             Model model ) throws IOException {
         
@@ -118,17 +133,18 @@ public class ClassCategoryCl02Controller {
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/" + parntsClSn + "/list" );
         
         return "common/alert";
     }
     
     @GetMapping( value = {
-            BASIC_PATH + "/{mcd}/detail",
-            BASIC_PATH + "/{mcd}/modify" } )
+            BASIC_PATH + "/{mcd}/{parntsClSn}/detail",
+            BASIC_PATH + "/{mcd}/{parntsClSn}/modify" } )
     public String detailOrModify(
             @RequestParam( required = true ) Long pk,    // 타입 체크
             @PathVariable String mcd,
+            @PathVariable Long parntsClSn,
             HttpServletRequest request,
             Model model ) {
         
@@ -137,11 +153,27 @@ public class ClassCategoryCl02Controller {
         // target object 조회
         model.addAttribute( "targetDto", classCategoryCl02Service.findById( pk ) );
         
+        // 부모 카테고리 값 가져오기
+    	ClassCategoryCl01ModDto classCategoryCl01ModDto = classCategoryCl01Service.findById(parntsClSn);
+    	
+    	// 부모 카테고리 값 ( sn, nm ) model 에 setting
+    	if(classCategoryCl01ModDto != null ) {
+    		 model.addAttribute("parntsClSn", parntsClSn);
+    		 model.addAttribute("parntsClNm", classCategoryCl01ModDto.getClNm());
+    		
+    	} else {
+    		// TODO : return error
+    		
+    	}
+        
         // E : 필요한 객체 setting
         
         
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
+        
+        // 경로 추가
+        model.addAttribute("parntsClSn", parntsClSn);
         
         String urlPath = request.getServletPath();
         String remainPath = "";
@@ -152,10 +184,10 @@ public class ClassCategoryCl02Controller {
     }
     
     @Transactional
-    @PostMapping( BASIC_PATH + "/{mcd}/update" )
+    @PostMapping( BASIC_PATH + "/{mcd}/{parntsClSn}/update" )
     public String update(
-            @RequestParam( "file" ) MultipartFile files,        // 첨부파일 필요시
             @PathVariable String mcd,
+            @PathVariable Long parntsClSn,
             @ModelAttribute ClassCategoryCl02ModDto modDto,
             HttpServletRequest request,
             Model model ) throws IOException {
@@ -170,16 +202,17 @@ public class ClassCategoryCl02Controller {
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/" + parntsClSn +  "/list" );
         
         return "common/alert";
     }
     
     @Transactional
-    @PostMapping( BASIC_PATH + "/{mcd}/delete" )
+    @PostMapping( BASIC_PATH + "/{mcd}/{parntsClSn}/delete" )
     public String delete(
             @RequestParam( required = true ) Long pk,
             @PathVariable String mcd,
+            @PathVariable Long parntsClSn,
             Model model ) {
         
         // 삭제 처리
@@ -187,13 +220,14 @@ public class ClassCategoryCl02Controller {
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/" + parntsClSn + "/list" );
         
         return "common/alert";
     }
     
     
     
+    // 카테고리 setting method
     public void categorySet(ClassCategoryCl02ListDto listDto, long parntsClSn) {
     	
     	ClassCategoryCl01ModDto classCategoryCl01ModDto = classCategoryCl01Service.findById(parntsClSn);

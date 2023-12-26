@@ -15,6 +15,7 @@ import com.meta.ponkids.domain.system.banner.dto.BannerSaveDto;
 import com.meta.ponkids.domain.system.banner.entity.Banner;
 import com.meta.ponkids.domain.system.banner.repository.BannerRepository;
 import com.meta.ponkids.global.util.ip.IpUtils;
+import com.meta.ponkids.global.util.session.SessionUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,8 +28,10 @@ public class BannerService {
 	public BannerSaveDto save( BannerSaveDto saveDto, HttpServletRequest request ) throws IOException {
 //    public BannerSaveDto save( BannerSaveDto saveDto, BannerRoleSaveDto bannerRoleSaveDto, HttpServletRequest request ) throws IOException {
 		
-		saveDto.setRegisterId( "admin@test.com" );							// Id set
-		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set
+		saveDto.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
+		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
+		saveDto.setUpdusrId( SessionUtils.getClientId() );					// Id set : update
+		saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
 		
 		Banner newBanner = bannerRepository.save( saveDto.toEntity() );			// ** save -> save된 정보 newXxx 로 저장
 		

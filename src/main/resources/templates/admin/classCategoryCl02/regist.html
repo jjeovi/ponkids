@@ -7,147 +7,53 @@
 
     // DOM 준비 된 이후 실행
     $( function () {
-    	
-    	 // 표시기간 선택시 표시기간 표출 처리
-        $( "input:radio[name='classPdSetYn']" ).change( function () {
-            if ( $( this ).val() == 'Y' ) {
-                $( "#expsrPeriodDiv" ).show();
-            } else {
-                $( "#expsrPeriodDiv" ).hide();
-            }
-        });
 
     });
-    // $( function () {}); end
-    
 
 </script>
 <!-- E : Javascript functions	-->
 <th:block layout:fragment="content">
+	
     <!-- S: content -->
     <div class="row">
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="insertForm" name="insertForm" method="post" th:action="@{ {basicPath}/mcd/insert ( basicPath = ${basicPath} ) }" enctype="multipart/form-data">
-                    	<div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">분류<span class="required">*</span></label>
-                            <div class="col-md-2 col-sm-6">
-                            	<select class="form-control" name="otherResideArea" id="countryList" >
-                                    <option value="">카테고리 선택</option>
-                                    <option th:each="item : ${classCategoryCl01List}" th:value="${item.clSn}">[[${item.clNm}]]
-                                </select>
-                            </div>
-                            <div class="col-md-2 col-sm-6">
-                            	<select class="form-control" name="otherResideArea" id="countryList" >
-                                    <option value="">커리큘럼 선택</option>
-                                    <option th:each="item : ${resideAreaList}" th:value="${item.cdDetailVal1}">[[${item.cdDetailNm}]]
-                                </select>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">썸네일 이미지</label>
-                            <div class="col-md-6 col-sm-6">
-                                <div class="filebox preview-image">
-                                    <div class="upload-display">
-                                        <div class="upload-thumb-wrap">
-                                            <img alt="썸네일 이미지" class="upload-thumb noimg">
-                                        </div>
-                                    </div>
-                                    <div class="upload-file-name">
-                                        <input class="input-file-name" value="선택된 파일 없음(.gif, .jpg, .png)" disabled="disabled">
-                                    </div>
-                                    <div class="upload-btn mt_10p">
-                                        <label class="btn btn-purple">업로드
-                                            <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
-                                        </label>
-                                    </div>
+                    <form id="insertForm" name="insertForm" method="post" th:action="@{ {basicPath}/{mcd}/{parntsClSn}/insert ( basicPath = ${basicPath}, mcd = ${mcd}, parntsClSn = ${parntsClSn} ) }">
+	                    <!-- hidden type  -->
+                        <input type="hidden" name="parntsClSn" required="required" th:value="${parntsClSn}" />
 
-                                </div>
-                            </div>
-                        </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">클래스 제목<span class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">카테고리<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control"name="userNm" required="required" placeholder="클래스 제목을 입력해주세요."/>
+                                <input class="form-control" name="parntsClNm" required="required" th:value="${parntsClNm}" readonly="readonly" />
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">클래스 요약<span class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">이름<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control"name="userNm" required="required" placeholder="클래스 제목을 입력해주세요."/>
-                                <small class="font-gray-dark">
-                                    클래스 조회화면 상단에 표시될 간략한 내용을 입력해주세요. 
-                                </small>
+                                <input class="form-control" data-validate-length-range="2,50" name="clNm" required="required" placeholder="이름을 입력해주세요." />
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">금액<span class="required">*</span></label>
-                            <div class="col-md-4 col-sm-6">
-                                <input class="form-control"name="userNm" required="required" placeholder="금액 입력" type="number" />
-                                <small class="font-gray-dark">
-                                    클래스 조회화면 상단에 표시될 간략한 내용을 입력해주세요. 
-                                </small>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">할인전 금액(필수아님)</label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">분류순서<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control"name="userNm" required="required" placeholder="할인전금액 입력" type="number"/>
+                                <input type="number" class="form-control" name="clSeq" required="required" placeholder="분류순서를 입력해주세요." />
                                 <small class="font-gray-dark">
-                                    할인 적용시 할인하기 전 금액을 입력해주세요. 금액보다 큰 값이어야 합니다.
+                                    분류 표시순서를 입력해주세요.
                                 </small>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">요일선택</label> 
-                            <div class="col-md-10 col-sm-6">
-                                <th:block th:each="data : ${day7List}">
-                                	<input th:id="'day'+${data.cdDetailSeq}" type="checkbox" name="day7List" th:value="${data.cdDetailVal1}"/>
-                                	<label th:for="'day'+${data.cdDetailSeq}"><span class="cbTitle">[[${data.cdDetailNm}]]</span></label>
-                                </th:block>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">표시여부</label> 
-                            <div class="col-md-2 col-sm-4">
-                                <div class="btn-group radiobox">
-                                    <input type="radio" id="classExpsrYn1" name="classExpsrYn" value="Y" class="join-btn">
-                                    <label for="classExpsrYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">표시</label>
-                                    <input type="radio" id="classExpsrYn2" name="classExpsrYn" value="N" class="join-btn">
-                                    <label for="classExpsrYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">미표시</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">표시기간</label> 
-                            <div class="col-md-2 col-sm-4">
-                                <div class="btn-group radiobox">
-                                    <input type="radio" id="classPdSetYn1" name="classPdSetYn" value="N" class="join-btn">
-                                    <label for="classPdSetYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">상시</label>
-                                    <input type="radio" id="classPdSetYn2" name="classPdSetYn" value="Y" class="join-btn">
-                                    <label for="classPdSetYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">기간설정</label>
-                                </div>
-                            </div>
-                            <div id="expsrPeriodDiv" style="display:none;">
-                                <div class="col-md-2 col-sm-4" >
-                                    <input class="form-control Date8String" type="date" name="classBeginDt">
-                                </div>
-                                <div class="col-md-2 col-sm-4" >
-                                    <input class="form-control Date8String" type="date" name="brdtDate" >
-                                </div>
                             </div>
                         </div>
                         <div class="ln_solid"></div>
                         <!-- 저장버튼 -->
-                        <div class="col-md-12 bottom-btn-group">
+                        <div class="col-md-12">
                             <!-- bottom left area -->
                             <div class="col-md-2 col-sm-3 text-left">
-                                <a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >목록</a>
+                                <a th:href="@{ {basicPath}/{mcd}/{parntsClSn}/list ( basicPath = ${basicPath}, mcd = ${mcd}, parntsClSn = ${parntsClSn} ) }" class="btn btn-white w120p">목록</a>
                             </div>
-                            <!-- bottom c	enter area -->
+                            <!-- bottom center area -->
                             <div class="col-md-8 col-sm-6 text-center">
-                                <a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >취소</a>
+                                <a th:href="@{ {basicPath}/{mcd}/{parntsClSn}/list ( basicPath = ${basicPath}, mcd = ${mcd}, parntsClSn = ${parntsClSn} ) }" class="btn btn-white w120p">취소</a>
                                 <button type="submit" class="btn btn-purple w120p">저장</button>
                             </div>
                             <!-- bottom right area -->

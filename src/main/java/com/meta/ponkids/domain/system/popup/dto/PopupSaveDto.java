@@ -17,6 +17,10 @@ public class PopupSaveDto {
 	
 	private String registerIp;      // 등록자 ip
 	
+    private String updusrId;      			// 수정자 ID
+    
+    private String updusrIp;      			// 수정자 IP
+	
 	// TODO 생성자();
 	@Builder
 	public PopupSaveDto(Long popupSn) {

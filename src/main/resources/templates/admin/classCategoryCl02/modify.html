@@ -19,230 +19,29 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="updateForm" name="updateForm" method="post" th:action="@{ {basicPath}/{mcd}/update ( basicPath = ${basicPath}, mcd = ${mcd} ) }" enctype="multipart/form-data">
+                    <form id="updateForm" name="updateForm" method="post" th:action="@{ {basicPath}/{mcd}/{parntsClSn}/update ( basicPath = ${basicPath}, mcd = ${mcd}, parntsClSn = ${parntsClSn} ) }">
 	                    <!-- hidden type  -->
-                        <input type="hidden" name="mngrConfmYn"     th:value="${targetDto.mngrConfmYn}" />
-                        <input type="hidden" name="userSn" 		    th:value="${targetDto.userSn}" />
-
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">프로필 이미지</label>
+                        <input type="hidden" name="clSn" th:value="${targetDto.clSn}" />	 <!--  primary key -->
+                        
+						<div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">카테고리<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <div class="filebox preview-image">
-                                    <div class="upload-display">
-                                        <div class="upload-thumb-wrap">
-                                            <img alt="프로필 이미지" class="upload-thumb noimg" 		th:if = 	"${targetDto.atchFileSn == null}" >
-<!--                                             <img alt="프로필 이미지" class="upload-thumb" 				th:unless = "${targetDto.atchFileSn == null}" th:src="@{/getImage/} + ${targetDto.atchFileSn}"  > -->
-                                            <img alt="프로필 이미지" class="upload-thumb" 				th:unless = "${targetDto.atchFileSn == null}" th:src="@{/getImage(atchFileSn=${targetDto.atchFileSn})}"  >
-                                        </div>
-                                    </div>
-                                    <div class="upload-file-name">
-                                        <input class="input-file-name" value="" disabled="disabled" >
-                                    </div>
-                                    <div class="upload-btn mt_10p">
-                                        <label class="btn btn-purple">업로드
-                                            <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" th:value="${targetDto.atchFileSn}" onchange="fileChange(this)">
-                                        </label>
-                                        <button type="button" class="btn btn-purple" id="removeImageBtn" onclick="removeImage(this);" th:if = 	"${targetDto.atchFileSn != null}">이미지제거</button>
-                                    </div>
-                                    <input type="hidden" name="atchFileSn" 	    th:value="${targetDto.atchFileSn}" />
-                                    <input type="hidden" name="atchFileSnOri" 	th:value="${targetDto.atchFileSn}" />
-                                </div>
+                                <input class="form-control" name="parntsClNm" required="required" th:value="${parntsClNm}" readonly="readonly" />
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>아이디(이메일형식)</label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">이름<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input name="userId" id="userId" class="form-control" th:value="${targetDto.userId}"
-                                       required="required" readonly/>
-                                <small class="font-gray-dark"   >
-                                    <b>비밀번호</b> 찾기 시 해당 이메일로 인증번호를 발송합니다. 정확한 이메일을 입력해주세요.
-                                </small>
-                            </div>
-                            <div class="col-md-2 pt_10p pl-0">
-                                <span id="checkResult"></span>
+                                <input class="form-control" data-validate-length-range="2,50" name="clNm" required="required" placeholder="이름을 입력해주세요." th:value="${targetDto.clNm}"/>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>비밀번호</label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">분류순서<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                            	<button type="button" class="btn btn-purple">비밀번호 초기화</button>
+                                <input type="number" class="form-control" name="clSeq" required="required" placeholder="분류순서를 입력해주세요." th:value="${targetDto.clSeq}"/>
                                 <small class="font-gray-dark">
-                                	초기화 시 비밀번호는 ponkids1234!@
+                                    분류 표시순서를 입력해주세요.
                                 </small>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>이름</label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control" data-validate-length-range="2,10" name="userNm" required="required" placeholder="이름을 입력해주세요." th:value="${targetDto.userNm}"/>
-                                <small class="font-gray-dark">
-                                    최소 2자 이상, 10자 이하로 입력해주세요.
-                                </small>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>성별</label>
-                            <div class="col-md-6 col-sm-6 ">
-                                <div class="btn-group radiobox">
-                                    <input type="radio" id="gender1" name="gender" value="M" class="join-btn" th:checked="${targetDto.gender eq 'M'}" required >
-                                    <label for="gender1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">남자</label>
-                                    <input type="radio" id="gender2" name="gender" value="F" class="join-btn" th:checked="${targetDto.gender eq 'F'}" required>
-                                    <label for="gender2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">여자</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>생년월일</label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control Date8String" type="date" name="brdtDate" required="required" th:value="${targetDto.brdtDate}">
-                                <small class="font-gray-dark">
-                                    아이디 찾기 시 생년월일을 입력합니다.
-                                </small>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>연락처</label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="tel" name="telNo" id="telNo" th:value="${targetDto.telNo}" required="required" placeholder="연락처입력 ( - 제외 )" data-validate-length-range="10,11" >
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>거주지역</label>
-                            <div class="col-md-2 col-sm-4">
-                                <div class="btn-group radiobox">
-                                    <input type="radio" id="resideArea1" name="resideArea" value="대한민국" class="join-btn" th:checked="${targetDto.resideArea eq '대한민국'}" required="required">
-                                    <label for="resideArea1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">대한민국</label>
-                                    <input type="radio" id="resideArea2" name="resideArea" value="other" class="join-btn" th:checked="${targetDto.resideArea ne '대한민국'}" required="required">
-                                    <label for="resideArea2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                                    	그 외
-                                    </label>
-                                </div>
-                            </div>
-                            <!-- TODO 공통코드로 불러서 뿌리게끔 수정 -->
-                            <div class="col-md-2 col-sm-4">
-                            	<select class="form-control" name="otherResideArea" id="countryList" style="display: none;">
-                                    <option value="">국가 선택</option>
-                                    <option th:each="item : ${resideAreaList}" th:value="${item.cdDetailVal1}" th:selected="${item.cdDetailVal1} == ${targetDto.resideArea}" th:text="${item.cdDetailNm}">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">주소</label>
-                            <div class="col-md-1 col-sm-6">
-                                <input class="form-control text-center" type="text" name="zip" readonly
-                                       placeholder="우편번호"/>
-                            </div>
-                            <div class="col-md-5 col-sm-6 pl-0">
-                                <input class="form-control" type="text" name="rdnmAdr" th:readonly="readonly"
-                                       placeholder="주소 찾기 버튼 클릭하여 주소 입력"/>
-                            </div>
-                            <div class="col-md-1 pl-0">
-                                <button type="button" class="btn btn-purple w100p">주소 찾기</button>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>관리자 여부</label>
-                            <div class="col-md-2 col-sm-4">
-                                <div class="btn-group radiobox">
-                                    <input type="radio" id="mngrYn1" name="mngrYn" value="N" th:checked="${targetDto.mngrYn eq 'N'}" class="join-btn" readonly >
-                                    <label for="mngrYn1" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">사용자</label>
-                                    <input type="radio" id="mngrYn2" name="mngrYn" value="Y" th:checked="${targetDto.mngrYn eq 'Y'}" class="join-btn" readonly>
-                                    <label for="mngrYn2" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">관리자</label>
-                                </div>
-                            </div>
-                            <div class="col-md-2 col-sm-4 ml_20p" th:if="${userRoleModDto != null}">
-                                <select class="form-control" name="roleSn" id="roleList" style="display: none;">
-                                    <option value="">관리자 권한 선택</option>
-                                    <option th:each="item : ${roleList}" th:value="${item.roleSn}" th:text="${item.roleDc}" th:selected="${item.roleSn} == ${userRoleModDto.roleSn}">
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="field item form-group" id="userChldrnAddDiv">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">자녀</label>
-                            <div class="div_menu_detail row col-md-10">
-                                <div class="col-md-12 col-sm-12 ">
-                                    <div class="x_panel mb-0" style="height:auto;overflow: scroll; max-height:350px;">
-                                        <div class="x_content mt_5p">
-                                            <button type="button" class="btn btn-purple w100p mb_15p"
-                                                    data-toggle="modal" data-target=".bs-example-modal-lg"
-                                                    onclick="setModalBtn('C')">
-                                                자녀 추가
-                                            </button>
-                                            <!-- 자녀 등록 모달 -->
-                                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
-                                                 id="addChldrnModal"
-                                                 aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-                                                <div class="modal-dialog modal-dialog-centered modal-lg">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">자녀 추가</h4>
-                                                            <button type="button" class="close" data-dismiss="modal">
-                                                                <span aria-hidden="true">×</span></button>
-                                                        </div>
-                                                        <div class="modal-body" id="addChldrnModalBody">
-                                                        	<div name="chldrnModDiv" class="modForm" style="display: none;">
-                                                                <!-- 자녀 수정시 여기서 수정 작업 -->
-                                                            </div>
-                                                            <div name="chldrnAddDiv" 
-                                                            	th:replace="~{admin/user/modChldrnFormModal :: chldrnDiv(${targetChldrnDtoList}) }"
-                                                            ></div>
-                                                            <div name="chldrnAddDiv" class="newForm"
-                                                                 th:insert="/admin/user/addChldrnForm.html">
-                                                                <!-- 자녀 수정 모달 (/admin/user/addChldrnForm.html) -->
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-white"
-                                                                    data-dismiss="modal">닫기
-                                                            </button>
-                                                            <button type="button" class="btn btn-purple"
-                                                                    id="addChldrnBtn" onclick="addChldrn()">저장
-                                                            </button>
-                                                            <button type="button" class="btn btn-success"
-                                                                    id="updateChldrnBtn" onclick="updateChldrn()"
-                                                                    style="display:none;">수정
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <table class="table table-bordered text-center" id="chldrnTable">
-                                                <thead>
-                                                <tr>
-                                                    <th>순번</th>
-                                                    <th>이름</th>
-                                                    <th>성별</th>
-                                                    <th>생년월일</th>
-                                                    <th>연락처</th>
-                                                    <th>이메일</th>
-                                                    <th>관리</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody id="chldrnTableBody">
-                                                <!-- 자녀 추가 테이블 -->
-                                                	<tr th:if = "${!targetChldrnDtoList.isEmpty()}" th:each=" data : ${targetChldrnDtoList} ">
-						                                <td name="trNum" th:text="${dataStat.count}"></td>
-						                                <td name="chldrnNm" th:text="${data.chldrnNm}"></td>
-						                                <td name="chldrnGenderRadio" th:text="${data.chldrnGender}"></td>
-						                                <td name="chldrnBrdtDate" th:text="${data.chldrnBrdtDate}"></td>
-						                                <td name="chldrnTelNo" th:text="${data.chldrnTelNo}"></td>
-						                                <td name="chldrnEmail" th:text="${data.chldrnEmail}"></td>
-						                                <td>
-						                                	<button onclick="modifyChldrn(this)" type="button" class="btn btn-success btn-sm table-btn">수정</button><button onclick="deleteChldrn(this)" type="button" class="btn btn-danger btn-sm table-btn">삭제</button>
-						                                </td>
-						                            </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <small class="font-gray-dark">회원등록 후에도 자녀 등록이 가능합니다.<b>회원조회 &gt; 회원 우측
-                                        [수정]</b></small>
-                                </div>
                             </div>
                         </div>
                         <div class="ln_solid"></div>
@@ -250,11 +49,11 @@
                         <div class="col-md-12">
                             <!-- bottom left area -->
                             <div class="col-md-2 col-sm-3 text-left">
-                                <a th:href="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="btn btn-white w120p">목록</a>
+                                <a th:href="@{ {basicPath}/{mcd}/{parntsClSn}/list ( basicPath = ${basicPath}, mcd = ${mcd}, parntsClSn = ${parntsClSn} ) }" class="btn btn-white w120p">목록</a>
                             </div>
                             <!-- bottom center area -->
                             <div class="col-md-8 col-sm-6 text-center">
-                                <a th:href="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="btn btn-white w120p">취소</a>
+                                <a th:href="@{ {basicPath}/{mcd}/{parntsClSn}/list ( basicPath = ${basicPath}, mcd = ${mcd}, parntsClSn = ${parntsClSn} ) }" class="btn btn-white w120p">취소</a>
                                 <button type="submit" class="btn btn-purple w120p">저장</button>
                             </div>
                             <!-- bottom right area -->

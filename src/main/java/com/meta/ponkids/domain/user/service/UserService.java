@@ -48,6 +48,8 @@ public class UserService {
     public UserSaveDto save( UserSaveDto userSaveDto, UserRoleSaveDto userRoleSaveDto, MultiUserChldrnSaveDto userChldrns, HttpServletRequest request ) throws IOException {
         
         userSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );                        // 회원 IP 저장
+        userSaveDto.setUpdusrIp( IpUtils.getClientIP( request ) );							// Ip set : update
+		
         userSaveDto.setPassword( passwordEncoder.encode( userSaveDto.getPassword() ) );   	// 비밀번호 암호화
         
         User newUser = userRepository.save( userSaveDto.toEntity() );        				// ** 회원 save -> save된 정보 newUser 로 저장 
@@ -189,7 +191,7 @@ public class UserService {
         
         // 기존 userChldrn 삭제
         userChldrnRepository.deleteAllByUserSn( modDto.getUserSn());
-        
+        	
         // 새로 save
         if ( userChldrns != null && userChldrns.getUserChldrns() != null && userChldrns.getUserChldrns().size() > 0 && modDto.getMngrYn().equals( "N" ) ) {
         	List<UserChldrn> userChldrnList = new ArrayList<>();

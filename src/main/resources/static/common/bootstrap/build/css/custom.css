@@ -5696,6 +5696,9 @@ input[type="checkbox"][disabled] + label{
   color: #af0024;
   font-weight: bold;
 }
+.required:before {
+	content: " ";
+}
 
 
 

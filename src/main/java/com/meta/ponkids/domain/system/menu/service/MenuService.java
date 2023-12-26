@@ -6,6 +6,8 @@ import com.meta.ponkids.domain.system.menu.repository.MenuRepository;
 import com.meta.ponkids.domain.system.menu.repository.MenuRoleRepository;
 import com.meta.ponkids.domain.system.role.dto.RoleListDto;
 import com.meta.ponkids.global.util.ip.IpUtils;
+import com.meta.ponkids.global.util.session.SessionUtils;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,10 +28,10 @@ public class MenuService {
     @Transactional
     public MenuSaveDto save( MenuSaveDto saveDto, HttpServletRequest request ) throws IOException {
         
-        saveDto.setRegisterId( "admin@test.com" );                         // Id set
-        saveDto.setRegisterIp( IpUtils.getClientIP( request ) );           // Ip set
-        saveDto.setUpdusrId( "admin@test.com"  );
-        saveDto.setUpdusrIp(  IpUtils.getClientIP( request ) );
+    	saveDto.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
+		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
+		saveDto.setUpdusrId( SessionUtils.getClientId() );					// Id set : update
+		saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
         
         Menu newMenu = menuRepository.save( saveDto.toEntity() );            // ** save -> save된 정보 newXxx 로 저장
         

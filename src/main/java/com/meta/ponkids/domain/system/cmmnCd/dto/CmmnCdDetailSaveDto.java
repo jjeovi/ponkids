@@ -17,10 +17,18 @@ public class CmmnCdDetailSaveDto {
 	
 	private String registerIp;      // 등록자 ip
 	
+    private String updusrId;      	// 수정자 ID
+    
+    private String updusrIp;      	// 수정자 IP
+	
 	// TODO 생성자();
 	@Builder
-	public CmmnCdDetailSaveDto(Long cdDetailSn) {
+	public CmmnCdDetailSaveDto(Long cdDetailSn, String registerId, String registerIp, String updusrId, String updusrIp ) {
 		this.cdDetailSn = cdDetailSn;
+		this.registerId = registerId;
+		this.registerIp = registerIp;
+		this.updusrId = updusrId;
+		this.updusrIp = updusrIp;
 	}
 	
 	// TODO toEntity();
@@ -28,6 +36,10 @@ public class CmmnCdDetailSaveDto {
 	public CmmnCdDetail toEntity() {
 		return CmmnCdDetail.builder()
 				.cdDetailSn(cdDetailSn)
+				.registerId( registerId )
+				.registerIp( registerIp )
+				.updusrId( updusrId )
+				.updusrIp( updusrIp )
 				.build();
 	}
 
