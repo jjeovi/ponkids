@@ -180,7 +180,7 @@
                     <!-- S : 하단 목록 -->
                     <div class="col-md-12 col-sm-12">
                         <!-- bottom left area -->
-                        <div class="col-md-2 col-sm-3 text-left">
+                        <div class="col-md-2 col-sm-3 text-left" th:if="${ searchDTO.category.lv1Sn != 0  }">
                             <a th:href="@{ {basicPath}/{mcd}/{parntsClSn}/regist ( basicPath = ${basicPath}, mcd = ${mcd}, parntsClSn = ${parntsClSn} ) }" class="btn btn-white w120p">등록</a>
                         </div>
                         <!-- S : 테이블 하단 페이징 -->

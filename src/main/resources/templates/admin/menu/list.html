@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{admin/layout/layout}">
-<title layout:fragment="title">pioneerkids Admin - 메뉴 조회</title>
 <!-- S : Javascript functions	-->
 <script layout:fragment="script">
     let typeAdm = '[[${@environment.getProperty('key.default.admin')}]]';
@@ -324,8 +323,9 @@
                         <div class="cateLv4 blink"></div>
                     </div>
                     <div class="btn-group float-right" role="group">
+                    	<!-- th:data-search-cate-url : 검색 url setting -->
                         <button name="searchCateBtn" type="button" class="btn btn-purple w120p"
-                                th:data-search-cate-url="|/admin/menu/live/${type}/getMenuListAjax|"	<!-- 검색 url setting -->
+                                th:data-search-cate-url="|/admin/menu/live/${type}/getMenuListAjax|"	
                                 th:onclick="searchCateAjax( this.getAttribute('data-search-cate-url') )">보기
                         </button>
                     </div>
