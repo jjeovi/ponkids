@@ -48,7 +48,7 @@ public class NttReplyRepositoryImpl    {
     
     }
 
-	  // 댓글 목록
+	  // 댓글 목록 (답글 갯수 추가)
       public List<NttReplyListDto> getList(Long nttSn) {
 	  
       QNttReply subNttReply = new QNttReply("subNttReply");

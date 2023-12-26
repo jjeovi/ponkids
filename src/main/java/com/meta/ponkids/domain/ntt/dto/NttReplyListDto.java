@@ -25,7 +25,7 @@ public class NttReplyListDto {
      @NotNull
      private String registerId;
  	 private String writerDt;
- 	 private Long nttReplyCnt;
+ 	 private Long nttReplyCnt;  // 답글 갯수
     
 
     		 
