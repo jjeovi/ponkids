@@ -1,5 +1,11 @@
 package com.meta.ponkids.domain.ntt.repository.impl;
 
+import static com.meta.ponkids.domain.ntt.entity.QNttReply.nttReply;
+
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
 import com.meta.ponkids.domain.ntt.dto.NttReplyListDto;
 import com.meta.ponkids.domain.ntt.dto.QNttReplyListDto;
 import com.meta.ponkids.domain.ntt.entity.QNttReply;
@@ -7,13 +13,8 @@ import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
-
-import static com.meta.ponkids.domain.ntt.entity.QNttReply.nttReply;
 
 
 
@@ -55,7 +56,8 @@ public class NttReplyRepositoryImpl    {
 	  
       QNttReply subNttReply = new QNttReply("subNttReply");
 	  List<NttReplyListDto> results = query
-			                         .select(new QNttReplyListDto(
+			                         .select(
+			                        		 new QNttReplyListDto(
 													               nttReply.nttReplySn,
 													               nttReply.nttSn,
 													               nttReply.step,
@@ -66,14 +68,15 @@ public class NttReplyRepositoryImpl    {
 													               Expressions.stringTemplate("to_char({0}, '{1s}')", nttReply.updtDt, "YYYY-MM-DD HH:MM:SS"),
   													               nttReply.delYn,
   													               ExpressionUtils.as( JPAExpressions.select( subNttReply.count() )
-  											                       .from(subNttReply)
-  											                       .where( subNttReply.parntsReplySn.eq(nttReply.nttReplySn)) , "nttReplyCnt" )
-			                        		                         ))
-			                                            .from(nttReply)
-			                                            .where( nttReply.nttSn.eq( nttSn ),
-			                                            		nttReply.step.eq(1))
-			                                            .orderBy(nttReply.nttReplySeq.desc())
-			                                            .fetch();
+	  											                       .from(subNttReply)
+	  											                       .where( subNttReply.parntsReplySn.eq(nttReply.nttReplySn)) , "nttReplyCnt" )
+                		                         )
+			                        )
+                                    .from(nttReply)
+                                    .where( nttReply.nttSn.eq( nttSn ),
+                                    		nttReply.step.eq(1))
+                                    .orderBy(nttReply.nttReplySeq.desc())
+                                    .fetch();
 	  
 	  
 	  

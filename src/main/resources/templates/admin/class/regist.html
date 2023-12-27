@@ -60,6 +60,7 @@
     });
     // $( function () {}); end
     
+    // re arrange crseCd
     function getListByParntsClSnAjaxCallback( result ) {
     	
     	// rearrange CrseCd 
@@ -74,7 +75,6 @@
     	 for ( let item of result.resultList ) {
     		 $("[name='crseCd']").append("<option value='" + item.clSn + "'>" + item.clNm + "</option>");
         }
-    	
     }
     
 </script>

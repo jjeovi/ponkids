@@ -53,16 +53,18 @@ public class ClassCategoryCl01RepositoryImpl implements ClassCategoryCl01Reposit
         // (1) 결과list (results).
 		List<ClassCategoryCl01ListDto> results = query
 				// select
-                .select( new QClassCategoryCl01ListDto(
-                		classCategoryCl01.clSn,
-                		classCategoryCl01.clNm,
-                		classCategoryCl01.clSeq,
-                		ExpressionUtils.as( JPAExpressions.select(classCategoryCl02.count())
-                										.from(classCategoryCl02)
-                										.where( classCategoryCl02.parntsClSn.eq(classCategoryCl01.clSn) ) , "childCateCnt" ),
-                		classCategoryCl01.registerId,
-                		classCategoryCl01.regDt
-                		) ) 
+                .select( 
+                		new QClassCategoryCl01ListDto(
+	                		classCategoryCl01.clSn,
+	                		classCategoryCl01.clNm,
+	                		classCategoryCl01.clSeq,
+	                		ExpressionUtils.as( JPAExpressions.select(classCategoryCl02.count())
+	                										.from(classCategoryCl02)
+	                										.where( classCategoryCl02.parntsClSn.eq(classCategoryCl01.clSn) ) , "childCateCnt" ),
+	                		classCategoryCl01.registerId,
+	                		classCategoryCl01.regDt
+                		)
+                ) 
                 .from( classCategoryCl01 )
                 // where
                 .where( eqOption(listDto.getSchOption(), listDto.getSchCntn()) )
