@@ -51,7 +51,9 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 .select( new QClassListDto(
                         class$.classSn,
                         class$.ctgryCd,
+                        class$.ctgryCd.as( "ctgryNm" ),
                         class$.crseCd,
+                        class$.crseCd.as( "crseNm" ),
                         class$.classSj,
                         class$.classSumry,
                         class$.classDc,
@@ -63,6 +65,7 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                         class$.thumbAtchFileSn,
                         class$.atchFileSn,
                         class$.classExpsrYn,
+                        class$.classExpsrYn.as( "classExpsrPeriod" ),
                         class$.registerId,
                         class$.regDt
                 ) )
