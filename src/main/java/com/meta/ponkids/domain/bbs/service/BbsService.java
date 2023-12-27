@@ -5,20 +5,17 @@ import com.meta.ponkids.domain.bbs.dto.BbsModDto;
 import com.meta.ponkids.domain.bbs.dto.BbsSaveReqDto;
 import com.meta.ponkids.domain.bbs.entity.Bbs;
 import com.meta.ponkids.domain.bbs.repository.BbsRepository;
+import com.meta.ponkids.global.util.ip.IpUtils;
+import com.meta.ponkids.global.util.session.SessionUtils;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.meta.ponkids.global.util.ip.IpUtils;
-import com.meta.ponkids.global.util.session.SessionUtils;
-
-import java.time.LocalDateTime;
-
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 
 
 /**
@@ -34,78 +31,78 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 @RequiredArgsConstructor
 public class BbsService {
-
+    
     private final BbsRepository bbsRepository;
-
+    
     @Transactional
-    public BbsSaveReqDto save( BbsSaveReqDto bbsSaveReqDto , HttpServletRequest request ) {
-    	
-         // dto to entity 작업 (필수)
-         Bbs bbs = Bbs.builder()
-                      .bbsSn(bbsSaveReqDto.getBbsSn())
-                      .bbsSeCd(bbsSaveReqDto.getBbsSeCd())
-                      .bbsNm(bbsSaveReqDto.getBbsNm())
-                      .bbsGdcc(bbsSaveReqDto.getBbsGdcc())
-                      .bbsDc(bbsSaveReqDto.getBbsDc())
-                      .replySetYn(bbsSaveReqDto.getReplySetYn())
-                      .useYn(bbsSaveReqDto.getUseYn())
-                      .openYn(bbsSaveReqDto.getOpenYn())
-                      .registerId(SessionUtils.getClientId())
-                      .registerIp( IpUtils.getClientIP( request ))
-                      .regDt(LocalDateTime.now())
-                      .updusrId(SessionUtils.getClientId())
-                      .updusrIp( IpUtils.getClientIP( request ))
-                      .updtDt(LocalDateTime.now())
-                      .build();
-
-         // 게시판 저장
-         bbsRepository.save(bbs);
-
-         return bbsSaveReqDto;
+    public BbsSaveReqDto save( BbsSaveReqDto bbsSaveReqDto, HttpServletRequest request ) {
+        
+        // dto to entity 작업 (필수)
+        Bbs bbs = Bbs.builder()
+                .bbsSn( bbsSaveReqDto.getBbsSn() )
+                .bbsSeCd( bbsSaveReqDto.getBbsSeCd() )
+                .bbsNm( bbsSaveReqDto.getBbsNm() )
+                .bbsGdcc( bbsSaveReqDto.getBbsGdcc() )
+                .bbsDc( bbsSaveReqDto.getBbsDc() )
+                .replySetYn( bbsSaveReqDto.getReplySetYn() )
+                .useYn( bbsSaveReqDto.getUseYn() )
+                .openYn( bbsSaveReqDto.getOpenYn() )
+                .registerId( SessionUtils.getClientId() )
+                .registerIp( IpUtils.getClientIP( request ) )
+                .regDt( LocalDateTime.now() )
+                .updusrId( SessionUtils.getClientId() )
+                .updusrIp( IpUtils.getClientIP( request ) )
+                .updtDt( LocalDateTime.now() )
+                .build();
+        
+        // 게시판 저장
+        bbsRepository.save( bbs );
+        
+        return bbsSaveReqDto;
     }
     
     
-	// 게시판 목록 조회
+    // 게시판 목록 조회
     public Page<BbsListDto> getList( BbsListDto bbsListDto, Pageable pageable ) {
-	  
-    	return bbsRepository.getList( bbsListDto, pageable ); 
-	
-	 }
+        
+        return bbsRepository.getList( bbsListDto, pageable );
+        
+    }
     
     // 게시판 수정시
     public BbsModDto findByBbsSn( Long bbsSn ) {
-    	
-    	Bbs bbs = bbsRepository.findByBbsSn( bbsSn );
-    	
-    	
-    	BbsModDto bbsModDto = new BbsModDto();
-    	bbsModDto = bbsModDto.toDto( bbs );
-    	
-    	return bbsModDto;
-    	
+        
+        Bbs bbs = bbsRepository.findByBbsSn( bbsSn );
+        
+        
+        BbsModDto bbsModDto = new BbsModDto();
+        bbsModDto = bbsModDto.toDto( bbs );
+        
+        return bbsModDto;
+        
     }
     
     // 게시판 댓글 설정여부 조회
-    public String getSetReplySetYn(Long bbsSn) {
-    	
-    	String replySetYn = bbsRepository.getSetReplySetYn(bbsSn);
-    	
-    	return replySetYn;
-    	
+    public String getSetReplySetYn( Long bbsSn ) {
+        
+        String replySetYn = bbsRepository.getSetReplySetYn( bbsSn );
+        
+        return replySetYn;
+        
     }
     
     // 게시판 구분 코드 조회
-    public String getBbsSeCd(Long bbsSn) {
-    	
-    	String bbsSeCd = bbsRepository.getBbsSeCd(bbsSn);
-    	
-    	return bbsSeCd;
-    	
+    public String getBbsSeCd( Long bbsSn ) {
+        
+        String bbsSeCd = bbsRepository.getBbsSeCd( bbsSn );
+        
+        return bbsSeCd;
+        
     }
     
     // 게시판 수정
     @Transactional
-    public void update( BbsModDto modDto  ,HttpServletRequest request  ) {
+    public void update( BbsModDto modDto, HttpServletRequest request ) {
         // target 조회
         Bbs bbs = bbsRepository.findByBbsSn( modDto.getBbsSn() );
         
@@ -113,17 +110,23 @@ public class BbsService {
         BbsModDto targetDto = new BbsModDto();
         targetDto = targetDto.toDto( bbs );
         
-        modDto.setUpdusrIp( IpUtils.getClientIP( request ));
+        modDto.setUpdusrIp( IpUtils.getClientIP( request ) );
         
         // target object 에 수정사항 set
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
-        if ( StringUtils.hasText( modDto.getBbsNm() ) ) targetDto.setBbsNm( modDto.getBbsNm() );                    // 게시판 이름 
-        if ( StringUtils.hasText( modDto.getBbsGdcc() ) ) targetDto.setBbsGdcc( modDto.getBbsGdcc() );              // 게시판 안내문구   
-        if ( StringUtils.hasText( modDto.getBbsDc() ) ) targetDto.setBbsDc( modDto.getBbsDc() );                    // 게시판 설명
-        if ( StringUtils.hasText( modDto.getReplySetYn() ) ) targetDto.setReplySetYn( modDto.getReplySetYn() );     // 댓글설정여부
-        if ( StringUtils.hasText( modDto.getUseYn() ) ) targetDto.setUseYn( modDto.getUseYn() );                    // 사용여부
-        if ( StringUtils.hasText( modDto.getOpenYn() ) ) targetDto.setOpenYn( modDto.getOpenYn() );                 // 공개여부여부
-
+        if ( StringUtils.hasText( modDto.getBbsNm() ) )
+            targetDto.setBbsNm( modDto.getBbsNm() );                    // 게시판 이름
+        if ( StringUtils.hasText( modDto.getBbsGdcc() ) )
+            targetDto.setBbsGdcc( modDto.getBbsGdcc() );              // 게시판 안내문구
+        if ( StringUtils.hasText( modDto.getBbsDc() ) )
+            targetDto.setBbsDc( modDto.getBbsDc() );                    // 게시판 설명
+        if ( StringUtils.hasText( modDto.getReplySetYn() ) )
+            targetDto.setReplySetYn( modDto.getReplySetYn() );     // 댓글설정여부
+        if ( StringUtils.hasText( modDto.getUseYn() ) )
+            targetDto.setUseYn( modDto.getUseYn() );                    // 사용여부
+        if ( StringUtils.hasText( modDto.getOpenYn() ) )
+            targetDto.setOpenYn( modDto.getOpenYn() );                 // 공개여부여부
+        
         
         // target object 전환 ( dto to entity )
         bbs = targetDto.toEntity();
@@ -137,9 +140,9 @@ public class BbsService {
     public void deleteAllByBbsSn( Long bbsSn ) {
         
         // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
-    	bbsRepository.deleteAllByBbsSn( bbsSn );    
+        bbsRepository.deleteAllByBbsSn( bbsSn );
         
-    
+        
     }
     
     

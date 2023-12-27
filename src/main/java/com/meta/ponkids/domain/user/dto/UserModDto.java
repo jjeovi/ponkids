@@ -53,7 +53,7 @@ public class UserModDto {
     
     private String detailAdr;       // 상세 주소
     
-    private Long atchFileSn;      	// 첨부파일 일련번호
+    private Long atchFileSn;        // 첨부파일 일련번호
     
     private Long atchFileSnOri;     // 첨부파일 일련번호
     
@@ -71,9 +71,9 @@ public class UserModDto {
     
     private String cntnSns;         // 연계SNS
     
-    private String updusrId;      	// 수정자 ID
+    private String updusrId;        // 수정자 ID
     
-    private String updusrIp;      	// 수정자 IP
+    private String updusrIp;        // 수정자 IP
     
     private String delYn;           // 삭제여부
     
@@ -124,8 +124,8 @@ public class UserModDto {
                 .confmerIp( confmerIp )
                 .confmDt( confmDt )
                 .cntnSns( cntnSns )
-                .updusrId( updusrId)
-                .updusrIp( updusrIp)
+                .updusrId( updusrId )
+                .updusrIp( updusrIp )
                 .build();
     }
     
@@ -150,8 +150,8 @@ public class UserModDto {
                 .confmerIp( user.getConfmerIp() )
                 .confmDt( user.getConfmDt() )
                 .cntnSns( user.getCntnSns() )
-                .updusrId(user.getUpdusrId())
-                .updusrIp(user.getUpdusrIp())
+                .updusrId( user.getUpdusrId() )
+                .updusrIp( user.getUpdusrIp() )
                 .build();
     }
     

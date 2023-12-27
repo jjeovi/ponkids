@@ -72,6 +72,32 @@ public class LoginDto implements UserDetails {
     private String delYn;                           // 삭제 여부
     
     
+    @QueryProjection
+    public LoginDto( Long userSn, String userId, String password, Long roleSn, String roleNm, String roleDc, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSns, LocalDateTime lastLoginDt ) {
+        this.userSn = userSn;
+        this.userId = userId;
+        this.password = password;
+        this.roleSn = roleSn;
+        this.roleNm = roleNm;
+        this.roleDc = roleDc;
+        this.userNm = userNm;
+        this.gender = gender;
+        this.brdtDate = brdtDate;
+        this.telNo = telNo;
+        this.resideArea = resideArea;
+        this.zip = zip;
+        this.rdnmAdr = rdnmAdr;
+        this.detailAdr = detailAdr;
+        this.atchFileSn = atchFileSn;
+        this.mngrYn = mngrYn;
+        this.mngrConfmYn = mngrConfmYn;
+        this.confmerId = confmerId;
+        this.confmerIp = confmerIp;
+        this.confmDt = confmDt;
+        this.cntnSns = cntnSns;
+        this.lastLoginDt = lastLoginDt;
+    }
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<GrantedAuthority> auth = new ArrayList<GrantedAuthority>();
@@ -107,31 +133,5 @@ public class LoginDto implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-    
-    @QueryProjection
-    public LoginDto( Long userSn, String userId, String password, Long roleSn, String roleNm, String roleDc, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSns, LocalDateTime lastLoginDt ) {
-        this.userSn = userSn;
-        this.userId = userId;
-        this.password = password;
-        this.roleSn = roleSn;
-        this.roleNm = roleNm;
-        this.roleDc = roleDc;
-        this.userNm = userNm;
-        this.gender = gender;
-        this.brdtDate = brdtDate;
-        this.telNo = telNo;
-        this.resideArea = resideArea;
-        this.zip = zip;
-        this.rdnmAdr = rdnmAdr;
-        this.detailAdr = detailAdr;
-        this.atchFileSn = atchFileSn;
-        this.mngrYn = mngrYn;
-        this.mngrConfmYn = mngrConfmYn;
-        this.confmerId = confmerId;
-        this.confmerIp = confmerIp;
-        this.confmDt = confmDt;
-        this.cntnSns = cntnSns;
-        this.lastLoginDt = lastLoginDt;
     }
 }

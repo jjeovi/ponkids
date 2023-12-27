@@ -2,7 +2,6 @@ package com.meta.ponkids.domain.user.repository;
 
 import com.meta.ponkids.domain.user.entity.UserChldrn;
 import com.meta.ponkids.domain.user.repository.custom.UserChldrnRepositoryCustom;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

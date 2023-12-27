@@ -17,10 +17,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class UserListDto {
-	
-	private Long userSn;
-	
-	private String userId;
+    
+    private Long userSn;
+    
+    private String userId;
     
     private String userNm;
     
@@ -42,9 +42,9 @@ public class UserListDto {
     
     
     @QueryProjection
-    public UserListDto(Long userSn, String userId, String userNm, String gender, String brdtDate, String telNo, String resideArea, String mngrYn, String mngrConfmYn ) {
-    	this.userSn = userSn;
-    	this.userId = userId;
+    public UserListDto( Long userSn, String userId, String userNm, String gender, String brdtDate, String telNo, String resideArea, String mngrYn, String mngrConfmYn ) {
+        this.userSn = userSn;
+        this.userId = userId;
         this.userNm = userNm;
         this.gender = gender;
         this.brdtDate = brdtDate;

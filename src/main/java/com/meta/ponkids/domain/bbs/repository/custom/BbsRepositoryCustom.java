@@ -16,8 +16,10 @@ import org.springframework.data.domain.Pageable;
  * 2023-12-02        ehlee             최초 생성
  */
 public interface BbsRepositoryCustom {
-	
-	Page<BbsListDto> getList( BbsListDto bbsListDto, Pageable pageable );
-	String getSetReplySetYn(Long bbsSn);
-	String getBbsSeCd(Long bbsSn);
+    
+    Page<BbsListDto> getList( BbsListDto bbsListDto, Pageable pageable );
+    
+    String getSetReplySetYn( Long bbsSn );
+    
+    String getBbsSeCd( Long bbsSn );
 }

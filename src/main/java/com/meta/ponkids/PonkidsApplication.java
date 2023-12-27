@@ -8,11 +8,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableCaching
 @EnableJpaAuditing
-@SpringBootApplication(exclude = SecurityAutoConfiguration.class)
+@SpringBootApplication( exclude = SecurityAutoConfiguration.class )
 public class PonkidsApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(PonkidsApplication.class, args);
+    
+    public static void main( String[] args ) {
+        SpringApplication.run( PonkidsApplication.class, args );
     }
-
+    
 }

@@ -43,7 +43,7 @@ public class ClassModDto {
     
     //builder 생성
     @Builder
-    public ClassModDto( Long classSn, String ctgryCd, String crseCd, String classSj, String classSumry, String classDc, String classAmt, String classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn , String updusrId, String updusrIp) {
+    public ClassModDto( Long classSn, String ctgryCd, String crseCd, String classSj, String classSumry, String classDc, String classAmt, String classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String updusrId, String updusrIp ) {
         this.classSn = classSn;
         this.ctgryCd = ctgryCd;
         this.crseCd = crseCd;
@@ -58,8 +58,8 @@ public class ClassModDto {
         this.thumbAtchFileSn = thumbAtchFileSn;
         this.atchFileSn = atchFileSn;
         this.classExpsrYn = classExpsrYn;
-		this.updusrId = updusrId;
-		this.updusrIp = updusrIp;
+        this.updusrId = updusrId;
+        this.updusrIp = updusrIp;
     }
     
     // Dto to Entity 메소드 생성
@@ -79,8 +79,8 @@ public class ClassModDto {
                 .thumbAtchFileSn( thumbAtchFileSn )
                 .atchFileSn( atchFileSn )
                 .classExpsrYn( classExpsrYn )
-				.updusrId(updusrId)
-				.updusrIp(updusrIp)
+                .updusrId( updusrId )
+                .updusrIp( updusrIp )
                 .build();
     }
     
@@ -101,8 +101,8 @@ public class ClassModDto {
                 .thumbAtchFileSn( clas.getThumbAtchFileSn() )
                 .atchFileSn( clas.getAtchFileSn() )
                 .classExpsrYn( clas.getClassExpsrYn() )
-				.updusrId(clas.getUpdusrId())
-				.updusrIp(clas.getUpdusrIp())
+                .updusrId( clas.getUpdusrId() )
+                .updusrIp( clas.getUpdusrIp() )
                 .build();
     }
     

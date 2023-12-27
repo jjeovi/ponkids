@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface AtchFileDetailRepositoryCustom {
     
-    AtchFileDetail getTarget(Long atchFileSn, Long fileSeq);
+    AtchFileDetail getTarget( Long atchFileSn, Long fileSeq );
     
     List<AtchFileDetail> getList( Long atchFileSn );
 }

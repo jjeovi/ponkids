@@ -14,14 +14,14 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
     
     // 로그인 시 체크변수 pon 로 고정
-    @Value("${key.admin.auth}")
+    @Value( "${key.admin.auth}" )
     private String AUTH;
     
     @GetMapping( "/admLogin" )
     public String admLogin( @RequestParam( "auth" ) String auth,
-                              HttpServletRequest request,
-                              HttpSession session,
-                              Model model ) {
+                            HttpServletRequest request,
+                            HttpSession session,
+                            Model model ) {
         
         // admin 접근시 경로 : /admin/login?auth=pon
         if ( !StringUtils.hasText( auth ) ) {
@@ -29,7 +29,7 @@ public class LoginController {
             return "/error/401";
         }
         
-        String errCd = (String)session.getAttribute( "errCd" );
+        String errCd = ( String ) session.getAttribute( "errCd" );
         if ( StringUtils.hasText( errCd ) ) {
             session.removeAttribute( "errCd" );
             
@@ -45,9 +45,9 @@ public class LoginController {
     
     @GetMapping( "/admLogout" )
     public String admLogout( @RequestParam( "auth" ) String auth,
-                              HttpServletRequest request,
-                              HttpSession session,
-                              Model model ) {
+                             HttpServletRequest request,
+                             HttpSession session,
+                             Model model ) {
         
         // admin 접근시 경로 : /admin/login?auth=pon
         if ( !StringUtils.hasText( auth ) ) {
@@ -55,7 +55,7 @@ public class LoginController {
             return "/error/401";
         }
         
-        String errCd = (String)session.getAttribute( "errCd" );
+        String errCd = ( String ) session.getAttribute( "errCd" );
         if ( StringUtils.hasText( errCd ) ) {
 //            session.removeAttribute( "errCd" );
             
@@ -70,7 +70,6 @@ public class LoginController {
     }
     
     
-    
     private String getErrorMessage( String errCd ) {
         String resultMsg = "";
         
@@ -83,9 +82,9 @@ public class LoginController {
                 resultMsg = "계정이 존재하지 않습니다. 회원가입 진행 후 로그인 해주세요.";
             } else if ( errCd.equals( "E4" ) ) {
                 resultMsg = "인증 요청이 거부되었습니다. 관리자에게 문의하세요.";
-            } else if ( errCd.equals( "E5" )) {
+            } else if ( errCd.equals( "E5" ) ) {
                 resultMsg = "알 수 없는 이유로 로그인에 실패하였습니다 관리자에게 문의하세요.";
-            } else if ( errCd.equals( "E6" )) {
+            } else if ( errCd.equals( "E6" ) ) {
                 resultMsg = "로그인이 필요합니다.";
             }
         }

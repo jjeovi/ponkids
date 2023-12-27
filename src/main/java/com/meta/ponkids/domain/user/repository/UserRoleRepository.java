@@ -1,11 +1,10 @@
 package com.meta.ponkids.domain.user.repository;
 
+import com.meta.ponkids.domain.user.entity.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import com.meta.ponkids.domain.user.entity.UserRole;
 
 /**
  * InterfaceName  : UserRoleRepository
@@ -18,8 +17,8 @@ import com.meta.ponkids.domain.user.entity.UserRole;
  * 2023-11-19        jjeoV             최초 생성
  */
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
-	
-	UserRole findByUserSn( Long userSn );
+    
+    UserRole findByUserSn( Long userSn );
     
     @Modifying( clearAutomatically = true )
     @Query( value = "UPDATE tb_user_role "

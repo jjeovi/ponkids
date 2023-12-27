@@ -28,24 +28,21 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MenuController {
     
+    private final static String BASIC_PATH = "/admin/menu";
     private final MenuService menuService;
     private final RoleRepository roleRepository;
     private final MenuRepository menuRepository;
     private final MenuRoleRepository menuRoleRepository;
-    
-    private final static String BASIC_PATH = "/admin/menu";
-    
-    
-    @Value("${key.default.admin}")
+    @Value( "${key.default.admin}" )
     private String TYPE_ADMIN;
     
-    @Value("${key.default.user}")
+    @Value( "${key.default.user}" )
     private String TYPE_USER;
     
-    @Value("${key.default.adminRootMenuSn}")
+    @Value( "${key.default.adminRootMenuSn}" )
     private Long ADMIN_ROOT_MENU_SN;
     
-    @Value("${key.default.userRootMenuSn}")
+    @Value( "${key.default.userRootMenuSn}" )
     private Long USER_ROOT_MENU_SN;
     
     @GetMapping( BASIC_PATH + "/{mcd}/{type}/list" )
@@ -191,7 +188,7 @@ public class MenuController {
         Map<String, Object> result = new HashMap<String, Object>();
         
         // 메뉴 list 출력
-        if( type.equals( TYPE_ADMIN ) ) {
+        if ( type.equals( TYPE_ADMIN ) ) {
             
             result.put( "resultList", menuService.getList( listDto ) );
             
@@ -242,7 +239,7 @@ public class MenuController {
         saveDto = menuService.save( saveDto, request );
         
         
-        if( type.equals(TYPE_ADMIN) ) {
+        if ( type.equals( TYPE_ADMIN ) ) {
             // 메뉴 권한 부여작업 update ( delete 후 insert )
             menuService.menuRoleUpdate( saveDto, request );
         }
@@ -269,7 +266,7 @@ public class MenuController {
         // update 구현
         menuService.update( modDto, request );
         
-        if( type.equals(TYPE_ADMIN) ) {
+        if ( type.equals( TYPE_ADMIN ) ) {
             // 메뉴 권한 부여작업 update ( delete 후 insert )
             menuService.menuRoleUpdate( modDto, request );
         }
@@ -301,7 +298,7 @@ public class MenuController {
         menuRepository.delete( menu );
         
         
-        if( type.equals(TYPE_ADMIN) ) {
+        if ( type.equals( TYPE_ADMIN ) ) {
             // menu 권한 삭제
             menuRoleRepository.deleteAllByMenuSn( menu.getMenuSn() );
         }
@@ -326,19 +323,19 @@ public class MenuController {
         // 메뉴 등록 (ajax)
         // rootMenuCreate
         // 각 타입에 맞는 rootMenu 생성
-        saveDto = rootMenuCreate(saveDto, type);
+        saveDto = rootMenuCreate( saveDto, type );
         
-        if( type.equals(TYPE_ADMIN) ) {
+        if ( type.equals( TYPE_ADMIN ) ) {
             //
-            MenuModDto rootMenu = menuService.findById(USER_ROOT_MENU_SN);
-            if(rootMenu.getMenuSn() == null ) {
+            MenuModDto rootMenu = menuService.findById( USER_ROOT_MENU_SN );
+            if ( rootMenu.getMenuSn() == null ) {
                 saveDto = menuService.save( saveDto, request );
             }
             
             // 메뉴 권한 부여작업 update ( delete 작업 없이 바로  insert )
             menuService.menuRoleRootUpdate( saveDto, request );
             
-        } else if ( type.equals(TYPE_USER) ) {
+        } else if ( type.equals( TYPE_USER ) ) {
             saveDto = menuService.save( saveDto, request );
         }
         
@@ -348,25 +345,25 @@ public class MenuController {
         return result;
     }
     
-    private MenuSaveDto rootMenuCreate(MenuSaveDto saveDto, String type ) {
+    private MenuSaveDto rootMenuCreate( MenuSaveDto saveDto, String type ) {
         
         if ( type.equals( TYPE_ADMIN ) ) {
             // 루트 관리자 메뉴 생성
-            saveDto.setMenuSn(ADMIN_ROOT_MENU_SN);
-            saveDto.setMenuNm("피오니키즈 관리자");
-            saveDto.setMenuCd("");
-            saveDto.setParntsMenuYn("Y");
-            saveDto.setMenuSeq((long)1);
-            saveDto.setUseYn("Y");
+            saveDto.setMenuSn( ADMIN_ROOT_MENU_SN );
+            saveDto.setMenuNm( "피오니키즈 관리자" );
+            saveDto.setMenuCd( "" );
+            saveDto.setParntsMenuYn( "Y" );
+            saveDto.setMenuSeq( ( long ) 1 );
+            saveDto.setUseYn( "Y" );
             
         } else if ( type.equals( TYPE_USER ) ) {
             // 루트 사용자 메뉴 생성
-            saveDto.setMenuSn(USER_ROOT_MENU_SN);
-            saveDto.setMenuNm("피오니키즈 사용자");
-            saveDto.setMenuCd("");
-            saveDto.setParntsMenuYn("Y");
-            saveDto.setMenuSeq((long)1);
-            saveDto.setUseYn("Y");
+            saveDto.setMenuSn( USER_ROOT_MENU_SN );
+            saveDto.setMenuNm( "피오니키즈 사용자" );
+            saveDto.setMenuCd( "" );
+            saveDto.setParntsMenuYn( "Y" );
+            saveDto.setMenuSeq( ( long ) 1 );
+            saveDto.setUseYn( "Y" );
         }
         
         return saveDto;

@@ -56,9 +56,9 @@ public class UserRoleModDto {
     }
     
     // Entity to Dto 메소드는 DTO 내부에서 생성.
-    public UserRoleModDto toDto( UserRole userRole) {
-    	return UserRoleModDto.builder()
-                .userRoleSn( userRole.getUserRoleSn())
+    public UserRoleModDto toDto( UserRole userRole ) {
+        return UserRoleModDto.builder()
+                .userRoleSn( userRole.getUserRoleSn() )
                 .userSn( userRole.getUserSn() )
                 .roleSn( userRole.getRoleSn() )
                 .updusrId( userRole.getUpdusrId() )

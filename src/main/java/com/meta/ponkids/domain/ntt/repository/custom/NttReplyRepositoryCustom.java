@@ -5,7 +5,6 @@ import com.meta.ponkids.domain.ntt.dto.NttReplyListDto;
 import java.util.List;
 
 
-
 /**
  * InterfaceName  : NttReplyRepositoryCustom
  * author         : ehlee
@@ -17,8 +16,9 @@ import java.util.List;
  * 2023-12-02        ehlee             최초 생성
  */
 public interface NttReplyRepositoryCustom {
-	
-	List<NttReplyListDto> getList( Long nttSn );
-	List<NttReplyListDto> getAnswerReplyList(Long nttReplySn );
-
+    
+    List<NttReplyListDto> getList( Long nttSn );
+    
+    List<NttReplyListDto> getAnswerReplyList( Long nttReplySn );
+    
 }

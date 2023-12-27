@@ -17,13 +17,12 @@ import java.util.List;
 
 @Component
 public class MenuInterceptor implements HandlerInterceptor {
-	
-
-	@Value("${key.menuCd.auth}")
-	private String MCD;
+    
     
     @Autowired
     private final MenuService menuService;
+    @Value( "${key.menuCd.auth}" )
+    private String MCD;
     
     public MenuInterceptor( MenuService menuService ) {
         this.menuService = menuService;
@@ -43,21 +42,21 @@ public class MenuInterceptor implements HandlerInterceptor {
         MenuListDto listDto = new MenuListDto();
         listDto.setCategory( new CategoryDto() );
         listDto.getCategory().setLv1Sn( loginDto.getRoleSn() );
-        listDto.setUseYn("Y");
+        listDto.setUseYn( "Y" );
         // listDto Setting
         
         // menuLit Setting
         List<MenuListDto> menuList = menuService.getList( listDto );
         
         // mcd setting
-        if(modelAndView != null ) {
-		    String mcd = (String)modelAndView.getModel().get( MCD );
-		    request.setAttribute(MCD, mcd);
+        if ( modelAndView != null ) {
+            String mcd = ( String ) modelAndView.getModel().get( MCD );
+            request.setAttribute( MCD, mcd );
         }
         
         
         request.setAttribute( "menuList", menuList );
-        request.setAttribute("currentPageUrl", requestUri);
+        request.setAttribute( "currentPageUrl", requestUri );
         
     }
     

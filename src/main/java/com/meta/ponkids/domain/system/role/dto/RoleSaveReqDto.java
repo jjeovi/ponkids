@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.boot.autoconfigure.info.ProjectInfoProperties;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 
@@ -24,8 +22,8 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Data
 @Setter
-public class RoleSaveReqDto  {
-
+public class RoleSaveReqDto {
+    
     @NotNull
     private long roleSn;          // 아이디
     
@@ -47,14 +45,13 @@ public class RoleSaveReqDto  {
     }
     
     // DTO to Entity 메소드는 DTO 내부에서 생성.
-    public Role toEntity(){
+    public Role toEntity() {
         return Role.builder()
                 .roleSn( roleSn )
                 .registerId( registerId )
                 .registerIp( registerIp )
                 .build();
     }
-    
     
     
 }

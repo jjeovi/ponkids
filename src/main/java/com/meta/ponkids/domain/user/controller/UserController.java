@@ -1,41 +1,26 @@
 package com.meta.ponkids.domain.user.controller;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-
+import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
+import com.meta.ponkids.domain.system.file.service.AtchFileService;
+import com.meta.ponkids.domain.system.role.repository.RoleRepository;
+import com.meta.ponkids.domain.user.dto.*;
+import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
+import com.meta.ponkids.domain.user.repository.UserRepository;
+import com.meta.ponkids.domain.user.service.UserRoleService;
+import com.meta.ponkids.domain.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
-import com.meta.ponkids.domain.system.file.service.AtchFileService;
-import com.meta.ponkids.domain.system.role.repository.RoleRepository;
-import com.meta.ponkids.domain.user.dto.MultiUserChldrnSaveDto;
-import com.meta.ponkids.domain.user.dto.UserListDto;
-import com.meta.ponkids.domain.user.dto.UserModDto;
-import com.meta.ponkids.domain.user.dto.UserRoleModDto;
-import com.meta.ponkids.domain.user.dto.UserRoleSaveDto;
-import com.meta.ponkids.domain.user.dto.UserSaveDto;
-import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
-import com.meta.ponkids.domain.user.repository.UserRepository;
-import com.meta.ponkids.domain.user.service.UserRoleService;
-import com.meta.ponkids.domain.user.service.UserService;
-
-import lombok.RequiredArgsConstructor;
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+import java.io.IOException;
+import java.time.LocalDateTime;
 
 /**
  * className      : UserController
@@ -51,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
     
+    private final static String BASIC_PATH = "/admin/user";
     private final UserService userService;
     private final UserRoleService userRoleService;
     private final UserChldrnRepository userChldrnRepository;
@@ -58,8 +44,6 @@ public class UserController {
     private final RoleRepository roleRepository;
     private final AtchFileService atchFileService;
     private final CmmnCdDetailService cmmnCdDetailService;
-    
-    private final static String BASIC_PATH = "/admin/user";
     
     /**
      * methodName    : list
@@ -72,7 +56,7 @@ public class UserController {
                         @PathVariable String mcd,
                         Model model ) {
         
-    	// 목록 조회
+        // 목록 조회
         Page<UserListDto> resultList = userService.getList( userListDto, pageable );
         model.addAttribute( "resultList", resultList );
         
@@ -97,7 +81,7 @@ public class UserController {
         model.addAttribute( "roleList", roleRepository.findAllByOrderByRoleSn() );
         
         // 거주지역 리스트
-        model.addAttribute( "resideAreaList", cmmnCdDetailService.getList("RESIDE_AREA_CD") );
+        model.addAttribute( "resideAreaList", cmmnCdDetailService.getList( "RESIDE_AREA_CD" ) );
         
         // 가입 object 생성
         model.addAttribute( new UserSaveDto() );
@@ -115,8 +99,8 @@ public class UserController {
      */
     @Transactional
     @PostMapping( BASIC_PATH + "/{mcd}/insert" )
-    public String insert (
-            @RequestParam("file") MultipartFile files,
+    public String insert(
+            @RequestParam( "file" ) MultipartFile files,
             @ModelAttribute UserSaveDto saveDto,
             @ModelAttribute UserRoleSaveDto userRoleSaveDto,  // required false
             @PathVariable String mcd,
@@ -137,13 +121,13 @@ public class UserController {
             // 회원가입 처리
             
             // 첨부파일 존재시 파일 저장
-            if(!files.isEmpty()){
-            	saveDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 ) 
+            if ( !files.isEmpty() ) {
+                saveDto.setAtchFileSn( atchFileService.save( files ) );    // 파일 save (파일 개수 1개일 때 )
             }
             
             // 관리자 승인여부 Y 이면 승인일시 now로 setting
             if ( saveDto.getMngrConfmYn().equals( "Y" ) ) {
-            	saveDto.setConfmDt( LocalDateTime.now() );
+                saveDto.setConfmDt( LocalDateTime.now() );
             }
             
             // save
@@ -162,8 +146,8 @@ public class UserController {
      * date           : 11/17/23
      * description    : user detail or user modify method
      */
-    @GetMapping( value = { 
-    		BASIC_PATH + "/{mcd}/detail",
+    @GetMapping( value = {
+            BASIC_PATH + "/{mcd}/detail",
             BASIC_PATH + "/{mcd}/modify" } )
     public String detailOrModify(
             @RequestParam( required = true ) Long userSn,
@@ -179,16 +163,16 @@ public class UserController {
         model.addAttribute( "targetDto", targetDto );
         
         // 거주지역 리스트
-        model.addAttribute( "resideAreaList", cmmnCdDetailService.getList("RESIDE_AREA_CD") );
+        model.addAttribute( "resideAreaList", cmmnCdDetailService.getList( "RESIDE_AREA_CD" ) );
         
         // roleDto 조회 
-        if(targetDto.getMngrYn().equals("Y")) {
-        	// 관리자일 경우에만 조회
-        	model.addAttribute("userRoleModDto", userRoleService.findByUserSn(userSn) );
+        if ( targetDto.getMngrYn().equals( "Y" ) ) {
+            // 관리자일 경우에만 조회
+            model.addAttribute( "userRoleModDto", userRoleService.findByUserSn( userSn ) );
         }
         
         // chldrn target object 조회
-        model.addAttribute("targetChldrnDtoList", userChldrnRepository.getListByUserSn( userSn ));
+        model.addAttribute( "targetChldrnDtoList", userChldrnRepository.getListByUserSn( userSn ) );
         
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
@@ -210,7 +194,7 @@ public class UserController {
     @Transactional
     @PostMapping( BASIC_PATH + "/{mcd}/update" )
     public String update(
-            @RequestParam("file") MultipartFile files,
+            @RequestParam( "file" ) MultipartFile files,
             @ModelAttribute UserModDto modDto,
             @ModelAttribute UserRoleModDto userRoleModDto,  // required false
             @PathVariable String mcd,
@@ -219,25 +203,25 @@ public class UserController {
             Model model ) throws IOException {
         
         // 첨부파일 존재시 파일 저장
-        if(!files.isEmpty()){
+        if ( !files.isEmpty() ) {
             // 기존에 첨부파일 있을시 삭제
-            if( modDto.getAtchFileSnOri() != null ) {
-                atchFileService.delete(modDto.getAtchFileSnOri());
+            if ( modDto.getAtchFileSnOri() != null ) {
+                atchFileService.delete( modDto.getAtchFileSnOri() );
             }
             
             // 첨부파일 저장
-            modDto.setAtchFileSn(atchFileService.save(files));	// 파일 save (파일 개수 1개일 때 )
+            modDto.setAtchFileSn( atchFileService.save( files ) );    // 파일 save (파일 개수 1개일 때 )
         } else {
             // 첨부파일 존재하지않을 때
             // 기존 첨부파일이 있었는데 삭제됬다면 삭제처리
-            if( modDto.getAtchFileSnOri()!= null && modDto.getAtchFileSn() == null ) {
-                atchFileService.delete(modDto.getAtchFileSnOri());
+            if ( modDto.getAtchFileSnOri() != null && modDto.getAtchFileSn() == null ) {
+                atchFileService.delete( modDto.getAtchFileSnOri() );
                 modDto.setAtchFileSn( null );
             }
         }
         
         // update 구현
-        userService.update( modDto, userRoleModDto,  userChldrns, request );
+        userService.update( modDto, userRoleModDto, userChldrns, request );
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
@@ -262,10 +246,10 @@ public class UserController {
         userService.deleteAllByUserSn( userSn );
         
         // 첨부파일 삭제
-        Long atchFileSn = userService.findByUserSn(userSn).getAtchFileSn();
-        if (atchFileSn != null ) {
-        	atchFileService.delete(atchFileSn);
-        };
+        Long atchFileSn = userService.findByUserSn( userSn ).getAtchFileSn();
+        if ( atchFileSn != null ) {
+            atchFileService.delete( atchFileSn );
+        }
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );

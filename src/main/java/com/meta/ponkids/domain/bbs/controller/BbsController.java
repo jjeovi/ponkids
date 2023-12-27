@@ -4,16 +4,14 @@ import com.meta.ponkids.domain.bbs.dto.BbsListDto;
 import com.meta.ponkids.domain.bbs.dto.BbsModDto;
 import com.meta.ponkids.domain.bbs.dto.BbsSaveReqDto;
 import com.meta.ponkids.domain.bbs.service.BbsService;
+import com.meta.ponkids.domain.ntt.repository.NttRepository;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import com.meta.ponkids.domain.ntt.repository.NttRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -33,10 +31,9 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class BbsController {
     
+    private final static String BASIC_PATH = "/admin/bbs";
     private final BbsService bbsService;
     private final NttRepository nttRepository;
-    
-    private final static String BASIC_PATH = "/admin/bbs";
     
     /**
      * methodName    : bbsList

@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -22,11 +21,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 public class UserSaveDto {
-	
-	private Long userSn;
+    
+    private Long userSn;
     
     @NotNull
-    private String userId;          	// 회원 일련번호
+    private String userId;            // 회원 일련번호
     
     @NotNull
     private String password;        // 비밀번호
@@ -68,9 +67,9 @@ public class UserSaveDto {
     
     private String registerIp;      // 등록자 IP
     
-    private String updusrId;      	// 수정자 ID
+    private String updusrId;        // 수정자 ID
     
-    private String updusrIp;      	// 수정자 IP
+    private String updusrIp;        // 수정자 IP
     
     private String delYn;           // 삭제여부
     
@@ -95,8 +94,8 @@ public class UserSaveDto {
         this.confmDt = confmDt;
         this.cntnSns = cntnSns;
         this.registerIp = registerIp;
-		this.updusrId = updusrId;
-		this.updusrIp = updusrIp;
+        this.updusrId = updusrId;
+        this.updusrIp = updusrIp;
         this.delYn = delYn;
     }
     

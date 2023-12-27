@@ -8,106 +8,106 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class BannerModDto {
-	
-	private Long bannerSn;					// 배너 일련번호
-	
-	private String bannerClCd;          	// 배너 분류 코드
-	
-	private String bannerClDetailCd;     	// 배너 분류 상세 코드
-	
-	private Long bannerExpsrOrdr;         	// 배너 노출 순서
-	
-	private String bannerNm;          		// 배너 이름
-	
-	private String bannerDc;          		// 배너 설명
-	
-	private Long atchFileSn;          		// 첨부 파일 일련번호
-	
-	private String url;          			// 클릭시 이동 URL
-	
-	private String classMapngYn;          	// 클래스 매핑 여부
-	
-	private String classSn;          		// 클래스 일련번호
-	
-	private Long useYn;          			// 사용 여부
-	
-	private String bannerPdSetYn;        	// 배너 기간 설정 여부
-	
-	private String bannerBeginDt;         	// 배너 시작 일시
-	
-	private String bannerEndDt;          	// 배너 종료 일시
-	
-    private String updusrId;      			// 수정자 ID
     
-    private String updusrIp;      			// 수정자 IP
+    private Long bannerSn;                    // 배너 일련번호
     
-	//builder 생성
-	@Builder
-	public BannerModDto(Long bannerSn, String bannerClCd, String bannerClDetailCd, Long bannerExpsrOrdr,
-			String bannerNm, String bannerDc, Long atchFileSn, String url, String classMapngYn, String classSn,
-			Long useYn, String bannerPdSetYn, String bannerBeginDt, String bannerEndDt, String updusrId,
-			String updusrIp) {
-		super();
-		this.bannerSn = bannerSn;
-		this.bannerClCd = bannerClCd;
-		this.bannerClDetailCd = bannerClDetailCd;
-		this.bannerExpsrOrdr = bannerExpsrOrdr;
-		this.bannerNm = bannerNm;
-		this.bannerDc = bannerDc;
-		this.atchFileSn = atchFileSn;
-		this.url = url;
-		this.classMapngYn = classMapngYn;
-		this.classSn = classSn;
-		this.useYn = useYn;
-		this.bannerPdSetYn = bannerPdSetYn;
-		this.bannerBeginDt = bannerBeginDt;
-		this.bannerEndDt = bannerEndDt;
-		this.updusrId = updusrId;
-		this.updusrIp = updusrIp;
-	}
-	
-	// Dto to Entity 메소드 생성
-	public Banner toEntity() {
-		return Banner.builder()
-				.bannerSn(bannerSn)
-				.bannerClCd(bannerClCd)
-				.bannerClDetailCd(bannerClDetailCd)
-				.bannerExpsrOrdr(bannerExpsrOrdr)
-				.bannerNm(bannerNm)
-				.bannerDc(bannerDc)
-				.atchFileSn(atchFileSn)
-				.url(url)
-				.classMapngYn(classMapngYn)
-				.classSn(classSn)
-				.useYn(useYn)
-				.bannerPdSetYn(bannerPdSetYn)
-				.bannerBeginDt(bannerBeginDt)
-				.bannerEndDt(bannerEndDt)
-				.updusrId(updusrId)
-				.updusrIp(updusrIp)
-				.build();
-	}
-	
-	// Entity to Dto 메소드는 DTO 내부에서 생성.
-	public BannerModDto toDto(Banner banner) {
-		return BannerModDto.builder()
-				.bannerSn(banner.getBannerSn())
-				.bannerClCd(banner.getBannerClCd())
-				.bannerClDetailCd(banner.getBannerClDetailCd())
-				.bannerExpsrOrdr(banner.getBannerExpsrOrdr())
-				.bannerNm(banner.getBannerNm())
-				.bannerDc(banner.getBannerDc())
-				.atchFileSn(banner.getAtchFileSn())
-				.url(banner.getUrl())
-				.classMapngYn(banner.getClassMapngYn())
-				.classSn(banner.getClassSn())
-				.useYn(banner.getUseYn())
-				.bannerPdSetYn(banner.getBannerPdSetYn())
-				.bannerBeginDt(banner.getBannerBeginDt())
-				.bannerEndDt(banner.getBannerEndDt())
-				.updusrId(banner.getUpdusrId())
-				.updusrIp(banner.getUpdusrIp())
-				.build();
-	}
-
+    private String bannerClCd;            // 배너 분류 코드
+    
+    private String bannerClDetailCd;        // 배너 분류 상세 코드
+    
+    private Long bannerExpsrOrdr;            // 배너 노출 순서
+    
+    private String bannerNm;                // 배너 이름
+    
+    private String bannerDc;                // 배너 설명
+    
+    private Long atchFileSn;                // 첨부 파일 일련번호
+    
+    private String url;                    // 클릭시 이동 URL
+    
+    private String classMapngYn;            // 클래스 매핑 여부
+    
+    private String classSn;                // 클래스 일련번호
+    
+    private Long useYn;                    // 사용 여부
+    
+    private String bannerPdSetYn;            // 배너 기간 설정 여부
+    
+    private String bannerBeginDt;            // 배너 시작 일시
+    
+    private String bannerEndDt;            // 배너 종료 일시
+    
+    private String updusrId;                // 수정자 ID
+    
+    private String updusrIp;                // 수정자 IP
+    
+    //builder 생성
+    @Builder
+    public BannerModDto( Long bannerSn, String bannerClCd, String bannerClDetailCd, Long bannerExpsrOrdr,
+                         String bannerNm, String bannerDc, Long atchFileSn, String url, String classMapngYn, String classSn,
+                         Long useYn, String bannerPdSetYn, String bannerBeginDt, String bannerEndDt, String updusrId,
+                         String updusrIp ) {
+        super();
+        this.bannerSn = bannerSn;
+        this.bannerClCd = bannerClCd;
+        this.bannerClDetailCd = bannerClDetailCd;
+        this.bannerExpsrOrdr = bannerExpsrOrdr;
+        this.bannerNm = bannerNm;
+        this.bannerDc = bannerDc;
+        this.atchFileSn = atchFileSn;
+        this.url = url;
+        this.classMapngYn = classMapngYn;
+        this.classSn = classSn;
+        this.useYn = useYn;
+        this.bannerPdSetYn = bannerPdSetYn;
+        this.bannerBeginDt = bannerBeginDt;
+        this.bannerEndDt = bannerEndDt;
+        this.updusrId = updusrId;
+        this.updusrIp = updusrIp;
+    }
+    
+    // Dto to Entity 메소드 생성
+    public Banner toEntity() {
+        return Banner.builder()
+                .bannerSn( bannerSn )
+                .bannerClCd( bannerClCd )
+                .bannerClDetailCd( bannerClDetailCd )
+                .bannerExpsrOrdr( bannerExpsrOrdr )
+                .bannerNm( bannerNm )
+                .bannerDc( bannerDc )
+                .atchFileSn( atchFileSn )
+                .url( url )
+                .classMapngYn( classMapngYn )
+                .classSn( classSn )
+                .useYn( useYn )
+                .bannerPdSetYn( bannerPdSetYn )
+                .bannerBeginDt( bannerBeginDt )
+                .bannerEndDt( bannerEndDt )
+                .updusrId( updusrId )
+                .updusrIp( updusrIp )
+                .build();
+    }
+    
+    // Entity to Dto 메소드는 DTO 내부에서 생성.
+    public BannerModDto toDto( Banner banner ) {
+        return BannerModDto.builder()
+                .bannerSn( banner.getBannerSn() )
+                .bannerClCd( banner.getBannerClCd() )
+                .bannerClDetailCd( banner.getBannerClDetailCd() )
+                .bannerExpsrOrdr( banner.getBannerExpsrOrdr() )
+                .bannerNm( banner.getBannerNm() )
+                .bannerDc( banner.getBannerDc() )
+                .atchFileSn( banner.getAtchFileSn() )
+                .url( banner.getUrl() )
+                .classMapngYn( banner.getClassMapngYn() )
+                .classSn( banner.getClassSn() )
+                .useYn( banner.getUseYn() )
+                .bannerPdSetYn( banner.getBannerPdSetYn() )
+                .bannerBeginDt( banner.getBannerBeginDt() )
+                .bannerEndDt( banner.getBannerEndDt() )
+                .updusrId( banner.getUpdusrId() )
+                .updusrIp( banner.getUpdusrIp() )
+                .build();
+    }
+    
 }

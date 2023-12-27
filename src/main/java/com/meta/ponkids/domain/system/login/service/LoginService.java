@@ -12,15 +12,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginService implements UserDetailsService {
     private final LoginRepository loginRepository;
+    
     @Override
     public UserDetails loadUserByUsername( String userId ) throws UsernameNotFoundException {
-
+        
         // 로그인 시 저장할 객체
         LoginDto loginDto = loginRepository.getLogin( userId );
         
-        if(loginDto != null){
+        if ( loginDto != null ) {
             return loginDto;
         }
-        throw new UsernameNotFoundException("User not exist with name :" + userId);
+        throw new UsernameNotFoundException( "User not exist with name :" + userId );
     }
 }

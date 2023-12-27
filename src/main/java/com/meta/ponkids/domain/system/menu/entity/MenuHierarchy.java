@@ -1,9 +1,9 @@
 package com.meta.ponkids.domain.system.menu.entity;
 
-import lombok.*;
-import org.hibernate.annotations.Immutable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
@@ -11,43 +11,43 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MenuHierarchy {
-	
+    
     @Id
-    private Long menuSn ;
+    private Long menuSn;
     
-    private Long upperMenuSn ;
+    private Long upperMenuSn;
     
-    private String menuNm ;
+    private String menuNm;
     
-    private String menuPath ;
+    private String menuPath;
     
-    private String hierarchy ;
+    private String hierarchy;
     
-    private String requiredMenu ;
+    private String requiredMenu;
     
-    private Long childMenuCnt ;
+    private Long childMenuCnt;
     
-    private String menuCd ;
+    private String menuCd;
     
-    private String menuUrl ;
+    private String menuUrl;
     
-    private String parntsMenuYn ;
+    private String parntsMenuYn;
     
-    private Long menuSeq ;
+    private Long menuSeq;
     
-    private String menuDcSetYn ;
+    private String menuDcSetYn;
     
-    private String menuDc ;
+    private String menuDc;
     
-    private String menuDetailDc ;
+    private String menuDetailDc;
     
-    private Long atchFileSn ;
+    private Long atchFileSn;
     
-    private String useYn ;
+    private String useYn;
     
-    private String newWindowYn ;
+    private String newWindowYn;
     
-    private Long level ;
+    private Long level;
     
     private LocalDateTime updtDt;
 }

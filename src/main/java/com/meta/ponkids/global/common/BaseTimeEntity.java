@@ -5,9 +5,6 @@ import org.hibernate.annotations.Comment;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
@@ -20,7 +17,7 @@ import java.time.LocalDateTime;
  * author         : jjeoV
  * date           : 10/29/23
  * description    : class of Time generation
- *                  등록일 / 수정일 생성 클래스
+ * 등록일 / 수정일 생성 클래스
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
@@ -31,12 +28,12 @@ import java.time.LocalDateTime;
 @EntityListeners( AuditingEntityListener.class )
 public abstract class BaseTimeEntity {
     
-    @Comment( value = "등록일시")
-    @Column(updatable = false)
+    @Comment( value = "등록일시" )
+    @Column( updatable = false )
     @CreatedDate
     private LocalDateTime regDt;
     
-    @Comment( value = "수정일시")
+    @Comment( value = "수정일시" )
 //    @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경
     @LastModifiedDate
     private LocalDateTime updtDt;

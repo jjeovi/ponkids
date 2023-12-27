@@ -1,39 +1,30 @@
 package com.meta.ponkids.domain.cls.controller;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl01ListDto;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl01ModDto;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl01SaveDto;
 import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
 import com.meta.ponkids.domain.cls.repository.ClassCategoryCl02Repository;
 import com.meta.ponkids.domain.cls.service.ClassCategoryCl01Service;
-import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
 public class ClassCategoryCl01Controller {
     
+    private final static String BASIC_PATH = "/admin/classCategoryCl01";
     private final ClassCategoryCl01Service classCategoryCl01Service;
     private final ClassCategoryCl02Repository classCategoryCl02Repository;
-    
-    private final static String BASIC_PATH = "/admin/classCategoryCl01";
     
     @GetMapping( BASIC_PATH + "/{mcd}/list" )
     public String list( @ModelAttribute ClassCategoryCl01ListDto listDto,
@@ -68,7 +59,7 @@ public class ClassCategoryCl01Controller {
         model.addAttribute( "saveDto", new ClassSaveDto() );
         
         // 클래스 카테고리 분류1 list setting
-        model.addAttribute("classCategoryCl01List", classCategoryCl01Service.findAll());
+        model.addAttribute( "classCategoryCl01List", classCategoryCl01Service.findAll() );
         
         // E : 필요한 객체 setting
         
@@ -93,7 +84,7 @@ public class ClassCategoryCl01Controller {
         // 등록 처리
         
         // save
-    	classCategoryCl01Service.save( saveDto, request );
+        classCategoryCl01Service.save( saveDto, request );
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
@@ -142,7 +133,7 @@ public class ClassCategoryCl01Controller {
         // E : 필요한 객체 setting
         
         // update 구현
-    	classCategoryCl01Service.update( modDto, request );
+        classCategoryCl01Service.update( modDto, request );
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
@@ -157,23 +148,23 @@ public class ClassCategoryCl01Controller {
             @RequestParam( required = true ) Long pk,
             @PathVariable String mcd,
             Model model ) {
-    	
-    	// 하위항목 개수 체크 후
-    	// 하위항목 존재하면 삭제 할 수 없음.
-    	if( classCategoryCl02Repository.existsByparntsClSn( pk ) ) {
-    		// 메시지 출력 및 url 이동 처리
+        
+        // 하위항목 개수 체크 후
+        // 하위항목 존재하면 삭제 할 수 없음.
+        if ( classCategoryCl02Repository.existsByparntsClSn( pk ) ) {
+            // 메시지 출력 및 url 이동 처리
             model.addAttribute( "resultMsg", "항목이 존재하는 카테고리는 삭제할 수 없습니다." );
             model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
             return "common/alert";
-    	}
-    	
-    	// 하위항목 개수 체크 후
-    	
-    	// 하위항목 존재하면 삭제 할 수 없음.
-    	
+        }
+        
+        // 하위항목 개수 체크 후
+        
+        // 하위항목 존재하면 삭제 할 수 없음.
+        
         
         // 삭제 처리
-    	classCategoryCl01Service.deleteAllById( pk );        // By 뒤에는 custom
+        classCategoryCl01Service.deleteAllById( pk );        // By 뒤에는 custom
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );

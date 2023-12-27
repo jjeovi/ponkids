@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface ClassRepository extends JpaRepository<Class, Long>, ClassRepositoryCustom {
-	
-	Optional<Class> findById( Long pk );
+    
+    Optional<Class> findById( Long pk );
 }

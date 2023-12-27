@@ -48,20 +48,20 @@ public class UserRole extends BaseTimeEntity {
     //    @NotNull
     private Long roleSn;
     
-    @Column(updatable = false)
+    @Column( updatable = false )
     private String registerId;
     
-    @Column(updatable = false)
+    @Column( updatable = false )
     private String registerIp;
-
-//  @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경
+    
+    //  @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경
     private String updusrId;
     
-//  @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경
+    //  @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경
     private String updusrIp;
     
     @ColumnDefault( "N" )
-    @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가 (등록 시, 수정 시 해당컬럼 신경쓰지 않음.)
+    @Column( insertable = false, updatable = false )  // del_yn 컬럼에 공통으로 추가 (등록 시, 수정 시 해당컬럼 신경쓰지 않음.)
     private String delYn;
     
 }

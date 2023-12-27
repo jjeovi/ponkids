@@ -1,22 +1,5 @@
 package com.meta.ponkids.domain.cls.controller;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.meta.ponkids.domain.cls.dto.ClassListDto;
 import com.meta.ponkids.domain.cls.dto.ClassModDto;
 import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
@@ -24,20 +7,28 @@ import com.meta.ponkids.domain.cls.service.ClassCategoryCl01Service;
 import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
 import com.meta.ponkids.domain.cls.service.ClassService;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
 public class ClassController {
     
+    private final static String BASIC_PATH = "/admin/class";
     private final ClassService classService;
     private final ClassCategoryCl01Service classCategoryCl01Service;
     private final ClassCategoryCl02Service classCategoryCl02Service;
     private final CmmnCdDetailService cmmnCdDetailService;
-    
-    
-    private final static String BASIC_PATH = "/admin/class";
     
     @GetMapping( BASIC_PATH + "/{mcd}/list" )
     public String list( @ModelAttribute ClassListDto listDto,
@@ -56,7 +47,7 @@ public class ClassController {
         
         // 카테고리 리스트 ( lv1 )
         // 클래스 카테고리 분류1 list setting
-        model.addAttribute("cateLv1List", classCategoryCl01Service.findAll());
+        model.addAttribute( "cateLv1List", classCategoryCl01Service.findAll() );
         
         // E : 필요한 객체 setting
         
@@ -79,7 +70,7 @@ public class ClassController {
         model.addAttribute( "day7List", cmmnCdDetailService.getList( "DAY_7_CD" ) );    // 요일리스트
         
         // 클래스 카테고리 분류1 list setting
-        model.addAttribute("classCategoryCl01List", classCategoryCl01Service.findAll());
+        model.addAttribute( "classCategoryCl01List", classCategoryCl01Service.findAll() );
         
         // E : 필요한 객체 setting
         

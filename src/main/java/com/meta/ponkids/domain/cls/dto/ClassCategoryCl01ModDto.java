@@ -1,21 +1,20 @@
 package com.meta.ponkids.domain.cls.dto;
 
 import com.meta.ponkids.domain.cls.entity.ClassCategoryCl01;
-
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ClassCategoryCl01ModDto{
+public class ClassCategoryCl01ModDto {
     
-	private Long clSn;			// 분류1 일련번호
-	
-	private String clNm;			// 분류1 이름
-	
-	private Long clSeq;			// 분류1 순번
-	
+    private Long clSn;            // 분류1 일련번호
+    
+    private String clNm;            // 분류1 이름
+    
+    private Long clSeq;            // 분류1 순번
+    
     private String updusrId;        // 수정자 ID
     
     private String updusrIp;        // 수정자 IP
@@ -26,8 +25,8 @@ public class ClassCategoryCl01ModDto{
         this.clSn = clSn;
         this.clNm = clNm;
         this.clSeq = clSeq;
-		this.updusrId = updusrId;
-		this.updusrIp = updusrIp;
+        this.updusrId = updusrId;
+        this.updusrIp = updusrIp;
     }
     
     // Dto to Entity 메소드 생성
@@ -36,8 +35,8 @@ public class ClassCategoryCl01ModDto{
                 .clSn( clSn )
                 .clNm( clNm )
                 .clSeq( clSeq )
-				.updusrId(updusrId)
-				.updusrIp(updusrIp)
+                .updusrId( updusrId )
+                .updusrIp( updusrIp )
                 .build();
     }
     
@@ -47,8 +46,8 @@ public class ClassCategoryCl01ModDto{
                 .clSn( classCategoryCl01.getClSn() )
                 .clNm( classCategoryCl01.getClNm() )
                 .clSeq( classCategoryCl01.getClSeq() )
-				.updusrId( classCategoryCl01.getUpdusrId() )
-				.updusrIp( classCategoryCl01.getUpdusrIp() )
+                .updusrId( classCategoryCl01.getUpdusrId() )
+                .updusrIp( classCategoryCl01.getUpdusrIp() )
                 .build();
     }
     

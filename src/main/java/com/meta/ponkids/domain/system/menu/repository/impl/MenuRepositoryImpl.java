@@ -32,7 +32,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
     
     @Override
     public List<MenuListDto> getList( MenuListDto listDto ) {
-        
+
 //        System.out.println("캐시를 저장시에 사용합니다. 최초 이후로는 저장이 되지 않습니다.");
         //		   select tmr.menu_sn
         //				, tmr.role_sn
@@ -87,15 +87,15 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                                 , adminMenuHierarchy.level
                         )
                 )
-                .from( 		menuRole )
-                .leftJoin( 	adminMenuHierarchy )    // view : vw_menu_hierarchy
-                .on(		menuRole.menuSn.eq( adminMenuHierarchy.menuSn ) )
+                .from( menuRole )
+                .leftJoin( adminMenuHierarchy )    // view : vw_menu_hierarchy
+                .on( menuRole.menuSn.eq( adminMenuHierarchy.menuSn ) )
                 .where(
-                        eqCateLv1( listDto.getCategory()),
+                        eqCateLv1( listDto.getCategory() ),
                         eqAdminMenuUseYn( listDto.getUseYn() ),
-                        adminMenuHierarchy.delYn.eq("N")
+                        adminMenuHierarchy.delYn.eq( "N" )
                 )
-                .orderBy(	adminMenuHierarchy.hierarchy.asc() )
+                .orderBy( adminMenuHierarchy.hierarchy.asc() )
                 .fetch();
         
         return results;
@@ -166,12 +166,12 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                                 , userMenuHierarchy.level
                         )
                 )
-                .from( 		userMenuHierarchy )
+                .from( userMenuHierarchy )
                 .where(
                         eqUserMenuUseYn( listDto.getUseYn() ),
-                        userMenuHierarchy.delYn.eq("N")
+                        userMenuHierarchy.delYn.eq( "N" )
                 )
-                .orderBy(	userMenuHierarchy.hierarchy.asc() )
+                .orderBy( userMenuHierarchy.hierarchy.asc() )
                 .fetch();
         
         return results;
@@ -186,7 +186,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
     
     @Override
     public List<MenuListDto> getAllList( MenuListDto listDto ) {
-        
+
 //        System.out.println("캐시를 저장시에 사용합니다. 최초 이후로는 실행되지 않습니다..");
         
         //		   select tmr.menu_sn
@@ -210,39 +210,39 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
         List<MenuListDto> results = query
                 // select
                 .select( new QMenuListDto(
-                          adminMenuHierarchy.menuSn
-                        , adminMenuHierarchy.menuSn.as( "id" )    // menuSn 과 id 는 같은 값으로 mapping (jstree 의 변수 id를 매핑하기 위한 임시 변수)
-                        , Expressions.asString( "0" ).castToNum( Long.class ).as( "roleSn" ) // 0
-                        , adminMenuHierarchy.upperMenuSn
-                        , new CaseBuilder()
-                        .when( adminMenuHierarchy.upperMenuSn.isNull() ).then( "#" )
-                        .otherwise( adminMenuHierarchy.upperMenuSn.stringValue() ).as( "parent" )
-                        // upperMenuSn 과 parent 는 같은 값으로 mapping (jstree 의 변수 parent를 매핑하기 위한 임시 변수)
-                        // parent 는 string 임에 유의한다. parent가 null 이면 jstree가 error 발생하여 null 을 # 로 치환
-                        , adminMenuHierarchy.menuNm
-                        , adminMenuHierarchy.menuNm.concat( " [" ).concat( adminMenuHierarchy.menuSeq.stringValue() ).concat( "]" ).as( "text" )    // menuNm 과 text 는 같은 값으로 mapping ( jstree 의 변수 text를 매핑하기 위한 임시 변수 )
-                        , adminMenuHierarchy.menuPath
-                        , adminMenuHierarchy.hierarchy
-                        , adminMenuHierarchy.requiredMenu
-                        , adminMenuHierarchy.childMenuCnt
-                        , adminMenuHierarchy.menuCd
-                        , adminMenuHierarchy.menuUrl
-                        , adminMenuHierarchy.parntsMenuYn
-                        , adminMenuHierarchy.parntsMenuYn.as( "types" )
-                        , adminMenuHierarchy.menuSeq
-                        , adminMenuHierarchy.menuDcSetYn
-                        , adminMenuHierarchy.menuDc
-                        , adminMenuHierarchy.menuDetailDc
-                        , adminMenuHierarchy.atchFileSn
-                        , adminMenuHierarchy.useYn
-                        , adminMenuHierarchy.newWindowYn
-                        , adminMenuHierarchy.level
+                                adminMenuHierarchy.menuSn
+                                , adminMenuHierarchy.menuSn.as( "id" )    // menuSn 과 id 는 같은 값으로 mapping (jstree 의 변수 id를 매핑하기 위한 임시 변수)
+                                , Expressions.asString( "0" ).castToNum( Long.class ).as( "roleSn" ) // 0
+                                , adminMenuHierarchy.upperMenuSn
+                                , new CaseBuilder()
+                                .when( adminMenuHierarchy.upperMenuSn.isNull() ).then( "#" )
+                                .otherwise( adminMenuHierarchy.upperMenuSn.stringValue() ).as( "parent" )
+                                // upperMenuSn 과 parent 는 같은 값으로 mapping (jstree 의 변수 parent를 매핑하기 위한 임시 변수)
+                                // parent 는 string 임에 유의한다. parent가 null 이면 jstree가 error 발생하여 null 을 # 로 치환
+                                , adminMenuHierarchy.menuNm
+                                , adminMenuHierarchy.menuNm.concat( " [" ).concat( adminMenuHierarchy.menuSeq.stringValue() ).concat( "]" ).as( "text" )    // menuNm 과 text 는 같은 값으로 mapping ( jstree 의 변수 text를 매핑하기 위한 임시 변수 )
+                                , adminMenuHierarchy.menuPath
+                                , adminMenuHierarchy.hierarchy
+                                , adminMenuHierarchy.requiredMenu
+                                , adminMenuHierarchy.childMenuCnt
+                                , adminMenuHierarchy.menuCd
+                                , adminMenuHierarchy.menuUrl
+                                , adminMenuHierarchy.parntsMenuYn
+                                , adminMenuHierarchy.parntsMenuYn.as( "types" )
+                                , adminMenuHierarchy.menuSeq
+                                , adminMenuHierarchy.menuDcSetYn
+                                , adminMenuHierarchy.menuDc
+                                , adminMenuHierarchy.menuDetailDc
+                                , adminMenuHierarchy.atchFileSn
+                                , adminMenuHierarchy.useYn
+                                , adminMenuHierarchy.newWindowYn
+                                , adminMenuHierarchy.level
                         )
                 )
-                .from( 	adminMenuHierarchy )
+                .from( adminMenuHierarchy )
                 .where(
-                        eqAdminMenuUseYn(listDto.getUseYn()),
-                        adminMenuHierarchy.delYn.eq("N")
+                        eqAdminMenuUseYn( listDto.getUseYn() ),
+                        adminMenuHierarchy.delYn.eq( "N" )
                 )
                 .orderBy(
                         adminMenuHierarchy.hierarchy.asc()
@@ -272,18 +272,18 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
         List<RoleListDto> results = query
                 .select(
                         new QRoleListDto(
-                        		role.roleSn,
+                                role.roleSn,
                                 role.roleNm,
                                 role.roleDc
                         )
                 )
-                .from( 			menuRole )
-                .leftJoin( 		role )
+                .from( menuRole )
+                .leftJoin( role )
                 .on(
-                        		menuRole.roleSn.eq( role.roleSn ),
-                        		role.delYn.eq( "N" ) )
-                .where(			eqMenuSn( listDto.getMenuSn() ) )
-                .orderBy( 		menuRole.roleSn.asc() )
+                        menuRole.roleSn.eq( role.roleSn ),
+                        role.delYn.eq( "N" ) )
+                .where( eqMenuSn( listDto.getMenuSn() ) )
+                .orderBy( menuRole.roleSn.asc() )
                 .fetch();
         
         return results;
@@ -294,9 +294,9 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
         
         AdminMenuHierarchy result = query
                 // select
-                .select( 	adminMenuHierarchy )
-                .from( 		adminMenuHierarchy )
-                .leftJoin( 	menuRole )
+                .select( adminMenuHierarchy )
+                .from( adminMenuHierarchy )
+                .leftJoin( menuRole )
                 .on(
                         adminMenuHierarchy.menuSn.eq( menuRole.menuSn ),
                         menuRole.delYn.eq( "N" )
@@ -312,27 +312,27 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
     
     @Override
     public AdminMenuHierarchy findLastUpdtDtAdminMenuCache( long sn ) {
-        return this.findLastUpdtDtAdminMenu(sn);
+        return this.findLastUpdtDtAdminMenu( sn );
     }
     
     @Override
     public AdminMenuHierarchy findLastUpdtDtAdminMenuNoCache( long sn ) {
-        return this.findLastUpdtDtAdminMenu(sn);
+        return this.findLastUpdtDtAdminMenu( sn );
     }
     
     @Override
     public AdminMenuHierarchy findLastUpdtDtAdminMenuAgainCache( long sn ) {
-        return this.findLastUpdtDtAdminMenu(sn);
+        return this.findLastUpdtDtAdminMenu( sn );
     }
     
     
-    private UserMenuHierarchy findLastUpdtDtUserMenu( ) {
+    private UserMenuHierarchy findLastUpdtDtUserMenu() {
         
         UserMenuHierarchy result = query
                 // select
-                .select( 	userMenuHierarchy )
-                .from( 		userMenuHierarchy )
-                .leftJoin( 	menuRole )
+                .select( userMenuHierarchy )
+                .from( userMenuHierarchy )
+                .leftJoin( menuRole )
                 .on(
                         userMenuHierarchy.menuSn.eq( menuRole.menuSn ),
                         menuRole.delYn.eq( "N" )
@@ -347,17 +347,17 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
     }
     
     @Override
-    public UserMenuHierarchy findLastUpdtDtUserMenuCache(  ) {
+    public UserMenuHierarchy findLastUpdtDtUserMenuCache() {
         return this.findLastUpdtDtUserMenu();
     }
     
     @Override
-    public UserMenuHierarchy findLastUpdtDtUserMenuNoCache( ) {
+    public UserMenuHierarchy findLastUpdtDtUserMenuNoCache() {
         return this.findLastUpdtDtUserMenu();
     }
     
     @Override
-    public UserMenuHierarchy findLastUpdtDtUserMenuAgainCache( ) {
+    public UserMenuHierarchy findLastUpdtDtUserMenuAgainCache() {
         return this.findLastUpdtDtUserMenu();
     }
     
@@ -382,11 +382,11 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
     
     
     private BooleanExpression eqAdminMenuUseYn( String yn ) {
-    	return ( StringUtils.hasText(yn)) ? adminMenuHierarchy.useYn.eq( yn ) : null;
+        return ( StringUtils.hasText( yn ) ) ? adminMenuHierarchy.useYn.eq( yn ) : null;
     }
     
     private BooleanExpression eqUserMenuUseYn( String yn ) {
-        return ( StringUtils.hasText(yn)) ? userMenuHierarchy.useYn.eq( yn ) : null;
+        return ( StringUtils.hasText( yn ) ) ? userMenuHierarchy.useYn.eq( yn ) : null;
     }
     
     private BooleanExpression eqOption( String schOption, String schCntn ) {

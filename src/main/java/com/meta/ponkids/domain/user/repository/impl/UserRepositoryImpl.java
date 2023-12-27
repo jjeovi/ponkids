@@ -1,6 +1,5 @@
 package com.meta.ponkids.domain.user.repository.impl;
 
-import com.meta.ponkids.domain.system.login.dto.LoginDto;
 import com.meta.ponkids.domain.user.dto.QUserListDto;
 import com.meta.ponkids.domain.user.dto.UserListDto;
 import com.meta.ponkids.domain.user.repository.custom.UserRepositoryCustom;
@@ -43,24 +42,24 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         List<UserListDto> results = query
                 // select
                 .select( new QUserListDto(
-                		user.userSn,
-                		user.userId,
-                		user.userNm,
-                		new CaseBuilder()
-                		.when( user.gender.eq("M")).then("남자")
-                		.when( user.gender.eq("F")).then("여자")
-                		.otherwise("")
-                		.as("gender"),
-                		user.brdtDate,
-                		user.telNo,
-                		new CaseBuilder()
-                		.when(user.resideArea.eq("")).then("지역없음")
-                		.otherwise( user.resideArea).as("resideArea"),
-                		new CaseBuilder()
-                		.when( user.mngrYn.eq("Y")).then("관리자")
-                		.when( user.mngrYn.eq("N")).then("사용자")
-                		.otherwise("").as("mngrYn"),
-                		user.mngrConfmYn)
+                        user.userSn,
+                        user.userId,
+                        user.userNm,
+                        new CaseBuilder()
+                                .when( user.gender.eq( "M" ) ).then( "남자" )
+                                .when( user.gender.eq( "F" ) ).then( "여자" )
+                                .otherwise( "" )
+                                .as( "gender" ),
+                        user.brdtDate,
+                        user.telNo,
+                        new CaseBuilder()
+                                .when( user.resideArea.eq( "" ) ).then( "지역없음" )
+                                .otherwise( user.resideArea ).as( "resideArea" ),
+                        new CaseBuilder()
+                                .when( user.mngrYn.eq( "Y" ) ).then( "관리자" )
+                                .when( user.mngrYn.eq( "N" ) ).then( "사용자" )
+                                .otherwise( "" ).as( "mngrYn" ),
+                        user.mngrConfmYn )
                 ).from( user )
                 // where
                 .where(
@@ -87,7 +86,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         
         return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
     }
-   
+    
     // -------------------------------- WHERE 검색 옵션 setting --------------------------------
     private BooleanExpression eqGender( String gender ) {
         return StringUtils.hasText( gender ) ? user.gender.eq( gender ) : null;

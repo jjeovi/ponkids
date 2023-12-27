@@ -1,11 +1,11 @@
 package com.meta.ponkids.domain.cls.dto;
 
-import java.time.LocalDateTime;
-
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -47,7 +47,7 @@ public class ClassListDto {
     
     private String registerId;      // 등록자 ID
     
-    private LocalDateTime regDt;	// 등록일자
+    private LocalDateTime regDt;    // 등록일자
     
     private String schOption;   // 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
     
@@ -56,7 +56,7 @@ public class ClassListDto {
     private CategoryDto category;    // 카테고리 검색 : 생성자에는 추가하지 않음!
     
     @QueryProjection
-    public ClassListDto( Long classSn, String ctgryCd, String ctgryNm, String crseCd, String crseNm, String classSj, String classSumry, String classDc, String classAmt, String classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String classExpsrPeriod,  String registerId, LocalDateTime regDt) {
+    public ClassListDto( Long classSn, String ctgryCd, String ctgryNm, String crseCd, String crseNm, String classSj, String classSumry, String classDc, String classAmt, String classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String classExpsrPeriod, String registerId, LocalDateTime regDt ) {
         this.classSn = classSn;
         this.ctgryCd = ctgryCd;
         this.ctgryNm = ctgryNm;
@@ -74,7 +74,7 @@ public class ClassListDto {
         this.atchFileSn = atchFileSn;
         this.classExpsrYn = classExpsrYn;
         this.classExpsrPeriod = classExpsrPeriod;
-		this.registerId = registerId;
-		this.regDt = regDt;
+        this.registerId = registerId;
+        this.regDt = regDt;
     }
 }

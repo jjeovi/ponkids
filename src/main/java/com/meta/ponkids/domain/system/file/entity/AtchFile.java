@@ -30,14 +30,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Where( clause = "del_yn = 'N'" )    // DEFAULT 로 WHERE DEL_YN = 'N' 문을 추가하여 조회
-@SQLDelete( sql = "UPDATE tb_atch_file SET del_yn ='Y' WHERE atch_file_sn = ?" ) // delelte 시 실행 (ex ) ~Repository.deleteById)
+@SQLDelete( sql = "UPDATE tb_atch_file SET del_yn ='Y' WHERE atch_file_sn = ?" )
+// delelte 시 실행 (ex ) ~Repository.deleteById)
 @SequenceGenerator(
         name = "SEQ_TB_ATCH_FILE_SN",
         sequenceName = "SEQ_TB_ACTH_FILE_SN",
         initialValue = 1,
         allocationSize = 1
 )
-@EntityListeners(AuditingEntityListener.class) 
+@EntityListeners( AuditingEntityListener.class )
 @Entity
 @Table( name = "tb_atch_file" )
 public class AtchFile {
@@ -46,13 +47,13 @@ public class AtchFile {
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_ACTH_FILE_SN" )
     private Long atchFileSn;
     
-    @Comment( value = "등록일시")
-    @Column(updatable = false)
+    @Comment( value = "등록일시" )
+    @Column( updatable = false )
     @CreatedDate
     private LocalDateTime regDt;
     
-    @ColumnDefault("N")                             // del_yn 컬럼에 공통으로 추가
-    @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가
+    @ColumnDefault( "N" )                             // del_yn 컬럼에 공통으로 추가
+    @Column( insertable = false, updatable = false )  // del_yn 컬럼에 공통으로 추가
     private String delYn;                           // 삭제 여부
     
 }

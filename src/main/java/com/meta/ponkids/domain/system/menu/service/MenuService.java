@@ -7,7 +7,6 @@ import com.meta.ponkids.domain.system.menu.repository.MenuRoleRepository;
 import com.meta.ponkids.domain.system.role.dto.RoleListDto;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,10 +27,10 @@ public class MenuService {
     @Transactional
     public MenuSaveDto save( MenuSaveDto saveDto, HttpServletRequest request ) throws IOException {
         
-    	saveDto.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
-		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
-		saveDto.setUpdusrId( SessionUtils.getClientId() );					// Id set : update
-		saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
+        saveDto.setRegisterId( SessionUtils.getClientId() );                // Id set : regist
+        saveDto.setRegisterIp( IpUtils.getClientIP( request ) );            // Ip set : regist
+        saveDto.setUpdusrId( SessionUtils.getClientId() );                    // Id set : update
+        saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );                // Ip set : update
         
         Menu newMenu = menuRepository.save( saveDto.toEntity() );            // ** save -> save된 정보 newXxx 로 저장
         
@@ -98,6 +97,7 @@ public class MenuService {
             return Collections.emptyList(); // 빈 List<> 생성
         }
     }
+    
     public List<MenuListDto> getUserMenuList( MenuListDto listDto ) {
         
         // (1) 전체 권한 메뉴 리스트
@@ -259,19 +259,14 @@ public class MenuService {
 //                System.out.println( "updtDtMenuCache의   최종 수정시간 = " + updtDtMenuCache.getUpdtDt() );
 //                System.out.println( "updtDtMenuNoCache의 최종 수정시간 = " + updtDtMenuNoCache.getUpdtDt() );
                 
-                if ( !updtDtMenuCache.getUpdtDt().equals( updtDtMenuNoCache.getUpdtDt() ) ) {
-                    // 최종 수정 시간이 변경을 감지 했다면
-                    // 메뉴 리스트 의 캐시를 갱신해야함.
-                    return true;
-                } else {
-                    return false;
-                }
+                // 최종 수정 시간이 변경을 감지 했다면
+                // 메뉴 리스트 의 캐시를 갱신해야함.
+                return !updtDtMenuCache.getUpdtDt().equals( updtDtMenuNoCache.getUpdtDt() );
             }
         }
         
         return true;
     }
-    
     
     
 }

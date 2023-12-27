@@ -5,144 +5,154 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class DateUtils implements DateConstants  {
+public class DateUtils implements DateConstants {
     // -------------------------------------------------------------------------
     // 현재 날짜 및 시간
     // -------------------------------------------------------------------------
-
+    
     /**
      * 기본일자형식({@link DateConstants#DF_DATE})으로 된 현재날짜를 반환한다.
+     *
      * @return 현재날짜
      */
     public static Date getCurrentDate() {
-        return getCurrentDateTime(DF_DATE); // 시간값은 무시됨
+        return getCurrentDateTime( DF_DATE ); // 시간값은 무시됨
     }
-
+    
     /**
      * 입력형식으로 된  현재날짜를 반환한다.
+     *
      * @param dateFormat 날짜형식
      * @return 현재날짜
      */
-    public static Date getCurrentDate(String dateFormat) {
-        return getCurrentDateTime(dateFormat);
+    public static Date getCurrentDate( String dateFormat ) {
+        return getCurrentDateTime( dateFormat );
     }
-
+    
     /**
      * 입력형식으로 된 현재날짜의 문자열을 반환한다.
      * <pre>
      *  예)
      *      String dateTimeString = DateUtils.getCurrentDateString(DateUtils.DF_YYYYMMDDHHMMSS_DP);
      * </pre>
+     *
      * @param dateFormat 날짜형식
      * @return 현재날짜에 대한 문자열
      */
-    public static String getCurrentDateString(String dateFormat) {
+    public static String getCurrentDateString( String dateFormat ) {
         Date currentDate = Calendar.getInstance().getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-        return sdf.format(currentDate);
+        SimpleDateFormat sdf = new SimpleDateFormat( dateFormat );
+        return sdf.format( currentDate );
     }
-
+    
     /**
      * 현재시각을 반환한다.
+     *
      * @return 현재일시
      */
     public static Date getCurrentDateTime() {
         return Calendar.getInstance().getTime();
     }
-
+    
     /**
      * 기본일자형식({@link DateConstants#DF_BASE})으로 된 현재일시를 반환한다.
+     *
      * @return 현재일시
      */
     public static Date getCurrentBaseDateTime() {
-        return getCurrentDateTime(DF_BASE); // 밀리세컨드는 무시됨.
+        return getCurrentDateTime( DF_BASE ); // 밀리세컨드는 무시됨.
     }
-
+    
     /**
      * 입력형식으로 된  현재날짜 또는 일시를 반환한다.
+     *
      * @param dateFormat 날짜형식
      * @return 현재날짜
      */
-    public static Date getCurrentDateTime(String dateFormat) {
+    public static Date getCurrentDateTime( String dateFormat ) {
         Date currentDate = Calendar.getInstance().getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+        SimpleDateFormat sdf = new SimpleDateFormat( dateFormat );
         try {
-            return sdf.parse(sdf.format(currentDate));
-        }
-        catch (Exception e) {
+            return sdf.parse( sdf.format( currentDate ) );
+        } catch ( Exception e ) {
             return currentDate;
         }
     }
-
+    
     /**
      * 입력받은 <code>java.util.Date</code>의 해당월 날짜를 1일로 설정하여 반환
+     *
      * @param date 설정할 날짜
      * @return 입력된 날짜의 해당월 첫번째 날짜
      */
-    public static Date getFirstDateOfMonth(Date date) {
+    public static Date getFirstDateOfMonth( Date date ) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-
+        calendar.setTime( date );
+        calendar.set( Calendar.DAY_OF_MONTH, 1 );
+        
         return calendar.getTime();
     }
-
+    
     /**
      * 입력받은 <code>java.util.Date</code>의 해당월 마지막 날짜를 설정하여 반환
+     *
      * @param date 설정할 날짜
      * @return 입력된 날짜의 해당월 마지막 날짜
      */
-    public static Date getLastDateOfMonth(Date date) {
+    public static Date getLastDateOfMonth( Date date ) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-
+        calendar.setTime( date );
+        calendar.set( Calendar.DAY_OF_MONTH, calendar.getActualMaximum( Calendar.DAY_OF_MONTH ) );
+        
         return calendar.getTime();
     }
-
+    
     /**
      * 입력받은 <code>java.util.Date</code>를 1월 1일로 설정하여 반환
+     *
      * @param date 설정할 날짜
      * @return 입력일자의 1월 1일 날짜
      */
-    public static Date getFirstDateOfYear(Date date) {
+    public static Date getFirstDateOfYear( Date date ) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        calendar.set(Calendar.MONTH, Calendar.JANUARY);
-
+        calendar.setTime( date );
+        calendar.set( Calendar.DAY_OF_MONTH, 1 );
+        calendar.set( Calendar.MONTH, Calendar.JANUARY );
+        
         return calendar.getTime();
     }
-
+    
     /**
      * 입력받은 <code>java.util.Date</code>를 12월 31일로 설정하여 반환
+     *
      * @param date 설정할 날짜
      * @return 입력일자의 12월 31일 날짜
      */
-    public static Date getLastDateOfYear(Date date) {
+    public static Date getLastDateOfYear( Date date ) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.DAY_OF_MONTH, 31);
-        calendar.set(Calendar.MONTH, Calendar.DECEMBER);
-
+        calendar.setTime( date );
+        calendar.set( Calendar.DAY_OF_MONTH, 31 );
+        calendar.set( Calendar.MONTH, Calendar.DECEMBER );
+        
         return calendar.getTime();
     }
-
+    
     // -------------------------------------------------------------------------
     // 문자열 --> 날짜 변경
     // -------------------------------------------------------------------------
-
+    
     /**
      * 기본일자형식({@link DateConstants#DF_DATE})의 날짜문자열을 날짜로 변환하여 반환한다.
      * <p>
      * 내부에서 {@link #toDate(String, String) toDate(dateString, DF_DATE)} 를 호출한다.
+     *
      * @param dateString 날짜문자열
      * @return 날짜
      */
-    public static Date toDate(String dateString) {
-        return toDate(dateString, DF_DATE);
+    public static Date toDate( String dateString ) {
+        return toDate( dateString, DF_DATE );
     }
-
+    
     /**
      * format형태인 String데이타를 java.util.Date로 변환
      * <p>
@@ -164,179 +174,185 @@ public class DateUtils implements DateConstants  {
      * @param dateFormat 날짜형식
      * @return java.util.Date
      */
-    public static Date toDate(String dateString, String dateFormat) {
-        if (dateString == null || dateString.length() == 0) return null;
-
+    public static Date toDate( String dateString, String dateFormat ) {
+        if ( dateString == null || dateString.length() == 0 ) return null;
+        
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-            return sdf.parse(dateString);
-        }
-        catch (Exception e) {
+            SimpleDateFormat sdf = new SimpleDateFormat( dateFormat );
+            return sdf.parse( dateString );
+        } catch ( Exception e ) {
             return null;
         }
     }
-
+    
     /**
      * 변경전날짜형식의 날짜문자열을 변경후날짜형식의 날짜로 변환하여 반환한다.
      * <p>
      * 변경전날짜형식과 변경후날짜형식이 널이면 기본날짜형식({@link DateConstants#DF_DATE})을 적용한다.
      *
-     * @param dateString 날짜문자열
+     * @param dateString       날짜문자열
      * @param beforeDateFormat 변경전날짜형식
-     * @param afterDateFormat 변경후날짜형식
+     * @param afterDateFormat  변경후날짜형식
      * @return 변경후날짜형식으로 변환된 날짜. 만약 입력된 날짜문자열이 널이거나 형식이 유효하지 않을 경우 널을 반환한다.
      */
-    public static Date toDate(String dateString, String beforeDateFormat, String afterDateFormat) {
-        if (dateString == null || dateString.length() == 0) return null;
+    public static Date toDate( String dateString, String beforeDateFormat, String afterDateFormat ) {
+        if ( dateString == null || dateString.length() == 0 ) return null;
         // 변경전날짜형식과 변경후날짜형식이 널이면 기본날짜형식을 적용하고 형식이 같을 경우 날짜를 변경하지 않고 반환한다.
-        if (beforeDateFormat == null) beforeDateFormat = DF_DATE;
-        if (afterDateFormat == null) afterDateFormat = DF_DATE;
-
+        if ( beforeDateFormat == null ) beforeDateFormat = DF_DATE;
+        if ( afterDateFormat == null ) afterDateFormat = DF_DATE;
+        
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat(beforeDateFormat);
-            Date date = sdf.parse(dateString);
-            if (beforeDateFormat == afterDateFormat || beforeDateFormat.equals(afterDateFormat)) {
+            SimpleDateFormat sdf = new SimpleDateFormat( beforeDateFormat );
+            Date date = sdf.parse( dateString );
+            if ( beforeDateFormat == afterDateFormat || beforeDateFormat.equals( afterDateFormat ) ) {
                 return date;
             }
-
+            
             // 패턴변경후 날짜변환
-            sdf.applyPattern(afterDateFormat); // 패턴변경
-            return sdf.parse(sdf.format(date));
-        }
-        catch (Exception e) {
+            sdf.applyPattern( afterDateFormat ); // 패턴변경
+            return sdf.parse( sdf.format( date ) );
+        } catch ( Exception e ) {
             return null;
         }
     }
-
+    
     // -------------------------------------------------------------------------
     // 날짜 --> 문자열 변경
     // -------------------------------------------------------------------------
-
+    
     /**
      * 기본일자형식({@link DateConstants#DF_DATE})으로 된 현재날짜를 문자열로 반환한다.
+     *
      * @return 현재날짜(yyyyMMdd)
      */
     public static String getCurrentDateString() {
         Date currentDate = getCurrentDateTime();
-        return toDateString(currentDate, DF_DATE);
+        return toDateString( currentDate, DF_DATE );
     }
-
+    
     /**
      * 기본형식({@link DateConstants#DF_BASE})으로 된 현재날짜를 문자열로 반환한다.
+     *
      * @return 현재날짜(yyyyMMddHHmmss)
      */
     public static String getCurrentBaseDateString() {
         Date currentDate = getCurrentDateTime();
-        return toDateString(currentDate, DF_BASE);
+        return toDateString( currentDate, DF_BASE );
     }
-
+    
     /**
      * <code>java.util.Date</code>인 데이타를 날짜형식에 맞게 <code>java.lang.String</code>으로 변환
-     * @param date 변경대상이 되는 일자
+     *
+     * @param date       변경대상이 되는 일자
      * @param dateFormat 날짜형식
      * @return 입력된 날짜형식으로 변환된 날짜문자열
      */
-    public static String toDateString(Date date, String dateFormat) {
-        if (date == null) return null;
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-        return sdf.format(date);
+    public static String toDateString( Date date, String dateFormat ) {
+        if ( date == null ) return null;
+        SimpleDateFormat sdf = new SimpleDateFormat( dateFormat );
+        return sdf.format( date );
     }
-
+    
     /**
      * 입력받은 <code>java.util.Date</code>의 해당월 날짜를 1일로 설정하여
      * 데이타를 날짜형식에 맞게 <code>java.lang.String</code>으로 변환
-     * @param date 설정할 날짜
+     *
+     * @param date       설정할 날짜
      * @param dateFormat 날짜형식
      * @return 입력된 날짜형식으로 변환된 해당월 첫번째 날짜
      */
-    public static String getFirstDateStringOfMonth(Date date, String dateFormat) {
-        return toDateString(getFirstDateOfMonth(date), dateFormat);
+    public static String getFirstDateStringOfMonth( Date date, String dateFormat ) {
+        return toDateString( getFirstDateOfMonth( date ), dateFormat );
     }
-
+    
     /**
      * 입력받은 <code>java.util.Date</code>의 해당월 마지막 날짜를 설정하여
      * 데이터를 날짜 형식에 맞게 <code>java.lang.String</code>으로 변환
-     * @param date 설정할 날짜
+     *
+     * @param date       설정할 날짜
      * @param dateFormat 날짜형식
      * @return 입력된 날짜형식으로 변환된 해당월 마지막 날짜
      */
-    public static String getLastDateStringOfMonth(Date date, String dateFormat) {
-        return toDateString(getLastDateOfMonth(date), dateFormat);
+    public static String getLastDateStringOfMonth( Date date, String dateFormat ) {
+        return toDateString( getLastDateOfMonth( date ), dateFormat );
     }
-
+    
     /**
      * 입력받은 <code>java.util.Date</code>를 1월 1일로 설정하여
      * 데이터를 날짜 형식에 맞게 <code>java.lang.String</code>으로 변환
-     * @param date 설정할 날짜
+     *
+     * @param date       설정할 날짜
      * @param dateFormat 날짜형식
      * @return 입력된 날짜형식으로 변환된 입력일자의 1월 1일 날짜
      */
-    public static String getFirstDateStringOfYear(Date date, String dateFormat) {
-        return toDateString(getFirstDateOfYear(date), dateFormat);
+    public static String getFirstDateStringOfYear( Date date, String dateFormat ) {
+        return toDateString( getFirstDateOfYear( date ), dateFormat );
     }
-
+    
     /**
      * 입력받은 <code>java.util.Date</code>를 12월 31일로 설정하여
      * 데이터를 날짜 형식에 맞게 <code>java.lang.String</code>으로 변환
-     * @param date 설정할 날짜
+     *
+     * @param date       설정할 날짜
      * @param dateFormat 날짜형식
      * @return 입력된 날짜형식으로 변환된 입력일자의 12월 31일 날짜
      */
-    public static String getLastDateStringOfYear(Date date, String dateFormat) {
-        return toDateString(getLastDateOfYear(date), dateFormat);
+    public static String getLastDateStringOfYear( Date date, String dateFormat ) {
+        return toDateString( getLastDateOfYear( date ), dateFormat );
     }
-
+    
     // -------------------------------------------------------------------------
     // 문자열 --> 문자열 변경
     // -------------------------------------------------------------------------
-
+    
     /**
      * 날짜형식변경
      * <p>
      * 변경전날짜형식과 변경후날짜형식이 널이면 기본날짜형식({@link DateConstants#DF_DATE})을
      * 적용하고 형식이 같을 경우 날짜를 변경하지 않고 반환한다.
      *
-     * @param dateString 변경대상이 되는 일자
+     * @param dateString       변경대상이 되는 일자
      * @param beforeDateFormat 변경전날짜형식. 널이 입력되면 {@link DateConstants#DF_DATE}을 적용한다.
-     * @param afterDateFormat 변경후날짜형식. 널이 입력되면 {@link DateConstants#DF_DATE}을 적용한다.
+     * @param afterDateFormat  변경후날짜형식. 널이 입력되면 {@link DateConstants#DF_DATE}을 적용한다.
      * @return 변경후날짜형식으로 변환된 날짜문자열. 만약 입력된 날짜문자열이 널이거나 형식이 유효하지 않을 경우 널을 반환한다.
      */
-    public static String convertDateFormat(String dateString, String beforeDateFormat, String afterDateFormat) {
-        if (dateString == null) return null;
+    public static String convertDateFormat( String dateString, String beforeDateFormat, String afterDateFormat ) {
+        if ( dateString == null ) return null;
         // 변경전날짜형식과 변경후날짜형식이 널이면 기본날짜형식을 적용하고 형식이 같을 경우 날짜를 변경하지 않고 반환한다.
-        if (beforeDateFormat == null) beforeDateFormat = DF_DATE;
-        if (afterDateFormat == null) afterDateFormat = DF_DATE;
-        if (beforeDateFormat == afterDateFormat || beforeDateFormat.equals(afterDateFormat)) return dateString;
-
-        SimpleDateFormat sdf = new SimpleDateFormat(beforeDateFormat);
+        if ( beforeDateFormat == null ) beforeDateFormat = DF_DATE;
+        if ( afterDateFormat == null ) afterDateFormat = DF_DATE;
+        if ( beforeDateFormat == afterDateFormat || beforeDateFormat.equals( afterDateFormat ) ) return dateString;
+        
+        SimpleDateFormat sdf = new SimpleDateFormat( beforeDateFormat );
         try {
-            Date date = sdf.parse(dateString);
-            sdf.applyPattern(afterDateFormat); // 패턴변경
-            return sdf.format(date);
-        }
-        catch (Exception e) {
+            Date date = sdf.parse( dateString );
+            sdf.applyPattern( afterDateFormat ); // 패턴변경
+            return sdf.format( date );
+        } catch ( Exception e ) {
             return null;
         }
     }
-
+    
     /**
      * 기준일자가 해당월의 말일자인지 여부를 반환한다.
+     *
      * @param basisDate 기준일자
      */
-    public static boolean isLastDay(Date basisDate) {
+    public static boolean isLastDay( Date basisDate ) {
         Calendar basisCal = Calendar.getInstance();
-        basisCal.setTime(basisDate);
-        return isLastDay(basisCal);
+        basisCal.setTime( basisDate );
+        return isLastDay( basisCal );
     }
-
+    
     /**
      * 기준일자가 해당월의 말일자인지 여부를 반환한다.
+     *
      * @param basisCal 기준달력
      */
-    public static boolean isLastDay(Calendar basisCal) {
-        return (basisCal.get(Calendar.DATE) == basisCal.getActualMaximum(Calendar.DATE));
+    public static boolean isLastDay( Calendar basisCal ) {
+        return ( basisCal.get( Calendar.DATE ) == basisCal.getActualMaximum( Calendar.DATE ) );
     }
-
+    
     /**
      * 해당일의 말일자 구하기
      * <pre>
@@ -346,16 +362,16 @@ public class DateUtils implements DateConstants  {
      * @param dateFormat 반환될 날짜형식
      * @return
      */
-    public static String setLastDay(String dateString, String dateFormat) {
-        Date date = toDate(dateString, DF_DATE);
-
+    public static String setLastDay( String dateString, String dateFormat ) {
+        Date date = toDate( dateString, DF_DATE );
+        
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-
-        return toDateString(new Date(calendar.getTimeInMillis()), dateFormat);
+        calendar.setTime( date );
+        calendar.set( Calendar.DATE, calendar.getActualMaximum( Calendar.DAY_OF_MONTH ) );
+        
+        return toDateString( new Date( calendar.getTimeInMillis() ), dateFormat );
     }
-
+    
     /**
      * 일자의 요일을 반환
      * <pre>
@@ -363,90 +379,87 @@ public class DateUtils implements DateConstants  {
      * @param date 일자
      * @return
      */
-    public static int getDayOfWeek(Date date) {
+    public static int getDayOfWeek( Date date ) {
         int result = 0;
-        Calendar calendar = Calendar.getInstance(Locale.KOREAN);
-        calendar.setTime(date);
-        result = calendar.get(Calendar.DAY_OF_WEEK);
+        Calendar calendar = Calendar.getInstance( Locale.KOREAN );
+        calendar.setTime( date );
+        result = calendar.get( Calendar.DAY_OF_WEEK );
         return result;
     }
-
+    
     /**
      * 입력받은 날짜에서 +/- N일의 날짜를 구한다.
+     *
      * @param date 기준 일자
      * @param day  +/- N일
      * @return 결과 일자
      */
-    public static String changeDateWithDayLevel(Date date, int day) {
+    public static String changeDateWithDayLevel( Date date, int day ) {
         Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) + day);
-        return DateUtils.toDateString(cal.getTime(), DateUtils.DF_DATE);
+        cal.setTime( date );
+        cal.set( Calendar.DAY_OF_MONTH, cal.get( Calendar.DAY_OF_MONTH ) + day );
+        return DateUtils.toDateString( cal.getTime(), DateUtils.DF_DATE );
     }
-
+    
     /**
      * 입력한 일자(A)가 오늘일자(B) 기준 이전일자인지 여부 (오늘일자 포함 안함) (A < B)
      *
      * @param date 일자
      * @return 여부
      */
-    public static boolean isBeforeDate(Date date) {
+    public static boolean isBeforeDate( Date date ) {
         String currentDate = getCurrentDateString();
-        String compareDate = toDateString(date, DF_DATE);
-        int compare = currentDate.compareTo(compareDate);
-        if (compare > 0) return true;
-        return false;
+        String compareDate = toDateString( date, DF_DATE );
+        int compare = currentDate.compareTo( compareDate );
+        return compare > 0;
     }
-
+    
     /**
      * 입력한 일자(A)가 오늘일자(B) 기준 이전일자인지 여부 (오늘일자 포함 안함)(A < B)
      *
      * @param date 일자
      * @return 여부
      */
-    public static boolean isBeforeDate(String compareDate) {
+    public static boolean isBeforeDate( String compareDate ) {
         String currentDate = getCurrentDateString();
-        int compare = currentDate.compareTo(compareDate);
-        if (compare > 0) return true;
-        return false;
+        int compare = currentDate.compareTo( compareDate );
+        return compare > 0;
     }
-
+    
     /**
      * 첫번째 입력한 일자(A)가 두번째 입력한 비교일자(B) 기준 이전 일자인지 여부(A <= B)
-     * @param date 일자
+     *
+     * @param date        일자
      * @param compareDate 비교일자
      * @return 여부
      */
-    public static boolean isBeforeDate(String date, String compareDate) {
-        int compare = compareDate.compareTo(date);
-        if (compare >= 0) return true;
-        return false;
+    public static boolean isBeforeDate( String date, String compareDate ) {
+        int compare = compareDate.compareTo( date );
+        return compare >= 0;
     }
-
+    
     /**
      * 입력한 일자(A)가 오늘일자(B) 기준 이후 일자인지 여부 (오늘일자 포함 안함) (A > B)
      *
      * @param date 일자
      * @return 여부
      */
-    public static boolean isAfterDate(Date date) {
+    public static boolean isAfterDate( Date date ) {
         String currentDate = getCurrentDateString();
-        String compareDate = toDateString(date, DF_DATE);
-        int compare = currentDate.compareTo(compareDate);
-        if (compare < 0) return true;
-        return false;
+        String compareDate = toDateString( date, DF_DATE );
+        int compare = currentDate.compareTo( compareDate );
+        return compare < 0;
     }
-
+    
     /**
      * 입력한 일자(A)가 오늘일자(B) 기준 이후 일자인지 여부 (오늘일자 포함 안함) (A > B)
      *
      * @param date 일자
      * @return 여부
      */
-    public static boolean isAfterDate(String date) {
+    public static boolean isAfterDate( String date ) {
         String currentDate = getCurrentDateString();
-        int compare = currentDate.compareTo(date);
-        if (compare < 0) return true;
-        return false;
+        int compare = currentDate.compareTo( date );
+        return compare < 0;
     }
 }

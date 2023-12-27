@@ -7,7 +7,6 @@ import com.meta.ponkids.domain.cls.entity.Class;
 import com.meta.ponkids.domain.cls.repository.ClassRepository;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,22 +19,22 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 public class ClassService {
-	private final ClassRepository classRepository;	// repository setting
-	
-	@Transactional
-	public ClassSaveDto save( ClassSaveDto saveDto, HttpServletRequest request ) throws IOException {
-		
-		saveDto.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
-		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
-		saveDto.setUpdusrId( SessionUtils.getClientId() );					// Id set : update
-		saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
-		
-		Class newClass = classRepository.save( saveDto.toEntity() );			// ** save -> save된 정보 newXxx 로 저장
-		
-		return saveDto;
-		
-	}
-
+    private final ClassRepository classRepository;    // repository setting
+    
+    @Transactional
+    public ClassSaveDto save( ClassSaveDto saveDto, HttpServletRequest request ) throws IOException {
+        
+        saveDto.setRegisterId( SessionUtils.getClientId() );                // Id set : regist
+        saveDto.setRegisterIp( IpUtils.getClientIP( request ) );            // Ip set : regist
+        saveDto.setUpdusrId( SessionUtils.getClientId() );                    // Id set : update
+        saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );                // Ip set : update
+        
+        Class newClass = classRepository.save( saveDto.toEntity() );            // ** save -> save된 정보 newXxx 로 저장
+        
+        return saveDto;
+        
+    }
+    
     public Page<ClassListDto> getList( ClassListDto listDto, Pageable pageable ) {
         return classRepository.getList( listDto, pageable );
     }
@@ -43,26 +42,26 @@ public class ClassService {
     
     public ClassModDto findById( Long pk ) {
         
-        Class clas = classRepository.findById( pk ).orElse(null);
+        Class clas = classRepository.findById( pk ).orElse( null );
         
-        if ( clas == null ) { 
-        	
-        	return null;
-        	
+        if ( clas == null ) {
+            
+            return null;
+            
         } else {
-        	ClassModDto modDto = new ClassModDto();
-        	modDto = modDto.toDto( clas );
-        	
-        	return modDto;
+            ClassModDto modDto = new ClassModDto();
+            modDto = modDto.toDto( clas );
+            
+            return modDto;
         }
         
     }
     
     @Transactional
     public void update( ClassModDto modDto, HttpServletRequest request ) throws IOException {
-    	
-    	// target 조회
-        Class clas = classRepository.findById( modDto.getClassSn() ).orElse(null);
+        
+        // target 조회
+        Class clas = classRepository.findById( modDto.getClassSn() ).orElse( null );
         
         // target object 전환 ( entity to dto )
         ClassModDto targetDto = new ClassModDto();
@@ -78,21 +77,21 @@ public class ClassService {
 //        if ( StringUtils.hasText( modDto.getRdnmAdr() ) ) targetDto.setRdnmAdr( modDto.getRdnmAdr() );        	// 주소
 //        if ( StringUtils.hasText( modDto.getZip() ) ) targetDto.setZip( modDto.getZip() );                		// 우편번호
 //        if ( StringUtils.hasText( modDto.getMngrYn() ) ) targetDto.setMngrYn( modDto.getMngrYn() );          	// 관리자여부
-        
+
 //        targetDto.setAtchFileSn( modDto.getAtchFileSn() );          											// 첨부파일 (첨부파일은 Null이어도 변경)
         
         // id,ip setting
-        targetDto.setUpdusrIp(IpUtils.getClientIP( request ));
-        targetDto.setUpdusrId("admin@test.com");
+        targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
+        targetDto.setUpdusrId( "admin@test.com" );
         
         // target object 전환 ( dto to entity )
         clas = targetDto.toEntity();
         
         // 수정사항 적용
         classRepository.save( clas );
-    	
+        
     }
-
+    
     @Transactional
     public void deleteAllById( Long pk ) {
         
@@ -100,5 +99,5 @@ public class ClassService {
         classRepository.deleteById( pk );    // Entity 의 @SQLDelete 를 수행
         
     }
-
+    
 }
