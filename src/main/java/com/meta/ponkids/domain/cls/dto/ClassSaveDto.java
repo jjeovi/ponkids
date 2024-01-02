@@ -39,7 +39,7 @@ public class ClassSaveDto {
     
     private String classExpsrYn;            // 클래스표시여부
     
-    private List<ClassWeekSaveDto> classWeekSaveDtoList;    // 요일 리스트
+    private String[] classWeek;   			// 요일
     
     private String registerId;              // 등록자 id
     

@@ -22,17 +22,17 @@ public class ClassWeekService {
 	private final ClassWeekRepository classWeekRepository;	// repository setting
 	
 	@Transactional
-	public ClassWeekSaveDto save( ClassWeekSaveDto saveDto, HttpServletRequest request ) throws IOException {
+	public ClassWeekSaveDto save( String[] saveDto, HttpServletRequest request ) throws IOException {
 //    public ClassWeekSaveDto save( ClassWeekSaveDto saveDto, ClassWeekRoleSaveDto classWeekRoleSaveDto, HttpServletRequest request ) throws IOException {
 		
-		saveDto.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
-		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
-		saveDto.setUpdusrId( SessionUtils.getClientId() );					// Id set : update
-		saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
-		
-		ClassWeek newClassWeek = classWeekRepository.save( saveDto.toEntity() );			// ** save -> save된 정보 newXxx 로 저장
-		
-		return saveDto;
+//		saveDto.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
+//		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
+//		saveDto.setUpdusrId( SessionUtils.getClientId() );					// Id set : update
+//		saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
+//		
+//		ClassWeek newClassWeek = classWeekRepository.save( saveDto.toEntity() );			// ** save -> save된 정보 newXxx 로 저장
+//		
+//		return saveDto;
 		
 	}
 	

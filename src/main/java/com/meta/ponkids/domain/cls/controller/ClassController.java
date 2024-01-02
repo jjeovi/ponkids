@@ -28,6 +28,7 @@ import java.util.List;
 public class ClassController {
     
     private final static String BASIC_PATH = "/admin/class";
+    private final static String BASIC_DIR_PATH = "/admin/clas";
     
     private final ClassService classService;
     private final ClassWeekService classWeekService;
@@ -60,7 +61,7 @@ public class ClassController {
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
-        return BASIC_PATH + "/list";
+        return BASIC_DIR_PATH + "/list";
     }
     
     @GetMapping( BASIC_PATH + "/{mcd}/regist" )
@@ -83,7 +84,7 @@ public class ClassController {
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
-        return BASIC_PATH + "/regist";
+        return BASIC_DIR_PATH + "/regist";
     }
     
     @Transactional
@@ -118,9 +119,12 @@ public class ClassController {
         classService.save( saveDto, request );
         
         // TODO : 클래스 요일 저장
-        if( saveDto.getClassWeekSaveDtoList().size() != 0 ){
-//            classWeekService.save();
+        if(saveDto.getClassWeek() != null ) {
+        	classWeekService.save(saveDto.getClassWeek(), request);
         }
+//        if( saveDto.getClassWeek != 0 ){
+////            classWeekService.save();
+//        }
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
@@ -154,7 +158,7 @@ public class ClassController {
         if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/detail" ) ) remainPath = "detail";
         if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/modify" ) ) remainPath = "modify";
         
-        return BASIC_PATH + "/" + remainPath;
+        return BASIC_DIR_PATH + "/" + remainPath;
     }
     
     @Transactional

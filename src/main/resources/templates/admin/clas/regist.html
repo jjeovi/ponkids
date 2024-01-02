@@ -161,7 +161,7 @@
                             <label class="col-form-label col-md-2 col-sm-3 label-align">요일선택</label> 
                             <div class="col-md-10 col-sm-6">
                                 <th:block th:each="data : ${day7List}">
-                                	<input th:id="'day'+${data.cdDetailSeq}" type="checkbox" name="day7List" th:value="${data.cdDetailVal1}"/>
+                                	<input th:id="'day'+${data.cdDetailSeq}" type="checkbox" name="classWeek" th:value="${data.cdDetailVal1}"/>
                                 	<label th:for="'day'+${data.cdDetailSeq}"><span class="cbTitle">[[${data.cdDetailNm}]]</span></label>
                                 </th:block>
                             </div>
@@ -196,6 +196,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일</label>
+                            <div class="col-md-6 col-sm-6">
+							   <table  id="file_table">
+							   </table>
+							   <input type="file" id="multi-add" class="btn-add"   name="atchFile" value="" multiple>
+                            </div>
+                         </div> 
                         <div class="ln_solid"></div>
                         <!-- 저장버튼 -->
                         <div class="col-md-12 bottom-btn-group">
