@@ -116,12 +116,13 @@ public class ClassController {
         }
         
         // 클래스 저장
-        classService.save( saveDto, request );
+        saveDto = classService.save( saveDto, request );
         
-        // TODO : 클래스 요일 저장
-        if(saveDto.getClassWeek() != null ) {
-        	classWeekService.save(saveDto.getClassWeek(), request);
+        if ( saveDto.getClassWeek() != null ) {
+            classWeekService.save( saveDto, request );
         }
+
+
 //        if( saveDto.getClassWeek != 0 ){
 ////            classWeekService.save();
 //        }

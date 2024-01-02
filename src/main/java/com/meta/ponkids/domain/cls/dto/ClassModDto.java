@@ -23,9 +23,9 @@ public class ClassModDto {
     
     private String classDc;                 // 클래스설명
     
-    private String classAmt;                // 클래스금액
+    private Long classAmt;                // 클래스금액
     
-    private String classDscntBfeAmt;        // 클래스할인전금액
+    private Long classDscntBfeAmt;        // 클래스할인전금액
     
     private String classPdSetYn;            // 클래스기간설정여부
     
@@ -47,7 +47,7 @@ public class ClassModDto {
     
     //builder 생성
     @Builder
-    public ClassModDto( Long classSn, String ctgryCd, String crseCd, String classSj, String classSumry, String classDc, String classAmt, String classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String updusrId, String updusrIp ) {
+    public ClassModDto( Long classSn, String ctgryCd, String crseCd, String classSj, String classSumry, String classDc, Long classAmt, Long classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String updusrId, String updusrIp ) {
         this.classSn = classSn;
         this.ctgryCd = ctgryCd;
         this.crseCd = crseCd;

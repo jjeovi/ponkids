@@ -30,6 +30,7 @@ public class ClassService {
         saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );                // Ip set : update
         
         Class newClass = classRepository.save( saveDto.toEntity() );            // ** save -> save된 정보 newXxx 로 저장
+        saveDto.setClassSn( newClass.getClassSn() );
         
         return saveDto;
         

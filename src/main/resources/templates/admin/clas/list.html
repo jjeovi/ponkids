@@ -104,15 +104,14 @@
                             <tbody>
 	                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
 	                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
-	                                <td th:text="${data.gender}"></td>
+	                                <td th:text="${data.classSj}"></td>
 	                                <td th:text="${data.classSj}"></td>
 	                                <td th:text="${data.classAmt}"></td>
 	                                <td th:text="${data.classExpsrYn}"></td>
-	                                <td th:text="${data.mngrYn}"></td>
 	                                <td>
-	                                    <a th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, userSn = ${data.userSn} ) }"
+	                                    <a th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.classSn} ) }"
 	                                       class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
-	                                    <a th:href="'javascript:deleteItem(\'' + ${data.userSn} + '\');'"
+	                                    <a th:href="'javascript:deleteItem(\'' + ${data.classSn} + '\');'"
 	                                       class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>삭제</a>
 	                                </td>
 	                            </tr>
@@ -153,7 +152,7 @@
                     </div>
                 </form>
                 <form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/{mcd}/delete ( basicPath = ${basicPath}, mcd = ${mcd} ) }">
-            		<input type="hidden" name="userSn" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+            		<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
             	</form>
             </div>
         </div>

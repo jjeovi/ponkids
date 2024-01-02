@@ -18,22 +18,21 @@ import javax.persistence.*;
 @NoArgsConstructor
 @DynamicInsert // insert 구문 시 null 이 아닌 값들만 insert
 @DynamicUpdate // update 구문 시 null 이 아닌 값들만 update
-@SequenceGenerator(	// TODO SEQUENCE setting
+@SequenceGenerator(
         name = "SEQ_TB_CLASS_WEEK_SN",
         sequenceName = "SEQ_TB_CLASS_WEEK_SN",
         initialValue = 1,
         allocationSize = 1
 )
-@Where( clause = "del_yn = 'N'") // DEFAULT 로 WHERE DEL_YN = 'N' 문을 추가하여 조회
-// TODO SQLDelete setting
-@SQLDelete(sql = "UPDATE tb_CLASS_WEEK SET del_yn ='Y', updt_dt = now() WHERE CLASS_WEEK_sn = ?") // delelte 시 실행 (ex ) ~Repository.deleteById)
-//TODO TB name setting
+@Where( clause = "del_yn = 'N'" ) // DEFAULT 로 WHERE DEL_YN = 'N' 문을 추가하여 조회
+@SQLDelete( sql = "UPDATE tb_class_week SET del_yn ='Y', updt_dt = now() WHERE class_week_sn = ?" )
+// delelte 시 실행 (ex ) ~Repository.deleteById)
 @Table( name = "TB_CLASS_WEEK" )
 public class ClassWeek extends BaseTimeEntity {
-	
-	@Id
-	@GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_CLASS_WEEK_SN" )
-	private Long classWeekSn;               // 클래스 요일 일련번호
+    
+    @Id
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_CLASS_WEEK_SN" )
+    private Long classWeekSn;               // 클래스 요일 일련번호
     
     private Long classSn;                   // 클래스 일련번호
     
@@ -48,9 +47,9 @@ public class ClassWeek extends BaseTimeEntity {
     private String updusrId;                // 수정자ID
     
     private String updusrIp;                // 수정자IP
-
-    @ColumnDefault("N")                             // del_yn 컬럼에 공통으로 추가
-    @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가 (등록 시, 수정 시 해당컬럼 신경쓰지 않음.)
+    
+    @ColumnDefault( "N" )                             // del_yn 컬럼에 공통으로 추가
+    @Column( insertable = false, updatable = false )  // del_yn 컬럼에 공통으로 추가 (등록 시, 수정 시 해당컬럼 신경쓰지 않음.)
     private String delYn;                           // 삭제 여부
-
+    
 }

@@ -44,9 +44,9 @@ public class Class extends BaseTimeEntity {
     
     private String classDc;                // 클래스설명
     
-    private String classAmt;            // 클래스금액
+    private Long classAmt;            // 클래스금액
     
-    private String classDscntBfeAmt;    // 클래스할인전금액
+    private Long classDscntBfeAmt;    // 클래스할인전금액
     
     private String classPdSetYn;        // 클래스기간설정여부
     

@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 public class ClassSaveDto {
@@ -23,9 +21,9 @@ public class ClassSaveDto {
     
     private String classDc;                 // 클래스설명
     
-    private String classAmt;                // 클래스금액
+    private Long classAmt;                // 클래스금액
     
-    private String classDscntBfeAmt;        // 클래스할인전금액
+    private Long classDscntBfeAmt;        // 클래스할인전금액
     
     private String classPdSetYn;            // 클래스기간설정여부
     
@@ -39,7 +37,7 @@ public class ClassSaveDto {
     
     private String classExpsrYn;            // 클래스표시여부
     
-    private String[] classWeek;   			// 요일
+    private String[] classWeek;            // 요일
     
     private String registerId;              // 등록자 id
     
@@ -50,7 +48,7 @@ public class ClassSaveDto {
     private String updusrIp;                // 수정자 IP
     
     @Builder
-    public ClassSaveDto( Long classSn, String ctgryCd, String crseCd, String classSj, String classSumry, String classDc, String classAmt, String classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String registerId, String registerIp, String updusrId, String updusrIp ) {
+    public ClassSaveDto( Long classSn, String ctgryCd, String crseCd, String classSj, String classSumry, String classDc, Long classAmt, Long classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String registerId, String registerIp, String updusrId, String updusrIp ) {
         this.classSn = classSn;
         this.ctgryCd = ctgryCd;
         this.crseCd = crseCd;

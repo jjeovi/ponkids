@@ -27,9 +27,9 @@ public class ClassListDto {
     
     private String classDc;              // 클래스설명
     
-    private String classAmt;             // 클래스금액
+    private Long classAmt;               // 클래스금액
     
-    private String classDscntBfeAmt;     // 클래스할인전금액
+    private Long classDscntBfeAmt;     // 클래스할인전금액
     
     private String classPdSetYn;         // 클래스기간설정여부
     
@@ -37,9 +37,9 @@ public class ClassListDto {
     
     private String classEndDt;           // 클래스종료일시
     
-    private Long thumbAtchFileSn;      // 썸네일첨부파일일련번호
+    private Long thumbAtchFileSn;        // 썸네일첨부파일일련번호
     
-    private Long atchFileSn;           // 첨부파일일련번호
+    private Long atchFileSn;            // 첨부파일일련번호
     
     private String classExpsrYn;         // 클래스표시여부
     
@@ -56,7 +56,7 @@ public class ClassListDto {
     private CategoryDto category;    // 카테고리 검색 : 생성자에는 추가하지 않음!
     
     @QueryProjection
-    public ClassListDto( Long classSn, String ctgryCd, String ctgryNm, String crseCd, String crseNm, String classSj, String classSumry, String classDc, String classAmt, String classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String classExpsrPeriod, String registerId, LocalDateTime regDt ) {
+    public ClassListDto( Long classSn, String ctgryCd, String ctgryNm, String crseCd, String crseNm, String classSj, String classSumry, String classDc, Long classAmt, Long classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String classExpsrPeriod, String registerId, LocalDateTime regDt ) {
         this.classSn = classSn;
         this.ctgryCd = ctgryCd;
         this.ctgryNm = ctgryNm;
