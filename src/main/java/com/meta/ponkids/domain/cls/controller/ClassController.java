@@ -6,7 +6,9 @@ import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
 import com.meta.ponkids.domain.cls.service.ClassCategoryCl01Service;
 import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
 import com.meta.ponkids.domain.cls.service.ClassService;
+import com.meta.ponkids.domain.cls.service.ClassWeekService;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
+import com.meta.ponkids.domain.system.file.service.AtchFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,16 +21,20 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class ClassController {
     
     private final static String BASIC_PATH = "/admin/class";
+    
     private final ClassService classService;
+    private final ClassWeekService classWeekService;
     private final ClassCategoryCl01Service classCategoryCl01Service;
     private final ClassCategoryCl02Service classCategoryCl02Service;
     private final CmmnCdDetailService cmmnCdDetailService;
+    private final AtchFileService atchFileService;
     
     @GetMapping( BASIC_PATH + "/{mcd}/list" )
     public String list( @ModelAttribute ClassListDto listDto,
@@ -86,6 +92,8 @@ public class ClassController {
             @ModelAttribute ClassSaveDto saveDto,
             @PathVariable String mcd,
             HttpServletRequest request,
+            @RequestParam( "thumbFile" ) MultipartFile thumbFile,
+            @RequestParam( "atchFile" ) List<MultipartFile> atchFileList,
             Model model ) throws IOException {
         
         // S : 필요한 객체 setting
@@ -95,7 +103,24 @@ public class ClassController {
         // 등록 처리
         
         // save
+        
+        // 썸네일 이미지 존재시 파일 저장
+        if ( !thumbFile.isEmpty() ) {
+            saveDto.setThumbAtchFileSn( atchFileService.save( thumbFile ) );
+        }
+        
+        // 첨부파일  존재시 파일 저장
+        if ( atchFileList.get( 0 ).getSize() != 0 ) {
+            saveDto.setAtchFileSn( atchFileService.multifileSave( atchFileList, null ) );
+        }
+        
+        // 클래스 저장
         classService.save( saveDto, request );
+        
+        // TODO : 클래스 요일 저장
+        if( saveDto.getClassWeekSaveDtoList().size() != 0 ){
+//            classWeekService.save();
+        }
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
