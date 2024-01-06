@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- jQuery -->
+    <script src="/common/bootstrap/vendors/jquery/dist/jquery-3.5.1.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="/common/bootstrap/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+<script>
+    flatpickr("#datepicker", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+    });
+
+</script>
+<body>
+<h3>
+    flatpickr example
+</h3>
+<input type="text" id="datepicker">
+</body>
+</html>
