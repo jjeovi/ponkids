@@ -2,15 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{admin/layout/layout}">
 <!-- S : Javascript functions	-->
-<script src="/common/bootstrap/vendors/jquery/dist/jquery-3.5.1.min.js"></script>
+
 <script layout:fragment="script">
 
     // DOM 준비 된 이후 실행
     $( function () {
 
     	// summernote editor 설정
-    	fnSummernoteCall('summernote');
-    	fnSummernoteCall('summernote2');
+    	fnSummernoteCall('classSumry'); // 클래스 요약
+    	fnSummernoteCall('classDc');    // 클래스 설명
     	
     	// 표시기간 선택시 표시기간 표출 처리
         $( "input:radio[name='classPdSetYn']" ).change( function () {
@@ -20,8 +20,7 @@
                 $( "#expsrPeriodDiv" ).hide();
             }
         });
-    	
-    	
+
     	// 카테고리 선택시 커리큘럼 재정렬 
     	$("[name='ctgryCd']").change( function() {
     		
@@ -53,13 +52,11 @@
             	} 
             } );
             // ajax END
-    		
     	});
-    	 
 
     });
     // $( function () {}); end
-    
+
     // re arrange crseCd
     function getListByParntsClSnAjaxCallback( result ) {
     	
@@ -130,13 +127,13 @@
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">클래스 요약<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                            	<textarea id="summernote" name="nttCn"  class="form-control"></textarea>
+                            	<textarea id="classSumry" name="classSumry"  class="form-control"></textarea>
                             </div>
                         </div>
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">클래스 설명<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                            	<textarea id="summernote2" name="nttCn"  class="form-control"></textarea>
+                            	<textarea id="classDc" name="classDc"  class="form-control"></textarea>
                             </div>
                         </div>
                         <div class="field item form-group">
@@ -151,7 +148,7 @@
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">할인전 금액</label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control"name="classDscntBfeAmt" required="required" placeholder="할인전금액 입력" type="number"/>
+                                <input class="form-control"name="classDscntBfeAmt" placeholder="할인전금액 입력" type="number"/>
                                 <small class="font-gray-dark">
                                     할인 적용시 할인하기 전 금액을 입력해주세요. 금액보다 큰 값이어야 합니다.
                                 </small>
@@ -187,12 +184,26 @@
                                     <label for="classPdSetYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">기간설정</label>
                                 </div>
                             </div>
-                            <div id="expsrPeriodDiv" style="display:none;">
-                                <div class="col-md-2 col-sm-4" >
-                                    <input class="form-control Date8String" type="date" name="classBeginDt">
+                            <div id="expsrPeriodDiv" style="display:none;" class="col-md-2 col-sm-4" >
+                                <div class="form-group">
+                                    <div class='input-group date' id='myDatepicker2'>
+                                        <input type='text' class="form-control" />
+                                        <span class="input-group-addon">
+                                           <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
                                 </div>
-                                <div class="col-md-2 col-sm-4" >
-                                    <input class="form-control Date8String" type="date" name="brdtDate" >
+                                <div class='input-group date' id='myDatepicker'>
+                                    <input type='text' class="form-control" />
+                                    <span class="input-group-addon">
+                                       <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                                <div>
+                                    <input class="form-control Date8String dateBegin" type="text" name="classBeginDt" id="classBeginDt" placeholder="날짜 선택">
+                                </div>
+                                <div>
+                                    <input class="form-control Date8String" type="date" name="classEndDt" >
                                 </div>
                             </div>
                         </div>
@@ -226,5 +237,29 @@
         </div>
     </div>
     <!-- E : content -->
+    <script>
+
+        flatpickr('#classBeginDt', {
+            dateFormat: 'Y-m-d H:i', // 날짜 및 시간 형식 설정 (예: 2023-09-12 15:30)
+            enableTime: true,        // 시간 선택 활성화
+            time_24hr: true,         // 24시간 형식 사용
+            minDate: 'today',        // 오늘 이전 날짜 선택 비활성화
+            defaultDate: 'today',    // 초기 날짜 설정 (현재 날짜와 시간)
+            disable: ['2023-09-15', '2023-09-20'], // 특정 날짜 비활성화
+            locale: 'ko',            // 한국어로 지역화
+            onOpen: function(selectedDates, dateStr, instance) {
+                // 위젯이 열릴 때 실행할 코드
+            },
+            onClose: function(selectedDates, dateStr, instance) {
+                // 위젯이 닫힐 때 실행할 코드
+            },
+            onChange: function(selectedDates, dateStr, instance) {
+                // 날짜가 변경될 때 실행할 코드
+            },
+            // disableMobile: true,      // 모바일 기기에서 위젯 비활성화
+            altInput: true,           // 추가 입력란 활성화
+            altFormat: 'Y-m-d H:i', // 추가 입력란의 날짜 및 시간 형식
+        });
+    </script>
 </th:block>
 </html>

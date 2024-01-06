@@ -121,11 +121,6 @@ public class ClassController {
         if ( saveDto.getClassWeek() != null ) {
             classWeekService.save( saveDto, request );
         }
-
-
-//        if( saveDto.getClassWeek != 0 ){
-////            classWeekService.save();
-//        }
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
