@@ -1,5 +1,6 @@
 package com.meta.ponkids.domain.cls.controller;
 
+import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ListDto;
 import com.meta.ponkids.domain.cls.dto.ClassListDto;
 import com.meta.ponkids.domain.cls.dto.ClassModDto;
 import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
@@ -9,6 +10,9 @@ import com.meta.ponkids.domain.cls.service.ClassService;
 import com.meta.ponkids.domain.cls.service.ClassWeekService;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 import com.meta.ponkids.domain.system.file.service.AtchFileService;
+import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
+import com.meta.ponkids.domain.system.menu.service.MenuService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +42,7 @@ public class ClassController {
     private final ClassCategoryCl02Service classCategoryCl02Service;
     private final CmmnCdDetailService cmmnCdDetailService;
     private final AtchFileService atchFileService;
+    private final MenuService menuService;
     
     @GetMapping( BASIC_PATH + "/{mcd}/list" )
     public String list( @ModelAttribute ClassListDto listDto,
@@ -56,6 +62,16 @@ public class ClassController {
         // 카테고리 리스트 ( lv1 )
         // 클래스 카테고리 분류1 list setting
         model.addAttribute( "cateLv1List", classCategoryCl01Service.findAll() );
+        
+        if(listDto.getCategory() != null && listDto.getCategory().getLv1Sn() != null  ) {
+        	
+        	ClassCategoryCl02ListDto categoryCl02ListDto = new ClassCategoryCl02ListDto();
+        	
+        	// 부모clSn 값 setting ( ajax의 categorySn 을 대입해준다.)
+        	categoryCl02ListDto.setParntsClSn( listDto.getCategory().getLv1Sn() );
+        	
+        	model.addAttribute( "cateLv2List", classCategoryCl02Service.findByParntsClSnOrderByClSeq( categoryCl02ListDto ) );
+        }
         
         // E : 필요한 객체 setting
         
@@ -206,6 +222,22 @@ public class ClassController {
         model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
         
         return "common/alert";
+    }
+    
+    // 카테고리 검색 (Ajax)
+    @ResponseBody
+    @GetMapping( BASIC_PATH + "/live/getListAjax")
+    public Map<String, Object> getListAjax( @ModelAttribute ClassListDto listDto ,
+    		@PageableDefault( size = 10 ) Pageable pageable
+    		) {
+    	
+    	Map<String, Object> result = new HashMap<String, Object>();
+    	
+    	MenuListDto mListDto = new MenuListDto();
+//    	result.put( "resultList", menuService.getUserMenuList( mListDto ) );
+    	result.put( "resultList", classService.getList( listDto, pageable ) );
+    	
+    	return result;
     }
     
     

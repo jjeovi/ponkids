@@ -246,7 +246,7 @@ function getCateNextLvList( url, e ) {
         // 카테고리 박스 개수 체크하여
         // 마지막 박스 클릭 아닌 경우에 다음 카테고리 조회 실행
         var ulCnt = $( ".category-list-area .category-group-box ul" ).length;
-        if ( ulNum != ( ulCnt - 1 ) ) {
+        if ( ulNum != ( ulCnt - 1 ) && url != '' ) {
 
             $.ajax( {
                 url: url,
@@ -280,8 +280,62 @@ function getCateNextLvList( url, e ) {
             } );
         }
         
-    }
+    } else {
+		
+		 $( e ).siblings().removeClass( "on" );
+        $( e ).addClass( "on" );
+
+        var $ul = $( e ).parent();
+        var ulNum = $ul.prevAll().length;	// 몇번쨰 ul 인지 체크 (0부터 카운트..)
+
+        // picked-cate 태그 안에 해당 내용 삽입
+        $( "#picked-cate" ).find( ".cateLv" + ulNum ).empty();
+        $( "#picked-cate" ).find( ".cateLv" + ulNum ).text( $( e ).text() );
+
+        // 깜박임 class 지웠다 다시 실행해서 애니메이션 재실행
+        $( "#picked-cate" ).find( ".cateLv" + ulNum ).removeClass( "blink" );
+        setTimeout( function () {
+            $( "#picked-cate" ).find( ".cateLv" + ulNum ).addClass( "blink" );
+        }, 100 );
+		
+	}
 }
+
+
+ 
+// 분류영역 보기 버튼 클릭 event
+function searchCate( url ){
+
+    if ( $( ".category-list-area .category-group-box ul li.on" ).length ) {
+
+        var data = {};
+        
+        var searchParams = "?";
+
+        $( ".category-list-area .category-group-box ul li.on" ).each( function ( i, item ) {
+            if ( i == 0 ) {
+				searchParams += "category.lv1Sn=" + $( this ).val() + "&";
+            } else if ( i == 1 ) {
+				searchParams += "category.lv2Sn=" + $( this ).val() + "&";
+            } else if ( i == 2 ) {
+				searchParams += "category.lv3Sn=" + $( this ).val() + "&";
+            } else if ( i == 3 ) {
+				searchParams += "category.lv4Sn=" + $( this ).val() + "&";
+            } else if ( i == 4 ) {
+				searchParams += "category.lv5Sn=" + $( this ).val() + "&";
+            }
+        } );
+        
+        // url setting 
+        location.replace(url+searchParams);	// 현재 페이지 내에서 뒤로가기를 적용시키지 않을 거라 location.href 대신 location.repalce를 사용
+            
+
+    } else {
+        alert( "검색 옵션을 선택해주세요." );
+    }
+	
+}
+
 
 // 카테고리 검색 버튼 function
 function searchCateAjax( url ) {
@@ -902,3 +956,11 @@ $.fn.dateTimePickr = function () {
 
     return result;
 };
+
+
+
+// 카테고리 검색 초기 세팅 함수
+function cateItemSet( searchDTO ){	
+	
+	
+}

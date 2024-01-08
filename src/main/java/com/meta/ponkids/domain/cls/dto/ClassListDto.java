@@ -47,7 +47,7 @@ public class ClassListDto {
     
     private String registerId;      // 등록자 ID
     
-    private LocalDateTime regDt;    // 등록일자
+    private String regDt;    // 등록일자
     
     private String schOption;   // 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
     
@@ -56,7 +56,7 @@ public class ClassListDto {
     private CategoryDto category;    // 카테고리 검색 : 생성자에는 추가하지 않음!
     
     @QueryProjection
-    public ClassListDto( Long classSn, String ctgryCd, String ctgryNm, String crseCd, String crseNm, String classSj, String classSumry, String classDc, Long classAmt, Long classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String classExpsrPeriod, String registerId, LocalDateTime regDt ) {
+    public ClassListDto( Long classSn, String ctgryCd, String ctgryNm, String crseCd, String crseNm, String classSj, String classSumry, String classDc, Long classAmt, Long classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String classExpsrPeriod, String registerId, String regDt ) {
         this.classSn = classSn;
         this.ctgryCd = ctgryCd;
         this.ctgryNm = ctgryNm;

@@ -4,7 +4,10 @@ package com.meta.ponkids.domain.cls.repository.impl;
 import com.meta.ponkids.domain.cls.dto.ClassListDto;
 import com.meta.ponkids.domain.cls.dto.QClassListDto;
 import com.meta.ponkids.domain.cls.repository.custom.ClassRepositoryCustom;
+import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,7 @@ import java.util.List;
 import static com.meta.ponkids.domain.cls.entity.QClass.class$;
 import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl01.classCategoryCl01;
 import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategoryCl02;
+import static com.meta.ponkids.domain.system.menu.entity.QMenuRole.menuRole;
 
 @Repository
 @RequiredArgsConstructor
@@ -66,10 +70,20 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                         class$.classEndDt,
                         class$.thumbAtchFileSn,
                         class$.atchFileSn,
-                        class$.classExpsrYn,
-                        class$.classExpsrYn.as( "classExpsrPeriod" ),
+                        new CaseBuilder()
+                        			.when( class$.classExpsrYn.eq("Y")).then("표시")
+                        			.when( class$.classExpsrYn.eq("N")).then("미표시")
+                        			.otherwise("")
+                        			.as("classExpsrYn"),
+                        new CaseBuilder()
+                        			.when( 	class$.classPdSetYn.eq("Y")).then(
+                        					class$.classBeginDt.concat(" ~ ").concat(class$.classEndDt)
+                        				)
+                        			.when( class$.classPdSetYn.eq("N")).then("상시")
+                        			.otherwise("")
+                        			.as("classExpsrPeriod"),
                         class$.registerId,
-                        class$.regDt
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH:MM:SS" )
                 ) )
                 .from( class$ )
                 .leftJoin( classCategoryCl01 )
@@ -77,8 +91,12 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 .leftJoin( classCategoryCl02 )
                 .on( class$.crseCd.eq( classCategoryCl02.clSn.stringValue() ) )
                 // where
-                .where()
-//                .orderBy( clas.classSn.desc())
+                .where( 
+                		eqCateLv1( listDto.getCategory() ),
+                		eqCateLv2( listDto.getCategory() ),
+                		eqOption( listDto.getSchOption(), listDto.getSchCntn() ) 
+                		)
+                .orderBy( class$.classSn.desc())
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )
                 .fetch();
@@ -87,6 +105,8 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
         JPAQuery<Long> count = query.select( class$.count() )
                 .from( class$ )
                 .where(
+                		eqCateLv1( listDto.getCategory() ),
+                		eqCateLv2( listDto.getCategory() ),
                         eqOption( listDto.getSchOption(), listDto.getSchCntn() ) );
         
         
@@ -106,6 +126,21 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
         } else {
             return null;
         }
+    }
+    
+
+    // 카테고리 lv 1 검색 옵션
+    // class$.ctgryCd == lv1sn 
+    private BooleanExpression eqCateLv1( CategoryDto categoryDto ) {
+        return ( categoryDto != null && categoryDto.getLv1Sn() != null
+                && categoryDto.getLv1Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? class$.ctgryCd.eq( categoryDto.getLv1Sn().toString() ) : null;
+    }
+    
+    // 카테고리 lv 2 검색 옵션
+    // class$.crseCd == lv2sn 
+    private BooleanExpression eqCateLv2( CategoryDto categoryDto ) {
+    	return ( categoryDto != null && categoryDto.getLv2Sn() != null
+    			&& categoryDto.getLv2Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? class$.crseCd.eq( categoryDto.getLv2Sn().toString() ) : null;
     }
     
 }

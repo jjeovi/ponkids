@@ -6,6 +6,8 @@
 
     // DOM 준비 된 이후 실행
     $( function () {
+		
+		
 
     });
 
@@ -33,6 +35,16 @@
                         </ul>
                         <ul class="data-group" data-all-yn="Y" data-search-url=""> <!--  data-all-yn : 전체 여부 , data-search-url : 검색조회용 url (ajax0) -->
                             <!--  lv2 -->
+                            <th:block th:if="${cateLv2List ne null}">
+								<li onclick="getCateNextLvList('', this );"
+									th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == 0 ) } ? 'on'"
+	                                value="0">전체
+	                            </li>
+	                            <li onclick="getCateNextLvList('', this );"
+	                            	th:each="data : ${cateLv2List}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == data.clSn ) } ? 'on'"
+	                                th:value="${data.clSn}">[[${data.clNm}]]
+	                            </li>
+							</th:block>
                         </ul>
                     </div>
                 </div>
@@ -47,8 +59,8 @@
                     </div>
                     <div class="btn-group float-right" role="group">
                         <button name="searchCateBtn" type="button" class="btn btn-purple w120p"
-                                th:data-search-cate-url="|/admin/menu/live/${type}/getMenuListAjax|"
-                                th:onclick="searchCateAjax( this.getAttribute('data-search-cate-url') )">보기
+                                th:data-search-cate-url="|${basicPath}/${mcd}/list|"
+                                th:onclick="searchCate( this.getAttribute('data-search-cate-url') )">보기
                         </button>
                     </div>
                 </div>
@@ -93,11 +105,11 @@
                             <colgroup>
                                 <col width="50px;">
                                 <col width="150px;">
-                                <col width="250px;">
-                                <col width="15%;">
+                                <col width="200px;">
+                                <col width="8%;">
                                 <col width="8%;">
                                 <col width="20%;">
-                                <col width="10%;">
+                                <col width="15%;">
                             </colgroup>
                             <thead>
 	                            <tr>
@@ -117,6 +129,7 @@
 	                                <td th:text="${data.classSj}"></td>
 	                                <td th:text="${data.classAmt}"></td>
 	                                <td th:text="${data.classExpsrYn}"></td>
+	                                <td th:text="${data.classExpsrPeriod}"></td>
 	                                <td>
 	                                    <a th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.classSn} ) }"
 	                                       class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
