@@ -274,11 +274,8 @@ public class ClassCategoryCl02Controller {
                 categoryDto.setLv1Nm( classCategoryCl01ModDto.getClNm() );
                 listDto.setCategory( categoryDto );
             }
-            
         }
-        
     }
-    
     
     @ResponseBody
     @GetMapping( BASIC_PATH + "/live/getListByParntsClSnAjax" )
@@ -286,6 +283,13 @@ public class ClassCategoryCl02Controller {
         // 카테고리(parntsClSn) 로 커리큘럼 검색
         
         Map<String, Object> result = new HashMap<String, Object>();
+        
+        // 부모clSn 값 setting ( ajax의 categorySn 을 대입해준다.)
+        if(listDto.getParntsClSn() == null ) {
+        	if(listDto.getCategory().getCategorySn() != null ) {
+        		listDto.setParntsClSn(listDto.getCategory().getCategorySn());
+        	}
+        }
         
         // 부모 클래스 일련번호로 커리큘럼검색
         List<ClassCategoryCl02ListDto> listDtos = classCategoryCl02Service.findByParntsClSnOrderByClSeq( listDto );

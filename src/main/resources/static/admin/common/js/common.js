@@ -220,7 +220,6 @@ function getCateNextLvList( url, e ) {
         var ulNum = $ul.prevAll().length;	// 몇번쨰 ul 인지 체크 (0부터 카운트..)
 
         // 뒷단계 카테고리 전부 비움
-        // $(".category-list-area .category-group-box ul li.on").each(function(i,item){
         $( ".category-list-area .category-group-box ul" ).each( function ( i, item ) {
             if ( i > ulNum ) {
                 $( this ).empty();
@@ -240,8 +239,9 @@ function getCateNextLvList( url, e ) {
         setTimeout( function () {
             $( "#picked-cate" ).find( ".cateLv" + ulNum ).addClass( "blink" );
         }, 100 );
-
-        var categorySn = $( e ).val();
+        
+        var data = {};
+        data['category.categorySn'] = $( e ).val();
 
         // 카테고리 박스 개수 체크하여
         // 마지막 박스 클릭 아닌 경우에 다음 카테고리 조회 실행
@@ -253,7 +253,7 @@ function getCateNextLvList( url, e ) {
                 type: "GET",
                 dataType: "json",
                 async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-                data: { categorySn: categorySn }, // 검색할 값
+                data: data, // 검색할 값
                 contentType: "application/json",
                 success: function ( result ) {
                     // return type : List<CategoryDto>
@@ -269,14 +269,17 @@ function getCateNextLvList( url, e ) {
                             $( "<li>" ).attr( "onclick", "getCateNextLvList('" + url + "', this )" ).attr( "value", "" ).append( "전체" )
                         );
                     }
-                    for ( let i in result ) {
-                        $( ".category-list-area .category-group-box ul" ).eq( ulNum + 1 ).append(
-                            $( "<li>" ).attr( "onclick", "getCateNextLvList('" + url + "', this )" ).attr( "value", result[i].categorySn ).append( result[i].categoryNm )
-                        );
+                    if( result.resultList != null && result.resultList.length > 0 ) {
+		                for ( let item of result.resultList ) {
+		                    $( ".category-list-area .category-group-box ul" ).eq( ulNum + 1 ).append(
+		                        $( "<li>" ).attr( "onclick", "getCateNextLvList('" + url + "', this )" ).attr( "value", item.category['categorySn'] ).append( item.category['categoryNm'] )
+		                    );
+		                }
                     }
                 }
             } );
         }
+        
     }
 }
 

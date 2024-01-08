@@ -22,11 +22,11 @@
                     <div class="category-group-box">
                         <ul class="data-group" data-all-yn="Y">
                             <!--  lv1 -->
-                            <li onclick="getCateNextLvList('', this );"
+                            <li onclick="getCateNextLvList('/admin/classCategoryCl02/live/getListByParntsClSnAjax', this );"
                                 th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'on'"
                                 value="0">전체
                             </li>
-                            <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('', this );"
+                            <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('/admin/classCategoryCl02/live/getListByParntsClSnAjax', this );"
                                 th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) } ? 'on'"
                                 th:value="${data.clSn}">[[${data.clNm}]]
                             </li>
@@ -113,7 +113,7 @@
                             <tbody>
 	                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
 	                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
-	                                <td> [[${data.ctgryNm}]] <th:block th:if="${data.crseCd != null && data.crseCd != '' }">[ [[${data.crseCd}]] ] </th:block> </td>
+	                                <td> [[${data.ctgryNm}]] <th:block th:if="${data.crseCd != null && data.crseCd != '' }">[ [[${data.crseNm}]] ] </th:block> </td>
 	                                <td th:text="${data.classSj}"></td>
 	                                <td th:text="${data.classAmt}"></td>
 	                                <td th:text="${data.classExpsrYn}"></td>

@@ -5,6 +5,7 @@ import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ModDto;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02SaveDto;
 import com.meta.ponkids.domain.cls.entity.ClassCategoryCl02;
 import com.meta.ponkids.domain.cls.repository.ClassCategoryCl02Repository;
+import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,17 @@ public class ClassCategoryCl02Service {
         
         ClassCategoryCl02ListDto classCategoryCl02ListDto = new ClassCategoryCl02ListDto();    // new로 listDto 생성
         List<ClassCategoryCl02ListDto> listDtoList = classCategoryCl02List.stream().map( m -> classCategoryCl02ListDto.toDto( m ) ).collect( Collectors.toList() );
+        
+        // lv2 setting ( 분류 lv2 데이터 뿌릴때 사용 )
+        for(ClassCategoryCl02ListDto dto : listDtoList) {
+        	
+        	CategoryDto categoryDto = new CategoryDto();
+        	
+        	categoryDto.setCategorySn(dto.getClSn());
+        	categoryDto.setCategoryNm(dto.getClNm());
+        	
+        	dto.setCategory(categoryDto);        	
+        }
         
         return listDtoList;
     }
