@@ -22,29 +22,28 @@ $( function () {
 
         // 변경 불가 처리
         $( this ).attr( "onclick", "return false;" );
-    });
+    } );
 
     // 카테고리 분류가 선택 되어있으면 picked-cate 에 뿌려준다.
     if ( $( ".category-list-area .category-group-box ul li.on" ).length ) {
         $( ".category-list-area .category-group-box ul li.on" ).trigger( "click" );
     }
-    
-    
-	// dateTimePickr 클래스속성인 모든 항목
-	// 1. html 태그에 [ data-pickr ] 값 date		: date  설정 
-	// 2. html 태그에 [ data-pickr ] 값 time		: time  설정 
-	// 3. html 태그에 [ data-pickr ] 값 dateTime : date와 time 모두 설정 
-	$('[data-pickr="dateTime"').each( function ( i, item ) {
-			
-        flatpickr( '#'+ item.id , {
+
+
+    // dateTimePickr 클래스속성인 모든 항목
+    // 1. html 태그에 [ data-pickr ] 값 date		: date  설정
+    // 2. html 태그에 [ data-pickr ] 값 time		: time  설정
+    // 3. html 태그에 [ data-pickr ] 값 dateTime : date와 time 모두 설정
+    $( '[data-pickr="dateTime"' ).each( function ( i, item ) {
+
+        flatpickr( '#' + item.id, {
             dateFormat: 'Y-m-d H:i',	// 날짜 및 시간 형식 설정 (예: 2023-09-12 15:30)
-            defaultHour : '09',			// 디폴트 시간 설정 (날짜 선택시 기본으로 설정되어있는 시간)		
+            defaultHour: '09',			// 디폴트 시간 설정 (날짜 선택시 기본으로 설정되어있는 시간)
             enableTime: true,        	// 시간 선택 활성화
             locale: 'ko',            	// 한국어로 지역화
-        });
-		
-	} );
+        } );
 
+    } );
 
 
 } );
@@ -879,24 +878,24 @@ function fnfileDelete( atchFileSn, fileSeq ) {
 }
 
 
-
-// dateTime 선택 (date, time 모두 선택시) 
+// dateTime 선택 (date, time 모두 선택시)
 $.fn.dateTimePickr = function () {
-	// dateTime 선택 (date, time 모두 선택시)
-	// 날짜 및 시간 형식 : Y-m-d H:i , ex) 2023-09-12 15:30
-	// 언어 : 한국어
-	
+    // dateTime 선택 (date, time 모두 선택시)
+    // 날짜 및 시간 형식 : Y-m-d H:i , ex) 2023-09-12 15:30
+    // 언어 : 한국어
+
     var result = true;
-    
+
     this.each( function () {
-		
-        flatpickr( '#'+ this.id , {
+
+        flatpickr( '#' + this.id, {
             dateFormat: 'Y-m-d H:i', // 날짜 및 시간 형식 설정 (예: 2023-09-12 15:30)
             enableTime: true,        // 시간 선택 활성화
+            allowInput: true, // prevent "readonly" prop
             locale: 'ko',            // 한국어로 지역화
-        });
-        
+        } );
+
     } );
-    
+
     return result;
 };

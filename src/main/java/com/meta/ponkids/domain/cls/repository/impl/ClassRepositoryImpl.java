@@ -17,6 +17,8 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 import static com.meta.ponkids.domain.cls.entity.QClass.class$;
+import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl01.classCategoryCl01;
+import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategoryCl02;
 
 @Repository
 @RequiredArgsConstructor
@@ -51,9 +53,9 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 .select( new QClassListDto(
                         class$.classSn,
                         class$.ctgryCd,
-                        class$.ctgryCd.as( "ctgryNm" ),
+                        classCategoryCl01.clNm.as( "ctgryNm" ),
                         class$.crseCd,
-                        class$.crseCd.as( "crseNm" ),
+                        classCategoryCl02.clNm.as( "crseNm" ),
                         class$.classSj,
                         class$.classSumry,
                         class$.classDc,
@@ -70,6 +72,10 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                         class$.regDt
                 ) )
                 .from( class$ )
+                .leftJoin( classCategoryCl01 )
+                .on( class$.ctgryCd.eq( classCategoryCl01.clSn.stringValue() ) )
+                .leftJoin( classCategoryCl02 )
+                .on( class$.crseCd.eq( classCategoryCl02.clSn.stringValue() ) )
                 // where
                 .where()
 //                .orderBy( clas.classSn.desc())

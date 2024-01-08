@@ -52,8 +52,6 @@
             } );
             // ajax END
     	});
-    	
-    	
 
     });
     // $( function () {}); end
@@ -70,15 +68,32 @@
     	$("[name='crseCd']").append("<option value=''>선택안함</option>");
     	
     	// 커리큘럼 추가
-    	 for ( let item of result.resultList ) {
+    	for ( let item of result.resultList ) {
     		 $("[name='crseCd']").append("<option value='" + item.clSn + "'>" + item.clNm + "</option>");
         }
     }
+
+    // 등록 유효성 검사
+    function insertValidCheck() {
+
+        // 표시기간 유효성 체크
+        var classPdSetYn = $( "[name='classPdSetYn']:checked" ).val();
+        if ( classPdSetYn == 'Y' && $("#classBeginDt").val() == '' ) {
+            alert("표시 시작 일시를 입력해주세요.");
+            $( "#classBeginDt" ).focus();
+            return false;
+        }
+        if ( classPdSetYn == 'Y' && $("#classEndDt").val() == '' ) {
+            alert("표시 종료 일시를 입력해주세요.");
+            $( "#classEndDt" ).focus();
+            return false;
+        }
+
+        return true;
+
+    }
     
 </script>
-<script>
-
-    </script>
 <!-- E : Javascript functions	-->
 <th:block layout:fragment="content">
     <!-- S: content -->
@@ -86,7 +101,7 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="insertForm" name="insertForm" method="post" th:action="@{ {basicPath}/mcd/insert ( basicPath = ${basicPath} ) }" enctype="multipart/form-data">
+                    <form id="insertForm" name="insertForm" method="post" th:action="@{ {basicPath}/mcd/insert ( basicPath = ${basicPath} ) }" enctype="multipart/form-data" th:onsubmit="return insertValidCheck();">
                     	<div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">분류<span class="required">*</span></label>
                             <div class="col-md-2 col-sm-6">
@@ -190,11 +205,11 @@
                             </div>
                             <div id="expsrPeriodDiv" style="display:none;" class="col-md-4 col-sm-4" >
                                 <div class="col-md-5 col-sm-12">
-                                    <input class="form-control" type="text" name="classBeginDt"	id="classBeginDt"	data-pickr="dateTime"	placeholder="표시 시작날짜 선택">  
+                                    <input class="form-control" type="text" name="classBeginDt"	id="classBeginDt"	data-pickr="dateTime"	placeholder="표시 시작일시 선택" >
                                 </div>
                                 <div class="col-md-1 col-sm-12 period-wave"></div>
                                 <div class="col-md-5 col-sm-12">
-                                    <input class="form-control" type="text" name="classEndDt"	id="classEndDt"		data-pickr="dateTime"	placeholder="표시 종료날짜 선택">
+                                    <input class="form-control" type="text" name="classEndDt"	id="classEndDt"		data-pickr="dateTime"	placeholder="표시 종료일시 선택" >
                                 </div>
                             </div>
                         </div>

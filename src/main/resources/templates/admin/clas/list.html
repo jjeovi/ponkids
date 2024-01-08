@@ -90,6 +90,15 @@
                     <!-- S : 테이블 -->
                     <div class="col-md-12 col-sm-12 ">
                         <table id="listTable" class="table table-bordered text-center">
+                            <colgroup>
+                                <col width="50px;">
+                                <col width="150px;">
+                                <col width="250px;">
+                                <col width="15%;">
+                                <col width="8%;">
+                                <col width="20%;">
+                                <col width="10%;">
+                            </colgroup>
                             <thead>
 	                            <tr>
 	                                <th>순번</th>
@@ -104,7 +113,7 @@
                             <tbody>
 	                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
 	                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
-	                                <td th:text="${data.classSj}"></td>
+	                                <td> [[${data.ctgryNm}]] <th:block th:if="${data.crseCd != null && data.crseCd != '' }">[ [[${data.crseCd}]] ] </th:block> </td>
 	                                <td th:text="${data.classSj}"></td>
 	                                <td th:text="${data.classAmt}"></td>
 	                                <td th:text="${data.classExpsrYn}"></td>

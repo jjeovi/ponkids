@@ -462,4 +462,23 @@ public class DateUtils implements DateConstants {
         int compare = currentDate.compareTo( date );
         return compare < 0;
     }
+    
+    /**
+     * 숫자를 제외한 모든 문자를 제거하고 숫자문자열만 리턴한다.
+     *
+     * @return
+     */
+    public static String removeCharExceptNumber(String str) {
+        
+        return str.replaceAll("[^0-9]", "");
+        
+        // 또는
+        // return str.replaceAll("[^\\d]", "");
+        
+        // 또는
+        // return str.replaceAll("\\D", "");
+        
+        // 모두 사용가능하다.
+    }
+    
 }

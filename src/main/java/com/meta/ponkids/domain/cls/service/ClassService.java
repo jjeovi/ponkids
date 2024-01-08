@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -26,8 +27,23 @@ public class ClassService {
         
         saveDto.setRegisterId( SessionUtils.getClientId() );                // Id set : regist
         saveDto.setRegisterIp( IpUtils.getClientIP( request ) );            // Ip set : regist
-        saveDto.setUpdusrId( SessionUtils.getClientId() );                    // Id set : update
-        saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );                // Ip set : update
+        saveDto.setUpdusrId( SessionUtils.getClientId() );                  // Id set : update
+        saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );              // Ip set : update
+        
+        
+        if ( StringUtils.hasText( saveDto.getClassPdSetYn() ) && saveDto.getClassPdSetYn().equals( "Y" ) ) {
+            // 표시기간설정여부 체크하여 표시기간 있을 시 숫자제외 다른 문자들 제거 작업 필요
+            
+            if ( !StringUtils.hasText( saveDto.getClassBeginDt() ) || !StringUtils.hasText( saveDto.getClassEndDt() ) ) {
+                throw new IOException( "[표시기간 설정 필요]" );
+            }
+            
+        } else if ( StringUtils.hasText( saveDto.getClassPdSetYn() ) && saveDto.getClassPdSetYn().equals( "N" ) ) {
+            // 표시기간설정이 N 인 경우 (상시) , 시작일시, 종료일시 값을 null 로 setting
+            saveDto.setClassBeginDt( null );
+            saveDto.setClassEndDt( null );
+            
+        }
         
         Class newClass = classRepository.save( saveDto.toEntity() );            // ** save -> save된 정보 newXxx 로 저장
         saveDto.setClassSn( newClass.getClassSn() );

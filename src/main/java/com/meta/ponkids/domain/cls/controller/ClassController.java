@@ -116,7 +116,16 @@ public class ClassController {
         }
         
         // 클래스 저장
-        saveDto = classService.save( saveDto, request );
+        try {
+            saveDto = classService.save( saveDto, request );
+        } catch ( Exception e ) {
+            // 메시지 출력 및 url 이동 처리
+            model.addAttribute( "resultMsg", "등록 중 오류가 발생했습니다. " + e.getMessage() + "\n다시 시도해주세요." );
+            model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+            
+            return "common/alert";
+        }
+        
         
         if ( saveDto.getClassWeek() != null ) {
             classWeekService.save( saveDto, request );
