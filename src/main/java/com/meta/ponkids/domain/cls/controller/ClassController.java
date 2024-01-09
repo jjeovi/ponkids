@@ -11,7 +11,6 @@ import com.meta.ponkids.domain.cls.service.ClassWeekService;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 import com.meta.ponkids.domain.system.file.service.AtchFileService;
 import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
-import com.meta.ponkids.domain.system.menu.service.MenuService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -42,7 +41,6 @@ public class ClassController {
     private final ClassCategoryCl02Service classCategoryCl02Service;
     private final CmmnCdDetailService cmmnCdDetailService;
     private final AtchFileService atchFileService;
-    private final MenuService menuService;
     
     @GetMapping( BASIC_PATH + "/{mcd}/list" )
     public String list( @ModelAttribute ClassListDto listDto,
@@ -169,8 +167,13 @@ public class ClassController {
         // target object 조회
         model.addAttribute( "targetDto", classService.findById( pk ) );
         
-        // E : 필요한 객체 setting
+        // 요일 List add
+        model.addAttribute( "day7List", cmmnCdDetailService.getList( "DAY_7_CD" ) );    // 요일리스트
         
+        // 클래스 카테고리 분류1 list setting
+        model.addAttribute( "classCategoryCl01List", classCategoryCl01Service.findAll() );
+        
+        // E : 필요한 객체 setting
         
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
@@ -233,8 +236,6 @@ public class ClassController {
     	
     	Map<String, Object> result = new HashMap<String, Object>();
     	
-    	MenuListDto mListDto = new MenuListDto();
-//    	result.put( "resultList", menuService.getUserMenuList( mListDto ) );
     	result.put( "resultList", classService.getList( listDto, pageable ) );
     	
     	return result;

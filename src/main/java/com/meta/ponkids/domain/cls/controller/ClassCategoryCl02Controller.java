@@ -292,7 +292,15 @@ public class ClassCategoryCl02Controller {
         }
         
         // 부모 클래스 일련번호로 커리큘럼검색
-        List<ClassCategoryCl02ListDto> listDtos = classCategoryCl02Service.findByParntsClSnOrderByClSeq( listDto );
+        List<ClassCategoryCl02ListDto> listDtos = null;
+        
+        if( listDto.getParntsClSn() != null && listDto.getParntsClSn() == 0  ) {
+        	// 부모클래스 일련번호가 0 일 때 : 전체 검색
+        	listDtos = classCategoryCl02Service.findAllByOrderByClSeq();
+        } else if ( listDto.getParntsClSn() != null ) {
+        	// 부모클래스 일련번호가 0 이 아닐 때 : 부모클래스일련번호로 검색 
+        	listDtos = classCategoryCl02Service.findByParntsClSnOrderByClSeq( listDto );
+        }
         
         // list put
         result.put( "resultList", listDtos );

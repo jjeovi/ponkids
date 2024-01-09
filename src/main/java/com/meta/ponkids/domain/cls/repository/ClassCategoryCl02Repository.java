@@ -15,5 +15,7 @@ public interface ClassCategoryCl02Repository extends JpaRepository<ClassCategory
     
     List<ClassCategoryCl02> findAll();
     
+    List<ClassCategoryCl02> findAllByOrderByClSeq();
+    
     List<ClassCategoryCl02> findByParntsClSnOrderByClSeq( long parntsClSn );
 }

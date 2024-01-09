@@ -44,6 +44,26 @@ public class ClassCategoryCl02Service {
         return classCategoryCl02Repository.getList( listDto, pageable );
     }
     
+    
+    public List<ClassCategoryCl02ListDto> findAllByOrderByClSeq( ) {
+    	List<ClassCategoryCl02> classCategoryCl02List = classCategoryCl02Repository.findAllByOrderByClSeq();
+    	
+    	ClassCategoryCl02ListDto classCategoryCl02ListDto = new ClassCategoryCl02ListDto();    // new로 listDto 생성
+        List<ClassCategoryCl02ListDto> listDtoList = classCategoryCl02List.stream().map( m -> classCategoryCl02ListDto.toDto( m ) ).collect( Collectors.toList() );
+        
+        // lv2 setting ( 분류 lv2 데이터 뿌릴때 사용 )
+        for(ClassCategoryCl02ListDto dto : listDtoList) {
+        	
+        	CategoryDto categoryDto = new CategoryDto();
+        	
+        	categoryDto.setCategorySn(dto.getClSn());
+        	categoryDto.setCategoryNm(dto.getClNm());
+        	
+        	dto.setCategory(categoryDto);        	
+        }
+        
+        return listDtoList;
+    }
     public List<ClassCategoryCl02ListDto> findByParntsClSnOrderByClSeq( ClassCategoryCl02ListDto listDto ) {
         List<ClassCategoryCl02> classCategoryCl02List = classCategoryCl02Repository.findByParntsClSnOrderByClSeq( listDto.getParntsClSn() );
         
