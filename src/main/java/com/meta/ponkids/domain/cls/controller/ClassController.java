@@ -9,6 +9,9 @@ import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
 import com.meta.ponkids.domain.cls.service.ClassService;
 import com.meta.ponkids.domain.cls.service.ClassWeekService;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
+import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
+import com.meta.ponkids.domain.system.file.repository.AtchFileDetailRepository;
+import com.meta.ponkids.domain.system.file.service.AtchFileDetailService;
 import com.meta.ponkids.domain.system.file.service.AtchFileService;
 import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
 
@@ -41,6 +44,8 @@ public class ClassController {
     private final ClassCategoryCl02Service classCategoryCl02Service;
     private final CmmnCdDetailService cmmnCdDetailService;
     private final AtchFileService atchFileService;
+    private final AtchFileDetailService atchFileDetailService;
+    private final AtchFileDetailRepository atchFileDetailRepository;
     
     @GetMapping( BASIC_PATH + "/{mcd}/list" )
     public String list( @ModelAttribute ClassListDto listDto,
@@ -61,14 +66,14 @@ public class ClassController {
         // 클래스 카테고리 분류1 list setting
         model.addAttribute( "cateLv1List", classCategoryCl01Service.findAll() );
         
-        if(listDto.getCategory() != null && listDto.getCategory().getLv1Sn() != null  ) {
-        	
-        	ClassCategoryCl02ListDto categoryCl02ListDto = new ClassCategoryCl02ListDto();
-        	
-        	// 부모clSn 값 setting ( ajax의 categorySn 을 대입해준다.)
-        	categoryCl02ListDto.setParntsClSn( listDto.getCategory().getLv1Sn() );
-        	
-        	model.addAttribute( "cateLv2List", classCategoryCl02Service.findByParntsClSnOrderByClSeq( categoryCl02ListDto ) );
+        if ( listDto.getCategory() != null && listDto.getCategory().getLv1Sn() != null ) {
+            
+            ClassCategoryCl02ListDto categoryCl02ListDto = new ClassCategoryCl02ListDto();
+            
+            // 부모clSn 값 setting ( ajax의 categorySn 을 대입해준다.)
+            categoryCl02ListDto.setParntsClSn( listDto.getCategory().getLv1Sn() );
+            
+            model.addAttribute( "cateLv2List", classCategoryCl02Service.findByParntsClSnOrderByClSeq( categoryCl02ListDto.getParntsClSn() ) );
         }
         
         // E : 필요한 객체 setting
@@ -141,7 +146,6 @@ public class ClassController {
             return "common/alert";
         }
         
-        
         if ( saveDto.getClassWeek() != null ) {
             classWeekService.save( saveDto, request );
         }
@@ -165,13 +169,30 @@ public class ClassController {
         // S : 필요한 객체 setting
         
         // target object 조회
-        model.addAttribute( "targetDto", classService.findById( pk ) );
+        ClassModDto targetDto = classService.findById( pk );
+        model.addAttribute( "targetDto", targetDto );
         
         // 요일 List add
         model.addAttribute( "day7List", cmmnCdDetailService.getList( "DAY_7_CD" ) );    // 요일리스트
         
-        // 클래스 카테고리 분류1 list setting
-        model.addAttribute( "classCategoryCl01List", classCategoryCl01Service.findAll() );
+        // 클래스 카테고리 list setting
+        model.addAttribute( "ctgryCdList", classCategoryCl01Service.findAll() );
+        
+        // 클래스 커리큘럼 list setting ( targetDto 의 ctgryCd 값으로 커리큘럼 list 를 구함. )
+        model.addAttribute( "crseCdList", classCategoryCl02Service.findByParntsClSnOrderByClSeq( Long.parseLong( targetDto.getCtgryCd() ) ) );
+        
+        // 클래스 요일 List add
+        // 클래스 요일 은 html 그리고 script로 ajax를 통해 불러온다. 처음에 불러오면 타임리프로 요일을 체크하는 로직이 너무 어렵기 때문에 html먼저 그린 뒤 ajax를 호출 하는 방식으로 정함.
+//        model.addAttribute( "classWeekList",  classWeekService.findByClassSnOrderByClassWeekSn( targetDto.getClassSn() ));
+        // 클래스sn model 에 추가
+        model.addAttribute( "schClassSn",  targetDto.getClassSn() );
+        
+        
+        // 첨부파일 존재시
+        if ( targetDto.getAtchFileSn() != null ) {
+            List<AtchFileDetail> atchFileList = atchFileDetailService.getList( targetDto.getAtchFileSn() );
+            model.addAttribute( "atchFileList", atchFileList );
+        }
         
         // E : 필요한 객체 setting
         
@@ -189,7 +210,8 @@ public class ClassController {
     @Transactional
     @PostMapping( BASIC_PATH + "/{mcd}/update" )
     public String update(
-            @RequestParam( "file" ) MultipartFile files,        // 첨부파일 필요시
+            @RequestParam( "file" ) MultipartFile files,        // 첨부파일 (썸네일 이미지)
+            @RequestParam( "atchFile" ) List<MultipartFile> atchFileList,   // 첨부파일 (여러개 파일 )
             @PathVariable String mcd,
             @ModelAttribute ClassModDto modDto,
             HttpServletRequest request,
@@ -197,8 +219,50 @@ public class ClassController {
         
         // S : 필요한 객체 setting
         
-        // E : 필요한 객체 setting
+        // 첨부파일 존재시 파일 저장
+        if ( !files.isEmpty() ) {
+            // 기존에 첨부파일 있을시 삭제
+            if ( modDto.getThumbAtchFileSn() != null ) {
+                atchFileService.delete( modDto.getThumbAtchFileSnOri() );
+            }
+            
+            // 첨부파일 저장
+            modDto.setThumbAtchFileSn( atchFileService.save( files ) );    // 파일 save (파일 개수 1개일 때 )
+        } else {
+            // 첨부파일 존재하지않을 때
+            // 기존 첨부파일이 있었는데 삭제됬다면 삭제처리
+            if ( modDto.getThumbAtchFileSnOri() != null && modDto.getThumbAtchFileSn() == null ) {
+                atchFileService.delete( modDto.getThumbAtchFileSnOri() );
+                modDto.setThumbAtchFileSn( null );
+            }
+        }
         
+        Long atchFileSn = modDto.getAtchFileSn();
+        
+        // 첨부파일  존재시 파일 저장
+        if ( atchFileSn != null ) { // 기존 첨부파일 있을시
+            // 첨부파일  존재시 파일 저장
+            if ( atchFileList.get( 0 ).getSize() != 0 ) {
+                atchFileService.multifileSave( atchFileList, atchFileSn );    // 파일 save (파일여러개 ) + 추가 저장
+            } else {
+                // 기존 첨부파일 모두 삭제 됬을 경우?
+                List<AtchFileDetail> atchFileDetailList = atchFileDetailService.getList( atchFileSn );
+                if ( atchFileDetailList.isEmpty() ) {
+                    atchFileDetailRepository.deleteByAtchFileDetailPk_AtchFileSn( atchFileSn ); // 부모 테이블 삭제 처리
+                    modDto.setAtchFileSn( null );    // 파일 save (파일여러개 )
+                }
+            }
+            
+        } else { //기존 첨부파일 없을시 신규로 추가
+            
+            // 첨부파일  존재시 파일 저장
+            if ( atchFileList.get( 0 ).getSize() != 0 ) {
+                modDto.setAtchFileSn( atchFileService.multifileSave( atchFileList, null ) );
+            }
+            
+        }
+        
+        // E : 필요한 객체 setting
         
         // update 구현
         classService.update( modDto, request );
@@ -228,17 +292,30 @@ public class ClassController {
     }
     
     // 카테고리 검색 (Ajax)
+//    @ResponseBody
+//    @GetMapping( BASIC_PATH + "/live/getListAjax" )
+//    public Map<String, Object> getListAjax( @ModelAttribute ClassListDto listDto,
+//                                            @PageableDefault( size = 10 ) Pageable pageable
+//    ) {
+//
+//        Map<String, Object> result = new HashMap<String, Object>();
+//
+//        result.put( "resultList", classService.getList( listDto, pageable ) );
+//
+//        return result;
+//    }
+//
+    // 클래스 요일 검색 (Ajax)
     @ResponseBody
-    @GetMapping( BASIC_PATH + "/live/getListAjax")
-    public Map<String, Object> getListAjax( @ModelAttribute ClassListDto listDto ,
-    		@PageableDefault( size = 10 ) Pageable pageable
-    		) {
-    	
-    	Map<String, Object> result = new HashMap<String, Object>();
-    	
-    	result.put( "resultList", classService.getList( listDto, pageable ) );
-    	
-    	return result;
+    @GetMapping( BASIC_PATH + "/live/getClassWeekListAjax" )
+    public Map<String, Object> getClassWeekListAjax( @ModelAttribute ClassListDto listDto
+    ) {
+        
+        Map<String, Object> result = new HashMap<String, Object>();
+        
+        result.put( "resultList", classWeekService.findByClassSnOrderByClassWeekSn( listDto.getClassSn() ) );   // 클래스 요일 classSn으로 검색
+        
+        return result;
     }
     
     

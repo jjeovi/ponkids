@@ -35,6 +35,8 @@ public class ClassModDto {
     
     private Long thumbAtchFileSn;           // 썸네일첨부파일일련번호
     
+    private Long thumbAtchFileSnOri;     // 첨부파일 일련번호
+    
     private Long atchFileSn;                // 첨부파일일련번호
     
     private String classExpsrYn;            // 클래스표시여부

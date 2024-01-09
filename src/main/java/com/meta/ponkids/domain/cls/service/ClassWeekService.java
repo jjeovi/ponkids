@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +48,15 @@ public class ClassWeekService {
     
     public Page<ClassWeekListDto> getList( ClassWeekListDto listDto, Pageable pageable ) {
         return classWeekRepository.getList( listDto, pageable );
+    }
+    
+    public List<ClassWeekListDto> findByClassSnOrderByClassWeekSn( Long pk) {
+        List<ClassWeek> classWeekList =  classWeekRepository.findByClassSnOrderByClassWeekSn( pk );
+        
+        ClassWeekListDto classWeekListDto = new ClassWeekListDto();
+        List<ClassWeekListDto> listDtos = classWeekList.stream().map( m -> classWeekListDto.toDto( m ) ).collect( Collectors.toList());
+        
+        return listDtos;
     }
     
     public ClassWeekModDto findById( Long pk ) {    // TODO 타입 체크 필요

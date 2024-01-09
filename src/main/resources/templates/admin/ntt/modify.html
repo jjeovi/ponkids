@@ -1,293 +1,296 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"    layout:decorate="~{admin/layout/layout}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/layout}">
 <title layout:fragment="title">pioneerkids (Admin-bbs) - 게시물 등록</title>
 
-<script  layout:fragment="script">
-	var header = $("meta[name='_csrf_header']").attr("content");
-    var token = $("meta[name='_csrf']").attr("content");
-$(document).ready(function() {
-	// 에디터 설정 
-	fnSummernoteCall('summernote');
-});
+<script layout:fragment="script">
+    var header = $( "meta[name='_csrf_header']" ).attr( "content" );
+    var token = $( "meta[name='_csrf']" ).attr( "content" );
+    $( document ).ready( function () {
+        // 에디터 설정
+        fnSummernoteCall( 'summernote' );
+    } );
 
 
+    //댓글(Reply) 및 답글(answerReply) 등록
+    function fnReplyInsert( parntsReplySn ) {
 
-//댓글(Reply) 및 답글(answerReply) 등록
-function fnReplyInsert( parntsReplySn ){
-    
-    var nttReplyCn =  "";
-    var nttSn =  $("#nttSn").val();
-    var gubun = "";
-    var html = "";
-     
-    if( parntsReplySn == 0 ) {
-		 gubun = "R"; // 댓글 
-		 nttReplyCn =  $("#nttReplyCn").val();
-	} else {
-		 gubun = "A"; // 답글  
-		 nttReplyCn =  $("#AR" +parntsReplySn).val();
-	}
-     $.ajax( {
-      url: "/reply/nttReplyInsert",
-      	beforeSend: function(xhr){
-			
-		 if(header != null &&  token != null){
-			xhr.setRequestHeader(header, token);
-		 }
-  
-        },
-      type: "post",
-      data:  { parntsReplySn: parntsReplySn ,  nttReplyCn : nttReplyCn ,nttSn : nttSn ,gubun : gubun},
-      success: function ( result ) {
-		  if( result == "success" ) {
-			  if( gubun == "R" ) {
-			      alert("댓글이 정상적으로 등록되었습니다.");
-                  $("#nttReplyCn").val("");
-              
-                  fnReplyList( nttSn ); // 댓글 목록 조회
-		        } else {
-			       alert("답글이 정상적으로 등록되었습니다.");
-			       $("#AR" +parntsReplySn ).val("");
-			  	    fnAnswerReplyList(parntsReplySn); // 답글 목록 조회
-		      } 
-		   }
-      }}
-    );
-}
+        var nttReplyCn = "";
+        var nttSn = $( "#nttSn" ).val();
+        var gubun = "";
+        var html = "";
 
+        if ( parntsReplySn == 0 ) {
+            gubun = "R"; // 댓글
+            nttReplyCn = $( "#nttReplyCn" ).val();
+        } else {
+            gubun = "A"; // 답글
+            nttReplyCn = $( "#AR" + parntsReplySn ).val();
+        }
+        $.ajax( {
+                url: "/reply/nttReplyInsert",
+                beforeSend: function ( xhr ) {
 
+                    if ( header != null && token != null ) {
+                        xhr.setRequestHeader( header, token );
+                    }
 
-//댓글 수정 영역 표시
-function fnReReplyModifyOpen( nttReplySn , type ) {
-      
-	if( type == 'mod') {
+                },
+                type: "post",
+                data: { parntsReplySn: parntsReplySn, nttReplyCn: nttReplyCn, nttSn: nttSn, gubun: gubun },
+                success: function ( result ) {
+                    if ( result == "success" ) {
+                        if ( gubun == "R" ) {
+                            alert( "댓글이 정상적으로 등록되었습니다." );
+                            $( "#nttReplyCn" ).val( "" );
 
-	  $("#nttReplyCn_Editor" + nttReplySn).show();
-	  $("#nttReplyCn_Read" + nttReplySn).hide();
-	  $("#save" + nttReplySn).show();	 // 저장버튼 표시
-	  $("#mod"  + nttReplySn).hide();    // 수정버튼 숨김
-	} else {
-		
-	  $("#nttReplyCn_Editor" + nttReplySn).hide();
-	  $("#nttReplyCn_Read" + nttReplySn).show();
-	  $("#save" + nttReplySn).hide();	  // 저장버튼 숨김
-	  $("#mod"  + nttReplySn).show();     // 수정버튼 표시
-	}
-	
-}
+                            fnReplyList( nttSn ); // 댓글 목록 조회
+                        } else {
+                            alert( "답글이 정상적으로 등록되었습니다." );
+                            $( "#AR" + parntsReplySn ).val( "" );
+                            fnAnswerReplyList( parntsReplySn ); // 답글 목록 조회
+                        }
+                    }
+                }
+            }
+        );
+    }
 
 
-//댓글,답글 수정 : gubun -R 댓글 , A- 답글 
-function fnReReplyModify(nttReplySn, gubun,parntsReplySn){
-    
-     var nttReplyCn =  $("#nttReplyCn_Editor" + nttReplySn ).val();
-     var nttSn =  $("#nttSn").val();
-     var html = "";
-      
-     $.ajax( {
-      url: "/reply/nttReplyUpdate",
-      beforeSend: function(xhr){
-		 if(header != null &&  token != null){
-			xhr.setRequestHeader(header, token);
-		 }
-        },
-      type: "post",
-      data: { nttReplySn: nttReplySn ,  nttReplyCn : nttReplyCn},
-      success: function ( result ) {
-		  
-		    $("#nttReplyCn_Editor" + nttReplySn).hide();
-	        $("#nttReplyCn_Read" + nttReplySn).show();
-	        $("#save"+ nttReplySn).hide();	
-	        $("#mod" + nttReplySn).show();
-	        
-	     if( result == "success" ) {      
-            if( gubun == "R" ) {
-			   alert("댓글이 수정되었습니다.");
-	           fnReplyList(nttSn); 
-            } else {
-			   alert("답글이 수정되었습니다.");
-	           fnAnswerReplyList(parntsReplySn);     
-		   }
-		  }
-      }}
-     );
-	
-}
+    //댓글 수정 영역 표시
+    function fnReReplyModifyOpen( nttReplySn, type ) {
 
-//댓글, 답글 삭제
-function fnReReplyDelete(nttReplySn, gubun,parntsReplySn){
-   var nttSn =  $("#nttSn").val();
-      
-   $.ajax({
-    url: "/reply/nttReplyDelete",
-    	beforeSend: function(xhr){
-			
-		 if(header != null &&  token != null){
-			xhr.setRequestHeader(header, token);
-		 }
-  
-        },
-    type: "post",
-    data: { nttReplySn: nttReplySn},
-    success: function ( result ) {
-       
-       if( gubun == "R" ){
-		 alert("댓글이 정삭적으로 삭제되었습니다.");
-		 fnReplyList(nttSn);  // 댓글 목록 조회 
-	   } else {
-		 alert("답글이 정삭적으로 삭제되었습니다.");
-		 fnAnswerReplyList(parntsReplySn);   // 답글 목록 조회 
-	   }
-        
-    }}
-  );
+        if ( type == 'mod' ) {
 
-}
-   
-// 답글  구역 조회
-function fnReReplyArea( nttReplySn ,type ) {
+            $( "#nttReplyCn_Editor" + nttReplySn ).show();
+            $( "#nttReplyCn_Read" + nttReplySn ).hide();
+            $( "#save" + nttReplySn ).show();	 // 저장버튼 표시
+            $( "#mod" + nttReplySn ).hide();    // 수정버튼 숨김
+        } else {
 
-	if( type == 'open') {
-	  $("#open"+nttReplySn).hide();   // 답글 버튼 숨길
-	  $("#close"+nttReplySn).show();  // 접기 버튼 표시		
-	  
-	  //답글 목록 조회
-	  fnAnswerReplyList(nttReplySn);
-	  
-	} else {
-	  $("#open" + nttReplySn).show();   // 답글 버튼 표시
-	  $("#close" + nttReplySn).hide();  // 접기 버튼 숨김	
-      $("#answer" + nttReplySn).hide(); // 답글 구역 숨김
-	}
+            $( "#nttReplyCn_Editor" + nttReplySn ).hide();
+            $( "#nttReplyCn_Read" + nttReplySn ).show();
+            $( "#save" + nttReplySn ).hide();	  // 저장버튼 숨김
+            $( "#mod" + nttReplySn ).show();     // 수정버튼 표시
+        }
 
-}
+    }
 
-// 댓글목록 조회 
-function fnReplyList( nttSn ) {
-	    
-      $.ajax( {
-      url: "/reply/nttReplyList",
-      type: "GET",
-      dataType: "json",
-      data: { nttSn:  nttSn},
-      contentType: "application/json",
-      success: function ( result ) {
-		var html = "";	
-               
-        $("#replyAddList").remove(); // 댓글 목록 지우기
-	           
-	    html +="<div id='replyAddList'>";
-	    for( i = 0 ; i < result.length ; i++ ) {
-	   	         html += "<div class='card-header p-2'>";
-	   	         html += "   <table>";
-	   	         html += "        <tbody>";
-	   	         html += "             <tr class='align-middle'>";
-	   	         html += "                 <td rowspan='2' class='pr-2'><i class='fa fa-user-o fa-2x'></i></td>";
-	   	         html += "                  <td class='ml' >작성자 : "+  result[i].registerId  + "&nbsp;&nbsp;&nbsp;&nbsp;작성일 : "  +  result[i].updtDt + "</td>";
-	   	         html += "             </tr>";
-	   	         html += "         </tbody>";
-	   	         html += "   </table>";
-	   	         html += "</div>";
-	   	         html += "<div class='card-body'>";
-					 if( result[i].delYn == 'N') {
-						  html +=  "<div>";
-						  html +=  "   <p class='card-text'>";
-						  html +=  "   <span id='nttReplyCn_Read" + result[i].nttReplySn  + "'>" + result[i].nttReplyCn  +  "</span>";
-					      html +=  "   </p>";
-						  html +=  "   <input type = 'text'   class='ml'   id='nttReplyCn_Editor" + result[i].nttReplySn  + "'  style='display: none;' value='" + result[i].nttReplyCn  + "'/>"; 
-						  html +=  "   <input type = 'hidden' class='ml'   value='" +  result[i].nttReplyCn  + "'/>" ;
-						  // 버튼
-						  html += '    <span class="badge badge-dark" style="cursor:pointer"                   id="open' +  result[i].nttReplySn + '"><a onclick="fnReReplyArea('    +  result[i].nttReplySn  + ',\'open\');"          >답글(' +  result[i].nttReplyCnt + ')</a></span>';
-						  html += '    <span class="badge badge-dark" style="cursor:pointer;  display: none;"  id="close'+  result[i].nttReplySn + '"><a onclick="fnReReplyArea(\''  + result[i].nttReplySn + '\',\'close\');"         >접기</a></span>';
-						  html += '    <span class="badge badge-dark" style="cursor:pointer"                   id="mod'  +  result[i].nttReplySn + '"><a onclick="fnReReplyModifyOpen(\'' +  result[i].nttReplySn + '\',\'mod\');"     >수정</a></span>';
-						  html += '    <span class="badge badge-dark" style="cursor:pointer;  display: none;"  id="save' +  result[i].nttReplySn + '"><a onclick="fnReReplyModify(\''     + result[i].nttReplySn   + '\',\'R\',\'0\');">저장</a></span>';
-						  html += '    <span class="badge badge-dark" style="cursor:pointer"                   id="del'  +  result[i].nttReplySn + '"><a onclick="fnReReplyDelete(\''     + result[i].nttReplySn + '\',\'R\',\'0\');"  >삭제</a></span>';
-						  html += "</div>";
-						} else {
-						  html += "<p class='card-text''><span>댓글이 작성자에 의해 삭제되었습니다.</span> </p>";
-						}
-	   	     html += "</div>";
-	   	     html += "<div style='display: none;' id='answer" + result[i].nttReplySn +"'></div>";
-	     }
-	     html += "</div>";   
-	   	    
-        $("#replyDiv").html(html); // 댓글 목록 리프레쉬
-	   }
-     })
-}
 
-//답글 목록 조회
-function fnAnswerReplyList( nttReplySn ) {
-      $.ajax( {
-      url: "/reply/answerReplyList",
-      type: "GET",
-      dataType: "json",
-      data: { nttReplySn:  nttReplySn},
-      contentType: "application/json",
-      success: function ( result ) {
-	
-	  $("#answer"+ nttReplySn).show(); // 답글구역 보이기
-	  
-	   var html  = "";  // 답글 작성 및 목록 구역 
-		   html  += ' <div class="card mb-1" >';
-		   html  += '   <div class="card-header bg-light"><i class="fa fa-comment fa"></i> 답글 작성 </div>';
-		   html  += '      <div class="card-body">';          
-		   html  += '        <input type="hidden" name="nttSn" id="nttSn"  value="' +  nttReplySn + '" />';   	    
-		   html  += '           <ul class="list-group list-group-flush">';	          
-		   html  += '              <li class="list-group-item"> ';
-		   html  += '                <textarea class="form-control"    id="AR' + nttReplySn  +  '" rows="3" name="nttReplyCn"></textarea> ';	    	     	 		  
-		   html  += '                <button type="button" class="btn btn-dark mt-3" onclick="fnReplyInsert('+  nttReplySn + ');" >등록</button> ' ;  	 		    
-		   html  += '  	           </li>'; 			  
-		   html  += '  	         </ul>'; 	  	 			  
-		   html  += '      </div>';
-		   html  += '   </div>'; 	 	 		   
-		   html  += '</div>'; 
-		   html  += '<div class="card mt-2">';   	 		   
-		   html  += '   <div class="card-header bg-light"> <i class="fa fa-comment fa"></i> 답글 목록</div>';   	  	         
-		   html  += '       <div id="answer' + nttReplySn + '"></div> ';                
-		   html  += '       <div id="answerList' + nttReplySn + '" class="card-body"></div> ';                  
-		   html  += '</div> ';  
-	
-	  	 $("#answer" + nttReplySn).html(html); // 답글구역 셋팅
+    //댓글,답글 수정 : gubun -R 댓글 , A- 답글
+    function fnReReplyModify( nttReplySn, gubun, parntsReplySn ) {
 
-	   var html2 = "";  // 답글 목록 
-	  for ( i = 0 ; i < result.length ; i++ ) {
-		
-		   html2 += "<div class='card-header p-2'>";
-		   html2 += "   <table>";
-		   html2 += "        <tbody>";
-		   html2 += "             <tr class='align-middle'>";
-		   html2 += "                  <td rowspan='2' class='pr-2'><i class='fa fa-user-o fa-2x'></i></td>";
-		   html2 += "                  <td class='ml' >작성자 : "+  result[i].registerId  + "&nbsp;&nbsp;&nbsp;&nbsp;작성일 : "  +  result[i].updtDt + "</td>";
-		   html2 += "             </tr>";
-		   html2 += "         </tbody>";
-		   html2 += "   </table>";
-		   html2 += "</div>";
-		   html2 += "<div class='card-body'>";
-		 
-		 if( result[i].delYn == 'N') {
-			  html2 +=  "<p class='card-text'>";
-			  html2 +=  "    <span id='nttReplyCn_Read" + result[i].nttReplySn  + "'>" + result[i].nttReplyCn  +  "</span>";
-              html2 +=  "</p>";
-		      html2 +=  "<input type = 'text'   class='ml'   id='nttReplyCn_Editor" + result[i].nttReplySn  + "'  style='display: none;' value='" + result[i].nttReplyCn  + "'/>"; 
-		      html2 +=  "<input type = 'hidden' class='ml'   value='" +  result[i].nttReplyCn  + "'/>" ;
-		      // 버튼                                                                                                                             
-		      html2 += '<span class="badge badge-dark" style="cursor:pointer"  id="mod' + result[i].nttReplySn +	'">              <a onclick="fnReReplyModifyOpen(\'' +  result[i].nttReplySn + '\',\'mod\');" >수정</a></span>';
-		      html2 += '<span class="badge badge-dark" style="cursor:pointer; display: none;" id="save' + result[i].nttReplySn  + '"><a onclick="fnReReplyModify(\'' + result[i].nttReplySn   + '\',\'A\',\'' +  result[i].parntsReplySn  +  '\');">저장</a></span>';
-		      html2 += '<span class="badge badge-dark" style="cursor:pointer"  id="del' + result[i].nttReplySn +  '">                <a onclick="fnReReplyDelete(\''  + result[i].nttReplySn  + '\',\'A\',\'' +  result[i].parntsReplySn  +  '\');">삭제</a></span>';
-		 } else {
-			  html2 += "<p class='card-text''><span>답글이 작성자에 의해 삭제되었습니다.</span></p>";
-		 }
-		    html2 += "</div>";
-	     }
+        var nttReplyCn = $( "#nttReplyCn_Editor" + nttReplySn ).val();
+        var nttSn = $( "#nttSn" ).val();
+        var html = "";
 
-	  if( result.length == 0 ) { // 답글이 없을 경우
-		   html2 += "   <p class='card-text'>등록된 답글이 없습니다. </p>  ";  
-	   }
-		 $("#answerList" + nttReplySn).html(html2); // 답글목록 셋팅
-      }}
-     );
-}
+        $.ajax( {
+                url: "/reply/nttReplyUpdate",
+                beforeSend: function ( xhr ) {
+                    if ( header != null && token != null ) {
+                        xhr.setRequestHeader( header, token );
+                    }
+                },
+                type: "post",
+                data: { nttReplySn: nttReplySn, nttReplyCn: nttReplyCn },
+                success: function ( result ) {
+
+                    $( "#nttReplyCn_Editor" + nttReplySn ).hide();
+                    $( "#nttReplyCn_Read" + nttReplySn ).show();
+                    $( "#save" + nttReplySn ).hide();
+                    $( "#mod" + nttReplySn ).show();
+
+                    if ( result == "success" ) {
+                        if ( gubun == "R" ) {
+                            alert( "댓글이 수정되었습니다." );
+                            fnReplyList( nttSn );
+                        } else {
+                            alert( "답글이 수정되었습니다." );
+                            fnAnswerReplyList( parntsReplySn );
+                        }
+                    }
+                }
+            }
+        );
+
+    }
+
+    //댓글, 답글 삭제
+    function fnReReplyDelete( nttReplySn, gubun, parntsReplySn ) {
+        var nttSn = $( "#nttSn" ).val();
+
+        $.ajax( {
+                url: "/reply/nttReplyDelete",
+                beforeSend: function ( xhr ) {
+
+                    if ( header != null && token != null ) {
+                        xhr.setRequestHeader( header, token );
+                    }
+
+                },
+                type: "post",
+                data: { nttReplySn: nttReplySn },
+                success: function ( result ) {
+
+                    if ( gubun == "R" ) {
+                        alert( "댓글이 정삭적으로 삭제되었습니다." );
+                        fnReplyList( nttSn );  // 댓글 목록 조회
+                    } else {
+                        alert( "답글이 정삭적으로 삭제되었습니다." );
+                        fnAnswerReplyList( parntsReplySn );   // 답글 목록 조회
+                    }
+
+                }
+            }
+        );
+
+    }
+
+    // 답글  구역 조회
+    function fnReReplyArea( nttReplySn, type ) {
+
+        if ( type == 'open' ) {
+            $( "#open" + nttReplySn ).hide();   // 답글 버튼 숨길
+            $( "#close" + nttReplySn ).show();  // 접기 버튼 표시
+
+            //답글 목록 조회
+            fnAnswerReplyList( nttReplySn );
+
+        } else {
+            $( "#open" + nttReplySn ).show();   // 답글 버튼 표시
+            $( "#close" + nttReplySn ).hide();  // 접기 버튼 숨김
+            $( "#answer" + nttReplySn ).hide(); // 답글 구역 숨김
+        }
+
+    }
+
+    // 댓글목록 조회
+    function fnReplyList( nttSn ) {
+
+        $.ajax( {
+            url: "/reply/nttReplyList",
+            type: "GET",
+            dataType: "json",
+            data: { nttSn: nttSn },
+            contentType: "application/json",
+            success: function ( result ) {
+                var html = "";
+
+                $( "#replyAddList" ).remove(); // 댓글 목록 지우기
+
+                html += "<div id='replyAddList'>";
+                for ( i = 0; i < result.length; i++ ) {
+                    html += "<div class='card-header p-2'>";
+                    html += "   <table>";
+                    html += "        <tbody>";
+                    html += "             <tr class='align-middle'>";
+                    html += "                 <td rowspan='2' class='pr-2'><i class='fa fa-user-o fa-2x'></i></td>";
+                    html += "                  <td class='ml' >작성자 : " + result[i].registerId + "&nbsp;&nbsp;&nbsp;&nbsp;작성일 : " + result[i].updtDt + "</td>";
+                    html += "             </tr>";
+                    html += "         </tbody>";
+                    html += "   </table>";
+                    html += "</div>";
+                    html += "<div class='card-body'>";
+                    if ( result[i].delYn == 'N' ) {
+                        html += "<div>";
+                        html += "   <p class='card-text'>";
+                        html += "   <span id='nttReplyCn_Read" + result[i].nttReplySn + "'>" + result[i].nttReplyCn + "</span>";
+                        html += "   </p>";
+                        html += "   <input type = 'text'   class='ml'   id='nttReplyCn_Editor" + result[i].nttReplySn + "'  style='display: none;' value='" + result[i].nttReplyCn + "'/>";
+                        html += "   <input type = 'hidden' class='ml'   value='" + result[i].nttReplyCn + "'/>";
+                        // 버튼
+                        html += '    <span class="badge badge-dark" style="cursor:pointer"                   id="open' + result[i].nttReplySn + '"><a onclick="fnReReplyArea(' + result[i].nttReplySn + ',\'open\');"          >답글(' + result[i].nttReplyCnt + ')</a></span>';
+                        html += '    <span class="badge badge-dark" style="cursor:pointer;  display: none;"  id="close' + result[i].nttReplySn + '"><a onclick="fnReReplyArea(\'' + result[i].nttReplySn + '\',\'close\');"         >접기</a></span>';
+                        html += '    <span class="badge badge-dark" style="cursor:pointer"                   id="mod' + result[i].nttReplySn + '"><a onclick="fnReReplyModifyOpen(\'' + result[i].nttReplySn + '\',\'mod\');"     >수정</a></span>';
+                        html += '    <span class="badge badge-dark" style="cursor:pointer;  display: none;"  id="save' + result[i].nttReplySn + '"><a onclick="fnReReplyModify(\'' + result[i].nttReplySn + '\',\'R\',\'0\');">저장</a></span>';
+                        html += '    <span class="badge badge-dark" style="cursor:pointer"                   id="del' + result[i].nttReplySn + '"><a onclick="fnReReplyDelete(\'' + result[i].nttReplySn + '\',\'R\',\'0\');"  >삭제</a></span>';
+                        html += "</div>";
+                    } else {
+                        html += "<p class='card-text''><span>댓글이 작성자에 의해 삭제되었습니다.</span> </p>";
+                    }
+                    html += "</div>";
+                    html += "<div style='display: none;' id='answer" + result[i].nttReplySn + "'></div>";
+                }
+                html += "</div>";
+
+                $( "#replyDiv" ).html( html ); // 댓글 목록 리프레쉬
+            }
+        } )
+    }
+
+    //답글 목록 조회
+    function fnAnswerReplyList( nttReplySn ) {
+        $.ajax( {
+                url: "/reply/answerReplyList",
+                type: "GET",
+                dataType: "json",
+                data: { nttReplySn: nttReplySn },
+                contentType: "application/json",
+                success: function ( result ) {
+
+                    $( "#answer" + nttReplySn ).show(); // 답글구역 보이기
+
+                    var html = "";  // 답글 작성 및 목록 구역
+                    html += ' <div class="card mb-1" >';
+                    html += '   <div class="card-header bg-light"><i class="fa fa-comment fa"></i> 답글 작성 </div>';
+                    html += '      <div class="card-body">';
+                    html += '        <input type="hidden" name="nttSn" id="nttSn"  value="' + nttReplySn + '" />';
+                    html += '           <ul class="list-group list-group-flush">';
+                    html += '              <li class="list-group-item"> ';
+                    html += '                <textarea class="form-control"    id="AR' + nttReplySn + '" rows="3" name="nttReplyCn"></textarea> ';
+                    html += '                <button type="button" class="btn btn-dark mt-3" onclick="fnReplyInsert(' + nttReplySn + ');" >등록</button> ';
+                    html += '  	           </li>';
+                    html += '  	         </ul>';
+                    html += '      </div>';
+                    html += '   </div>';
+                    html += '</div>';
+                    html += '<div class="card mt-2">';
+                    html += '   <div class="card-header bg-light"> <i class="fa fa-comment fa"></i> 답글 목록</div>';
+                    html += '       <div id="answer' + nttReplySn + '"></div> ';
+                    html += '       <div id="answerList' + nttReplySn + '" class="card-body"></div> ';
+                    html += '</div> ';
+
+                    $( "#answer" + nttReplySn ).html( html ); // 답글구역 셋팅
+
+                    var html2 = "";  // 답글 목록
+                    for ( i = 0; i < result.length; i++ ) {
+
+                        html2 += "<div class='card-header p-2'>";
+                        html2 += "   <table>";
+                        html2 += "        <tbody>";
+                        html2 += "             <tr class='align-middle'>";
+                        html2 += "                  <td rowspan='2' class='pr-2'><i class='fa fa-user-o fa-2x'></i></td>";
+                        html2 += "                  <td class='ml' >작성자 : " + result[i].registerId + "&nbsp;&nbsp;&nbsp;&nbsp;작성일 : " + result[i].updtDt + "</td>";
+                        html2 += "             </tr>";
+                        html2 += "         </tbody>";
+                        html2 += "   </table>";
+                        html2 += "</div>";
+                        html2 += "<div class='card-body'>";
+
+                        if ( result[i].delYn == 'N' ) {
+                            html2 += "<p class='card-text'>";
+                            html2 += "    <span id='nttReplyCn_Read" + result[i].nttReplySn + "'>" + result[i].nttReplyCn + "</span>";
+                            html2 += "</p>";
+                            html2 += "<input type = 'text'   class='ml'   id='nttReplyCn_Editor" + result[i].nttReplySn + "'  style='display: none;' value='" + result[i].nttReplyCn + "'/>";
+                            html2 += "<input type = 'hidden' class='ml'   value='" + result[i].nttReplyCn + "'/>";
+                            // 버튼
+                            html2 += '<span class="badge badge-dark" style="cursor:pointer"  id="mod' + result[i].nttReplySn + '">              <a onclick="fnReReplyModifyOpen(\'' + result[i].nttReplySn + '\',\'mod\');" >수정</a></span>';
+                            html2 += '<span class="badge badge-dark" style="cursor:pointer; display: none;" id="save' + result[i].nttReplySn + '"><a onclick="fnReReplyModify(\'' + result[i].nttReplySn + '\',\'A\',\'' + result[i].parntsReplySn + '\');">저장</a></span>';
+                            html2 += '<span class="badge badge-dark" style="cursor:pointer"  id="del' + result[i].nttReplySn + '">                <a onclick="fnReReplyDelete(\'' + result[i].nttReplySn + '\',\'A\',\'' + result[i].parntsReplySn + '\');">삭제</a></span>';
+                        } else {
+                            html2 += "<p class='card-text''><span>답글이 작성자에 의해 삭제되었습니다.</span></p>";
+                        }
+                        html2 += "</div>";
+                    }
+
+                    if ( result.length == 0 ) { // 답글이 없을 경우
+                        html2 += "   <p class='card-text'>등록된 답글이 없습니다. </p>  ";
+                    }
+                    $( "#answerList" + nttReplySn ).html( html2 ); // 답글목록 셋팅
+                }
+            }
+        );
+    }
 
 </script>
 
@@ -298,18 +301,20 @@ function fnAnswerReplyList( nttReplySn ) {
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="updateForm" name="updateForm" method="post" th:action="@{ {basicPath}/mcd/update ( basicPath = ${basicPath} ) }"
-                          th:object="${nttSaveReqDto}"  enctype="multipart/form-data">
-                        <input type="hidden" name="bbsSn"  th:value="${targetDto.bbsSn}"/>
-                        <input type="hidden" name="nttSn"  th:value="${targetDto.nttSn}" />
-                        <input type="hidden" name="nttRdcnt"  th:value="${targetDto.nttRdcnt}" />
+                    <form id="updateForm" name="updateForm" method="post"
+                          th:action="@{ {basicPath}/mcd/update ( basicPath = ${basicPath} ) }"
+                          th:object="${nttSaveReqDto}" enctype="multipart/form-data">
+                        <input type="hidden" name="bbsSn" th:value="${targetDto.bbsSn}"/>
+                        <input type="hidden" name="nttSn" th:value="${targetDto.nttSn}"/>
+                        <input type="hidden" name="nttRdcnt" th:value="${targetDto.nttRdcnt}"/>
                         <!-- TODO 프로필 이미지 추가 작업 -->
-      
+
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">제목<span class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">제목<span
+                                    class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="input" id="nttNm" name="nttNm"
-                                     th:value="${targetDto.nttNm}"
+                                       th:value="${targetDto.nttNm}"
                                        required/>
                                 <span style="position: absolute;right:15px;top:7px;" onclick="hideshow()">
 									<i id="slash" class="fa fa-eye-slash" style="display:none;"></i>
@@ -317,104 +322,125 @@ function fnAnswerReplyList( nttReplySn ) {
                                 </span>
                             </div>
                         </div>
-                         <!--포토형일 경우 표시  -->
-                        <div  th:if = "${bbsSeCd == '01'}">
-	                      <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">썸네일 이미지<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <div class="filebox preview-image">
-                                    <div class="upload-display">
-                                         <div class="upload-thumb-wrap">
-                                            <img alt="썸네일 이미지" class="upload-thumb noimg" 		th:if = 	"${targetDto.atchFileSn == null}" >
-<!--                                             <img alt="프로필 이미지" class="upload-thumb" 				th:unless = "${targetDto.atchFileSn == null}" th:src="@{/getImage/} + ${targetDto.atchFileSn}"  > -->
-                                            <img alt="썸네일 이미지" class="upload-thumb" 				th:unless = "${targetDto.atchFileSn == null}" th:src="@{/getImage(atchFileSn=${targetDto.atchFileSn})}"  >
+                        <!--포토형일 경우 표시  -->
+                        <div th:if="${bbsSeCd == '01'}">
+                            <div class="field item form-group">
+                                <label class="col-form-label col-md-2 col-sm-3 label-align">썸네일 이미지<span
+                                        class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="filebox preview-image">
+                                        <div class="upload-display">
+                                            <div class="upload-thumb-wrap">
+                                                <img alt="썸네일 이미지" class="upload-thumb noimg"
+                                                     th:if="${targetDto.atchFileSn == null}">
+                                                <!--                                             <img alt="프로필 이미지" class="upload-thumb" 				th:unless = "${targetDto.atchFileSn == null}" th:src="@{/getImage/} + ${targetDto.atchFileSn}"  > -->
+                                                <img alt="썸네일 이미지" class="upload-thumb"
+                                                     th:unless="${targetDto.atchFileSn == null}"
+                                                     th:src="@{/getImage(atchFileSn=${targetDto.atchFileSn})}">
+                                            </div>
                                         </div>
+                                        <div class="upload-file-name">
+                                            <input class="input-file-name" value="" disabled="disabled">
+                                        </div>
+                                        <div class="upload-btn mt_10p">
+                                            <label class="btn btn-purple">업로드
+                                                <input type="file" name="file" class="upload-hidden"
+                                                       accept=".gif, .jpg, .png" style="display: none;"
+                                                       onchange="fileChange(this)">
+                                            </label>
+                                            <button type="button" class="btn btn-purple" id="removeImageBtn"
+                                                    onclick="removeImage(this);"
+                                                    th:if="${targetDto.atchFileSn != null}">이미지제거
+                                            </button>
+                                        </div>
+                                        <input type="hidden" name="atchFileSn" th:value="${targetDto.atchFileSn}"/>
+                                        <input type="hidden" name="atchFileSnOri" th:value="${targetDto.atchFileSn}"/>
                                     </div>
-                                    <div class="upload-file-name">
-                                        <input class="input-file-name" value="" disabled="disabled">
-                                    </div>
-                                    <div class="upload-btn mt_10p">
-                                        <label class="btn btn-purple">업로드
-                                            <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
-                                        </label>
-                                        <button type="button" class="btn btn-purple" id="removeImageBtn" onclick="removeImage(this);" th:if = "${targetDto.atchFileSn != null}">이미지제거</button>
-                                    </div>
-                                    <input type="hidden" name="atchFileSn" 	    th:value="${targetDto.atchFileSn}" />
-                                    <input type="hidden" name="atchFileSnOri" 	th:value="${targetDto.atchFileSn}" />
                                 </div>
                             </div>
-                           </div>   
                         </div>
-                        <div  th:if = "${bbsSeCd == '02'}">
-                             <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
+                        <div th:if="${bbsSeCd == '02'}">
+                            <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png"
+                                   style="display: none;" onchange="fileChange(this)">
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">내용<span class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">내용<span
+                                    class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                  <textarea id="summernote" name="nttCn"  class="form-control"   th:value="${targetDto.nttCn}"   th:text="${targetDto.nttCn}"></textarea>
+                                <textarea id="summernote" name="nttCn" class="form-control"
+                                          th:value="${targetDto.nttCn}" th:text="${targetDto.nttCn}"></textarea>
                             </div>
                         </div>
-                        
+
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">공지설정<span class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">공지설정<span
+                                    class="required">*</span></label>
                             <div class="col-md-6 col-sm-6 ">
                                 <div class="btn-group radiobox">
-                                    <input type="radio" id="noticeSetYn1" name="noticeSetYn" value="Y"   th:checked="${targetDto.noticeSetYn eq 'Y'}" class="join-btn" required>
+                                    <input type="radio" id="noticeSetYn1" name="noticeSetYn" value="Y"
+                                           th:checked="${targetDto.noticeSetYn eq 'Y'}" class="join-btn" required>
                                     <label for="noticeSetYn1" class="btn btn-outline-purple w100p"
                                            data-toggle-class="btn-primary"
                                            data-toggle-passive-class="btn-default">설정</label>
-                                    <input type="radio" id="noticeSetYn2" name="noticeSetYn" value="N"  th:checked="${targetDto.noticeSetYn eq 'N'}"  class="join-btn" required>
+                                    <input type="radio" id="noticeSetYn2" name="noticeSetYn" value="N"
+                                           th:checked="${targetDto.noticeSetYn eq 'N'}" class="join-btn" required>
                                     <label for="noticeSetYn2" class="btn btn-outline-purple w100p"
                                            data-toggle-class="btn-primary"
                                            data-toggle-passive-class="btn-default">미설정</label>
                                 </div>
                             </div>
-                         </div>
-                         
-                          <div class="field item form-group">
-                             <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일 목록</label>
-                               <div id="attachFileDiv">
-                                  <div id="attachFileList">
-	                               <div class="upload-thumb-wrap" th:if = "${targetDto.cnAtchFileSn != null}" >
-									    <input type="hidden" id="cnAtchFileSn" name="cnAtchFileSn"    th:value="${targetDto.cnAtchFileSn}">
-									    <div  th:if = "${!atchFileList.isEmpty()}" th:each=" data : ${atchFileList} ">
-									         <span th:text="${data.orignlFileNm}"></span>
-									         <span class="badge badge-dark" style="cursor:pointer" ><a th:href="@{/fileDownload(atchFileSn=${data.AtchFileDetailPk.atchFileSn}, fileSeq=${data.AtchFileDetailPk.fileSeq})}">다운로드</a></span>
-									         <span class="badge badge-dark" style="cursor:pointer" ><a th:onclick="javascript:fnfileDelete([[${data.AtchFileDetailPk.atchFileSn}]],[[${data.AtchFileDetailPk.fileSeq}]]);">삭제</a></span>
-						                </div>
-	                               </div>
-	                                <div lass="upload-thumb-wrap"  th:if = "${targetDto.cnAtchFileSn == null}" >
-									    <p class="card-text">
-							               <span>첨부파일이 없습니다.</span> 
-						                 </p>
-						           </div>
-						           </div>
-					            </div>
-                          </div>
+                        </div>
+
                         <div class="field item form-group">
-							 <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일 추가</label>
-                             <div class="col-md-6 col-sm-6">
- 								  <table  id= "file_table" >
-									   <td id="fileNoData">
-									   선택된 파일이 없습니다.
-								        </td>	
-								 </table>
-								 <input type="file" id="multi-add" class="btn-add"  name="multiFile" multiple style="display: none;">
-					             <button type="button" class="btn-add" id="file_add">파일추가</button>
-								
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일 목록</label>
+                            <div id="attachFileDiv">
+                                <div id="attachFileList">
+                                    <div class="upload-thumb-wrap" th:if="${targetDto.cnAtchFileSn != null}">
+                                        <input type="hidden" id="cnAtchFileSn" name="cnAtchFileSn"
+                                               th:value="${targetDto.cnAtchFileSn}">
+                                        <div th:if="${!atchFileList.isEmpty()}" th:each=" data : ${atchFileList} ">
+                                            <span th:text="${data.orignlFileNm}"></span>
+                                            <span class="badge badge-dark" style="cursor:pointer"><a
+                                                    th:href="@{/fileDownload(atchFileSn=${data.AtchFileDetailPk.atchFileSn}, fileSeq=${data.AtchFileDetailPk.fileSeq})}">다운로드</a></span>
+                                            <span class="badge badge-dark" style="cursor:pointer"><a
+                                                    th:onclick="javascript:fnfileDelete([[${data.AtchFileDetailPk.atchFileSn}]],[[${data.AtchFileDetailPk.fileSeq}]]);">삭제</a></span>
+                                        </div>
+                                    </div>
+                                    <div lass="upload-thumb-wrap" th:if="${targetDto.cnAtchFileSn == null}">
+                                        <p class="card-text">
+                                            <span>첨부파일이 없습니다.</span>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
-					    </div>   
-   
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일 추가</label>
+                            <div class="col-md-6 col-sm-6">
+                                <table id="file_table">
+                                    <td id="fileNoData">
+                                        선택된 파일이 없습니다.
+                                    </td>
+                                </table>
+                                <input type="file" id="multi-add" class="btn-add" name="multiFile" multiple
+                                       style="display: none;">
+                                <button type="button" class="btn-add" id="file_add">파일추가</button>
+
+                            </div>
+                        </div>
+
                         <div class="ln_solid"></div>
                         <!-- 저장버튼 -->
-                       <div class="col-md-12">
+                        <div class="col-md-12">
                             <!-- bottom left area -->
                             <div class="col-md-2 col-sm-3 text-left">
-								<a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath}  , bbsSn =  ${targetDto.bbsSn} ) }" class="btn btn-white w120p">목록</a>
+                                <a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath}  , bbsSn =  ${targetDto.bbsSn} ) }"
+                                   class="btn btn-white w120p">목록</a>
                             </div>
                             <!-- bottom center area -->
                             <div class="col-md-8 col-sm-6 text-center">
-                                <a th:href="'javascript:deleteItem(\'' + ${targetDto.nttSn} + '\');'"   class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>삭제</a>
+                                <a th:href="'javascript:deleteItem(\'' + ${targetDto.nttSn} + '\');'"
+                                   class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>삭제</a>
                                 <button type="submit" class="btn btn-purple w120p">저장</button>
                             </div>
                             <!-- bottom right area -->
@@ -422,87 +448,102 @@ function fnAnswerReplyList( nttReplySn ) {
                             </div>
                         </div>
                     </form>
-                     <form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/mcd/delete ( basicPath = ${basicPath} ) }">
-            		     <input type="hidden" name="nttSn" id="delPk" /> <!-- delPk 문자 수정 금지 -->
-            	    </form>
+                    <form id="deleteForm" name="deleteForm" method="post"
+                          th:action="@{ {basicPath}/mcd/delete ( basicPath = ${basicPath} ) }">
+                        <input type="hidden" name="nttSn" id="delPk"/> <!-- delPk 문자 수정 금지 -->
+                    </form>
                 </div>
             </div>
         </div>
     </div>
     <!-- E: 메인 등록 영역 -->
 
-  <!--댓글 설정했을 경우 -->
-  <div  th:if = "${replySetYn == 'Y'}">    
-	  <!-- S: 댓글등록 -->
-	  <div class="card mb-2" >
-	  	 <div class="card-header bg-light">
-	  	         <i class="fa fa-comment fa"></i> 댓글 작성
-	  	 </div>
-	  	 <div class="card-body">
-	  	    <input type="hidden" name="nttSn" id="nttSn"  th:value="${nttSn}" />
-	  	    <ul class="list-group list-group-flush">
-	  	 	   <li class="list-group-item">
-	  	 		  <textarea class="form-control" id="nttReplyCn" rows="3" name="nttReplyCn"></textarea>
-	  	 		  <button type="button" class="btn btn-dark mt-3" onclick="fnReplyInsert(0);" >등록</button>
-	  	 		</li>
-	  	     </ul>
-	  	 </div>
-	  </div>
-	  <!-- E: 댓글등록 -->
-	 
-	  <!-- S: 댓글목록 -->
-	  <div class="card mt-2">
-		 <div class="card-header bg-light">
-	  	      <i class="fa fa-comment fa"></i> 댓글 목록
-	  	 </div>
-	  	 <!-- S: 댓글 구역 -->
-	  	 <div id="replyDiv">
-		  	 <div id="replyAddList">
-			     <div  th:if = "${!replyList.isEmpty()}" th:each=" data : ${replyList} ">
-				  	 <div class="card-header p-2" >
-						<table>
-							<tbody>
-								<tr class="align-middle">
-								  <td rowspan="2" class="pr-2"><i class="fa fa-user-o fa-2x"></i></td>
-								  <td class="ml" > 작성자 : <span   th:id="'registerId' + ${data.nttReplySn}" th:text="${data.registerId}"></span> &nbsp;&nbsp;&nbsp;&nbsp;작성일 : <span  th:text="${data.updtDt}"></span> </td>
-								</tr>
-							</tbody>
-					   </table>
-				    </div>
-				    <div class="card-body" >
-					   <div  th:if = "${data.delYn == 'N'}" >
-						  <p class="card-text" >
-						    <span th:text="${data.nttReplyCn}"  th:id="'nttReplyCn_Read' + ${data.nttReplySn}" ></span> 
-					      </p>
-					      <input type = "text"   class="ml" th:value="${data.nttReplyCn}"   th:id="'nttReplyCn_Editor' + ${data.nttReplySn}" style="display: none;"/>
-					      <input type = "hidden" class="ml" th:value="${ data.nttReplySn}"></input> 
-						  <span class="badge badge-dark" style="cursor:pointer"                  th:id="'open'  + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyArea( [[${data.nttReplySn}]] ,'open');">   답글([[${data.nttReplyCnt}]])</a></span>
-						  <span class="badge badge-dark" style="cursor:pointer;  display: none;" th:id="'close' + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyArea( [[${data.nttReplySn}]] ,'close');">  접기</a></span>
-						  <span class="badge badge-dark" style="cursor:pointer"                  th:id="'mod'   + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyModifyOpen([[${data.nttReplySn}]],'mod');">수정</a></span>
-						  <span class="badge badge-dark" style="cursor:pointer;  display: none;" th:id="'save'  + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyModify([[${data.nttReplySn}]],'R',0);">    저장</a></span>
-						  <span class="badge badge-dark" style="cursor:pointer;"                 th:id="'del'   + ${data.nttReplySn}"><a th:onclick="javascript:fnReReplyDelete([[${data.nttReplySn}]],'R',0);">    삭제</a></span>
-				       </div>
-				      <div  th:if = "${data.delYn == 'Y'}" >
-						  <p class="card-text">
-						   <span>댓글이 작성자에 의해 삭제되었습니다.</span> 
-					     </p>
-				      </div>
-				     <!-- 답글 구역 S-->
-				     <div style="display: none;" th:id="'answer' + ${data.nttReplySn}">
-					 </div>
-					 <!-- 답글 구역 E-->	 
-			       </div>
-			     </div>
-		         <div class="card-body"  th:unless = "${!replyList.isEmpty()}" id="replyNone">
-		  	       <p class="card-text">등록된 댓글이 없습니다. </p>     
-		  	      </div>
-		  	 
-		  	 </div>
-	  	 
-	  	 </div>
-	  	 
-	  	 
-     </div>
+    <!--댓글 설정했을 경우 -->
+    <div th:if="${replySetYn == 'Y'}">
+        <!-- S: 댓글등록 -->
+        <div class="card mb-2">
+            <div class="card-header bg-light">
+                <i class="fa fa-comment fa"></i> 댓글 작성
+            </div>
+            <div class="card-body">
+                <input type="hidden" name="nttSn" id="nttSn" th:value="${nttSn}"/>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <textarea class="form-control" id="nttReplyCn" rows="3" name="nttReplyCn"></textarea>
+                        <button type="button" class="btn btn-dark mt-3" onclick="fnReplyInsert(0);">등록</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- E: 댓글등록 -->
+
+        <!-- S: 댓글목록 -->
+        <div class="card mt-2">
+            <div class="card-header bg-light">
+                <i class="fa fa-comment fa"></i> 댓글 목록
+            </div>
+            <!-- S: 댓글 구역 -->
+            <div id="replyDiv">
+                <div id="replyAddList">
+                    <div th:if="${!replyList.isEmpty()}" th:each=" data : ${replyList} ">
+                        <div class="card-header p-2">
+                            <table>
+                                <tbody>
+                                <tr class="align-middle">
+                                    <td rowspan="2" class="pr-2"><i class="fa fa-user-o fa-2x"></i></td>
+                                    <td class="ml"> 작성자 : <span th:id="'registerId' + ${data.nttReplySn}"
+                                                                th:text="${data.registerId}"></span> &nbsp;&nbsp;&nbsp;&nbsp;작성일
+                                                    : <span th:text="${data.updtDt}"></span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${data.delYn == 'N'}">
+                                <p class="card-text">
+                                    <span th:text="${data.nttReplyCn}"
+                                          th:id="'nttReplyCn_Read' + ${data.nttReplySn}"></span>
+                                </p>
+                                <input type="text" class="ml" th:value="${data.nttReplyCn}"
+                                       th:id="'nttReplyCn_Editor' + ${data.nttReplySn}" style="display: none;"/>
+                                <input type="hidden" class="ml" th:value="${ data.nttReplySn}"></input>
+                                <span class="badge badge-dark" style="cursor:pointer"
+                                      th:id="'open'  + ${data.nttReplySn}"><a
+                                        th:onclick="javascript:fnReReplyArea( [[${data.nttReplySn}]] ,'open');">   답글([[${data.nttReplyCnt}]])</a></span>
+                                <span class="badge badge-dark" style="cursor:pointer;  display: none;"
+                                      th:id="'close' + ${data.nttReplySn}"><a
+                                        th:onclick="javascript:fnReReplyArea( [[${data.nttReplySn}]] ,'close');">  접기</a></span>
+                                <span class="badge badge-dark" style="cursor:pointer"
+                                      th:id="'mod'   + ${data.nttReplySn}"><a
+                                        th:onclick="javascript:fnReReplyModifyOpen([[${data.nttReplySn}]],'mod');">수정</a></span>
+                                <span class="badge badge-dark" style="cursor:pointer;  display: none;"
+                                      th:id="'save'  + ${data.nttReplySn}"><a
+                                        th:onclick="javascript:fnReReplyModify([[${data.nttReplySn}]],'R',0);">    저장</a></span>
+                                <span class="badge badge-dark" style="cursor:pointer;"
+                                      th:id="'del'   + ${data.nttReplySn}"><a
+                                        th:onclick="javascript:fnReReplyDelete([[${data.nttReplySn}]],'R',0);">    삭제</a></span>
+                            </div>
+                            <div th:if="${data.delYn == 'Y'}">
+                                <p class="card-text">
+                                    <span>댓글이 작성자에 의해 삭제되었습니다.</span>
+                                </p>
+                            </div>
+                            <!-- 답글 구역 S-->
+                            <div style="display: none;" th:id="'answer' + ${data.nttReplySn}">
+                            </div>
+                            <!-- 답글 구역 E-->
+                        </div>
+                    </div>
+                    <div class="card-body" th:unless="${!replyList.isEmpty()}" id="replyNone">
+                        <p class="card-text">등록된 댓글이 없습니다. </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
 </th:block>
 <!--</body>-->
 <!-- E : Javascript functions	-->

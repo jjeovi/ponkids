@@ -526,11 +526,8 @@
                                 <div class="col-md-8 col-sm-6 pt_5p">
                                     <div class="possibleRole">
                                         <th:block th:each="data : ${cateLv1List}">
-                                            <label>
-                                                <input th:id="'roleSnList'+${dataStat.count}" type="checkbox"
-                                                       name="roleSnList" th:value="${data.categorySn}"/>
+                                                <input th:id="'roleSnList'+${dataStat.count}" type="checkbox" name="roleSnList" th:value="${data.categorySn}"/>
                                                 <label th:for="'roleSnList'+${dataStat.count}"><span class="cbTitle">[[${data.categoryNm}]]</span></label>
-                                            </label>
                                         </th:block>
                                     </div>
                                     <small class="font-gray-dark">
@@ -704,12 +701,10 @@
                                 <div class="col-md-8 col-sm-6 pt_5p">
                                     <div class="possibleRole">
                                         <th:block th:each="data : ${cateLv1List}">
-                                            <label>
                                                 <input th:id="'roleSnList' + ${dataStat.count} + '_U'" type="checkbox"
                                                        name="roleSnList" th:value="${data.categorySn}"/>
                                                 <label th:for="'roleSnList' + ${dataStat.count} + '_U'"><span
                                                         class="cbTitle">[[${data.categoryNm}]]</span></label>
-                                            </label>
                                         </th:block>
                                     </div>
                                     <small class="font-gray-dark">

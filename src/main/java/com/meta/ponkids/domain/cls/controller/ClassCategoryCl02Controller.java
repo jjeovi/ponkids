@@ -299,7 +299,7 @@ public class ClassCategoryCl02Controller {
         	listDtos = classCategoryCl02Service.findAllByOrderByClSeq();
         } else if ( listDto.getParntsClSn() != null ) {
         	// 부모클래스 일련번호가 0 이 아닐 때 : 부모클래스일련번호로 검색 
-        	listDtos = classCategoryCl02Service.findByParntsClSnOrderByClSeq( listDto );
+        	listDtos = classCategoryCl02Service.findByParntsClSnOrderByClSeq( listDto.getParntsClSn() );
         }
         
         // list put

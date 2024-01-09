@@ -74,7 +74,7 @@
     }
 
     // 등록 유효성 검사
-    function insertValidCheck() {
+    function submitValidCheck() {
 
         // 표시기간 유효성 체크
         var classPdSetYn = $( "[name='classPdSetYn']:checked" ).val();
@@ -101,7 +101,7 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="insertForm" name="insertForm" method="post" th:action="@{ {basicPath}/mcd/insert ( basicPath = ${basicPath} ) }" enctype="multipart/form-data" th:onsubmit="return insertValidCheck();">
+                    <form id="insertForm" name="insertForm" method="post" th:action="@{ {basicPath}/{mcd}/insert ( basicPath = ${basicPath}, mcd = ${mcd} ) }" enctype="multipart/form-data" th:onsubmit="return submitValidCheck();">
                     	<div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">분류<span class="required">*</span></label>
                             <div class="col-md-2 col-sm-6">

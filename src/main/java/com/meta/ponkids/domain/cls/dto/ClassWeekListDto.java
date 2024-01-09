@@ -1,6 +1,8 @@
 package com.meta.ponkids.domain.cls.dto;
 
+import com.meta.ponkids.domain.cls.entity.ClassWeek;
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +24,7 @@ public class ClassWeekListDto {
     
     private String schCntn;        // 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!
     
+    @Builder
     @QueryProjection
     public ClassWeekListDto( Long classWeekSn, Long classSn, String classDayCd, String registerId, String regDt ) {
         this.classWeekSn = classWeekSn;
@@ -29,6 +32,14 @@ public class ClassWeekListDto {
         this.classDayCd = classDayCd;
         this.registerId = registerId;
         this.regDt = regDt;
+    }
+    
+    public ClassWeekListDto toDto( ClassWeek classWeek ) {
+        return ClassWeekListDto.builder()
+                .classWeekSn( classWeek.getClassWeekSn())
+                .classSn( classWeek.getClassSn() )
+                .classDayCd( classWeek.getClassDayCd() )
+                .build();
     }
     
 }
