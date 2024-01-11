@@ -172,7 +172,7 @@ public class MenuService {
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
-        targetDto.setUpdusrId( "admin@test.com" );
+        targetDto.setUpdusrId( SessionUtils.getClientId() );
         
         // target object 전환 ( dto to entity )
         menu = targetDto.toEntity();
@@ -200,7 +200,7 @@ public class MenuService {
                 MenuRoleSaveDto menuRole = new MenuRoleSaveDto();
                 
                 menuRole.setRegisterId( IpUtils.getClientIP( request ) );
-                menuRole.setRegisterIp( "admin@test.com" );
+                menuRole.setRegisterIp( SessionUtils.getClientId() );
                 
                 menuRole.setMenuSn( menuDto.getMenuSn() );
                 menuRole.setRoleSn( roleSn );
@@ -226,7 +226,7 @@ public class MenuService {
                 MenuRoleSaveDto menuRole = new MenuRoleSaveDto();
                 
                 menuRole.setRegisterId( IpUtils.getClientIP( request ) );
-                menuRole.setRegisterIp( "admin@test.com" );
+                menuRole.setRegisterIp( SessionUtils.getClientId() );
                 
                 menuRole.setMenuSn( menuDto.getMenuSn() );
                 menuRole.setRoleSn( roleSn );

@@ -56,7 +56,6 @@ public class ClassService {
         return classRepository.getList( listDto, pageable );
     }
     
-    
     public ClassModDto findById( Long pk ) {
         
         Class clas = classRepository.findById( pk ).orElse( null );
@@ -86,20 +85,21 @@ public class ClassService {
         
         // TODO target object 에 수정사항 set	
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
-//        if ( StringUtils.hasText( modDto.getUserNm() ) ) targetDto.setUserNm( modDto.getUserNm() );          	// 이름
-//        if ( StringUtils.hasText( modDto.getGender() ) ) targetDto.setGender( modDto.getGender() );          	// 성별
-//        if ( StringUtils.hasText( modDto.getBrdtDate() ) ) targetDto.setBrdtDate( modDto.getBrdtDate() );		// 생년월일
-//        if ( StringUtils.hasText( modDto.getTelNo() ) ) targetDto.setTelNo( modDto.getTelNo() );            	// 연락처
-//        if ( StringUtils.hasText( modDto.getResideArea() ) ) targetDto.setResideArea( modDto.getResideArea() );	// 거주지역
-//        if ( StringUtils.hasText( modDto.getRdnmAdr() ) ) targetDto.setRdnmAdr( modDto.getRdnmAdr() );        	// 주소
-//        if ( StringUtils.hasText( modDto.getZip() ) ) targetDto.setZip( modDto.getZip() );                		// 우편번호
-//        if ( StringUtils.hasText( modDto.getMngrYn() ) ) targetDto.setMngrYn( modDto.getMngrYn() );          	// 관리자여부
-
-//        targetDto.setAtchFileSn( modDto.getAtchFileSn() );          											// 첨부파일 (첨부파일은 Null이어도 변경)
+        if ( StringUtils.hasText( modDto.getCtgryCd() ) )       targetDto.setCtgryCd( modDto.getCtgryCd() ); 	                // 카테고리
+        if ( StringUtils.hasText( modDto.getCrseCd() ) )        targetDto.setCrseCd( modDto.getCrseCd() );                      // 커리큘럼
+        if ( StringUtils.hasText( modDto.getClassSj() ) )       targetDto.setClassSj( modDto.getClassSj() );                    // 클래스 제목
+        if ( StringUtils.hasText( modDto.getClassSumry() ) )    targetDto.setClassSumry( modDto.getClassSumry() );              // 클래스 요약
+        if ( StringUtils.hasText( modDto.getClassDc() ) )       targetDto.setClassDc( modDto.getClassDc() );                    // 클래스 설명
+        if ( modDto.getClassAmt() != null )                     targetDto.setClassAmt( modDto.getClassAmt() );                  // 금액
+        if ( modDto.getClassDscntBfeAmt() != null )             targetDto.setClassDscntBfeAmt( modDto.getClassDscntBfeAmt() );  // 할인된 금액
+        if ( StringUtils.hasText( modDto.getClassExpsrYn() ) )  targetDto.setClassExpsrYn( modDto.getClassExpsrYn() );          // 표시여부
+        if ( StringUtils.hasText( modDto.getClassPdSetYn() ) )  targetDto.setClassPdSetYn( modDto.getClassPdSetYn() );          // 표시기간설정여부
+        targetDto.setClassBeginDt( modDto.getClassBeginDt() );          // 표시시작일시
+        targetDto.setClassEndDt( modDto.getClassEndDt() );              // 표시종료일시
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
-        targetDto.setUpdusrId( "admin@test.com" );
+        targetDto.setUpdusrId( SessionUtils.getClientId() );
         
         // target object 전환 ( dto to entity )
         clas = targetDto.toEntity();
@@ -114,7 +114,6 @@ public class ClassService {
         
         // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
         classRepository.deleteById( pk );    // Entity 의 @SQLDelete 를 수행
-        
     }
     
 }

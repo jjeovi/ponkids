@@ -78,7 +78,7 @@ public class BannerService {
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
-        targetDto.setUpdusrId( "admin@test.com" );
+        targetDto.setUpdusrId( SessionUtils.getClientId() );
         
         // target object 전환 ( dto to entity )
         banner = targetDto.toEntity();

@@ -10,6 +10,7 @@ import com.meta.ponkids.domain.system.menu.service.MenuService;
 import com.meta.ponkids.domain.system.role.dto.RoleListDto;
 import com.meta.ponkids.domain.system.role.repository.RoleRepository;
 import com.meta.ponkids.global.util.ip.IpUtils;
+import com.meta.ponkids.global.util.session.SessionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -290,7 +291,7 @@ public class MenuController {
         // 메뉴 삭제 (ajax)
         
         // id, ip set
-        modDto.setUpdusrId( "admin@test.com" );
+        modDto.setUpdusrId( SessionUtils.getClientId() );
         modDto.setUpdusrIp( IpUtils.getClientIP( request ) );            // Ip set)
         
         // menu 삭제

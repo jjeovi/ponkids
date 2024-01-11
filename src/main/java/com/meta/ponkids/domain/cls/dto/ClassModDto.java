@@ -1,15 +1,13 @@
 package com.meta.ponkids.domain.cls.dto;
 
 import com.meta.ponkids.domain.cls.entity.Class;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.List;
+import lombok.*;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class ClassModDto {
+@EqualsAndHashCode( callSuper = false )
+public class ClassModDto extends ClassDto {
     
     private Long classSn;                   // 클래스일련번호
     
@@ -41,7 +39,7 @@ public class ClassModDto {
     
     private String classExpsrYn;            // 클래스표시여부
     
-    private List<ClassWeekSaveDto> classWeekSaveDtoList;    // 요일 리스트
+    private String[] classWeek;            // 요일
     
     private String updusrId;                // 수정자 ID
     

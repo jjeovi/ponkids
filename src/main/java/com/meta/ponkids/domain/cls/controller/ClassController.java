@@ -13,8 +13,6 @@ import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
 import com.meta.ponkids.domain.system.file.repository.AtchFileDetailRepository;
 import com.meta.ponkids.domain.system.file.service.AtchFileDetailService;
 import com.meta.ponkids.domain.system.file.service.AtchFileService;
-import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -146,6 +144,7 @@ public class ClassController {
             return "common/alert";
         }
         
+        //  클래스 요일 저장
         if ( saveDto.getClassWeek() != null ) {
             classWeekService.save( saveDto, request );
         }
@@ -264,8 +263,25 @@ public class ClassController {
         
         // E : 필요한 객체 setting
         
+        try {
+            // update 구현
+            classService.update( modDto, request );
+        } catch ( Exception e ) {
+            // 메시지 출력 및 url 이동 처리
+            model.addAttribute( "resultMsg", "수정 중 오류가 발생했습니다. " + e.getMessage() + "\n다시 시도해주세요." );
+            model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+            
+            return "common/alert";
+        }
+        
         // update 구현
         classService.update( modDto, request );
+        
+        //  클래스 요일 update
+        if ( modDto.getClassWeek() != null ) {
+            classWeekService.deleteAllByClassSn(modDto.getClassSn());
+            classWeekService.save( modDto, request );
+        }
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );

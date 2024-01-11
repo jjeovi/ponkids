@@ -1,9 +1,6 @@
 package com.meta.ponkids.domain.cls.service;
 
-import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
-import com.meta.ponkids.domain.cls.dto.ClassWeekListDto;
-import com.meta.ponkids.domain.cls.dto.ClassWeekModDto;
-import com.meta.ponkids.domain.cls.dto.ClassWeekSaveDto;
+import com.meta.ponkids.domain.cls.dto.*;
 import com.meta.ponkids.domain.cls.entity.ClassWeek;
 import com.meta.ponkids.domain.cls.repository.ClassWeekRepository;
 import com.meta.ponkids.global.util.ip.IpUtils;
@@ -26,7 +23,7 @@ public class ClassWeekService {
     private final ClassWeekRepository classWeekRepository;    // repository setting
     
     @Transactional
-    public void save( ClassSaveDto saveDto, HttpServletRequest request ) throws IOException {
+    public void save( ClassDto saveDto, HttpServletRequest request ) throws IOException {
         
         if ( saveDto.getClassWeek().length != 0 ) {
             List<ClassWeek> classWeekList = new ArrayList<>();
@@ -35,8 +32,10 @@ public class ClassWeekService {
                 classWeekSaveDto.setClassSn( saveDto.getClassSn() );
                 classWeekSaveDto.setClassDayCd( yoil );
                 
-                classWeekSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );                                        // 등록자 ip
-                classWeekSaveDto.setRegisterId( SessionUtils.getClientId() );                                            // 등록자 id
+                classWeekSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );                                       // 등록자 ip
+                classWeekSaveDto.setRegisterId( SessionUtils.getClientId() );                                           // 등록자 id
+                classWeekSaveDto.setUpdusrIp( IpUtils.getClientIP( request ) );                                         // 수정자 ip
+                classWeekSaveDto.setUpdusrId( SessionUtils.getClientId() );                                             // 수정자 id
                 
                 classWeekList.add( classWeekSaveDto.toEntity() );
                 
@@ -112,10 +111,10 @@ public class ClassWeekService {
     }
     
     @Transactional
-    public void deleteAllById( Long pk ) {
+    public void deleteAllByClassSn(Long pk ) {
         
-        // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
-        classWeekRepository.deleteById( pk );    // Entity 의 @SQLDelete 를 수행
+        classWeekRepository.deleteAllByClassSn(pk);
+        
     }
     
 }

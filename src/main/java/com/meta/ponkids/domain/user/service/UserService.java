@@ -142,7 +142,7 @@ public class UserService {
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
-        targetDto.setUpdusrId( "admin@test.com" );
+        targetDto.setUpdusrId( SessionUtils.getClientId() );
         
         // target object 전환 ( dto to entity )
         user = targetDto.toEntity();
@@ -173,7 +173,7 @@ public class UserService {
             
             // id,ip setting
             userRoleTargetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
-            userRoleTargetDto.setUpdusrId( "admin@test.com" );
+            userRoleTargetDto.setUpdusrId( SessionUtils.getClientId() );
             
             // target object 전환 ( dto to entity )
             userRole = userRoleTargetDto.toEntity();
