@@ -298,6 +298,9 @@
                             </div>
                             <!-- bottom right area -->
                             <div class="col-md-2 col-sm-3 text-right">
+                                <a th:href="'javascript:deleteItem(\'' + ${targetDto.classSn} + '\');'" class="btn btn-danger btn-xs">
+                                    <i class="fa fa-trash-o"></i>삭제
+                                </a>
                             </div>
                         </div>
                     </form>

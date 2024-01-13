@@ -104,12 +104,12 @@
                         <table id="listTable" class="table table-bordered text-center">
                             <colgroup>
                                 <col width="50px;">
-                                <col width="150px;">
-                                <col width="200px;">
+                                <col width="auto;">
+                                <col width="auto;">
                                 <col width="8%;">
                                 <col width="8%;">
                                 <col width="20%;">
-                                <col width="15%;">
+                                <col width="20%;">
                             </colgroup>
                             <thead>
 	                            <tr>
@@ -125,16 +125,24 @@
                             <tbody>
 	                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
 	                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
-	                                <td> [[${data.ctgryNm}]] <th:block th:if="${data.crseCd != null && data.crseCd != '' }">[ [[${data.crseNm}]] ] </th:block> </td>
-	                                <td th:text="${data.classSj}"></td>
+	                                <td> [[${data.ctgryNm}]] <th:block th:if="${data.crseCd != null && data.crseCd != '' }"><br/>[ [[${data.crseNm}]] ] </th:block> </td>
+	                                <td>
+                                        <a th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.classSn} ) }" th:text="${data.classSj}">
+                                        </a>
+                                    </td>
 	                                <td th:text="${data.classAmt}"></td>
 	                                <td th:text="${data.classExpsrYn}"></td>
 	                                <td th:text="${data.classExpsrPeriod}"></td>
 	                                <td>
-	                                    <a th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.classSn} ) }"
-	                                       class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
-	                                    <a th:href="'javascript:deleteItem(\'' + ${data.classSn} + '\');'"
-	                                       class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>삭제</a>
+                                        <a th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.classSn} ) }" class="btn btn-success btn-xs">
+                                            <i class="fa fa-pencil"></i>신청현황
+                                        </a>
+	                                    <a th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.classSn} ) }" class="btn btn-primary btn-xs">
+                                            <i class="fa fa-pencil"></i>수업
+                                        </a>
+	                                    <a th:href="'javascript:deleteItem(\'' + ${data.classSn} + '\');'" class="btn btn-warning btn-xs">
+                                            <i class="fa fa-trash-o"></i>후기
+                                        </a>
 	                                </td>
 	                            </tr>
 	                            <tr th:unless = "${!resultList.isEmpty()}">
