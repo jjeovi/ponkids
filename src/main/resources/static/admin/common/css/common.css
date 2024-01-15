@@ -5711,10 +5711,18 @@ input[type="checkbox"][disabled] + label{
 }
 
 
-
-
 /* 기간 물결 처리 */
 .period-wave {
 	padding-top: 6px;
 	content: "~";
+}
+
+/* 모달 너비 xl 버전 설정 */
+.modal-xlg {
+  max-width : 1300px;
+}
+
+/* 숨기기 style */
+.hide {
+  display:none;
 }

@@ -34,7 +34,7 @@ import java.util.Map;
 public class ClassController {
     
     private final static String BASIC_PATH = "/admin/class";
-    private final static String BASIC_DIR_PATH = "/admin/clas";
+    private final static String BASIC_DIR_PATH = "/admin/cls";
     
     private final ClassService classService;
     private final ClassWeekService classWeekService;
@@ -96,6 +96,9 @@ public class ClassController {
         
         // 클래스 카테고리 분류1 list setting
         model.addAttribute( "classCategoryCl01List", classCategoryCl01Service.findAll() );
+        
+        // 클래스 입력항목 > 입력항목 유형 리스트
+        model.addAttribute( "clsDtlTyCdList", cmmnCdDetailService.getList( "CLASS_DETAIL_ITEM_TY_CD" ) );   // 클래 상세 항목 유형 코드 리스트
         
         // E : 필요한 객체 setting
         
