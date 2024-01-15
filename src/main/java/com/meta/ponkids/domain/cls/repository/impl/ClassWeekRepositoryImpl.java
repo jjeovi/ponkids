@@ -27,10 +27,8 @@ public class ClassWeekRepositoryImpl implements ClassWeekRepositoryCustom {
     @Override
     public Page<ClassWeekListDto> getList( ClassWeekListDto listDto, Pageable pageable ) {
         
-        // TODO 구현
         // (1) '결과list' 와 (2)'count' 를 2번에 걸쳐 조회
         
-        // TODO
         // (1) 결과list (results).
         List<ClassWeekListDto> results = query
                 // select
@@ -54,8 +52,6 @@ public class ClassWeekRepositoryImpl implements ClassWeekRepositoryCustom {
                 .limit( pageable.getPageSize() )
                 .fetch();
         
-        
-        // TODO
         // (2) count
         JPAQuery<Long> count = query.select( classWeek.count() )
                 .from( classWeek )
@@ -70,11 +66,11 @@ public class ClassWeekRepositoryImpl implements ClassWeekRepositoryCustom {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨
         if ( StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn ) ) {
 //            if ( schOption.equals( "A" ) )
-//                return classWeek.classWeekSn.contains( schCntn ); // TODO LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+//                return classWeek.classWeekSn.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
 //            else if ( schOption.equals( "B" ) )
-//                return classWeek.classWeekNm.contains( schCntn ); // TODO LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+//                return classWeek.classWeekNm.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
 //            else return null;
-            return null;            // TODO (build한 이후에 해주세요. 안그럼 에러발생)  실제 구현시에는 해당부분지워주고 위에부분주석풀기
+            return null;            // (build한 이후에 해주세요. 안그럼 에러발생)  실제 구현시에는 해당부분지워주고 위에부분주석풀기
         } else {
             return null;
         }

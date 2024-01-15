@@ -33,19 +33,25 @@ public class ClassDetailOptn extends BaseTimeEntity {
 	
 	@Id
 	@GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_class_detail_optn_SN" )
-	private Long classDetailOptnSn;
+	private Long 	classDetailOptnSn;				// 클래스 상세 옵션 일련번호
+	
+	private Long 	classDetailSn;					// 클래스 상세 일련번호
+	
+	private Long 	classDetailOptnSeq;				// 클래스 상세 옵션 순번
+	
+	private String 	classsDetailOptnCn;				// 클래스 상세 옵션 내용
 	
 	@Column(updatable = false)
-	private String registerId;          // 등록자 ID
+	private String 	registerId;          			// 등록자 ID
 	
 	@Column(updatable = false)
-	private String registerIp;          // 등록자 IP
+	private String 	registerIp;          			// 등록자 IP
 	
-//  @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경
-	private String updusrId;            // 수정자 ID
+//  @Column(insertable = false)   					// 등록할 때도 수정일시에 시간 들어가게 변경
+	private String 	updusrId;            			// 수정자 ID
 	
-//  @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경
-	private String updusrIp;            // 수정자 IP
+//  @Column(insertable = false)   					// 등록할 때도 수정일시에 시간 들어가게 변경
+	private String 	updusrIp;            			// 수정자 IP
 
     @ColumnDefault("N")                             // del_yn 컬럼에 공통으로 추가
     @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가 (등록 시, 수정 시 해당컬럼 신경쓰지 않음.)

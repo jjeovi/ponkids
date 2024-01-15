@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-// TODO PK(*ID) 체크
+// PK(*ID) 체크
 public interface ClassDetailRepository extends JpaRepository<ClassDetail, Long>, ClassDetailRepositoryCustom {
 	
-	Optional<ClassDetail> findById( Long pk );	// TODO PK(*ID) 체크
+	Optional<ClassDetail> findById( Long pk );	// PK(*ID) 체크
 }

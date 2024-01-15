@@ -44,7 +44,7 @@ public class ClassCategoryCl01Service {
         
     }
     
-    public ClassCategoryCl01ModDto findById( Long pk ) {    // TODO 타입 체크 필요
+    public ClassCategoryCl01ModDto findById( Long pk ) {    // 타입 체크 필요
         
         ClassCategoryCl01 classCategoryCl01 = classCategoryCl01Repository.findById( pk ).orElse( null );
         
@@ -62,7 +62,7 @@ public class ClassCategoryCl01Service {
         
     }
     
-    public List<ClassCategoryCl01ListDto> findAll() {    // TODO 타입 체크 필요
+    public List<ClassCategoryCl01ListDto> findAll() {    // 타입 체크 필요
         
         List<ClassCategoryCl01> classCategoryCl01List = classCategoryCl01Repository.findAllByOrderByClSeq();
         
@@ -79,13 +79,13 @@ public class ClassCategoryCl01Service {
 //    public void update ( ClassCategoryCl01ModDto modDto, ClassCategoryCl01RoleModDto classCategoryCl01RoleModDto, HttpServletRequest request ) throws IOException {
         
         // target 조회
-        ClassCategoryCl01 classCategoryCl01 = classCategoryCl01Repository.findById( modDto.getClSn() ).orElse( null );    // TODO PK 체크
+        ClassCategoryCl01 classCategoryCl01 = classCategoryCl01Repository.findById( modDto.getClSn() ).orElse( null );    // PK 체크
         
         // target object 전환 ( entity to dto )
         ClassCategoryCl01ModDto targetDto = new ClassCategoryCl01ModDto();
         targetDto = targetDto.toDto( classCategoryCl01 );
         
-        // TODO target object 에 수정사항 set	
+        // target object 에 수정사항 set	
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
         if ( StringUtils.hasText( modDto.getClNm() ) ) targetDto.setClNm( modDto.getClNm() );            // 이름
         if ( modDto.getClSeq() != null ) targetDto.setClSeq( modDto.getClSeq() );                        // 성별

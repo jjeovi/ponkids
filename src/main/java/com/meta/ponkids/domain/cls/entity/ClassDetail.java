@@ -33,22 +33,32 @@ public class ClassDetail extends BaseTimeEntity {
 	
 	@Id
 	@GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_CLASS_DETAIL_SN" )
-	private Long classDetailSn;
+	private Long 	classDetailSn;					// 클래스 상세 일련번호
+	
+	private Long 	classSn;						// 클래스 일련번호
+	
+	private Long 	classDetailSeq;					// 클래스 상세 순번
+	
+	private String 	classDetailItemTyCd;			// 클래스 상세 항목 유형 코드
+	
+	private String 	classDetailItemCn;				// 클래스 상세 항목
+	
+	private String 	classDetailEssntlYn;			// 클래스 상세 필수 여부
 	
 	@Column(updatable = false)
-	private String registerId;          // 등록자 ID
+	private String	registerId;          			// 등록자 ID
 	
 	@Column(updatable = false)
-	private String registerIp;          // 등록자 IP
+	private String 	registerIp;          			// 등록자 IP
 	
-//  @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경
-	private String updusrId;            // 수정자 ID
+//  @Column(insertable = false)   					// 등록할 때도 수정일시에 시간 들어가게 변경
+	private String 	updusrId;            			// 수정자 ID
 	
-//  @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경
-	private String updusrIp;            // 수정자 IP
+//  @Column(insertable = false)   					// 등록할 때도 수정일시에 시간 들어가게 변경
+	private String 	updusrIp;            			// 수정자 IP
 
     @ColumnDefault("N")                             // del_yn 컬럼에 공통으로 추가
     @Column(insertable = false, updatable = false)  // del_yn 컬럼에 공통으로 추가 (등록 시, 수정 시 해당컬럼 신경쓰지 않음.)
-    private String delYn;                           // 삭제 여부
+    private String 	delYn;                          // 삭제 여부
 
 }

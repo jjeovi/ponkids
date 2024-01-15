@@ -28,15 +28,18 @@ public class ClassDetailRepositoryImpl implements ClassDetailRepositoryCustom {
 	@Override
 	public Page<ClassDetailListDto> getList( ClassDetailListDto listDto, Pageable pageable ) {
 		
-		// TODO 구현
 		// (1) '결과list' 와 (2)'count' 를 2번에 걸쳐 조회
-        
-		// TODO
+		
         // (1) 결과list (results).
 		List<ClassDetailListDto> results = query
 				// select
                 .select( new QClassDetailListDto(
                 		classDetail.classDetailSn,
+                		classDetail.classSn,
+                		classDetail.classDetailSeq,
+                		classDetail.classDetailItemTyCd,
+                		classDetail.classDetailItemCn,
+                		classDetail.classDetailEssntlYn,
                 		classDetail.registerId,
                 		Expressions.stringTemplate("to_char({0}, '{1s}')", classDetail.regDt, "YYYY-MM-DD HH:MM:SS")
 //                		new CaseBuilder()
@@ -53,30 +56,25 @@ public class ClassDetailRepositoryImpl implements ClassDetailRepositoryCustom {
                 .limit( pageable.getPageSize() )
                 .fetch();
 		
-		
-		// TODO
 		// (2) count
         JPAQuery<Long> count = query.select( classDetail.count() )
                 .from( classDetail )									
                 .where(
                         eqOption( listDto.getSchOption(), listDto.getSchCntn() ) );
-                
-				
 		
 		return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
 		
 	}
 	
-	
     private BooleanExpression eqOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨
         if ( StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn ) ) {
 //            if ( schOption.equals( "A" ) )
-//                return classDetail.classDetailSn.contains( schCntn ); // TODO LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+//                return classDetail.classDetailSn.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
 //            else if ( schOption.equals( "B" ) )
-//                return classDetail.classDetailNm.contains( schCntn ); // TODO LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+//                return classDetail.classDetailNm.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
 //            else return null;
-        	return null;			// TODO (build한 이후에 해주세요. 안그럼 에러발생)  실제 구현시에는 해당부분지워주고 위에부분주석풀기
+        	return null;			// (build한 이후에 해주세요. 안그럼 에러발생)  실제 구현시에는 해당부분지워주고 위에부분주석풀기
         } else {
             return null;
         }

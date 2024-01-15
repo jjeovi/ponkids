@@ -9,5 +9,5 @@ import java.util.Optional;
 // TODO PK(*ID) 체크
 public interface ClassDetailOptnRepository extends JpaRepository<ClassDetailOptn, Long>, ClassDetailOptnRepositoryCustom {
 	
-	Optional<ClassDetailOptn> findById( Long pk );	// TODO PK(*ID) 체크
+	Optional<ClassDetailOptn> findById( Long pk );	// PK(*ID) 체크
 }

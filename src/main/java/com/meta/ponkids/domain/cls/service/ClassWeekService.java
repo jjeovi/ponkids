@@ -58,7 +58,7 @@ public class ClassWeekService {
         return listDtos;
     }
     
-    public ClassWeekModDto findById( Long pk ) {    // TODO 타입 체크 필요
+    public ClassWeekModDto findById( Long pk ) {    // 타입 체크 필요
         
         ClassWeek classWeek = classWeekRepository.findById( pk ).orElse( null );
         
@@ -79,13 +79,13 @@ public class ClassWeekService {
 //    public void update ( ClassWeekModDto modDto, ClassWeekRoleModDto classWeekRoleModDto, HttpServletRequest request ) throws IOException {
         
         // target 조회
-        ClassWeek classWeek = classWeekRepository.findById( modDto.getClassWeekSn() ).orElse( null );    // TODO PK 체크
+        ClassWeek classWeek = classWeekRepository.findById( modDto.getClassWeekSn() ).orElse( null );    // PK 체크
         
         // target object 전환 ( entity to dto )
         ClassWeekModDto targetDto = new ClassWeekModDto();
         targetDto = targetDto.toDto( classWeek );
         
-        // TODO target object 에 수정사항 set	
+        // target object 에 수정사항 set	
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
 //        if ( StringUtils.hasText( modDto.getUserNm() ) ) targetDto.setUserNm( modDto.getUserNm() );          	// 이름
 //        if ( StringUtils.hasText( modDto.getGender() ) ) targetDto.setGender( modDto.getGender() );          	// 성별

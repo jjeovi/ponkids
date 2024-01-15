@@ -120,9 +120,9 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
             if ( schOption.equals( "A" ) )
                 return class$.classSj.contains( schCntn );
 //            else if ( schOption.equals( "B" ) )
-//                return clas.classNm.contains( schCntn ); // TODO LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+//                return clas.classNm.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
 //            else return null;
-            return null;            // TODO (build한 이후에 해주세요. 안그럼 에러발생)  실제 구현시에는 해당부분지워주고 위에부분주석풀기
+            return null;            // (build한 이후에 해주세요. 안그럼 에러발생)  실제 구현시에는 해당부분지워주고 위에부분주석풀기
         } else {
             return null;
         }

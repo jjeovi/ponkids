@@ -98,7 +98,7 @@ public class ClassCategoryCl02RepositoryImpl implements ClassCategoryCl02Reposit
             if ( schOption.equals( "A" ) )
 //            	return classCategoryCl02.clNm.contains( schCntn );								// 기존
                 return classCategoryCl02.clNm.toUpperCase().contains( schCntn.toUpperCase() );    // 변경
-            return null;            // TODO (build한 이후에 해주세요. 안그럼 에러발생)  실제 구현시에는 해당부분지워주고 위에부분주석풀기
+            return null;            // (build한 이후에 해주세요. 안그럼 에러발생)  실제 구현시에는 해당부분지워주고 위에부분주석풀기
         } else {
             return null;
         }

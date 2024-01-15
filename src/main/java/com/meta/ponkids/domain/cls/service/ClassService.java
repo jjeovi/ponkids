@@ -83,7 +83,7 @@ public class ClassService {
         ClassModDto targetDto = new ClassModDto();
         targetDto = targetDto.toDto( clas );
         
-        // TODO target object 에 수정사항 set	
+        // target object 에 수정사항 set	
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
         if ( StringUtils.hasText( modDto.getCtgryCd() ) )       targetDto.setCtgryCd( modDto.getCtgryCd() ); 	                // 카테고리
         if ( StringUtils.hasText( modDto.getCrseCd() ) )        targetDto.setCrseCd( modDto.getCrseCd() );                      // 커리큘럼
