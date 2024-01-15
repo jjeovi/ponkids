@@ -152,6 +152,9 @@ public class ClassController {
             classWeekService.save( saveDto, request );
         }
         
+        // TODO 클래스 상세 ( 입력 항목 ) 저장
+        // TODO 클래스 상세 ( 입력 항목 ) 저장
+        
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
         model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
