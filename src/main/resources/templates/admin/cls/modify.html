@@ -204,6 +204,79 @@
                                 </th:block>
                             </div>
                         </div>
+                        <div class="field item form-group" id="ClsDtlAddDiv">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">신청 입력 항목</label>
+                            <div class="div_menu_detail row col-md-10">
+                                <div class="col-md-12 col-sm-12 ">
+                                    <div class="x_panel mb-0" style="height:auto;overflow: scroll; max-height:350px;">
+                                        <div class="x_content mt_5p">
+                                            <button type="button" class="btn btn-purple mb_15p" data-toggle="modal" data-target=".bs-example-modal-lg" onclick="setModalBtn('C')">
+                                                신청 입력 항목 추가
+                                            </button>
+                                            <!-- 신청 입력 항목 등록 모달 -->
+                                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="addClsDtlModal" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                                                <div class="modal-dialog modal-dialog-centered modal-lg modal-xlg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title">입력 항목 추가</h4>
+                                                            <button type="button" class="close" data-dismiss="modal">
+                                                                <span aria-hidden="true">×</span> <!-- 닫기 버튼 -->
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body" id="addClsDtlModalBody">
+                                                            <div name="clsDtlModDiv" class="modForm" style="display: none;">
+                                                                <!-- 클래스 입력 항목 수정시 여기서 수정 작업 -->
+                                                            </div>
+                                                            <div name="clsDtlAddDiv" th:replace="~{admin/cls/modClsDtlFormModal :: clsDtlDiv(${targetClsDtlList}) }"></div>
+                                                            <div name="clsDtlAddDiv" class="newForm" th:insert="admin/cls/addClsDtlFormModal.html">
+                                                                <!-- 클래스 입력 항목 추가 모달 (/admin/cls/addClsDtlFormModal.html) -->
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-white" data-dismiss="modal">
+                                                                닫기
+                                                            </button>
+                                                            <button type="button" class="btn btn-purple" id="addClsDtlBtn" onclick="addClsDtl()">
+                                                                저장
+                                                            </button>
+                                                            <button type="button" class="btn btn-success" id="updateClsDtlBtn" onclick="updateClsDtl()" style="display:none;">
+                                                                수정
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- 입력항목 표시 영역 -->
+                                            <table class="table table-bordered text-center" id="clsDtlTable">
+                                                <thead>
+                                                <tr>
+                                                    <th>순번</th>
+                                                    <th>유형</th>
+                                                    <th class="hide">유형(값)</th>
+                                                    <th>입력 항목</th>
+                                                    <th>필수여부</th>
+                                                    <th>관리</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="clsDtlTableBody">
+                                                <!-- 신청 입력 항목 추가 테이블 -->
+                                                	<tr th:if = "${!targetClsDtlList.isEmpty()}" th:each=" data : ${targetClsDtlList} ">
+						                                <td name="trNum" th:text="${dataStat.count}"></td>
+						                                <td name="classDetailItemTyNm" th:text="${data.classDetailItemTyCd}"></td>
+						                                <td class="hide" name="classDetailItemTyCd" th:text="${data.classDetailItemTyCd}"></td>
+						                                <td name="classDetailItemCn" th:text="${data.classDetailItemCn}"></td>
+						                                <td name="classDetailEssntlYn" th:text="${data.classDetailEssntlYn}"></td>
+						                                <td>
+						                                	<button onclick="modifyChldrn(this)" type="button" class="btn btn-success btn-sm table-btn">수정</button><button onclick="deleteChldrn(this)" type="button" class="btn btn-danger btn-sm table-btn">삭제</button>
+						                                </td>
+						                            </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">클래스 요약<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">

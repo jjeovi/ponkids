@@ -3,9 +3,13 @@ package com.meta.ponkids.domain.cls.repository.impl;
 
 import com.meta.ponkids.domain.cls.dto.ClassDetailListDto;
 import com.meta.ponkids.domain.cls.dto.QClassDetailListDto;
+import com.meta.ponkids.domain.cls.entity.ClassDetail;
 import com.meta.ponkids.domain.cls.repository.custom.ClassDetailRepositoryCustom;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +22,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 import static com.meta.ponkids.domain.cls.entity.QClassDetail.classDetail;
+import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
 
 @Repository
 @RequiredArgsConstructor
@@ -38,8 +43,15 @@ public class ClassDetailRepositoryImpl implements ClassDetailRepositoryCustom {
                 		classDetail.classSn,
                 		classDetail.classDetailSeq,
                 		classDetail.classDetailItemTyCd,
+                		ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
+                                .from( cmmnCdDetail )
+                                .where( cmmnCdDetail.parntsReplySn.eq( nttReply.nttReplySn ) ), "nttReplyCnt" )
                 		classDetail.classDetailItemCn,
                 		classDetail.classDetailEssntlYn,
+                		new CaseBuilder()
+			                        .when( classDetail.classDetailEssntlYn.eq( "Y" ) ).then( "필수" )
+			                        .when( classDetail.classDetailEssntlYn.eq( "N" ) ).then( "선택" )
+			                        .otherwise( "" ).as( "classDetailEssntlYnNm" ),
                 		classDetail.registerId,
                 		Expressions.stringTemplate("to_char({0}, '{1s}')", classDetail.regDt, "YYYY-MM-DD HH:MM:SS")
 //                		new CaseBuilder()
@@ -63,6 +75,17 @@ public class ClassDetailRepositoryImpl implements ClassDetailRepositoryCustom {
                         eqOption( listDto.getSchOption(), listDto.getSchCntn() ) );
 		
 		return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
+		
+	}
+	
+	@Override
+	public List<ClassDetail> findByClassSnOrderByClassDetailSeq( Long pk ) {
+		
+		 List<ClassDetail> results = query.select(
+				 	new QClassDetailListDto(
+				 			classDetail.
+				 			)
+				 )
 		
 	}
 	

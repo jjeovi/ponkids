@@ -1,11 +1,33 @@
 package com.meta.ponkids.domain.cls.controller;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ListDto;
 import com.meta.ponkids.domain.cls.dto.ClassListDto;
 import com.meta.ponkids.domain.cls.dto.ClassModDto;
 import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
 import com.meta.ponkids.domain.cls.service.ClassCategoryCl01Service;
 import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
+import com.meta.ponkids.domain.cls.service.ClassDetailService;
 import com.meta.ponkids.domain.cls.service.ClassService;
 import com.meta.ponkids.domain.cls.service.ClassWeekService;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
@@ -13,21 +35,8 @@ import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
 import com.meta.ponkids.domain.system.file.repository.AtchFileDetailRepository;
 import com.meta.ponkids.domain.system.file.service.AtchFileDetailService;
 import com.meta.ponkids.domain.system.file.service.AtchFileService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,9 +47,13 @@ public class ClassController {
     
     private final ClassService classService;
     private final ClassWeekService classWeekService;
+    private final ClassDetailService classDetailService;
     private final ClassCategoryCl01Service classCategoryCl01Service;
     private final ClassCategoryCl02Service classCategoryCl02Service;
+    
+    
     private final CmmnCdDetailService cmmnCdDetailService;
+    
     private final AtchFileService atchFileService;
     private final AtchFileDetailService atchFileDetailService;
     private final AtchFileDetailRepository atchFileDetailRepository;
@@ -152,8 +165,10 @@ public class ClassController {
             classWeekService.save( saveDto, request );
         }
         
-        // TODO 클래스 상세 ( 입력 항목 ) 저장
-        // TODO 클래스 상세 ( 입력 항목 ) 저장
+        // 입력항목 존재하면 등록
+        if( saveDto != null && saveDto.getClassDetails() != null && saveDto.getClassDetails().size() != 0 ) {
+        	classDetailService.save(saveDto, request);
+        }
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
@@ -188,7 +203,11 @@ public class ClassController {
         
         // 클래스 요일 List add
         // 클래스 요일 은 html 그리고 script로 ajax를 통해 불러온다. 처음에 불러오면 타임리프로 요일을 체크하는 로직이 너무 어렵기 때문에 html먼저 그린 뒤 ajax를 호출 하는 방식으로 정함.
-//        model.addAttribute( "classWeekList",  classWeekService.findByClassSnOrderByClassWeekSn( targetDto.getClassSn() ));
+        // model.addAttribute( "classWeekList",  classWeekService.findByClassSnOrderByClassWeekSn( targetDto.getClassSn() ));
+        
+        // chldrn target object 조회
+        model.addAttribute( "targetClsDtlList", classDetailService.findByClassSnOrderByClassDetailSeq( targetDto.getClassSn() ) );
+        
         // 클래스sn model 에 추가
         model.addAttribute( "schClassSn",  targetDto.getClassSn() );
         
@@ -280,13 +299,16 @@ public class ClassController {
             return "common/alert";
         }
         
-        // update 구현
-        classService.update( modDto, request );
-        
-        //  클래스 요일 update
+        //  클래스 요일 update : 요일 전부 삭제 후 새로 save
         if ( modDto.getClassWeek() != null ) {
             classWeekService.deleteAllByClassSn(modDto.getClassSn());
             classWeekService.save( modDto, request );
+        }
+        
+        // 입력항목 update (입력항목 존재시) : 입력항목 전부 삭제 후 새로 save
+        if( modDto != null && modDto.getClassDetails() != null && modDto.getClassDetails().size() != 0 ) {
+        	classDetailService.deleteAllByClassSn(modDto.getClassSn());
+        	classDetailService.save(modDto, request);
         }
         
         // 메시지 출력 및 url 이동 처리
@@ -313,20 +335,6 @@ public class ClassController {
         return "common/alert";
     }
     
-    // 카테고리 검색 (Ajax)
-//    @ResponseBody
-//    @GetMapping( BASIC_PATH + "/live/getListAjax" )
-//    public Map<String, Object> getListAjax( @ModelAttribute ClassListDto listDto,
-//                                            @PageableDefault( size = 10 ) Pageable pageable
-//    ) {
-//
-//        Map<String, Object> result = new HashMap<String, Object>();
-//
-//        result.put( "resultList", classService.getList( listDto, pageable ) );
-//
-//        return result;
-//    }
-//
     // 클래스 요일 검색 (Ajax)
     @ResponseBody
     @GetMapping( BASIC_PATH + "/live/getClassWeekListAjax" )

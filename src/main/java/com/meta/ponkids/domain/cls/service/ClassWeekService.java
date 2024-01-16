@@ -25,7 +25,7 @@ public class ClassWeekService {
     @Transactional
     public void save( ClassDto saveDto, HttpServletRequest request ) throws IOException {
         
-        if ( saveDto.getClassWeek().length != 0 ) {
+        if ( saveDto.getClassWeek().size() != 0 ) {
             List<ClassWeek> classWeekList = new ArrayList<>();
             for ( String yoil : saveDto.getClassWeek() ) {
                 ClassWeekSaveDto classWeekSaveDto = new ClassWeekSaveDto();

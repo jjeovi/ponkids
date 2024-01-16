@@ -1,10 +1,13 @@
 package com.meta.ponkids.domain.cls.dto;
 
 import com.meta.ponkids.domain.cls.entity.Class;
-import lombok.*;
+
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode( callSuper = false )
 public class ClassSaveDto extends ClassDto {
@@ -37,8 +40,6 @@ public class ClassSaveDto extends ClassDto {
     
     private String classExpsrYn;            // 클래스표시여부
     
-    private String[] classWeek;            // 요일
-    
     private String registerId;              // 등록자 id
     
     private String registerIp;              // 등록자 ip
@@ -48,26 +49,45 @@ public class ClassSaveDto extends ClassDto {
     private String updusrIp;                // 수정자 IP
     
     @Builder
-    public ClassSaveDto( Long classSn, String ctgryCd, String crseCd, String classSj, String classSumry, String classDc, Long classAmt, Long classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String registerId, String registerIp, String updusrId, String updusrIp ) {
-        this.classSn = classSn;
-        this.ctgryCd = ctgryCd;
-        this.crseCd = crseCd;
-        this.classSj = classSj;
-        this.classSumry = classSumry;
-        this.classDc = classDc;
-        this.classAmt = classAmt;
-        this.classDscntBfeAmt = classDscntBfeAmt;
-        this.classPdSetYn = classPdSetYn;
-        this.classBeginDt = classBeginDt;
-        this.classEndDt = classEndDt;
-        this.thumbAtchFileSn = thumbAtchFileSn;
-        this.atchFileSn = atchFileSn;
-        this.classExpsrYn = classExpsrYn;
-        this.registerId = registerId;
-        this.registerIp = registerIp;
-        this.updusrId = updusrId;
-        this.updusrIp = updusrIp;
-    }
+    public ClassSaveDto(
+    		Long classSn, 
+    		String ctgryCd, 
+    		String crseCd, 
+    		String classSj,
+			String classSumry, 
+			String classDc, 
+			Long classAmt, 
+			Long classDscntBfeAmt, 
+			String classPdSetYn,
+			String classBeginDt, 
+			String classEndDt, 
+			Long thumbAtchFileSn, 
+			Long atchFileSn, 
+			String classExpsrYn,
+			String registerId, 
+			String registerIp, 
+			String updusrId, 
+			String updusrIp ) {
+    	
+		this.classSn = classSn;
+		this.ctgryCd = ctgryCd;
+		this.crseCd = crseCd;
+		this.classSj = classSj;
+		this.classSumry = classSumry;
+		this.classDc = classDc;
+		this.classAmt = classAmt;
+		this.classDscntBfeAmt = classDscntBfeAmt;
+		this.classPdSetYn = classPdSetYn;
+		this.classBeginDt = classBeginDt;
+		this.classEndDt = classEndDt;
+		this.thumbAtchFileSn = thumbAtchFileSn;
+		this.atchFileSn = atchFileSn;
+		this.classExpsrYn = classExpsrYn;
+		this.registerId = registerId;
+		this.registerIp = registerIp;
+		this.updusrId = updusrId;
+		this.updusrIp = updusrIp;
+	}
     
     // Dto to Entity 메소드 생성
     public Class toEntity() {
@@ -92,4 +112,5 @@ public class ClassSaveDto extends ClassDto {
                 .updusrIp( updusrIp )
                 .build();
     }
+
 }

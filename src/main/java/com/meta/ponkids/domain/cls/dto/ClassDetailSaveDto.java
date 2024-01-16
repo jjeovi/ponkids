@@ -1,6 +1,7 @@
 package com.meta.ponkids.domain.cls.dto;
 
 import com.meta.ponkids.domain.cls.entity.ClassDetail;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

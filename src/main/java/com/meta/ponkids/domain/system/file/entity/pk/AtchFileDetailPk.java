@@ -1,11 +1,12 @@
 package com.meta.ponkids.domain.system.file.entity.pk;
 
+import java.io.Serializable;
+
+import javax.persistence.Embeddable;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Embeddable;
-import java.io.Serializable;
 
 
 @Data
@@ -13,6 +14,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class AtchFileDetailPk implements Serializable {
     
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
     
     private Long atchFileSn;        // 첨부 파일 일련번호
     

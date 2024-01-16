@@ -73,12 +73,12 @@
             // div name : chldrnAddDiv / newForm 이 아닌 div 를 배열로 정리
             $( "[name='chldrnAddDiv']" ).not( '.newForm' ).each( function ( index ) {
                 // 자녀이름, 자녀성별, 자녀생년월일, 자녀이메일, 자녀연락처
-                $( this ).find( "input[name=chldrnNm]" ).attr( "name", "userChldrns[" + index + "].chldrnNm" );
-                $( this ).find( "input[name=chldrnGender]" ).attr( "name", "userChldrns[" + index + "].chldrnGender" );
-                $( this ).find( "input[name=chldrnBrdtDate]" ).attr( "name", "userChldrns[" + index + "].chldrnBrdtDate" );
-                $( this ).find( "input[name=chldrnEmail]" ).attr( "name", "userChldrns[" + index + "].chldrnEmail" );
-                $( this ).find( "input[name=chldrnTelNo]" ).attr( "name", "userChldrns[" + index + "].chldrnTelNo" );
-                $( this ).find( "input[name=file]" ).attr( "name", "userChldrns[" + index + "].file" );
+                $( this ).find( "[name=chldrnNm]" ).attr( "name", "userChldrns[" + index + "].chldrnNm" );					// 자녀 이름
+                $( this ).find( "[name=chldrnGender]" ).attr( "name", "userChldrns[" + index + "].chldrnGender" );			// 자녀 성별
+                $( this ).find( "[name=chldrnBrdtDate]" ).attr( "name", "userChldrns[" + index + "].chldrnBrdtDate" );		// 자녀 생년월일
+                $( this ).find( "[name=chldrnEmail]" ).attr( "name", "userChldrns[" + index + "].chldrnEmail" );			// 자녀 이메일
+                $( this ).find( "[name=chldrnTelNo]" ).attr( "name", "userChldrns[" + index + "].chldrnTelNo" );			// 자녀 연락처
+                $( this ).find( "[name=file]" ).attr( "name", "userChldrns[" + index + "].file" );							// 파일
 
             } );
 

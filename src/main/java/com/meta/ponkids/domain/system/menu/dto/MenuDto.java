@@ -47,4 +47,5 @@ public class MenuDto {
     
     private String delYn;           // 삭제여부
     
+    
 }

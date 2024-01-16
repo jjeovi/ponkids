@@ -88,7 +88,22 @@
             $( "#classEndDt" ).focus();
             return false;
         }
-
+        
+        
+     	// ==================== 유효성 모두 통과 후 dataset 정리 ==================================
+        // ==================== 유효성 모두 통과 후 dataset 정리 ==================================
+        	
+       
+        // 입력항목 정보 배열 처리 :
+        // 입력항목 정보들 각각 값들을 배열화시켜 submit
+        // div name : clsDtlAddDiv 중 newForm 이 아닌 div 를 배열로 정리
+        $( "[name='clsDtlAddDiv']" ).not( '.newForm' ).each( function ( index ) {
+                // 입력 유형, 입력 항목, 필수 여부
+                $( this ).find( "[name=classDetailItemTyCd]" ).attr( "name", "classDetails[" + index + "].classDetailItemTyCd" );	// 입력 유형
+                $( this ).find( "[name=classDetailItemCn]" ).attr( "name", "classDetails[" + index + "].classDetailItemCn" );		// 입력 항목
+                $( this ).find( "[name=classDetailEssntlYn]" ).attr( "name", "classDetails[" + index + "].classDetailEssntlYn" );	// 필수 여부
+        });
+        	
         return true;
 
     }
@@ -145,13 +160,13 @@
         // 신청입력항목정보 테이블의 trNum 번째 신청입력항목에 수정한 값을 매핑하여표시하기
         modifyClsDtlRow( $targetDiv, trNum );    // 신청입력항목정보테이블에추가
 
-        // modifyForm 내용을 targetClsDtlDiv 내용으로 교체
+        // modifyForm 내용을 targetDiv 내용으로 교체
         var $cloneDiv = $targetDiv.clone();
         $cloneDiv = $cloneDiv.contents().unwrap();
         $trNumDiv.empty();
         $cloneDiv.appendTo( $trNumDiv );
 
-        // targetClsDtlDiv 안의 내용 지우기
+        // targetDiv 안의 내용 지우기
         $targetDiv.empty();
 
         // 모든 clsDtlAddDiv modifyForm 제거
@@ -448,9 +463,6 @@
                                                 <!-- 신청 입력 항목 추가 테이블 -->
                                                 </tbody>
                                             </table>
-                                            <div id="clsDtlDiv">
-
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

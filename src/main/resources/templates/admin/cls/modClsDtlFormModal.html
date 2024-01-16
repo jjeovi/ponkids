@@ -1,0 +1,38 @@
+<div name="clsDtlAddDiv" th:fragment = "clsDtlDiv(targetClsDtlList)" th:if = "${!targetClsDtlList.isEmpty()}"  th:each=" data : ${targetClsDtlList} " style="display:none;" class="existForm">
+	<input type="hidden" name="classDetailEssntlYn" th:value="${data.classDetailEssntlYn}" />
+	<div class="field item form-group">
+	    <label class="col-form-label col-md-2 col-sm-3 label-align">입력 유형<span class="required">*</span></label>
+	    <div class="col-md-2 col-sm-6">
+	        <select class="form-control" name="classDetailItemTyCd" >
+	            <option value="">입력 유형 선택</option>
+	            <option value="ANSWER" th:selected="${data.classDetailItemTyCd} == 'ANSWER'" >주관식</option>
+	        </select>
+	    </div>
+	</div>
+	<div class="field item form-group">
+	    <label class="col-form-label col-md-2 col-sm-3 label-align">입력 항목<span class="required">*</span></label>
+	    <div class="col-md-8 col-sm-9">
+	        <input class="form-control" name="classDetailItemCn" placeholder="클래스 입력 항목 내용 입력" th:value="${data.classDetailItemCn}" />
+	        <small class="font-gray-dark">
+	            클래스 신청 시 입력 받을 항목을 입력해주세요. ex ) ⭐️ 미팅장소에 10분 전 도착해주시길 바랍니다. 지각 시 환불이 어렵습니다. ⭐ (예시답변 : 네 )
+	        </small>
+	    </div>
+	</div>
+	<div class="field item form-group">
+	    <label class="col-form-label col-md-2 col-sm-3 label-align">필수 여부<span class="required">*</span></label>
+	    <div class="col-md-2 col-sm-4">
+	        <div class="btn-group radiobox">
+	            <label class="btn btn-outline-purple w100p"
+	                   data-toggle-class="btn-primary"
+	                   data-toggle-passive-class="btn-default">
+	                <input type="radio" name="classDetailEssntlYnRadio" value="Y" class="join-btn" onclick="clickRadioEvent(this)" th:checked="${data.classDetailEssntlYn eq 'Y'}" >필수
+	            </label>
+	            <label class="btn btn-outline-purple w100p"
+	                   data-toggle-class="btn-primary"
+	                   data-toggle-passive-class="btn-default">
+	                <input type="radio" name="classDetailEssntlYnRadio" value="N" class="join-btn" onclick="clickRadioEvent(this)" th:checked="${data.classDetailEssntlYn eq 'N'}" >선택
+	            </label>
+	        </div>
+	    </div>
+	</div>
+</div>

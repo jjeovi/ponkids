@@ -1,5 +1,7 @@
 package com.meta.ponkids.domain.system.cmmnCd.entity;
 
+import com.meta.ponkids.domain.system.cmmnCd.entity.pk.CmmnCdPk;
+import com.meta.ponkids.domain.system.file.entity.pk.AtchFileDetailPk;
 import com.meta.ponkids.global.common.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +37,13 @@ public class CmmnCd extends BaseTimeEntity {
     private Long cdSn;
     
     private String cdNm;
+    
+    
+    // 복합키 생성 ( CmmnCdPk.java 에서 2개 키를 미리 생성)
+    // private Long cdSn;				// 코드 일련번호
+    // private String cdNm;				// 코드 이름
+    @EmbeddedId
+    private CmmnCdPk cmmnCdPk;        // 복합키 setting
     
     private String cdDc;
     

@@ -39,8 +39,6 @@ public class ClassModDto extends ClassDto {
     
     private String classExpsrYn;            // 클래스표시여부
     
-    private String[] classWeek;            // 요일
-    
     private String updusrId;                // 수정자 ID
     
     private String updusrIp;                // 수정자 IP
