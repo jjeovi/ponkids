@@ -8,8 +8,8 @@
     $( function () {
 
     	// summernote editor 설정
-    	fnSummernoteCall('classSumry'); // 클래스 요약
-    	fnSummernoteCall('classDc');    // 클래스 설명
+    	// fnSummernoteCall('classSumry'); // 클래스 요약
+    	// fnSummernoteCall('classDc');    // 클래스 설명
     	
     	// 모집인원 선택시 인원수 input 활성화/비활성화 처리
         $( "input:radio[name='rcritNmprSetYn']" ).change( function () {
@@ -38,21 +38,23 @@
     // form submit 시 유효성 검사
     function submitValidCheck() {
 
-        // 표시기간 유효성 체크
-        var classPdSetYn = $( "[name='classPdSetYn']:checked" ).val();
-        if ( classPdSetYn == 'Y' && $("#classBeginDt").val() == '' ) {
-            alert("표시 시작 일시를 입력해주세요.");
-            $( "#classBeginDt" ).focus();
+        // 모집인원 설정시 모집인원 수 체크
+        var rcritNmprSetYn = $( "[name='rcritNmprSetYn']:checked" ).val();
+        if ( rcritNmprSetYn == 'Y' && $("#rcritNmprCo").val() == '' ) {
+            alert("모집인원 설정시 모집인원 수는 필수로 입력해주세요.");
+            $( "#rcritNmprCo" ).focus();
             return false;
         }
-        if ( classPdSetYn == 'Y' && $("#classEndDt").val() == '' ) {
-            alert("표시 종료 일시를 입력해주세요.");
-            $( "#classEndDt" ).focus();
+
+        // 예비모집인원 설정시 예비모집인원 수 체크
+        var preparRcritNmprSetYn = $( "[name='preparRcritNmprSetYn']:checked" ).val();
+        if ( preparRcritNmprSetYn == 'Y' && $("#preparRcritNmprCo").val() == '' ) {
+            alert("예비모집인원 설정시 예비모집인원 수는 필수로 입력해주세요.");
+            $( "#preparRcritNmprCo" ).focus();
             return false;
         }
         	
         return true;
-
     }
 
 </script>
@@ -71,16 +73,16 @@
 								<input type="text" class="form-control" name="classNm"	id="classNm" th:value="${classDto.classSj}" readonly>
                             </div>
                             <div class="col-md-2 col-sm-6">
-                            	<select class="form-control" name="classWeekSn" id="classWeekSn" >
+                            	<select class="form-control" name="classWeekSn" id="classWeekSn" required="required">
                                     <option value="">요일 선택</option>
                                     <option th:each="item : ${classWeekList}" th:value="${item.classDayCd}">[[${item.classDayNm}]]
                                 </select>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">수업 순번<span class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">수업 순번</label>
                             <div class="col-md-6 col-sm-6">
-                                <input type="number" class="form-control" name="lctreSeq" placeholder="수업 순번 입력(숫자만)" />
+                                <input type="number" class="form-control" name="lctreSeq" placeholder="수업 순번 입력(숫자만)"/>
                                 <small class="font-gray-dark">
                                 	신청 화면에서 수업이 selectbox로 보여지는 순서입니다. 입력하지 않을 시 마지막 순번으로 자동책정됩니다.
                                 </small>
@@ -89,31 +91,31 @@
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">수업 제목<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" name="lctreSj" placeholder="수업 제목을 입력해주세요."/>
+                                <input class="form-control" name="lctreSj" placeholder="수업 제목을 입력해주세요." required/>
                                 <small class="font-gray-dark">
                                 	신청 화면에서 수업이 selectbox로 보여지는 내용입니다.
                                 </small>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">수업 설명<span class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">수업 설명</label>
                             <div class="col-md-6 col-sm-6">
                             	<textarea id="lctreDc" name="lctreDc" class="form-control"></textarea>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">신청자 안내<span class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">신청자 안내</label>
                             <div class="col-md-6 col-sm-6">
                             	<textarea id="lctreApplcntGuidance" name="lctreApplcntGuidance" class="form-control"></textarea>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">모집인원 설정</label> 
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">모집인원 설정<span class="required">*</span></label> 
                             <div class="col-md-2 col-sm-4">
                                 <div class="btn-group radiobox">
-                                    <input type="radio" id="rcritNmprSetYn1" name="rcritNmprSetYn" value="Y" class="join-btn">
+                                    <input type="radio" id="rcritNmprSetYn1" name="rcritNmprSetYn" value="Y" class="join-btn" required>
                                     <label for="rcritNmprSetYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">예</label>
-                                    <input type="radio" id="rcritNmprSetYn2" name="rcritNmprSetYn" value="N" class="join-btn">
+                                    <input type="radio" id="rcritNmprSetYn2" name="rcritNmprSetYn" value="N" class="join-btn" required>
                                     <label for="rcritNmprSetYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">아니오</label>
                                 </div>
                             </div>
@@ -124,12 +126,12 @@
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">예비 모집인원 설정</label> 
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">예비 모집인원 설정<span class="required">*</span></label> 
                             <div class="col-md-2 col-sm-4">
                                 <div class="btn-group radiobox">
-                                    <input type="radio" id="preparRcritNmprSetYn1" name="preparRcritNmprSetYn" value="Y" class="join-btn">
+                                    <input type="radio" id="preparRcritNmprSetYn1" name="preparRcritNmprSetYn" value="Y" class="join-btn" required>
                                     <label for="preparRcritNmprSetYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">예</label>
-                                    <input type="radio" id="preparRcritNmprSetYn2" name="preparRcritNmprSetYn" value="N" class="join-btn">
+                                    <input type="radio" id="preparRcritNmprSetYn2" name="preparRcritNmprSetYn" value="N" class="join-btn" required>
                                     <label for="preparRcritNmprSetYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">아니오</label>
                                 </div>
                             </div>
