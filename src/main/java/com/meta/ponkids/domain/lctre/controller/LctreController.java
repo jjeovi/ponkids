@@ -17,10 +17,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.meta.ponkids.domain.cls.dto.ClassModDto;
+import com.meta.ponkids.domain.cls.service.ClassService;
+import com.meta.ponkids.domain.cls.service.ClassWeekService;
 import com.meta.ponkids.domain.lctre.dto.LctreListDto;
 import com.meta.ponkids.domain.lctre.dto.LctreModDto;
 import com.meta.ponkids.domain.lctre.dto.LctreSaveDto;
 import com.meta.ponkids.domain.lctre.service.LctreService;
+import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,6 +34,11 @@ public class LctreController {
     
     private final LctreService lctreService;
     
+    private final ClassService classService;
+    private final ClassWeekService classWeekService;
+    
+    private final CmmnCdDetailService cmmnCdDetailService;
+    
     private final static String BASIC_PATH = "/admin/lctre";
     
     
@@ -37,7 +46,7 @@ public class LctreController {
                             BASIC_PATH + "/{classSn}/{mcd}/list" } )
     public String list( @ModelAttribute LctreListDto listDto,
                         @PathVariable String mcd,
-                        @PathVariable( required = false ) String classSn,
+                        @PathVariable( required = false ) Long classSn,
                         @PageableDefault( size = 10 ) Pageable pageable,
                         Model model ) {
         
@@ -59,13 +68,34 @@ public class LctreController {
         return BASIC_PATH + "/list";
     }
     
-    @GetMapping( BASIC_PATH + "/{mcd}/regist" )
-    public String regist( @PathVariable String mcd, Model model ) {
+    @GetMapping( BASIC_PATH + "/{classSn}/{mcd}/regist" )
+    public String regist( 	@PathVariable String mcd,
+    						@PathVariable Long classSn,
+    						Model model ) {
         
         // S : 필요한 객체 setting
         
         // 가입 object 생성
         model.addAttribute( new LctreSaveDto() );
+        
+        // 클래스 정보 add
+        ClassModDto classDto  = classService.findById(classSn);
+        
+        // 클래스가 존재 하지 않을 시
+        if(classDto == null ) {
+        	// 메시지 출력 및 url 이동 처리
+            model.addAttribute( "resultMsg", "클래스의 정보를 확인해주세요." );
+            model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+            
+            return "common/alert";
+        }
+        
+        
+        
+        model.addAttribute("classDto", classService.findById(classSn));
+        
+        // 클래스 요일 List add
+        model.addAttribute( "classWeekList", classWeekService.getListByClassSn( classSn ) );    // 요일리스트
         
         // E : 필요한 객체 setting
         
@@ -92,7 +122,6 @@ public class LctreController {
         
         // save
         lctreService.save( saveDto, request );
-//        lctreService.save( saveDto, lctreRoleSaveDto, request );
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );

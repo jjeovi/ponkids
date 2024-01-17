@@ -1,22 +1,24 @@
 package com.meta.ponkids.domain.cls.repository.impl;
 
-import com.meta.ponkids.domain.cls.dto.ClassWeekListDto;
-import com.meta.ponkids.domain.cls.dto.QClassWeekListDto;
-import com.meta.ponkids.domain.cls.repository.custom.ClassWeekRepositoryCustom;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
+import static com.meta.ponkids.domain.cls.entity.QClassWeek.classWeek;
+import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
+
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
+import com.meta.ponkids.domain.cls.dto.ClassWeekListDto;
+import com.meta.ponkids.domain.cls.dto.QClassWeekListDto;
+import com.meta.ponkids.domain.cls.repository.custom.ClassWeekRepositoryCustom;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import static com.meta.ponkids.domain.cls.entity.QClassWeek.classWeek;
+import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
@@ -36,13 +38,8 @@ public class ClassWeekRepositoryImpl implements ClassWeekRepositoryCustom {
                         classWeek.classWeekSn,
                         classWeek.classSn,
                         classWeek.classDayCd,
-                        classWeek.registerId,
-                        Expressions.stringTemplate( "to_char({0}, '{1s}')", classWeek.regDt, "YYYY-MM-DD HH:MM:SS" )
-//                		new CaseBuilder()
-//                		.when( user.gender.eq("M")).then("남자")
-//                		.when( user.gender.eq("F")).then("여자")
-//                		.otherwise("")
-//                		.as("gender"),
+                        cmmnCdDetail.cdDetailNm,
+                        cmmnCdDetail.cdDetailSeq
                 ) )
                 .from( classWeek )
                 // where
@@ -60,6 +57,37 @@ public class ClassWeekRepositoryImpl implements ClassWeekRepositoryCustom {
         
         return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
         
+    }
+    
+    @Override
+    public List<ClassWeekListDto> getListByClassSn( Long pk ){
+    	List<ClassWeekListDto> results = query
+    			.select( new QClassWeekListDto(
+                        classWeek.classWeekSn,
+                        classWeek.classSn,
+                        classWeek.classDayCd,
+                        cmmnCdDetail.cdDetailNm,
+                        cmmnCdDetail.cdDetailSeq )
+    			)
+    			.from( classWeek )
+    			.innerJoin(cmmnCdDetail)
+    			//join 조건 시에는 delYn 조건을 명시해야 함 
+    			.on( cmmnCdDetail.cdDetailVal1.eq(classWeek.classDayCd),
+    				cmmnCdDetail.delYn.eq("N")
+    			)
+    			.where( eqClassSn(pk), 
+    					cmmnCdDetail.cdNm.eq("DAY_7_CD")
+    			)
+    			.orderBy( cmmnCdDetail.cdDetailSeq.asc() )
+    			.fetch();
+    			
+    			return results;
+    }
+	
+	// -------------------------------- WHERE 검색 옵션 setting --------------------------------
+	  
+    private BooleanExpression eqClassSn( Long pk ) {
+        return pk != null ? classWeek.classSn.eq(pk) : null;
     }
     
     private BooleanExpression eqOption( String schOption, String schCntn ) {

@@ -58,6 +58,11 @@ public class ClassWeekService {
         return listDtos;
     }
     
+    
+    public List<ClassWeekListDto> getListByClassSn( Long pk) {
+    	return classWeekRepository.getListByClassSn( pk );
+    }
+    
     public ClassWeekModDto findById( Long pk ) {    // 타입 체크 필요
         
         ClassWeek classWeek = classWeekRepository.findById( pk ).orElse( null );

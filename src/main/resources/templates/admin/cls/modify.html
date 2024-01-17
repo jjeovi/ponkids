@@ -103,7 +103,7 @@
         }
     }
 
-    // 등록 유효성 검사
+    // form submit 시 유효성 검사
     function submitValidCheck() {
 
         // 표시기간 유효성 체크
@@ -134,11 +134,8 @@
                 $( this ).find( "[name=classDetailEssntlYn]" ).attr( "name", "classDetails[" + index + "].classDetailEssntlYn" );	// 필수 여부
         });
         	
-
         return true;
-
     }
-    
     
     
     // 입력항목 추가 > 저장 버튼 클릭 event
@@ -169,7 +166,6 @@
         $( "#addClsDtlModal" ).modal( 'hide' );
         return true;
     }
-
 
     // 신청입력항목 수정 버튼 클릭 > 수정정보 tr에 현행화
     function updateClsDtl() {
@@ -211,7 +207,6 @@
 
     }
 
-
     // 입력항목 모달 저장시 유효성 검사
     function clsDtlValidCheck( $targetDiv ) {
 
@@ -233,7 +228,6 @@
         return true;
     }
 
-
     // 모달로 추가한 입력항목을 화면에 표출
     function addClsDtlRow( $targetDiv ) {
 
@@ -253,7 +247,6 @@
         );
     }
 
-
     // 입력항목 정보 테이블에 변경사항 수정
     function modifyClsDtlRow( $targetDiv, trNum ) {
 
@@ -263,13 +256,11 @@
         $modifyTr.find( "[name='classDetailItemTyCd']" ).text( $targetDiv.find( "[name='classDetailItemTyCd'] :selected" ).val() );
         $modifyTr.find( "[name='classDetailItemCn']" ).text( $targetDiv.find( "[name='classDetailItemCn']" ).val() );
         $modifyTr.find( "[name='classDetailEssntlYnRadio']" ).text( $targetDiv.find( "[name='classDetailEssntlYnRadio']:checked" ).val() == "Y" ? "필수" : "선택" );
-
     }
-
-
 
     // 신청입력항목 (등록된 항목에서) 수정 버튼 > modal 출력
     function modifyClsDtl( e ) {
+		
         // 모달 하단의 버튼 설정
         setModalBtn( "U" );
 
@@ -311,7 +302,6 @@
         $( "[name='clsDtlModDiv']" ).find( "[name='classDetailItemTyCd']" ).val(classDetailItemTyCdVal).prop( "selected", true );
 
         $( "#addClsDtlModal" ).modal( 'show' );
-
     }
 
     // 신청입력항목 (등록된 항목에서) 삭제 버튼
@@ -330,9 +320,7 @@
                 $( this ).find( "[name='trNum']" ).text( ( $( this ).prevAll().length ) + 1 );
             } );
         }
-
     }
-
 
     // 모달 버튼 setting
     function setModalBtn( mode ) {
