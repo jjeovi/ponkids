@@ -12,5 +12,5 @@ public interface CmmnCdDetailRepository extends JpaRepository<CmmnCdDetail, Long
     
     Optional<CmmnCdDetail> findById( Long pk );    // TODO PK(*ID) 체크
     
-    List<CmmnCdDetail> findByCdSnAndUseYnOrderByCdDetailSeqAsc( long cdSn, String useYn );
+    List<CmmnCdDetail> findByCdNmAndUseYnOrderByCdDetailSeqAsc( String cdNm, String useYn );
 }

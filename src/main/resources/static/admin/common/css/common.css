@@ -5726,3 +5726,16 @@ input[type="checkbox"][disabled] + label{
 .hide {
   display:none;
 }
+
+
+/* 하이퍼링크(파란색처리) */
+.b-link {
+	color: #4da1fc;
+    font-weight: bold;
+    text-decoration: underline;
+}
+.b-link:hover {
+	color: #0776ed;
+    font-weight: bold;
+    text-decoration: underline;
+}

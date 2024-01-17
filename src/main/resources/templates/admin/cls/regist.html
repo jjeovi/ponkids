@@ -145,11 +145,11 @@
         // target 신청입력항목 div setting
         var $targetDiv = $( "[name='clsDtlModDiv']" );
 
-        // 이름, 성별 유효성 검사
+        // 유효성 검사
         if ( !clsDtlValidCheck( $targetDiv ) ) return false;
 
-        // 성별 (라디오) 값 hidden 태그에 저장
-        $targetDiv.find( "[name='clsDtlGender']" ).val( $targetDiv.find( "[name='clsDtlGenderRadio']:checked" ).val() );
+        // 필수여부 (라디오) 값 hidden 태그에 저장
+        $targetDiv.find( "[name='classDetailEssntlYn']" ).val( $targetDiv.find( "[name='classDetailEssntlYnRadio']:checked" ).val() );
     
 
         // S : trNum 번째 찾기

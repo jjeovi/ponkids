@@ -36,7 +36,7 @@ public class CmmnCdDetailRepositoryImpl implements CmmnCdDetailRepositoryCustom 
                 // select
                 .select( new QCmmnCdDetailListDto(
                         cmmnCdDetail.cdDetailSn,
-                        cmmnCdDetail.cdSn,
+                        cmmnCdDetail.cdNm,
                         cmmnCdDetail.cdDetailSeq,
                         cmmnCdDetail.cdDetailNm,
                         cmmnCdDetail.cdDetailDc,

@@ -1,9 +1,19 @@
 package com.meta.ponkids.domain.cls.repository.impl;
 
 
+import static com.meta.ponkids.domain.cls.entity.QClassDetail.classDetail;
+import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
+
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
+
 import com.meta.ponkids.domain.cls.dto.ClassDetailListDto;
 import com.meta.ponkids.domain.cls.dto.QClassDetailListDto;
-import com.meta.ponkids.domain.cls.entity.ClassDetail;
 import com.meta.ponkids.domain.cls.repository.custom.ClassDetailRepositoryCustom;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -12,17 +22,8 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.support.PageableExecutionUtils;
-import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
-
-import java.util.List;
-
-import static com.meta.ponkids.domain.cls.entity.QClassDetail.classDetail;
-import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
 
 @Repository
 @RequiredArgsConstructor
@@ -45,7 +46,8 @@ public class ClassDetailRepositoryImpl implements ClassDetailRepositoryCustom {
                 		classDetail.classDetailItemTyCd,
                 		ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
                                 .from( cmmnCdDetail )
-                                .where( cmmnCdDetail.parntsReplySn.eq( nttReply.nttReplySn ) ), "nttReplyCnt" )
+                                .where( cmmnCdDetail.cdDetailVal1.eq( classDetail.classDetailItemTyCd ),
+                                		cmmnCdDetail.cdNm.eq("CLASS_DETAIL_ITEM_TY_CD") ), "classDetailItemTyNm" ),
                 		classDetail.classDetailItemCn,
                 		classDetail.classDetailEssntlYn,
                 		new CaseBuilder()
@@ -54,14 +56,8 @@ public class ClassDetailRepositoryImpl implements ClassDetailRepositoryCustom {
 			                        .otherwise( "" ).as( "classDetailEssntlYnNm" ),
                 		classDetail.registerId,
                 		Expressions.stringTemplate("to_char({0}, '{1s}')", classDetail.regDt, "YYYY-MM-DD HH:MM:SS")
-//                		new CaseBuilder()
-//                		.when( user.gender.eq("M")).then("남자")
-//                		.when( user.gender.eq("F")).then("여자")
-//                		.otherwise("")
-//                		.as("gender"),
                 		) )					
                 .from( classDetail )
-                // where
                 .where()
 //                .orderBy( classDetail.classDetailSn.desc())
                 .offset( pageable.getOffset() )
@@ -79,15 +75,42 @@ public class ClassDetailRepositoryImpl implements ClassDetailRepositoryCustom {
 	}
 	
 	@Override
-	public List<ClassDetail> findByClassSnOrderByClassDetailSeq( Long pk ) {
+	public List<ClassDetailListDto> findByClassSnOrderByClassDetailSeq( Long pk ) {
 		
-		 List<ClassDetail> results = query.select(
-				 	new QClassDetailListDto(
-				 			classDetail.
-				 			)
+		 List<ClassDetailListDto> results = query.select(
+				 new QClassDetailListDto(
+	                		classDetail.classDetailSn,
+	                		classDetail.classSn,
+	                		classDetail.classDetailSeq,
+	                		classDetail.classDetailItemTyCd,
+	                		ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
+	                                .from( cmmnCdDetail )
+	                                .where( cmmnCdDetail.cdDetailVal1.eq( classDetail.classDetailItemTyCd ),
+	                                		cmmnCdDetail.cdNm.eq("CLASS_DETAIL_ITEM_TY_CD") ), "classDetailItemTyNm" ),
+	                		classDetail.classDetailItemCn,
+	                		classDetail.classDetailEssntlYn,
+	                		new CaseBuilder()
+				                        .when( classDetail.classDetailEssntlYn.eq( "Y" ) ).then( "필수" )
+				                        .when( classDetail.classDetailEssntlYn.eq( "N" ) ).then( "선택" )
+				                        .otherwise( "" )
+				                        .as( "classDetailEssntlYnNm" ),
+	                		classDetail.registerId,
+	                		Expressions.stringTemplate("to_char({0}, '{1s}')", classDetail.regDt, "YYYY-MM-DD HH:MM:SS")
+	                		)
 				 )
+				 .from(classDetail)
+				 .where ( eqClassSn( pk ) )
+				 .orderBy( classDetail.classDetailSeq.asc() )
+				 .fetch();
 		
+		 return results;
 	}
+	
+	// -------------------------------- WHERE 검색 옵션 setting --------------------------------
+	  
+    private BooleanExpression eqClassSn( Long pk ) {
+        return pk != null ? classDetail.classSn.eq(pk) : null;
+    }
 	
     private BooleanExpression eqOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨

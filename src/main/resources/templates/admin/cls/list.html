@@ -127,7 +127,7 @@
 	                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
 	                                <td> [[${data.ctgryNm}]] <th:block th:if="${data.crseCd != null && data.crseCd != '' }"><br/>[ [[${data.crseNm}]] ] </th:block> </td>
 	                                <td>
-                                        <a th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.classSn} ) }" th:text="${data.classSj}">
+                                        <a class="b-link" th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.classSn} ) }" th:text="${data.classSj}">
                                         </a>
                                     </td>
 	                                <td th:text="${data.classAmt}"></td>

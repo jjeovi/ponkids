@@ -54,7 +54,7 @@ public class CmmnCdDetailService {
         
         if ( cmmnCd != null ) {
             
-            List<CmmnCdDetail> cmmnCdDetailList = cmmnCdDetailRepository.findByCdSnAndUseYnOrderByCdDetailSeqAsc( cmmnCd.getCdSn(), "Y" );    // useYn 은 default로 Y
+            List<CmmnCdDetail> cmmnCdDetailList = cmmnCdDetailRepository.findByCdNmAndUseYnOrderByCdDetailSeqAsc( cdNm, "Y" );    // useYn 은 default로 Y
             
             // entity to dto (List) 전환
             CmmnCdDetailListDto cmmnCdDetailListDto = new CmmnCdDetailListDto();    // new로 listDto 생성

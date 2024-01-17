@@ -12,7 +12,7 @@ public class CmmnCdDetailListDto {
     
     private Long cdDetailSn;
     
-    private Long cdSn;
+    private String cdNm;
     
     private Long cdDetailSeq;
     
@@ -38,12 +38,11 @@ public class CmmnCdDetailListDto {
     
     @Builder
     @QueryProjection
-    public CmmnCdDetailListDto( Long cdDetailSn, Long cdSn, Long cdDetailSeq, String cdDetailNm, String cdDetailDc,
+    public CmmnCdDetailListDto( Long cdDetailSn, String cdNm, Long cdDetailSeq, String cdDetailNm, String cdDetailDc,
                                 String cdDetailVal1, String cdDetailVal2, String cdDetailVal3, String cdDetailVal4, String cdDetailVal5,
                                 String useYn ) {
-        super();
         this.cdDetailSn = cdDetailSn;
-        this.cdSn = cdSn;
+        this.cdNm = cdNm;
         this.cdDetailSeq = cdDetailSeq;
         this.cdDetailNm = cdDetailNm;
         this.cdDetailDc = cdDetailDc;
@@ -60,7 +59,7 @@ public class CmmnCdDetailListDto {
     public CmmnCdDetailListDto toDto( CmmnCdDetail cmmnCdDetail ) {
         return CmmnCdDetailListDto.builder()
                 .cdDetailSn( cmmnCdDetail.getCdDetailSn() )
-                .cdSn( cmmnCdDetail.getCdSn() )
+                .cdNm( cmmnCdDetail.getCdNm() )
                 .cdDetailSeq( cmmnCdDetail.getCdDetailSeq() )
                 .cdDetailNm( cmmnCdDetail.getCdDetailNm() )
                 .cdDetailDc( cmmnCdDetail.getCdDetailDc() )

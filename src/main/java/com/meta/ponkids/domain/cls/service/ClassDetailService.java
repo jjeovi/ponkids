@@ -1,5 +1,16 @@
 package com.meta.ponkids.domain.cls.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.meta.ponkids.domain.cls.dto.ClassDetailListDto;
 import com.meta.ponkids.domain.cls.dto.ClassDetailModDto;
 import com.meta.ponkids.domain.cls.dto.ClassDetailSaveDto;
@@ -8,17 +19,8 @@ import com.meta.ponkids.domain.cls.entity.ClassDetail;
 import com.meta.ponkids.domain.cls.repository.ClassDetailRepository;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -55,12 +57,8 @@ public class ClassDetailService {
     }
     
     public List<ClassDetailListDto> findByClassSnOrderByClassDetailSeq(Long pk) {
-    	List<ClassDetail> classDetailList = classDetailRepository.findByClassSnOrderByClassDetailSeq( pk );
     	
-    	ClassDetailListDto classDetailListDto = new ClassDetailListDto();
-    	List<ClassDetailListDto> listDtos = classDetailList.stream().map( m -> classDetailListDto.toDto( m )).collect( Collectors.toList());
-    	
-    	return listDtos;
+    	return classDetailRepository.findByClassSnOrderByClassDetailSeq( pk );
     }
     
     

@@ -34,7 +34,7 @@ public class CmmnCdDetail extends BaseTimeEntity {
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_CMMN_CD_DETAIL_SN" )
     private Long cdDetailSn;
     
-    private Long cdSn;
+    private String cdNm;
     
     private Long cdDetailSeq;
     

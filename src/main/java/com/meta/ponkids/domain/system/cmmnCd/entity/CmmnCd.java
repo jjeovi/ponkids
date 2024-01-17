@@ -1,17 +1,25 @@
 package com.meta.ponkids.domain.system.cmmnCd.entity;
 
-import com.meta.ponkids.domain.system.cmmnCd.entity.pk.CmmnCdPk;
-import com.meta.ponkids.domain.system.file.entity.pk.AtchFileDetailPk;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import com.meta.ponkids.global.common.BaseTimeEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.*;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.*;
 
 @Entity
 @Getter
@@ -37,13 +45,6 @@ public class CmmnCd extends BaseTimeEntity {
     private Long cdSn;
     
     private String cdNm;
-    
-    
-    // 복합키 생성 ( CmmnCdPk.java 에서 2개 키를 미리 생성)
-    // private Long cdSn;				// 코드 일련번호
-    // private String cdNm;				// 코드 이름
-    @EmbeddedId
-    private CmmnCdPk cmmnCdPk;        // 복합키 setting
     
     private String cdDc;
     
