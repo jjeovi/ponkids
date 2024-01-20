@@ -37,8 +37,8 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
 
 
 //		this.classSn = classSn;
-//		this.ctgryCd = ctgryCd;
-//		this.crseCd = crseCd;
+//		this.ctgrySn = ctgrySn;
+//		this.crseSn = crseSn;
 //		this. = classSj;
 //		this.classSumry = classSumry;
 //		this. = classDc;
@@ -56,9 +56,9 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 // select
                 .select( new QClassListDto(
                         class$.classSn,
-                        class$.ctgryCd,
+                        class$.ctgrySn,
                         classCategoryCl01.clNm.as( "ctgryNm" ),
-                        class$.crseCd,
+                        class$.crseSn,
                         classCategoryCl02.clNm.as( "crseNm" ),
                         class$.classSj,
                         class$.classSumry,
@@ -87,9 +87,15 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 ) )
                 .from( class$ )
                 .leftJoin( classCategoryCl01 )
-                .on( class$.ctgryCd.eq( classCategoryCl01.clSn.stringValue() ) )
+                // join 에는 delYn 조건 필수로 추가
+                .on(    class$.ctgrySn.eq( classCategoryCl01.clSn ),
+                        classCategoryCl01.delYn.eq( "N" )
+                )
                 .leftJoin( classCategoryCl02 )
-                .on( class$.crseCd.eq( classCategoryCl02.clSn.stringValue() ) )
+                // join 에는 delYn 조건 필수로 추가
+                .on(    class$.crseSn.eq( classCategoryCl02.clSn ),
+                        classCategoryCl02.delYn.eq("N")
+                )
                 // where
                 .where( 
                 		eqCateLv1( listDto.getCategory() ),
@@ -114,6 +120,63 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
         
     }
     
+    @Override
+    public List<ClassListDto> getList( ClassListDto listDto ) {
+        
+        return query
+                // select
+                .select( new QClassListDto(
+                        class$.classSn,
+                        class$.ctgrySn,
+                        classCategoryCl01.clNm.as( "ctgryNm" ),
+                        class$.crseSn,
+                        classCategoryCl02.clNm.as( "crseNm" ),
+                        class$.classSj,
+                        class$.classSumry,
+                        class$.classDc,
+                        class$.classAmt,
+                        class$.classDscntBfeAmt,
+                        class$.classPdSetYn,
+                        class$.classBeginDt,
+                        class$.classEndDt,
+                        class$.thumbAtchFileSn,
+                        class$.atchFileSn,
+                        new CaseBuilder()
+                                .when( class$.classExpsrYn.eq("Y")).then("표시")
+                                .when( class$.classExpsrYn.eq("N")).then("미표시")
+                                .otherwise("")
+                                .as("classExpsrYn"),
+                        new CaseBuilder()
+                                .when( 	class$.classPdSetYn.eq("Y")).then(
+                                        class$.classBeginDt.concat(" ~ ").concat(class$.classEndDt)
+                                )
+                                .when( class$.classPdSetYn.eq("N")).then("상시")
+                                .otherwise("")
+                                .as("classExpsrPeriod"),
+                        class$.registerId,
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH:MM:SS" )
+                ) )
+                .from( class$ )
+                .leftJoin( classCategoryCl01 )
+                // join 에는 delYn 조건 필수로 추가
+                .on(    class$.ctgrySn.eq( classCategoryCl01.clSn ),
+                        classCategoryCl01.delYn.eq( "N" )
+                )
+                .leftJoin( classCategoryCl02 )
+                // join 에는 delYn 조건 필수로 추가
+                .on(    class$.crseSn.eq( classCategoryCl02.clSn ),
+                        classCategoryCl02.delYn.eq("N")
+                )
+                // where
+                .where(
+                        eqCateLv1( listDto.getCategory() ),
+                        eqCateLv2( listDto.getCategory() ),
+                        eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                )
+                .orderBy( class$.classSn.desc())
+                .fetch();
+    }
+    
     private BooleanExpression eqOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨
         if ( StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn ) ) {
@@ -130,17 +193,17 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
     
 
     // 카테고리 lv 1 검색 옵션
-    // class$.ctgryCd == lv1sn 
+    // class$.ctgrySn == lv1sn 
     private BooleanExpression eqCateLv1( CategoryDto categoryDto ) {
         return ( categoryDto != null && categoryDto.getLv1Sn() != null
-                && categoryDto.getLv1Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? class$.ctgryCd.eq( categoryDto.getLv1Sn().toString() ) : null;
+                && categoryDto.getLv1Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? class$.ctgrySn.eq( categoryDto.getLv1Sn() ) : null;
     }
     
     // 카테고리 lv 2 검색 옵션
-    // class$.crseCd == lv2sn 
+    // class$.crseSn == lv2sn 
     private BooleanExpression eqCateLv2( CategoryDto categoryDto ) {
     	return ( categoryDto != null && categoryDto.getLv2Sn() != null
-    			&& categoryDto.getLv2Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? class$.crseCd.eq( categoryDto.getLv2Sn().toString() ) : null;
+    			&& categoryDto.getLv2Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? class$.crseSn.eq( categoryDto.getLv2Sn() ) : null;
     }
     
 }

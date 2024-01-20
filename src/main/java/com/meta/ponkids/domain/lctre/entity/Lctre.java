@@ -25,9 +25,7 @@ import javax.persistence.*;
         allocationSize = 1
 )
 @Where( clause = "del_yn = 'N'") // DEFAULT 로 WHERE DEL_YN = 'N' 문을 추가하여 조회
-// TODO SQLDelete setting
 @SQLDelete(sql = "UPDATE tb_LCTRE SET del_yn ='Y', updt_dt = now() WHERE LCTRE_sn = ?") // delelte 시 실행 (ex ) ~Repository.deleteById)
-//TODO TB name setting
 @Table( name = "tb_lctre" )
 public class Lctre extends BaseTimeEntity {
 	
@@ -37,7 +35,7 @@ public class Lctre extends BaseTimeEntity {
 	
 	private Long 	classSn;				// 클래스 일련번호
 	
-	private Long 	classWeekSn;			// 클래스 요일 일련번호
+	private String 	classDayCd;				// 클래스 요일 코드
 	
 	private Long 	lctreSeq;				// 수업 순번
 	

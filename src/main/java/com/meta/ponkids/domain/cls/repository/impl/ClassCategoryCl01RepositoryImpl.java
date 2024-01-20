@@ -34,8 +34,8 @@ public class ClassCategoryCl01RepositoryImpl implements ClassCategoryCl01Reposit
 
 
 //		this.classSn = classSn;
-//		this.ctgryCd = ctgryCd;
-//		this.crseCd = crseCd;
+//		this.ctgrySn = ctgrySn;
+//		this.crseSn = crseSn;
 //		this. = classSj;
 //		this.classSumry = classSumry;
 //		this. = classDc;

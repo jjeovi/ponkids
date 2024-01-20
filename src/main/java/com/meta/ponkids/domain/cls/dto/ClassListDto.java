@@ -13,11 +13,11 @@ public class ClassListDto {
     
     private Long classSn;                // 클래스일련번호
     
-    private String ctgryCd;              // 카테고리코드
+    private Long ctgrySn;              // 카테고리코드
     
     private String ctgryNm;              // 카테고리명
     
-    private String crseCd;               // 커리큘럼코드
+    private Long crseSn;               // 커리큘럼코드
     
     private String crseNm;               // 커리큘럼명
     
@@ -56,11 +56,11 @@ public class ClassListDto {
     private CategoryDto category;    // 카테고리 검색 : 생성자에는 추가하지 않음!
     
     @QueryProjection
-    public ClassListDto( Long classSn, String ctgryCd, String ctgryNm, String crseCd, String crseNm, String classSj, String classSumry, String classDc, Long classAmt, Long classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String classExpsrPeriod, String registerId, String regDt ) {
+    public ClassListDto( Long classSn, Long ctgrySn, String ctgryNm, Long crseSn, String crseNm, String classSj, String classSumry, String classDc, Long classAmt, Long classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String classExpsrPeriod, String registerId, String regDt ) {
         this.classSn = classSn;
-        this.ctgryCd = ctgryCd;
+        this.ctgrySn = ctgrySn;
         this.ctgryNm = ctgryNm;
-        this.crseCd = crseCd;
+        this.crseSn = crseSn;
         this.crseNm = crseNm;
         this.classSj = classSj;
         this.classSumry = classSumry;

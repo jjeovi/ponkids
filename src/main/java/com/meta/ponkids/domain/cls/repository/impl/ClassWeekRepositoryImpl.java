@@ -34,13 +34,14 @@ public class ClassWeekRepositoryImpl implements ClassWeekRepositoryCustom {
         // (1) 결과list (results).
         List<ClassWeekListDto> results = query
                 // select
-                .select( new QClassWeekListDto(
-                        classWeek.classWeekSn,
-                        classWeek.classSn,
-                        classWeek.classDayCd,
-                        cmmnCdDetail.cdDetailNm,
-                        cmmnCdDetail.cdDetailSeq
-                ) )
+                .select(
+                        new QClassWeekListDto (
+                            cmmnCdDetail.cdDetailSn.as( "cdDetailSn" ),
+                            cmmnCdDetail.cdDetailVal1.as( "classDayCd" ),
+                            cmmnCdDetail.cdDetailNm.as( "classDayNm" ),
+                            cmmnCdDetail.cdDetailSeq.as( "classDaySeq" )
+                        )
+                )
                 .from( classWeek )
                 // where
                 .where()
@@ -60,34 +61,36 @@ public class ClassWeekRepositoryImpl implements ClassWeekRepositoryCustom {
     }
     
     @Override
-    public List<ClassWeekListDto> getListByClassSn( Long pk ){
-    	List<ClassWeekListDto> results = query
-    			.select( new QClassWeekListDto(
-                        classWeek.classWeekSn,
-                        classWeek.classSn,
-                        classWeek.classDayCd,
-                        cmmnCdDetail.cdDetailNm,
-                        cmmnCdDetail.cdDetailSeq )
-    			)
-    			.from( classWeek )
-    			.innerJoin(cmmnCdDetail)
-    			//join 조건 시에는 delYn 조건을 명시해야 함 
-    			.on( cmmnCdDetail.cdDetailVal1.eq(classWeek.classDayCd),
-    				cmmnCdDetail.delYn.eq("N")
-    			)
-    			.where( eqClassSn(pk), 
-    					cmmnCdDetail.cdNm.eq("DAY_7_CD")
-    			)
-    			.orderBy( cmmnCdDetail.cdDetailSeq.asc() )
-    			.fetch();
-    			
-    			return results;
+    public List<ClassWeekListDto> getListByClassSn( Long pk ) {
+        List<ClassWeekListDto> results = query
+                .select(
+                        new QClassWeekListDto (
+                            cmmnCdDetail.cdDetailSn.as( "cdDetailSn" ),
+                            cmmnCdDetail.cdDetailVal1.as( "classDayCd" ),
+                            cmmnCdDetail.cdDetailNm.as( "classDayNm" ),
+                            cmmnCdDetail.cdDetailSeq.as( "classDaySeq" )
+                        )
+                )
+                .from( classWeek )
+                .innerJoin( cmmnCdDetail )
+                //join 조건 시에는 delYn 조건을 명시해야 함
+                .on( cmmnCdDetail.cdDetailVal1.eq( classWeek.classDayCd ),
+                        cmmnCdDetail.delYn.eq( "N" )
+                )
+                .where( eqClassSn( pk ),
+                        cmmnCdDetail.cdNm.eq( "DAY_7_CD" )
+                )
+                .groupBy( cmmnCdDetail.cdDetailSn )
+                .orderBy( cmmnCdDetail.cdDetailSeq.asc() )
+                .fetch();
+        
+        return results;
     }
-	
-	// -------------------------------- WHERE 검색 옵션 setting --------------------------------
-	  
+    
+    // -------------------------------- WHERE 검색 옵션 setting --------------------------------
+    
     private BooleanExpression eqClassSn( Long pk ) {
-        return pk != null ? classWeek.classSn.eq(pk) : null;
+        return ( pk != null && pk != 0 )? classWeek.classSn.eq( pk ) : null;
     }
     
     private BooleanExpression eqOption( String schOption, String schCntn ) {

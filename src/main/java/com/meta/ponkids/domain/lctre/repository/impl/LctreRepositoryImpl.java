@@ -3,6 +3,9 @@ package com.meta.ponkids.domain.lctre.repository.impl;
 
 import java.util.List;
 
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.jpa.JPAExpressions;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -19,7 +22,14 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 
+import static com.meta.ponkids.domain.cls.entity.QClass.class$;
+import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl01.classCategoryCl01;
+import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategoryCl02;
+import static com.meta.ponkids.domain.cls.entity.QClassDetail.classDetail;
+import static com.meta.ponkids.domain.cls.entity.QClassWeek.classWeek;
 import static com.meta.ponkids.domain.lctre.entity.QLctre.lctre;
+import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
+import static com.meta.ponkids.domain.user.entity.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
@@ -30,24 +40,44 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 	@Override
 	public Page<LctreListDto> getList( LctreListDto listDto, Pageable pageable ) {
 		
-		// TODO 구현
 		// (1) '결과list' 와 (2)'count' 를 2번에 걸쳐 조회
         
-		// TODO
         // (1) 결과list (results).
 		List<LctreListDto> results = query
 				// select
                 .select( new QLctreListDto(
                 		lctre.lctreSn,
+						class$.ctgrySn,
+						classCategoryCl01.clNm.as( "ctgryNm" ),
+						class$.crseSn,
+						classCategoryCl02.clNm.as( "crseNm" ),
 						lctre.classSn,
-						lctre.classWeekSn,
+						ExpressionUtils.as( JPAExpressions.select( class$.classSj )
+								.from( class$ )
+								.where( class$.classSn.eq( lctre.classSn )
+										 ), "classSj" ),
+						lctre.classDayCd,
+						ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
+								.from( cmmnCdDetail )
+								.where( cmmnCdDetail.cdDetailVal1.eq( lctre.classDayCd ),
+										cmmnCdDetail.cdNm.eq("DAY_7_CD") ), "classDayNm" ),
 						lctre.lctreSeq,
 						lctre.lctreSj,
 						lctre.lctreDc,
 						lctre.lctreApplcntGuidance,
 						lctre.rcritNmprSetYn,
+						new CaseBuilder()
+								.when( lctre.rcritNmprSetYn.eq( "Y" ) ).then( "설정" )
+								.when( lctre.rcritNmprSetYn.eq( "N" ) ).then( "미설정" )
+								.otherwise( "" )
+								.as( "rcritNmprSetYnNm" ),
 						lctre.rcritNmprCo,
 						lctre.preparRcritNmprSetYn,
+						new CaseBuilder()
+								.when( lctre.preparRcritNmprSetYn.eq( "Y" ) ).then( "설정" )
+								.when( lctre.preparRcritNmprSetYn.eq( "N" ) ).then( "미설정" )
+								.otherwise( "" )
+								.as( "preparRcritNmprSetYnNm" ),
 						lctre.preparRcritNmprCo,
 						lctre.registerId,
                 		Expressions.stringTemplate("to_char({0}, '{1s}')", lctre.regDt, "YYYY-MM-DD HH:MM:SS")
@@ -58,8 +88,25 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 //                		.as("gender"),
                 		) )					
                 .from( lctre )
+				.leftJoin( class$ )
+				// join 에는 delYn 조건 필수로 추가
+				.on(    class$.classSn.eq( lctre.classSn ),
+						class$.delYn.eq( "N" )
+				)
+				.leftJoin( classCategoryCl01 )
+				// join 에는 delYn 조건 필수로 추가
+				.on(    class$.ctgrySn.eq( classCategoryCl01.clSn ),
+						classCategoryCl01.delYn.eq( "N" )
+				)
+				.leftJoin( classCategoryCl02 )
+				// join 에는 delYn 조건 필수로 추가
+				.on(    class$.crseSn.eq( classCategoryCl02.clSn ),
+						classCategoryCl02.delYn.eq("N")
+				)
                 // where
-                .where()
+                .where(
+						eqClassSn( listDto.getClassSn() )
+				)
 //                .orderBy( lctre.lctreSn.desc())
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )
@@ -79,6 +126,12 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 		
 	}
 	
+	
+	// -------------------------------- WHERE 검색 옵션 setting --------------------------------
+	
+	private BooleanExpression eqClassSn( Long pk ) {
+		return ( pk != null && pk != 0 )? lctre.classSn.eq( pk ) : null;
+	}
 	
     private BooleanExpression eqOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨

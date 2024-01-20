@@ -284,11 +284,13 @@ public class ClassCategoryCl02Controller {
         
         Map<String, Object> result = new HashMap<String, Object>();
         
-        // 부모clSn 값 setting ( ajax의 categorySn 을 대입해준다.)
-        if(listDto.getParntsClSn() == null ) {
-        	if(listDto.getCategory().getCategorySn() != null ) {
-        		listDto.setParntsClSn(listDto.getCategory().getCategorySn());
-        	}
+        // 분류에서 설정된 categorySn값을 검색키워드에 맞게 검색조건값 setting ( ajax의 categorySn 을 대입 )
+        // target = parntsClSn
+        Long targetPk = listDto.getParntsClSn();
+        if ( targetPk == null ) {
+            if ( listDto.getCategory().getCategorySn() != null ) {
+                listDto.setParntsClSn( listDto.getCategory().getCategorySn() );
+            }
         }
         
         // 부모 클래스 일련번호로 커리큘럼검색

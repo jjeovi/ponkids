@@ -11,9 +11,9 @@ public class ClassModDto extends ClassDto {
     
     private Long classSn;                   // 클래스일련번호
     
-    private String ctgryCd;                 // 카테고리코드
+    private Long ctgrySn;                 // 카테고리코드
     
-    private String crseCd;                  // 커리큘럼코드
+    private Long crseSn;                  // 커리큘럼코드
     
     private String classSj;                 // 클래스제목
     
@@ -45,10 +45,10 @@ public class ClassModDto extends ClassDto {
     
     //builder 생성
     @Builder
-    public ClassModDto( Long classSn, String ctgryCd, String crseCd, String classSj, String classSumry, String classDc, Long classAmt, Long classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String updusrId, String updusrIp ) {
+    public ClassModDto( Long classSn, Long ctgrySn, Long crseSn, String classSj, String classSumry, String classDc, Long classAmt, Long classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String updusrId, String updusrIp ) {
         this.classSn = classSn;
-        this.ctgryCd = ctgryCd;
-        this.crseCd = crseCd;
+        this.ctgrySn = ctgrySn;
+        this.crseSn = crseSn;
         this.classSj = classSj;
         this.classSumry = classSumry;
         this.classDc = classDc;
@@ -68,8 +68,8 @@ public class ClassModDto extends ClassDto {
     public Class toEntity() {
         return Class.builder()
                 .classSn( classSn )
-                .ctgryCd( ctgryCd )
-                .crseCd( crseCd )
+                .ctgrySn( ctgrySn )
+                .crseSn( crseSn )
                 .classSj( classSj )
                 .classSumry( classSumry )
                 .classDc( classDc )
@@ -90,8 +90,8 @@ public class ClassModDto extends ClassDto {
     public ClassModDto toDto( Class clas ) {
         return ClassModDto.builder()
                 .classSn( clas.getClassSn() )
-                .ctgryCd( clas.getCtgryCd() )
-                .crseCd( clas.getCrseCd() )
+                .ctgrySn( clas.getCtgrySn() )
+                .crseSn( clas.getCrseSn() )
                 .classSj( clas.getClassSj() )
                 .classSumry( clas.getClassSumry() )
                 .classDc( clas.getClassDc() )

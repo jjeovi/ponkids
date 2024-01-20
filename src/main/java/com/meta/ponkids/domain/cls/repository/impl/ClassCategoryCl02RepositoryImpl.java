@@ -33,8 +33,8 @@ public class ClassCategoryCl02RepositoryImpl implements ClassCategoryCl02Reposit
         
         // (1) '결과list' 와 (2)'count' 를 2번에 걸쳐 조회
 //		this.classSn = classSn;
-//		this.ctgryCd = ctgryCd;
-//		this.crseCd = crseCd;
+//		this.ctgrySn = ctgrySn;
+//		this.crseSn = crseSn;
 //		this. = classSj;
 //		this.classSumry = classSumry;
 //		this. = classDc;

@@ -14,9 +14,9 @@ public class ClassSaveDto extends ClassDto {
     
     private Long classSn;                   // 클래스일련번호
     
-    private String ctgryCd;                 // 카테고리코드
+    private Long ctgrySn;                 // 카테고리코드
     
-    private String crseCd;                  // 커리큘럼코드
+    private Long crseSn;                  // 커리큘럼코드
     
     private String classSj;                 // 클래스제목
     
@@ -50,9 +50,9 @@ public class ClassSaveDto extends ClassDto {
     
     @Builder
     public ClassSaveDto(
-    		Long classSn, 
-    		String ctgryCd, 
-    		String crseCd, 
+    		Long classSn,
+			Long ctgrySn,
+			Long crseSn,
     		String classSj,
 			String classSumry, 
 			String classDc, 
@@ -70,8 +70,8 @@ public class ClassSaveDto extends ClassDto {
 			String updusrIp ) {
     	
 		this.classSn = classSn;
-		this.ctgryCd = ctgryCd;
-		this.crseCd = crseCd;
+		this.ctgrySn = ctgrySn;
+		this.crseSn = crseSn;
 		this.classSj = classSj;
 		this.classSumry = classSumry;
 		this.classDc = classDc;
@@ -93,8 +93,8 @@ public class ClassSaveDto extends ClassDto {
     public Class toEntity() {
         return Class.builder()
                 .classSn( classSn )
-                .ctgryCd( ctgryCd )
-                .crseCd( crseCd )
+                .ctgrySn( ctgrySn )
+                .crseSn( crseSn )
                 .classSj( classSj )
                 .classSumry( classSumry )
                 .classDc( classDc )

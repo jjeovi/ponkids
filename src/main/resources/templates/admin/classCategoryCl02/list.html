@@ -70,16 +70,16 @@
                                 th:value="${data.clSn}">[[${data.clNm}]]
                             </li>
                         </ul>
-<!--                         <ul class="data-group" data-all-yn="Y" data-search-url="">  data-all-yn : 전체 여부 , data-search-url : 검색조회용 url (ajax0) -->
+<!--                         <ul class="data-group" data-all-yn="Y" data-next-step-li-onclick-param-url="">  data-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
 <!--                              lv2 -->
 <!--                         </ul> -->
-<!--                         <ul class="data-group" data-all-yn="Y" data-search-url="">  data-all-yn : 전체 여부 , data-search-url : 검색조회용 url (ajax0) -->
+<!--                         <ul class="data-group" data-all-yn="Y" data-next-step-li-onclick-param-url="">  data-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
 <!--                              lv3 -->
 <!--                         </ul> -->
-<!--                         <ul class="data-group" data-all-yn="Y" data-search-url="">  data-all-yn : 전체 여부 , data-search-url : 검색조회용 url (ajax0) -->
+<!--                         <ul class="data-group" data-all-yn="Y" data-next-step-li-onclick-param-url="">  data-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
 <!--                              lv4 -->
 <!--                         </ul> -->
-<!--                         <ul class="data-group" data-all-yn="Y" data-search-url="">  data-all-yn : 전체 여부 , data-search-url : 검색조회용 url (ajax0) -->
+<!--                         <ul class="data-group" data-all-yn="Y" data-next-step-li-onclick-param-url="">  data-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
 <!--                              lv5 -->
 <!--                         </ul> -->
                     </div>
@@ -118,7 +118,7 @@
                     </div>
                     <!-- E : 카테고리 목록 으로 이동 -->
                 	<h2 class="pl_15p" th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null ) }">
-	            		대분류 : [[${searchDTO.category.lv1Nm}]]
+	            		분류 : [[${searchDTO.category.lv1Nm}]]
 	            	</h2>
                     <input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
                     <!-- S : 테이블 상단 검색 창 -->

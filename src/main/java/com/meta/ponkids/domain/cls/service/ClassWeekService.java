@@ -3,6 +3,7 @@ package com.meta.ponkids.domain.cls.service;
 import com.meta.ponkids.domain.cls.dto.*;
 import com.meta.ponkids.domain.cls.entity.ClassWeek;
 import com.meta.ponkids.domain.cls.repository.ClassWeekRepository;
+import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
 import lombok.RequiredArgsConstructor;
@@ -49,18 +50,23 @@ public class ClassWeekService {
         return classWeekRepository.getList( listDto, pageable );
     }
     
-    public List<ClassWeekListDto> findByClassSnOrderByClassWeekSn( Long pk) {
-        List<ClassWeek> classWeekList =  classWeekRepository.findByClassSnOrderByClassWeekSn( pk );
-        
-        ClassWeekListDto classWeekListDto = new ClassWeekListDto();
-        List<ClassWeekListDto> listDtos = classWeekList.stream().map( m -> classWeekListDto.toDto( m ) ).collect( Collectors.toList());
-        
-        return listDtos;
-    }
-    
     
     public List<ClassWeekListDto> getListByClassSn( Long pk) {
-    	return classWeekRepository.getListByClassSn( pk );
+        
+        List<ClassWeekListDto> listDtos = classWeekRepository.getListByClassSn( pk );
+        
+        // 카테고리 값 뿌리기 위한  setting
+        for( ClassWeekListDto dto : listDtos) {
+            
+            CategoryDto categoryDto = new CategoryDto();
+            
+            categoryDto.setCategorySn(dto.getClassWeekSn());    // 이 부분이 결국은 html 에서 카테고리검색의 li value 값이 됨
+            categoryDto.setCategoryNm(dto.getClassDayNm());    // 이 부분이 결국은 html 에서 카테고리검색의 li 명칭이 됨
+            
+            dto.setCategory(categoryDto);
+        }
+        
+    	return listDtos;
     }
     
     public ClassWeekModDto findById( Long pk ) {    // 타입 체크 필요

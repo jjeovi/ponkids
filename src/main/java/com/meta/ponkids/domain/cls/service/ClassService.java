@@ -1,10 +1,12 @@
 package com.meta.ponkids.domain.cls.service;
 
+import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ListDto;
 import com.meta.ponkids.domain.cls.dto.ClassListDto;
 import com.meta.ponkids.domain.cls.dto.ClassModDto;
 import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
 import com.meta.ponkids.domain.cls.entity.Class;
 import com.meta.ponkids.domain.cls.repository.ClassRepository;
+import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +59,25 @@ public class ClassService {
         return classRepository.getList( listDto, pageable );
     }
     
+    
+    public List<ClassListDto> getList( ClassListDto listDto ) {
+        
+        List<ClassListDto> listDtos = classRepository.getList( listDto );
+        
+        // 카테고리 값 뿌리기 위한  setting
+        for( ClassListDto dto : listDtos) {
+            
+            CategoryDto categoryDto = new CategoryDto();
+            
+            categoryDto.setCategorySn(dto.getClassSn());    // 이 부분이 결국은 html 에서 카테고리검색의 li value 값이 됨
+            categoryDto.setCategoryNm(dto.getClassSj());    // 이 부분이 결국은 html 에서 카테고리검색의 li 명칭이 됨
+            
+            dto.setCategory(categoryDto);
+        }
+        return listDtos;
+    }
+    
+    
     public ClassModDto findById( Long pk ) {
         
         Class clas = classRepository.findById( pk ).orElse( null );
@@ -85,8 +107,8 @@ public class ClassService {
         
         // target object 에 수정사항 set	
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
-        if ( StringUtils.hasText( modDto.getCtgryCd() ) )       targetDto.setCtgryCd( modDto.getCtgryCd() ); 	                // 카테고리
-        if ( StringUtils.hasText( modDto.getCrseCd() ) )        targetDto.setCrseCd( modDto.getCrseCd() );                      // 커리큘럼
+        if ( modDto.getCtgrySn() != null )                      targetDto.setCtgrySn( modDto.getCtgrySn() ); 	                // 카테고리
+        if ( modDto.getCrseSn() != null )                       targetDto.setCrseSn( modDto.getCrseSn() );                      // 커리큘럼
         if ( StringUtils.hasText( modDto.getClassSj() ) )       targetDto.setClassSj( modDto.getClassSj() );                    // 클래스 제목
         if ( StringUtils.hasText( modDto.getClassSumry() ) )    targetDto.setClassSumry( modDto.getClassSumry() );              // 클래스 요약
         if ( StringUtils.hasText( modDto.getClassDc() ) )       targetDto.setClassDc( modDto.getClassDc() );                    // 클래스 설명

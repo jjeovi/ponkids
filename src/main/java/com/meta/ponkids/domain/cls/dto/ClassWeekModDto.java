@@ -9,15 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ClassWeekModDto {
     
-    private Long classWeekSn;        // 클래스 요일 일련번호
+    private Long    classWeekSn;    // 클래스 요일 일련번호
     
-    private Long classSn;           // 클래스 일련번호
+    private Long    classSn;        // 클래스 일련번호
     
-    private String classDayCd;      // 클래스 요일 코드
+    private String    classDayCd;     // 클래스 요일 코드
     
-    private String updusrId;        // 수정자 ID
+    private String  updusrId;       // 수정자 ID
     
-    private String updusrIp;        // 수정자 IP
+    private String  updusrIp;       // 수정자 IP
     
     //builder 생성
     @Builder

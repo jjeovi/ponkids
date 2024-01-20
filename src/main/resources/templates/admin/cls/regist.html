@@ -21,7 +21,7 @@
         });
 
     	// 카테고리 선택시 커리큘럼 재정렬 
-    	$("[name='ctgryCd']").change( function() {
+    	$("[name='ctgrySn']").change( function() {
     		
     		var parntsClSn = $(this).val();
     		
@@ -56,20 +56,20 @@
     });
     // $( function () {}); end
 
-    // re arrange crseCd
+    // re arrange crseSn
     function getListByParntsClSnAjaxCallback( result ) {
     	
-    	// rearrange CrseCd 
+    	// rearrange CrseSn
     	
     	// 커리큘럼 전체 삭제
-    	$("[name='crseCd']").empty();
+    	$("[name='crseSn']").empty();
     	
     	// 커리큘럼 추가 (전체)
-    	$("[name='crseCd']").append("<option value=''>선택안함</option>");
+    	$("[name='crseSn']").append("<option value=''>선택안함</option>");
     	
     	// 커리큘럼 추가
     	for ( let item of result.resultList ) {
-    		 $("[name='crseCd']").append("<option value='" + item.clSn + "'>" + item.clNm + "</option>");
+    		 $("[name='crseSn']").append("<option value='" + item.clSn + "'>" + item.clNm + "</option>");
         }
     }
 
@@ -338,13 +338,13 @@
                     	<div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">분류<span class="required">*</span></label>
                             <div class="col-md-2 col-sm-6">
-                            	<select class="form-control" name="ctgryCd" id="classCategoryCl01List" required="required">
+                            	<select class="form-control" name="ctgrySn" id="classCategoryCl01List" required="required">
                                     <option value="">카테고리 선택</option>
                                     <option th:each="item : ${classCategoryCl01List}" th:value="${item.clSn}">[[${item.clNm}]]
                                 </select>
                             </div>
                             <div class="col-md-2 col-sm-6">
-                            	<select class="form-control" name="crseCd" id="classCategoryCl02List" >
+                            	<select class="form-control" name="crseSn" id="classCategoryCl02List" >
                                     <option value="">커리큘럼 선택</option>
                                 </select>
                             </div>

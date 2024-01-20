@@ -56,8 +56,8 @@ public class ClassCategoryCl02Service {
         	
         	CategoryDto categoryDto = new CategoryDto();
         	
-        	categoryDto.setCategorySn(dto.getClSn());
-        	categoryDto.setCategoryNm(dto.getClNm());
+        	categoryDto.setCategorySn(dto.getClSn());   // 이 부분이 결국은 html 에서 카테고리검색의 li value 값이 됨
+        	categoryDto.setCategoryNm(dto.getClNm());   // 이 부분이 결국은 html 에서 카테고리검색의 li 명칭이 됨
         	
         	dto.setCategory(categoryDto);        	
         }
@@ -70,15 +70,15 @@ public class ClassCategoryCl02Service {
         ClassCategoryCl02ListDto classCategoryCl02ListDto = new ClassCategoryCl02ListDto();    // new로 listDto 생성
         List<ClassCategoryCl02ListDto> listDtoList = classCategoryCl02List.stream().map( m -> classCategoryCl02ListDto.toDto( m ) ).collect( Collectors.toList() );
         
-        // lv2 setting ( 분류 lv2 데이터 뿌릴때 사용 )
+        // 카테고리 값 뿌리기 위한  setting
         for(ClassCategoryCl02ListDto dto : listDtoList) {
         	
         	CategoryDto categoryDto = new CategoryDto();
-        	
-        	categoryDto.setCategorySn(dto.getClSn());
-        	categoryDto.setCategoryNm(dto.getClNm());
-        	
-        	dto.setCategory(categoryDto);        	
+            
+            categoryDto.setCategorySn(dto.getClSn());   // 이 부분이 결국은 html 에서 카테고리검색의 li value 값이 됨
+            categoryDto.setCategoryNm(dto.getClNm());   // 이 부분이 결국은 html 에서 카테고리검색의 li 명칭이 됨
+         
+        	dto.setCategory(categoryDto);
         }
         
         return listDtoList;

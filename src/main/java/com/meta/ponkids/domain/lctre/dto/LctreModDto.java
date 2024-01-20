@@ -2,21 +2,19 @@ package com.meta.ponkids.domain.lctre.dto;
 
 import com.meta.ponkids.domain.lctre.entity.Lctre;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-// TODO Dto 항목 setting
 @Data
 @NoArgsConstructor
-public class LctreModDto {
+@EqualsAndHashCode( callSuper = false )
+public class LctreModDto extends LctreDto {
 	
 	
 	private Long 	lctreSn;				// 수업 일련번호
 	
 	private Long 	classSn;				// 클래스 일련번호
-	
-	private Long 	classWeekSn;			// 클래스 요일 일련번호
+    
+    private String 	classDayCd;				// 클래스 요일 코드
 	
 	private Long 	lctreSeq;				// 수업 순번
 	
@@ -39,10 +37,10 @@ public class LctreModDto {
     private String 	updusrIp;                // 수정자 IP
     
     @Builder
-    public LctreModDto( Long lctreSn, Long classSn, Long classWeekSn, Long lctreSeq, String lctreSj, String lctreDc, String lctreApplcntGuidance, String rcritNmprSetYn, Long rcritNmprCo, String preparRcritNmprSetYn, Long preparRcritNmprCo, String updusrId, String updusrIp ) {
+    public LctreModDto( Long lctreSn, Long classSn, String classDayCd, Long lctreSeq, String lctreSj, String lctreDc, String lctreApplcntGuidance, String rcritNmprSetYn, Long rcritNmprCo, String preparRcritNmprSetYn, Long preparRcritNmprCo, String updusrId, String updusrIp ) {
         this.lctreSn = lctreSn;
         this.classSn = classSn;
-        this.classWeekSn = classWeekSn;
+        this.classDayCd = classDayCd;
         this.lctreSeq = lctreSeq;
         this.lctreSj = lctreSj;
         this.lctreDc = lctreDc;
@@ -56,13 +54,12 @@ public class LctreModDto {
     }
     
     
-    // TODO toEntity();
     // Dto to Entity 메소드 생성
     public Lctre toEntity() {
         return Lctre.builder()
                 .lctreSn( lctreSn )
                 .classSn( classSn )
-                .classWeekSn( classWeekSn )
+                .classDayCd( classDayCd )
                 .lctreSeq( lctreSeq )
                 .lctreSj( lctreSj )
                 .lctreDc( lctreDc )
@@ -80,7 +77,7 @@ public class LctreModDto {
         return LctreModDto.builder()
                 .lctreSn( lctre.getLctreSn() )
                 .classSn( lctre.getClassSn() )
-                .classWeekSn( lctre.getClassWeekSn() )
+                .classDayCd( lctre.getClassDayCd() )
                 .lctreSeq( lctre.getLctreSeq() )
                 .lctreSj( lctre.getLctreSj() )
                 .lctreDc( lctre.getLctreDc() )
@@ -94,7 +91,5 @@ public class LctreModDto {
                 .updusrIp( lctre.getUpdusrIp() )
                 .build();
     }
-    
-	
 	
 }

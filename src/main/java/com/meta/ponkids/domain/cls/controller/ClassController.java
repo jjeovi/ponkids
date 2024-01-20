@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import com.meta.ponkids.domain.cls.repository.ClassRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -50,7 +51,6 @@ public class ClassController {
     private final ClassDetailService classDetailService;
     private final ClassCategoryCl01Service classCategoryCl01Service;
     private final ClassCategoryCl02Service classCategoryCl02Service;
-    
     
     private final CmmnCdDetailService cmmnCdDetailService;
     
@@ -166,8 +166,8 @@ public class ClassController {
         }
         
         // 입력항목 존재하면 등록
-        if( saveDto != null && saveDto.getClassDetails() != null && saveDto.getClassDetails().size() != 0 ) {
-        	classDetailService.save(saveDto, request);
+        if ( saveDto != null && saveDto.getClassDetails() != null && saveDto.getClassDetails().size() != 0 ) {
+            classDetailService.save( saveDto, request );
         }
         
         // 메시지 출력 및 url 이동 처리
@@ -196,20 +196,21 @@ public class ClassController {
         model.addAttribute( "day7List", cmmnCdDetailService.getList( "DAY_7_CD" ) );    // 요일리스트
         
         // 클래스 카테고리 list setting
-        model.addAttribute( "ctgryCdList", classCategoryCl01Service.findAll() );
+        model.addAttribute( "ctgrySnList", classCategoryCl01Service.findAll() );
         
-        // 클래스 커리큘럼 list setting ( targetDto 의 ctgryCd 값으로 커리큘럼 list 를 구함. )
-        model.addAttribute( "crseCdList", classCategoryCl02Service.findByParntsClSnOrderByClSeq( Long.parseLong( targetDto.getCtgryCd() ) ) );
+        // 클래스 커리큘럼 list setting ( targetDto 의 ctgrySn 값으로 커리큘럼 list 를 구함. )
+        model.addAttribute( "crseSnList", classCategoryCl02Service.findByParntsClSnOrderByClSeq( targetDto.getCtgrySn() ) );
         
         // 클래스 요일 List add
-        // 클래스 요일 은 html 그리고 script로 ajax를 통해 불러온다. 처음에 불러오면 타임리프로 요일을 체크하는 로직이 너무 어렵기 때문에 html먼저 그린 뒤 ajax를 호출 하는 방식으로 정함.
+        // 클래스 요일 은 html 그리고 script로 ajax를 통해 불러온다. 처음에 불러오면 타임리프로 요일을 체크하는 로직으로는 타임리프의 값을 script에서 읽는데 한계가 있기 때문에
+        // html먼저 그린 뒤 ajax를 호출 하는 방식으로 정함. -> /live/getClassWeekListAjax 에서 구현
         // model.addAttribute( "classWeekList",  classWeekService.findByClassSnOrderByClassWeekSn( targetDto.getClassSn() ));
         
         // chldrn target object 조회
         model.addAttribute( "targetClsDtlList", classDetailService.findByClassSnOrderByClassDetailSeq( targetDto.getClassSn() ) );
         
         // 클래스sn model 에 추가
-        model.addAttribute( "schClassSn",  targetDto.getClassSn() );
+        model.addAttribute( "schClassSn", targetDto.getClassSn() );
         
         
         // 첨부파일 존재시
@@ -301,14 +302,14 @@ public class ClassController {
         
         //  클래스 요일 update : 요일 전부 삭제 후 새로 save
         if ( modDto.getClassWeek() != null ) {
-            classWeekService.deleteAllByClassSn(modDto.getClassSn());
+            classWeekService.deleteAllByClassSn( modDto.getClassSn() );
             classWeekService.save( modDto, request );
         }
         
         // 입력항목 update (입력항목 존재시) : 입력항목 전부 삭제 후 새로 save
-        if( modDto != null && modDto.getClassDetails() != null && modDto.getClassDetails().size() != 0 ) {
-        	classDetailService.deleteAllByClassSn(modDto.getClassSn());
-        	classDetailService.save(modDto, request);
+        if ( modDto != null && modDto.getClassDetails() != null && modDto.getClassDetails().size() != 0 ) {
+            classDetailService.deleteAllByClassSn( modDto.getClassSn() );
+            classDetailService.save( modDto, request );
         }
         
         // 메시지 출력 및 url 이동 처리
@@ -343,10 +344,31 @@ public class ClassController {
         
         Map<String, Object> result = new HashMap<String, Object>();
         
-        result.put( "resultList", classWeekService.findByClassSnOrderByClassWeekSn( listDto.getClassSn() ) );   // 클래스 요일 classSn으로 검색
+        // 분류에서 설정된 categorySn값을 검색키워드에 맞게 검색조건값 setting ( ajax의 categorySn 을 대입 )
+        // target = classSn
+        Long targetPk = listDto.getClassSn();
+        if ( targetPk == null ) {
+            if ( listDto.getCategory().getCategorySn() != null ) {
+                listDto.setClassSn( listDto.getCategory().getCategorySn() );
+            }
+        }
+        
+        result.put( "resultList", classWeekService.getListByClassSn( listDto.getClassSn() ) );   // 클래스 요일 classSn으로 검색
         
         return result;
     }
     
+    // 클래스 검색 (Ajax)
+    @ResponseBody
+    @GetMapping( BASIC_PATH + "/live/getClassListAjax" )
+    public Map<String, Object> getClassListAjax( @ModelAttribute ClassListDto listDto
+    ) {
+        
+        Map<String, Object> result = new HashMap<String, Object>();
+        
+        result.put( "resultList", classService.getList( listDto ) );   // 클래스 요일 classSn으로 검색
+        
+        return result;
+    }
     
 }

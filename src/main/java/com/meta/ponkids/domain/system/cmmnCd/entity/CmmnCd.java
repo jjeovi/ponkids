@@ -42,47 +42,47 @@ public class CmmnCd extends BaseTimeEntity {
     
     @Id
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_CMMN_CD_SN" )
-    private Long cdSn;
+    private Long    cdSn;
     
-    private String cdNm;
+    private String  cdNm;
     
-    private String cdDc;
+    private String  cdDc;
     
-    private String cdDetailVal1_Dc;
+    private String  cdDetailVal1_Dc;
     
-    private String cdDetailVal2_Dc;
+    private String  cdDetailVal2_Dc;
     
-    private String cdDetailVal3_Dc;
+    private String  cdDetailVal3_Dc;
     
-    private String cdDetailVal4_Dc;
+    private String  cdDetailVal4_Dc;
     
-    private String cdDetailVal5_Dc;
+    private String  cdDetailVal5_Dc;
     
-    private String useYn;
+    private String  useYn;
     
-    private String sysEssntlCmmnYn;
+    private String  sysEssntlCmmnYn;
     
-    private String clCd;
+    private String  clCd;
     
-    private String remark;
-    
-    @Column( updatable = false )
-    private String registerId;
+    private String  remark;
     
     @Column( updatable = false )
-    private String registerIp;
+    private String  registerId;
+    
+    @Column( updatable = false )
+    private String  registerIp;
     
     
     //  @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경
-    private String updusrId;
+    private String  updusrId;
     
     //  @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경
-    private String updusrIp;
+    private String  updusrIp;
     
     
     @ColumnDefault( "N" )                             // del_yn 컬럼에 공통으로 추가
     @Column( insertable = false, updatable = false )  // del_yn 컬럼에 공통으로 추가 (등록 시, 수정 시 해당컬럼 신경쓰지 않음.)
-    private String delYn;                           // 삭제 여부
+    private String  delYn;                           // 삭제 여부
     
     
 }

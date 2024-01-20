@@ -1,4 +1,5 @@
 const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // 이메일 유효성 검사
+var cateSchData = {};   // 전역변수 설정 (검색값을 계속 기억)
 
 
 // ------------- function () 함수 실행  호출시점 : DOM Tree 생성 완료 후 -----------------
@@ -227,9 +228,6 @@ function getCateNextLvList( url, e ) {
             }
         } );
 
-        // $ul = $(e).parent()			// 선택한 태그의 <ul class="data-group"> 을 선택
-        // var ulNum = $ul.prevAll().length+1;	// 몇번쨰 ul 인지 체크 (1부터 카운트..)
-
         // picked-cate 태그 안에 해당 내용 삽입
         $( "#picked-cate" ).find( ".cateLv" + ulNum ).empty();
         $( "#picked-cate" ).find( ".cateLv" + ulNum ).text( $( e ).text() );
@@ -239,9 +237,31 @@ function getCateNextLvList( url, e ) {
         setTimeout( function () {
             $( "#picked-cate" ).find( ".cateLv" + ulNum ).addClass( "blink" );
         }, 100 );
-        
-        var data = {};
-        data['category.categorySn'] = $( e ).val();
+
+        // ulNum 단계로 구분하여 값을 해당 단계의 sn으로 저장
+        switch (ulNum){
+            case 0: // 첫번째 ul 일 경우 lv1Sn 애 저장
+                cateSchData['category.lv1Sn'] = $( e ).val();
+                break;
+            case 1: // 두번째 ul 일 경우 lv2Sn 애 저장
+                cateSchData['category.lv2Sn'] = $( e ).val();
+                break;
+            case 2: // 세번째 ul 일 경우 lv3Sn 애 저장
+                cateSchData['category.lv3Sn'] = $( e ).val();
+                break;
+            case 3: // 네번째 ul 일 경우 lv4Sn 애 저장
+                cateSchData['category.lv4Sn'] = $( e ).val();
+                break;
+            case 4: // 다섯번째 ul 일 경우 lv5Sn 애 저장
+                cateSchData['category.lv5Sn'] = $( e ).val();
+                break;
+            default:
+                cateSchData['category.categorySn'] = $( e ).val();
+                break;
+        }
+
+        // 별개로 categorySn 에도 추가로 저장해줌.
+        cateSchData['category.categorySn'] = $( e ).val();
 
         // 카테고리 박스 개수 체크하여
         // 마지막 박스 클릭 아닌 경우에 다음 카테고리 조회 실행
@@ -253,15 +273,17 @@ function getCateNextLvList( url, e ) {
                 type: "GET",
                 dataType: "json",
                 async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-                data: data, // 검색할 값
+                data: cateSchData, // 검색할 값
                 contentType: "application/json",
                 success: function ( result ) {
                     // return type : List<CategoryDto>
                     var allYn = $ul.data( 'allYn' );
-                    var searchUrl = $ul.data( 'searchUrl' );
+                    var nextStepLiOnclickParamUrl = $ul.data( 'nextStepLiOnclickParamUrl' );
 
-                    if ( searchUrl != null && searchUrl != '' ) {
-                        url = searchUrl;
+                    if ( nextStepLiOnclickParamUrl != null && nextStepLiOnclickParamUrl != '' ) {
+                        url = nextStepLiOnclickParamUrl;
+                    } else {
+                        url = '';
                     }
 
                     if ( allYn != null && allYn == 'Y' ) {

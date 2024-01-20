@@ -34,9 +34,9 @@ public class Class extends BaseTimeEntity {
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_CLASS_SN" )
     private Long classSn;                // 클래스일련번호
     
-    private String ctgryCd;                // 카테고리코드
+    private Long ctgrySn;                // 카테고리코드
     
-    private String crseCd;                // 커리큘럼코드
+    private Long crseSn;                // 커리큘럼코드
     
     private String classSj;                // 클래스제목
     

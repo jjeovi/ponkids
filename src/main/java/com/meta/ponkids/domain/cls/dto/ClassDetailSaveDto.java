@@ -62,5 +62,4 @@ public class ClassDetailSaveDto {
 				.updusrIp(updusrIp)
 				.build();
 	}
-
 }

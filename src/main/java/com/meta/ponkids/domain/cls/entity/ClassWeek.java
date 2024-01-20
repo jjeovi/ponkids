@@ -36,7 +36,7 @@ public class ClassWeek extends BaseTimeEntity {
     
     private Long classSn;                   // 클래스 일련번호
     
-    private String classDayCd;              // 클래스 요일 코드
+    private String classDayCd;              // 클래스 요일 일련번호
     
     @Column( updatable = false )
     private String registerId;              // 등록자ID

@@ -17,7 +17,7 @@ public class ClassDetailListDto {
 	
 	private Long 	classDetailSeq;					// 클래스 상세 순번
 	
-	private String 	classDetailItemTyCd;			// 클래스 상세 항목 유형 코드
+	private String 	classDetailItemTyCd;			// 클래스 상세 항목 유형 일련번호
 	
 	private String 	classDetailItemTyNm;			// 클래스 상세 항목 유형 명
 	
