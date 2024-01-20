@@ -25,6 +25,8 @@ public class LctreListDto extends LctreDto {
 	
 	private String 		classSj;				// 클래스 제목
 	
+	private Long 		classDaySn;				// 클래스 요일 코드
+	
 	private String 		classDayCd;				// 클래스 요일 코드
 	
 	private String 		classDayNm;				// 클래스 요일 명
@@ -60,7 +62,7 @@ public class LctreListDto extends LctreDto {
 	private CategoryDto category;    			// 카테고리 검색 : 생성자에는 추가하지 않음!
 	
 	@QueryProjection
-	public LctreListDto( Long lctreSn, Long ctgrySn, String ctgryNm, Long crseSn, String crseNm, Long classSn, String classSj, String classDayCd, String classDayNm, Long lctreSeq, String lctreSj, String lctreDc, String lctreApplcntGuidance, String rcritNmprSetYn, String rcritNmprSetYnNm, Long rcritNmprCo, String preparRcritNmprSetYn, String preparRcritNmprSetYnNm, Long preparRcritNmprCo, String registerId, String regDt ) {
+	public LctreListDto( Long lctreSn, Long ctgrySn, String ctgryNm, Long crseSn, String crseNm, Long classSn, String classSj, Long classDaySn, String classDayCd, String classDayNm, Long lctreSeq, String lctreSj, String lctreDc, String lctreApplcntGuidance, String rcritNmprSetYn, String rcritNmprSetYnNm, Long rcritNmprCo, String preparRcritNmprSetYn, String preparRcritNmprSetYnNm, Long preparRcritNmprCo, String registerId, String regDt ) {
 		this.lctreSn = lctreSn;
 		this.ctgrySn = ctgrySn;
 		this.ctgryNm = ctgryNm;
@@ -68,6 +70,7 @@ public class LctreListDto extends LctreDto {
 		this.crseNm = crseNm;
 		this.classSn = classSn;
 		this.classSj = classSj;
+		this.classDaySn = classDaySn;
 		this.classDayCd = classDayCd;
 		this.classDayNm = classDayNm;
 		this.lctreSeq = lctreSeq;

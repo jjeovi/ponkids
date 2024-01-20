@@ -60,7 +60,7 @@ public class ClassWeekService {
             
             CategoryDto categoryDto = new CategoryDto();
             
-            categoryDto.setCategorySn(dto.getClassWeekSn());    // 이 부분이 결국은 html 에서 카테고리검색의 li value 값이 됨
+            categoryDto.setCategorySn(dto.getCdDetailSn());    // 이 부분이 결국은 html 에서 카테고리검색의 li value 값이 됨
             categoryDto.setCategoryNm(dto.getClassDayNm());    // 이 부분이 결국은 html 에서 카테고리검색의 li 명칭이 됨
             
             dto.setCategory(categoryDto);

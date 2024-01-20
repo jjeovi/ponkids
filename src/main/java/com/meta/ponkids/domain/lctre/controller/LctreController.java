@@ -366,7 +366,7 @@ public class LctreController {
                 result.put("validResult", true);
                 
                 // 클래스 정보 add
-                model.addAttribute( "classDto", classDto );
+                result.put( "classDto", classDto );
                 
             }
         }

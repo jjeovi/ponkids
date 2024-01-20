@@ -52,15 +52,10 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 						class$.crseSn,
 						classCategoryCl02.clNm.as( "crseNm" ),
 						lctre.classSn,
-						ExpressionUtils.as( JPAExpressions.select( class$.classSj )
-								.from( class$ )
-								.where( class$.classSn.eq( lctre.classSn )
-										 ), "classSj" ),
+						class$.classSj,
+						cmmnCdDetail.cdDetailSn,
 						lctre.classDayCd,
-						ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
-								.from( cmmnCdDetail )
-								.where( cmmnCdDetail.cdDetailVal1.eq( lctre.classDayCd ),
-										cmmnCdDetail.cdNm.eq("DAY_7_CD") ), "classDayNm" ),
+						cmmnCdDetail.cdDetailNm,
 						lctre.lctreSeq,
 						lctre.lctreSj,
 						lctre.lctreDc,
@@ -103,6 +98,11 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 				.on(    class$.crseSn.eq( classCategoryCl02.clSn ),
 						classCategoryCl02.delYn.eq("N")
 				)
+				.leftJoin( cmmnCdDetail )
+				.on(	cmmnCdDetail.cdNm.eq("DAY_7_CD"),
+						cmmnCdDetail.cdDetailVal1.eq( lctre.classDayCd ),
+						cmmnCdDetail.delYn.eq("N")
+						)
                 // where
                 .where(
 						eqClassSn( listDto.getClassSn() )
