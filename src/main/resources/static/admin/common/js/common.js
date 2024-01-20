@@ -218,7 +218,8 @@ function getCateNextLvList( url, e ) {
         $( e ).addClass( "on" );
 
         var $ul = $( e ).parent();
-        var ulNum = $ul.prevAll().length;	// 몇번쨰 ul 인지 체크 (0부터 카운트..)
+        var $div = $( e ).parent().parent();
+        var ulNum = $div.prevAll().length;	// 몇번쨰 ul 인지 체크 (0부터 카운트..)
 
         // 뒷단계 카테고리 전부 비움
         $( ".category-list-area .category-group-box ul" ).each( function ( i, item ) {
@@ -308,7 +309,8 @@ function getCateNextLvList( url, e ) {
         $( e ).addClass( "on" );
 
         var $ul = $( e ).parent();
-        var ulNum = $ul.prevAll().length;	// 몇번쨰 ul 인지 체크 (0부터 카운트..)
+        var $div = $( e ).parent().parent();
+        var ulNum = $div.prevAll().length;	// 몇번쨰 ul 인지 체크 (0부터 카운트..)
 
         // picked-cate 태그 안에 해당 내용 삽입
         $( "#picked-cate" ).find( ".cateLv" + ulNum ).empty();

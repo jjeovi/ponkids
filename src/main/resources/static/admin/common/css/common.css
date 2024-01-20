@@ -5451,7 +5451,7 @@ input[type="radio"][disabled]:checked+label{
 
 .category-area {
 	position: relative;
-    height: 237px;
+    height: 277px;
     padding-top: 23px;
     padding-left: 12px;
 }
@@ -5470,18 +5470,25 @@ input[type="radio"][disabled]:checked+label{
 }
 
 .category-list-area .category-group-box .data-group {
-    padding: 10px 0 0;
-    height: 188px;
     width: calc(20% - 6px);
-    border: 1px solid #dbdde2;
     display: inline-block;
     border-radius: 10px;
-    padding-left : 10px;
-    padding-right : 10px;
+    padding-left : 2px;
+    padding-right : 2px;
 }
 .category-list-area .data-group {
-    overflow: auto;
     background: #fff;
+}
+
+.category-list-area .category-group-box .data-group ul {
+  padding : 10px 0 0 ;
+  overflow: auto;
+  height: 188px;
+  border: 1px solid #dbdde2;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-top: 7px;
+  border-radius: 10px;
 }
 
 .category-list-area .category-group-box .data-group li {
@@ -5560,6 +5567,13 @@ ul li {
   */
 }
 
+.category-title {
+  position: relative;
+  font-size: 18px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
 /* E : 카테고리 분류 영역 설정 */
 
 /* S : 메뉴 영역 */
