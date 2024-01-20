@@ -25,56 +25,68 @@
                         <!--
                             data-next-step-li-onclick-param-url : 다음 단계 ul > li 항목의 onlick url parameter 값 설정
                          -->
-                        <ul class="data-group" data-all-yn="Y" data-next-step-li-onclick-param-url="/admin/class/live/getClassListAjax" >
-                            <!--  lv1 -->
-                            <li onclick="getCateNextLvList('/admin/classCategoryCl02/live/getListByParntsClSnAjax', this );"
-                                th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'on'"
-                                value="0" th:text="전체">
-                            </li>
-                            <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('/admin/classCategoryCl02/live/getListByParntsClSnAjax', this );"
-                                th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) } ? 'on'"
-                                th:value="${data.clSn}" th:text="${data.clNm}">
-                            </li>
-                        </ul>
-                        <ul class="data-group" data-all-yn="Y" data-next-step-li-onclick-param-url="/admin/class/live/getClassWeekListAjax"> <!--  data-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
-                            <!--  lv2 -->
-                            <th:block th:if="${cateLv2List ne null}">
-								<li onclick="getCateNextLvList('/admin/class/live/getClassListAjax', this );"
-									th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == 0  || searchDTO.category.lv2Sn == null ) } ? 'on'"
-	                                value="0" th:text="전체">
-	                            </li>
-	                            <li onclick="getCateNextLvList('/admin/class/live/getClassListAjax', this );"
-	                            	th:each="data : ${cateLv2List}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == data.clSn ) } ? 'on'"
-	                                th:value="${data.clSn}" th:text="${data.clNm}">
-	                            </li>
-							</th:block>
-                        </ul>
-                        <ul class="data-group" data-all-yn="Y" data-next-step-li-onclick-param-url=""> <!--  data-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
+                        <!--  lv1 -->
+                        <div class="data-group">
+                            <span class="category-title lv1">카테고리</span>
+                            <ul data-all-yn="Y" data-next-step-li-onclick-param-url="/admin/class/live/getClassListAjax" >
+                                <li onclick="getCateNextLvList('/admin/classCategoryCl02/live/getListByParntsClSnAjax', this );"
+                                    th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'on'"
+                                    value="0" th:text="전체">
+                                </li>
+                                <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('/admin/classCategoryCl02/live/getListByParntsClSnAjax', this );"
+                                    th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) } ? 'on'"
+                                    th:value="${data.clSn}" th:text="${data.clNm}">
+                                </li>
+                            </ul>
+                        </div>
+                        <!--  lv2 -->
+                        <div class="data-group">
+                            <span class="category-title lv2">커리큘럼</span>
+                            <ul data-all-yn="Y" data-next-step-li-onclick-param-url="/admin/class/live/getClassWeekListAjax"> <!--  data-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
+                                <th:block th:if="${cateLv2List ne null}">
+                                    <li onclick="getCateNextLvList('/admin/class/live/getClassListAjax', this );"
+                                        th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == 0  || searchDTO.category.lv2Sn == null ) } ? 'on'"
+                                        value="0" th:text="전체">
+                                    </li>
+                                    <li onclick="getCateNextLvList('/admin/class/live/getClassListAjax', this );"
+                                        th:each="data : ${cateLv2List}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == data.clSn ) } ? 'on'"
+                                        th:value="${data.clSn}" th:text="${data.clNm}">
+                                    </li>
+                                </th:block>
+                            </ul>
+                        </div>
                             <!--  lv3 -->
-                            <th:block th:if="${cateLv3List ne null}">
-                                <li onclick="getCateNextLvList('/admin/class/live/getClassWeekListAjax', this );"
-                                    th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv3Sn == 0 ) } ? 'on'"
-                                    value="0" th:text="전체">
-                                </li>
-                                <li onclick="getCateNextLvList('/admin/class/live/getClassWeekListAjax', this );"
-                                    th:each="data : ${cateLv3List}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv3Sn == data.classSn ) } ? 'on'"
-                                    th:value="${data.classSn}" th:text="${data.classSj}">
-                                </li>
-                            </th:block>
-                        </ul>
-                        <ul class="data-group" data-all-yn="Y" data-next-step-li-onclick-param-url=""> <!--  data-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
-                            <!--  lv4 -->
-                            <th:block th:if="${cateLv4List ne null}">
-                                <li onclick="getCateNextLvList('', this );"
-                                    th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv4Sn == 0 ) } ? 'on'"
-                                    value="0" th:text="전체">
-                                </li>
-                                <li onclick="getCateNextLvList('', this );"
-                                    th:each="data : ${cateLv4List}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv4Sn == data.cdDetailSn ) } ? 'on'"
-                                    th:value="${data.cdDetailSn}" th:text="${data.classDayNm}">
-                                </li>
-                            </th:block>
-                        </ul>
+                        <div class="data-group">
+                            <span class="category-title lv3">클래스</span>
+                            <ul data-all-yn="Y" data-next-step-li-onclick-param-url=""> <!--  data-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
+                                <th:block th:if="${cateLv3List ne null}">
+                                    <li onclick="getCateNextLvList('/admin/class/live/getClassWeekListAjax', this );"
+                                        th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv3Sn == 0 ) } ? 'on'"
+                                        value="0" th:text="전체">
+                                    </li>
+                                    <li onclick="getCateNextLvList('/admin/class/live/getClassWeekListAjax', this );"
+                                        th:each="data : ${cateLv3List}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv3Sn == data.classSn ) } ? 'on'"
+                                        th:value="${data.classSn}" th:text="${data.classSj}">
+                                    </li>
+                                </th:block>
+                            </ul>
+                        </div>
+                        <!--  lv4 -->
+                        <div class="data-group">
+                            <span class="category-title lv4">요일</span>
+                            <ul data-all-yn="Y" data-next-step-li-onclick-param-url=""> <!--  data-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
+                                <th:block th:if="${cateLv4List ne null}">
+                                    <li onclick="getCateNextLvList('', this );"
+                                        th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv4Sn == 0 ) } ? 'on'"
+                                        value="0" th:text="전체">
+                                    </li>
+                                    <li onclick="getCateNextLvList('', this );"
+                                        th:each="data : ${cateLv4List}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv4Sn == data.cdDetailSn ) } ? 'on'"
+                                        th:value="${data.cdDetailSn}" th:text="${data.classDayNm}">
+                                    </li>
+                                </th:block>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <!-- 분류 영역 > 우측영역 ( 선택한 카테고리 텍스트 표출, 카테고리검색 버튼) -->

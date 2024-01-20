@@ -300,17 +300,21 @@
                 <!-- 분류 영역 > 카테고리 그룹 영역 -->
                 <div class="col-md-10 category-list-area">
                     <div class="category-group-box">
-                        <ul class="data-group" data-all-yn="Y">
-                            <!--  lv1 -->
-                            <li onclick="getCateNextLvList('', this );"
-                                th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'on'"
-                                value="0">전체
-                            </li>
-                            <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('', this );"
-                                th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.categorySn ) } ? 'on'"
-                                th:value="${data.categorySn}">[[${data.categoryNm}]]
-                            </li>
-                        </ul>
+                        <!-- lv1 -->
+                        <div class="data-group">
+                            <span class="category-title">권한</span>
+                            <ul data-all-yn="Y">
+                                <!--  lv1 -->
+                                <li onclick="getCateNextLvList('', this );"
+                                    th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'on'"
+                                    value="0">전체
+                                </li>
+                                <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('', this );"
+                                    th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.categorySn ) } ? 'on'"
+                                    th:value="${data.categorySn}">[[${data.categoryNm}]]
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <!-- 분류 영역 > 우측영역 ( 선택한 카테고리 텍스트 표출, 카테고리검색 버튼) -->

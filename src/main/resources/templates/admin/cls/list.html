@@ -22,30 +22,36 @@
                 <!-- 분류 영역 > 카테고리 그룹 영역 -->
                 <div class="col-md-10 category-list-area">
                     <div class="category-group-box">
-                        <ul class="data-group" data-all-yn="Y">
-                            <!--  lv1 -->
-                            <li onclick="getCateNextLvList('/admin/classCategoryCl02/live/getListByParntsClSnAjax', this );"
-                                th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'on'"
-                                value="0">전체
-                            </li>
-                            <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('/admin/classCategoryCl02/live/getListByParntsClSnAjax', this );"
-                                th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) } ? 'on'"
-                                th:value="${data.clSn}">[[${data.clNm}]]
-                            </li>
-                        </ul>
-                        <ul class="data-group" data-all-yn="Y" data-next-step-li-onclick-param-url=""> <!--  data-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
-                            <!--  lv2 -->
-                            <th:block th:if="${cateLv2List ne null}">
-								<li onclick="getCateNextLvList('', this );"
-									th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == 0 ) } ? 'on'"
-	                                value="0">전체
-	                            </li>
-	                            <li onclick="getCateNextLvList('', this );"
-	                            	th:each="data : ${cateLv2List}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == data.clSn ) } ? 'on'"
-	                                th:value="${data.clSn}">[[${data.clNm}]]
-	                            </li>
-							</th:block>
-                        </ul>
+                        <div class="data-group">
+                            <span class="category-title">카테고리</span>
+                            <ul data-all-yn="Y">
+                                <!--  lv1 -->
+                                <li onclick="getCateNextLvList('/admin/classCategoryCl02/live/getListByParntsClSnAjax', this );"
+                                    th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'on'"
+                                    value="0">전체
+                                </li>
+                                <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('/admin/classCategoryCl02/live/getListByParntsClSnAjax', this );"
+                                    th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) } ? 'on'"
+                                    th:value="${data.clSn}">[[${data.clNm}]]
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="data-group">
+                            <span class="category-title">커리큘럼</span>
+                            <ul data-all-yn="Y" data-next-step-li-onclick-param-url=""> <!--  data-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
+                                <!--  lv2 -->
+                                <th:block th:if="${cateLv2List ne null}">
+                                    <li onclick="getCateNextLvList('', this );"
+                                        th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == 0 ) } ? 'on'"
+                                        value="0">전체
+                                    </li>
+                                    <li onclick="getCateNextLvList('', this );"
+                                        th:each="data : ${cateLv2List}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == data.clSn ) } ? 'on'"
+                                        th:value="${data.clSn}">[[${data.clNm}]]
+                                    </li>
+                                </th:block>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <!-- 분류 영역 > 우측영역 ( 선택한 카테고리 텍스트 표출, 카테고리검색 버튼) -->
