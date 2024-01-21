@@ -1,5 +1,25 @@
 package com.meta.ponkids.domain.system.menu.controller;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+
+import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
 import com.meta.ponkids.domain.system.menu.dto.MenuModDto;
 import com.meta.ponkids.domain.system.menu.dto.MenuSaveDto;
@@ -11,19 +31,8 @@ import com.meta.ponkids.domain.system.role.dto.RoleListDto;
 import com.meta.ponkids.domain.system.role.repository.RoleRepository;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
@@ -236,13 +245,25 @@ public class MenuController {
         
         // 메뉴 등록 (ajax)
         
-        // insert 구현
-        saveDto = menuService.save( saveDto, request );
-        
         
         if ( type.equals( TYPE_ADMIN ) ) {
+            // insert 구현
+            saveDto = menuService.save( saveDto, request );
             // 메뉴 권한 부여작업 update ( delete 후 insert )
             menuService.menuRoleUpdate( saveDto, request );
+        }
+        
+        if ( type.equals( TYPE_USER ) ) {
+
+            // insert 구현
+            saveDto = menuService.saveAndFlush( saveDto, request );
+        	
+        	try {
+				menuService.menuSaveToJsonFile();
+			} catch (ParseException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
         
         // 메시지 출력 및 url 이동 처리 (ajax)
@@ -369,6 +390,5 @@ public class MenuController {
         
         return saveDto;
     }
-    
     
 }

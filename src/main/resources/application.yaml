@@ -56,6 +56,8 @@ key :
     upload :
 #        path : C:/upload/           # 업로드 파일 저장 경로 ( 개발용 ) ( window )
         path : /Users/jjeoV/Desktop/jjeoV/2023/pioneerKids/upload/    # 업로드 파일 저장 경로 ( 개발용 ) ( Mac )
+    menu:
+        jsonFilePath : \file\menu\json\pon\
     admin :
         auth : pon                  # 로그인 인증용 key
     menuCd :

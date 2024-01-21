@@ -36,7 +36,7 @@ public class AtchFileService {
     private final AtchFileRepository atchFileRepository;
     private final AtchFileDetailRepository atchFileDetailRepository;
     
-    @Value( "${upload.path}" )
+    @Value( "${key.upload.path}" )
     private String UPLOAD_PATH;
     
     /**
