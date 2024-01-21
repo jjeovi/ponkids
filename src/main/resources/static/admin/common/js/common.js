@@ -8,6 +8,7 @@ $( function () {
     // 해당 데이터가 없으면 colspan값 th개수만큼 자동으로 set
     if ( $( ".noDataTd" ).length ) {
         $( ".noDataTd" ).attr( "colspan", $( '#listTable th' ).length );
+        $( ".noDataTd" ).show();
     }
 
     // input type=radio 에서 readonly 를 주면
