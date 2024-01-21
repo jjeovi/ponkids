@@ -54,11 +54,11 @@ key :
         user  : pon                                                     # 사용자 화면 기본 변수 key
         userRootMenuSn  : 200                                           # 사용자 루트 메뉴sn
     upload :
-#        path : C:/upload/                                              # 업로드 파일 저장 경로 ( 개발용 ) ( window )
-        path : /Users/jjeoV/Desktop/jjeoV/2023/pioneerKids/upload/      # 업로드 파일 저장 경로 ( 개발용 ) ( Mac )
+        path : C:/upload/                                              # 업로드 파일 저장 경로 ( 개발용 ) ( window )
+#        path : /Users/jjeoV/Desktop/jjeoV/2023/pioneerKids/upload/      # 업로드 파일 저장 경로 ( 개발용 ) ( Mac )
     menu:
-#        jsonFilePath : \file\menu\json\pon\                            # 사용자 메뉴 파일 생성 경로 ( window )
-        jsonFilePath : /file/menu/json/pon/                             # 사용자 메뉴 파일 생성 경로 ( Max )
+        jsonFilePath : \file\menu\json\pon\                            # 사용자 메뉴 파일 생성 경로 ( window )
+ #       jsonFilePath : /file/menu/json/pon/                             # 사용자 메뉴 파일 생성 경로 ( Max )
     admin :
         auth : pon                  # 로그인 인증용 key
     menuCd :
