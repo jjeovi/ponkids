@@ -63,8 +63,6 @@ public class ParameterAop {
         HttpServletResponse response = ( ( ServletRequestAttributes ) RequestContextHolder.currentRequestAttributes() ).getResponse();
         String requestUri = request.getRequestURI();
         String fullUri = getfullUriExp( request );
-        String queryString = request.getQueryString();
-        
         
         if ( requestUri.startsWith( "/admin/" ) ) {
             

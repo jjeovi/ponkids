@@ -1,8 +1,8 @@
 package com.meta.ponkids.domain.lctre.repository.impl;
 
-
 import java.util.List;
 
+import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.JPAExpressions;
@@ -76,12 +76,7 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 						lctre.preparRcritNmprCo,
 						lctre.registerId,
                 		Expressions.stringTemplate("to_char({0}, '{1s}')", lctre.regDt, "YYYY-MM-DD HH:MM:SS")
-//                		new CaseBuilder()
-//                		.when( user.gender.eq("M")).then("남자")
-//                		.when( user.gender.eq("F")).then("여자")
-//                		.otherwise("")
-//                		.as("gender"),
-                		) )					
+                		) )
                 .from( lctre )
 				.leftJoin( class$ )
 				// join 에는 delYn 조건 필수로 추가
@@ -105,6 +100,10 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 						)
                 // where
                 .where(
+						eqCateLv1( listDto.getCategory() ),	// 분류 조회 : lv1Sn 값 존재시 검색
+						eqCateLv2( listDto.getCategory() ),	// 분류 조회 : lv2Sn 값 존재시 검색
+						eqCateLv3( listDto.getCategory() ), // 분류 조회 : lv3Sn 값 존재시 검색
+						eqCateLv4( listDto.getCategory() ), // 분류 조회 : lv4Sn 값 존재시 검색
 						eqClassSn( listDto.getClassSn() )
 				)
 //                .orderBy( lctre.lctreSn.desc())
@@ -112,22 +111,45 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
                 .limit( pageable.getPageSize() )
                 .fetch();
 		
-		
-		// TODO
 		// (2) count
         JPAQuery<Long> count = query.select( lctre.count() )
-                .from( lctre )									
+                .from( lctre )
                 .where(
                         eqOption( listDto.getSchOption(), listDto.getSchCntn() ) );
-                
-				
 		
 		return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
-		
 	}
 	
-	
 	// -------------------------------- WHERE 검색 옵션 setting --------------------------------
+	
+	// 카테고리 lv 1 검색 옵션
+	// lv1Sn == class$.ctgrySn
+	private BooleanExpression eqCateLv1( CategoryDto categoryDto ) {
+		return ( categoryDto != null && categoryDto.getLv1Sn() != null
+				&& categoryDto.getLv1Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? class$.ctgrySn.eq( categoryDto.getLv1Sn() ) : null;
+	}
+	
+	// 카테고리 lv 2 검색 옵션
+	// lv2Sn == class$.crseSn
+	private BooleanExpression eqCateLv2( CategoryDto categoryDto ) {
+		return ( categoryDto != null && categoryDto.getLv2Sn() != null
+				&& categoryDto.getLv2Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? class$.crseSn.eq( categoryDto.getLv2Sn() ) : null;
+	}
+	
+	// 카테고리 lv 3 검색 옵션
+	// lv3sn == class$.classSn
+	
+	private BooleanExpression eqCateLv3( CategoryDto categoryDto ) {
+		return ( categoryDto != null && categoryDto.getLv3Sn() != null
+				&& categoryDto.getLv3Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? class$.classSn.eq( categoryDto.getLv3Sn() ) : null;
+	}
+	
+	// 카테고리 lv 4 검색 옵션
+	// lv4sn == cmmnCdDetail.cdDetailSn
+	private BooleanExpression eqCateLv4( CategoryDto categoryDto ) {
+		return ( categoryDto != null && categoryDto.getLv4Sn() != null
+				&& categoryDto.getLv4Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? cmmnCdDetail.cdDetailSn.eq( categoryDto.getLv4Sn() ) : null;
+	}
 	
 	private BooleanExpression eqClassSn( Long pk ) {
 		return ( pk != null && pk != 0 )? lctre.classSn.eq( pk ) : null;

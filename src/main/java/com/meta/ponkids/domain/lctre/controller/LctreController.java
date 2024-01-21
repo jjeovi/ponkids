@@ -20,9 +20,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.HashMap;
@@ -56,7 +58,7 @@ public class LctreController {
         // S : 필요한 객체 setting
         
         // url 에 classSn 담겨 있을 시 classSn 유효성 체크
-        if( classSn != null ) {
+        if ( classSn != null && classSn != 0 ) {
             // 공통 유효성 체크 함수
             Map<String, Object> classValidCheck = classValidCheck( classSn, mcd, model );
             boolean validResult = ( boolean ) classValidCheck.get( "validResult" ); // 체크 결과
@@ -72,47 +74,77 @@ public class LctreController {
                 if ( classDto != null ) {
                     // 클래스가 존재할 경우 분류 (lv1,lv2) 값 세팅을 미리 해줌
                     
+                    CategoryDto categoryDto = new CategoryDto();
+                    
                     // 분류 선택값 set 및 리스트 미리 setting 작업
                     if ( classDto.getCtgrySn() != null ) {
                         
-                        CategoryDto categoryDto = new CategoryDto();
-                        
-                        // ------- S : 븐류 lv1 선택값 매핑 및 븐류 lv2 li 리스트 생성 작업
                         // ------- S : 분류 lv1 선택값 매핑 및 분류 lv2 li 리스트 생성 작업 : 커리큘럼 리스트 ( lv2 )
                         categoryDto.setLv1Sn( classDto.getCtgrySn() );    // searchDTO 에 lv1 Sn 매칭
-                        // lv2 li 리스트를 미리 만들어 뿌림
-                        model.addAttribute( "cateLv2List", classCategoryCl02Service.findByParntsClSnOrderByClSeq( categoryDto.getLv1Sn() ) );   // lv2 list 생성
                         
-                        // ------- S : 분류 lv2 선택값 매핑 및 분류 lv3 li 리스트 생성 작업
                         // ------- S : 분류 lv2 선택값 매핑 및 분류 lv3 li 리스트 생성 작업 : 클래스 리스트 ( lv3 )
-                        categoryDto.setLv2Sn( classDto.getCrseSn() );     // searchDTO 에 lv2 Sn 매칭
-                        // lv3 li 리스트를 미리 만들어 뿌림
-                        ClassListDto classListDto = new ClassListDto();
-                        classListDto.setCategory( categoryDto );
-                        model.addAttribute( "cateLv3List", classService.getList( classListDto ) );  // lv3 list 생성
+                        if ( classDto.getCrseSn() == null ) {
+                            // 커리큘럼Sn 이 null 일 경우, 0 으로 setting
+                            categoryDto.setLv2Sn( ( long ) 0 );
+                        } else {
+                            categoryDto.setLv2Sn( classDto.getCrseSn() );     // searchDTO 에 lv2 Sn 매칭
+                        }
                         
-                        // ------- S : 분류 lv3 선택값 매핑 및 분류 lv4 li 리스트 생성 작업
                         // ------- S : 분류 lv3 선택값 매핑 및 분류 lv4 li 리스트 생성 작업 : 요일 리스트 ( lv4 )
                         categoryDto.setLv3Sn( classDto.getClassSn() );
-                        // lv4 li 리스트를 미리 만들어 뿌림
-                        model.addAttribute( "cateLv4List", classWeekService.getListByClassSn( categoryDto.getLv3Sn() ) );   // lv4 list 생성 (클래스 요일 classSn으로 검색 )
                         
+                        // lv4 setting
+                        if ( listDto.getCategory() != null && listDto.getCategory().getLv4Sn() != null ) {
+                            categoryDto.setLv4Sn( listDto.getCategory().getLv4Sn() );
+                        }
+                        
+                        // listDto 에 category setting
                         listDto.setCategory( categoryDto );             // listDto 에 categoryDto setting
                     }
                 }
             }
         }
         
-        // 목록 조회
-        Page<LctreListDto> resultList = lctreService.getList( listDto, pageable );
-        model.addAttribute( "resultList", resultList );
+        // 검색 조건 searchDTO 정렬하여 redirect function
+        // 검색 분류 : [ 카테고리 / 커리큘럼 / 클래스 / 요일 ] 순서의 4단계:
+        // 1. 카테고리, 커리큘럼 까지만 검색 (~lv2) 했을시, mapping 조건 : BASIC_PATH + "/{mcd}/list"
+        // 2. 클래스 까지 검색했을 시 , : BASIC_PATH + "/{mcd}/{classSn}/list"
+        schConditionCombineForResetUrl( listDto, classSn, mcd, model );
         
         // 카테고리 리스트 ( lv1 )
         // 클래스 카테고리 분류1 list setting
         model.addAttribute( "cateLv1List", classCategoryCl01Service.findAll() );
         
+        // 클래스 카테고리 분류2,3,4 list setting
+        if ( listDto.getCategory() != null ) {
+            
+            // 클래스 카테고리 분류2 list setting
+            if ( listDto.getCategory().getLv1Sn() != null ) {
+                // lv2 li 리스트를 미리 만들어 뿌림
+                model.addAttribute( "cateLv2List", classCategoryCl02Service.findByParntsClSnOrderByClSeq( listDto.getCategory().getLv1Sn() ) );   // lv2 list 생성
+            }
+            
+            // 클래스 카테고리 분류3 list setting
+            if ( listDto.getCategory().getLv2Sn() != null ) {
+                // lv3 li 리스트를 미리 만들어 뿌림
+                ClassListDto classListDto = new ClassListDto();
+                classListDto.setCategory( listDto.getCategory() );
+                model.addAttribute( "cateLv3List", classService.getList( classListDto ) );  // lv3 list 생성
+            }
+            
+            // 클래스 카테고리 분류4 list setting
+            if ( listDto.getCategory().getLv3Sn() != null ) {
+                // lv4 li 리스트를 미리 만들어 뿌림
+                model.addAttribute( "cateLv4List", classWeekService.getListByClassSn( listDto.getCategory().getLv3Sn() ) );   // lv4 list 생성 (클래스 요일 classSn으로 검색 )
+            }
+        }
+        
         // 검색 dto setting
         model.addAttribute( "searchDTO", listDto );
+        
+        // 목록 조회
+        Page<LctreListDto> resultList = lctreService.getList( listDto, pageable );
+        model.addAttribute( "resultList", resultList );
         
         // E : 필요한 객체 setting
         
@@ -131,24 +163,21 @@ public class LctreController {
         
         // url 에 classSn 담겨 있을 시 classSn 유효성 체크
         Map<String, Object> classValidCheck = classValidCheck( classSn, mcd, model );
-        boolean validResult = (boolean)classValidCheck.get("validResult");
-        if( !validResult ) {
-            model.addAttribute( "resultMsg",  (String)classValidCheck.get("resultMsg"));
-            model.addAttribute( "moveUrl", (String)classValidCheck.get("moveUrl") );
+        boolean validResult = ( boolean ) classValidCheck.get( "validResult" );
+        if ( !validResult ) {
+            model.addAttribute( "resultMsg", ( String ) classValidCheck.get( "resultMsg" ) );
+            model.addAttribute( "moveUrl", ( String ) classValidCheck.get( "moveUrl" ) );
             
             return "common/alert";
         }
         
-        ClassModDto classDto = (ClassModDto) classValidCheck.get("classDto");
+        ClassModDto classDto = ( ClassModDto ) classValidCheck.get( "classDto" );
         
         // 등록 classSn 정보 add
         model.addAttribute( "classDto", classDto );
         
-        
         // 가입 object 생성
         model.addAttribute( new LctreSaveDto() );
-        
-        
         
         // 클래스 요일 List add
         model.addAttribute( "classWeekList", classWeekService.getListByClassSn( classSn ) );    // 요일리스트
@@ -174,23 +203,31 @@ public class LctreController {
         // S : 필요한 객체 setting
         // url 에 classSn 담겨 있을 시 classSn 유효성 체크
         Map<String, Object> classValidCheck = classValidCheck( classSn, mcd, model );
-        boolean validResult = (boolean)classValidCheck.get("validResult");
-        if( !validResult ) {
-            model.addAttribute( "resultMsg",  (String)classValidCheck.get("resultMsg"));
-            model.addAttribute( "moveUrl", (String)classValidCheck.get("moveUrl") );
+        boolean validResult = ( boolean ) classValidCheck.get( "validResult" );
+        if ( !validResult ) {
+            model.addAttribute( "resultMsg", ( String ) classValidCheck.get( "resultMsg" ) );
+            model.addAttribute( "moveUrl", ( String ) classValidCheck.get( "moveUrl" ) );
             
             return "common/alert";
         }
         
-        ClassModDto classDto = (ClassModDto) classValidCheck.get("classDto");
+        ClassModDto classDto = ( ClassModDto ) classValidCheck.get( "classDto" );
         
         // 등록 classSn 정보 add
         model.addAttribute( "classDto", classDto );
         
-        
         // E : 필요한 객체 setting
         
         // 등록 처리
+        // 수업 순번 없을 경우, 최대값으로 설정
+        if ( saveDto.getLctreSeq() == null ) {
+            LctreModDto lctreModDto = lctreService.findTop1ByClassSnOrderByLctreSeqDesc( saveDto.getClassSn() );
+            if ( lctreModDto == null ) {
+                saveDto.setLctreSeq( ( long ) 1 );
+            } else {
+                saveDto.setLctreSeq( lctreModDto.getLctreSeq() + 1 );
+            }
+        }
         
         // save
         lctreService.save( saveDto, request );
@@ -215,24 +252,36 @@ public class LctreController {
         // S : 필요한 객체 setting
         // url 에 classSn 담겨 있을 시 classSn 유효성 체크
         Map<String, Object> classValidCheck = classValidCheck( classSn, mcd, model );
-        boolean validResult = (boolean)classValidCheck.get("validResult");
-        if( !validResult ) {
-            model.addAttribute( "resultMsg",  (String)classValidCheck.get("resultMsg"));
-            model.addAttribute( "moveUrl", (String)classValidCheck.get("moveUrl") );
+        boolean validResult = ( boolean ) classValidCheck.get( "validResult" );
+        if ( !validResult ) {
+            model.addAttribute( "resultMsg", ( String ) classValidCheck.get( "resultMsg" ) );
+            model.addAttribute( "moveUrl", ( String ) classValidCheck.get( "moveUrl" ) );
             
             return "common/alert";
         }
         
-        ClassModDto classDto = (ClassModDto) classValidCheck.get("classDto");
+        ClassModDto classDto = ( ClassModDto ) classValidCheck.get( "classDto" );
         
         // 등록 classSn 정보 add
         model.addAttribute( "classDto", classDto );
         
+        // 클래스 요일 List add
+        model.addAttribute( "classWeekList", classWeekService.getListByClassSn( classSn ) );    // 요일리스트
+        
         // target object 조회
-        model.addAttribute( "targetDto", lctreService.findById( pk ) );
+        LctreModDto targetDto = lctreService.findById( pk );
+        
+        // lctreSn 으로 조회한 classSn 값과 url Param의 classSn 같은 값인지 비교
+        if ( !targetDto.getClassSn().equals( classSn ) ) {
+            model.addAttribute( "resultMsg", "클래스 일련번호 값을 확인해주세요." );
+            model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+            
+            return "common/alert";
+        }
+        
+        model.addAttribute( "targetDto", targetDto );
         
         // E : 필요한 객체 setting
-        
         
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
@@ -248,7 +297,6 @@ public class LctreController {
     @Transactional
     @PostMapping( BASIC_PATH + "/{mcd}/{classSn}/update" )
     public String update(
-            @RequestParam( "file" ) MultipartFile files,        // 첨부파일 필요시
             @ModelAttribute LctreModDto modDto,
 //            @ModelAttribute LctreRoleModDto lctreRoleModDto,  // required false
             @PathVariable String mcd,
@@ -259,15 +307,15 @@ public class LctreController {
         // S : 필요한 객체 setting
         // url 에 classSn 담겨 있을 시 classSn 유효성 체크
         Map<String, Object> classValidCheck = classValidCheck( classSn, mcd, model );
-        boolean validResult = (boolean)classValidCheck.get("validResult");
-        if( !validResult ) {
-            model.addAttribute( "resultMsg",  (String)classValidCheck.get("resultMsg"));
-            model.addAttribute( "moveUrl", (String)classValidCheck.get("moveUrl") );
+        boolean validResult = ( boolean ) classValidCheck.get( "validResult" );
+        if ( !validResult ) {
+            model.addAttribute( "resultMsg", ( String ) classValidCheck.get( "resultMsg" ) );
+            model.addAttribute( "moveUrl", ( String ) classValidCheck.get( "moveUrl" ) );
             
             return "common/alert";
         }
         
-        ClassModDto classDto = (ClassModDto) classValidCheck.get("classDto");
+        ClassModDto classDto = ( ClassModDto ) classValidCheck.get( "classDto" );
         
         // 등록 classSn 정보 add
         model.addAttribute( "classDto", classDto );
@@ -297,7 +345,7 @@ public class LctreController {
             Model model ) {
         
         // url 에 classSn 담겨 있을 시 classSn 유효성 체크
-        if( classSn != null ) {
+        if ( classSn != null ) {
             Map<String, Object> classValidCheck = classValidCheck( classSn, mcd, model );
             boolean validResult = ( boolean ) classValidCheck.get( "validResult" );
             if ( !validResult ) {
@@ -325,15 +373,7 @@ public class LctreController {
     }
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    // url 변수 classSn 유효성 체크 로직
     private Map<String, Object> classValidCheck( Long classSn, String mcd, Model model ) {
         
         Map<String, Object> result = new HashMap<String, Object>();
@@ -342,12 +382,12 @@ public class LctreController {
             // 클래스 정보 add ( classSn으로 검색 )
             ClassModDto classDto = classService.findById( classSn );
             // 클래스 요일 list 정보 add ( classSn으로 검색 )
-            List<ClassWeekListDto> classWeekListDtos =  classWeekService.getListByClassSn( classSn );
+            List<ClassWeekListDto> classWeekListDtos = classWeekService.getListByClassSn( classSn );
             
             // 클래스가 존재 하지 않을 시
             if ( classDto == null ) {
                 // 메시지 출력 및 url 이동 처리
-                result.put("validResult", false);
+                result.put( "validResult", false );
                 
                 result.put( "resultMsg", "클래스의 정보를 확인해주세요." );
                 result.put( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
@@ -355,25 +395,130 @@ public class LctreController {
                 return result;
             } else if ( classWeekListDtos.size() == 0 ) {
                 // 메시지 출력 및 url 이동 처리
-                result.put("validResult", false);
-                
+                result.put( "validResult", false );
                 
                 result.put( "resultMsg", "클래스에 요일 등록이 되어있지 않습니다.\n적어도 1개의 요일을 선택해 주세요." );
-                result.put( "moveUrl",   "/admin/class/" + mcd + "/modify?pk=" + classSn );
+                result.put( "moveUrl", "/admin/class/" + mcd + "/modify?pk=" + classSn );
                 
                 return result;
             } else {
-                result.put("validResult", true);
+                result.put( "validResult", true );
                 
                 // 클래스 정보 add
                 result.put( "classDto", classDto );
+            }
+        }
+        return result;
+    }
+    
+    // 조회조건에 따라 url mapping 변경 작업
+    private void schConditionCombineForResetUrl( LctreListDto listDto, Long classSn, String mcd, Model model ) {
+        
+        CategoryDto schCategoryDto = listDto.getCategory();
+        
+        if ( schCategoryDto != null && schCategoryDto.getLv3Sn() != null ) {   // schCategoryDto.getLv3Sn() != null : 클래스 검색 값이 있을시,
+            
+            // 0. schCategoryDto.getLv3Sn 이 0 일때
+            //  0-1. classSn 이 있을 때, :
+            //  0-2. classSn 이 없을 때, : return
+            // 1. classSn 이 있을 때,
+            //  1-1. classSn과 schCategoryDto.getLv3Sn() 값이 같은 경우 : lv4 존재여부 확인 후, return
+            //  1-2. classSn과 schCategoryDto.getLv3Sn() 값이 다른 경우 : BASIC_PATH + "/{mcd}/{classSn}/list" 경로로 redirect 한다.
+            // 2. classSn 이 없을 때 : BASIC_PATH + "/{mcd}/{classSn}/list" 경로로 redirect 한다.
+            
+            if ( schCategoryDto.getLv3Sn() == 0 ) {
+                // 0. schCategoryDto.getLv3Sn 이 0 일때
                 
+                if ( classSn != null ) {
+                    String makeUrlParam = "";
+                    if ( schCategoryDto.getLv1Sn() != null )
+                        makeUrlParam += "category.lv1Sn=" + schCategoryDto.getLv1Sn() + "&";
+                    if ( schCategoryDto.getLv2Sn() != null )
+                        makeUrlParam += "category.lv2Sn=" + schCategoryDto.getLv2Sn() + "&";
+                    if ( schCategoryDto.getLv3Sn() != null )
+                        makeUrlParam += "category.lv3Sn=" + schCategoryDto.getLv3Sn() + "&";
+                    if ( schCategoryDto.getLv4Sn() != null )
+                        makeUrlParam += "category.lv4Sn=" + schCategoryDto.getLv4Sn() + "&";
+                    try {
+                        // response 선언
+                        HttpServletResponse response = ( ( ServletRequestAttributes ) RequestContextHolder.currentRequestAttributes() ).getResponse();
+                        response.sendRedirect( BASIC_PATH + "/" + mcd + "/list?" + makeUrlParam );
+                        
+                    } catch ( IOException e ) {
+                        throw new RuntimeException( e );
+                    }
+                    
+                } else {
+                    return;
+                }
+            }
+            
+            // classSn으로 class 정보 조회
+            if ( classSn != null && schCategoryDto.getLv3Sn() == classSn ) {
+                //  1-1. classSn과 schCategoryDto.getLv3Sn() 값이 같은 경우 : 바로 return
+                
+                return;
+                
+            } else if ( classSn != null && schCategoryDto.getLv3Sn() != classSn ) {
+                //  1-2. classSn과 schCategoryDto.getLv3Sn() 값이 다른 경우 : BASIC_PATH + "/{mcd}/{classSn}/list" 경로로 redirect 한다.
+                
+                try {
+                    // response 선언
+                    HttpServletResponse response = ( ( ServletRequestAttributes ) RequestContextHolder.currentRequestAttributes() ).getResponse();
+                    if ( schCategoryDto.getLv4Sn() != null ) {
+                        response.sendRedirect( BASIC_PATH + "/" + mcd + "/" + classSn + "/list?category.lv4Sn=" + schCategoryDto.getLv4Sn() );
+                    } else {
+                        response.sendRedirect( BASIC_PATH + "/" + mcd + "/" + classSn + "/list" );
+                    }
+                    
+                } catch ( IOException e ) {
+                    throw new RuntimeException( e );
+                }
+            } else if ( classSn == null ) {
+                // 2. classSn 이 없을 때 : BASIC_PATH + "/{mcd}/{classSn}/list" 경로로 redirect 한다.
+                try {
+                    // response 선언
+                    HttpServletResponse response = ( ( ServletRequestAttributes ) RequestContextHolder.currentRequestAttributes() ).getResponse();
+                    if ( schCategoryDto.getLv4Sn() != null ) {
+                         response.sendRedirect( BASIC_PATH + "/" + mcd + "/" + schCategoryDto.getLv3Sn() + "/list?category.lv4Sn=" + schCategoryDto.getLv4Sn() );
+                    } else {
+                        response.sendRedirect( BASIC_PATH + "/" + mcd + "/" + schCategoryDto.getLv3Sn() + "/list" );
+                    }
+                    
+                } catch ( IOException e ) {
+                    throw new RuntimeException( e );
+                }
+                
+            } else {
+                return;
+            }
+            
+        } else if ( schCategoryDto != null ) {
+            // lv3 조회조건이 null 일 경우
+            
+            if ( classSn != null ) {
+                // redirect
+                String makeUrlParam = "";
+                if ( schCategoryDto.getLv1Sn() != null )
+                    makeUrlParam += "category.lv1Sn=" + schCategoryDto.getLv1Sn() + "&";
+                if ( schCategoryDto.getLv2Sn() != null )
+                    makeUrlParam += "category.lv2Sn=" + schCategoryDto.getLv2Sn() + "&";
+                
+                try {
+                    // response 선언
+                    HttpServletResponse response = ( ( ServletRequestAttributes ) RequestContextHolder.currentRequestAttributes() ).getResponse();
+                    response.sendRedirect( BASIC_PATH + "/" + mcd + "/list?" + makeUrlParam );
+                    
+                } catch ( IOException e ) {
+                    throw new RuntimeException( e );
+                }
+                
+            } else {
+                return;
             }
         }
         
         
-        
-        return result;
     }
     
     

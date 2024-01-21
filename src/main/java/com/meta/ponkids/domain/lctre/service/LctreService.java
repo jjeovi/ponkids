@@ -18,6 +18,7 @@ import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +43,22 @@ public class LctreService {
 
     public Page<LctreListDto> getList( LctreListDto listDto, Pageable pageable ) {
         return lctreRepository.getList( listDto, pageable );
+    }
+    
+    public LctreModDto findTop1ByClassSnOrderByLctreSeqDesc ( Long pk ) {
+        // target 조회
+        Lctre lctre = lctreRepository.findTop1ByClassSnOrderByLctreSeqDesc( pk ).orElse(null);
+        
+        if (lctre == null ) {
+            return null;
+        } else {
+            
+            LctreModDto targetDto  = new LctreModDto();
+            targetDto = targetDto.toDto( lctre );
+            
+            return targetDto;
+        }
+        
     }
     
     
@@ -74,16 +91,15 @@ public class LctreService {
         
         // TODO target object 에 수정사항 set	
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
-//        if ( StringUtils.hasText( modDto.getUserNm() ) ) targetDto.setUserNm( modDto.getUserNm() );          	// 이름
-//        if ( StringUtils.hasText( modDto.getGender() ) ) targetDto.setGender( modDto.getGender() );          	// 성별
-//        if ( StringUtils.hasText( modDto.getBrdtDate() ) ) targetDto.setBrdtDate( modDto.getBrdtDate() );		// 생년월일
-//        if ( StringUtils.hasText( modDto.getTelNo() ) ) targetDto.setTelNo( modDto.getTelNo() );            	// 연락처
-//        if ( StringUtils.hasText( modDto.getResideArea() ) ) targetDto.setResideArea( modDto.getResideArea() );	// 거주지역
-//        if ( StringUtils.hasText( modDto.getRdnmAdr() ) ) targetDto.setRdnmAdr( modDto.getRdnmAdr() );        	// 주소
-//        if ( StringUtils.hasText( modDto.getZip() ) ) targetDto.setZip( modDto.getZip() );                		// 우편번호
-//        if ( StringUtils.hasText( modDto.getMngrYn() ) ) targetDto.setMngrYn( modDto.getMngrYn() );          	// 관리자여부
-        
-//        targetDto.setAtchFileSn( modDto.getAtchFileSn() );          											// 첨부파일 (첨부파일은 Null이어도 변경)
+        if ( StringUtils.hasText(modDto.getClassDayCd())) targetDto.setClassDayCd( modDto.getClassDayCd() );    // 수업 요일
+        targetDto.setLctreSeq( modDto.getLctreSeq() );                                                          // 수업 순번
+        if(StringUtils.hasText( modDto.getLctreSj() ))  targetDto.setLctreSj( modDto.getLctreSj() );            // 수업 제목
+        targetDto.setLctreDc( modDto.getLctreDc() );                                                            // 수업 설명
+        targetDto.setLctreApplcntGuidance( modDto.getLctreApplcntGuidance() );                                  // 신청자 안내
+        if(StringUtils.hasText( modDto.getRcritNmprSetYn() ))  targetDto.setRcritNmprSetYn( modDto.getRcritNmprSetYn() );            // 모집인원 설정여부
+        targetDto.setRcritNmprCo( modDto.getRcritNmprCo() );                                                    // 모집인원 수
+        if(StringUtils.hasText( modDto.getPreparRcritNmprSetYn() ))  targetDto.setPreparRcritNmprSetYn( modDto.getPreparRcritNmprSetYn() );            // 모집인원 설정여부
+        targetDto.setPreparRcritNmprCo( modDto.getPreparRcritNmprCo() );                                        // 모집인원 수
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );

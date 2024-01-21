@@ -30,11 +30,11 @@
                             <span class="category-title lv1">카테고리</span>
                             <ul data-all-yn="Y" data-next-step-li-onclick-param-url="/admin/class/live/getClassListAjax" >
                                 <li onclick="getCateNextLvList('/admin/classCategoryCl02/live/getListByParntsClSnAjax', this );"
-                                    th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'on'"
+                                    th:classappend="${ ( searchDTO.category != null && searchDTO.category.lv1Sn  == 0 ) } ? 'on'"
                                     value="0" th:text="전체">
                                 </li>
                                 <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('/admin/classCategoryCl02/live/getListByParntsClSnAjax', this );"
-                                    th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) } ? 'on'"
+                                    th:classappend="${ ( searchDTO.category != null  &&  searchDTO.category.lv1Sn == data.clSn ) } ? 'on'"
                                     th:value="${data.clSn}" th:text="${data.clNm}">
                                 </li>
                             </ul>
@@ -45,7 +45,7 @@
                             <ul data-all-yn="Y" data-next-step-li-onclick-param-url="/admin/class/live/getClassWeekListAjax"> <!--  data-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
                                 <th:block th:if="${cateLv2List ne null}">
                                     <li onclick="getCateNextLvList('/admin/class/live/getClassListAjax', this );"
-                                        th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == 0  || searchDTO.category.lv2Sn == null ) } ? 'on'"
+                                        th:classappend="${ ( searchDTO.category != null && searchDTO.category.lv2Sn == 0 ) } ? 'on'"
                                         value="0" th:text="전체">
                                     </li>
                                     <li onclick="getCateNextLvList('/admin/class/live/getClassListAjax', this );"
@@ -61,7 +61,7 @@
                             <ul data-all-yn="Y" data-next-step-li-onclick-param-url=""> <!--  data-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
                                 <th:block th:if="${cateLv3List ne null}">
                                     <li onclick="getCateNextLvList('/admin/class/live/getClassWeekListAjax', this );"
-                                        th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv3Sn == 0 ) } ? 'on'"
+                                        th:classappend="${ searchDTO.category != null && searchDTO.category.lv3Sn == 0 } ? 'on'"
                                         value="0" th:text="전체">
                                     </li>
                                     <li onclick="getCateNextLvList('/admin/class/live/getClassWeekListAjax', this );"
@@ -77,7 +77,7 @@
                             <ul data-all-yn="Y" data-next-step-li-onclick-param-url=""> <!--  data-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
                                 <th:block th:if="${cateLv4List ne null}">
                                     <li onclick="getCateNextLvList('', this );"
-                                        th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv4Sn == 0 ) } ? 'on'"
+                                        th:classappend="${ searchDTO.category != null && searchDTO.category.lv4Sn == 0 } ? 'on'"
                                         value="0" th:text="전체">
                                     </li>
                                     <li onclick="getCateNextLvList('', this );"
@@ -172,7 +172,7 @@
 	                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
                                     <td> [[${data.ctgryNm}]] <th:block th:if="${data.crseSn != null && data.crseSn != '' }"><br/>[ [[${data.crseNm}]] ] </th:block> </td>
 	                                <td>
-                                        <a class="b-link" th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.classSn} ) }">
+                                        <a class="b-link" th:href="@{{basicPath}/{mcd}/{classSn}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, classSn = ${data.classSn}, pk = ${data.lctreSn} ) }">
                                             [[${data.classSj}]] <th:block><br/>[ [[${data.lctreSj}]] ]</th:block>
                                         </a>
                                     </td>
@@ -205,7 +205,7 @@
                     <div class="col-md-12 col-sm-12">
                         <!-- bottom left area -->
                         <div class="col-md-2 col-sm-3 text-left">
-                            <a th:if="${classSn != null }" th:href="@{ {basicPath}/{mcd}/{classSn}/regist ( basicPath = ${basicPath}, mcd = ${mcd}, classSn = ${classSn} ) }" class="btn btn-white w120p">등록</a>
+                            <a th:if="${ classSn != null && classSn != 0 }" th:href="@{ {basicPath}/{mcd}/{classSn}/regist ( basicPath = ${basicPath}, mcd = ${mcd}, classSn = ${classSn} ) }" class="btn btn-white w120p">등록</a>
                         </div>
                         <!-- S : 테이블 하단 페이징 -->
                         <div class="col-md-8 col-sm-6 text-center"

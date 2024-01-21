@@ -11,4 +11,6 @@ import com.meta.ponkids.domain.lctre.repository.custom.LctreRepositoryCustom;
 public interface LctreRepository extends JpaRepository<Lctre, Long>, LctreRepositoryCustom {
 	
 	Optional<Lctre> findById( Long pk );	// TODO PK(*ID) 체크
+	
+	Optional<Lctre> findTop1ByClassSnOrderByLctreSeqDesc( Long pk );
 }

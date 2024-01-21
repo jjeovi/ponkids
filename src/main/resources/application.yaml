@@ -54,8 +54,8 @@ key :
         user  : pon                 # 사용자 화면 기본 변수 key
         userRootMenuSn  : 200       # 사용자 루트 메뉴sn
     upload :
-        path : C:/upload/           # 업로드 파일 저장 경로 ( 개발용 ) ( window )
-#        path : /Users/jjeoV/Desktop/jjeoV/2023/pioneerKids/upload/    # 업로드 파일 저장 경로 ( 개발용 ) ( Mac )
+#        path : C:/upload/           # 업로드 파일 저장 경로 ( 개발용 ) ( window )
+        path : /Users/jjeoV/Desktop/jjeoV/2023/pioneerKids/upload/    # 업로드 파일 저장 경로 ( 개발용 ) ( Mac )
     admin :
         auth : pon                  # 로그인 인증용 key
     menuCd :
