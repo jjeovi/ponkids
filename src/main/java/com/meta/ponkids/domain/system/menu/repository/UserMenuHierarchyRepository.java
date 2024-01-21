@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserMenuHierarchyRepository extends JpaRepository<UserMenuHierarchy, Long> {
     
-    UserMenuHierarchy findTop1ByMenuUrlOrderByMenuSn( String menuUrl );
+    UserMenuHierarchy findTop1ByMenuUrlAndDelYnOrderByMenuSn( String menuUrl , String delYn);
     
     void deleteByMenuSn( Long sn );
     

@@ -12,9 +12,9 @@ public class UserMenuHierarchyService {
     
     private final UserMenuHierarchyRepository userMenuHierarchyRepository;
     
-    public UserMenuHierarchyDto findTop1ByMenuUrlOrderByMenuSn( String menuUrl ) {
+    public UserMenuHierarchyDto findTop1ByMenuUrlAndDelYnOrderByMenuSn( String menuUrl , String delYn) {
         
-        UserMenuHierarchy userMenuHierarchy = userMenuHierarchyRepository.findTop1ByMenuUrlOrderByMenuSn( menuUrl );
+        UserMenuHierarchy userMenuHierarchy = userMenuHierarchyRepository.findTop1ByMenuUrlAndDelYnOrderByMenuSn( menuUrl , delYn );
         
         UserMenuHierarchyDto userMenuHierarchyDto = new UserMenuHierarchyDto();
         userMenuHierarchyDto = userMenuHierarchyDto.toDto( userMenuHierarchy );

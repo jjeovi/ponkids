@@ -5,10 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AdminMenuHierarchyRepository extends JpaRepository<AdminMenuHierarchy, Long> {
     
-    AdminMenuHierarchy findTop1ByMenuUrlOrderByMenuSn( String menuUrl );
+    AdminMenuHierarchy findTop1ByMenuUrlAndDelYnOrderByMenuSn( String menuUrl, String delYn );
     
     
-    AdminMenuHierarchy findTop1ByMenuCdOrderByMenuSn( String menuCd );
+    AdminMenuHierarchy findTop1ByMenuCdAndDelYnOrderByMenuSn( String menuCd, String delYn );
     
     void deleteByMenuSn( Long sn );
     

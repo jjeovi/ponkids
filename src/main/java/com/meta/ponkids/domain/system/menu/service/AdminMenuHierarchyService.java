@@ -12,9 +12,9 @@ public class AdminMenuHierarchyService {
     
     private final AdminMenuHierarchyRepository adminMenuHierarchyRepository;
     
-    public AdminMenuHierarchyDto findTop1ByMenuUrlOrderByMenuSn( String menuUrl ) {
+    public AdminMenuHierarchyDto findTop1ByMenuUrlAndDelYnOrderByMenuSn( String menuUrl , String delYn) {
         
-        AdminMenuHierarchy adminMenuHierarchy = adminMenuHierarchyRepository.findTop1ByMenuUrlOrderByMenuSn( menuUrl );
+        AdminMenuHierarchy adminMenuHierarchy = adminMenuHierarchyRepository.findTop1ByMenuUrlAndDelYnOrderByMenuSn( menuUrl , delYn);
         
         if ( adminMenuHierarchy == null ) {
             return null;
@@ -27,9 +27,9 @@ public class AdminMenuHierarchyService {
         
     }
     
-    public AdminMenuHierarchyDto findTop1ByMenuCdOrderByMenuSn( String menuCd ) {
+    public AdminMenuHierarchyDto findTop1ByMenuCdAndDelYnOrderByMenuSn( String menuCd, String delYn ) {
         
-        AdminMenuHierarchy adminMenuHierarchy = adminMenuHierarchyRepository.findTop1ByMenuCdOrderByMenuSn( menuCd );
+        AdminMenuHierarchy adminMenuHierarchy = adminMenuHierarchyRepository.findTop1ByMenuCdAndDelYnOrderByMenuSn( menuCd , delYn );
         
         if ( adminMenuHierarchy == null ) {
             return null;

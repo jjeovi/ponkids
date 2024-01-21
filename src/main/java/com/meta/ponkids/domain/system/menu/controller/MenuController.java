@@ -8,8 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -98,31 +98,6 @@ public class MenuController {
         return BASIC_PATH + "/regist";
     }
     
-    @Transactional
-    @PostMapping( BASIC_PATH + "/insert" )
-    public String insert(
-            @ModelAttribute MenuSaveDto saveDto,
-//            @ModelAttribute MenuRoleSaveDto menuRoleSaveDto,  // required false
-            HttpServletRequest request,
-            Model model ) throws IOException {
-        
-        // S : 필요한 객체 setting
-        
-        // E : 필요한 객체 setting
-        
-        // 등록 처리
-        
-        // save
-        menuService.save( saveDto, request );
-//        menuService.save( saveDto, menuRoleSaveDto, request );
-        
-        // 메시지 출력 및 url 이동 처리
-        model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/list" );
-        
-        return "common/alert";
-    }
-    
     @GetMapping( value = {
             BASIC_PATH + "/detail",
             BASIC_PATH + "/modify" } )
@@ -164,7 +139,7 @@ public class MenuController {
         // E : 필요한 객체 setting
         
         // update 구현
-        menuService.update( modDto, request );
+//        menuService.update( modDto, request );
         //	menuService.update( modDto, menuRoleModDto, request );
         
         // 메시지 출력 및 url 이동 처리
@@ -244,26 +219,22 @@ public class MenuController {
     ) throws IOException {
         
         // 메뉴 등록 (ajax)
-        
+        saveDto = menuService.save( saveDto, request, type );
         
         if ( type.equals( TYPE_ADMIN ) ) {
             // insert 구현
-            saveDto = menuService.save( saveDto, request );
+            
             // 메뉴 권한 부여작업 update ( delete 후 insert )
             menuService.menuRoleUpdate( saveDto, request );
-        }
-        
-        if ( type.equals( TYPE_USER ) ) {
-
+            
+        } else if ( type.equals( TYPE_USER ) ) {
             // insert 구현
-            saveDto = menuService.saveAndFlush( saveDto, request );
-        	
-        	try {
-				menuService.menuSaveToJsonFile();
-			} catch (ParseException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+            
+            try {
+                menuService.menuSaveToJsonFile();   // 사용자 메뉴 일 경우, 등록, 수정, 삭제 시 파일생성 refresh 작업 필요
+            } catch ( IOException e ) {
+                e.printStackTrace();
+            }
         }
         
         // 메시지 출력 및 url 이동 처리 (ajax)
@@ -285,12 +256,22 @@ public class MenuController {
         // 메뉴 수정 (ajax)
         Map<String, Object> result = new HashMap<String, Object>();
         
+        
         // update 구현
-        menuService.update( modDto, request );
+        menuService.update( modDto, request, type );
+        
         
         if ( type.equals( TYPE_ADMIN ) ) {
+            
             // 메뉴 권한 부여작업 update ( delete 후 insert )
             menuService.menuRoleUpdate( modDto, request );
+        } else if ( type.equals( TYPE_USER ) ) {
+            
+            try {
+                menuService.menuSaveToJsonFile();   // 사용자 메뉴 일 경우, 등록, 수정, 삭제 시 파일생성 refresh 작업 필요
+            } catch ( IOException e ) {
+                e.printStackTrace();
+            }
         }
         
         // 메시지 출력 및 url 이동 처리 (ajax)
@@ -317,12 +298,18 @@ public class MenuController {
         
         // menu 삭제
         Menu menu = modDto.toEntity();
-        menuRepository.delete( menu );
-        
+        menuService.delete( modDto );
         
         if ( type.equals( TYPE_ADMIN ) ) {
             // menu 권한 삭제
             menuRoleRepository.deleteAllByMenuSn( menu.getMenuSn() );
+        } else if ( type.equals( TYPE_USER ) ) {
+            
+            try {
+                menuService.menuSaveToJsonFile();   // 사용자 메뉴 일 경우, 등록, 수정, 삭제 시 파일생성 refresh 작업 필요
+            } catch ( IOException e ) {
+                e.printStackTrace();
+            }
         }
         
         // 메시지 출력 및 url 이동 처리 (ajax)
@@ -351,14 +338,20 @@ public class MenuController {
             //
             MenuModDto rootMenu = menuService.findById( USER_ROOT_MENU_SN );
             if ( rootMenu.getMenuSn() == null ) {
-                saveDto = menuService.save( saveDto, request );
+                saveDto = menuService.save( saveDto, request, type );
             }
             
             // 메뉴 권한 부여작업 update ( delete 작업 없이 바로  insert )
             menuService.menuRoleRootUpdate( saveDto, request );
             
         } else if ( type.equals( TYPE_USER ) ) {
-            saveDto = menuService.save( saveDto, request );
+            saveDto = menuService.save( saveDto, request, type );
+            
+            try {
+                menuService.menuSaveToJsonFile();   // 사용자 메뉴 일 경우, 등록, 수정, 삭제 시 파일생성 refresh 작업 필요
+            } catch ( IOException e ) {
+                e.printStackTrace();
+            }
         }
         
         // 메시지 출력 및 url 이동 처리 (ajax)
