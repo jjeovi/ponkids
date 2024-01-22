@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +23,6 @@ import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
 import com.meta.ponkids.domain.system.menu.dto.MenuModDto;
 import com.meta.ponkids.domain.system.menu.dto.MenuSaveDto;
 import com.meta.ponkids.domain.system.menu.entity.Menu;
-import com.meta.ponkids.domain.system.menu.repository.MenuRepository;
 import com.meta.ponkids.domain.system.menu.repository.MenuRoleRepository;
 import com.meta.ponkids.domain.system.menu.service.MenuService;
 import com.meta.ponkids.domain.system.role.dto.RoleListDto;
@@ -41,7 +39,6 @@ public class MenuController {
     private final static String BASIC_PATH = "/admin/menu";
     private final MenuService menuService;
     private final RoleRepository roleRepository;
-    private final MenuRepository menuRepository;
     private final MenuRoleRepository menuRoleRepository;
     @Value( "${key.default.admin}" )
     private String TYPE_ADMIN;
