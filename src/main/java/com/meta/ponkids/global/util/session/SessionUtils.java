@@ -1,6 +1,6 @@
 package com.meta.ponkids.global.util.session;
 
-import com.meta.ponkids.domain.system.login.dto.LoginDto;
+import com.meta.ponkids.domain.adm.system.login.dto.LoginDto;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SessionUtils {

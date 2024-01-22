@@ -1,8 +1,8 @@
 package com.meta.ponkids.global.config.interceptor;
 
-import com.meta.ponkids.domain.system.login.dto.LoginDto;
-import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
-import com.meta.ponkids.domain.system.menu.service.MenuService;
+import com.meta.ponkids.domain.adm.system.login.dto.LoginDto;
+import com.meta.ponkids.domain.adm.system.menu.dto.MenuListDto;
+import com.meta.ponkids.domain.adm.system.menu.service.MenuService;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
