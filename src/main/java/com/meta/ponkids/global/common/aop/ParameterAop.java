@@ -1,9 +1,9 @@
 package com.meta.ponkids.global.common.aop;
 
-import com.meta.ponkids.domain.adm.system.login.dto.LoginDto;
-import com.meta.ponkids.domain.adm.system.menu.dto.AdminMenuHierarchyDto;
-import com.meta.ponkids.domain.adm.system.menu.repository.MenuRepository;
-import com.meta.ponkids.domain.adm.system.menu.service.AdminMenuHierarchyService;
+import com.meta.ponkids.domain.system.login.dto.LoginDto;
+import com.meta.ponkids.domain.system.menu.dto.AdminMenuHierarchyDto;
+import com.meta.ponkids.domain.system.menu.repository.MenuRepository;
+import com.meta.ponkids.domain.system.menu.service.AdminMenuHierarchyService;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;

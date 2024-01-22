@@ -1,7 +1,7 @@
 package com.meta.ponkids.global.config.interceptor;
 
 
-import com.meta.ponkids.domain.adm.system.login.dto.LoginDto;
+import com.meta.ponkids.domain.system.login.dto.LoginDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
