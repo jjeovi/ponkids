@@ -44,7 +44,9 @@ public class ClassWeekRepositoryImpl implements ClassWeekRepositoryCustom {
                 )
                 .from( classWeek )
                 // where
-                .where()
+                .where(
+                		eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                		)
 //                .orderBy( classWeek.classWeekSn.desc())
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )

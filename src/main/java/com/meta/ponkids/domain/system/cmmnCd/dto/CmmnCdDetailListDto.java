@@ -1,6 +1,7 @@
 package com.meta.ponkids.domain.system.cmmnCd.dto;
 
 import com.meta.ponkids.domain.system.cmmnCd.entity.CmmnCdDetail;
+import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,8 @@ public class CmmnCdDetailListDto {
     private Long cdDetailSn;
     
     private String cdNm;
+    
+    private String cdDc;
     
     private Long cdDetailSeq;
     
@@ -32,17 +35,22 @@ public class CmmnCdDetailListDto {
     
     private String useYn;
     
+    private String regDt;            // 등록일자
+    
     private String schOption;   // 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
     
     private String schCntn;     // 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!
     
+    private CategoryDto category;   // 카테고리 검색 : 생성자에는 추가하지 않음!
+    
     @Builder
     @QueryProjection
-    public CmmnCdDetailListDto( Long cdDetailSn, String cdNm, Long cdDetailSeq, String cdDetailNm, String cdDetailDc,
+    public CmmnCdDetailListDto( Long cdDetailSn, String cdNm, String cdDc, Long cdDetailSeq, String cdDetailNm, String cdDetailDc,
                                 String cdDetailVal1, String cdDetailVal2, String cdDetailVal3, String cdDetailVal4, String cdDetailVal5,
-                                String useYn ) {
+                                String useYn, String regDt ) {
         this.cdDetailSn = cdDetailSn;
         this.cdNm = cdNm;
+        this.cdDc = cdDc;
         this.cdDetailSeq = cdDetailSeq;
         this.cdDetailNm = cdDetailNm;
         this.cdDetailDc = cdDetailDc;
@@ -52,7 +60,26 @@ public class CmmnCdDetailListDto {
         this.cdDetailVal4 = cdDetailVal4;
         this.cdDetailVal5 = cdDetailVal5;
         this.useYn = useYn;
+        this.regDt = regDt;
     }
+    
+    // dto to entity 메소드 생성
+    public CmmnCdDetail toEntity() {
+    	 return CmmnCdDetail.builder()
+                 .cdDetailSn( cdDetailSn )
+                 .cdNm( cdNm )
+                 .cdDetailSeq( cdDetailSeq )
+                 .cdDetailNm( cdDetailNm )
+                 .cdDetailDc( cdDetailDc )
+                 .cdDetailVal1( cdDetailVal1 )
+                 .cdDetailVal2( cdDetailVal2 )
+                 .cdDetailVal3( cdDetailVal3 )
+                 .cdDetailVal4( cdDetailVal4 )
+                 .cdDetailVal5( cdDetailVal5 )
+                 .useYn( useYn )
+                 .build();
+    }
+    
     
     
     // Entity to Dto 메소드는 DTO 내부에서 생성.
@@ -71,6 +98,7 @@ public class CmmnCdDetailListDto {
                 .useYn( cmmnCdDetail.getUseYn() )
                 .build();
     }
+    
     
     
 }

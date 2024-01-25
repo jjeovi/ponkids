@@ -1,22 +1,26 @@
 package com.meta.ponkids.domain.system.cmmnCd.repository.impl;
 
 
-import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailListDto;
-import com.meta.ponkids.domain.system.cmmnCd.dto.QCmmnCdDetailListDto;
-import com.meta.ponkids.domain.system.cmmnCd.repository.custom.CmmnCdDetailRepositoryCustom;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
+import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCd.cmmnCd;
+import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
+
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
+import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailListDto;
+import com.meta.ponkids.domain.system.cmmnCd.dto.QCmmnCdDetailListDto;
+import com.meta.ponkids.domain.system.cmmnCd.repository.custom.CmmnCdDetailRepositoryCustom;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
+import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
@@ -37,6 +41,7 @@ public class CmmnCdDetailRepositoryImpl implements CmmnCdDetailRepositoryCustom 
                 .select( new QCmmnCdDetailListDto(
                         cmmnCdDetail.cdDetailSn,
                         cmmnCdDetail.cdNm,
+                        cmmnCd.cdDc,
                         cmmnCdDetail.cdDetailSeq,
                         cmmnCdDetail.cdDetailNm,
                         cmmnCdDetail.cdDetailDc,
@@ -45,30 +50,44 @@ public class CmmnCdDetailRepositoryImpl implements CmmnCdDetailRepositoryCustom 
                         cmmnCdDetail.cdDetailVal3,
                         cmmnCdDetail.cdDetailVal4,
                         cmmnCdDetail.cdDetailVal5,
-                        cmmnCdDetail.useYn
+                        cmmnCdDetail.useYn,
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", cmmnCdDetail.regDt, "YYYY-MM-DD HH:MM:SS" )
                 ) )
                 .from( cmmnCdDetail )
+                .leftJoin( cmmnCd )
+                .on(
+                		cmmnCd.cdNm.eq(cmmnCdDetail.cdNm),
+                		cmmnCd.delYn.eq("N")
+                		)
+                
                 // where
-                .where()
+                .where(
+                		eqCdNm( listDto.getCdNm() ),
+                		eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                		)
 //                .orderBy( cmmnCdDetail.cdDetailSn.desc())
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )
                 .fetch();
         
-        
-        // TODO
         // (2) count
         JPAQuery<Long> count = query.select( cmmnCdDetail.count() )
                 .from( cmmnCdDetail )
                 .where(
-                        eqOption( listDto.getSchOption(), listDto.getSchCntn() ) );
-        
-        
+                		eqCdNm( listDto.getCdNm() ),
+                        eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                       );
         
         return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
-        
     }
     
+    
+    
+    // -------------------------------- WHERE 검색 옵션 setting --------------------------------
+    
+    private BooleanExpression eqCdNm( String cdNm ) {
+        return ( StringUtils.hasText(cdNm) )? cmmnCdDetail.cdNm.eq( cdNm ) : null;
+    }
     
     private BooleanExpression eqOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨

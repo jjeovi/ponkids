@@ -1,25 +1,35 @@
 package com.meta.ponkids.domain.cls.controller;
 
-import com.meta.ponkids.domain.cls.service.ClassCategoryCl01Service;
-import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
-import com.meta.ponkids.domain.system.menu.service.MenuService;
-import com.meta.ponkids.domain.cls.repository.ClassCategoryCl02Repository;
-import com.meta.ponkids.domain.cls.dto.*;
-import com.meta.ponkids.global.common.dto.CategoryDto;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.meta.ponkids.domain.cls.dto.ClassCategoryCl01ModDto;
+import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ListDto;
+import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ModDto;
+import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02SaveDto;
+import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
+import com.meta.ponkids.domain.cls.service.ClassCategoryCl01Service;
+import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
+import com.meta.ponkids.global.common.dto.CategoryDto;
+
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,8 +38,6 @@ public class ClassCategoryCl02AdmController {
     private final static String BASIC_PATH = "/admin/classCategoryCl02";
     private final ClassCategoryCl02Service classCategoryCl02Service;
     private final ClassCategoryCl01Service classCategoryCl01Service;
-    private final ClassCategoryCl02Repository classCategoryCl02Repository;
-    private final MenuService menuService;
     
     @GetMapping( BASIC_PATH + "/{mcd}/{parntsClSn}/list" )
     public String list( @ModelAttribute ClassCategoryCl02ListDto listDto,
@@ -70,7 +78,7 @@ public class ClassCategoryCl02AdmController {
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
-        // 경로 추가
+        // 부모 카테고리 Sn 값 setting
         model.addAttribute( "parntsClSn", parntsClSn );
         
         return BASIC_PATH + "/list";
@@ -183,7 +191,7 @@ public class ClassCategoryCl02AdmController {
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
-        // 경로 추가
+        // 부모 카테고리 Sn 값 setting
         model.addAttribute( "parntsClSn", parntsClSn );
         
         String urlPath = request.getServletPath();
@@ -237,6 +245,45 @@ public class ClassCategoryCl02AdmController {
     }
     
     
+    @ResponseBody
+    @GetMapping( BASIC_PATH + "/live/getListByParntsClSnAjax" )
+    public Map<String, Object> getListByParntsClSnAjax( @ModelAttribute ClassCategoryCl02ListDto listDto ) {
+        // 카테고리(parntsClSn) 로 커리큘럼 검색
+        
+        Map<String, Object> result = new HashMap<String, Object>();
+        
+        // 분류에서 설정된 categorySn값을 검색키워드에 맞게 검색조건값 setting ( ajax의 categorySn 을 대입 )
+        // target = parntsClSn
+        Long targetPk = listDto.getParntsClSn();
+        if ( targetPk == null ) {
+            if ( listDto.getCategory().getCategorySn() != null ) {
+                listDto.setParntsClSn( listDto.getCategory().getCategorySn() );
+            }
+        }
+        
+        // 부모 클래스 일련번호로 커리큘럼검색
+        List<ClassCategoryCl02ListDto> listDtos = null;
+        
+        if( listDto.getParntsClSn() != null && listDto.getParntsClSn() == 0  ) {
+        	// 부모클래스 일련번호가 0 일 때 : 전체 검색
+        	listDtos = classCategoryCl02Service.findAllByOrderByClSeq();
+        } else if ( listDto.getParntsClSn() != null ) {
+        	// 부모클래스 일련번호가 0 이 아닐 때 : 부모클래스일련번호로 검색 
+        	listDtos = classCategoryCl02Service.findByParntsClSnOrderByClSeq( listDto.getParntsClSn() );
+        }
+        
+        // list put
+        result.put( "resultList", listDtos );
+        
+        return result;
+    }
+    
+    
+    
+    // ========================= Util method =========================
+    // ========================= Util method =========================
+    // ========================= Util method =========================
+    
     // 카테고리 setting method
     public void categorySet( ClassCategoryCl02ListDto listDto, long parntsClSn ) {
         
@@ -275,39 +322,6 @@ public class ClassCategoryCl02AdmController {
                 listDto.setCategory( categoryDto );
             }
         }
-    }
-    
-    @ResponseBody
-    @GetMapping( BASIC_PATH + "/live/getListByParntsClSnAjax" )
-    public Map<String, Object> getListByParntsClSnAjax( @ModelAttribute ClassCategoryCl02ListDto listDto ) {
-        // 카테고리(parntsClSn) 로 커리큘럼 검색
-        
-        Map<String, Object> result = new HashMap<String, Object>();
-        
-        // 분류에서 설정된 categorySn값을 검색키워드에 맞게 검색조건값 setting ( ajax의 categorySn 을 대입 )
-        // target = parntsClSn
-        Long targetPk = listDto.getParntsClSn();
-        if ( targetPk == null ) {
-            if ( listDto.getCategory().getCategorySn() != null ) {
-                listDto.setParntsClSn( listDto.getCategory().getCategorySn() );
-            }
-        }
-        
-        // 부모 클래스 일련번호로 커리큘럼검색
-        List<ClassCategoryCl02ListDto> listDtos = null;
-        
-        if( listDto.getParntsClSn() != null && listDto.getParntsClSn() == 0  ) {
-        	// 부모클래스 일련번호가 0 일 때 : 전체 검색
-        	listDtos = classCategoryCl02Service.findAllByOrderByClSeq();
-        } else if ( listDto.getParntsClSn() != null ) {
-        	// 부모클래스 일련번호가 0 이 아닐 때 : 부모클래스일련번호로 검색 
-        	listDtos = classCategoryCl02Service.findByParntsClSnOrderByClSeq( listDto.getParntsClSn() );
-        }
-        
-        // list put
-        result.put( "resultList", listDtos );
-        
-        return result;
     }
     
 }

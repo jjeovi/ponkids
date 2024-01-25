@@ -112,7 +112,8 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 .where(
                 		eqCateLv1( listDto.getCategory() ),
                 		eqCateLv2( listDto.getCategory() ),
-                        eqOption( listDto.getSchOption(), listDto.getSchCntn() ) );
+                        eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                       );
         
         
         return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );

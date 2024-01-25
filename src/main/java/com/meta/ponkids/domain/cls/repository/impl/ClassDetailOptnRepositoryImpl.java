@@ -49,7 +49,9 @@ public class ClassDetailOptnRepositoryImpl implements ClassDetailOptnRepositoryC
                 		) )					
                 .from( classDetailOptn )
                 // where
-                .where()
+                .where(
+                		eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                		)
 //                .orderBy( classDetailOptn.classDetailOptnSn.desc())
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )
@@ -59,7 +61,8 @@ public class ClassDetailOptnRepositoryImpl implements ClassDetailOptnRepositoryC
         JPAQuery<Long> count = query.select( classDetailOptn.count() )
                 .from( classDetailOptn )									
                 .where(
-                        eqOption( listDto.getSchOption(), listDto.getSchCntn() ) );
+                        eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                       );
                 
 		
 		return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );

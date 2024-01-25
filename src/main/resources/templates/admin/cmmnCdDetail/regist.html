@@ -18,60 +18,65 @@
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="insertForm" name="insertForm" method="post" th:action="@{ {basicPath}/mcd/insert ( basicPath = ${basicPath} ) }">
-                        <!-- TODO : 코드 이름 중복 체크 필요함.  -->
+                    <form id="insertForm" name="insertForm" method="post" th:action="@{ {basicPath}/{mcd}/{cdSn}/insert ( basicPath = ${basicPath}, mcd = ${mcd}, cdSn = ${cdSn} ) }">
+	                    <!-- hidden type  -->
+                        <input type="hidden" name="cdNm" required="required" th:value="${cdNm}" />
+						
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드 이름<span class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">공통코드<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" data-validate-length-range="2,50" name="cdNm" required="required" placeholder="코드 이름을 입력해주세요." />
+                                <input class="form-control" name="cdTitle" required="required" th:value="|${cdNm} [${cdDc}]|" readonly="readonly" />
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드 설명<span class="required">*</span></label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드 상세명<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input type="text" class="form-control" name="cdDc" required="required" placeholder="코드 설명을 입력해주세요." />
+                                <input class="form-control" data-validate-length-range="2,50" name="cdDetailNm" required="required" placeholder="코드 상세명 을(를) 입력해주세요." />
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드값 1 </label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드 상세 순번<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input type="text" class="form-control" name="cdVal1"  placeholder="코드값 1 을(를) 입력해주세요." />
+                                <input type="number" class="form-control" name="cdDetailSeq" required="required" placeholder="코드상세순번 을(를) 입력해주세요." />
+                                <small class="font-gray-dark">
+                                    코드 상세 순번을 입력해주세요. *(숫자만 입력 가능)
+                                </small>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드값 2 </label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드 상세 설명<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input type="text" class="form-control" name="cdVal2"  placeholder="코드값 2 을(를) 입력해주세요." />
+                                <textarea id="cdDetailDc" name="cdDetailDc"  class="form-control"></textarea>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드값 3 </label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드 상세 값 1<span class="required">*</span> </label>
                             <div class="col-md-6 col-sm-6">
-                                <input type="text" class="form-control" name="cdVal3"  placeholder="코드값 3 을(를) 입력해주세요." />
+                                <input type="text" class="form-control" name="cdDetailVal1" required="required" placeholder="코드 상세 값 1 을(를) 입력해주세요." />
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드값 4 </label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드 상세 값 2 </label>
                             <div class="col-md-6 col-sm-6">
-                                <input type="text" class="form-control" name="cdVal4"  placeholder="코드값 4 을(를) 입력해주세요." />
+                                <input type="text" class="form-control" name="cdDetailVal2"  placeholder="코드 상세 값 2 을(를) 입력해주세요." />
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드값 5 </label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드 상세 값 3 </label>
                             <div class="col-md-6 col-sm-6">
-                                <input type="text" class="form-control" name="cdVal5"  placeholder="코드값 5 을(를) 입력해주세요." />
+                                <input type="text" class="form-control" name="cdDetailVal3"  placeholder="코드 상세 값 3 을(를) 입력해주세요." />
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">분류 코드</label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드 상세 값 4 </label>
                             <div class="col-md-6 col-sm-6">
-                                <input type="text" class="form-control" name="clCd"  placeholder="분류 코드 을(를) 입력해주세요." />
+                                <input type="text" class="form-control" name="cdDetailVal4"  placeholder="코드 상세 값 4 을(를) 입력해주세요." />
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">비고</label>
+                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드 상세 값 5 </label>
                             <div class="col-md-6 col-sm-6">
-                                <textarea name="remark"  class="form-control"></textarea>
+                                <input type="text" class="form-control" name="cdDetailVal5"  placeholder="코드 상세 값 5 을(를) 입력해주세요." />
                             </div>
                         </div>
                         <div class="field item form-group">
@@ -85,27 +90,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">시스템 필수 코드 여부<span class="required">*</span></label>
-                            <div class="col-md-2 col-sm-4">
-                                <div class="btn-group radiobox">
-                                    <input type="radio" id="sysEssntlCmmnYn1" name="sysEssntlCmmnYn" value="Y" class="join-btn">
-                                    <label for="sysEssntlCmmnYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">예</label>
-                                    <input type="radio" id="sysEssntlCmmnYn2" name="sysEssntlCmmnYn" value="N" class="join-btn">
-                                    <label for="sysEssntlCmmnYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">아니오</label>
-                                </div>
-                            </div>
-                        </div>
                         <div class="ln_solid"></div>
                         <!-- 저장버튼 -->
                         <div class="col-md-12">
                             <!-- bottom left area -->
                             <div class="col-md-2 col-sm-3 text-left">
-                                <a th:href="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="btn btn-white w120p">목록</a>
+                                <a th:href="@{ {basicPath}/{mcd}/{cdSn}/list ( basicPath = ${basicPath}, mcd = ${mcd}, cdSn = ${cdSn} ) }" class="btn btn-white w120p">목록</a>
                             </div>
                             <!-- bottom center area -->
                             <div class="col-md-8 col-sm-6 text-center">
-                                <a th:href="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="btn btn-white w120p">취소</a>
+                                <a th:href="@{ {basicPath}/{mcd}/{cdSn}/list ( basicPath = ${basicPath}, mcd = ${mcd}, cdSn = ${cdSn} ) }" class="btn btn-white w120p">취소</a>
                                 <button type="submit" class="btn btn-purple w120p">저장</button>
                             </div>
                             <!-- bottom right area -->

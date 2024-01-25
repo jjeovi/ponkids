@@ -606,6 +606,9 @@
                             </div>
                         </div>
                     </form>
+                    <form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/{mcd}/delete ( basicPath = ${basicPath}, mcd = ${mcd} ) }">
+	            		<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+	            	</form>
                 </div>
             </div>
         </div>

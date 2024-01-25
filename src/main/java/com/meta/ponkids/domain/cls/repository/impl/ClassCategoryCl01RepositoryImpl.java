@@ -58,7 +58,7 @@ public class ClassCategoryCl01RepositoryImpl implements ClassCategoryCl01Reposit
                                 classCategoryCl01.clSeq,
                                 ExpressionUtils.as( JPAExpressions.select( classCategoryCl02.count() )
                                         .from( classCategoryCl02 )
-                                        .where( classCategoryCl02.parntsClSn.eq( classCategoryCl01.clSn ) ), "childCateCnt" ),
+                                        .where( classCategoryCl02.parntsClSn.eq( classCategoryCl01.clSn ) ), "childCnt" ),
                                 classCategoryCl01.registerId,
                                 classCategoryCl01.regDt
                         )
@@ -76,7 +76,8 @@ public class ClassCategoryCl01RepositoryImpl implements ClassCategoryCl01Reposit
         JPAQuery<Long> count = query.select( classCategoryCl01.count() )
                 .from( classCategoryCl01 )
                 .where(
-                        eqOption( listDto.getSchOption(), listDto.getSchCntn() ) );
+                        eqOption( listDto.getSchOption(), listDto.getSchCntn() ) 
+                       );
         
         
         return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );

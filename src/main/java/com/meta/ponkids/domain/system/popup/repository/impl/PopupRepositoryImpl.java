@@ -44,7 +44,9 @@ public class PopupRepositoryImpl implements PopupRepositoryCustom {
                 ) )
                 .from( popup )
                 // where
-                .where()
+                .where(
+                		eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                		)
 //                .orderBy( popup.popupSn.desc())
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )

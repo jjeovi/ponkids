@@ -19,7 +19,7 @@ public class ClassCategoryCl01ListDto {
     
     private Long clSeq;            // 분류1 순번
     
-    private Long childCateCnt;        // 하위항목개수
+    private Long childCnt;        // 하위항목개수
     
     private String registerId;      // 등록자 ID
     
@@ -33,11 +33,11 @@ public class ClassCategoryCl01ListDto {
     
     @Builder
     @QueryProjection
-    public ClassCategoryCl01ListDto( Long clSn, String clNm, Long clSeq, Long childCateCnt, String registerId, LocalDateTime regDt ) {
+    public ClassCategoryCl01ListDto( Long clSn, String clNm, Long clSeq, Long childCnt, String registerId, LocalDateTime regDt ) {
         this.clSn = clSn;
         this.clNm = clNm;
         this.clSeq = clSeq;
-        this.childCateCnt = childCateCnt;
+        this.childCnt = childCnt;
         this.registerId = registerId;
         this.regDt = regDt;
     }

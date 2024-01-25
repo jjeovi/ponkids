@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -39,18 +40,15 @@ public class CmmnCdDetailService {
         CmmnCdDetail newCmmnCdDetail = cmmnCdDetailRepository.save( saveDto.toEntity() );            // ** save -> save된 정보 newXxx 로 저장
         
         return saveDto;
-        
     }
-    
     
     public Page<CmmnCdDetailListDto> getList( CmmnCdDetailListDto listDto, Pageable pageable ) {
         return cmmnCdDetailRepository.getList( listDto, pageable );
     }
     
-    
     public List<CmmnCdDetailListDto> getList( String cdNm ) {
         
-        CmmnCd cmmnCd = cmmnCdRepository.findByCdNm( cdNm );
+        CmmnCd cmmnCd = cmmnCdRepository.findByCdNm( cdNm ).orElse( null );
         
         if ( cmmnCd != null ) {
             
@@ -64,11 +62,8 @@ public class CmmnCdDetailService {
         } else {
             
             return null;
-            
         }
-        
     }
-    
     
     public CmmnCdDetailModDto findById( Long pk ) {    // TODO 타입 체크 필요
         
@@ -91,18 +86,16 @@ public class CmmnCdDetailService {
         CmmnCdDetailModDto targetDto = new CmmnCdDetailModDto();
         targetDto = targetDto.toDto( cmmnCdDetail );
         
-        // TODO target object 에 수정사항 set	
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
-//        if ( StringUtils.hasText( modDto.getUserNm() ) ) targetDto.setUserNm( modDto.getUserNm() );          	// 이름
-//        if ( StringUtils.hasText( modDto.getGender() ) ) targetDto.setGender( modDto.getGender() );          	// 성별
-//        if ( StringUtils.hasText( modDto.getBrdtDate() ) ) targetDto.setBrdtDate( modDto.getBrdtDate() );		// 생년월일
-//        if ( StringUtils.hasText( modDto.getTelNo() ) ) targetDto.setTelNo( modDto.getTelNo() );            	// 연락처
-//        if ( StringUtils.hasText( modDto.getResideArea() ) ) targetDto.setResideArea( modDto.getResideArea() );	// 거주지역
-//        if ( StringUtils.hasText( modDto.getRdnmAdr() ) ) targetDto.setRdnmAdr( modDto.getRdnmAdr() );        	// 주소
-//        if ( StringUtils.hasText( modDto.getZip() ) ) targetDto.setZip( modDto.getZip() );                		// 우편번호
-//        if ( StringUtils.hasText( modDto.getMngrYn() ) ) targetDto.setMngrYn( modDto.getMngrYn() );          	// 관리자여부
-
-//        targetDto.setAtchFileSn( modDto.getAtchFileSn() );          											// 첨부파일 (첨부파일은 Null이어도 변경)
+        if ( StringUtils.hasText( modDto.getCdDetailNm() ) ) targetDto.setCdDetailNm( modDto.getCdDetailNm());
+        if ( modDto.getCdDetailSeq() != null ) targetDto.setCdDetailSeq( modDto.getCdDetailSeq());
+        if ( StringUtils.hasText( modDto.getCdDetailDc() ) ) targetDto.setCdDetailDc( modDto.getCdDetailDc());
+        if ( StringUtils.hasText( modDto.getCdDetailVal1() ) ) targetDto.setCdDetailVal1( modDto.getCdDetailVal1());
+        targetDto.setCdDetailVal2( modDto.getCdDetailVal2());
+        targetDto.setCdDetailVal3( modDto.getCdDetailVal3());
+        targetDto.setCdDetailVal4( modDto.getCdDetailVal4());
+        targetDto.setCdDetailVal5( modDto.getCdDetailVal5());
+        if ( StringUtils.hasText( modDto.getUseYn() ) ) targetDto.setUseYn( modDto.getUseYn());
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
@@ -113,7 +106,6 @@ public class CmmnCdDetailService {
         
         // 수정사항 적용
         cmmnCdDetailRepository.save( cmmnCdDetail );
-        
     }
     
     @Transactional
@@ -121,8 +113,6 @@ public class CmmnCdDetailService {
         
         // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
         cmmnCdDetailRepository.deleteById( pk );    // Entity 의 @SQLDelete 를 수행
-        
     }
-    
     
 }

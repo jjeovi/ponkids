@@ -26,9 +26,16 @@
                     </div>
                     <div class="col-md-11 col-sm-10 mb_10p">
                         <div class="btn-group float-right" role="group">
+							<select class="form-control" name="mngrConfmYn">
+                                <option value="">사용여부</option>
+                                <option value="Y" th:selected=" ${searchDTO.useYn} == 'Y' ">사용</option>
+                                <option value="N" th:selected=" ${searchDTO.useYn} == 'N' ">미사용</option>
+                            </select>
+                            <div class="vl ml_5p"></div>
                             <select class="form-control ml_5p w_55r" name="schOption">
-                                <option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">제목</option>
-<!--                                <option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">이름</option>-->
+                                <option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">코드 이름</option>
+                                <option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">코드 설명</option>
+                                <option value="C" th:selected=" ${searchDTO.schOption} == 'C' ">분류 코드</option>
                             </select>
                             <input type="text" name="schCntn" th:value="${searchDTO.schCntn}"
                                    class="form-control input-sm" placeholder="검색어 입력"
@@ -43,9 +50,9 @@
                             <thead>
 	                            <tr>
 	                                <th>순번</th>
-	                                <th>이름</th>
-	                                <th>분류순서</th>
-	                                <th>등록자</th>
+	                                <th>코드이름</th>
+	                                <th>코드설명</th>
+	                                <th>분류코드</th>
 	                                <th>등록일</th>
 	                                <th>관리</th>
 	                            </tr>
@@ -54,18 +61,18 @@
 	                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
 	                            	
 	                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
-	                                <td th:text="${data.clNm}"></td>
-	                                <td th:text="${data.clSeq}"></td>
-	                                <td th:text="${data.registerId}"></td>
-	                                <td th:text="${#temporals.format(data.regDt, 'yyyy-MM-dd HH:MM:SS')}"></td>
-	                                <td th:with = "cnt = ${data.childCateCnt}, childCateCnt =  (${data.childCateCnt > 99 ? '99+' : cnt } )">	<!-- 항목개수가 99 보다 크면 99+ 로 표시 -->
-	                                    <a th:href="@{/admin/classCategoryCl02/{mcd}/{pk}/list ( mcd = ${mcd}, pk = ${data.clSn} ) }" class="btn btn-success btn-xs">
-	                                    	<i class="fa fa-pencil"></i>항목관리 [ [[${childCateCnt}]] ]
+	                                <td th:text="${data.cdNm}"></td>
+	                                <td th:text="${data.cdDc}"></td>
+	                                <td th:text="${data.clCd}"></td>
+	                                <td th:text="${data.regDt}"></td>
+	                                <td th:with = "cnt = ${data.childCnt}, childCnt =  (${data.childCnt > 99 ? '99+' : cnt } )">	<!-- 항목개수가 99 보다 크면 99+ 로 표시 -->
+	                                    <a th:href="@{/admin/cmmnCdDetail/{mcd}/{pk}/list ( mcd = ${mcd}, pk = ${data.cdSn} ) }" class="btn btn-success btn-xs">
+	                                    	<i class="fa fa-pencil"></i>항목관리 [ [[${childCnt}]] ]
 	                                    </a>
-	                                    <a th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.clSn} ) }" class="btn btn-primary btn-xs">
+	                                    <a th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.cdSn} ) }" class="btn btn-primary btn-xs">
 	                                    	<i class="fa fa-pencil"></i>수정
 	                                    </a>
-	                                    <a th:href="'javascript:deleteItem(\'' + ${data.clSn} + '\');'" class="btn btn-danger btn-xs">
+	                                    <a th:href="'javascript:deleteItem(\'' + ${data.cdSn} + '\');'" class="btn btn-danger btn-xs">
 	                                    	<i class="fa fa-trash-o"></i>삭제
 	                                    </a>
 	                                </td>

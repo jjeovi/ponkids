@@ -1,21 +1,27 @@
 package com.meta.ponkids.domain.system.cmmnCd.controller;
 
-import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdListDto;
-import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdModDto;
-import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdSaveDto;
-import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdService;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-import java.io.IOException;
+import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdListDto;
+import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdModDto;
+import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdSaveDto;
+import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdService;
+
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
@@ -86,7 +92,7 @@ public class CmmnCdAdmController {
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/list" );
+        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
         
         return "common/alert";
     }
@@ -113,8 +119,8 @@ public class CmmnCdAdmController {
         
         String urlPath = request.getServletPath();
         String remainPath = "";
-        if ( urlPath.split( BASIC_PATH )[ 1 ].startsWith( "/detail" ) ) remainPath = "detail";
-        if ( urlPath.split( BASIC_PATH )[ 1 ].startsWith( "/modify" ) ) remainPath = "modify";
+        if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/detail" ) ) remainPath = "detail";
+        if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/modify" ) ) remainPath = "modify";
         
         return BASIC_PATH + "/" + remainPath;
     }
@@ -122,9 +128,7 @@ public class CmmnCdAdmController {
     @Transactional
     @PostMapping( BASIC_PATH + "/{mcd}/update" )
     public String update(
-            @RequestParam( "file" ) MultipartFile files,        // 첨부파일 필요시
             @ModelAttribute CmmnCdModDto modDto,
-//            @ModelAttribute CmmnCdRoleModDto cmmnCdRoleModDto,  // required false
             @PathVariable String mcd,
             HttpServletRequest request,
             Model model ) throws IOException {
@@ -140,7 +144,7 @@ public class CmmnCdAdmController {
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/list" );
+        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
         
         return "common/alert";
     }
@@ -158,7 +162,7 @@ public class CmmnCdAdmController {
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/list" );
+        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
         
         return "common/alert";
     }

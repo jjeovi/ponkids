@@ -58,7 +58,9 @@ public class ClassDetailRepositoryImpl implements ClassDetailRepositoryCustom {
                 		Expressions.stringTemplate("to_char({0}, '{1s}')", classDetail.regDt, "YYYY-MM-DD HH:MM:SS")
                 		) )					
                 .from( classDetail )
-                .where()
+                .where(
+                		eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                		)
 //                .orderBy( classDetail.classDetailSn.desc())
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )
@@ -68,7 +70,8 @@ public class ClassDetailRepositoryImpl implements ClassDetailRepositoryCustom {
         JPAQuery<Long> count = query.select( classDetail.count() )
                 .from( classDetail )									
                 .where(
-                        eqOption( listDto.getSchOption(), listDto.getSchCntn() ) );
+                        eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                       );
 		
 		return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
 		

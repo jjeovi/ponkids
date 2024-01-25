@@ -52,7 +52,9 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                 ) )
                 .from( banner )
                 // where
-                .where()
+                .where(
+                		eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                		)
 //                .orderBy( banner.bannerSn.desc())
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )
@@ -64,7 +66,8 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
         JPAQuery<Long> count = query.select( banner.count() )
                 .from( banner )
                 .where(
-                        eqOption( listDto.getSchOption(), listDto.getSchCntn() ) );
+                        eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                       );
         
         
         

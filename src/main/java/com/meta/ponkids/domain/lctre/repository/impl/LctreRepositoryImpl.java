@@ -99,7 +99,8 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 						eqCateLv2( listDto.getCategory() ),	// 분류 조회 : lv2Sn 값 존재시 검색
 						eqCateLv3( listDto.getCategory() ), // 분류 조회 : lv3Sn 값 존재시 검색
 						eqCateLv4( listDto.getCategory() ), // 분류 조회 : lv4Sn 값 존재시 검색
-						eqClassSn( listDto.getClassSn() )
+						eqClassSn( listDto.getClassSn() ),
+						eqOption( listDto.getSchOption(), listDto.getSchCntn() )
 				)
 //                .orderBy( lctre.lctreSn.desc())
                 .offset( pageable.getOffset() )
@@ -110,7 +111,13 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
         JPAQuery<Long> count = query.select( lctre.count() )
                 .from( lctre )
                 .where(
-                        eqOption( listDto.getSchOption(), listDto.getSchCntn() ) );
+                		eqCateLv1( listDto.getCategory() ),	// 분류 조회 : lv1Sn 값 존재시 검색
+						eqCateLv2( listDto.getCategory() ),	// 분류 조회 : lv2Sn 값 존재시 검색
+						eqCateLv3( listDto.getCategory() ), // 분류 조회 : lv3Sn 값 존재시 검색
+						eqCateLv4( listDto.getCategory() ), // 분류 조회 : lv4Sn 값 존재시 검색
+						eqClassSn( listDto.getClassSn() ),
+                        eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                        );
 		
 		return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
 	}

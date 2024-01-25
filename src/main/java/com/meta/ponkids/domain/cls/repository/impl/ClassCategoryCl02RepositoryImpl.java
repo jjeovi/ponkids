@@ -81,7 +81,8 @@ public class ClassCategoryCl02RepositoryImpl implements ClassCategoryCl02Reposit
                 .from( classCategoryCl02 )
                 .where(
                         eqParntsClSn( listDto.getParntsClSn() ),
-                        eqOption( listDto.getSchOption(), listDto.getSchCntn() ) );
+                        eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                       );
         
         return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
         
