@@ -10,7 +10,29 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CmmnCdSaveDto {
     
-    private Long cdSn;
+    private Long    cdSn;
+    
+    private String  cdNm;
+    
+    private String  cdDc;
+    
+    private String  cdDetailVal1;
+    
+    private String  cdDetailVal2;
+    
+    private String  cdDetailVal3;
+    
+    private String  cdDetailVal4;
+    
+    private String  cdDetailVal5;
+    
+    private String  useYn;
+    
+    private String  sysEssntlCmmnYn;
+    
+    private String  clCd;
+    
+    private String  remark;
     
     private String registerId;      // 등록자 id
     
@@ -20,21 +42,41 @@ public class CmmnCdSaveDto {
     
     private String updusrIp;        // 수정자 IP
     
-    // TODO 생성자();
     @Builder
-    public CmmnCdSaveDto( Long cdSn, String registerId, String registerIp, String updusrId, String updusrIp ) {
+    public CmmnCdSaveDto( Long cdSn, String cdNm, String cdDc, String cdDetailVal1, String cdDetailVal2, String cdDetailVal3, String cdDetailVal4, String cdDetailVal5, String useYn, String sysEssntlCmmnYn, String clCd, String remark, String registerId, String registerIp, String updusrId, String updusrIp ) {
         this.cdSn = cdSn;
+        this.cdNm = cdNm;
+        this.cdDc = cdDc;
+        this.cdDetailVal1 = cdDetailVal1;
+        this.cdDetailVal2 = cdDetailVal2;
+        this.cdDetailVal3 = cdDetailVal3;
+        this.cdDetailVal4 = cdDetailVal4;
+        this.cdDetailVal5 = cdDetailVal5;
+        this.useYn = useYn;
+        this.sysEssntlCmmnYn = sysEssntlCmmnYn;
+        this.clCd = clCd;
+        this.remark = remark;
         this.registerId = registerId;
         this.registerIp = registerIp;
         this.updusrId = updusrId;
         this.updusrIp = updusrIp;
     }
     
-    // TODO toEntity();
     // Dto to Entity 메소드 생성
     public CmmnCd toEntity() {
         return CmmnCd.builder()
                 .cdSn( cdSn )
+                .cdNm( cdNm )
+                .cdDc( cdDc )
+                .cdDetailVal1( cdDetailVal1 )
+                .cdDetailVal2( cdDetailVal2 )
+                .cdDetailVal3( cdDetailVal3 )
+                .cdDetailVal4( cdDetailVal4 )
+                .cdDetailVal5( cdDetailVal5 )
+                .useYn( useYn )
+                .sysEssntlCmmnYn( sysEssntlCmmnYn )
+                .clCd( clCd )
+                .remark( remark )
                 .registerId( registerId )
                 .registerIp( registerIp )
                 .updusrId( updusrId )

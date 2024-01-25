@@ -10,10 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,9 +24,10 @@ public class CmmnCdAdmController {
     private final static String BASIC_PATH = "/admin/cmmnCd";
     private final CmmnCdService cmmnCdService;
     
-    @GetMapping( BASIC_PATH + "/list" )
+    @GetMapping( BASIC_PATH + "/{mcd}/list" )
     public String list( @ModelAttribute CmmnCdListDto listDto,
                         @PageableDefault( size = 10 ) Pageable pageable,
+                        @PathVariable String mcd,
                         Model model ) {
         
         // S : 필요한 객체 setting
@@ -50,8 +48,9 @@ public class CmmnCdAdmController {
         return BASIC_PATH + "/list";
     }
     
-    @GetMapping( BASIC_PATH + "/regist" )
-    public String regist( Model model ) {
+    @GetMapping( BASIC_PATH + "/{mcd}/regist" )
+    public String regist( @PathVariable String mcd,
+                          Model model ) {
         
         // S : 필요한 객체 setting
         
@@ -67,10 +66,11 @@ public class CmmnCdAdmController {
     }
     
     @Transactional
-    @PostMapping( BASIC_PATH + "/insert" )
+    @PostMapping( BASIC_PATH + "/{mcd}/insert" )
     public String insert(
             @ModelAttribute CmmnCdSaveDto saveDto,
 //            @ModelAttribute CmmnCdRoleSaveDto cmmnCdRoleSaveDto,  // required false
+            @PathVariable String mcd,
             HttpServletRequest request,
             Model model ) throws IOException {
         
@@ -92,10 +92,11 @@ public class CmmnCdAdmController {
     }
     
     @GetMapping( value = {
-            BASIC_PATH + "/detail",
-            BASIC_PATH + "/modify" } )
+            BASIC_PATH + "/{mcd}/detail",
+            BASIC_PATH + "/{mcd}/modify" } )
     public String detailOrModify(
             @RequestParam( required = true ) Long pk,    // 타입 체크
+            @PathVariable String mcd,
             Model model,
             HttpServletRequest request ) {
         
@@ -119,11 +120,12 @@ public class CmmnCdAdmController {
     }
     
     @Transactional
-    @PostMapping( BASIC_PATH + "/update" )
+    @PostMapping( BASIC_PATH + "/{mcd}/update" )
     public String update(
             @RequestParam( "file" ) MultipartFile files,        // 첨부파일 필요시
             @ModelAttribute CmmnCdModDto modDto,
 //            @ModelAttribute CmmnCdRoleModDto cmmnCdRoleModDto,  // required false
+            @PathVariable String mcd,
             HttpServletRequest request,
             Model model ) throws IOException {
         
@@ -145,9 +147,10 @@ public class CmmnCdAdmController {
     
     
     @Transactional
-    @PostMapping( BASIC_PATH + "/delete" )
+    @PostMapping( BASIC_PATH + "/{mcd}/delete" )
     public String delete(
             @RequestParam( required = true ) Long pk,
+            @PathVariable String mcd,
             Model model ) {
         
         // 삭제 처리

@@ -20,7 +20,6 @@
             <div class="x_panel">
                 <div class="x_content">
                     <form id="insertForm" name="insertForm" method="post" th:action="@{ {basicPath}/mcd/insert ( basicPath = ${basicPath} ) }" enctype="multipart/form-data">
-                        <input type="hidden" name="mngrConfmYn" value="Y"/>
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">프로필 이미지</label>
                             <div class="col-md-6 col-sm-6">
@@ -174,74 +173,6 @@
                                     <option th:each="item : ${roleList}" th:value="${item.roleSn}">[[${item.roleDc}]]
                                     </option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="field item form-group" id="userChldrnAddDiv">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">자녀</label>
-                            <div class="div_menu_detail row col-md-10">
-                                <div class="col-md-12 col-sm-12 ">
-                                    <div class="x_panel mb-0" style="height:auto;overflow: scroll; max-height:350px;">
-                                        <div class="x_content mt_5p">
-                                            <button type="button" class="btn btn-purple w100p mb_15p"
-                                                    data-toggle="modal" data-target=".bs-example-modal-lg"
-                                                    onclick="setModalBtn('C')">
-                                                자녀 추가
-                                            </button>
-                                            <!-- 자녀 등록 모달 -->
-                                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
-                                                 id="addChldrnModal"
-                                                 aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-                                                <div class="modal-dialog modal-dialog-centered modal-lg">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">자녀 추가</h4>
-                                                            <button type="button" class="close" data-dismiss="modal">
-                                                                <span aria-hidden="true">×</span></button>
-                                                        </div>
-                                                        <div class="modal-body" id="addChldrnModalBody">
-                                                            <div name="chldrnModDiv" class="modForm" style="display: none;">
-                                                                <!-- 자녀 수정시 여기서 수정 작업 -->
-                                                            </div>
-                                                            <div name="chldrnAddDiv" class="newForm"
-                                                                 th:insert="/admin/user/addChldrnForm.html">
-                                                                <!-- 자녀 추가 모달 (/admin/user/addChldrnForm.html) -->
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-white"
-                                                                    data-dismiss="modal">닫기
-                                                            </button>
-                                                            <button type="button" class="btn btn-purple"
-                                                                    id="addChldrnBtn" onclick="addChldrn()">저장
-                                                            </button>
-                                                            <button type="button" class="btn btn-success"
-                                                                    id="updateChldrnBtn" onclick="updateChldrn()"
-                                                                    style="display:none;">수정
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <table class="table table-bordered text-center" id="chldrnTable">
-                                                <thead>
-                                                <tr>
-                                                    <th>순번</th>
-                                                    <th>이름</th>
-                                                    <th>성별</th>
-                                                    <th>생년월일</th>
-                                                    <th>연락처</th>
-                                                    <th>이메일</th>
-                                                    <th>관리</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody id="chldrnTableBody">
-                                                <!-- 자녀 추가 테이블 -->
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <small class="font-gray-dark">회원등록 후에도 자녀 등록이 가능합니다.<b>회원조회 &gt; 회원 우측 [수정]</b></small>
-                                </div>
                             </div>
                         </div>
                         <div class="ln_solid"></div>

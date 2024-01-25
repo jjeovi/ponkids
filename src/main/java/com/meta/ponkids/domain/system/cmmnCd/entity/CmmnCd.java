@@ -48,15 +48,15 @@ public class CmmnCd extends BaseTimeEntity {
     
     private String  cdDc;
     
-    private String  cdDetailVal1_Dc;
+    private String  cdDetailVal1;
     
-    private String  cdDetailVal2_Dc;
+    private String  cdDetailVal2;
     
-    private String  cdDetailVal3_Dc;
+    private String  cdDetailVal3;
     
-    private String  cdDetailVal4_Dc;
+    private String  cdDetailVal4;
     
-    private String  cdDetailVal5_Dc;
+    private String  cdDetailVal5;
     
     private String  useYn;
     
@@ -78,7 +78,6 @@ public class CmmnCd extends BaseTimeEntity {
     
     //  @Column(insertable = false)   // 등록할 때도 수정일시에 시간 들어가게 변경
     private String  updusrIp;
-    
     
     @ColumnDefault( "N" )                             // del_yn 컬럼에 공통으로 추가
     @Column( insertable = false, updatable = false )  // del_yn 컬럼에 공통으로 추가 (등록 시, 수정 시 해당컬럼 신경쓰지 않음.)

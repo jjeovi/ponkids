@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// TODO Dto 항목 setting
 @Data
 @NoArgsConstructor
 public class CmmnCdDetailModDto {
@@ -17,11 +16,13 @@ public class CmmnCdDetailModDto {
     
     private String updusrIp;        // 수정자 IP
     
-    // TODO 생성자();
+    
     //builder 생성
     @Builder
-    public CmmnCdDetailModDto( Long cdDetailSn ) {
+    public CmmnCdDetailModDto( Long cdDetailSn, String updusrId, String updusrIp ) {
         this.cdDetailSn = cdDetailSn;
+        this.updusrId = updusrId;
+        this.updusrIp = updusrIp;
     }
     
     

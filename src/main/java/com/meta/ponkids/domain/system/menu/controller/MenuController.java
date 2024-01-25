@@ -35,19 +35,18 @@ public class MenuController {
     
     @ResponseBody
     @GetMapping( BASIC_PATH + "/live/{type}/getMenuListAjax" )
-    public Map<String, Object> getMenuListAjax( @ModelAttribute MenuListDto listDto,
-                                                @PathVariable String type ) {
+    public Map<String, Object> getMenuListAjax( @PathVariable String type ) {
         // 해당 권한에 맞는 menuList 가져온 뒤 drawMenuTree 로 메뉴를 그린다.
         Map<String, Object> result = new HashMap<String, Object>();
+        
+        // MenuListDto 생성
+        MenuListDto listDto = new MenuListDto();
         
         // 메뉴 list 출력
         if ( type.equals( TYPE_USER ) ) {
             result.put( "resultList", menuService.getUserMenuList( listDto ) );
-            
         }
-        
         return result;
     }
-    
     
 }
