@@ -1,9 +1,12 @@
 package com.meta.ponkids.domain.system.banner.controller;
 
+import com.meta.ponkids.domain.cls.service.ClassCategoryCl01Service;
 import com.meta.ponkids.domain.system.banner.dto.BannerListDto;
 import com.meta.ponkids.domain.system.banner.dto.BannerModDto;
 import com.meta.ponkids.domain.system.banner.dto.BannerSaveDto;
 import com.meta.ponkids.domain.system.banner.service.BannerService;
+import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +26,10 @@ public class BannerAdmController {
     
     private final static String BASIC_PATH = "/admin/banner";
     private final BannerService bannerService;
+    
+    private final CmmnCdDetailService cmmnCdDetailService;
+
+    private final ClassCategoryCl01Service classCategoryCl01Service;
     
     @GetMapping( BASIC_PATH + "/{mcd}/list" )
     public String list( @ModelAttribute BannerListDto listDto,
@@ -56,7 +63,13 @@ public class BannerAdmController {
                           Model model ) {
         
         // S : 필요한 객체 setting
-        
+    	
+    	// 배너 분류 setting ( 메인상단배너, 메인클래스배너 )
+    	model.addAttribute( "bannerClCdList", cmmnCdDetailService.getList( "BANNER_CL_CD" ) );   // 배너 분류 코드 리스트 
+    	
+        // 클래스 카테고리 분류1 list setting
+        model.addAttribute( "classCategoryCl01List", classCategoryCl01Service.findAll() );
+    	
         // 가입 object 생성
         model.addAttribute( new BannerSaveDto() );
         

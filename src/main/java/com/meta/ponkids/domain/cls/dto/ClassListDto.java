@@ -1,7 +1,10 @@
 package com.meta.ponkids.domain.cls.dto;
 
+import com.meta.ponkids.domain.cls.entity.Class;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.annotations.QueryProjection;
+
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -55,6 +58,7 @@ public class ClassListDto {
     
     private CategoryDto category;    // 카테고리 검색 : 생성자에는 추가하지 않음!
     
+    @Builder
     @QueryProjection
     public ClassListDto( Long classSn, Long ctgrySn, String ctgryNm, Long crseSn, String crseNm, String classSj, String classSumry, String classDc, Long classAmt, Long classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String classExpsrPeriod, String registerId, String regDt ) {
         this.classSn = classSn;
@@ -77,4 +81,26 @@ public class ClassListDto {
         this.registerId = registerId;
         this.regDt = regDt;
     }
+    
+    
+    // Entity to Dto 메소드는 DTO 내부에서 생성.
+    public ClassListDto toDto( Class clas ) {
+        return ClassListDto.builder()
+                .classSn( clas.getClassSn() )
+                .ctgrySn( clas.getCtgrySn() )
+                .crseSn( clas.getCrseSn() )
+                .classSj( clas.getClassSj() )
+                .classSumry( clas.getClassSumry() )
+                .classDc( clas.getClassDc() )
+                .classAmt( clas.getClassAmt() )
+                .classDscntBfeAmt( clas.getClassDscntBfeAmt() )
+                .classPdSetYn( clas.getClassPdSetYn() )
+                .classBeginDt( clas.getClassBeginDt() )
+                .classEndDt( clas.getClassEndDt() )
+                .thumbAtchFileSn( clas.getThumbAtchFileSn() )
+                .atchFileSn( clas.getAtchFileSn() )
+                .classExpsrYn( clas.getClassExpsrYn() )
+                .build();
+    }
+    
 }

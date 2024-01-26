@@ -59,7 +59,6 @@ public class ClassCategoryCl02AdmController {
             
         } else {
             // TODO : return error
-            
         }
         
         // 목록 조회
@@ -104,7 +103,6 @@ public class ClassCategoryCl02AdmController {
             
         } else {
             // TODO : return error
-            
         }
         
         // E : 필요한 객체 setting
@@ -215,7 +213,6 @@ public class ClassCategoryCl02AdmController {
         
         // E : 필요한 객체 setting
         
-        
         // update 구현
         classCategoryCl02Service.update( modDto, request );
         
@@ -293,14 +290,12 @@ public class ClassCategoryCl02AdmController {
                 
                 listDto.getCategory().setLv1Sn( parntsClSn );
                 listDto.getCategory().setLv1Nm( "전체" );
-                
             } else {
                 CategoryDto categoryDto = new CategoryDto();
                 
                 categoryDto.setLv1Sn( parntsClSn );
                 categoryDto.setLv1Nm( "전체" );
                 listDto.setCategory( categoryDto );
-                
             }
         }
         

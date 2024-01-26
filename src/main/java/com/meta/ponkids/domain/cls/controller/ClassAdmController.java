@@ -109,7 +109,7 @@ public class ClassAdmController {
         // 클래스 카테고리 분류1 list setting
         model.addAttribute( "classCategoryCl01List", classCategoryCl01Service.findAll() );
         
-        // 클래스 입력항목 > 입력항목 유형 리스트
+        // 클래스 입력항목 > 입력항목 유형 리스트 ( 주관식, 선택형 , ... ) 
         model.addAttribute( "clsDtlTyCdList", cmmnCdDetailService.getList( "CLASS_DETAIL_ITEM_TY_CD" ) );   // 클래 상세 항목 유형 코드 리스트
         
         // E : 필요한 객체 setting
@@ -366,6 +366,19 @@ public class ClassAdmController {
         Map<String, Object> result = new HashMap<String, Object>();
         
         result.put( "resultList", classService.getList( listDto ) );   // 클래스 요일 classSn으로 검색
+        
+        return result;
+    }
+    
+    // 클래스 검색 ( 커리큘럼 일련번호로 검색 ) (Ajax)
+    @ResponseBody
+    @GetMapping( BASIC_PATH + "/live/getClassListByCrseSnAjax" )
+    public Map<String, Object> getClassListByCrseSnAjax( @ModelAttribute ClassListDto listDto
+    ) {
+        
+        Map<String, Object> result = new HashMap<String, Object>();
+        
+        result.put( "resultList", classService.getListByCrseSn( listDto ) );   // 커리큘럼 일련번호로 검색
         
         return result;
     }

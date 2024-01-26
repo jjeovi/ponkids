@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -74,6 +75,38 @@ public class ClassService {
             dto.setCategory(categoryDto);
         }
         return listDtos;
+    }
+    
+    
+    // 커리큘럼으로 classList 검색
+    public List<ClassListDto> getListByCrseSn( ClassListDto listDto ) {
+    	
+    	Long ctgrySn 	= listDto.getCtgrySn();			// 카테고리 일련번호
+    	Long crseSn 	= listDto.getCrseSn(); 			// 커리큘럼 일련번호 
+    	
+    	List<Class> classList = null ;
+    	
+    	if ( crseSn == 0 ) {	// 커리큘럼 일련번호가 전체일 경우 : 카테고리 일련번호로 클래스 검색 
+    		classList = classRepository.findByCtgrySnOrderByClassSnDesc( ctgrySn );
+    	} else {				// 그 외 일경우 : 커리큘럼 일련번호로 검색
+    		classList = classRepository.findByCrseSnOrderByClassSnDesc( crseSn );
+    	}
+    	
+    	ClassListDto classListDto = new ClassListDto();
+    	List<ClassListDto> listDtos = classList.stream().map( m -> classListDto.toDto( m ) ).collect( Collectors.toList() );
+    	
+    	// 카테고리 값 뿌리기 위한  setting
+    	for( ClassListDto dto : listDtos) {
+    		
+    		CategoryDto categoryDto = new CategoryDto();
+    		
+    		categoryDto.setCategorySn(dto.getClassSn());    // 이 부분이 결국은 html 에서 카테고리검색의 li value 값이 됨
+    		categoryDto.setCategoryNm(dto.getClassSj());    // 이 부분이 결국은 html 에서 카테고리검색의 li 명칭이 됨
+    		
+    		dto.setCategory(categoryDto);
+    	}
+    	
+    	return listDtos;
     }
     
     

@@ -1,6 +1,9 @@
 package com.meta.ponkids.domain.system.cmmnCd.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -15,7 +18,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ListDto;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailListDto;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailModDto;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailSaveDto;
@@ -261,6 +266,22 @@ public class CmmnCdDetailAdmController {
         model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/" + cdSn + "/list" );
         
         return "common/alert";
+    }
+    
+    
+    // cdNm(코드이름) 으로 공통코드상세 리스트 조회
+    @ResponseBody
+    @GetMapping( BASIC_PATH + "/live/getListByCdNmAjax" )
+    public Map<String, Object> getListByParntsClSnAjax( CmmnCdDetailListDto listDto ) {
+        // 코드이름으로 공통코드상세 리스트 조회
+    	Map<String, Object> result = new HashMap<String, Object>();
+    	
+    	List<CmmnCdDetailListDto> listDtos = cmmnCdDetailService.getList(listDto.getCdNm());
+    	
+    	// list put
+    	result.put( "resultList", listDtos );
+    	
+        return result;
     }
     
     

@@ -2,31 +2,305 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{admin/layout/layout}">
 <!-- S : Javascript functions	-->
+
 <script layout:fragment="script">
 
-    // DOM 준비 된 이후 실행
     $( function () {
 
+    	// summernote editor 설정
+    	fnSummernoteCall('classSumry'); // 클래스 요약
+    	fnSummernoteCall('classDc');    // 클래스 설명
+    	
+    	// 표시기간 선택시 표시기간 표출 처리
+        $( "[name='bannerPdSetYn']" ).change( function () {
+            if ( $( this ).val() == 'Y' ) {
+                $( "#expsrPeriodDiv" ).show();
+                $("#bannerBeginDt, #bannerEndDt").attr("required", "required");
+            } else {
+                $( "#expsrPeriodDiv" ).hide();
+                $("#bannerBeginDt, #bannerEndDt").removeAttr("required");
+            }
+        });
+    	
+    	// 클래스매핑여부 선택시 이벤트 처리 
+        $( "[name='classMapngYn']" ).change( function () {
+            if ( $( this ).val() == 'Y' ) {
+				// url 매핑 클래스 여부 Y 일시 
+				// url input readonly
+				// 매핑클래스 활성화
+				
+				$("[name='url']").prop("readonly", true);
+				$("[name='url']").attr("placeholder", "매핑클래스 항목을 선택해주시면 url 이 자동으로 매핑됩니다.");
+				$("[name='url']").val("");
+                $( ".mappingClassDiv" ).show();
+                $("#ctgrySn, #crseSn, #classSn").attr("required", "required");
+                
+            } else {
+				// url 매핑 클래스 여부 N 일시 
+				// url input readonly 풀기
+				// 매핑클래스 비활성화
+				// 매핑클래스 3개 selectbox 기본값으로 선택
+				
+				$("[name='url']").removeAttr("readonly");
+				$("[name='url']").attr("placeholder", "url을 입력해주세요.");
+				$("[name='url']").val("");
+				$( ".mappingClassDiv" ).hide();
+				
+				// 카테고리 default 항목으로 강제선택
+				$("[name='ctgrySn']").val("").prop("selected", true);
+    	
+		    	// 커리큘럼 전체 삭제 후 default 항목 추가
+		    	$("[name='crseSn']").empty();
+		    	$("[name='crseSn']").append("<option value=''>커리큘럼 선택</option>");
+		            	
+		    	// 클래스 전체 삭제 후 default 항목 추가
+		    	$("[name='classSn']").empty();
+		    	$("[name='classSn']").append("<option value=''>클래스 선택</option>");
+		    	
+		    	$("#ctgrySn, #crseSn, #classSn").removeAttr("required");
+				
+            }
+        });
+
+    	// 배너분류 선택시 배너상세분류 재정렬
+    	$("[name='bannerClCd']").change( function() {
+    		
+    		var detailCdYn = $(this).find("option:selected").data( 'detailCdYn' );		// 하위분류 검색 여부 : Y일 경우에만 검색할 수 있도록
+    		var clCd = $(this).find("option:selected").data( 'clCd' );					// 검색할 하위 분류 코드 
+    		 
+    		
+    		if ( detailCdYn == 'Y' ) {
+				// 하위분류 선택으로 설정
+				
+				$(".detailCdArea").show();	// 배너상세분류 부분 표시
+				$("#bannerClDetailCd").attr("required", "required");
+
+				// 배너상세분류코드 검색 ajax
+	    		// ajax START
+	    		var url = '/admin/cmmnCdDetail/live/getListByCdNmAjax';
+	            $.ajax( {
+	                url: url, 
+	                type: "GET",
+	                dataType: "json",
+	                async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+	                data: {cdNm : clCd},	// 배너 분류 할 코드명으로 공통코드 조회
+	                contentType: "application/json",
+	                success: function ( result ) {
+	                 // callback 함수 연결 -> callback함수로 구현
+	                 if ( typeof getListByCdNmAjaxCallback === 'function' ) {
+	                 	getListByCdNmAjaxCallback( result );
+	                 } else {
+	                     console.log( 'getListByCdNmAjaxCallback( result ) funnction is required. getListByCdNmAjaxCallback( result ) 콜백함수 not found!' );
+	                 }
+	                    
+	                }
+	            } );
+	            // ajax END
+				
+			} else if ( detailCdYn != 'Y' ) {
+				// 하위분류 선택 안하게 설정
+				
+				$(".detailCdArea").hide();	// 배너상세분류 부분 표시
+				$("[name='bannerClDetailCd']").val('');
+				$("#bannerClDetailCd").removeAttr("required");
+				
+			}
+    		
+    	});
+    	
+    	
+    	// 카테고리 선택시 커리큘럼 목록 재정렬 
+    	$("[name='ctgrySn']").change( function() {
+    		
+    		var parntsClSn = $(this).val();
+    		
+    		// 커리큘럼 검색 ajax
+    		// ajax START
+    		var url = '/admin/classCategoryCl02/live/getListByParntsClSnAjax';
+            $.ajax( {
+                url: url, 
+                type: "GET",
+                dataType: "json",
+                async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+                data: {parntsClSn : parntsClSn},	// 부모 클래스 일련번호 setting
+                contentType: "application/json",
+                success: function ( result ) {
+                 // callback 함수 연결 -> callback함수로 구현
+                 if ( typeof getListByParntsClSnAjaxCallback === 'function' ) {
+                 	getListByParntsClSnAjaxCallback( result );
+                 } else {
+                     console.log( 'getListByParntsClSnAjaxCallback( result ) funnction is required. getListByParntsClSnAjaxCallback( result ) 콜백함수 not found!' );
+                 }
+                    
+                }
+            });
+            // ajax END
+    	});
+    	
+    	// 커리큘럼 선택시 클래스 목록 재정렬 
+    	$("[name='crseSn']").change( function() {
+    		
+    		var ctgrySn = $("[name='ctgrySn']").val();
+    		var crseSn = $(this).val();
+    		
+    		// 커리큘럼 검색 ajax
+    		// ajax START
+    		var url = '/admin/class/live/getClassListByCrseSnAjax';
+            $.ajax( {
+                url: url, 
+                type: "GET",
+                dataType: "json",
+                async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+                data: {ctgrySn : ctgrySn, crseSn : crseSn},	// 커리큘럼 일련번호로 검색 ( 커리큘럼일련번호가 전체일 경우는 카테고리로 검색 )
+                contentType: "application/json",
+                success: function ( result ) {
+                 // callback 함수 연결 -> callback함수로 구현
+                 if ( typeof getClassListByCrseSnAjaxCallback === 'function' ) {
+                 	getClassListByCrseSnAjaxCallback( result );
+                 } else {
+                     console.log( 'getClassListByCrseSnAjaxCallback( result ) funnction is required. getClassListByCrseSnAjaxCallback( result ) 콜백함수 not found!' );
+                 }
+                    
+                }
+            });
+            // ajax END
+    	});
+    	
+    	
+
     });
+    // $( function () {}); end
+
+    // re arrange bannerClDetailCd
+    function getListByCdNmAjaxCallback( result ) {
+    	
+    	// 배너 상세 분류 전체 삭제
+    	$("[name='bannerClDetailCd']").empty();
+    	
+    	// 배너 상세 분류 추가 (전체)
+    	$("[name='bannerClDetailCd']").append("<option value=''>배너 상세 분류 선택</option>");
+    	
+    	// 배너 상세 분류 selectbox 에 추가
+    	for ( let item of result.resultList ) {
+    		 $("[name='bannerClDetailCd']").append("<option value='" + item.cdDetailSn + "'>" + item.cdDetailNm + "</option>");
+        }
+    }
+    
+    
+    // re arrange crseSn
+    function getListByParntsClSnAjaxCallback( result ) {
+    	
+    	// rearrange CrseSn
+    	
+    	// 커리큘럼 전체 삭제
+    	$("[name='crseSn']").empty();
+    	
+    	// 커리큘럼 추가 (전체)
+    	$("[name='crseSn']").append("<option value=''>커리큘럼 선택</option>");
+    	$("[name='crseSn']").append("<option value='0'>전체</option>");
+    	
+    	// 커리큘럼 추가
+    	for ( let item of result.resultList ) {
+    		 $("[name='crseSn']").append("<option value='" + item.clSn + "'>" + item.clNm + "</option>");
+        }
+            	
+    	// 클래스 전체 삭제
+    	$("[name='classSn']").empty();
+    	
+    	// 클래스 추가 (전체)
+    	$("[name='classSn']").append("<option value=''>클래스 선택</option>");
+    	
+    }
+    
+    
+    // re arrange clasSn
+    function getClassListByCrseSnAjaxCallback( result ) {
+    	
+    	// rearrange clasSn
+    	
+    	// 클래스 전체 삭제
+    	$("[name='classSn']").empty();
+    	
+    	// 클래스 추가 (전체)
+    	$("[name='classSn']").append("<option value=''>클래스 선택</option>");
+    	
+    	// 클래스 추가
+    	for ( let item of result.resultList ) {
+    		 $("[name='classSn']").append("<option value='" + item.classSn + "'>" + item.classSj + "</option>");
+        }
+    }
+
+
+    // form submit 시 유효성 검사
+    function submitValidCheck() {
+		
+		// 배너 이미지 첨부파일 유효성 체크
+		if ( $("[name='atchFile']")[0].files[0] == null ) {
+			alert("배너 이미지(첨부파일)를 등록해주세요.");
+			$("[name='atchFile']").focus();
+			return false;
+		}
+		
+        // url 클래스 매핑 여부 항목 체크
+        // Y 일 경우 url 값 유효성 체크
+        var classMapngYn = $( "[name='classMapngYn']:checked" ).val();
+        
+        if ( classMapngYn == 'Y' && $("[name='url']").val() == '' ) {
+			alert("url 값을 입력해주세요.");
+            $( "[name='url']" ).focus();
+            return false;
+		}
+		
+		
+        // 표시기간 유효성 체크
+        var bannerPdSetYn = $( "[name='bannerPdSetYn']:checked" ).val();
+        if ( bannerPdSetYn == 'Y' && $("#bannerBeginDt").val() == '' ) {
+            alert("배너 표시 시작 일시를 입력해주세요.");
+            $( "#bannerBeginDt" ).focus();
+            return false;
+        }
+        if ( bannerPdSetYn == 'Y' && $("#bannerEndDt").val() == '' ) {
+            alert("배너 표시 종료 일시를 입력해주세요.");
+            $( "#bannerEndDt" ).focus();
+            return false;
+        }
+        
+
+        return true;
+    }
+
 
 
 </script>
 <!-- E : Javascript functions	-->
 <th:block layout:fragment="content">
-
     <!-- S: content -->
     <div class="row">
         <div class="col-md-12 col-sm-12 ">
             <div class="x_panel">
                 <div class="x_content">
-                    <form id="insertForm" name="insertForm" method="post" th:action="@{ {basicPath}/mcd/insert ( basicPath = ${basicPath} ) }" enctype="multipart/form-data">
+                    <form id="insertForm" name="insertForm" method="post" th:action="@{ {basicPath}/{mcd}/insert ( basicPath = ${basicPath}, mcd = ${mcd} ) }" enctype="multipart/form-data" th:onsubmit="return submitValidCheck();">
+                    	<div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">분류<span class="required">*</span></label>
+                            <div class="col-md-2 col-sm-4">
+                            	<select class="form-control" name="bannerClCd" id="bannerClCd" required="required" >
+                                    <option value="">배너분류 선택</option>
+                                    <option th:each="item : ${bannerClCdList}" th:value="${item.cdDetailVal1}" th:data-detail-cd-yn="|${item.cdDetailVal2}|" th:data-cl-cd="|${item.cdDetailVal3}|" >[[${item.cdDetailNm}]]
+                                </select>
+                            </div>
+                            <div class="col-md-2 col-sm-4 detailCdArea" style="display:none;">
+                            	<select class="form-control" name="bannerClDetailCd" id="bannerClDetailCd" >
+                                    <option value="">배너상세분류 선택</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">프로필 이미지</label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">배너 이미지</label>
                             <div class="col-md-6 col-sm-6">
                                 <div class="filebox preview-image">
                                     <div class="upload-display">
                                         <div class="upload-thumb-wrap">
-                                            <img alt="프로필 이미지" class="upload-thumb noimg">
+                                            <img alt="썸네일 이미지" class="upload-thumb noimg">
                                         </div>
                                     </div>
                                     <div class="upload-file-name">
@@ -34,7 +308,7 @@
                                     </div>
                                     <div class="upload-btn mt_10p">
                                         <label class="btn btn-purple">업로드
-                                            <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
+                                            <input type="file" name="atchFile" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
                                         </label>
                                     </div>
 
@@ -42,137 +316,95 @@
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>아이디(이메일형식)</label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">배너 이름<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input name="userId" id="userId" class="form-control"
-                                       required="required"/>
-                                <small class="font-gray-dark"   >
-                                    <b>비밀번호</b> 찾기 시 해당 이메일로 인증번호를 발송합니다. 정확한 이메일을 입력해주세요.
-                                </small>
-                            </div>
-                            <div class="col-md-2 pt_10p pl-0">
-                                <span id="checkResult"></span>
+                                <input class="form-control"name="bannerNm" required="required" placeholder="배너 이름을 입력해주세요."/>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>비밀번호</label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">배너 순번<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="password" id="password1" name="password"
-                                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[!@#$%^&*]).{8,}"
-                                       title="Minimum 8 Characters Including An Upper And Lower Case Letter, A Number And A Unique Character"
-                                       required/>
-                                <span class="hideshow" onclick="hideshow()">
-									<i id="slash" class="fa fa-eye-slash" style="display:none;"></i>
-									<i id="eye" class="fa fa-eye"></i>
-                                </span>
+                                <input type="number" class="form-control" name="cdDetailSeq" required="required" placeholder="배너순번 을(를) 입력해주세요." />
                                 <small class="font-gray-dark">
-                                    영문 (대소문자 구분), 숫자, 특수문자를 포함하여 <b>최소 8자리</b>로 구성
+                                    배너 순번을 입력해주세요. *(숫자만 입력 가능)
                                 </small>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align"><span class="required">*</span>비밀번호 재입력</label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">배너 설명</label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="password" name="password2"
-                                       data-validate-linked='password' required='required'/>
+                            	<textarea id="bannerDc" name="bannerDc" class="form-control" rows="10"></textarea>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>이름</label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control" data-validate-length-range="2,10" name="userNm"
-                                       required="required"
-                                       placeholder="이름을 입력해주세요."/>
-                                <small class="font-gray-dark">
-                                    최소 2자 이상, 10자 이하로 입력해주세요.
-                                </small>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>성별</label>
-                            <div class="col-md-6 col-sm-6 ">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">url 클래스 매핑 여부<span class="required">*</span></label>
+                            <div class="col-md-6 col-sm-4">
                                 <div class="btn-group radiobox">
-                                    <input type="radio" id="gender1" name="gender" value="M" class="join-btn" required>
-                                    <label for="gender1" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">남자</label>
-                                    <input type="radio" id="gender2" name="gender" value="F" class="join-btn" required>
-                                    <label for="gender2" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">여자</label>
+                                    <input type="radio" id="classMapngYn1" name="classMapngYn" value="Y" class="join-btn" required="required">
+                                    <label for="classMapngYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">예</label>
+                                    <input type="radio" id="classMapngYn2" name="classMapngYn" value="N" class="join-btn" required="required">
+                                    <label for="classMapngYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">아니오</label>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>생년월일</label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control Date8String" type="date" name="brdtDate" required="required">
+                                <br >
                                 <small class="font-gray-dark">
-                                    아이디 찾기 시 생년월일을 입력합니다.
+                                   클래스를 선택하여 해당 클래스로 url을 자동으로 연결합니다. ('예' 선택시 매핑 클래스 영역 활성화. url은 클래스 기준으로 자동으로 매핑)
                                 </small>
                             </div>
                         </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>연락처</label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="tel" name="telNo" id="telNo" required="required"
-                                       placeholder="연락처입력 ( - 제외 )" data-validate-length-range="10,11">
+                        <div class="field item form-group mappingClassDiv" style="display:none;">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">매핑 클래스<span class="required">*</span></label>
+                            <div class="col-md-2 col-sm-6">
+                            	<select class="form-control" name="ctgrySn" id="ctgrySn">
+                                    <option value="">카테고리 선택</option>
+                                    <option th:each="item : ${classCategoryCl01List}" th:value="${item.clSn}">[[${item.clNm}]]
+                                </select>
                             </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>거주지역</label>
-                            <div class="col-md-2 col-sm-4">
-                                <div class="btn-group radiobox">
-                                    <input type="radio" id="resideArea1" name="resideArea" value="대한민국" class="join-btn" required="required">
-                                    <label for="resideArea1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">대한민국</label>
-                                    <input type="radio" id="resideArea2" name="resideArea" value="other" class="join-btn" required="required">
-                                    <label for="resideArea2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                                    	그 외
-                                    </label>
-                                </div>
+                            <div class="col-md-2 col-sm-6">
+                            	<select class="form-control" name="crseSn" id="crseSn" >
+                                    <option value="">커리큘럼 선택</option>
+                                </select>
                             </div>
-                            <div class="col-md-2 col-sm-4">
-                                <select class="form-control" name="otherResideArea" id="countryList"
-                                        style="display: none;">
-                                    <option value="">국가 선택</option>
-                                    <option th:each="item : ${resideAreaList}" th:value="${item.cdDetailVal1}">[[${item.cdDetailNm}]]
+                            <div class="col-md-2 col-sm-6">
+                            	<select class="form-control" name="classSn" id="classSn" >
+                                    <option value="">클래스 선택</option>
                                 </select>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">주소</label>
-                            <div class="col-md-1 col-sm-6">
-                                <input class="form-control text-center" type="text" name="zip" disabled="disabled"
-                                       placeholder="우편번호"/>
-                            </div>
-                            <div class="col-md-5 col-sm-6 pl-0">
-                                <input class="form-control" type="text" name="rdnmAdr" disabled="disabled"
-                                       placeholder="주소 찾기 버튼 클릭하여 주소 입력"/>
-                            </div>
-                            <div class="col-md-1 pl-0">
-                                <button type="button" class="btn btn-purple w100p">주소 찾기</button>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">URL<span class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6">
+                                <input class="form-control"name="url" required="required" placeholder="url을 입력해주세요."/>
                             </div>
                         </div>
                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align"><span class="required">*</span>관리자 여부</label>
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">배너 표시기간</label> 
                             <div class="col-md-2 col-sm-4">
                                 <div class="btn-group radiobox">
-                                    <input type="radio" id="mngrYn1" name="mngrYn" value="N" class="join-btn">
-                                    <label for="mngrYn1" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">사용자</label>
-                                    <input type="radio" id="mngrYn2" name="mngrYn" value="Y" class="join-btn">
-                                    <label for="mngrYn2" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">관리자</label>
+                                    <input type="radio" id="bannerPdSetYn1" name="bannerPdSetYn" value="N" class="join-btn" required="required">
+                                    <label for="bannerPdSetYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">상시</label>
+                                    <input type="radio" id="bannerPdSetYn2" name="bannerPdSetYn" value="Y" class="join-btn" required="required">
+                                    <label for="bannerPdSetYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">기간설정</label>
                                 </div>
                             </div>
-                            <div class="col-md-2 col-sm-4 ml_20p">
-                                <select class="form-control" name="roleSn" id="roleList" style="display: none;">
-                                    <option value="">관리자 권한 선택</option>
-                                    <option th:each="item : ${roleList}" th:value="${item.roleSn}">[[${item.roleDc}]]
-                                    </option>
-                                </select>
+                            <div id="expsrPeriodDiv" style="display:none;" class="col-md-4 col-sm-4" >
+                                <div class="col-md-5 col-sm-12">
+                                    <input class="form-control" type="text" name="bannerBeginDt"	id="bannerBeginDt"	data-pickr="dateTime"	placeholder="표시 시작일시 선택" >
+                                </div>
+                                <div class="col-md-1 col-sm-12 period-wave"></div>
+                                <div class="col-md-5 col-sm-12">
+                                    <input class="form-control" type="text" name="bannerEndDt"	id="bannerEndDt"		data-pickr="dateTime"	placeholder="표시 종료일시 선택" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">사용여부</label> 
+                            <div class="col-md-2 col-sm-4">
+                                <div class="btn-group radiobox">
+                                    <input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn" required="required">
+                                    <label for="useYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">사용</label>
+                                    <input type="radio" id="useYn2" name="useYn" value="N" class="join-btn" required="required">
+                                    <label for="useYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">미사용</label>
+                                </div>
                             </div>
                         </div>
                         <div class="ln_solid"></div>
@@ -182,7 +414,7 @@
                             <div class="col-md-2 col-sm-3 text-left">
                                 <a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >목록</a>
                             </div>
-                            <!-- bottom center area -->
+                            <!-- bottom c	enter area -->
                             <div class="col-md-8 col-sm-6 text-center">
                                 <a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >취소</a>
                                 <button type="submit" class="btn btn-purple w120p">저장</button>
