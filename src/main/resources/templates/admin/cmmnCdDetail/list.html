@@ -69,7 +69,7 @@
                                 </li>
                                 <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('', this );"
                                     th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.cdSn ) } ? 'on'"
-                                    th:value="${data.cdSn}">[[${data.cdNm}]]
+                                    th:value="${data.cdSn}">[[${data.cdDc}]]
                                 </li>
                             </ul>
                         </div>

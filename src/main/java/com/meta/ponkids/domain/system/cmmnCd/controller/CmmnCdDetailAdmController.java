@@ -294,12 +294,12 @@ public class CmmnCdDetailAdmController {
             if ( listDto.getCategory() != null ) {
                 
                 listDto.getCategory().setLv1Sn( cdSn );
-                listDto.getCategory().setLv1Nm( cmmnCdModDto.getCdNm() );
+                listDto.getCategory().setLv1Nm( cmmnCdModDto.getCdDc() );
             } else {
                 CategoryDto categoryDto = new CategoryDto();
                 
                 categoryDto.setLv1Sn( cdSn );
-                categoryDto.setLv1Nm( cmmnCdModDto.getCdNm() );
+                categoryDto.setLv1Nm( cmmnCdModDto.getCdDc() );
                 listDto.setCategory( categoryDto );
             }
         }
