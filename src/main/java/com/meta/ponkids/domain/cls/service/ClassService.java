@@ -4,6 +4,7 @@ import com.meta.ponkids.domain.cls.repository.ClassRepository;
 import com.meta.ponkids.domain.cls.dto.ClassListDto;
 import com.meta.ponkids.domain.cls.dto.ClassModDto;
 import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
+import com.meta.ponkids.domain.cls.dto.ClassWeekListDto;
 import com.meta.ponkids.domain.cls.entity.Class;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.meta.ponkids.global.util.ip.IpUtils;
@@ -64,15 +65,8 @@ public class ClassService {
         List<ClassListDto> listDtos = classRepository.getList( listDto );
         
         // 카테고리 값 뿌리기 위한  setting
-        for( ClassListDto dto : listDtos) {
-            
-            CategoryDto categoryDto = new CategoryDto();
-            
-            categoryDto.setCategorySn(dto.getClassSn());    // 이 부분이 결국은 html 에서 카테고리검색의 li value 값이 됨
-            categoryDto.setCategoryNm(dto.getClassSj());    // 이 부분이 결국은 html 에서 카테고리검색의 li 명칭이 됨
-            
-            dto.setCategory(categoryDto);
-        }
+        for( ClassListDto dto : listDtos) dto = setCategory(dto);
+        
         return listDtos;
     }
     
@@ -92,18 +86,11 @@ public class ClassService {
     	}
     	
     	ClassListDto classListDto = new ClassListDto();
-    	List<ClassListDto> listDtos = classList.stream().map( m -> classListDto.toDto( m ) ).collect( Collectors.toList() );
-    	
-    	// 카테고리 값 뿌리기 위한  setting
-    	for( ClassListDto dto : listDtos) {
-    		
-    		CategoryDto categoryDto = new CategoryDto();
-    		
-    		categoryDto.setCategorySn(dto.getClassSn());    // 이 부분이 결국은 html 에서 카테고리검색의 li value 값이 됨
-    		categoryDto.setCategoryNm(dto.getClassSj());    // 이 부분이 결국은 html 에서 카테고리검색의 li 명칭이 됨
-    		
-    		dto.setCategory(categoryDto);
-    	}
+    	List<ClassListDto> listDtos = classList
+    			.stream()
+    			.map( m -> classListDto.toDto( m ) )							// 1. entity to dto 작업
+    			.map( m -> setCategory( m ) )                                   // 2. 카테고리 값 뿌리기 위한  setting
+                .collect( Collectors.toList() );								// 3. 1,2 과정을 거친 후 toList로 전환
     	
     	return listDtos;
     }
@@ -124,6 +111,12 @@ public class ClassService {
             return modDto;
         }
         
+    }
+    
+    
+    // pk 로 조회 ( 고유 1건 조회 ) 
+    public ClassListDto getByClassSn( Long pk ) {
+    	return classRepository.getByClassSn(pk);
     }
     
     @Transactional
@@ -167,6 +160,27 @@ public class ClassService {
         
         // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
         classRepository.deleteById( pk );    // Entity 의 @SQLDelete 를 수행
+    }
+    
+    
+    
+    
+    // ================================== UTIL ========================================
+    // ================================== UTIL ========================================
+    // ================================== UTIL ========================================
+    
+    
+    private ClassListDto setCategory(ClassListDto listDto ) {
+        
+        CategoryDto categoryDto = new CategoryDto();
+        
+        categoryDto.setCategorySn(listDto.getClassSn());    // 이 부분이 결국은 html 에서 카테고리검색의 li value 값이 됨
+        categoryDto.setCategoryNm(listDto.getClassSj());    // 이 부분이 결국은 html 에서 카테고리검색의 li 명칭이 됨
+        
+        listDto.setCategory(categoryDto);
+        
+        return listDto;
+        
     }
     
 }

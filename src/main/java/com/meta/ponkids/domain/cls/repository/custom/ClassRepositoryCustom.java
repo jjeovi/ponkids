@@ -14,4 +14,7 @@ public interface ClassRepositoryCustom {
     List<ClassListDto> getList( ClassListDto listDto);
     
     
+    ClassListDto getByClassSn( Long classSn ) ;
+    
+    
 }
