@@ -9,49 +9,49 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BannerModDto {
     
-    private Long bannerSn;                    // 배너 일련번호
+    private Long    bannerSn;               // 배너 일련번호
     
-    private String bannerClCd;            // 배너 분류 코드
+    private String  bannerClCd;             // 배너 분류 코드
     
-    private String bannerClDetailCd;        // 배너 분류 상세 코드
+    private String  bannerClDetailCd;       // 배너 분류 상세 코드
     
-    private Long bannerExpsrOrdr;            // 배너 노출 순서
+    private Long    bannerExpsrSeq;         // 배너 노출 순서
     
-    private String bannerNm;                // 배너 이름
+    private String  bannerNm;               // 배너 이름
     
-    private String bannerDc;                // 배너 설명
+    private String  bannerDc;               // 배너 설명
     
-    private Long atchFileSn;                // 첨부 파일 일련번호
+    private Long    atchFileSn;             // 첨부 파일 일련번호
     
-    private String url;                    // 클릭시 이동 URL
+    private String  url;                    // 클릭시 이동 URL
     
-    private String classMapngYn;            // 클래스 매핑 여부
+    private String  classMapngYn;           // 클래스 매핑 여부
     
-    private String classSn;                // 클래스 일련번호
+    private Long    classSn;                // 클래스 일련번호
     
-    private Long useYn;                    // 사용 여부
+    private String  useYn;                  // 사용 여부
     
-    private String bannerPdSetYn;            // 배너 기간 설정 여부
+    private String  bannerPdSetYn;          // 배너 기간 설정 여부
     
-    private String bannerBeginDt;            // 배너 시작 일시
+    private String  bannerBeginDt;          // 배너 시작 일시
     
-    private String bannerEndDt;            // 배너 종료 일시
+    private String  bannerEndDt;            // 배너 종료 일시
     
-    private String updusrId;                // 수정자 ID
+    private String  updusrId;               // 수정자 ID
     
-    private String updusrIp;                // 수정자 IP
+    private String  updusrIp;               // 수정자 IP
     
     //builder 생성
     @Builder
-    public BannerModDto( Long bannerSn, String bannerClCd, String bannerClDetailCd, Long bannerExpsrOrdr,
-                         String bannerNm, String bannerDc, Long atchFileSn, String url, String classMapngYn, String classSn,
-                         Long useYn, String bannerPdSetYn, String bannerBeginDt, String bannerEndDt, String updusrId,
+    public BannerModDto( Long bannerSn, String bannerClCd, String bannerClDetailCd, Long bannerExpsrSeq,
+                         String bannerNm, String bannerDc, Long atchFileSn, String url, String classMapngYn, Long classSn,
+                         String useYn, String bannerPdSetYn, String bannerBeginDt, String bannerEndDt, String updusrId,
                          String updusrIp ) {
         super();
         this.bannerSn = bannerSn;
         this.bannerClCd = bannerClCd;
         this.bannerClDetailCd = bannerClDetailCd;
-        this.bannerExpsrOrdr = bannerExpsrOrdr;
+        this.bannerExpsrSeq = bannerExpsrSeq;
         this.bannerNm = bannerNm;
         this.bannerDc = bannerDc;
         this.atchFileSn = atchFileSn;
@@ -72,7 +72,7 @@ public class BannerModDto {
                 .bannerSn( bannerSn )
                 .bannerClCd( bannerClCd )
                 .bannerClDetailCd( bannerClDetailCd )
-                .bannerExpsrOrdr( bannerExpsrOrdr )
+                .bannerExpsrSeq( bannerExpsrSeq )
                 .bannerNm( bannerNm )
                 .bannerDc( bannerDc )
                 .atchFileSn( atchFileSn )
@@ -94,7 +94,7 @@ public class BannerModDto {
                 .bannerSn( banner.getBannerSn() )
                 .bannerClCd( banner.getBannerClCd() )
                 .bannerClDetailCd( banner.getBannerClDetailCd() )
-                .bannerExpsrOrdr( banner.getBannerExpsrOrdr() )
+                .bannerExpsrSeq( banner.getBannerExpsrSeq() )
                 .bannerNm( banner.getBannerNm() )
                 .bannerDc( banner.getBannerDc() )
                 .atchFileSn( banner.getAtchFileSn() )

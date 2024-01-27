@@ -33,7 +33,6 @@ public class ClassService {
         saveDto.setUpdusrId( SessionUtils.getClientId() );                  // Id set : update
         saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );              // Ip set : update
         
-        
         if ( StringUtils.hasText( saveDto.getClassPdSetYn() ) && saveDto.getClassPdSetYn().equals( "Y" ) ) {
             // 표시기간설정여부 체크하여 표시기간 있을 시 숫자제외 다른 문자들 제거 작업 필요
             

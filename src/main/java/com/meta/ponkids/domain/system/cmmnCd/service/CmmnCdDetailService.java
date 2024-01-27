@@ -1,5 +1,6 @@
 package com.meta.ponkids.domain.system.cmmnCd.service;
 
+import com.meta.ponkids.domain.cls.dto.ClassListDto;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailListDto;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailModDto;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailSaveDto;
@@ -7,6 +8,7 @@ import com.meta.ponkids.domain.system.cmmnCd.entity.CmmnCd;
 import com.meta.ponkids.domain.system.cmmnCd.entity.CmmnCdDetail;
 import com.meta.ponkids.domain.system.cmmnCd.repository.CmmnCdDetailRepository;
 import com.meta.ponkids.domain.system.cmmnCd.repository.CmmnCdRepository;
+import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +58,11 @@ public class CmmnCdDetailService {
             
             // entity to dto (List) 전환
             CmmnCdDetailListDto cmmnCdDetailListDto = new CmmnCdDetailListDto();    // new로 listDto 생성
-            List<CmmnCdDetailListDto> cmmnCdDetailListDtoList = cmmnCdDetailList.stream().map( m -> cmmnCdDetailListDto.toDto( m ) ).collect( Collectors.toList() );
+            List<CmmnCdDetailListDto> cmmnCdDetailListDtoList = cmmnCdDetailList
+                    .stream()
+                    .map( m -> cmmnCdDetailListDto.toDto( m ) )                     // entity to dto 작업
+                    .map( m -> setCategory( m ) )                                   // 카테고리 값 뿌리기 위한  setting
+                    .collect( Collectors.toList() );
             
             return cmmnCdDetailListDtoList;
         } else {
@@ -113,6 +119,20 @@ public class CmmnCdDetailService {
         
         // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
         cmmnCdDetailRepository.deleteById( pk );    // Entity 의 @SQLDelete 를 수행
+    }
+    
+    private CmmnCdDetailListDto setCategory(CmmnCdDetailListDto listDto ) {
+        
+        // 카테고리 값 뿌리기 위한  setting
+        CategoryDto categoryDto = new CategoryDto();
+        
+        categoryDto.setCategorySn(listDto.getCdDetailSn());    // 이 부분이 결국은 html 에서 카테고리검색의 li value 값이 됨
+        categoryDto.setCategoryNm(listDto.getCdDetailNm());    // 이 부분이 결국은 html 에서 카테고리검색의 li 명칭이 됨
+        
+        listDto.setCategory(categoryDto);
+        
+        return listDto;
+        
     }
     
 }

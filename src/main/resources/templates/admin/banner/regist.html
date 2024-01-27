@@ -182,7 +182,7 @@
     	
     	// 배너 상세 분류 selectbox 에 추가
     	for ( let item of result.resultList ) {
-    		 $("[name='bannerClDetailCd']").append("<option value='" + item.cdDetailSn + "'>" + item.cdDetailNm + "</option>");
+    		 $("[name='bannerClDetailCd']").append("<option value='" + item.cdDetailVal1 + "'>" + item.cdDetailNm + "</option>");
         }
     }
     
@@ -308,7 +308,7 @@
                                     </div>
                                     <div class="upload-btn mt_10p">
                                         <label class="btn btn-purple">업로드
-                                            <input type="file" name="atchFile" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
+                                            <input type="file" name="thumbFile" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
                                         </label>
                                     </div>
 
@@ -324,7 +324,7 @@
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">배너 순번<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input type="number" class="form-control" name="cdDetailSeq" required="required" placeholder="배너순번 을(를) 입력해주세요." />
+                                <input type="number" class="form-control" name="bannerExpsrSeq" required="required" placeholder="배너순번 을(를) 입력해주세요." />
                                 <small class="font-gray-dark">
                                     배너 순번을 입력해주세요. *(숫자만 입력 가능)
                                 </small>

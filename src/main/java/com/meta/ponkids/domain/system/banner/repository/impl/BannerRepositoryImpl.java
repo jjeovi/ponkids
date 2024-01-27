@@ -4,7 +4,10 @@ package com.meta.ponkids.domain.system.banner.repository.impl;
 import com.meta.ponkids.domain.system.banner.dto.BannerListDto;
 import com.meta.ponkids.domain.system.banner.dto.QBannerListDto;
 import com.meta.ponkids.domain.system.banner.repository.custom.BannerRepositoryCustom;
+import com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail;
+import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +27,13 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
     
     private final JPAQueryFactory query;
     
+    QCmmnCdDetail join_bannerClCd       = new QCmmnCdDetail( "join_bannerClCd" );           // 배너 분류 조인용 테이블 생성
+    QCmmnCdDetail join_bannerClDetailCd = new QCmmnCdDetail( "join_bannerClDetailCd" );     // 배너 상세 분류 조인용 테이블 생성
+    
     @Override
     public Page<BannerListDto> getList( BannerListDto listDto, Pageable pageable ) {
+
         
-        // TODO 구현
         // (1) '결과list' 와 (2)'count' 를 2번에 걸쳐 조회
         
         // TODO
@@ -37,8 +43,10 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                 .select( new QBannerListDto(
                         banner.bannerSn,
                         banner.bannerClCd,
+                        join_bannerClCd.cdDetailNm.as("bannerClNm"),
                         banner.bannerClDetailCd,
-                        banner.bannerExpsrOrdr,
+                        join_bannerClDetailCd.cdDetailNm.as("bannerClDetailNm"),
+                        banner.bannerExpsrSeq,
                         banner.bannerNm,
                         banner.bannerDc,
                         banner.atchFileSn,
@@ -47,14 +55,42 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                         banner.classSn,
                         banner.useYn,
                         banner.bannerPdSetYn,
+                        new CaseBuilder()
+                                .when( banner.bannerPdSetYn.eq( "Y" ) ).then(
+                                        "기간"
+                                ).when( banner.bannerPdSetYn.eq( "N" ) ).then(
+                                        "상시"
+                                ).otherwise( "" )
+                                .as( "bannerPdSetYnNm" ),
                         banner.bannerBeginDt,
-                        banner.bannerEndDt
+                        banner.bannerEndDt,
+                        new CaseBuilder()
+                                .when( banner.bannerPdSetYn.eq( "Y" ) ).then(
+                                        banner.bannerBeginDt.concat( " ~ " ).concat( banner.bannerEndDt )
+                                )
+                                .when( banner.bannerPdSetYn.eq( "N" ) ).then( "-" )
+                                .otherwise( "" )
+                                .as( "bannerExpsrPeriod" )
                 ) )
                 .from( banner )
+                .leftJoin( join_bannerClCd )
+                .on(
+                        join_bannerClCd.cdDetailVal1.eq( banner.bannerClCd ),
+                        join_bannerClCd.cdNm.eq("BANNER_CL_CD"),
+                        join_bannerClCd.delYn.eq( "N" )
+                )
+                .leftJoin( join_bannerClDetailCd )
+                .on(
+                        join_bannerClDetailCd.cdDetailVal1.eq( banner.bannerClDetailCd ),
+                        join_bannerClDetailCd.cdNm.eq("BANNER_CL_DETAIL_CD"),
+                        join_bannerClDetailCd.delYn.eq( "N" )
+                )
                 // where
                 .where(
-                		eqOption( listDto.getSchOption(), listDto.getSchCntn() )
-                		)
+                        eqCateLv1( listDto.getCategory() ),
+                        eqCateLv2( listDto.getCategory() ),
+                        eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                )
 //                .orderBy( banner.bannerSn.desc())
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )
@@ -67,12 +103,32 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                 .from( banner )
                 .where(
                         eqOption( listDto.getSchOption(), listDto.getSchCntn() )
-                       );
+                );
         
         
         
         return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
         
+    }
+    
+    
+    // -------------------------------- WHERE 검색 옵션 setting --------------------------------
+    
+    
+    // 카테고리 lv 1 검색 옵션
+    // 배너 분류 검색
+    // join_bannerClCd.cdDetailSn == lv1sn
+    private BooleanExpression eqCateLv1( CategoryDto categoryDto ) {
+        return ( categoryDto != null && categoryDto.getLv1Sn() != null
+                && categoryDto.getLv1Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? join_bannerClCd.cdDetailSn.eq( categoryDto.getLv1Sn() ) : null;
+    }
+    
+    // 카테고리 lv 2 검색 옵션
+    // 배너 상세 분류 검색
+    // join_bannerClDetailCd.cdDetailSn == lv2sn
+    private BooleanExpression eqCateLv2( CategoryDto categoryDto ) {
+        return ( categoryDto != null && categoryDto.getLv2Sn() != null
+                && categoryDto.getLv2Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? join_bannerClDetailCd.cdDetailSn.eq( categoryDto.getLv2Sn() ) : null;
     }
     
     

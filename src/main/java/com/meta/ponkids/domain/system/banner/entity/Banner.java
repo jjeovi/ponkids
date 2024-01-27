@@ -38,7 +38,7 @@ public class Banner extends BaseTimeEntity {
     
     private String bannerClDetailCd;        // 배너 분류 상세 코드
     
-    private Long bannerExpsrOrdr;            // 배너 노출 순서
+    private Long bannerExpsrSeq;            // 배너 노출 순서
     
     private String bannerNm;                // 배너 이름
     
@@ -50,9 +50,9 @@ public class Banner extends BaseTimeEntity {
     
     private String classMapngYn;            // 클래스 매핑 여부
     
-    private String classSn;                // 클래스 일련번호
+    private Long classSn;                   // 클래스 일련번호
     
-    private Long useYn;                    // 사용 여부
+    private String useYn;                    // 사용 여부
     
     private String bannerPdSetYn;            // 배너 기간 설정 여부
     

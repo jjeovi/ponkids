@@ -5753,3 +5753,11 @@ input[type="checkbox"][disabled] + label{
     font-weight: bold;
     text-decoration: underline;
 }
+
+
+/* 테이블 안에 이미지 넣을 떄  */
+.img-table {
+  width: 120px;
+  max-height:50px;
+  object-fit : cover;
+}

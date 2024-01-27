@@ -7,6 +7,8 @@
     // DOM 준비 된 이후 실행
     $( function () {
 
+
+
     });
 
 </script>
@@ -20,17 +22,32 @@
                 <!-- 분류 영역 > 카테고리 그룹 영역 -->
                 <div class="col-md-10 category-list-area">
                     <div class="category-group-box">
-                        <ul class="data-group" data-all-yn="Y">
-                            <!--  lv1 -->
-                            <li onclick="getCateNextLvList('', this );"
-                                th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'on'"
-                                value="0">전체
-                            </li>
-                            <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('', this );"
-                                th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.categorySn ) } ? 'on'"
-                                th:value="${data.categorySn}">[[${data.categoryNm}]]
-                            </li>
-                        </ul>
+                        <div class="data-group">
+                            <span class="category-title">분류</span>
+                            <ul>
+                                <!--  lv1 -->
+                                <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('/admin/banner/live/getBannerClDetailListByBannerClCdAjax', this );"
+                                    th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.cdDetailSn ) } ? 'on'"
+                                    th:value="${data.cdDetailSn}">[[${data.cdDetailNm}]]
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="data-group">
+                            <span class="category-title">상세분류</span>
+                            <ul data-all-yn="Y" data-next-step-li-onclick-param-url=""> <!--  data-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
+                                <!--  lv2 -->
+                                <th:block th:if="${cateLv2List ne null}">
+                                    <li onclick="getCateNextLvList('', this );"
+                                        th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == 0 ) } ? 'on'"
+                                        value="0">전체
+                                    </li>
+                                    <li onclick="getCateNextLvList('', this );"
+                                        th:each="data : ${cateLv2List}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == data.clSn ) } ? 'on'"
+                                        th:value="${data.clSn}">[[${data.clNm}]]
+                                    </li>
+                                </th:block>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <!-- 분류 영역 > 우측영역 ( 선택한 카테고리 텍스트 표출, 카테고리검색 버튼) -->
@@ -44,8 +61,8 @@
                     </div>
                     <div class="btn-group float-right" role="group">
                         <button name="searchCateBtn" type="button" class="btn btn-purple w120p"
-                                th:data-search-cate-url="|/admin/menu/live/${type}/getMenuListAjax|"
-                                th:onclick="searchCateAjax( this.getAttribute('data-search-cate-url') )">보기
+                                th:data-search-cate-url="|${basicPath}/${mcd}/list|"
+                                th:onclick="searchCate( this.getAttribute('data-search-cate-url') )">보기
                         </button>
                     </div>
                 </div>
@@ -75,11 +92,9 @@
                             <div class="vl ml_5p"></div>
                             <select class="form-control ml_5p w_55r" name="schOption">
                                 <option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">제목</option>
-<!--                                <option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">이름</option>-->
+                                <!--                                <option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">이름</option>-->
                             </select>
-                            <input type="text" name="schCntn" th:value="${searchDTO.schCntn}"
-                                   class="form-control input-sm" placeholder="검색어 입력"
-                                   aria-controls="datatable-responsive">
+                            <input type="text" name="schCntn" th:value="${searchDTO.schCntn}" class="form-control input-sm" placeholder="검색어 입력" aria-controls="datatable-responsive">
                             <button type="submit" class="btn btn-purple w250p">검색</button>
                         </div>
                     </div>
@@ -87,41 +102,52 @@
                     <!-- S : 테이블 -->
                     <div class="col-md-12 col-sm-12 ">
                         <table id="listTable" class="table table-bordered text-center">
+                            <colgroup>
+                                <col width="55px;">
+                                <col width="auto;">
+                                <col width="55px;">
+                                <col width="20%;">
+                                <col width="auto;">
+                                <col width="130px;">
+                                <col width="80px;">
+                                <col width="300px;">
+                                <col width="80px;">
+                            </colgroup>
                             <thead>
-	                            <tr>
-	                                <th>순번</th>
-	                                <th>아이디</th>
-	                                <th>이름</th>
-	                                <th>성별</th>
-	                                <th>생년월일</th>
-	                                <th>연락처</th>
-	                                <th>거주지역</th>
-	                                <th>관리자여부</th>
-	                                <th>관리</th>
-	                            </tr>
+                            <tr>
+                                <th>순번</th>
+                                <th>분류</th>
+                                <th>순번</th>
+                                <th>배너이름</th>
+                                <th>url</th>
+                                <th>이미지</th>
+                                <th>기간설정</th>
+                                <th>노출기간</th>
+                                <th>사용여부</th>
+                            </tr>
                             </thead>
                             <tbody>
-	                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
-	                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
-	                                <td th:text="${data.userId}"></td>
-	                                <td th:text="${data.userNm}"></td>
-	                                <td th:text="${data.gender}"></td>
-	                                <td th:text="${data.brdtDate}"></td>
-	                                <td th:text="${data.telNo}"></td>
-	                                <td th:text="${data.resideArea}"></td>
-	                                <td th:text="${data.mngrYn}"></td>
-	                                <td>
-	                                    <a th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, userSn = ${data.userSn} ) }"
-	                                       class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
-	                                    <a th:href="'javascript:deleteItem(\'' + ${data.userSn} + '\');'"
-	                                       class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>삭제</a>
-	                                </td>
-	                            </tr>
-	                            <tr th:unless = "${!resultList.isEmpty()}">
-	                                <td class="noDataTd" style="display: none;">
-	                                    데이터가 없습니다.
-	                                </td>
-	                            </tr>
+                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
+                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
+                                <td> [[${data.bannerClNm}]] <th:block th:if="${data.bannerClDetailCd != null && data.bannerClDetailCd != '' }"><br/>[ [[${data.bannerClDetailNm}]] ] </th:block> </td>
+                                <td th:text="${data.bannerExpsrSeq}"></td>
+                                <td>
+                                    <a class="b-link" th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.bannerSn} ) }" th:text="${data.bannerNm}">
+                                    </a>
+                                </td>
+                                <td th:text="${data.url}"></td>
+                                <td>
+                                    <img th:alt="|배너_${data.bannerNm}|" class="upload-thumb img-table"  th:if = "${data.atchFileSn != null}" th:src="@{/getImage(atchFileSn=${data.atchFileSn})}"  >
+                                </td>
+                                <td th:text="${data.bannerPdSetYnNm}"></td>
+                                <td th:text="${data.bannerExpsrPeriod}"></td>
+                                <td th:text="${data.useYn}"></td>
+                            </tr>
+                            <tr th:unless = "${!resultList.isEmpty()}">
+                                <td class="noDataTd" style="display: none;">
+                                    데이터가 없습니다.
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -154,8 +180,8 @@
                     </div>
                 </form>
                 <form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/{mcd}/delete ( basicPath = ${basicPath}, mcd = ${mcd} ) }">
-            		<input type="hidden" name="userSn" id="delPk" /> <!-- delPk 문자 수정 금지 -->
-            	</form>
+                    <input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+                </form>
             </div>
         </div>
     </div>
