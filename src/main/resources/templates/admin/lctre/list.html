@@ -116,7 +116,7 @@
             <div class="row">
                 <form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd}) }" class="form">
                     <h2 class="pl_15p" th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null ) }">
-                        분류 : [[${searchDTO.category.lv1Nm}]]
+                        분류 : [[${searchDTO.category.categoryNm}]]
                     </h2>
                     <input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
                     <!-- S : 테이블 상단 검색 창 -->
