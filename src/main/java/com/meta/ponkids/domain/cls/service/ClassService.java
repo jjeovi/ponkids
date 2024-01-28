@@ -1,25 +1,27 @@
 package com.meta.ponkids.domain.cls.service;
 
-import com.meta.ponkids.domain.cls.repository.ClassRepository;
-import com.meta.ponkids.domain.cls.dto.ClassListDto;
-import com.meta.ponkids.domain.cls.dto.ClassModDto;
-import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
-import com.meta.ponkids.domain.cls.dto.ClassWeekListDto;
-import com.meta.ponkids.domain.cls.entity.Class;
-import com.meta.ponkids.global.common.dto.CategoryDto;
-import com.meta.ponkids.global.util.ip.IpUtils;
-import com.meta.ponkids.global.util.session.SessionUtils;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.meta.ponkids.domain.cls.dto.ClassListDto;
+import com.meta.ponkids.domain.cls.dto.ClassModDto;
+import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
+import com.meta.ponkids.domain.cls.entity.Class;
+import com.meta.ponkids.domain.cls.repository.ClassRepository;
+import com.meta.ponkids.global.common.dto.CategoryDto;
+import com.meta.ponkids.global.util.ip.IpUtils;
+import com.meta.ponkids.global.util.session.SessionUtils;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -65,7 +67,7 @@ public class ClassService {
         List<ClassListDto> listDtos = classRepository.getList( listDto );
         
         // 카테고리 값 뿌리기 위한  setting
-        for( ClassListDto dto : listDtos) dto = setCategory(dto);
+        for( ClassListDto dto : listDtos) dto = createCategory(dto);
         
         return listDtos;
     }
@@ -89,7 +91,7 @@ public class ClassService {
     	List<ClassListDto> listDtos = classList
     			.stream()
     			.map( m -> classListDto.toDto( m ) )							// 1. entity to dto 작업
-    			.map( m -> setCategory( m ) )                                   // 2. 카테고리 값 뿌리기 위한  setting
+    			.map( m -> createCategory( m ) )                                   // 2. 카테고리 값 뿌리기 위한  setting
                 .collect( Collectors.toList() );								// 3. 1,2 과정을 거친 후 toList로 전환
     	
     	return listDtos;
@@ -170,7 +172,7 @@ public class ClassService {
     // ================================== UTIL ========================================
     
     
-    private ClassListDto setCategory(ClassListDto listDto ) {
+    private ClassListDto createCategory(ClassListDto listDto ) {
         
         CategoryDto categoryDto = new CategoryDto();
         

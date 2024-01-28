@@ -1,5 +1,17 @@
 package com.meta.ponkids.domain.cls.service;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ListDto;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ModDto;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02SaveDto;
@@ -8,17 +20,8 @@ import com.meta.ponkids.domain.cls.repository.ClassCategoryCl02Repository;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -49,18 +52,11 @@ public class ClassCategoryCl02Service {
     	List<ClassCategoryCl02> classCategoryCl02List = classCategoryCl02Repository.findAllByOrderByClSeq();
     	
     	ClassCategoryCl02ListDto classCategoryCl02ListDto = new ClassCategoryCl02ListDto();    // new로 listDto 생성
-        List<ClassCategoryCl02ListDto> listDtoList = classCategoryCl02List.stream().map( m -> classCategoryCl02ListDto.toDto( m ) ).collect( Collectors.toList() );
-        
-        // lv2 setting ( 분류 lv2 데이터 뿌릴때 사용 )
-        for(ClassCategoryCl02ListDto dto : listDtoList) {
-        	
-        	CategoryDto categoryDto = new CategoryDto();
-        	
-        	categoryDto.setCategorySn(dto.getClSn());   // 이 부분이 결국은 html 에서 카테고리검색의 li value 값이 됨
-        	categoryDto.setCategoryNm(dto.getClNm());   // 이 부분이 결국은 html 에서 카테고리검색의 li 명칭이 됨
-        	
-        	dto.setCategory(categoryDto);        	
-        }
+        List<ClassCategoryCl02ListDto> listDtoList = classCategoryCl02List
+        		.stream()
+				.map( m -> classCategoryCl02ListDto.toDto( m ) )				// 1. entity to dto 작업
+				.map( m -> createCategory( m ) )                                   // 2. 카테고리 값 뿌리기 위한  setting
+		        .collect( Collectors.toList() );								// 3. 1,2 과정을 거친 후 toList로 전환
         
         return listDtoList;
     }
@@ -74,18 +70,11 @@ public class ClassCategoryCl02Service {
         }
         
         ClassCategoryCl02ListDto classCategoryCl02ListDto = new ClassCategoryCl02ListDto();    // new로 listDto 생성
-        List<ClassCategoryCl02ListDto> listDtoList = classCategoryCl02List.stream().map( m -> classCategoryCl02ListDto.toDto( m ) ).collect( Collectors.toList() );
-        
-        // 카테고리 값 뿌리기 위한  setting
-        for(ClassCategoryCl02ListDto dto : listDtoList) {
-        	
-        	CategoryDto categoryDto = new CategoryDto();
-            
-            categoryDto.setCategorySn(dto.getClSn());   // 이 부분이 결국은 html 에서 카테고리검색의 li value 값이 됨
-            categoryDto.setCategoryNm(dto.getClNm());   // 이 부분이 결국은 html 에서 카테고리검색의 li 명칭이 됨
-         
-        	dto.setCategory(categoryDto);
-        }
+        List<ClassCategoryCl02ListDto> listDtoList = classCategoryCl02List
+        		.stream()
+        		.map( m -> classCategoryCl02ListDto.toDto( m ) )				// 1. entity to dto 작업
+        		.map( m -> createCategory( m ) )                                   // 2. 카테고리 값 뿌리기 위한  setting
+                .collect( Collectors.toList() );								// 3. 1,2 과정을 거친 후 toList로 전환
         
         return listDtoList;
     }
@@ -158,6 +147,29 @@ public class ClassCategoryCl02Service {
         
         // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
         classCategoryCl02Repository.deleteById( pk );    // Entity 의 @SQLDelete 를 수행
+    }
+    
+    
+    
+    
+    
+    // ================================== UTIL ========================================
+    // ================================== UTIL ========================================
+    // ================================== UTIL ========================================
+    
+    
+    private ClassCategoryCl02ListDto createCategory(ClassCategoryCl02ListDto listDto ) {
+        
+        // 카테고리 값 뿌리기 위한  setting
+    	CategoryDto categoryDto = new CategoryDto();
+    	
+    	categoryDto.setCategorySn(listDto.getClSn());   // 이 부분이 결국은 html 에서 카테고리검색의 li value 값이 됨
+    	categoryDto.setCategoryNm(listDto.getClNm());   // 이 부분이 결국은 html 에서 카테고리검색의 li 명칭이 됨
+    	
+    	listDto.setCategory(categoryDto);
+        
+        return listDto;
+        
     }
     
     

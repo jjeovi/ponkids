@@ -58,6 +58,8 @@ public class LctreAdmController {
         
         // url 에 classSn 담겨 있을 시 classSn 유효성 체크
         if ( classSn != null && classSn != 0 ) {
+        	// 1. class 정보가 있을 경우 : classDto 의 정보로 categoryhDto 의 lv1~lv3 까지 setting . ( lv1 : 카테고리, lv2 : 커리큘럼, lv3 : 클래스명 ) , lv4 는 listDto 에서 존재여부 체크하여 있으면 setting
+
             // 공통 유효성 체크 함수
             Map<String, Object> classValidCheck = classValidCheck( classSn, mcd, model );
             boolean validResult = ( boolean ) classValidCheck.get( "validResult" ); // 체크 결과
@@ -71,10 +73,16 @@ public class LctreAdmController {
                 ClassModDto classDto = ( ClassModDto ) classValidCheck.get( "classDto" );
                 
                 if ( classDto != null ) {
-                    // 클래스가 존재할 경우 분류 (lv1,lv2) 값 세팅을 미리 해줌
+                    // 클래스가 존재할 경우 분류 (lv1,lv2..) 값 세팅을 미리 해줌
                     listDto.setCategory( createCategory(listDto,classDto) );
                 }
             }
+        } else {
+        	// 2. class 정보가 없을 경우 : listDto의 lv1,lv2만 체크하면 됨 (lv3 or lv4 가 만약 있다면 classDto 가 있는 url 로 redirect 되었을 테니, 이 경우는 생각하지 않아도 됨.)
+        	//    listDto의 lv1,lv2 값이 있다면 체크하여 categoryDto 에 setting
+        	
+        	listDto.setCategory( createCategory(listDto, null ) );
+        	
         }
         
         // 검색 조건 searchDTO 정렬하여 redirect function
@@ -82,6 +90,7 @@ public class LctreAdmController {
         // 1. 카테고리, 커리큘럼 까지만 검색 (~lv2) 했을시, mapping 조건 : BASIC_PATH + "/{mcd}/list"
         // 2. 클래스 까지 검색했을 시 , : BASIC_PATH + "/{mcd}/{classSn}/list"
         schConditionCombineForResetUrl( listDto, classSn, mcd, model );
+        
         
         // 카테고리 리스트 ( lv1 )
         // 클래스 카테고리 분류1 list setting
@@ -110,6 +119,7 @@ public class LctreAdmController {
                 model.addAttribute( "cateLv4List", classWeekService.getListByClassSn( listDto.getCategory().getLv3Sn() ) );   // lv4 list 생성 (클래스 요일 classSn으로 검색 )
             }
         }
+        
         
         // 검색 dto setting
         model.addAttribute( "searchDTO", listDto );
@@ -436,10 +446,10 @@ public class LctreAdmController {
             }
             
             // classSn으로 class 정보 조회
-            if ( classSn != null && schCategoryDto.getLv3Sn() == classSn ) {
+            if ( classSn != null && schCategoryDto.getLv3Sn().equals(classSn) ) {
                 //  1-1. classSn과 schCategoryDto.getLv3Sn() 값이 같은 경우 : 바로 return
-                
-            } else if ( classSn != null && schCategoryDto.getLv3Sn().equals(classSn) ) {
+                return;
+            } else if ( classSn != null && ! (schCategoryDto.getLv3Sn().equals(classSn)) ) {
                 //  1-2. classSn과 schCategoryDto.getLv3Sn() 값이 다른 경우 : BASIC_PATH + "/{mcd}/{classSn}/list" 경로로 redirect 한다.
                 
                 try {
@@ -499,61 +509,146 @@ public class LctreAdmController {
         }
     }
     
+    
     // create Category 함수
     private CategoryDto createCategory( LctreListDto listDto, ClassModDto classDto ) {
+    	// 1. class 정보가 있을 경우 : classDto 의 정보로 categoryhDto 의 lv1~lv3 까지 setting . ( lv1 : 카테고리, lv2 : 커리큘럼, lv3 : 클래스명 ) , lv4 는 listDto 에서 존재여부 체크하여 있으면 setting
+    	// 2. class 정보가 없을 경우 : listDto의 lv1,lv2만 체크하면 됨 (lv3 or lv4 가 만약 있다면 classDto 가 있는 url 로 redirect 되었을 테니, 이 경우는 생각하지 않아도 됨.)
+    	//    listDto의 lv1,lv2 값이 있다면 체크하여 categoryDto 에 setting
         
         CategoryDto categoryDto = new CategoryDto();
         
-        // 분류 선택값 set 및 리스트 미리 setting 작업
-        if ( classDto.getCtgrySn() != null ) {
-            
-            // 분류 제목 설정 변수 선언
-            String categoryNm = "";
-            
-            // ------- S : 분류 lv1 선택값 매핑 및 분류 lv2 li 리스트 생성 작업 : 커리큘럼 리스트 ( lv2 )
-            categoryDto.setLv1Sn( classDto.getCtgrySn() );    // searchDTO 에 lv1 Sn 매칭
-            // ctgrySn 값으로 카테고리명 조회
-            ClassCategoryCl01ModDto classCategoryCl01ModDto = classCategoryCl01Service.findById( classDto.getCtgrySn() );
-            categoryDto.setLv1Nm( classCategoryCl01ModDto.getClNm() );
-            categoryNm += classCategoryCl01ModDto.getClNm();
-            
-            
-            // ------- S : 분류 lv2 선택값 매핑 및 분류 lv3 li 리스트 생성 작업 : 클래스 리스트 ( lv3 )
-            if ( classDto.getCrseSn() == null ) {
-                // 커리큘럼Sn 이 null 일 경우, 0 으로 setting
-                categoryDto.setLv2Sn( ( long ) 0 );
-                categoryDto.setLv2Nm( "전체" );
-                categoryNm += " > " + "전체";
-            } else {
-                categoryDto.setLv2Sn( classDto.getCrseSn() );     // searchDTO 에 lv2 Sn 매칭
-                // crseSn 값으로 커리큘럼명 조회
-                ClassCategoryCl02ModDto classCategoryCl02ModDto = classCategoryCl02Service.findById( classDto.getCrseSn() );
-                categoryDto.setLv2Nm( classCategoryCl02ModDto.getClNm() );
-                categoryNm += "> " + classCategoryCl02ModDto.getClNm();
-            }
-            
-            // ------- S : 분류 lv3 선택값 매핑 및 분류 lv4 li 리스트 생성 작업 : 요일 리스트 ( lv4 )
-            categoryDto.setLv3Sn( classDto.getClassSn() );
-            categoryDto.setLv3Nm( classDto.getClassSj() );
-            categoryNm += " > " + classDto.getClassSj();
-            
-            // lv4 setting
-            if ( listDto.getCategory() != null && listDto.getCategory().getLv4Sn() != null ) {
-                categoryDto.setLv4Sn( listDto.getCategory().getLv4Sn() );
-                // lv4Sn 값으로 요일명 조회
-                CmmnCdDetailModDto cmmnCdDetailModDto = cmmnCdDetailService.findById( listDto.getCategory().getLv4Sn() );
-                categoryDto.setLv4Nm( cmmnCdDetailModDto.getCdDetailNm() );
-                categoryNm += " > " + cmmnCdDetailModDto.getCdDetailNm();
-            }
-            
-            categoryDto.setCategoryNm( categoryNm );        // category 제목 ( 분류에 뿌리기 위함 [ lctre/list.html ] )
-            
-            // listDto 에 category setting
-            listDto.setCategory( categoryDto );             // listDto 에 categoryDto setting
-        }
+        // 분류 제목 설정 변수 선언
+        String categoryNm = "";
         
-        return categoryDto;
+        if ( classDto != null ) {
+        	// 1. class 정보가 있을 경우 : classDto 의 정보로 categoryhDto 의 lv1~lv3 까지 setting . ( lv1 : 카테고리, lv2 : 커리큘럼, lv3 : 클래스명 ) , lv4 는 listDto 에서 존재여부 체크하여 있으면 setting
+        	
+        	 // 분류 선택값 set 및 리스트 미리 setting 작업
+            if ( classDto.getCtgrySn() != null ) {
+            	
+                // ------- S : 분류 lv1 선택값 매핑 및 분류 lv2 li 리스트 생성 작업 : 커리큘럼 리스트 ( lv2 )
+                categoryDto.setLv1Sn( classDto.getCtgrySn() );    // searchDTO 에 lv1 Sn 매칭
+                // ctgrySn 값으로 카테고리명 조회
+                ClassCategoryCl01ModDto classCategoryCl01ModDto = classCategoryCl01Service.findById( categoryDto.getLv1Sn() );
+                categoryDto.setLv1Nm( classCategoryCl01ModDto.getClNm() );
+                categoryNm += classCategoryCl01ModDto.getClNm();
+                
+                
+                // ------- S : 분류 lv2 선택값 매핑 및 분류 lv3 li 리스트 생성 작업 : 클래스 리스트 ( lv3 )
+                if ( classDto.getCrseSn() == null ) {
+                    // 커리큘럼Sn 이 null 일 경우, 0 으로 setting
+                    categoryDto.setLv2Sn( ( long ) 0 );
+                    categoryDto.setLv2Nm( "전체" );
+                    categoryNm += " > " + "전체";
+                } else {
+                    categoryDto.setLv2Sn( classDto.getCrseSn() );     // searchDTO 에 lv2 Sn 매칭
+                    // crseSn 값으로 커리큘럼명 조회
+                    ClassCategoryCl02ModDto classCategoryCl02ModDto = classCategoryCl02Service.findById( categoryDto.getLv2Sn() );
+                    categoryDto.setLv2Nm( classCategoryCl02ModDto.getClNm() );
+                    categoryNm += "> " + classCategoryCl02ModDto.getClNm();
+                }
+                
+                // ------- S : 분류 lv3 선택값 매핑 및 분류 lv4 li 리스트 생성 작업 : 요일 리스트 ( lv4 )
+                categoryDto.setLv3Sn( classDto.getClassSn() );
+                categoryDto.setLv3Nm( classDto.getClassSj() );
+                categoryNm += " > " + classDto.getClassSj();
+                
+                // lv4 setting
+                if ( listDto.getCategory() != null && listDto.getCategory().getLv4Sn() != null ) {
+                	
+                	if ( listDto.getCategory().getLv4Sn().equals( (long) 0 ) ) {
+                		categoryDto.setLv4Sn( listDto.getCategory().getLv4Sn() );
+                		categoryDto.setLv4Nm( "전체" );
+                		categoryNm += " > " + "전체";
+                		
+                	} else {
+                		categoryDto.setLv4Sn( listDto.getCategory().getLv4Sn() );
+                        // lv4Sn 값으로 요일명 조회
+                        CmmnCdDetailModDto cmmnCdDetailModDto = cmmnCdDetailService.findById( listDto.getCategory().getLv4Sn() );
+                        categoryDto.setLv4Nm( cmmnCdDetailModDto.getCdDetailNm() );
+                        categoryNm += " > " + cmmnCdDetailModDto.getCdDetailNm();
+                		
+                	}
+                    
+                }
+                
+                categoryDto.setCategoryNm( categoryNm );        // category 제목 ( 분류에 뿌리기 위함 [ lctre/list.html ] )
+            }
+            
+            return categoryDto;
+        	
+        } else {
+        	// 2. class 정보가 없을 경우 : listDto의 lv1,lv2만 체크하면 됨 (lv3 or lv4 가 만약 있다면 classDto 가 있는 url 로 redirect 되었을 테니, 이 경우는 생각하지 않아도 됨.)
+        	//    listDto의 lv1,lv2 값이 있다면 체크하여 categoryDto 에 setting
+        	
+        	// lv1 setting
+        	// ------- S : 분류 lv1 선택값 매핑 및 분류 lv2 li 리스트 생성 작업 : 커리큘럼 리스트 ( lv2 )
+            if ( listDto.getCategory() != null && listDto.getCategory().getLv1Sn() != null ) {
+            	
+            	if ( listDto.getCategory().getLv1Sn().equals( (long) 0) ) {
+            		// ctgrySn(카테고리일련번호) ( == listDto.getCategory().getLv1Sn() ) 의 값이 0 일 때
+            		listDto.getCategory().setLv1Nm( "전체" );
+            		categoryNm += "전체";
+            		
+            	} else {
+            		// 그 외
+            		
+            		ClassCategoryCl01ModDto classCategoryCl01ModDto = classCategoryCl01Service.findById( listDto.getCategory().getLv1Sn() );
+                    listDto.getCategory().setLv1Nm( classCategoryCl01ModDto.getClNm() );
+                    categoryNm += classCategoryCl01ModDto.getClNm();
+            	}
+            }
+            
+            // lv2 setting
+            // ------- S : 분류 lv2 선택값 매핑 및 분류 lv3 li 리스트 생성 작업 : 클래스 리스트 ( lv3 )
+            if ( listDto.getCategory() != null && listDto.getCategory().getLv2Sn() != null ) {
+            	
+            	if ( listDto.getCategory().getLv2Sn().equals( (long) 0 ) ) {
+            		// ctgrySn(카테고리일련번호) ( == listDto.getCategory().getLv1Sn() ) 의 값이 0 일 때 
+                    listDto.getCategory().setLv2Nm( "전체" );
+                    categoryNm += " > " + "전체";
+                } else {
+                	// 그 외
+                	
+                    ClassCategoryCl02ModDto classCategoryCl02ModDto = classCategoryCl02Service.findById( listDto.getCategory().getLv2Sn() );
+                    listDto.getCategory().setLv2Nm( classCategoryCl02ModDto.getClNm() );
+                    categoryNm += "> " + classCategoryCl02ModDto.getClNm();
+                }
+            }
+            
+            // lv3 setting ( 전체로 선택했을 시 (0일경우) 에만 확인 ) 
+            if ( listDto.getCategory() != null && listDto.getCategory().getLv3Sn() != null ) {
+            	
+            	if ( listDto.getCategory().getLv3Sn().equals( (long) 0 ) ) {
+                    listDto.getCategory().setLv3Nm( "전체" );
+                    categoryNm += " > " + "전체";
+                }
+            }
+            
+            // lv3 setting ( 전체로 선택했을 시 (0일경우) 에만 확인 ) 
+            if ( listDto.getCategory() != null && listDto.getCategory().getLv4Sn() != null ) {
+            	
+            	if ( listDto.getCategory().getLv4Sn().equals( (long) 0 ) ) {
+            		listDto.getCategory().setLv4Nm( "전체" );
+            		categoryNm += " > " + "전체";
+            	} else {
+                    // lv4Sn 값으로 요일명 조회
+                    CmmnCdDetailModDto cmmnCdDetailModDto = cmmnCdDetailService.findById( listDto.getCategory().getLv4Sn() );
+                    listDto.getCategory().setLv4Nm( cmmnCdDetailModDto.getCdDetailNm() );
+                    categoryNm += " > " + cmmnCdDetailModDto.getCdDetailNm();
+            		
+            	}
+            }
+            
+            
+            if(listDto.getCategory() != null ) {
+            	listDto.getCategory().setCategoryNm( categoryNm );        // category 제목 ( 분류에 뿌리기 위함 [ lctre/list.html ] )
+            	return listDto.getCategory();
+            } else {
+            	return null;
+            }
+        }
     }
-    
     
 }

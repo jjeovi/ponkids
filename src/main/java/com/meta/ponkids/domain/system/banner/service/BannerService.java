@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -63,18 +64,21 @@ public class BannerService {
         BannerModDto targetDto = new BannerModDto();
         targetDto = targetDto.toDto( banner );
         
-        // TODO target object 에 수정사항 set	
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
-//        if ( StringUtils.hasText( modDto.getUserNm() ) ) targetDto.setUserNm( modDto.getUserNm() );          	// 이름
-//        if ( StringUtils.hasText( modDto.getGender() ) ) targetDto.setGender( modDto.getGender() );          	// 성별
-//        if ( StringUtils.hasText( modDto.getBrdtDate() ) ) targetDto.setBrdtDate( modDto.getBrdtDate() );		// 생년월일
-//        if ( StringUtils.hasText( modDto.getTelNo() ) ) targetDto.setTelNo( modDto.getTelNo() );            	// 연락처
-//        if ( StringUtils.hasText( modDto.getResideArea() ) ) targetDto.setResideArea( modDto.getResideArea() );	// 거주지역
-//        if ( StringUtils.hasText( modDto.getRdnmAdr() ) ) targetDto.setRdnmAdr( modDto.getRdnmAdr() );        	// 주소
-//        if ( StringUtils.hasText( modDto.getZip() ) ) targetDto.setZip( modDto.getZip() );                		// 우편번호
-//        if ( StringUtils.hasText( modDto.getMngrYn() ) ) targetDto.setMngrYn( modDto.getMngrYn() );          	// 관리자여부
-
-//        targetDto.setAtchFileSn( modDto.getAtchFileSn() );          											// 첨부파일 (첨부파일은 Null이어도 변경)
+        if ( StringUtils.hasText( modDto.getBannerClCd() ) ) targetDto.setBannerClCd( modDto.getBannerClCd() );				// 배너 분류
+        if ( StringUtils.hasText( modDto.getBannerClDetailCd() ) ) targetDto.setBannerClDetailCd( modDto.getBannerClDetailCd() );	// 배너 상세분류
+        targetDto.setAtchFileSn( modDto.getAtchFileSn() );																	// 배너 이미지
+        if ( StringUtils.hasText( modDto.getBannerNm() ) ) targetDto.setBannerNm( modDto.getBannerNm() );					// 배너 이름
+        if ( modDto.getBannerExpsrSeq() != null ) targetDto.setBannerExpsrSeq( modDto.getBannerExpsrSeq() );				// 배너 순번
+        targetDto.setBannerDc( modDto.getBannerDc() );																		// 배너 설명
+        if ( StringUtils.hasText( modDto.getClassMapngYn() ) ) targetDto.setClassMapngYn( modDto.getClassMapngYn() );		// 클래스 매핑 여부
+        if ( modDto.getClassSn() != null ) targetDto.setClassSn( modDto.getClassSn() );										// 클래스 sn
+        if ( StringUtils.hasText( modDto.getUrl() ) ) targetDto.setUrl( modDto.getUrl() );									// url
+        if ( StringUtils.hasText( modDto.getBannerPdSetYn() ) ) targetDto.setBannerPdSetYn( modDto.getBannerPdSetYn() );	// 배너 표시 기간 여부
+        if ( StringUtils.hasText( modDto.getBannerBeginDt() ) ) targetDto.setBannerBeginDt( modDto.getBannerBeginDt() );	// 배너 표시 시작 일시
+        if ( StringUtils.hasText( modDto.getBannerEndDt() ) ) targetDto.setBannerEndDt( modDto.getBannerEndDt() );			// 배너 표시 시작 일시
+        if ( StringUtils.hasText( modDto.getUseYn() ) ) targetDto.setUseYn( modDto.getUseYn() );							// 사용여부
+        
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );

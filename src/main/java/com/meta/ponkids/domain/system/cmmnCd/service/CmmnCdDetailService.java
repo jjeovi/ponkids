@@ -1,6 +1,19 @@
 package com.meta.ponkids.domain.system.cmmnCd.service;
 
-import com.meta.ponkids.domain.cls.dto.ClassListDto;
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import com.meta.ponkids.domain.system.banner.dto.BannerModDto;
+import com.meta.ponkids.domain.system.banner.entity.Banner;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailListDto;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailModDto;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailSaveDto;
@@ -11,17 +24,8 @@ import com.meta.ponkids.domain.system.cmmnCd.repository.CmmnCdRepository;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -60,9 +64,9 @@ public class CmmnCdDetailService {
             CmmnCdDetailListDto cmmnCdDetailListDto = new CmmnCdDetailListDto();    // new로 listDto 생성
             List<CmmnCdDetailListDto> cmmnCdDetailListDtoList = cmmnCdDetailList
                     .stream()
-                    .map( m -> cmmnCdDetailListDto.toDto( m ) )                     // entity to dto 작업
-                    .map( m -> setCategory( m ) )                                   // 카테고리 값 뿌리기 위한  setting
-                    .collect( Collectors.toList() );
+                    .map( m -> cmmnCdDetailListDto.toDto( m ) )                     // 1. entity to dto 작업
+                    .map( m -> createCategory( m ) )                                   // 2. 카테고리 값 뿌리기 위한  setting
+                    .collect( Collectors.toList() );								// 3. 1,2 과정을 거친 후 toList로 전환
             
             return cmmnCdDetailListDtoList;
         } else {
@@ -79,6 +83,17 @@ public class CmmnCdDetailService {
         modDto = modDto.toDto( cmmnCdDetail );
         
         return modDto;
+    }
+    
+    
+    public CmmnCdDetailModDto findTop1ByCdNmAndCdDetailVal1( String cdNm, String cdDetailVal1 ) {    // TODO 타입 체크 필요
+    	
+    	CmmnCdDetail cmmnCdDetail = cmmnCdDetailRepository.findTop1ByCdNmAndCdDetailVal1( cdNm, cdDetailVal1 ).orElse( null );
+    	
+    	CmmnCdDetailModDto modDto = new CmmnCdDetailModDto();
+    	modDto = modDto.toDto( cmmnCdDetail );
+    	
+    	return modDto;
     }
     
     @Transactional
@@ -121,7 +136,15 @@ public class CmmnCdDetailService {
         cmmnCdDetailRepository.deleteById( pk );    // Entity 의 @SQLDelete 를 수행
     }
     
-    private CmmnCdDetailListDto setCategory(CmmnCdDetailListDto listDto ) {
+    
+    
+    
+    // ================================== UTIL ========================================
+    // ================================== UTIL ========================================
+    // ================================== UTIL ========================================
+    
+    
+    private CmmnCdDetailListDto createCategory(CmmnCdDetailListDto listDto ) {
         
         // 카테고리 값 뿌리기 위한  setting
         CategoryDto categoryDto = new CategoryDto();

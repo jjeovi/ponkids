@@ -23,6 +23,8 @@ public class BannerModDto {
     
     private Long    atchFileSn;             // 첨부 파일 일련번호
     
+    private Long    atchFileSnOri;          // 첨부 파일 일련번호(비교용)
+    
     private String  url;                    // 클릭시 이동 URL
     
     private String  classMapngYn;           // 클래스 매핑 여부

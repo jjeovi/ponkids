@@ -1,5 +1,16 @@
 package com.meta.ponkids.domain.cls.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.meta.ponkids.domain.cls.dto.ClassDto;
 import com.meta.ponkids.domain.cls.dto.ClassWeekListDto;
 import com.meta.ponkids.domain.cls.dto.ClassWeekModDto;
@@ -9,16 +20,8 @@ import com.meta.ponkids.domain.cls.repository.ClassWeekRepository;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -58,15 +61,7 @@ public class ClassWeekService {
         List<ClassWeekListDto> listDtos = classWeekRepository.getListByClassSn( pk );
         
         // 카테고리 값 뿌리기 위한  setting
-        for( ClassWeekListDto dto : listDtos) {
-            
-            CategoryDto categoryDto = new CategoryDto();
-            
-            categoryDto.setCategorySn(dto.getCdDetailSn());    // 이 부분이 결국은 html 에서 카테고리검색의 li value 값이 됨
-            categoryDto.setCategoryNm(dto.getClassDayNm());    // 이 부분이 결국은 html 에서 카테고리검색의 li 명칭이 됨
-            
-            dto.setCategory(categoryDto);
-        }
+        for( ClassWeekListDto dto : listDtos) dto = createCategory(dto);
         
     	return listDtos;
     }
@@ -127,6 +122,26 @@ public class ClassWeekService {
     public void deleteAllByClassSn(Long pk ) {
         
         classWeekRepository.deleteAllByClassSn(pk);
+        
+    }
+    
+    
+    // ================================== UTIL ========================================
+    // ================================== UTIL ========================================
+    // ================================== UTIL ========================================
+    
+    
+    private ClassWeekListDto createCategory(ClassWeekListDto listDto ) {
+        
+        // 카테고리 값 뿌리기 위한  setting
+        CategoryDto categoryDto = new CategoryDto();
+        
+        categoryDto.setCategorySn(listDto.getCdDetailSn());    // 이 부분이 결국은 html 에서 카테고리검색의 li value 값이 됨
+        categoryDto.setCategoryNm(listDto.getClassDayNm());    // 이 부분이 결국은 html 에서 카테고리검색의 li 명칭이 됨
+        
+        listDto.setCategory(categoryDto);
+        
+        return listDto;
         
     }
     

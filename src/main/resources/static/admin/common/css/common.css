@@ -5489,6 +5489,8 @@ input[type="radio"][disabled]:checked+label{
   padding-right: 10px;
   margin-top: 7px;
   border-radius: 10px;
+  white-space: nowrap;
+  transition: 0.3s;
 }
 
 .category-list-area .category-group-box .data-group li {
@@ -5498,14 +5500,38 @@ input[type="radio"][disabled]:checked+label{
     padding-left: 5px;
     padding-right: 5px;
     position: relative;
+    min-width: 100%;
+    width: max-content;
 }
+
+
+
+/* 카테고리 글자 옆으로 흐르게 하기  */
+@keyframes textLoop {
+    0% {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+    }
+    100% {
+      -webkit-transform: translate3d(calc(-100% + 245px), 0, 0);
+      transform: translate3d(calc(-100% + 245px), 0, 0);
+    }
+  }
 
 .category-list-area .data-group li:hover {
     background-color : #f3ecf6;
 }
 
+.category-list-area .data-group li.flow-text:hover {
+    animation: textLoop 6s linear infinite;
+}
+
 .category-list-area .data-group li.on {
     background-color : #ede5f0;
+}
+
+.category-list-area .data-group li.flow-text.on {
+    animation: textLoop 4s linear infinite;
 }
 
 .category-list-area .category-group-box .data-group li:after {
@@ -5761,3 +5787,5 @@ input[type="checkbox"][disabled] + label{
   max-height:50px;
   object-fit : cover;
 }
+
+

@@ -1,5 +1,6 @@
 const emailPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // 이메일 유효성 검사
 var cateSchData = {};   // 전역변수 설정 (검색값을 계속 기억)
+var categoryLiMaxWidth = 280;
 
 
 // ------------- function () 함수 실행  호출시점 : DOM Tree 생성 완료 후 -----------------
@@ -46,6 +47,19 @@ $( function () {
         } );
 
     } );
+    
+    
+    
+    // .category-group-box .data-group li 안의 텍스트 를 체크해서, 너비가 250 이상이면 특정 class 추가하기
+    $( ".category-group-box .data-group li" ).each( function ( i, item ) {
+		var textWidth = getTextWidth( $(this).text().replace(/\n/g, "").split("  ").join("") );
+		console.log($(this).text() +  ":" + textWidth );
+		if ( textWidth > categoryLiMaxWidth ) {
+			$(this).addClass("flow-text");
+		}
+    } );
+    
+    
 
 
 } );
@@ -165,6 +179,15 @@ function fileChange( e ) {
 
         // id값 제거
         parent.children( "[name='atchFileSn']" ).remove();
+        
+        // 파일 업로드 액션 여부 체크 
+        if ( $("[name='fileAtchActYn']").length ) {	// 해당 name 으로 된 input 항목 있을 때만 실행
+        	// 해당 여부의 값을 Y 로 변경
+        	if ( $("[name='fileAtchActYn']").val() != 'Y' ) {
+				$("[name='fileAtchActYn']").val("Y");
+			}
+			
+		}
 
         if ( window.FileReader && $( e )[0].files[0] != null ) {
 
@@ -279,7 +302,7 @@ function getCateNextLvList( url, e ) {
                 contentType: "application/json",
                 success: function ( result ) {
                     // return type : List<CategoryDto>
-                    var allYn = $ul.data( 'allYn' );
+                    var nextStepAllYn = $ul.data( 'nextStepAllYn' );
                     var nextStepLiOnclickParamUrl = $ul.data( 'nextStepLiOnclickParamUrl' );
 
                     if ( nextStepLiOnclickParamUrl != null && nextStepLiOnclickParamUrl != '' ) {
@@ -288,16 +311,24 @@ function getCateNextLvList( url, e ) {
                         url = '';
                     }
 
-                    if ( allYn != null && allYn == 'Y' ) {
+                    if ( nextStepAllYn != null && nextStepAllYn == 'Y' ) {
                         $( ".category-list-area .category-group-box ul" ).eq( ulNum + 1 ).append(
                             $( "<li>" ).attr( "onclick", "getCateNextLvList('" + url + "', this )" ).attr( "value", "" ).append( "전체" )
                         );
                     }
                     if( result.resultList != null && result.resultList.length > 0 ) {
 		                for ( let item of result.resultList ) {
+							var flowText = "" ;
+							var textWidth = getTextWidth( item.category['categoryNm'].replace(/\n/g, "").split("  ").join("") );
+							console.log(item.category['categoryNm'] +  ":" + textWidth );
+							if ( textWidth > categoryLiMaxWidth ) {
+								flowText = "flow-text";
+							}
+							
 		                    $( ".category-list-area .category-group-box ul" ).eq( ulNum + 1 ).append(
-		                        $( "<li>" ).attr( "onclick", "getCateNextLvList('" + url + "', this )" ).attr( "value", item.category['categorySn'] ).append( item.category['categoryNm'] )
+		                        $( "<li>" ).attr( "onclick", "getCateNextLvList('" + url + "', this )" ).attr( "value", item.category['categorySn'] ).attr("class", flowText).append( item.category['categoryNm'] )
 		                    );
+		                    
 		                }
                     }
                 }
@@ -989,3 +1020,15 @@ function cateItemSet( searchDTO ){
 	
 	
 }
+
+this.getTextWidth = function(text, font){		
+	if(font == null || font == '' || font == 'undefined' ) {
+		font = 'normal normal 400 normal 19.95px / 33px NotoKrR' ;
+	}
+    var canvas = this.canvas ||
+        (this.canvas = document.createElement("canvas"));
+    var context = canvas.getContext("2d");
+    context.font = font;
+    var metrics = context.measureText(text);
+    return metrics.width;
+};

@@ -385,7 +385,6 @@
                                     <div class="upload-display">
                                         <div class="upload-thumb-wrap">
                                             <img alt="프로필 이미지" class="upload-thumb noimg" 		th:if = 	"${targetDto.atchFileSn == null}" >
-<!--                                             <img alt="프로필 이미지" class="upload-thumb" 				th:unless = "${targetDto.atchFileSn == null}" th:src="@{/getImage/} + ${targetDto.atchFileSn}"  > -->
                                             <img alt="프로필 이미지" class="upload-thumb" 				th:unless = "${targetDto.atchFileSn == null}" th:src="@{/getImage(atchFileSn=${targetDto.atchFileSn})}"  >
                                         </div>
                                     </div>

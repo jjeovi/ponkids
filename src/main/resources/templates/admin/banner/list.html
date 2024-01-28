@@ -14,7 +14,6 @@
 </script>
 <!-- E : Javascript functions	-->
 <th:block layout:fragment="content">
-
     <!-- S : 분류 영역 -->
     <div class="div_menu_detail row">
         <div class="col-md-12 col-sm-12 ">
@@ -24,8 +23,12 @@
                     <div class="category-group-box">
                         <div class="data-group">
                             <span class="category-title">분류</span>
-                            <ul>
+                            <ul data-next-step-all-yn="Y">
                                 <!--  lv1 -->
+                                <li onclick="getCateNextLvList('/admin/banner/live/getBannerClDetailListByBannerClCdAjax', this );"
+                                    th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'on'"
+                                    value="0">전체
+                                </li>
                                 <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('/admin/banner/live/getBannerClDetailListByBannerClCdAjax', this );"
                                     th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.cdDetailSn ) } ? 'on'"
                                     th:value="${data.cdDetailSn}">[[${data.cdDetailNm}]]
@@ -34,7 +37,7 @@
                         </div>
                         <div class="data-group">
                             <span class="category-title">상세분류</span>
-                            <ul data-all-yn="Y" data-next-step-li-onclick-param-url=""> <!--  data-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
+                            <ul> <!--  data-next-step-all-yn : 다음 단계의 ul 에서의 '전체' 항목 설정할지 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
                                 <!--  lv2 -->
                                 <th:block th:if="${cateLv2List ne null}">
                                     <li onclick="getCateNextLvList('', this );"
@@ -42,8 +45,8 @@
                                         value="0">전체
                                     </li>
                                     <li onclick="getCateNextLvList('', this );"
-                                        th:each="data : ${cateLv2List}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == data.clSn ) } ? 'on'"
-                                        th:value="${data.clSn}">[[${data.clNm}]]
+                                        th:each="data : ${cateLv2List}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == data.cdDetailSn ) } ? 'on'"
+                                        th:value="${data.cdDetailSn}">[[${data.cdDetailNm}]]
                                     </li>
                                 </th:block>
                             </ul>
@@ -70,7 +73,6 @@
         </div>
     </div>
     <!-- E : 분류 영역 -->
-
     <!-- S: content -->
     <div class="x_panel">
         <div class="x_content">
@@ -84,7 +86,12 @@
                     </div>
                     <div class="col-md-11 col-sm-10 mb_10p">
                         <div class="btn-group float-right" role="group">
-                            <select class="form-control" name="mngrConfmYn">
+                            <select class="form-control" name="bannerPdSetYn">
+                                <option value="">기간설정</option>
+                                <option value="Y" th:selected=" ${searchDTO.bannerPdSetYn} == 'Y' ">기간</option>
+                                <option value="N" th:selected=" ${searchDTO.bannerPdSetYn} == 'N' ">상시</option>
+                            </select>
+                            <select class="form-control" name="useYn">
                                 <option value="">사용여부</option>
                                 <option value="Y" th:selected=" ${searchDTO.useYn} == 'Y' ">사용</option>
                                 <option value="N" th:selected=" ${searchDTO.useYn} == 'N' ">미사용</option>
@@ -92,6 +99,7 @@
                             <div class="vl ml_5p"></div>
                             <select class="form-control ml_5p w_55r" name="schOption">
                                 <option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">제목</option>
+                                <option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">url</option>
                                 <!--                                <option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">이름</option>-->
                             </select>
                             <input type="text" name="schCntn" th:value="${searchDTO.schCntn}" class="form-control input-sm" placeholder="검색어 입력" aria-controls="datatable-responsive">
@@ -127,27 +135,27 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
-                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
-                                <td> [[${data.bannerClNm}]] <th:block th:if="${data.bannerClDetailCd != null && data.bannerClDetailCd != '' }"><br/>[ [[${data.bannerClDetailNm}]] ] </th:block> </td>
-                                <td th:text="${data.bannerExpsrSeq}"></td>
-                                <td>
-                                    <a class="b-link" th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.bannerSn} ) }" th:text="${data.bannerNm}">
-                                    </a>
-                                </td>
-                                <td th:text="${data.url}"></td>
-                                <td>
-                                    <img th:alt="|배너_${data.bannerNm}|" class="upload-thumb img-table"  th:if = "${data.atchFileSn != null}" th:src="@{/getImage(atchFileSn=${data.atchFileSn})}"  >
-                                </td>
-                                <td th:text="${data.bannerPdSetYnNm}"></td>
-                                <td th:text="${data.bannerExpsrPeriod}"></td>
-                                <td th:text="${data.useYn}"></td>
-                            </tr>
-                            <tr th:unless = "${!resultList.isEmpty()}">
-                                <td class="noDataTd" style="display: none;">
-                                    데이터가 없습니다.
-                                </td>
-                            </tr>
+	                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
+	                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
+	                                <td> [[${data.bannerClNm}]] <th:block th:if="${data.bannerClDetailCd != null && data.bannerClDetailCd != '' }"><br/>[ [[${data.bannerClDetailNm}]] ] </th:block> </td>
+	                                <td th:text="${data.bannerExpsrSeq}"></td>
+	                                <td>
+	                                    <a class="b-link" th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.bannerSn} ) }" th:text="${data.bannerNm}">
+	                                    </a>
+	                                </td>
+	                                <td th:text="${data.url}"></td>
+	                                <td>
+	                                    <img th:alt="|배너_${data.bannerNm}|" class="upload-thumb img-table"  th:if = "${data.atchFileSn != null}" th:src="@{/getImage(atchFileSn=${data.atchFileSn})}"  >
+	                                </td>
+	                                <td th:text="${data.bannerPdSetYnNm}"></td>
+	                                <td th:text="${data.bannerExpsrPeriod}"></td>
+	                                <td th:text="${data.useYn}"></td>
+	                            </tr>
+	                            <tr th:unless = "${!resultList.isEmpty()}">
+	                                <td class="noDataTd" style="display: none;">
+	                                    데이터가 없습니다.
+	                                </td>
+	                            </tr>
                             </tbody>
                         </table>
                     </div>

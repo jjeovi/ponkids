@@ -89,9 +89,11 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                 .where(
                         eqCateLv1( listDto.getCategory() ),
                         eqCateLv2( listDto.getCategory() ),
+                        eqUseYn( listDto.getUseYn() ),
+                        eqBannerPdSetYn( listDto.getBannerPdSetYn() ),
                         eqOption( listDto.getSchOption(), listDto.getSchCntn() )
                 )
-//                .orderBy( banner.bannerSn.desc())
+                .orderBy( banner.bannerSn.desc())
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )
                 .fetch();
@@ -118,6 +120,22 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
     // 카테고리 lv 1 검색 옵션
     // 배너 분류 검색
     // join_bannerClCd.cdDetailSn == lv1sn
+    private BooleanExpression eqUseYn( String useYn  ) {
+    	return ( StringUtils.hasText( useYn ) ) ? banner.useYn.eq( useYn ) : null;
+    }
+    
+    
+    // 카테고리 lv 1 검색 옵션
+    // 배너 분류 검색
+    // join_bannerClCd.cdDetailSn == lv1sn
+    private BooleanExpression eqBannerPdSetYn( String eqBannerPdSetYn ) {
+    	return ( StringUtils.hasText( eqBannerPdSetYn ) ) ? banner.useYn.eq( eqBannerPdSetYn ) : null;
+    }
+    
+    
+    // 카테고리 lv 1 검색 옵션
+    // 배너 분류 검색
+    // join_bannerClCd.cdDetailSn == lv1sn
     private BooleanExpression eqCateLv1( CategoryDto categoryDto ) {
         return ( categoryDto != null && categoryDto.getLv1Sn() != null
                 && categoryDto.getLv1Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? join_bannerClCd.cdDetailSn.eq( categoryDto.getLv1Sn() ) : null;
@@ -137,10 +155,9 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
         if ( StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn ) ) {
             if ( schOption.equals( "A" ) )
                 return banner.bannerNm.contains( schCntn );
-//            else if ( schOption.equals( "B" ) )
-//                return banner.bannerNm.contains( schCntn ); // TODO LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
-//            else return null;
-            return null;            // TODO (build한 이후에 해주세요. 안그럼 에러발생)  실제 구현시에는 해당부분지워주고 위에부분주석풀기
+            else if ( schOption.equals( "B" ) )
+                return banner.url.contains( schCntn ); // TODO LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+            else return null;
         } else {
             return null;
         }

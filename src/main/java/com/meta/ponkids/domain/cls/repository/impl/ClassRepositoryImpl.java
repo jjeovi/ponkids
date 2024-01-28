@@ -254,14 +254,14 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
         }
     }
 
-    // 카테고리 lv 1 검색 옵션
+    // 카테고리 lv 1 검색 옵션 (카테고리)
     // class$.ctgrySn == lv1sn 
     private BooleanExpression eqCateLv1( CategoryDto categoryDto ) {
         return ( categoryDto != null && categoryDto.getLv1Sn() != null
                 && categoryDto.getLv1Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? class$.ctgrySn.eq( categoryDto.getLv1Sn() ) : null;
     }
     
-    // 카테고리 lv 2 검색 옵션
+    // 카테고리 lv 2 검색 옵션 (커리큘럼)
     // class$.crseSn == lv2sn 
     private BooleanExpression eqCateLv2( CategoryDto categoryDto ) {
     	return ( categoryDto != null && categoryDto.getLv2Sn() != null
