@@ -240,11 +240,14 @@
     function submitValidCheck() {
 		
 		// 배너 이미지 첨부파일 유효성 체크
-		if ( $("[name='atchFile']")[0].files[0] == null ) {
-			alert("배너 이미지(첨부파일)를 등록해주세요.");
-			$("[name='atchFile']").focus();
-			return false;
-		}
+        // 배너 이미지는 메인상단배너 분류로 선택시에만 유효성 체크 진행 ( 메인클래스 영역은 클래스에서 등록한 이미지로 자동으로 매핑 )
+        if ( $("#bannerClCd").val() == 'MAIN_TOP') {
+            if ( $( "[name='atchFile']" )[0].files[0] == null ) {
+                alert( "배너 이미지(첨부파일)를 등록해주세요." );
+                $( "[name='atchFile']" ).focus();
+                return false;
+            }
+        }
 		
         // url 클래스 매핑 여부 항목 체크
         // Y 일 경우 url 값 유효성 체크
@@ -300,7 +303,7 @@
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">배너 이미지<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <div class="filebox preview-image">
+                                <div class="filebox preview-image bn-img">
                                     <div class="upload-display">
                                         <div class="upload-thumb-wrap">
                                             <img alt="썸네일 이미지" class="upload-thumb noimg">
@@ -314,7 +317,9 @@
                                             <input type="file" name="atchFile" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
                                         </label>
                                     </div>
-
+                                    <small class="font-gray-dark">
+                                        배너 이미지 사이즈 규격 :  1695 x 580   (px)
+                                    </small>
                                 </div>
                             </div>
                         </div>

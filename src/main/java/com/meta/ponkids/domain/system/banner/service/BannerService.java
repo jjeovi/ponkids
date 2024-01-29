@@ -1,9 +1,9 @@
 package com.meta.ponkids.domain.system.banner.service;
 
-import com.meta.ponkids.domain.system.banner.dto.BannerModDto;
-import com.meta.ponkids.domain.system.banner.entity.Banner;
 import com.meta.ponkids.domain.system.banner.dto.BannerListDto;
+import com.meta.ponkids.domain.system.banner.dto.BannerModDto;
 import com.meta.ponkids.domain.system.banner.dto.BannerSaveDto;
+import com.meta.ponkids.domain.system.banner.entity.Banner;
 import com.meta.ponkids.domain.system.banner.repository.BannerRepository;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +42,13 @@ public class BannerService {
     public Page<BannerListDto> getList( BannerListDto listDto, Pageable pageable ) {
         return bannerRepository.getList( listDto, pageable );
     }
+    
+    
+    // 사용자 main 에 표출할 list
+    public List<BannerListDto> getMainList( String bannerClCd ) {
+        return bannerRepository.getMainList( bannerClCd );
+    }
+    
     
     
     public BannerModDto findById( Long pk ) {    // TODO 타입 체크 필요

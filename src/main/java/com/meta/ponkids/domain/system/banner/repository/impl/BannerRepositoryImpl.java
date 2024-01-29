@@ -8,6 +8,7 @@ import com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,11 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import static com.meta.ponkids.domain.system.banner.entity.QBanner.banner;
+import static com.meta.ponkids.domain.cls.entity.QClass.class$;
 
 @Repository
 @RequiredArgsConstructor
@@ -53,6 +56,10 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                         banner.url,
                         banner.classMapngYn,
                         banner.classSn,
+                        class$.classSj,
+                        class$.classAmt,
+                        class$.classDscntBfeAmt,
+                        class$.thumbAtchFileSn.as("classThumbAtchFileSn"),
                         banner.useYn,
                         banner.bannerPdSetYn,
                         new CaseBuilder()
@@ -73,6 +80,11 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                                 .as( "bannerExpsrPeriod" )
                 ) )
                 .from( banner )
+                .leftJoin( class$ )
+                .on (
+                        class$.classSn.eq( banner.classSn),
+                        class$.delYn.eq("N")
+                )
                 .leftJoin( join_bannerClCd )
                 .on(
                         join_bannerClCd.cdDetailVal1.eq( banner.bannerClCd ),
@@ -113,25 +125,116 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
         
     }
     
+    @Override
+    public List<BannerListDto> getMainList( String bannerClCd ) {
+        // 메인 list
+        
+        // - 1. 사용여부 Y
+        // - 2. 표시기간이 상시
+        // - 3. 표시기간이 기간일 경우 , 현재시간(now) 가 시작일~종료일 기간내에 포함되어있는 배너
+        
+        
+        List<BannerListDto> results = query
+                // select
+                .select( new QBannerListDto(
+                        banner.bannerSn,
+                        banner.bannerClCd,
+                        join_bannerClCd.cdDetailNm.as("bannerClNm"),
+                        banner.bannerClDetailCd,
+                        join_bannerClDetailCd.cdDetailNm.as("bannerClDetailNm"),
+                        banner.bannerExpsrSeq,
+                        banner.bannerNm,
+                        banner.bannerDc,
+                        banner.atchFileSn,
+                        banner.url,
+                        banner.classMapngYn,
+                        banner.classSn,
+                        class$.classSj,
+                        class$.classAmt,
+                        class$.classDscntBfeAmt,
+                        class$.thumbAtchFileSn.as("classThumbAtchFileSn"),
+                        banner.useYn,
+                        banner.bannerPdSetYn,
+                        new CaseBuilder()
+                                .when( banner.bannerPdSetYn.eq( "Y" ) ).then(
+                                        "기간"
+                                ).when( banner.bannerPdSetYn.eq( "N" ) ).then(
+                                        "상시"
+                                ).otherwise( "" )
+                                .as( "bannerPdSetYnNm" ),
+                        banner.bannerBeginDt,
+                        banner.bannerEndDt,
+                        new CaseBuilder()
+                                .when( banner.bannerPdSetYn.eq( "Y" ) ).then(
+                                        banner.bannerBeginDt.concat( " ~ " ).concat( banner.bannerEndDt )
+                                )
+                                .when( banner.bannerPdSetYn.eq( "N" ) ).then( "-" )
+                                .otherwise( "" )
+                                .as( "bannerExpsrPeriod" )
+                ) )
+                .from( banner )
+                .leftJoin( class$ )
+                .on (
+                        class$.classSn.eq( banner.classSn),
+                        class$.delYn.eq("N")
+                )
+                .leftJoin( join_bannerClCd )
+                .on(
+                        join_bannerClCd.cdDetailVal1.eq( banner.bannerClCd ),
+                        join_bannerClCd.cdNm.eq("BANNER_CL_CD"),
+                        join_bannerClCd.delYn.eq( "N" )
+                )
+                .leftJoin( join_bannerClDetailCd )
+                .on(
+                        join_bannerClDetailCd.cdDetailVal1.eq( banner.bannerClDetailCd ),
+                        join_bannerClDetailCd.cdNm.eq("BANNER_CL_DETAIL_CD"),
+                        join_bannerClDetailCd.delYn.eq( "N" )
+                )
+                // where
+                .where(
+                        eqUseYn("Y"),
+                        eqBannerClCd( bannerClCd ),
+                        eqBannerPdSetYn()
+                )
+                .orderBy( banner.bannerExpsrSeq.asc(), banner.regDt.asc())
+                .fetch();
+        
+        return results;
+    }
+    
     
     // -------------------------------- WHERE 검색 옵션 setting --------------------------------
     
     
-    // 카테고리 lv 1 검색 옵션
-    // 배너 분류 검색
-    // join_bannerClCd.cdDetailSn == lv1sn
+    // 사용여부 검색
     private BooleanExpression eqUseYn( String useYn  ) {
     	return ( StringUtils.hasText( useYn ) ) ? banner.useYn.eq( useYn ) : null;
     }
     
     
-    // 카테고리 lv 1 검색 옵션
-    // 배너 분류 검색
-    // join_bannerClCd.cdDetailSn == lv1sn
-    private BooleanExpression eqBannerPdSetYn( String eqBannerPdSetYn ) {
-    	return ( StringUtils.hasText( eqBannerPdSetYn ) ) ? banner.useYn.eq( eqBannerPdSetYn ) : null;
+    // 배너 분류 설정 여부 검색
+    private BooleanExpression eqBannerClCd( String bannerClCd ) {
+        return ( StringUtils.hasText( bannerClCd ) ) ? banner.bannerClCd.eq( bannerClCd ) : null;
     }
     
+    // 배너 기간 설정 여부 검색
+    private BooleanExpression eqBannerPdSetYn( String eqBannerPdSetYn ) {
+    	return ( StringUtils.hasText( eqBannerPdSetYn ) ) ? banner.bannerPdSetYn.eq( eqBannerPdSetYn ) : null;
+    }
+    
+    private BooleanExpression eqBannerPdSetYn() {
+        return banner.bannerPdSetYn.eq("N")
+                .or(
+                            banner.bannerPdSetYn.eq("Y").
+                       and(
+                               Expressions.currentTimestamp().between(
+                                    Expressions.dateTimeTemplate( Timestamp.class, "TO_TIMESTAMP({0}, 'YYYY-MM-DD HH24:MI')", banner.bannerBeginDt   ),
+                                    Expressions.dateTimeTemplate( Timestamp.class, "TO_TIMESTAMP({0}, 'YYYY-MM-DD HH24:MI')", banner.bannerEndDt     )
+                               )
+                       )
+                    );
+//        return banner.bannerPdSetYn.eq("Y");
+    }
     
     // 카테고리 lv 1 검색 옵션
     // 배너 분류 검색

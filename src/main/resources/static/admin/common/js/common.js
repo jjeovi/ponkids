@@ -1013,14 +1013,12 @@ $.fn.dateTimePickr = function () {
     return result;
 };
 
-
-
 // 카테고리 검색 초기 세팅 함수
 function cateItemSet( searchDTO ){	
-	
-	
+
 }
 
+// 텍스트 (공백 2개 포함 줄바꿈 제외 ) 길이를 너비로 계산하기
 this.getTextWidth = function(text, font){		
 	if(font == null || font == '' || font == 'undefined' ) {
 		font = 'normal normal 400 normal 19.95px / 33px NotoKrR' ;

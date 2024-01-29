@@ -33,11 +33,19 @@ public class BannerListDto {
     
     private Long    classSn;                // 클래스 일련번호
     
+    private String  classSj;                // 클래스 제목
+    
+    private Long    classAmt;               // 클래스 금액
+    
+    private Long    classDscntBfeAmt;       // 클래스 할인 전 금액
+    
+    private Long    classThumbAtchFileSn;   // 클래스 첨부파일 일련번호
+    
     private String  useYn;                  // 사용 여부
     
     private String  bannerPdSetYn;          // 배너 기간 설정 여부
     
-    private String  bannerPdSetYnNm;          // 배너 기간 설정 여부 명
+    private String  bannerPdSetYnNm;        // 배너 기간 설정 여부 명
     
     private String  bannerBeginDt;          // 배너 시작 일시
     
@@ -54,7 +62,7 @@ public class BannerListDto {
     
     @QueryProjection
     public BannerListDto( Long bannerSn, String bannerClCd, String bannerClNm, String bannerClDetailCd, String bannerClDetailNm, Long bannerExpsrSeq,
-                          String bannerNm, String bannerDc, Long atchFileSn, String url, String classMapngYn, Long classSn,
+                          String bannerNm, String bannerDc, Long atchFileSn, String url, String classMapngYn, Long classSn, String classSj, Long classAmt, Long classDscntBfeAmt, Long classThumbAtchFileSn,
                           String useYn, String bannerPdSetYn, String bannerPdSetYnNm, String bannerBeginDt, String bannerEndDt ,String bannerExpsrPeriod) {
         this.bannerSn = bannerSn;
         this.bannerClCd = bannerClCd;
@@ -68,13 +76,16 @@ public class BannerListDto {
         this.url = url;
         this.classMapngYn = classMapngYn;
         this.classSn = classSn;
+        this.classSj = classSj;
+        this.classAmt = classAmt;
+        this.classDscntBfeAmt = classDscntBfeAmt;
+        this.classThumbAtchFileSn = classThumbAtchFileSn;
         this.useYn = useYn;
         this.bannerPdSetYn = bannerPdSetYn;
         this.bannerPdSetYnNm = bannerPdSetYnNm;
         this.bannerBeginDt = bannerBeginDt;
         this.bannerEndDt = bannerEndDt;
         this.bannerExpsrPeriod = bannerExpsrPeriod;
-        
     }
     
 }

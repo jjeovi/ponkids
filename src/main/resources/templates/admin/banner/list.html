@@ -149,7 +149,7 @@
 	                                </td>
 	                                <td th:text="${data.bannerPdSetYnNm}"></td>
 	                                <td th:text="${data.bannerExpsrPeriod}"></td>
-	                                <td th:text="${data.useYn}"></td>
+	                                <td th:text="${data.useYn eq 'Y' ? '사용' : '미사용'}"></td>
 	                            </tr>
 	                            <tr th:unless = "${!resultList.isEmpty()}">
 	                                <td class="noDataTd" style="display: none;">

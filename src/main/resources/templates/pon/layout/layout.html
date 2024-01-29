@@ -80,6 +80,9 @@
         </ul>
         <ul class="pon_menu pc">
             <!-- Dynamic Connection -->
+            <li th:each="data : ${menuList}" th:if="${data.level eq 1}">
+                <a th:href="${data.menuUrl}" th:text="${data.menuNm}" />
+            </li>
         </ul>
         <div class="search_form">
             <div class="search">
@@ -131,6 +134,9 @@
             </div>
             <ul class="pon_menu mb">
                 <!-- Dynamic Connection -->
+                <li th:each="data : ${menuList}" th:if="${data.level eq 1}" >
+                    <a th:href="${data.menuUrl}" th:text="${data.menuNm}" />
+                </li>
             </ul>
         </div>
     </div>
@@ -272,11 +278,10 @@
 
 <!--S : script -->
 <!-- main -->
-<script src="/pon/common/js/main.js"></script>
 <script src="/pon/common/js/common.js"></script>
 
-<script layout:fragment="script">
+<div layout:fragment="script">
     // script 내용 작성
-</script>
+</div>
 <!--E : script -->
 </html>

@@ -1,6 +1,7 @@
 /*! sec01*/
 .wrap{font-family: "NanumSquare"; min-height:605px;}
 .visual_sec .visual_box{position: relative;}
+.visual_sec .visual_box .visual_img img{max-height: 580px; object-fit: cover;}
 .visual_sec .visual_txt{position: absolute; top: 25%; left: 20%; color: #fff; font-weight: 700; font-size: 22px; }
 .visual_sec .visual_txt p{margin-top: 20px;}
 

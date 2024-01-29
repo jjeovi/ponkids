@@ -5425,6 +5425,11 @@ input[type="radio"][disabled]:checked+label{
   max-width: 150px;
 }
 
+.filebox.bn-img .upload-thumb-wrap {  /* 추가될 이미지를 감싸는 요소 - 배너 이미지  */
+  max-width: 220px !important;
+}
+
+
 
 .filebox .upload-display img {  /* 추가될 이미지 */
   display: block;

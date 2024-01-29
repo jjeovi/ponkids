@@ -142,6 +142,9 @@ public class ClassService {
         if ( modDto.getClassDscntBfeAmt() != null )             targetDto.setClassDscntBfeAmt( modDto.getClassDscntBfeAmt() );  // 할인된 금액
         if ( StringUtils.hasText( modDto.getClassExpsrYn() ) )  targetDto.setClassExpsrYn( modDto.getClassExpsrYn() );          // 표시여부
         if ( StringUtils.hasText( modDto.getClassPdSetYn() ) )  targetDto.setClassPdSetYn( modDto.getClassPdSetYn() );          // 표시기간설정여부
+        
+        targetDto.setThumbAtchFileSn( modDto.getThumbAtchFileSn() );    // 첨부파일 ( 썸네일 )
+        targetDto.setAtchFileSn( modDto.getAtchFileSn() );              // 첨부파일 (본문)
         targetDto.setClassBeginDt( modDto.getClassBeginDt() );          // 표시시작일시
         targetDto.setClassEndDt( modDto.getClassEndDt() );              // 표시종료일시
         

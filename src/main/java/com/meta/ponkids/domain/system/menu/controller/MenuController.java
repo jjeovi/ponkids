@@ -19,8 +19,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MenuController {
     
-    private final static String BASIC_PATH = "/menu";
-    private final MenuService menuService;
     @Value( "${key.default.admin}" )
     private String TYPE_ADMIN;
     
@@ -33,10 +31,14 @@ public class MenuController {
     @Value( "${key.default.userRootMenuSn}" )
     private Long USER_ROOT_MENU_SN;
     
+    private final static String BASIC_PATH = "/menu";
+    
+    private final MenuService menuService;
+
     @ResponseBody
     @GetMapping( BASIC_PATH + "/live/{type}/getMenuListAjax" )
     public Map<String, Object> getMenuListAjax( @PathVariable String type ) {
-        // 해당 권한에 맞는 menuList 가져온 뒤 drawMenuTree 로 메뉴를 그린다.
+        // menu list (사용자) 가져오기
         Map<String, Object> result = new HashMap<String, Object>();
         
         // MenuListDto 생성

@@ -20,13 +20,9 @@
 </head>
 <title layout:fragment="title">피오니키즈 - pioneerkids</title>
 <!-- S : Javascript functions	-->
-<div layout:fragment="script">
+<script layout:fragment="script">
 
-    <!-- js -->
-    <script src="/pon/common/js/main.js"></script>
-
-</div>
-
+</script>
 <!-- E : Javascript functions	-->
 <div class="wrap pon-conents" layout:fragment="content">
 
@@ -36,10 +32,50 @@
         <div class="swiper mySwiper visual_swiper">
             <div class="swiper-wrapper">
                 <!-- Dynamic Connection -->
-                <div th:each="data : ${bannerTopList}" class="swiper-slide">
+                <div class="swiper-slide">
                     <div class="visual_box">
                         <div class="visual_img">
-                            <img th:src="@{/getImage(atchFileSn=${data.atchFileSn})}" th:alt="${data.bannerNm}" >
+                            <img class="pc_visual" src="/pon/common/image/visual_img01.png" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="visual_box">
+                        <div class="visual_img">
+                            <img class="pc_visual" src="/pon/common/image/visual_img01.png" alt="">
+                            <img class="mb_visual" src="/pon/common/image/mb_visual_img01.png" alt="">
+                        </div>
+                        <div class="visual_txt">
+                            <div class="txt_img">
+                                <img src="/pon/common/image/visual_txt01.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="visual_box">
+                        <div class="visual_img">
+                            <img class="pc_visual" src="/pon/common/image/visual_img01.png" alt="">
+                            <img class="mb_visual" src="/pon/common/image/mb_visual_img01.png" alt="">
+                        </div>
+                        <div class="visual_txt">
+                            <div class="txt_img">
+                                <img src="/pon/common/image/visual_txt01.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="swiper-slide">
+                    <div class="visual_box">
+                        <div class="visual_img">
+                            <img class="pc_visual" src="/pon/common/image/visual_img01.png" alt="">
+                            <img class="mb_visual" src="/pon/common/image/mb_visual_img01.png" alt="">
+                        </div>
+                        <div class="visual_txt">
+                            <div class="txt_img">
+                                <img src="/pon/common/image/visual_txt01.png" alt="">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -55,7 +91,7 @@
     <!-- TODO -->
     <section class="sec sec02">
         <div class="sec_txt sec02_txt">
-<!--            <div class="star"><img src="/pon/common/image/star.svg" alt=""></div>-->
+            <div class="star"><img src="/pon/common/image/star.svg" alt=""></div>
             <h3> 강력추천</h3>
             <span>피오니키즈에서만 만나볼 수 있는 특별한 클래스</span>
         </div>
@@ -161,7 +197,7 @@
     <section class="sec sec03">
         <div class="sec03_wrap">
             <div class="sec_txt sec03_txt">
-<!--                <div class="star"><img src="/pon/common/image/english_ico.svg" alt=""></div>-->
+                <div class="star"><img src="/pon/common/image/english_ico.svg" alt=""></div>
                 <h3> 영어</h3>
                 <span>유아/초등 영어와 친해지는 재미난 수업</span>
             </div>
@@ -290,7 +326,7 @@
     <section class="sec sec04">
         <div class="sec04_wrap">
             <div class="sec_txt sec04_txt">
-<!--                <div class="star"><img src="/pon/common/image/atom_ico.svg" alt=""></div>-->
+                <div class="star"><img src="/pon/common/image/atom_ico.svg" alt=""></div>
                 <h3>과학</h3>
                 <span>피오니키즈에서만 만나볼 수 있는 특별한 클래스</span>
             </div>
