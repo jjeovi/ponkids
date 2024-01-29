@@ -1,7 +1,9 @@
 package com.meta.ponkids.global.config;
 
 import com.meta.ponkids.global.config.interceptor.AuthInterceptor;
+import com.meta.ponkids.global.config.interceptor.MenuAdmInterceptor;
 import com.meta.ponkids.global.config.interceptor.MenuInterceptor;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     
     private final AuthInterceptor authInterceptor;
+    private final MenuAdmInterceptor menuAdmInterceptor;
     private final MenuInterceptor menuInterceptor;
     
     @Override
@@ -24,14 +27,36 @@ public class WebConfig implements WebMvcConfigurer {
         // 추후 로그인페이지에 IP 접근이 필요하다고 할 때 추가 예정
         
         // 권한 처리 및 세션 처리 Interceptor (preHandle)
-        registry.addInterceptor( authInterceptor ).
-                addPathPatterns( "/admin/**" ).             // 1. 체크 하는 로직은 /admin/ 하위 path 만 검사
-                excludePathPatterns( "/admLogin" );        // 2. 로그인 페이지는 검사하지 않음.
+        registry.addInterceptor( authInterceptor )
+                .addPathPatterns( "/admin/**" )             			// 1. 체크 하는 로직은 /admin/ 하위 path 만 검사
+                .excludePathPatterns( "/admLogin" );        			// 2. 로그인 페이지는 검사하지 않음.
         
+        // admin : 관리자 부분
+        // ==========================================================
         // 메뉴 mcd 값 추가하는 Interceptor (postHandle)
-        registry.addInterceptor( menuInterceptor ).
-                addPathPatterns( "/admin/**" ).             // 1. 체크 하는 로직은 /admin/ 하위 path 만 검사
-                excludePathPatterns( "/admLogin" );        // 2. 로그인 페이지는 검사하지 않음.
+        registry.addInterceptor( menuAdmInterceptor )
+                .addPathPatterns( 		"/admin/**" )             		// 1. 체크 하는 로직은 /admin/ 하위 path 만 검사
+                .excludePathPatterns( 	"/**/*Ajax" )        			// 제외 목록 : Ajax 통신 
+                .excludePathPatterns( 	"/**/*.js", 	"/**/*.css", 
+                						"/**/*.svg", 	"/**/*.png",
+                						"/**/*.jpg", 	"/**/*.jpg", 
+                						"/**/*.woff2" )        			// 제외 목록 : 정적 컨텐츠 
+                .excludePathPatterns( 	"/admLogin" )        			// 제외 목록 : 로그인 페이지
+        		.excludePathPatterns( 	"/getImage" );					// 제외 목록 : 첨부파일 조회시
+        
+        
+        // pon : 사용자 부분
+        // ==========================================================
+        // 메뉴 mcd 값 추가하는 Interceptor (postHandle) -> 사용자 
+        registry.addInterceptor( menuInterceptor )
+        		.addPathPatterns( "/**" )             					// 1. 체크 하는 로직은 /하위 전체 
+        		.excludePathPatterns( 	"/**/*Ajax" )        			// 제외 목록 : Ajax 통신 
+                .excludePathPatterns( 	"/**/*.js", 	"/**/*.css", 
+                						"/**/*.svg", 	"/**/*.png",
+                						"/**/*.jpg", 	"/**/*.jpg", 
+                						"/**/*.woff2" )        			// 제외 목록 : 정적 컨텐츠 
+                .excludePathPatterns( 	"/admLogin" )        			// 제외 목록 : 로그인 페이지
+        		.excludePathPatterns( 	"/getImage" );					// 제외 목록 : 첨부파일 조회시
     }
     
     @Override
@@ -44,7 +69,7 @@ public class WebConfig implements WebMvcConfigurer {
 //        registry.addResourceHandler( "/**" )
 //                .addResourceLocations( "classpath:/templates/", "classpath:/static/" );
         registry.addResourceHandler( "/**" )
-        .addResourceLocations( "classpath:/static/" );
+        		.addResourceLocations( "classpath:/static/" );
         
     }
     

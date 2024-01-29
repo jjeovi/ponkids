@@ -1,13 +1,17 @@
 package com.meta.ponkids.domain.system.menu.dto;
 
 import com.meta.ponkids.domain.system.menu.entity.UserMenuHierarchy;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class UserMenuHierarchyDto {
+@EqualsAndHashCode( callSuper = false )
+public class UserMenuHierarchyDto extends MenuHierarchyDto  {
     
     private Long menuSn;
     

@@ -1,10 +1,11 @@
 package com.meta.ponkids.global.common.aop;
 
-import com.meta.ponkids.domain.system.login.dto.LoginDto;
-import com.meta.ponkids.domain.system.menu.dto.AdminMenuHierarchyDto;
-import com.meta.ponkids.domain.system.menu.repository.MenuRepository;
-import com.meta.ponkids.domain.system.menu.service.AdminMenuHierarchyService;
-import lombok.RequiredArgsConstructor;
+import java.lang.reflect.Method;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -18,10 +19,15 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
-import java.util.List;
+import com.meta.ponkids.domain.system.login.dto.LoginDto;
+import com.meta.ponkids.domain.system.menu.dto.AdminMenuHierarchyDto;
+import com.meta.ponkids.domain.system.menu.dto.MenuHierarchyDto;
+import com.meta.ponkids.domain.system.menu.dto.UserMenuHierarchyDto;
+import com.meta.ponkids.domain.system.menu.repository.MenuRepository;
+import com.meta.ponkids.domain.system.menu.service.AdminMenuHierarchyService;
+import com.meta.ponkids.domain.system.menu.service.UserMenuHierarchyService;
+
+import lombok.RequiredArgsConstructor;
 
 @Aspect
 @Component
@@ -30,6 +36,7 @@ public class ParameterAop {
     
     private final MenuRepository menuRepository;
     private final AdminMenuHierarchyService adminMenuHierarchyService;
+    private final UserMenuHierarchyService 	userMenuHierarchyService;
     
     
     @Value( "${key.menuCd.auth}" )
@@ -64,10 +71,15 @@ public class ParameterAop {
         String requestUri = request.getRequestURI();
         String fullUri = getfullUriExp( request );
         
-        if ( requestUri.startsWith( "/admin/" ) ) {
+        // 관리자URL인지 체크하는 flag . Y 이면 관리자URL로 판단.
+        boolean adminUrlYn = ( requestUri.startsWith("/admin/") ) ? true : false;
+        
+        
+        if ( !(requestUri.endsWith( "Ajax" )) && requestUri.contains( "/mcd") ) {
             
             // 들어온 mcd값이 db에 젖아되어 있는 mcd 값과 다를시에는 mcd값을 맞춰서 redirect 시킵니다.
             
+        	System.out.println("mcdCheckAop requestUri ======  " + requestUri);
             // mcd : mcdxxx (xxx 는 숫자.. 자리수는 고정아님)
             String mcd = "";
             
@@ -130,7 +142,9 @@ public class ParameterAop {
                             // mcd 값 model 에 추가
                             model.addAttribute( MCD, mcd );
                             
-                            AdminMenuHierarchyDto presentMenuDto = adminMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( fullUri.replaceAll( "\\\\", "" ) , "N" );
+                            MenuHierarchyDto presentMenuDto = ( adminUrlYn ) ? ( (AdminMenuHierarchyDto) adminMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( fullUri.replaceAll( "\\\\", "" ) , "N" ) ) 
+                            												 : ( (UserMenuHierarchyDto) userMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( fullUri.replaceAll( "\\\\", "" ) , "N" ) );
+                            
                             // 현재 메뉴 정보 (currentMenu) model 에 추가
                             model.addAttribute( "currentMenu", presentMenuDto );
                             
@@ -155,7 +169,8 @@ public class ParameterAop {
                     
                     // 메뉴 url 이 맞지 않더라도 currnetMenu 를 인식할 수 있게 추가
                     String menuCd = mcd.replaceAll( "mcd", "" );
-                    AdminMenuHierarchyDto presentMenuDto = adminMenuHierarchyService.findTop1ByMenuCdAndDelYnOrderByMenuSn( menuCd , "N" );
+                    MenuHierarchyDto presentMenuDto = ( adminUrlYn ) ? ( (AdminMenuHierarchyDto) adminMenuHierarchyService.findTop1ByMenuCdAndDelYnOrderByMenuSn( menuCd , "N" ) ) 
+																	 : ( (UserMenuHierarchyDto) userMenuHierarchyService.findTop1ByMenuCdAndDelYnOrderByMenuSn( menuCd , "N" ) );
                     
                     if ( presentMenuDto != null ) {
                         // 현재 메뉴 정보 (currentMenu) model 에 추가
@@ -168,7 +183,9 @@ public class ParameterAop {
                     
                     model.addAttribute( MCD, mcd );
                     
-                    AdminMenuHierarchyDto presentMenuDto = adminMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( fullUri , "N" );
+                    MenuHierarchyDto presentMenuDto = ( adminUrlYn ) ? ( (AdminMenuHierarchyDto) adminMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( fullUri , "N" ) ) 
+																	 : ( (UserMenuHierarchyDto) userMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( fullUri , "N" ) );
+                    
                     // 현재 메뉴 정보 (currentMenu) model 에 추가
                     model.addAttribute( "currentMenu", presentMenuDto );
                     
@@ -187,7 +204,10 @@ public class ParameterAop {
                 
                 // 메뉴 url 이 맞지 않더라도 currnetMenu 를 인식할 수 있게 추가
                 String menuCd = mcd.replaceAll( "mcd", "" );
-                AdminMenuHierarchyDto presentMenuDto = adminMenuHierarchyService.findTop1ByMenuCdAndDelYnOrderByMenuSn( menuCd , "N" );
+                
+                
+                MenuHierarchyDto presentMenuDto = ( adminUrlYn ) ? ( (AdminMenuHierarchyDto) adminMenuHierarchyService.findTop1ByMenuCdAndDelYnOrderByMenuSn( menuCd , "N" ) ) 
+						 										 : ( (UserMenuHierarchyDto) userMenuHierarchyService.findTop1ByMenuCdAndDelYnOrderByMenuSn( menuCd , "N" ) );
                 
                 if ( presentMenuDto != null ) {
                     // 현재 메뉴 정보 (currentMenu) model 에 추가
@@ -211,8 +231,10 @@ public class ParameterAop {
                         
                         // mcd 값 model 에 추가
                         model.addAttribute( MCD, mcd );
+
                         
-                        AdminMenuHierarchyDto presentMenuDto = adminMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( requestUri , "N" );
+                        MenuHierarchyDto presentMenuDto = ( adminUrlYn ) ? ( (AdminMenuHierarchyDto) adminMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( requestUri , "N" ) ) 
+																		 : ( (UserMenuHierarchyDto) userMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( requestUri , "N" ) );
                         // 현재 메뉴 정보 (currentMenu) model 에 추가
                         model.addAttribute( "currentMenu", presentMenuDto );
                         

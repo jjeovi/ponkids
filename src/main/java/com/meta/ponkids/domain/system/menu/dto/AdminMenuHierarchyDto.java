@@ -3,11 +3,13 @@ package com.meta.ponkids.domain.system.menu.dto;
 import com.meta.ponkids.domain.system.menu.entity.AdminMenuHierarchy;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class AdminMenuHierarchyDto {
+@EqualsAndHashCode( callSuper = false )
+public class AdminMenuHierarchyDto extends MenuHierarchyDto {
     
     private Long menuSn;
     

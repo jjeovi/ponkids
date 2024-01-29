@@ -1,19 +1,18 @@
 package com.meta.ponkids.global.config.interceptor;
 
-import com.meta.ponkids.domain.system.login.dto.LoginDto;
-import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
-import com.meta.ponkids.domain.system.menu.service.MenuService;
-import com.meta.ponkids.global.common.dto.CategoryDto;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
+import com.meta.ponkids.domain.system.menu.service.MenuService;
 
 @Component
 public class MenuInterceptor implements HandlerInterceptor {
@@ -31,22 +30,8 @@ public class MenuInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle( HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView ) throws Exception {
         
-        // requestUri Setting
-        String requestUri = request.getRequestURI();
-        
-        // loginDto Setting
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        LoginDto loginDto = ( LoginDto ) principal;
-        
-        // listDto Setting
-        MenuListDto listDto = new MenuListDto();
-        listDto.setCategory( new CategoryDto() );
-        listDto.getCategory().setLv1Sn( loginDto.getRoleSn() );
-        listDto.setUseYn( "Y" );
-        // listDto Setting
-        
         // menuLit Setting
-        List<MenuListDto> menuList = menuService.getList( listDto );
+        List<MenuListDto> menuList = menuService.getUserMenuList( new MenuListDto() );
         
         // mcd setting
         if ( modelAndView != null ) {
@@ -54,6 +39,9 @@ public class MenuInterceptor implements HandlerInterceptor {
             request.setAttribute( MCD, mcd );
         }
         
+     // requestUri Setting
+        String requestUri = request.getRequestURI();
+        System.out.println("requestUri ========= " + requestUri);
         
         request.setAttribute( "menuList", menuList );
         request.setAttribute( "currentPageUrl", requestUri );

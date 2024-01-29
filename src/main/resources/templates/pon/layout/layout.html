@@ -29,6 +29,18 @@
     <script src="/pon/jquery/3.7.1/jquery.min.js"></script>
     <!-- swiper -->
     <script src="/pon/npm/swiper11/js/swiper-bundle.min.js"></script>
+    
+   <!-- 상수 항목 정의 ( 재사용을위해 ) -->
+   <script th:inline="javascript">
+		/*<![CDATA[*/
+		let searchDTO;	// 카테고리DTO (searchDTO) 정의 
+		let basicPath;	// 기본경로 
+	  	$(function(){
+	  		searchDTO =  /*[[${searchDTO}]]*/;	// 상수선언
+	  		basicPath =  /*[[${basicPath}]]*/;	// 상수선언
+       	});
+		/*]]>*/
+	</script>
 
 </div>
 <!--E : script -->
@@ -79,9 +91,10 @@
             </li>
         </ul>
         <ul class="pon_menu pc">
-            <!-- Dynamic Connection -->
             <li th:each="data : ${menuList}" th:if="${data.level eq 1}">
-                <a th:href="${data.menuUrl}" th:text="${data.menuNm}" />
+                <a 	th:href="${data.menuUrl}" th:text="${data.menuNm}"
+                	th:classappend="${ #strings.containsIgnoreCase(currentPageUrl,data.menuUrl) || 
+                					( mcd != null && #strings.prepend(data.menuCd,'mcd') == mcd )  } ? 'active'" />
             </li>
         </ul>
         <div class="search_form">
@@ -133,7 +146,6 @@
                 </div>
             </div>
             <ul class="pon_menu mb">
-                <!-- Dynamic Connection -->
                 <li th:each="data : ${menuList}" th:if="${data.level eq 1}" >
                     <a th:href="${data.menuUrl}" th:text="${data.menuNm}" />
                 </li>
@@ -279,9 +291,10 @@
 <!--S : script -->
 <!-- main -->
 <script src="/pon/common/js/common.js"></script>
+<script src="/pon/common/js/main.js"></script>
 
-<div layout:fragment="script">
-    // script 내용 작성
-</div>
+<script layout:fragment="script">
+    <!-- script 내용 작성 -->
+</script>
 <!--E : script -->
 </html>

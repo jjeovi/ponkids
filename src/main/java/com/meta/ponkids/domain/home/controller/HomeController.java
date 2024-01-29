@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.meta.ponkids.domain.system.banner.service.BannerService;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
-import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
-import com.meta.ponkids.domain.system.menu.service.MenuService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +17,6 @@ public class HomeController {
     private final static String BANNER_MAIN_CLASS = "MAIN_CLASS";
     
     private final BannerService bannerService;
-    private final MenuService menuService;
     
     private final CmmnCdDetailService cmmnCdDetailService;
     
@@ -29,7 +26,7 @@ public class HomeController {
         // S : 필요한 객체 setting
         
         // menuList
-        model.addAttribute("menuList", menuService.getUserMenuList( new MenuListDto() ) );
+//        model.addAttribute("menuList", menuService.getUserMenuList( new MenuListDto() ) );	// 메뉴 리스트는 interceptor 에서 처리
         
         // 배너 메인 상단 영역 리스트
         model.addAttribute("bannerTopList", bannerService.getMainList( BANNER_MAIN_TOP ) );
@@ -45,6 +42,7 @@ public class HomeController {
         
         return "pon/index";
     }
+    
     
     // 작업 비교용 ( 퍼블리싱 작업중.. 작업 완료되면 해당 메서드 삭제 ) 
     @GetMapping( "/compare" )

@@ -468,20 +468,20 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="field item form-group" th:if="${type == 'adm'}">
+                            <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명</label>
                                 <div class="col-md-8 col-sm-6">
                                     <input name="menuDc" id="menuDc" class="form-control"/>
-                                    <small class="font-gray-dark">
+                                    <small class="font-gray-dark" th:if="${type == 'adm'}">
                                         메뉴의 상단에 표시됩니다. (1줄로 간단히 설명)
                                     </small>
                                 </div>
                             </div>
-                            <div class="field item form-group" th:if="${type == 'adm'}">
+                            <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴상세설명</label>
                                 <div class="col-md-8 col-sm-6">
                                     <textarea rows="15" name="menuDetailDc" id="menuDetailDc"></textarea>
-                                    <small class="font-gray-dark">
+                                    <small class="font-gray-dark" th:if="${type == 'adm'}">
                                         메뉴의 상단에 상세보기를 펼쳤을 시 나오는 문구입니다.
                                     </small>
                                 </div>
@@ -623,7 +623,7 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="field item form-group" th:if="${type == 'adm'}">
+                            <div class="field item form-group" th:if="${type == 'adm'}" >
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명설정여부<span
                                         class="required"> * </span></label>
                                 <div class="col-md-8 col-sm-6">
@@ -645,7 +645,7 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="field item form-group" th:if="${type == 'adm'}">
+                            <div class="field item form-group" >
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명</label>
                                 <div class="col-md-8 col-sm-6">
                                     <input name="menuDc" class="form-control"/>
@@ -654,11 +654,11 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="field item form-group" th:if="${type == 'adm'}">
+                            <div class="field item form-group">
                                 <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴상세설명</label>
                                 <div class="col-md-8 col-sm-6">
                                     <textarea rows="15" name="menuDetailDc"></textarea>
-                                    <small class="font-gray-dark">
+                                    <small class="font-gray-dark" th:if="${type == 'adm'}">
                                         메뉴의 상단에 상세보기를 펼쳤을 시 나오는 문구입니다.
                                     </small>
                                 </div>

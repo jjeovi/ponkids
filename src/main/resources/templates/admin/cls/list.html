@@ -32,7 +32,7 @@
                                 </li>
                                 <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('/admin/classCategoryCl02/live/getListByParntsClSnAjax', this );"
                                     th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) } ? 'on'"
-                                    th:value="${data.clSn}">[[${data.clNm}]]
+                                    th:value="${data.clSn}" th:text="${data.clNm}" >
                                 </li>
                             </ul>
                         </div>

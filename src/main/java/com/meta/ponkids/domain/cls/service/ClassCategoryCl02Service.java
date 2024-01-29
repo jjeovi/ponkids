@@ -48,8 +48,8 @@ public class ClassCategoryCl02Service {
     }
     
     
-    public List<ClassCategoryCl02ListDto> findAllByOrderByClSeq( ) {
-    	List<ClassCategoryCl02> classCategoryCl02List = classCategoryCl02Repository.findAllByOrderByClSeq();
+    public List<ClassCategoryCl02ListDto> findAllByOrderByParntsClSnAscClSeqAsc() {
+    	List<ClassCategoryCl02> classCategoryCl02List = classCategoryCl02Repository.findAllByOrderByParntsClSnAscClSeqAsc();
     	
     	ClassCategoryCl02ListDto classCategoryCl02ListDto = new ClassCategoryCl02ListDto();    // new로 listDto 생성
         List<ClassCategoryCl02ListDto> listDtoList = classCategoryCl02List
@@ -64,7 +64,7 @@ public class ClassCategoryCl02Service {
         
         List<ClassCategoryCl02> classCategoryCl02List;
         if ( parntsClSn == 0 ) {
-            classCategoryCl02List = classCategoryCl02Repository.findAllByOrderByClSeq();
+            classCategoryCl02List = classCategoryCl02Repository.findAllByOrderByParntsClSnAscClSeqAsc();
         } else {
             classCategoryCl02List = classCategoryCl02Repository.findByParntsClSnOrderByClSeq( parntsClSn );
         }

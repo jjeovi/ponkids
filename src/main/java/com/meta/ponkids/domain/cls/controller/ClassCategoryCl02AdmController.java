@@ -263,7 +263,7 @@ public class ClassCategoryCl02AdmController {
         
         if( listDto.getParntsClSn() != null && listDto.getParntsClSn() == 0  ) {
         	// 부모클래스 일련번호가 0 일 때 : 전체 검색
-        	listDtos = classCategoryCl02Service.findAllByOrderByClSeq();
+        	listDtos = classCategoryCl02Service.findAllByOrderByParntsClSnAscClSeqAsc();
         } else if ( listDto.getParntsClSn() != null ) {
         	// 부모클래스 일련번호가 0 이 아닐 때 : 부모클래스일련번호로 검색 
         	listDtos = classCategoryCl02Service.findByParntsClSnOrderByClSeq( listDto.getParntsClSn() );

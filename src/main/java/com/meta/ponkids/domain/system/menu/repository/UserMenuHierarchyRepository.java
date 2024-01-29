@@ -1,11 +1,16 @@
 package com.meta.ponkids.domain.system.menu.repository;
 
-import com.meta.ponkids.domain.system.menu.entity.UserMenuHierarchy;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.meta.ponkids.domain.system.menu.entity.UserMenuHierarchy;
 
 public interface UserMenuHierarchyRepository extends JpaRepository<UserMenuHierarchy, Long> {
     
     UserMenuHierarchy findTop1ByMenuUrlAndDelYnOrderByMenuSn( String menuUrl , String delYn);
+    
+
+    UserMenuHierarchy findTop1ByMenuCdAndDelYnOrderByMenuSn( String menuCd, String delYn );
+    
     
     void deleteByMenuSn( Long sn );
     

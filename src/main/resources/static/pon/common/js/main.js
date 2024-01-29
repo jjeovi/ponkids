@@ -235,7 +235,7 @@ function detailClass( e ) {
 		var classSn = $(e).closest(".swiper-slide").data("classSn");
 		
 		alert("페이지 이동 실행 : " + classSn);
-//		location.href = "/class/detail?pk=" + classSn;
+//		location.href = "/class/mcd/detail?pk=" + classSn;
 	
 }
 

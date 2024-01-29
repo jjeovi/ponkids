@@ -169,6 +169,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                 .from( userMenuHierarchy )
                 .where(
                         eqUserMenuUseYn( listDto.getUseYn() ),
+                        userMenuHierarchy.useYn.eq( "Y" ),
                         userMenuHierarchy.delYn.eq( "N" )
                 )
                 .orderBy( userMenuHierarchy.hierarchy.asc() )
@@ -393,7 +394,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨
         if ( StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn ) ) {
 //            if ( schOption.equals( "A" ) )
-//                return menu.menuSn.contains( schCntn ); // TODO LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+//                return menu.menuSn.contains( schCntn ); // TODO LIKE검색. contains.( schCntn )) == LIKE '%' || schCntn || '%'
 //            else if ( schOption.equals( "B" ) )
 //                return menu.menuNm.contains( schCntn ); // TODO LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
 //            else return null;
