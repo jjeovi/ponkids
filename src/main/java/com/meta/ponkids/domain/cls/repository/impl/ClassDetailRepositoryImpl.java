@@ -47,6 +47,8 @@ public class ClassDetailRepositoryImpl implements ClassDetailRepositoryCustom {
                 		ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
                                 .from( cmmnCdDetail )
                                 .where( cmmnCdDetail.cdDetailVal1.eq( classDetail.classDetailItemTyCd ),
+                                		cmmnCdDetail.useYn.eq( "Y" ),
+                                		cmmnCdDetail.delYn.eq( "N" ),
                                 		cmmnCdDetail.cdNm.eq("CLASS_DETAIL_ITEM_TY_CD") ), "classDetailItemTyNm" ),
                 		classDetail.classDetailItemCn,
                 		classDetail.classDetailEssntlYn,
@@ -89,6 +91,8 @@ public class ClassDetailRepositoryImpl implements ClassDetailRepositoryCustom {
 	                		ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
 	                                .from( cmmnCdDetail )
 	                                .where( cmmnCdDetail.cdDetailVal1.eq( classDetail.classDetailItemTyCd ),
+	                                		cmmnCdDetail.useYn.eq( "Y" ),
+	                                		cmmnCdDetail.delYn.eq( "N" ),
 	                                		cmmnCdDetail.cdNm.eq("CLASS_DETAIL_ITEM_TY_CD") ), "classDetailItemTyNm" ),
 	                		classDetail.classDetailItemCn,
 	                		classDetail.classDetailEssntlYn,

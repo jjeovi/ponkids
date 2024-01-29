@@ -91,6 +91,7 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 				.leftJoin( cmmnCdDetail )
 				.on(	cmmnCdDetail.cdNm.eq("DAY_7_CD"),
 						cmmnCdDetail.cdDetailVal1.eq( lctre.classDayCd ),
+						cmmnCdDetail.useYn.eq("Y"),
 						cmmnCdDetail.delYn.eq("N")
 						)
                 // where

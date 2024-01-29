@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.meta.ponkids.domain.system.banner.dto.BannerModDto;
-import com.meta.ponkids.domain.system.banner.entity.Banner;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailListDto;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailModDto;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailSaveDto;

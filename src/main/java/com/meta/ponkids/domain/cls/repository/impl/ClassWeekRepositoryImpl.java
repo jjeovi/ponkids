@@ -74,9 +74,10 @@ public class ClassWeekRepositoryImpl implements ClassWeekRepositoryCustom {
                         )
                 )
                 .from( classWeek )
-                .innerJoin( cmmnCdDetail )
+                .leftJoin( cmmnCdDetail )
                 //join 조건 시에는 delYn 조건을 명시해야 함
                 .on( cmmnCdDetail.cdDetailVal1.eq( classWeek.classDayCd ),
+                		cmmnCdDetail.useYn.eq( "Y" ),
                         cmmnCdDetail.delYn.eq( "N" )
                 )
                 .where( eqClassSn( pk ),

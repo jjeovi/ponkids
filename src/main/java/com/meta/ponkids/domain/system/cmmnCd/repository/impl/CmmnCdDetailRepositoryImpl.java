@@ -57,6 +57,7 @@ public class CmmnCdDetailRepositoryImpl implements CmmnCdDetailRepositoryCustom 
                 .leftJoin( cmmnCd )
                 .on(
                 		cmmnCd.cdNm.eq(cmmnCdDetail.cdNm),
+                		cmmnCd.useYn.eq("Y"),
                 		cmmnCd.delYn.eq("N")
                 		)
                 

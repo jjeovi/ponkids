@@ -86,32 +86,7 @@ var swiper = new Swiper( ".visual_swiper", {
 } );
 
 
-var swiper = new Swiper( ".sec01 .swiper", {
-    slidesPerView: 4,
-    spaceBetween: 30,
-    navigation: {
-        nextEl: ".sec01 .swiper-button-next",
-        prevEl: ".sec01 .swiper-button-prev",
-    },
-    breakpoints: {
-        1240: {
-            slidesPerView: 4,
-            spaceBetween: 30,
-        },
-        768: {
-            slidesPerView: 3,
-            spaceBetween: 20,
-        },
-        365: {
-            slidesPerView: 2,
-            spaceBetween: 20,
-        },
-    }
-
-
-} );
-
-var swiper = new Swiper( ".sec02 .swiper", {
+var swiper = new Swiper( ".sec02 .propose_swiper", {
     slidesPerView: 4,
     spaceBetween: 30,
     navigation: {
@@ -132,15 +107,40 @@ var swiper = new Swiper( ".sec02 .swiper", {
             spaceBetween: 20,
         },
     }
+
+
 } );
 
-
-var swiper = new Swiper( ".sec03 .swiper", {
+var swiper = new Swiper( ".sec03 .english_swiper", {
     slidesPerView: 4,
     spaceBetween: 30,
     navigation: {
         nextEl: ".sec03 .swiper-button-next",
         prevEl: ".sec03 .swiper-button-prev",
+    },
+    breakpoints: {
+        1240: {
+            slidesPerView: 4,
+            spaceBetween: 30,
+        },
+        768: {
+            slidesPerView: 3,
+            spaceBetween: 20,
+        },
+        365: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+        },
+    }
+} );
+
+
+var swiper = new Swiper( ".sec04 .science_swiper", {
+    slidesPerView: 4,
+    spaceBetween: 30,
+    navigation: {
+        nextEl: ".sec04 .swiper-button-next",
+        prevEl: ".sec04 .swiper-button-prev",
     },
     breakpoints: {
         1240: {
@@ -227,25 +227,4 @@ function initMainReview() {
 
 
 
-}
-
-
-// 클래스 > 상세보기 event
-function detailClass( e ) {
-		var classSn = $(e).closest(".swiper-slide").data("classSn");
-		
-		alert("페이지 이동 실행 : " + classSn);
-//		location.href = "/class/detail?pk=" + classSn;
-	
-}
-
-
-
-// 클래스 > 좋아요 event
-function likeClass( e ) {
-		var classSn = $(e).closest(".swiper-slide").data("classSn");
-		
-		alert("좋아요 실행 : " + classSn);
-//		location.href = "/class/detail?pk=" + classSn;
-	
 }
