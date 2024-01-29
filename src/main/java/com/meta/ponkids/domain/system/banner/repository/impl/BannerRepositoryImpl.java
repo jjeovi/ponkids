@@ -175,7 +175,7 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                                 .as( "bannerExpsrPeriod" )
                 ) )
                 .from( banner )
-                .innerJoin( class$ )
+                .leftJoin( class$ )
                 .on (
                         class$.classSn.eq( banner.classSn),
                         class$.delYn.eq("N")
@@ -187,7 +187,7 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                         join_bannerClCd.useYn.eq( "Y" ),
                         join_bannerClCd.delYn.eq( "N" )
                 )
-                .innerJoin( join_bannerClDetailCd )
+                .leftJoin( join_bannerClDetailCd )
                 .on(
                         join_bannerClDetailCd.cdDetailVal1.eq( banner.bannerClDetailCd ),
                         join_bannerClDetailCd.cdNm.eq("BANNER_CL_DETAIL_CD"),

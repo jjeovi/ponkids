@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/pon/layout/layout}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/pon/layout/layout}">
 <head layout:fragment="head">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
@@ -36,7 +37,7 @@
                 <div th:each="data : ${bannerTopList}" class="swiper-slide">
                     <div class="visual_box">
                         <div class="visual_img">
-                            <img th:src="@{/getImage(atchFileSn=${data.atchFileSn})}" th:alt="${data.bannerNm}" >
+                            <img th:src="@{/getImage(atchFileSn=${data.atchFileSn})}" th:alt="${data.bannerNm}">
                         </div>
                     </div>
                 </div>
@@ -50,33 +51,35 @@
 
     <!-- S : 메인 > 클래스 카테고리 영역 -->
     <section th:each="data : ${bannerClDetailList}" th:classappend="|sec sec0${dataStat.count}|">
-		<div th:classappend="|sec0${dataStat.count}_wrap|" >
-			<div th:classappend="|sec_txt sec0${dataStat.count}_txt|">
-	            <h3 th:text="${data.cdDetailNm}"></h3>
-	            <span th:text="${data.cdDetailVal2}"></span>
-	        </div>
-	        <div class="card_box">
-	            <div th:classappend="|swiper mySwiper sec0${dataStat.count}_swiper swiper|" >
-	                <div class="swiper-wrapper" >
-						<div  th:each="class : ${bannerClassList}" th:if="${class.bannerClDetailCd == data.cdDetailVal1}" class="swiper-slide card_item" th:data-class-sn="${class.classSn}" >
-							<div class="item_img">
-	                            <img src="/pon/common/image/propose_img01.png" alt="" onclick="detailClass(this);" >
-	                            <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="좋아요" onclick="likeClass(this);">
-	                        </div>
-	                        <div class="item_info" onclick="detailClass(this);" >
-	                            <p th:text="${class.classSj}" />
-	                            <span th:if="${class.classDscntBfeAmt ne null && class.classDscntBfeAmt ne '' }" th:text="${class.classAmt}" class="item_sale" />
-	                            <span th:text="${class.classAmt}" class="item_price" />
-	                        </div>
-						</div>
-					</div>
-				</div>
-				<div class="swiper-button-next"></div>
+        <div th:classappend="|sec0${dataStat.count}_wrap|">
+            <div th:classappend="|sec_txt sec0${dataStat.count}_txt|">
+                <h3 th:text="${data.cdDetailNm}"></h3>
+                <span th:text="${data.cdDetailVal2}"></span>
+            </div>
+            <div class="card_box">
+                <div th:classappend="|swiper mySwiper sec0${dataStat.count}_swiper swiper|">
+                    <div class="swiper-wrapper">
+                        <div th:each="class : ${bannerClassList}" th:if="${class.bannerClDetailCd == data.cdDetailVal1}"
+                             class="swiper-slide card_item" th:data-class-sn="${class.classSn}">
+                            <div class="item_img">
+                                <img th:src="@{/getImage(atchFileSn=${class.classThumbAtchFileSn})}" alt="" onclick="detailClass(this);">
+                                <img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="좋아요" onclick="likeClass(this);">
+                            </div>
+                            <div class="item_info" onclick="detailClass(this);">
+                                <p th:text="${class.classSj}"/>
+                                <span th:if="${class.classDscntBfeAmt ne null && class.classDscntBfeAmt ne '' }"
+                                      th:text="${class.classAmt}" class="item_sale"/>
+                                <span th:text="${class.classAmt}" class="item_price"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
-			</div>
-			<div class="sec_bg"></div>
-		</div>
-	</section>
+            </div>
+            <div class="sec_bg"></div>
+        </div>
+    </section>
     <!-- E : 메인 > 클래스 카테고리 영역 -->
 
     <!-- S : 메인 > 왜 피오니 키즈... -->
@@ -128,85 +131,85 @@
     <!-- E : 메인 > 왜 피오니 키즈... -->
 
     <!-- S : 메인 > 수업 리뷰 -->
-<!--    <section class="sec sec06">-->
-<!--        <div class="sec06_wrap">-->
-<!--            <div class="sec06_tit">-->
-<!--                <h2>피오니키즈 수업리뷰</h2>-->
-<!--                <img src="/pon/common/image/pen.svg" alt="">-->
-<!--            </div>-->
-<!--            <div class="review_box">-->
-<!--                <div class="review_item">-->
-<!--                    <div class="review_tit">-->
-<!--                        <div class="img">-->
-<!--                            <img src="/pon/common/image/review_ca1.svg" alt="">-->
-<!--                        </div>-->
-<!--                        <h5>김**</h5>-->
-<!--                        <span>9세 남아 부모님</span>-->
-<!--                    </div>-->
-<!--                    <p>수업이 재밌대요. 수업중 밖에서 들어보면 우렁차게 잘 대답 하더라구요. 수업 마치면 Homework가 있다고 끝나자마자 아주 오리고 붙이고 바쁘네요 일단 어른이 봐도-->
-<!--                       수업자료가 아주 재밌어보여요 저희 아이는 숙제가 끝난 후에도 자료를 가지고 게임하듯이 놀더라구요.</p>-->
-<!--                </div>-->
-<!--                <div class="review_item">-->
-<!--                    <div class="review_tit">-->
-<!--                        <div class="img">-->
-<!--                            <img src="/pon/common/image/review_ca2.svg" alt="">-->
-<!--                        </div>-->
-<!--                        <h5>J***</h5>-->
-<!--                        <span>10세 여아 부모님</span>-->
-<!--                    </div>-->
-<!--                    <p>저희 아이는 국제학교를 다니고 있어서 아이를 위한 수업을 찾다가 듣게 되었는데 너무 만족합니다 활기차고 노련한 수업이였어요^^ 아이들과 소통해주시는 센스있는-->
-<!--                       선생님입니다 아이도 너무 재미있었다고 즐거워 했어요 다른 수업들도 꼭 다시 듣고 싶어요! 🥰</p>-->
-<!--                </div>-->
-<!--                <div class="review_item">-->
-<!--                    <div class="review_tit">-->
-<!--                        <div class="img">-->
-<!--                            <img src="/pon/common/image/review_ca3.svg" alt="">-->
-<!--                        </div>-->
-<!--                        <h5>남**</h5>-->
-<!--                        <span>8세 여 아 부모님</span>-->
-<!--                    </div>-->
-<!--                    <p>정말 이 가격이 맞나요? 너무너무 좋았어요 영어로 교과목을 배우다니. 선생님이며 수업 자료며 커리큘럼이며 퀄리티도 너무 좋구요 아이들 흥미를 유발하는 자료들까지~ 수업-->
-<!--                       수준 너무 좋았어요❤️ 온라인 수업중 최고였어요~ 당장 다른 수업도 등록 해야겠어요</p>-->
-<!--                </div>-->
-<!--                <div class="review_item review_item_mb">-->
-<!--                    <div class="review_tit">-->
-<!--                        <div class="img">-->
-<!--                            <img src="/pon/common/image/review_ca4.svg" alt="">-->
-<!--                        </div>-->
-<!--                        <h5>A***</h5>-->
-<!--                        <span>7세 여아 부모님</span>-->
-<!--                    </div>-->
-<!--                    <p>아이가 전해달래요"Thank you so much for today's lesson! I had so much fun. I would like to see you-->
-<!--                       again." 저희 아이같은 리터니들에게 꼭 필요한 수업 과정같아요 국내에선 접하기 힘든 수업이라 넘 만족해요</p>-->
-<!--                </div>-->
-<!--                <div class="review_item review_item_mb">-->
-<!--                    <div class="review_tit">-->
-<!--                        <div class="img">-->
-<!--                            <img src="/pon/common/image/review_ca5.svg" alt="">-->
-<!--                        </div>-->
-<!--                        <h5>박***</h5>-->
-<!--                        <span>9세 여아 부모님</span>-->
-<!--                    </div>-->
-<!--                    <p>외국인 학교 재학중이고 영어가 모국어인 아이입니다. 엄마 입장에서 너무 탐나고 아끼는 수업입니다. 우리아이만 알고싶은^^ 자체적인 커리큘럼이 있다는 점과 정통 미국식-->
-<!--                       교육의 색이 강하고 확실한 수업인 점이 가장 마음에 듭니다.</p>-->
-<!--                </div>-->
-<!--                <div class="review_item review_item_mb">-->
-<!--                    <div class="review_tit">-->
-<!--                        <div class="img">-->
-<!--                            <img src="/pon/common/image/review_ca6.svg" alt="">-->
-<!--                        </div>-->
-<!--                        <h5>최**</h5>-->
-<!--                        <span>8세 남아 부모님</span>-->
-<!--                    </div>-->
-<!--                    <p>열정적으로 수업해 주셔서 고맙습니다 제이든이 정말 좋아했어요! 수업 끝나고 배운것을 엄마에게 신나서 알려주네요^^ 남자아이고 활발한 아이라 오래 앉아있기가 힘든데-->
-<!--                       1시간 꼼짝 않고 집중하더라구요 아이가 만족하니 엄마는 대만족입니다!</p>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="sec06_bg">-->
-<!--            <img src="/pon/common/image/sec06_bg.png">-->
-<!--        </div>-->
-<!--    </section>-->
+    <!--    <section class="sec sec06">-->
+    <!--        <div class="sec06_wrap">-->
+    <!--            <div class="sec06_tit">-->
+    <!--                <h2>피오니키즈 수업리뷰</h2>-->
+    <!--                <img src="/pon/common/image/pen.svg" alt="">-->
+    <!--            </div>-->
+    <!--            <div class="review_box">-->
+    <!--                <div class="review_item">-->
+    <!--                    <div class="review_tit">-->
+    <!--                        <div class="img">-->
+    <!--                            <img src="/pon/common/image/review_ca1.svg" alt="">-->
+    <!--                        </div>-->
+    <!--                        <h5>김**</h5>-->
+    <!--                        <span>9세 남아 부모님</span>-->
+    <!--                    </div>-->
+    <!--                    <p>수업이 재밌대요. 수업중 밖에서 들어보면 우렁차게 잘 대답 하더라구요. 수업 마치면 Homework가 있다고 끝나자마자 아주 오리고 붙이고 바쁘네요 일단 어른이 봐도-->
+    <!--                       수업자료가 아주 재밌어보여요 저희 아이는 숙제가 끝난 후에도 자료를 가지고 게임하듯이 놀더라구요.</p>-->
+    <!--                </div>-->
+    <!--                <div class="review_item">-->
+    <!--                    <div class="review_tit">-->
+    <!--                        <div class="img">-->
+    <!--                            <img src="/pon/common/image/review_ca2.svg" alt="">-->
+    <!--                        </div>-->
+    <!--                        <h5>J***</h5>-->
+    <!--                        <span>10세 여아 부모님</span>-->
+    <!--                    </div>-->
+    <!--                    <p>저희 아이는 국제학교를 다니고 있어서 아이를 위한 수업을 찾다가 듣게 되었는데 너무 만족합니다 활기차고 노련한 수업이였어요^^ 아이들과 소통해주시는 센스있는-->
+    <!--                       선생님입니다 아이도 너무 재미있었다고 즐거워 했어요 다른 수업들도 꼭 다시 듣고 싶어요! 🥰</p>-->
+    <!--                </div>-->
+    <!--                <div class="review_item">-->
+    <!--                    <div class="review_tit">-->
+    <!--                        <div class="img">-->
+    <!--                            <img src="/pon/common/image/review_ca3.svg" alt="">-->
+    <!--                        </div>-->
+    <!--                        <h5>남**</h5>-->
+    <!--                        <span>8세 여 아 부모님</span>-->
+    <!--                    </div>-->
+    <!--                    <p>정말 이 가격이 맞나요? 너무너무 좋았어요 영어로 교과목을 배우다니. 선생님이며 수업 자료며 커리큘럼이며 퀄리티도 너무 좋구요 아이들 흥미를 유발하는 자료들까지~ 수업-->
+    <!--                       수준 너무 좋았어요❤️ 온라인 수업중 최고였어요~ 당장 다른 수업도 등록 해야겠어요</p>-->
+    <!--                </div>-->
+    <!--                <div class="review_item review_item_mb">-->
+    <!--                    <div class="review_tit">-->
+    <!--                        <div class="img">-->
+    <!--                            <img src="/pon/common/image/review_ca4.svg" alt="">-->
+    <!--                        </div>-->
+    <!--                        <h5>A***</h5>-->
+    <!--                        <span>7세 여아 부모님</span>-->
+    <!--                    </div>-->
+    <!--                    <p>아이가 전해달래요"Thank you so much for today's lesson! I had so much fun. I would like to see you-->
+    <!--                       again." 저희 아이같은 리터니들에게 꼭 필요한 수업 과정같아요 국내에선 접하기 힘든 수업이라 넘 만족해요</p>-->
+    <!--                </div>-->
+    <!--                <div class="review_item review_item_mb">-->
+    <!--                    <div class="review_tit">-->
+    <!--                        <div class="img">-->
+    <!--                            <img src="/pon/common/image/review_ca5.svg" alt="">-->
+    <!--                        </div>-->
+    <!--                        <h5>박***</h5>-->
+    <!--                        <span>9세 여아 부모님</span>-->
+    <!--                    </div>-->
+    <!--                    <p>외국인 학교 재학중이고 영어가 모국어인 아이입니다. 엄마 입장에서 너무 탐나고 아끼는 수업입니다. 우리아이만 알고싶은^^ 자체적인 커리큘럼이 있다는 점과 정통 미국식-->
+    <!--                       교육의 색이 강하고 확실한 수업인 점이 가장 마음에 듭니다.</p>-->
+    <!--                </div>-->
+    <!--                <div class="review_item review_item_mb">-->
+    <!--                    <div class="review_tit">-->
+    <!--                        <div class="img">-->
+    <!--                            <img src="/pon/common/image/review_ca6.svg" alt="">-->
+    <!--                        </div>-->
+    <!--                        <h5>최**</h5>-->
+    <!--                        <span>8세 남아 부모님</span>-->
+    <!--                    </div>-->
+    <!--                    <p>열정적으로 수업해 주셔서 고맙습니다 제이든이 정말 좋아했어요! 수업 끝나고 배운것을 엄마에게 신나서 알려주네요^^ 남자아이고 활발한 아이라 오래 앉아있기가 힘든데-->
+    <!--                       1시간 꼼짝 않고 집중하더라구요 아이가 만족하니 엄마는 대만족입니다!</p>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--        <div class="sec06_bg">-->
+    <!--            <img src="/pon/common/image/sec06_bg.png">-->
+    <!--        </div>-->
+    <!--    </section>-->
     <!-- E : 메인 > 수업 리뷰 -->
 
     <!-- S : 메인 > 하단 디자인 -->
