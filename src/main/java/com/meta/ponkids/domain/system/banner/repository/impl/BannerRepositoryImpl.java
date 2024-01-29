@@ -89,12 +89,14 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                 .on(
                         join_bannerClCd.cdDetailVal1.eq( banner.bannerClCd ),
                         join_bannerClCd.cdNm.eq("BANNER_CL_CD"),
+                        join_bannerClCd.useYn.eq( "Y" ),
                         join_bannerClCd.delYn.eq( "N" )
                 )
                 .leftJoin( join_bannerClDetailCd )
                 .on(
                         join_bannerClDetailCd.cdDetailVal1.eq( banner.bannerClDetailCd ),
                         join_bannerClDetailCd.cdNm.eq("BANNER_CL_DETAIL_CD"),
+                        join_bannerClDetailCd.useYn.eq( "Y" ),
                         join_bannerClDetailCd.delYn.eq( "N" )
                 )
                 // where
@@ -173,21 +175,23 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                                 .as( "bannerExpsrPeriod" )
                 ) )
                 .from( banner )
-                .leftJoin( class$ )
+                .innerJoin( class$ )
                 .on (
                         class$.classSn.eq( banner.classSn),
                         class$.delYn.eq("N")
                 )
-                .leftJoin( join_bannerClCd )
+                .innerJoin( join_bannerClCd )
                 .on(
                         join_bannerClCd.cdDetailVal1.eq( banner.bannerClCd ),
                         join_bannerClCd.cdNm.eq("BANNER_CL_CD"),
+                        join_bannerClCd.useYn.eq( "Y" ),
                         join_bannerClCd.delYn.eq( "N" )
                 )
-                .leftJoin( join_bannerClDetailCd )
+                .innerJoin( join_bannerClDetailCd )
                 .on(
                         join_bannerClDetailCd.cdDetailVal1.eq( banner.bannerClDetailCd ),
                         join_bannerClDetailCd.cdNm.eq("BANNER_CL_DETAIL_CD"),
+                        join_bannerClDetailCd.useYn.eq( "Y" ),
                         join_bannerClDetailCd.delYn.eq( "N" )
                 )
                 // where
@@ -196,7 +200,11 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                         eqBannerClCd( bannerClCd ),
                         eqBannerPdSetYn()
                 )
-                .orderBy( banner.bannerExpsrSeq.asc(), banner.regDt.asc())
+                .orderBy(
+                		banner.bannerClDetailCd.asc(),
+                		banner.bannerExpsrSeq.asc(),
+                		banner.regDt.asc()
+                )
                 .fetch();
         
         return results;
