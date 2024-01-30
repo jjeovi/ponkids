@@ -37,6 +37,9 @@ public class HomeController {
         // 배너 메인 클래스 영역 리스트
         model.addAttribute( "bannerClassList", bannerService.getMainList( BANNER_MAIN_CLASS ) );
         
+        // home 선언하여 차별점 둠 ( layout.html > pon-contents class 삭제 )
+        model.addAttribute( "mcd", "home" );
+        
         
         // E : 필요한 객체 setting
         

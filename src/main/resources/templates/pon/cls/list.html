@@ -27,7 +27,7 @@
 </div>
 
 <!-- E : Javascript functions	-->
-<div class="wrap pon-conents" layout:fragment="content">
+<div class="wrap" layout:fragment="content">
 	<form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="form">
 		<input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
 		<input type="hidden" name="category.lv1Sn" id="cate01"  th:value="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null ) } ? ${searchDTO.category.lv1Sn} " />
@@ -87,7 +87,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="card_list" th:classappend="${ (resultList.isEmpty())} ? 'no-data'">
+			<div class="card_list card_box" th:classappend="${ (resultList.isEmpty())} ? 'no-data'">
 				<div th:if = "${!resultList.isEmpty()}" th:each="data : ${resultList}" class="card_item">
 					<div class="item_img">
 						<img th:src="@{/getImage(atchFileSn=${data.thumbAtchFileSn})}" alt="클래스이미지" th:onclick="|detailClass(${data.classSn});|" >
