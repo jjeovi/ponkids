@@ -54,7 +54,7 @@
     <div class="header_top">
         <ol>
             <li>
-                <a href="class.html">로그인</a>
+                <a href="javascript:;" class="call_pop" data-layer="login">로그인</a>
             </li>
             <li>
                 <a href="#">학부모 상담요청</a>
@@ -285,6 +285,15 @@
     </div>
 </div>
 <!-- E : 문의 챗콘 -->
+
+<!-- layer popup  -->
+<div class="pop_dim" id="pop_dim"></div>
+<!-- popup id -->
+<div id="layer_findUser" 	class="pop_wrap findUser" 	data-layer-id="findUser" 	style="display: none;"	th:insert="/pon/layer/layer_findUser.html"	/> <!-- 아이디/비밀번호 찾기 -->
+<div id="layer_join" 		class="pop_wrap join" 		data-layer-id="join" 		style="display: none;"	th:insert="/pon/layer/layer_join.html"		/> <!-- 회원가입 -->
+<div id="layer_login" 		class="pop_wrap login" 		data-layer-id="login" 		style="display: none;"	th:insert="/pon/layer/layer_login.html"		/> <!-- 로그인 -->
+<div id="layer_policy" 		class="pop_wrap policy" 	data-layer-id="policy" 		style="display: none;"	th:insert="/pon/layer/layer_policy.html"	/> <!-- 이용약관 개인정보처리방침 -->
+ 
 </body>
 <!--e: body-->
 

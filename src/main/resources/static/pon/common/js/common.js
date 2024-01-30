@@ -130,3 +130,13 @@ function detailClass( classSn ) {
 }
 
 
+
+// 카카오 로그인
+function kakaoLogin(){
+	
+}
+
+// 구글 로그인
+function googleLogin(){
+	
+}
