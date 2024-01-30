@@ -1,6 +1,7 @@
 package com.meta.ponkids.domain.cls.repository.impl;
 
 import static com.meta.ponkids.domain.cls.entity.QClassWeek.classWeek;
+import static com.meta.ponkids.domain.lctre.entity.QLctre.lctre;
 import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
 
 import java.util.List;
@@ -76,7 +77,9 @@ public class ClassWeekRepositoryImpl implements ClassWeekRepositoryCustom {
                 .from( classWeek )
                 .leftJoin( cmmnCdDetail )
                 //join 조건 시에는 delYn 조건을 명시해야 함
-                .on( cmmnCdDetail.cdDetailVal1.eq( classWeek.classDayCd ),
+                .on( 
+                		cmmnCdDetail.cdNm.eq("DAY_7_CD"),
+                		cmmnCdDetail.cdDetailVal1.eq( classWeek.classDayCd ),
                 		cmmnCdDetail.useYn.eq( "Y" ),
                         cmmnCdDetail.delYn.eq( "N" )
                 )

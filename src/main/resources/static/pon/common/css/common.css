@@ -161,3 +161,30 @@
     .introduct_background{display: none;}
 }
 
+
+
+
+
+/* class > detail.html 페이지 */
+@media(max-width: 768px) {
+	.swiper-button-prev:after,
+	.swiper-rtl .swiper-button-next:after,
+	.swiper-button-next:after,
+	.swiper-rtl .swiper-button-prev:after {
+		display: none !important;
+	}
+}
+
+.swiper-button-prev:after,
+.swiper-rtl .swiper-button-next:after,
+.swiper-button-next:after,
+.swiper-rtl .swiper-button-prev:after {
+	color: #999 !important;
+}
+
+/* class > detail > 수업요일 데이터 없을 때 */
+.no-data-weekDay {
+	text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+}

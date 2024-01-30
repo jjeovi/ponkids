@@ -1,27 +1,33 @@
 package com.meta.ponkids.domain.cls.repository.impl;
 
 
-import com.meta.ponkids.domain.cls.dto.ClassListDto;
-import com.meta.ponkids.domain.cls.dto.QClassListDto;
-import com.meta.ponkids.domain.cls.repository.custom.ClassRepositoryCustom;
-import com.meta.ponkids.global.common.dto.CategoryDto;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
+import static com.meta.ponkids.domain.cls.entity.QClass.class$;
+import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl01.classCategoryCl01;
+import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategoryCl02;
+import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
+
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
+import com.meta.ponkids.domain.cls.dto.ClassListDto;
+import com.meta.ponkids.domain.cls.dto.ClassModDto;
+import com.meta.ponkids.domain.cls.dto.QClassListDto;
+import com.meta.ponkids.domain.cls.repository.custom.ClassRepositoryCustom;
+import com.meta.ponkids.global.common.dto.CategoryDto;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import static com.meta.ponkids.domain.cls.entity.QClass.class$;
-import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl01.classCategoryCl01;
-import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategoryCl02;
+import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
@@ -64,6 +70,14 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                         class$.classDc,
                         class$.classAmt,
                         class$.classDscntBfeAmt,
+                        class$.classTrgtCd,
+                        ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
+                                .from( cmmnCdDetail )
+                                .where( 
+                                		cmmnCdDetail.cdNm.eq("CLASS_TRGT_CD"),
+                                		cmmnCdDetail.cdDetailVal1.eq( class$.classTrgtCd ),
+                                		cmmnCdDetail.useYn.eq( "Y" ),
+                                		cmmnCdDetail.delYn.eq( "N" ) ), "classTrgtNm" ),
                         class$.classPdSetYn,
                         class$.classBeginDt,
                         class$.classEndDt,
@@ -136,6 +150,14 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                         class$.classDc,
                         class$.classAmt,
                         class$.classDscntBfeAmt,
+                        class$.classTrgtCd,
+                        ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
+                                .from( cmmnCdDetail )
+                                .where( 
+                                		cmmnCdDetail.cdNm.eq("CLASS_TRGT_CD"),
+                                		cmmnCdDetail.cdDetailVal1.eq( class$.classTrgtCd ),
+                                		cmmnCdDetail.useYn.eq( "Y" ),
+                                		cmmnCdDetail.delYn.eq( "N" ) ), "classTrgtNm" ),
                         class$.classPdSetYn,
                         class$.classBeginDt,
                         class$.classEndDt,
@@ -195,6 +217,14 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                         class$.classDc,
                         class$.classAmt,
                         class$.classDscntBfeAmt,
+                        class$.classTrgtCd,
+                        ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
+                                .from( cmmnCdDetail )
+                                .where( 
+                                		cmmnCdDetail.cdNm.eq("CLASS_TRGT_CD"),
+                                		cmmnCdDetail.cdDetailVal1.eq( class$.classTrgtCd ),
+                                		cmmnCdDetail.useYn.eq( "Y" ),
+                                		cmmnCdDetail.delYn.eq( "N" ) ), "classTrgtNm" ),
                         class$.classPdSetYn,
                         class$.classBeginDt,
                         class$.classEndDt,
@@ -228,14 +258,81 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 )
                 // where
                 .where(
-                        eqClassSn(classSn)					// 고유한 1건만 조회 (pk 로 조회 ) 
+                        eqClassSn( classSn )					// 고유한 1건만 조회 (pk 로 조회 ) 
                 )
                 .orderBy( class$.classSn.desc())
                 .fetchFirst();
     }
     
     
+    @Override
+    public List<ClassListDto> getListTop10OtherClassExceptMeByCtgrySn( ClassListDto listDto ) {
+    	// 10건만 조회
+    	// 나의 클래스와 같은 카테고리의 다른 클래스 ( 내 클래스는 제외하고 검색 ) : 10건만 조회
 
+        return query
+                // select
+                .select( new QClassListDto(
+                        class$.classSn,
+                        class$.ctgrySn,
+                        classCategoryCl01.clNm.as( "ctgryNm" ),
+                        class$.crseSn,
+                        classCategoryCl02.clNm.as( "crseNm" ),
+                        class$.classSj,
+                        class$.classSumry,
+                        class$.classDc,
+                        class$.classAmt,
+                        class$.classDscntBfeAmt,
+                        class$.classTrgtCd,
+                        ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
+                                .from( cmmnCdDetail )
+                                .where( 
+                                		cmmnCdDetail.cdNm.eq("CLASS_TRGT_CD"),
+                                		cmmnCdDetail.cdDetailVal1.eq( class$.classTrgtCd ),
+                                		cmmnCdDetail.useYn.eq( "Y" ),
+                                		cmmnCdDetail.delYn.eq( "N" ) ), "classTrgtNm" ),
+                        class$.classPdSetYn,
+                        class$.classBeginDt,
+                        class$.classEndDt,
+                        class$.thumbAtchFileSn,
+                        class$.atchFileSn,
+                        new CaseBuilder()
+                                .when( class$.classExpsrYn.eq("Y")).then("표시")
+                                .when( class$.classExpsrYn.eq("N")).then("미표시")
+                                .otherwise("")
+                                .as("classExpsrYn"),
+                        new CaseBuilder()
+                                .when( 	class$.classPdSetYn.eq("Y")).then(
+                                        class$.classBeginDt.concat(" ~ ").concat(class$.classEndDt)
+                                )
+                                .when( class$.classPdSetYn.eq("N")).then("상시")
+                                .otherwise("")
+                                .as("classExpsrPeriod"),
+                        class$.registerId,
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH:MM:SS" )
+                ) )
+                .from( class$ )
+                .leftJoin( classCategoryCl01 )
+                // join 에는 delYn 조건 필수로 추가
+                .on(    class$.ctgrySn.eq( classCategoryCl01.clSn ),
+                        classCategoryCl01.delYn.eq( "N" )
+                )
+                .leftJoin( classCategoryCl02 )
+                // join 에는 delYn 조건 필수로 추가
+                .on(    class$.crseSn.eq( classCategoryCl02.clSn ),
+                        classCategoryCl02.delYn.eq("N")
+                )
+                // where
+                .where(
+                		eqCtgrySn( listDto.getCtgrySn() ),
+                        neClassSn( listDto.getClassSn() )					// 고유한 1건만 조회 (pk 로 조회 ) 
+                )
+                .orderBy( class$.classSn.desc())
+                .limit( 10 )
+                .fetch();
+    	
+    }
+    
     
     
 	// -------------------------------- WHERE 검색 옵션 setting --------------------------------
@@ -271,6 +368,17 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
     // pk 로 고유값 1건만 조회
     private BooleanExpression eqClassSn( Long classSn ) {
     	return ( classSn != null ) ? class$.classSn.eq( classSn ) : null;
+    }
+    
+
+    // ctgrySn 조회 
+    private BooleanExpression eqCtgrySn( Long ctgrySn ) {
+    	return ( ctgrySn != null ) ? class$.ctgrySn.eq( ctgrySn ) : null;
+    }
+    
+    // pk 로 고유값 1건만 조회
+    private BooleanExpression neClassSn( Long classSn ) {
+    	return ( classSn != null ) ? class$.classSn.ne( classSn ) : null;
     }
     
     

@@ -11,6 +11,8 @@ public interface UserMenuHierarchyRepository extends JpaRepository<UserMenuHiera
 
     UserMenuHierarchy findTop1ByMenuCdAndDelYnOrderByMenuSn( String menuCd, String delYn );
     
+    UserMenuHierarchy findTop1ByMenuCdAndDelYnAndLevelNotOrderByMenuSn( String menuCd, String delYn, Long level );
+    
     
     void deleteByMenuSn( Long sn );
     

@@ -72,6 +72,12 @@ public class ClassService {
         return listDtos;
     }
     
+    // 나의 클래스와 같은 카테고리의 다른 클래스 ( 내 클래스는 제외하고 검색 ) : 10건만 조회
+    public List<ClassListDto> getListTop10OtherClassExceptMeByCtgrySn( ClassListDto targetDto ) {
+    	
+    	return classRepository.getListTop10OtherClassExceptMeByCtgrySn( targetDto );
+    }
+    
     
     // 커리큘럼으로 classList 검색
     public List<ClassListDto> getListByCrseSn( ClassListDto listDto ) {
@@ -140,6 +146,8 @@ public class ClassService {
         if ( StringUtils.hasText( modDto.getClassDc() ) )       targetDto.setClassDc( modDto.getClassDc() );                    // 클래스 설명
         if ( modDto.getClassAmt() != null )                     targetDto.setClassAmt( modDto.getClassAmt() );                  // 금액
         if ( modDto.getClassDscntBfeAmt() != null )             targetDto.setClassDscntBfeAmt( modDto.getClassDscntBfeAmt() );  // 할인된 금액
+        targetDto.setClassTrgtCd(modDto.getClassTrgtCd());																		// 클래스 대상 코드
+        if ( StringUtils.hasText( modDto.getClassExpsrYn() ) )  targetDto.setClassExpsrYn( modDto.getClassExpsrYn() );          // 표시여부
         if ( StringUtils.hasText( modDto.getClassExpsrYn() ) )  targetDto.setClassExpsrYn( modDto.getClassExpsrYn() );          // 표시여부
         if ( StringUtils.hasText( modDto.getClassPdSetYn() ) )  targetDto.setClassPdSetYn( modDto.getClassPdSetYn() );          // 표시기간설정여부
         

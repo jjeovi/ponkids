@@ -7,5 +7,7 @@ import org.springframework.data.domain.Pageable;
 public interface LctreRepositoryCustom {
 	
 	Page<LctreListDto> getList( LctreListDto listDto, Pageable pageable );
+	
+	LctreListDto getListByClassSn( Long classSn );
 
 }

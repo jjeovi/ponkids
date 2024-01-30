@@ -129,7 +129,17 @@
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" name="lctreSj" placeholder="수업 제목을 입력해주세요." th:value="${targetDto.lctreSj}" required/>
                                 <small class="font-gray-dark">
-                                    신청 화면에서 수업이 selectbox로 보여지는 내용입니다.
+                                    신청 화면에서 수업이 selectbox로 보여지는 내용입니다. ex ) 1월 1일 (월) 오후 3시 (59,000)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">수업 금액<span
+                                    class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6">
+                                <input type="number" class="form-control" name="lctreAmt" placeholder="수업 금액 입력(숫자만)" th:value="${targetDto.lctreAmt}"/>
+                                <small class="font-gray-dark">
+                                    실제 사용자가 지불할 수업 금액입니다.
                                 </small>
                             </div>
                         </div>

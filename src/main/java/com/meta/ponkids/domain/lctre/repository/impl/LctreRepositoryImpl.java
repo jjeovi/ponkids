@@ -53,6 +53,7 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 						cmmnCdDetail.cdDetailNm,
 						lctre.lctreSeq,
 						lctre.lctreSj,
+						lctre.lctreAmt,
 						lctre.lctreDc,
 						lctre.lctreApplcntGuidance,
 						lctre.rcritNmprSetYn,
@@ -121,6 +122,78 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
                         );
 		
 		return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
+	}
+	
+	@Override
+	public LctreListDto getListByClassSn( Long classSn ) {
+		
+
+        // (1) 결과list (results).
+		LctreListDto results = query
+				// select
+                .select( new QLctreListDto(
+                		lctre.lctreSn,
+						class$.ctgrySn,
+						classCategoryCl01.clNm.as( "ctgryNm" ),
+						class$.crseSn,
+						classCategoryCl02.clNm.as( "crseNm" ),
+						lctre.classSn,
+						class$.classSj,
+						cmmnCdDetail.cdDetailSn,
+						lctre.classDayCd,
+						cmmnCdDetail.cdDetailNm,
+						lctre.lctreSeq,
+						lctre.lctreSj,
+						lctre.lctreAmt,
+						lctre.lctreDc,
+						lctre.lctreApplcntGuidance,
+						lctre.rcritNmprSetYn,
+						new CaseBuilder()
+								.when( lctre.rcritNmprSetYn.eq( "Y" ) ).then( "설정" )
+								.when( lctre.rcritNmprSetYn.eq( "N" ) ).then( "미설정" )
+								.otherwise( "" )
+								.as( "rcritNmprSetYnNm" ),
+						lctre.rcritNmprCo,
+						lctre.preparRcritNmprSetYn,
+						new CaseBuilder()
+								.when( lctre.preparRcritNmprSetYn.eq( "Y" ) ).then( "설정" )
+								.when( lctre.preparRcritNmprSetYn.eq( "N" ) ).then( "미설정" )
+								.otherwise( "" )
+								.as( "preparRcritNmprSetYnNm" ),
+						lctre.preparRcritNmprCo,
+						lctre.registerId,
+                		Expressions.stringTemplate("to_char({0}, '{1s}')", lctre.regDt, "YYYY-MM-DD HH:MM:SS")
+                		) )
+                .from( lctre )
+				.leftJoin( class$ )
+				// join 에는 delYn 조건 필수로 추가
+				.on(    class$.classSn.eq( lctre.classSn ),
+						class$.delYn.eq( "N" )
+				)
+				.leftJoin( classCategoryCl01 )
+				// join 에는 delYn 조건 필수로 추가
+				.on(    class$.ctgrySn.eq( classCategoryCl01.clSn ),
+						classCategoryCl01.delYn.eq( "N" )
+				)
+				.leftJoin( classCategoryCl02 )
+				// join 에는 delYn 조건 필수로 추가
+				.on(    class$.crseSn.eq( classCategoryCl02.clSn ),
+						classCategoryCl02.delYn.eq("N")
+				)
+				.leftJoin( cmmnCdDetail )
+				.on(	cmmnCdDetail.cdNm.eq("DAY_7_CD"),
+						cmmnCdDetail.cdDetailVal1.eq( lctre.classDayCd ),
+						cmmnCdDetail.useYn.eq("Y"),
+						cmmnCdDetail.delYn.eq("N")
+						)
+                // where
+                .where(
+                		eqClassSn( classSn )
+				)
+                .orderBy( lctre.lctreSn.desc())
+                .fetchFirst();
+		
+		return results;
 	}
 	
 	// -------------------------------- WHERE 검색 옵션 setting --------------------------------

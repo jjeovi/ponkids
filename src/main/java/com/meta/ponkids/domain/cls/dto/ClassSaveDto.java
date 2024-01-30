@@ -28,6 +28,8 @@ public class ClassSaveDto extends ClassDto {
     
     private Long classDscntBfeAmt;        // 클래스할인전금액
     
+    private String classTrgtCd;            // 클래스 대상 코드
+    
     private String classPdSetYn;            // 클래스기간설정여부
     
     private String classBeginDt;            // 클래스시작일시
@@ -58,6 +60,7 @@ public class ClassSaveDto extends ClassDto {
 			String classDc, 
 			Long classAmt, 
 			Long classDscntBfeAmt, 
+			String classTrgtCd,
 			String classPdSetYn,
 			String classBeginDt, 
 			String classEndDt, 
@@ -77,6 +80,7 @@ public class ClassSaveDto extends ClassDto {
 		this.classDc = classDc;
 		this.classAmt = classAmt;
 		this.classDscntBfeAmt = classDscntBfeAmt;
+		this.classTrgtCd = classTrgtCd;
 		this.classPdSetYn = classPdSetYn;
 		this.classBeginDt = classBeginDt;
 		this.classEndDt = classEndDt;
@@ -100,6 +104,7 @@ public class ClassSaveDto extends ClassDto {
                 .classDc( classDc )
                 .classAmt( classAmt )
                 .classDscntBfeAmt( classDscntBfeAmt )
+                .classTrgtCd( classTrgtCd )
                 .classPdSetYn( classPdSetYn )
                 .classBeginDt( classBeginDt )
                 .classEndDt( classEndDt )

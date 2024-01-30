@@ -389,12 +389,12 @@
                                     </div>
                                     <div class="upload-btn mt_10p">
                                         <label class="btn btn-purple">업로드
-                                            <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" th:value="${targetDto.thumbAtchFileSn}" onchange="fileChange(this)">
+                                            <input type="file" name="thumbFile" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" th:value="${targetDto.thumbAtchFileSn}" onchange="fileChange(this)">
                                         </label>
                                         <button type="button" class="btn btn-purple" id="removeImageBtn" onclick="removeImage(this);" th:if = 	"${targetDto.thumbAtchFileSn != null}">이미지제거</button>
                                     </div>
-                                    <input type="hidden" name="atchFileSn" 	    th:value="${targetDto.thumbAtchFileSn}" />
-                                    <input type="hidden" name="atchFileSnOri" 	th:value="${targetDto.thumbAtchFileSn}" />
+                                    <input type="hidden" name="thumbAtchFileSn" 	    th:value="${targetDto.thumbAtchFileSn}" />
+                                    <input type="hidden" name="thumbAtchFileSnOri" 		th:value="${targetDto.thumbAtchFileSn}" />
                                 </div>
                             </div>
                         </div>
@@ -409,7 +409,7 @@
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control"name="classAmt" required="required" placeholder="금액 입력" type="number" th:value="${targetDto.classAmt}" />
                                 <small class="font-gray-dark">
-                                    금액을 입력해주세요. 숫자만 입력 가능
+                                    금액을 입력해주세요. 숫자만 입력 가능. 해당 금액은 표시용입니다. (실제 지불할 금액은 수업 관리에서 설정)
                                 </small>
                             </div>
                         </div>
@@ -421,6 +421,18 @@
                                     할인 적용시 할인하기 전 금액을 입력해주세요. 금액보다 큰 값이어야 합니다.
                                 </small>
                             </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">대상<span class="required">*</span></label>
+                            <div class="col-md-2 col-sm-6">
+                            	<select class="form-control" name="classTrgtCd" id="classTrgtCd">
+                                    <option value="">대상 선택</option>
+									<option th:each="item : ${classTrgtCdList}" th:value="${item.cdDetailVal1}" th:text="${item.cdDetailNm}" th:selected="${item.cdDetailVal1} == ${targetDto.classTrgtCd}" >
+                                </select>
+                            </div>
+                            <small class="font-gray-dark" style="padding-top: 10px;">
+                                미선택시, 클래스 상세 화면에서 대상정보가 표출되지 않습니다.
+                            </small>
                         </div>
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">요일선택</label>
@@ -553,8 +565,7 @@
                             <div id="attachFileDiv">
                                 <div id="attachFileList">
                                     <div class="upload-thumb-wrap" th:if="${targetDto.atchFileSn != null}">
-                                        <input type="hidden" id="atchFileSn" name="atchFileSn"
-                                               th:value="${targetDto.atchFileSn}">
+                                        <input type="hidden" id="atchFileSn" name="atchFileSn" th:value="${targetDto.atchFileSn}">
                                         <div th:if="${!atchFileList.isEmpty()}" th:each=" data : ${atchFileList} ">
                                             <span th:text="${data.orignlFileNm}"></span>
                                             <span class="badge badge-dark" style="cursor:pointer"><a
@@ -579,8 +590,7 @@
                                         선택된 파일이 없습니다.
                                     </td>
                                 </table>
-                                <input type="file" id="multi-add" class="btn-add" name="atchFile" multiple
-                                       style="display: none;">
+                                <input type="file" id="multi-add" class="btn-add" name="atchFile" multiple style="display: none;">
                                 <button type="button" class="btn-add" id="file_add">파일추가</button>
 
                             </div>

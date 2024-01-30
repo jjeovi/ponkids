@@ -311,7 +311,7 @@ public class LctreAdmController {
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/" + classSn + "/list" );
         
         return "common/alert";
     }
@@ -349,8 +349,11 @@ public class LctreAdmController {
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
-        
+        if ( classSn != null ) { 
+            model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/" + classSn + "/list" );
+        } else {
+        	model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+        }
         return "common/alert";
     }
     
@@ -640,7 +643,6 @@ public class LctreAdmController {
             		
             	}
             }
-            
             
             if(listDto.getCategory() != null ) {
             	listDto.getCategory().setCategoryNm( categoryNm );        // category 제목 ( 분류에 뿌리기 위함 [ lctre/list.html ] )

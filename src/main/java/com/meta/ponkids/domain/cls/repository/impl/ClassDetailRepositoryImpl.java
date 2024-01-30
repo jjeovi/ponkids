@@ -46,10 +46,11 @@ public class ClassDetailRepositoryImpl implements ClassDetailRepositoryCustom {
                 		classDetail.classDetailItemTyCd,
                 		ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
                                 .from( cmmnCdDetail )
-                                .where( cmmnCdDetail.cdDetailVal1.eq( classDetail.classDetailItemTyCd ),
+                                .where( 
+                                		cmmnCdDetail.cdNm.eq("CLASS_DETAIL_ITEM_TY_CD"),
+                                		cmmnCdDetail.cdDetailVal1.eq( classDetail.classDetailItemTyCd ),
                                 		cmmnCdDetail.useYn.eq( "Y" ),
-                                		cmmnCdDetail.delYn.eq( "N" ),
-                                		cmmnCdDetail.cdNm.eq("CLASS_DETAIL_ITEM_TY_CD") ), "classDetailItemTyNm" ),
+                                		cmmnCdDetail.delYn.eq( "N" ) ), "classDetailItemTyNm" ),
                 		classDetail.classDetailItemCn,
                 		classDetail.classDetailEssntlYn,
                 		new CaseBuilder()
@@ -90,10 +91,11 @@ public class ClassDetailRepositoryImpl implements ClassDetailRepositoryCustom {
 	                		classDetail.classDetailItemTyCd,
 	                		ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
 	                                .from( cmmnCdDetail )
-	                                .where( cmmnCdDetail.cdDetailVal1.eq( classDetail.classDetailItemTyCd ),
+	                                .where( 
+	                                		cmmnCdDetail.cdNm.eq("CLASS_DETAIL_ITEM_TY_CD"),
+	                                		cmmnCdDetail.cdDetailVal1.eq( classDetail.classDetailItemTyCd ),
 	                                		cmmnCdDetail.useYn.eq( "Y" ),
-	                                		cmmnCdDetail.delYn.eq( "N" ),
-	                                		cmmnCdDetail.cdNm.eq("CLASS_DETAIL_ITEM_TY_CD") ), "classDetailItemTyNm" ),
+	                                		cmmnCdDetail.delYn.eq( "N" ) ), "classDetailItemTyNm" ),
 	                		classDetail.classDetailItemCn,
 	                		classDetail.classDetailEssntlYn,
 	                		new CaseBuilder()

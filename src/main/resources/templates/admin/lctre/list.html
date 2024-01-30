@@ -159,7 +159,9 @@
 	                            <tr>
 	                                <th>순번</th>
 	                                <th>분류</th>
-	                                <th>[클래스제목]<br />수업제목</th>
+	                                <th>
+										<th:block th:unless="${ searchDTO.category != null && searchDTO.category.lv3Sn != null && searchDTO.category.lv3Sn != 0}">[클래스제목]<br /></th:block>수업제목</th>
+									</th>
                                     <th>요일</th>
 	                                <th>[수강 / 모집]인원</th>
 	                                <th>[수강 / 예비모집] 인원</th>
@@ -173,7 +175,8 @@
                                     <td> [[${data.ctgryNm}]] <th:block th:if="${data.crseSn != null && data.crseSn != '' }"><br/>[ [[${data.crseNm}]] ] </th:block> </td>
 	                                <td>
                                         <a class="b-link" th:href="@{{basicPath}/{mcd}/{classSn}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, classSn = ${data.classSn}, pk = ${data.lctreSn} ) }">
-                                            [[${data.classSj}]] <th:block><br/>[ [[${data.lctreSj}]] ]</th:block>
+                                            <th:block th:unless="${ searchDTO.category != null && searchDTO.category.lv3Sn != null && searchDTO.category.lv3Sn != 0}">[ [[${data.classSj}]] ]<br /></th:block>
+                                            <th:block>[[${data.lctreSj}]]</th:block>
                                         </a>
                                     </td>
                                     <td th:text="${data.classDayNm}"></td>

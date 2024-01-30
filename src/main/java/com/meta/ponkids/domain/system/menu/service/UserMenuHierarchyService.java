@@ -29,9 +29,9 @@ public class UserMenuHierarchyService {
         }
         
     }
-    public UserMenuHierarchyDto findTop1ByMenuCdAndDelYnOrderByMenuSn( String menuCd, String delYn ) {
+    public UserMenuHierarchyDto findTop1ByMenuCdAndDelYnAndLevelNotOrderByMenuSn( String menuCd, String delYn, Long level ) {
         
-    	UserMenuHierarchy userMenuHierarchy = userMenuHierarchyRepository.findTop1ByMenuCdAndDelYnOrderByMenuSn( menuCd , delYn );
+    	UserMenuHierarchy userMenuHierarchy = userMenuHierarchyRepository.findTop1ByMenuCdAndDelYnAndLevelNotOrderByMenuSn( menuCd , delYn , level);
         
         if ( userMenuHierarchy == null ) {
             return null;

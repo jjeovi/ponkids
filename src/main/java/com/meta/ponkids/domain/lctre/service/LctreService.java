@@ -1,9 +1,13 @@
 package com.meta.ponkids.domain.lctre.service;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.meta.ponkids.domain.lctre.dto.LctreAjaxDto;
 import com.meta.ponkids.domain.lctre.dto.LctreListDto;
 import com.meta.ponkids.domain.lctre.dto.LctreModDto;
 import com.meta.ponkids.domain.lctre.dto.LctreSaveDto;
@@ -44,6 +48,25 @@ public class LctreService {
     public Page<LctreListDto> getList( LctreListDto listDto, Pageable pageable ) {
         return lctreRepository.getList( listDto, pageable );
     }
+    
+    
+    public List<LctreAjaxDto> findByClassSnAndClassDayCdAjax( LctreListDto listDto ) {
+    	List<Lctre> lctreList = lctreRepository.findByClassSnAndClassDayCdOrderByLctreSeqAsc(listDto.getClassSn(), listDto.getClassDayCd());
+    	
+    	LctreAjaxDto lctreListDto = new LctreAjaxDto();
+    	List<LctreAjaxDto> listDtos = lctreList
+    			.stream()
+    			.map( m -> lctreListDto.toDto( m ) )
+    			.collect( Collectors.toList() );
+    	
+    	return listDtos;
+    }
+    
+    
+    public LctreListDto getListByClassSn( Long classSn ) {
+    	return lctreRepository.getListByClassSn( classSn );
+    }
+    
     
     public LctreModDto findTop1ByClassSnOrderByLctreSeqDesc ( Long pk ) {
         // target 조회
@@ -94,6 +117,7 @@ public class LctreService {
         if ( StringUtils.hasText(modDto.getClassDayCd())) targetDto.setClassDayCd( modDto.getClassDayCd() );    // 수업 요일
         targetDto.setLctreSeq( modDto.getLctreSeq() );                                                          // 수업 순번
         if(StringUtils.hasText( modDto.getLctreSj() ))  targetDto.setLctreSj( modDto.getLctreSj() );            // 수업 제목
+        targetDto.setLctreAmt( modDto.getLctreAmt() );            												// 수업 금액
         targetDto.setLctreDc( modDto.getLctreDc() );                                                            // 수업 설명
         targetDto.setLctreApplcntGuidance( modDto.getLctreApplcntGuidance() );                                  // 신청자 안내
         if(StringUtils.hasText( modDto.getRcritNmprSetYn() ))  targetDto.setRcritNmprSetYn( modDto.getRcritNmprSetYn() );            // 모집인원 설정여부

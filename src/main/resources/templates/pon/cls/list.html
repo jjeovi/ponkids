@@ -27,7 +27,7 @@
 </div>
 
 <!-- E : Javascript functions	-->
-<div class="wrap" layout:fragment="content">
+<div layout:fragment="content">
 	<form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="form">
 		<input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
 		<input type="hidden" name="category.lv1Sn" id="cate01"  th:value="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null ) } ? ${searchDTO.category.lv1Sn} " />
@@ -37,8 +37,8 @@
 				<div class="star">
 					<img src="/pon/common/image/star_color.svg" alt="">
 				</div>
-				<h3 th:text="${currentMenu != null && currentMenu.menuNm!= null } ? ${currentMenu.menuNm}" >메뉴명</h3>
-				<span th:text="${currentMenu != null && currentMenu.menuNm!= null } ? ${currentMenu.menuDc}" >메뉴설명</span>
+				<h3 th:text="${currentMenu != null && currentMenu.menuNm!= null } ? ${currentMenu.menuNm} : '클래스' " >메뉴명</h3>
+				<span th:text="${currentMenu != null && currentMenu.menuNm!= null } ? ${currentMenu.menuDc} : '피오니키즈에서만 만나볼 수 있는 특별한 클래스' " >메뉴설명</span>
 				<img class="bg_ico1" src="/pon/common/image/star_3d_color.png" alt="클래스배경이미지1">
 				<img class="bg_ico2" src="/pon/common/image/atom2.png" alt="클래스배경이미지2">
 			</div>

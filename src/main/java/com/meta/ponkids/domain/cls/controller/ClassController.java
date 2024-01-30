@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ListDto;
 import com.meta.ponkids.domain.cls.dto.ClassListDto;
 import com.meta.ponkids.domain.cls.dto.ClassModDto;
 import com.meta.ponkids.domain.cls.service.ClassCategoryCl01Service;
@@ -22,6 +21,7 @@ import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
 import com.meta.ponkids.domain.cls.service.ClassDetailService;
 import com.meta.ponkids.domain.cls.service.ClassService;
 import com.meta.ponkids.domain.cls.service.ClassWeekService;
+import com.meta.ponkids.domain.lctre.service.LctreService;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
 import com.meta.ponkids.domain.system.file.repository.AtchFileDetailRepository;
@@ -44,6 +44,8 @@ public class ClassController {
     private final ClassDetailService classDetailService;
     private final ClassCategoryCl01Service classCategoryCl01Service;
     private final ClassCategoryCl02Service classCategoryCl02Service;
+    
+    private final LctreService lctreService;
     
     private final CmmnCdDetailService cmmnCdDetailService;
     
@@ -72,15 +74,7 @@ public class ClassController {
         // 클래스 카테고리 분류1 list setting
         model.addAttribute( "cateLv1List", classCategoryCl01Service.findAll() );
         
-//        if ( listDto.getCategory() != null && listDto.getCategory().getLv1Sn() != null ) {
-//            
-//            ClassCategoryCl02ListDto categoryCl02ListDto = new ClassCategoryCl02ListDto();
-//            
-//            // 부모clSn 값 setting ( ajax의 categorySn 을 대입해준다.)
-//            categoryCl02ListDto.setParntsClSn( listDto.getCategory().getLv1Sn() );
-//            
-//            model.addAttribute( "cateLv2List", classCategoryCl02Service.findAllByOrderByParntsClSnAscClSeqAsc() );
-//        }
+        // 클래스 분류 2setting
         model.addAttribute( "cateLv2List", classCategoryCl02Service.findAllByOrderByParntsClSnAscClSeqAsc() );
         
         // E : 필요한 객체 setting
@@ -92,8 +86,6 @@ public class ClassController {
     }
 	
     
-    
-    
     @GetMapping( BASIC_PATH + "/{mcd}/detail" )
     public String detail( 
     		@RequestParam( required = true ) Long pk,    // 타입 체크
@@ -101,39 +93,56 @@ public class ClassController {
             HttpServletRequest request,
             Model model ) {
     	
-// S : 필요한 객체 setting
+    	// S : 필요한 객체 setting
+    	
+    	// 1. 클래스 의 정보 : targetDto
         
         // target object 조회
-        ClassModDto targetDto = classService.findById( pk );
+        ClassListDto targetDto = classService.getByClassSn( pk );
+        
+        if( targetDto == null  || targetDto.getClass() == null ) {
+        	
+            // 메시지 출력 및 url 이동 처리
+            model.addAttribute( "resultMsg", "유효하지 않은 클래스 정보입니다." );
+            model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+            
+            return "common/alert";
+        }
+        
         model.addAttribute( "targetDto", targetDto );
         
-        // 요일 List add
-        model.addAttribute( "day7List", cmmnCdDetailService.getList( "DAY_7_CD" ) );    // 요일리스트
-        
-        // 클래스 카테고리 list setting
-        model.addAttribute( "ctgrySnList", classCategoryCl01Service.findAll() );
-        
-        // 클래스 커리큘럼 list setting ( targetDto 의 ctgrySn 값으로 커리큘럼 list 를 구함. )
-        model.addAttribute( "crseSnList", classCategoryCl02Service.findByParntsClSnOrderByClSeq( targetDto.getCtgrySn() ) );
-        
-        // 클래스 요일 List add
-        // 클래스 요일 은 html 그리고 script로 ajax를 통해 불러온다. 처음에 불러오면 타임리프로 요일을 체크하는 로직으로는 타임리프의 값을 script에서 읽는데 한계가 있기 때문에
-        // html먼저 그린 뒤 ajax를 호출 하는 방식으로 정함. -> /live/getClassWeekListAjax 에서 구현
-        // model.addAttribute( "classWeekList",  classWeekService.findByClassSnOrderByClassWeekSn( targetDto.getClassSn() ));
-        
-        // chldrn target object 조회
+        // 1-1. 클래스의 정보 > 클래스 입력 항목 리스트 : targetClsDtlList  ( ex ⭐️ 미팅장소에 10분 전 도착해주시길 바랍니다. 지각 시 환불이 어렵습니다. ⭐ (예시답변 : 네 ) 등.. ) 
         model.addAttribute( "targetClsDtlList", classDetailService.findByClassSnOrderByClassDetailSeq( targetDto.getClassSn() ) );
         
-        // 클래스sn model 에 추가
-        model.addAttribute( "schClassSn", targetDto.getClassSn() );
-        
-        
-        // 첨부파일 존재시
+        // 1-2. 클래스 의 정보 > 첨부파일 (여러건) : atchFileList
+        // 첨부파일 존재시 (여러건)
         if ( targetDto.getAtchFileSn() != null ) {
             List<AtchFileDetail> atchFileList = atchFileDetailService.getList( targetDto.getAtchFileSn() );
             model.addAttribute( "atchFileList", atchFileList );
         }
         
+        // 2. 클래스 의 수업 정보 : classLctreList > ByClassSn
+        model.addAttribute("classLctreList", lctreService.getListByClassSn( targetDto.getClassSn() ) );		// 클래스 수업 : classSn 으로 검색
+        
+        
+    	// 3. 클래스 의 요일 정보 : classWeekList > ByClassSn
+        model.addAttribute("classWeekList", classWeekService.getListByClassSn( targetDto.getClassSn() ) );	// 클래스 요일 classSn으로 검색
+        
+//        // 요일 List add
+//        model.addAttribute( "day7List", cmmnCdDetailService.getList( "DAY_7_CD" ) );    // 요일리스트
+        
+        
+    	// 4. 클래스 의 후기 : classReviewList > ByClassSn
+        // TODO
+        
+    	// 5. 클래스 의 Q&A : classInqryList > ByClassSn
+        // TODO
+        
+    	// 6. 클래스 가 속한 카테고리의 다른 클래스들의 정보 : otherClassList ( 본인 클래스는 제외해야함 ) 
+        model.addAttribute("otherClassList", classService.getListTop10OtherClassExceptMeByCtgrySn( targetDto ) );
+        
+//        model.addAttribute( "classSn", targetDto.getClassSn() );
+     
         // E : 필요한 객체 setting
     	
     	// 기본 경로 setting
@@ -141,7 +150,6 @@ public class ClassController {
     	
     	return BASIC_DIR_PATH + "/detail";
     }
-    
 	
 	
 

@@ -25,6 +25,8 @@ public class ClassModDto extends ClassDto {
     
     private Long 	classDscntBfeAmt;       // 클래스할인전금액
     
+    private String 	classTrgtCd;           	// 클래스 대상 코드 
+    
     private String 	classPdSetYn;           // 클래스기간설정여부
     
     private String 	classBeginDt;           // 클래스시작일시
@@ -45,7 +47,7 @@ public class ClassModDto extends ClassDto {
     
     //builder 생성
     @Builder
-    public ClassModDto( Long classSn, Long ctgrySn, Long crseSn, String classSj, String classSumry, String classDc, Long classAmt, Long classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String updusrId, String updusrIp ) {
+    public ClassModDto( Long classSn, Long ctgrySn, Long crseSn, String classSj, String classSumry, String classDc, Long classAmt, Long classDscntBfeAmt, String classTrgtCd, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String updusrId, String updusrIp ) {
         this.classSn = classSn;
         this.ctgrySn = ctgrySn;
         this.crseSn = crseSn;
@@ -54,6 +56,7 @@ public class ClassModDto extends ClassDto {
         this.classDc = classDc;
         this.classAmt = classAmt;
         this.classDscntBfeAmt = classDscntBfeAmt;
+        this.classTrgtCd = classTrgtCd;
         this.classPdSetYn = classPdSetYn;
         this.classBeginDt = classBeginDt;
         this.classEndDt = classEndDt;
@@ -75,6 +78,7 @@ public class ClassModDto extends ClassDto {
                 .classDc( classDc )
                 .classAmt( classAmt )
                 .classDscntBfeAmt( classDscntBfeAmt )
+                .classTrgtCd( classTrgtCd )
                 .classPdSetYn( classPdSetYn )
                 .classBeginDt( classBeginDt )
                 .classEndDt( classEndDt )
@@ -97,6 +101,7 @@ public class ClassModDto extends ClassDto {
                 .classDc( clas.getClassDc() )
                 .classAmt( clas.getClassAmt() )
                 .classDscntBfeAmt( clas.getClassDscntBfeAmt() )
+                .classTrgtCd( clas.getClassTrgtCd() )
                 .classPdSetYn( clas.getClassPdSetYn() )
                 .classBeginDt( clas.getClassBeginDt() )
                 .classEndDt( clas.getClassEndDt() )

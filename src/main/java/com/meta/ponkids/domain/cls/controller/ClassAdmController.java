@@ -112,6 +112,9 @@ public class ClassAdmController {
         // 클래스 입력항목 > 입력항목 유형 리스트 ( 주관식, 선택형 , ... ) 
         model.addAttribute( "clsDtlTyCdList", cmmnCdDetailService.getList( "CLASS_DETAIL_ITEM_TY_CD" ) );   // 클래 상세 항목 유형 코드 리스트
         
+        // 클래스 대상 코드 리스트 ( 초등학생, 유아, 어린이 ,.... ) 
+        model.addAttribute( "classTrgtCdList", cmmnCdDetailService.getList( "CLASS_TRGT_CD" ) );   // 클래 상세 항목 유형 코드 리스트
+        
         // E : 필요한 객체 setting
         
         // 기본 경로 setting
@@ -208,7 +211,10 @@ public class ClassAdmController {
         // chldrn target object 조회
         model.addAttribute( "targetClsDtlList", classDetailService.findByClassSnOrderByClassDetailSeq( targetDto.getClassSn() ) );
         
-        // 클래스sn model 에 추가
+        // 클래스 대상 코드 리스트 ( 초등학생, 유아, 어린이 ,.... ) 
+        model.addAttribute( "classTrgtCdList", cmmnCdDetailService.getList( "CLASS_TRGT_CD" ) );   // 클래 상세 항목 유형 코드 리스트
+        
+        // 클래스sn model 에 추가 -> 요일검색하기 위함
         model.addAttribute( "schClassSn", targetDto.getClassSn() );
         
         
@@ -234,7 +240,7 @@ public class ClassAdmController {
     @Transactional
     @PostMapping( BASIC_PATH + "/{mcd}/update" )
     public String update(
-            @RequestParam( "file" ) MultipartFile files,        // 첨부파일 (썸네일 이미지)
+            @RequestParam( "thumbFile" ) MultipartFile files,        // 첨부파일 (썸네일 이미지)
             @RequestParam( "atchFile" ) List<MultipartFile> atchFileList,   // 첨부파일 (여러개 파일 )
             @PathVariable String mcd,
             @ModelAttribute ClassModDto modDto,

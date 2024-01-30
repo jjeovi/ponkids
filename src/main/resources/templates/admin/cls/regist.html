@@ -340,7 +340,7 @@
                             <div class="col-md-2 col-sm-6">
                             	<select class="form-control" name="ctgrySn" id="classCategoryCl01List" required="required">
                                     <option value="">카테고리 선택</option>
-                                    <option th:each="item : ${classCategoryCl01List}" th:value="${item.clSn}">[[${item.clNm}]]
+                                    <option th:each="item : ${classCategoryCl01List}" th:value="${item.clSn}" th:text="${item.clNm}">
                                 </select>
                             </div>
                             <div class="col-md-2 col-sm-6">
@@ -381,7 +381,7 @@
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control"name="classAmt" required="required" placeholder="금액 입력" type="number" />
                                 <small class="font-gray-dark">
-                                    금액을 입력해주세요. 숫자만 입력 가능
+                                    금액을 입력해주세요. 숫자만 입력 가능. 해당 금액은 표시용입니다. (실제 지불할 금액은 수업관리에서 설정)
                                 </small>
                             </div>
                         </div>
@@ -393,6 +393,18 @@
                                     할인 적용시 할인하기 전 금액을 입력해주세요. 금액보다 큰 값이어야 합니다.
                                 </small>
                             </div>
+                        </div>
+                        <div class="field item form-group">
+                            <label class="col-form-label col-md-2 col-sm-3 label-align">대상<span class="required">*</span></label>
+                            <div class="col-md-2 col-sm-6">
+                            	<select class="form-control" name="classTrgtCd" id="classTrgtCd">
+                                    <option value="">대상 선택</option>
+                                    <option th:each="item : ${classTrgtCdList}" th:value="${item.cdDetailVal1}" th:text="${item.cdDetailNm}">
+                                </select>
+                            </div>
+                            <small class="font-gray-dark" style="padding-top: 10px;">
+                                미선택시, 클래스 상세 화면에서 대상정보가 표출되지 않습니다.
+                            </small>
                         </div>
                         <div class="field item form-group">
                             <label class="col-form-label col-md-2 col-sm-3 label-align">요일선택</label>

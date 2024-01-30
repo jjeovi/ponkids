@@ -1,5 +1,6 @@
 package com.meta.ponkids.domain.lctre.dto;
 
+import com.meta.ponkids.domain.lctre.entity.Lctre;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.annotations.QueryProjection;
 
@@ -34,6 +35,8 @@ public class LctreListDto extends LctreDto {
 	private Long 		lctreSeq;				// 수업 순번
 	
 	private String 		lctreSj;				// 수업 제목
+
+	private Long		lctreAmt;				// 수업 금액
 	
 	private String 		lctreDc;				// 수업 설명
 	
@@ -61,8 +64,9 @@ public class LctreListDto extends LctreDto {
 	
 	private CategoryDto category;    			// 카테고리 검색 : 생성자에는 추가하지 않음!
 	
+	@Builder
 	@QueryProjection
-	public LctreListDto( Long lctreSn, Long ctgrySn, String ctgryNm, Long crseSn, String crseNm, Long classSn, String classSj, Long classDaySn, String classDayCd, String classDayNm, Long lctreSeq, String lctreSj, String lctreDc, String lctreApplcntGuidance, String rcritNmprSetYn, String rcritNmprSetYnNm, Long rcritNmprCo, String preparRcritNmprSetYn, String preparRcritNmprSetYnNm, Long preparRcritNmprCo, String registerId, String regDt ) {
+	public LctreListDto( Long lctreSn, Long ctgrySn, String ctgryNm, Long crseSn, String crseNm, Long classSn, String classSj, Long classDaySn, String classDayCd, String classDayNm, Long lctreSeq, String lctreSj, Long lctreAmt, String lctreDc, String lctreApplcntGuidance, String rcritNmprSetYn, String rcritNmprSetYnNm, Long rcritNmprCo, String preparRcritNmprSetYn, String preparRcritNmprSetYnNm, Long preparRcritNmprCo, String registerId, String regDt ) {
 		this.lctreSn = lctreSn;
 		this.ctgrySn = ctgrySn;
 		this.ctgryNm = ctgryNm;
@@ -75,6 +79,7 @@ public class LctreListDto extends LctreDto {
 		this.classDayNm = classDayNm;
 		this.lctreSeq = lctreSeq;
 		this.lctreSj = lctreSj;
+		this.lctreAmt = lctreAmt;
 		this.lctreDc = lctreDc;
 		this.lctreApplcntGuidance = lctreApplcntGuidance;
 		this.rcritNmprSetYn = rcritNmprSetYn;
@@ -86,4 +91,23 @@ public class LctreListDto extends LctreDto {
 		this.registerId = registerId;
 		this.regDt = regDt;
 	}
+	
+	// Entity to Dto 메소드는 DTO 내부에서 생성
+	public LctreListDto toDto( Lctre lctre ) {
+		return LctreListDto.builder()
+				.lctreSn( lctre.getLctreSn() )
+				.classSn( lctre.getClassSn() )
+				.classDayCd( lctre.getClassDayCd() )
+				.lctreSeq( lctre.getLctreSeq() )
+				.lctreSj( lctre.getLctreSj() )
+				.lctreAmt( lctre.getLctreAmt() )
+				.lctreDc( lctre.getLctreDc() )
+				.lctreApplcntGuidance( lctre.getLctreApplcntGuidance() )
+				.rcritNmprSetYn( lctre.getRcritNmprSetYn() )
+				.rcritNmprCo( lctre.getRcritNmprCo() )
+				.preparRcritNmprSetYn( lctre.getPreparRcritNmprSetYn() )
+				.preparRcritNmprCo( lctre.getPreparRcritNmprCo() )
+				.build();
+	}
+	
 }

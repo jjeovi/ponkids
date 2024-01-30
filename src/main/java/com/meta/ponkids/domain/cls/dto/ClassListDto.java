@@ -32,6 +32,10 @@ public class ClassListDto {
     
     private Long 	classDscntBfeAmt;     	// 클래스할인전금액
     
+    private String 	classTrgtCd;			// 클래스 대상 코드
+    
+    private String 	classTrgtNm;			// 클래스 대상 코드 명
+    
     private String 	classPdSetYn;         	// 클래스기간설정여부
     
     private String 	classBeginDt;        	// 클래스시작일시
@@ -58,7 +62,7 @@ public class ClassListDto {
     
     @Builder
     @QueryProjection
-    public ClassListDto( Long classSn, Long ctgrySn, String ctgryNm, Long crseSn, String crseNm, String classSj, String classSumry, String classDc, Long classAmt, Long classDscntBfeAmt, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String classExpsrPeriod, String registerId, String regDt ) {
+    public ClassListDto( Long classSn, Long ctgrySn, String ctgryNm, Long crseSn, String crseNm, String classSj, String classSumry, String classDc, Long classAmt, Long classDscntBfeAmt, String classTrgtCd, String classTrgtNm, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String classExpsrPeriod, String registerId, String regDt ) {
         this.classSn = classSn;
         this.ctgrySn = ctgrySn;
         this.ctgryNm = ctgryNm;
@@ -69,6 +73,8 @@ public class ClassListDto {
         this.classDc = classDc;
         this.classAmt = classAmt;
         this.classDscntBfeAmt = classDscntBfeAmt;
+        this.classTrgtCd = classTrgtCd;
+        this.classTrgtNm = classTrgtNm;
         this.classPdSetYn = classPdSetYn;
         this.classBeginDt = classBeginDt;
         this.classEndDt = classEndDt;
@@ -91,6 +97,7 @@ public class ClassListDto {
                 .classDc( clas.getClassDc() )
                 .classAmt( clas.getClassAmt() )
                 .classDscntBfeAmt( clas.getClassDscntBfeAmt() )
+                .classTrgtCd( clas.getClassTrgtCd() )
                 .classPdSetYn( clas.getClassPdSetYn() )
                 .classBeginDt( clas.getClassBeginDt() )
                 .classEndDt( clas.getClassEndDt() )

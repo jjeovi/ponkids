@@ -170,7 +170,7 @@ public class ParameterAop {
                     // 메뉴 url 이 맞지 않더라도 currnetMenu 를 인식할 수 있게 추가
                     String menuCd = mcd.replaceAll( "mcd", "" );
                     MenuHierarchyDto presentMenuDto = ( adminUrlYn ) ? ( (AdminMenuHierarchyDto) adminMenuHierarchyService.findTop1ByMenuCdAndDelYnOrderByMenuSn( menuCd , "N" ) ) 
-																	 : ( (UserMenuHierarchyDto) userMenuHierarchyService.findTop1ByMenuCdAndDelYnOrderByMenuSn( menuCd , "N" ) );
+																	 : ( (UserMenuHierarchyDto) userMenuHierarchyService.findTop1ByMenuCdAndDelYnAndLevelNotOrderByMenuSn( menuCd , "N", (long) 0 ) );
                     
                     if ( presentMenuDto != null ) {
                         // 현재 메뉴 정보 (currentMenu) model 에 추가
@@ -207,7 +207,7 @@ public class ParameterAop {
                 
                 
                 MenuHierarchyDto presentMenuDto = ( adminUrlYn ) ? ( (AdminMenuHierarchyDto) adminMenuHierarchyService.findTop1ByMenuCdAndDelYnOrderByMenuSn( menuCd , "N" ) ) 
-						 										 : ( (UserMenuHierarchyDto) userMenuHierarchyService.findTop1ByMenuCdAndDelYnOrderByMenuSn( menuCd , "N" ) );
+						 										 : ( (UserMenuHierarchyDto) userMenuHierarchyService.findTop1ByMenuCdAndDelYnAndLevelNotOrderByMenuSn( menuCd , "N", (long) 0 ) );
                 
                 if ( presentMenuDto != null ) {
                     // 현재 메뉴 정보 (currentMenu) model 에 추가

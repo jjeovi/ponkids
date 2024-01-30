@@ -41,6 +41,8 @@ public class Lctre extends BaseTimeEntity {
 	
 	private String 	lctreSj;				// 수업 제목
 	
+	private Long	lctreAmt;				// 수업 금액
+	
 	private String 	lctreDc;				// 수업 설명
 	
 	private String 	lctreApplcntGuidance;	// 수업 신청자 안내
