@@ -14,9 +14,9 @@
 /*! sec01*/
 .sec{padding: 60px 20px; box-sizing: border-box;}
 .sec .mySwiper {padding: 20px 0 !important;}
+.sec .sec_txt span{font-weight: 600;}
 .sec .sec01_txt, .sec .sec02_txt, .sec .sec03_txt{display: flex; align-items: flex-end; margin-top: 40px; position: relative;}
 .sec > .sec01_txt h3, .sec  .sec02_txt h3, .sec  .sec03_txt h3{font-family: 'yg-jalnan'; color: #333333; font-size: 30px; margin-left: 5px;}
-
 .sec .sec01_txt span, .sec .sec02_txt span, .sec .sec03_txt span{color: #555; font-family: 700; margin-left: 15px;}
 .card_box{margin-top: 10px; position: relative;}
 .card_box .item_info{display: flex; flex-direction: column;  font-size: 18px; background-color: #fff; padding: 20px; box-sizing:border-box; border-radius:  0 0 20px 20px;}
