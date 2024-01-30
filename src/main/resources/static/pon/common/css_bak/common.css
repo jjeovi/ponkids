@@ -60,8 +60,8 @@
 .class_1dep .tabnav li a.active::after{content:""; position: absolute; bottom: -10px; left: 50%; transform:translateX(-50%); height: 2px; width: 100%; background-color: #1CBCC9; border-radius: 10px;}
 .class_1dep .tabnav li a.active::before{content: "";position: absolute; bottom: -10px; left: 50%; background-image: url("../image/triangle.svg"); width: 8px; height: 6px; background-repeat: no-repeat; transform: translateX(-50%);}
 
-.class_1dep_content .tabnav_2dep a.active{color:#1CBCC9;  font-weight: bold; }
-.class_1dep_content{margin-top:30px; background-color: #f8f8f8; display: flex; align-items: center; padding: 15px 20px; border-radius: 20px; color: #555;}
+.class_2dep .tabnav_2dep a.active{color:#1CBCC9;  font-weight: bold; }
+.class_2dep{margin-top:30px; background-color: #f8f8f8; display: flex; align-items: center; padding: 15px 20px; border-radius: 20px; color: #555;}
 .tab1_category ul{display: flex;}
 .tab1_category ul li{padding:0 15px; display: flex; white-space: nowrap;}
 .tab1_category ul li img{margin-right: 5px;}
@@ -92,7 +92,7 @@
     .header_top, .header .nav{display: none;}
    .search_form, .header .nav ul{display: none;}
    .mb_nav{display: flex; justify-content: space-between; align-items: center;}
-   .class_1dep_content{padding: 10px 10px;}
+   .class_2dep{padding: 10px 10px;}
 
 }
 

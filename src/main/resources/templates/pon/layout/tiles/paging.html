@@ -16,8 +16,9 @@
             <img src="/pon/common/image/paging_left_ico.svg" alt="">
         </a>
     </span>
-    <span th:each = "page: ${#numbers.sequence(startPage, endPage)}" th:classappend = "${page == pageNumber + 1} ? 'active'">
-        <a th:text = "${page}"  th:href = "'javascript:searchListPage(\'' + ${form} + '\',' + ${page - 1} +');'" ></a >
+    <span 	th:each = "page: ${#numbers.sequence(startPage, endPage)}" th:classappend = "${page == pageNumber + 1} ? 'active'" class="page_num"
+    		th:data-form="${form}" th:data-page="${page-1}" onclick="searchListPage( this );">
+        <a th:text="${page}" th:href="'javascript:;'"></a >
     </span>
     <span th:classappend = "${resultList.last} ? 'disabled'">
         <a th:href="${resultList.last} ? '#' : 'javascript:searchListPage(\'' + ${form} + '\', '+ ${pageNumber +1 } + ');'">

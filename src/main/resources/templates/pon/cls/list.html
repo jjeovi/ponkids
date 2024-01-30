@@ -24,71 +24,95 @@
 <!-- S : Javascript functions	-->
 <div layout:fragment="script">
 	<!-- js -->
-	<script>
-
-
-
-	</script>
 </div>
 
 <!-- E : Javascript functions	-->
 <div class="wrap pon-conents" layout:fragment="content">
-	<div class="sub_box">
-		<div class="top_tit">
-			<div class="star">
-				<img src="/pon/common/image/star_color.svg" alt="">
-			</div>
-			<h3 th:text="${currentMenu.menuNm}" >메뉴명</h3>
-			<span th:text="${currentMenu.menuDc}" >메뉴설명</span>
-			<img class="bg_ico1" src="/pon/common/image/star_3d_color.png" alt="클래스배경이미지1">
-			<img class="bg_ico2" src="/pon/common/image/atom2.png" alt="클래스배경이미지2">
-			<br />현재 lv1 있는지 : <th:block th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null ) }">[[${searchDto.category.lv1Sn}]]</th:block>
-			<br />현재 lv2 있는지 : <th:block th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn != null ) }">[[${searchDto.category.lv2Sn}]]</th:block>
-		</div>
-		<div class="class_1dep">
-			<ul class="tabnav">
-				<li th:each="data : ${cateLv1List}" >
-                    <a th:href="|#tab${data.clSn}|" th:text="${data.clNm}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) } ? 'active'" /> 	
-                </li>
-			</ul>
-		</div>
-		<div class="class_1dep_content">
-			<div th:each="data : ${cateLv1List}" th:id="|tab${data.clSn}|"  th:style="${ (dataStat.first) ? '' : 'display:none'}" >
-				<div class="tab1_category">
-					<ul class="tabnav_2dep">
-						<li>
-							<a href="javascript:;" onclick="searchClassList( this )" th:data-parnts-cl-sn="${data.clSn}" data-cl-sn="0" th:text="전체" />
-						</li>
-						<li th:each=" item : ${ cateLv2List } " th:if=" ${ data.clSn == item.parntsClSn }" >
-							<a href="javascript:;" onclick="searchClassList( this )" th:data-parnts-cl-sn="${data.clSn}" th:data-cl-sn="${item.clSn}"  th:text="${item.clNm}" /> 
-						</li>
-					</ul>
+	<form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="form">
+		<input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
+		<input type="hidden" name="category.lv1Sn" id="cate01"  th:value="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null ) } ? ${searchDTO.category.lv1Sn} " />
+		<input type="hidden" name="category.lv2Sn" id="cate02"  th:value="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn != null ) } ? ${searchDTO.category.lv2Sn} " />
+		<div class="sub_box">
+			<div class="top_tit">
+				<div class="star">
+					<img src="/pon/common/image/star_color.svg" alt="">
 				</div>
+				<h3 th:text="${currentMenu != null && currentMenu.menuNm!= null } ? ${currentMenu.menuNm}" >메뉴명</h3>
+				<span th:text="${currentMenu != null && currentMenu.menuNm!= null } ? ${currentMenu.menuDc}" >메뉴설명</span>
+				<img class="bg_ico1" src="/pon/common/image/star_3d_color.png" alt="클래스배경이미지1">
+				<img class="bg_ico2" src="/pon/common/image/atom2.png" alt="클래스배경이미지2">
 			</div>
-		</div>
-		<div class="card_list">
-			<div th:each="data : ${resultList}" class="card_item">
-				<div class="item_img">
-					<img th:src="@{/getImage(atchFileSn=${data.thumbAtchFileSn})}" alt="클래스이미지">
-					<div class="heart_ico">
-						<img src="/pon/common/image/heart.svg" alt="">
+			<div class="class_1dep">
+				<ul class="tabnav">
+					<li>
+	                    <a href="#tab0" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'active'">전체</a> 	
+	                </li>					
+					<li th:each="data : ${cateLv1List}" >
+	                    <a th:href="|#tab${data.clSn}|" th:text="${data.clNm}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) } ? 'active'" /> 	
+	                </li>
+				</ul>
+			</div>
+			<div class="class_2dep">
+				<div th:id="tab0"  th:style="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) ? '' : 'display:none'}" > <!-- 1depth > 전체 클릭 시 -->
+					<div class="tab1_category">
+						<ul class="tabnav_2dep">
+							<li>
+								<img src="/pon/common/image/check_ico.svg" alt="" th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) && ( searchDTO.category.lv2Sn == 0 ) }">
+								<a	href="javascript:;" onclick="searchClassList( this )" th:data-parnts-cl-sn="0" data-cl-sn="0"
+									th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) && ( searchDTO.category.lv2Sn == 0 ) } ? 'active'" th:text="전체" />
+							</li>
+							<li th:each=" item : ${ cateLv2List } ">
+								<a href="javascript:;" onclick="searchClassList( this )" th:data-parnts-cl-sn="${item.parntsClSn}" th:data-cl-sn="${item.clSn}"  th:text="${item.clNm}" /> 
+							</li>
+						</ul>
 					</div>
 				</div>
-				<div class="item_info">
-					<span th:text="${data.ctgryNm}" class="item_txt">카테고리명</span>
-					<p th:text="${data.classSj}" >클래스제목</p>
-					<span th:text="${data.classDscntBfeAmt}" 	class="item_sale"  >할인전 금액</span>
-					<span th:text="${data.classAmt}" 			class="item_price" >금액</span>
+				<div 	th:each="data : ${cateLv1List}" th:id="|tab${data.clSn}|" 
+						th:style="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != 0 ) && (searchDTO.category.lv1Sn == data.clSn) ? '' : 'display:none'}" >
+					<div class="tab1_category">
+						<ul class="tabnav_2dep">
+							<li>
+								<img 	src="/pon/common/image/check_ico.svg" alt=""
+										th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) && ( searchDTO.category.lv2Sn == 0 ) }">
+								<a 	href="javascript:;" onclick="searchClassList( this )" th:data-parnts-cl-sn="${data.clSn}" data-cl-sn="0" th:text="전체"
+									th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) && ( searchDTO.category.lv2Sn == 0 ) } ? 'active'" />
+							</li>
+							<li th:each=" item : ${ cateLv2List } " th:if=" ${ data.clSn == item.parntsClSn }" >
+								<img 	src="/pon/common/image/check_ico.svg" alt=""
+										th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) && ( searchDTO.category.lv2Sn == item.clSn ) }">
+								<a 	href="javascript:;" onclick="searchClassList( this )" th:data-parnts-cl-sn="${data.clSn}" th:data-cl-sn="${item.clSn}"  th:text="${item.clNm}"
+									th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) && ( searchDTO.category.lv2Sn == item.clSn ) } ? 'active'" /> 
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
-			<div class="bg_ico3">
-				<img src="/pon/common/image/space_one.png" alt="">
+			<div class="card_list" th:classappend="${ (resultList.isEmpty())} ? 'no-data'">
+				<div th:if = "${!resultList.isEmpty()}" th:each="data : ${resultList}" class="card_item">
+					<div class="item_img">
+						<img th:src="@{/getImage(atchFileSn=${data.thumbAtchFileSn})}" alt="클래스이미지" th:onclick="|detailClass(${data.classSn});|" >
+						<div class="heart_ico">
+							<img src="/pon/common/image/heart.svg" alt="">
+						</div>
+					</div>
+					<div class="item_info" th:onclick="|detailClass(${data.classSn});|" >
+						<span th:text="${data.ctgryNm}" class="item_txt">카테고리명</span>
+						<p th:text="${data.classSj}" >클래스제목</p>
+						<span th:text="${data.classDscntBfeAmt}" 	class="item_sale"  >할인전 금액</span>
+						<span th:text="${data.classAmt}" 			class="item_price" >금액</span>
+					</div>
+				</div>
+				<div th:unless = "${!resultList.isEmpty()}" class="no-data">
+					클래스가 존재하지 않습니다. 
+				</div>
+				<div class="bg_ico3">
+					<img src="/pon/common/image/space_one.png" alt="">
+				</div>
+			</div>
+			<div class="paging_box" th:insert="~{pon/layout/tiles/paging :: paging('listForm', ${resultList})}">
 			</div>
 		</div>
-		<div class="paging_box" th:insert="~{pon/layout/tiles/paging :: paging('listForm', ${resultList})}">
-		</div>
-	</div>
-
+	</form>
 </div>
 
 </html>

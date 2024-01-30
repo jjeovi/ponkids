@@ -9,9 +9,9 @@ $( function () {
     // 3. init main review area
     // initMainReview();
 
-    $( '.class_1dep_content > div' ).hide();
+    $( '.class_2dep > div' ).hide();
     $( '.class_1dep .tabnav a' ).click( function () {
-        $( '.class_1dep_content > div' ).hide().filter( this.hash ).fadeIn();
+        $( '.class_2dep > div' ).hide().filter( this.hash ).fadeIn();
         $( '.class_1dep .tabnav a' ).removeClass( 'active' );
         $( this ).addClass( 'active' );
         return false;
@@ -28,8 +28,8 @@ $( function () {
 
 } );
 
-$( '.class_1dep_content .tabnav_2dep a' ).click( function () {
-    $( '.class_1dep_content .tabnav_2dep a' ).removeClass( 'active' );
+$( '.class_2dep .tabnav_2dep a' ).click( function () {
+    $( '.class_2dep .tabnav_2dep a' ).removeClass( 'active' );
     $( this ).addClass( 'active' );
 } )
 

@@ -170,6 +170,8 @@
 .pon-conents .top_tit {display:flex;align-items: flex-end;padding-top: 40px;position: relative; align-items: center; border-top: 1px solid #E6E6E6;}
 .sub_box{max-width: 1280px; margin: 0 auto;}
 .card_list{    display: grid;grid-template-columns: repeat(4,1fr);gap: 25px; }
+.card_list.no-data{grid-template-columns:auto; place-items: center;}
+.card_list .no-data{font-size: 1.2rem;}
 .pon-conents .card_list .card_item{flex: 1;}
 .bg_ico2{position: absolute;left: -130px;top:0; max-width: 150px;}
 .bg_ico1{position: absolute;right: 0;top: 0;max-width: 100px; z-index: -1;}
@@ -312,7 +314,7 @@
     .article_info{margin-top: 10px;}
     .article_list{margin-top: 10px;}
     .review_item .riview_disc{line-height: 1.3;}
-    .class_1dep_content{overflow-x: scroll;}
+    .class_2dep{overflow-x: scroll;}
 }
 @media(max-width:600px){
     .footer .footer_top .footer_link li:first-child a{padding-left: 0;}
@@ -325,7 +327,7 @@
     .like_star{margin-top: 5px;}
 }
 
-.class_1dep_content {
+.class_2dep {
  
     overflow-y: scroll;
 
@@ -333,7 +335,7 @@
     scrollbar-width: none; /* 파이어폭스 */
 }
 
-.class_1dep_content::-webkit-scrollbar {
+.class_2dep::-webkit-scrollbar {
     display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }
 
