@@ -218,6 +218,7 @@
 .review_item .riview_disc{color: #555;}
 .review_info{display: flex; justify-content: space-between;}
 /*! notice*/
+.notice_article{}
 .article_item{display: flex; width: 100%; border-bottom: 1px solid #E3E3E3; padding: 20px; box-sizing: border-box;}
 .article_body{display: flex; justify-content: space-between; width: 100%;}
 .article_tit{width:100%; color: #333;}
