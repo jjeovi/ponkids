@@ -1,1 +1,161 @@
-123123123
+<div id="popup_layer_join" class="pop_wrap join" data-layer-wrap="join" style="display: block;">
+	<div class="pop_top">
+		<p></p>
+		<button class="pop_close" id="join_close_btn"><i class="fas fa-times"><span class="hidden">팝업닫기</span></i></button>
+	</div>
+	<div class="pop_content">
+		<h2 class="pop_title">라라클래스 회원가입</h2>
+		<div class="login_wrap">
+			<p class="info_text">집에서 실시간으로 선생님과 재밌게 배우는 라라클래스</p>
+			<div class="join_wrap">
+
+				<input id="join_userNaverId" type="hidden">
+				<input id="join_userKakaoId" type="hidden">
+				<input id="join_snsId" type="hidden">
+				<input id="join_joinKind" type="hidden">
+				
+				<!-- 이름 -->
+				<div id="join_div_group_userName" class="group_wrap">
+					<div class="group">
+						<h5>이름<span class="necessary">(필수)</span></h5>
+					</div>
+					<input id="join_userName" class="name_input" type="text" placeholder="이름을 입력해주세요." data-type="name">
+					<p class="warning_text">* 이름을 입력해주세요.</p>
+				</div>
+
+				<!-- 성별 -->
+				<div id="join_div_group_userGender" class="group_wrap">
+					<div class="group">
+						<h5>성별<span class="necessary">(필수)</span></h5>
+					</div>
+					<div class="input_label">
+						<input id="join_male" class="radio_input" type="radio" name="parent_gender" value="M" checked="checked" data-type="gender"><label for="join_male">남</label>
+						<input id="join_female" class="radio_input" type="radio" name="parent_gender" value="F" data-type="gender"><label for="join_female">여</label>
+					</div>
+					
+					<p class="warning_text"></p>
+				</div>
+				
+				<!-- 이메일 -->
+				<div id="join_div_group_userEmail" class="group_wrap">
+					<div class="group">
+						<h5>이메일<span class="necessary">(필수)</span></h5>
+					</div>
+					<input id="join_userEmail" class="name_input" type="text" placeholder="이메일을 입력해주세요." data-type="email">
+					<p class="warning_text">* 이메일을 입력해주세요.</p>
+				</div>
+				
+				<!-- 비밀번호 -->
+				<div id="join_div_group_userPassword1" class="group_wrap">
+					<div class="group">
+						<h5>비밀번호<span class="necessary">(필수)</span></h5>
+					</div>
+					<input id="join_userPassword1" class="name_input" type="password" placeholder="비밀번호를 입력해주세요." data-type="password1">
+					<p class="warning_text">* 비밀번호를 입력해주세요.</p>
+					<p class="warning_text">* 6~20자리, 특수문자, 숫자, 영문자 포함하여 입력하세요.</p>
+				</div>
+				
+				<!-- 비밀번호 재입력 -->
+				<div id="join_div_group_userPassword2" class="group_wrap">
+					<div class="group">
+						<h5>비밀번호 재입력<span class="necessary">(필수)</span></h5>
+					</div>
+					<input id="join_userPassword2" class="name_input" type="password" placeholder="비밀번호를 다시 입력해주세요." data-type="password2">
+					<p class="warning_text">* 비밀번호가 같지 않습니다. 비밀번호를 확인해주세요.</p>
+				</div>
+				
+				<!-- 생년월일 -->
+				<div id="join_div_group_userBirthday" class="group_wrap">
+					<div class="group">
+						<h5>생년월일<span class="necessary">(필수)</span></h5>
+					</div>
+					<input id="join_userBirthday" class="date_cal hasDatepicker" readonly="" type="text" onkeypress="return false" data-type="birthday" placeholder="생년월일을 입력해주세요.">
+					<p class="warning_text">* 생년월일을 선택해주세요.</p>
+					<p class="warning_text">* 아이디/비밀번호 찾기에 사용되니 정확히 입력해주세요.</p>
+				</div>
+
+				<!-- 거주여부 -->
+				<div id="join_div_group_userGender" class="group_wrap">
+					<div class="group">
+						<h5>거주여부<span class="necessary">(필수)</span></h5>
+					</div>
+					<div class="input_label" id="selectOptionDiv">
+						<input id="join_user_residence_domestic" class="radio_input" type="radio" name="parent_residence" value="ko" checked="checked" data-type="residence"><label for="join_user_residence_domestic">국내</label>
+						<input id="join_user_residence_overseas" class="radio_input" type="radio" name="parent_residence" value="en" data-type="residence"><label for="join_user_residence_overseas">해외</label>
+					</div>
+					
+					<p class="warning_text"></p>
+				</div>
+				
+				<!-- 연락처 -->
+				<div id="join_div_group_userPhone" class="group_wrap">
+					<div class="group">
+						<h5>연락처<span class="necessary">(필수)</span><span class="warning_text"> [수업 줌링크 발송을 위해 정확한 연락처를 기재해주세요.]</span></h5>
+					</div>
+					
+					<input id="join_userPhone" class="name_input" type="text" placeholder="연락처를 입력해주세요." data-type="phone" maxlength="20"> 
+					<p class="warning_text">* 연락처를 입력해주세요.</p>
+				</div>
+				
+				<!-- 자녀정보 시작 -->
+				<div class="add_title">
+					<h5>자녀 정보</h5>
+					<button id="join_add_child_btn" class="add_btn">추가</button>
+				</div>
+				
+				<div class="add_wrap" id="join_input_child_0">
+					<div class="group_wrap">
+						<div class="group">
+							<h5>이름</h5>
+							<button id="join_del_child_btn" class="del_btn">삭제</button>
+						</div>
+						<input class="name_input" type="text" placeholder="이름을 입력해주세요." data-type="name">
+						<p class="warning_text">* 이름을 입력해주세요.</p>
+					</div>
+					<div class="group_wrap">
+						<div class="group">
+							<h5>성별</h5>
+						</div>
+						<div class="input_label">
+							
+							<input class="radio_input" type="radio" name="children_gender" id="male" value="M" data-type="gender"><label for="male">남</label>
+							<input class="radio_input" type="radio" name="children_gender" id="female" value="F" data-type="gender"><label for="female">여</label>
+						</div>
+						
+						<p class="warning_text"></p>
+					</div>
+					<div class="group_wrap">
+						<div class="group">
+							<h5>생년월일</h5>
+						</div>
+						<input class="date_cal hasDatepicker" readonly="" type="text" onkeypress="return false" data-type="birthday" placeholder="생년월일을 입력해주세요." id="dp1706665439840">
+						<p class="warning_text">* 생년월일을 선택해주세요.</p>
+						<p class="warning_text">* 수강생 연령 확인을 위해 정확히 입력해주세요.</p>
+					</div>
+					<div class="group_wrap">
+						<div class="group">
+							<h5>연락처</h5>
+						</div>
+						<input class="name_input" type="text" placeholder="연락처를 입력해주세요." data-type="phone" maxlength="20">
+						
+						<p class="warning_text"></p>
+					</div>
+				</div>
+				<!-- 자녀정보 종료 -->
+
+				<!-- 약관 동의 체크박스 -->
+				<div class="group_wrap">
+					<div class="input_label">
+						<input id="join_agreement_personal_info" type="checkbox"><label for="join_agreement_personal_info" class="pop_label"><span class="hidden">구매조건 확인 및 결제 진행에 동의</span></label> 
+						<label class="pop_open" data-layer="UCPolicy">[필수] 라라클래스 이용약관과 개인정보처리방침에 동의합니다.</label>
+					</div>
+				</div>
+
+			</div>
+
+			
+			<button id="join_login_btn" class="login_btn">가입하기</button>
+		
+		</div>
+	</div>
+</div>

@@ -1,627 +1,627 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout/layout}">
+	  layout:decorate="~{admin/layout/layout}">
 <!-- S : Javascript functions	-->
 <script layout:fragment="script">
 
-    $( function () {
+	$( function () {
 
-    	// summernote editor 설정
-    	fnSummernoteCall('classSumry'); // 클래스 요약
-    	fnSummernoteCall('classDc');    // 클래스 설명
+		// summernote editor 설정
+		fnSummernoteCall('classSumry'); // 클래스 요약
+		fnSummernoteCall('classDc');	// 클래스 설명
 
-    	// 표시기간 선택시 표시기간 표출 처리
-        $( "input:radio[name='classPdSetYn']" ).change( function () {
-            if ( $( this ).val() == 'Y' ) {
-                $( "#expsrPeriodDiv" ).show();
-            } else {
-                $( "#expsrPeriodDiv" ).hide();
-            }
-        });
+		// 표시기간 선택시 표시기간 표출 처리
+		$( "input:radio[name='classPdSetYn']" ).change( function () {
+			if ( $( this ).val() == 'Y' ) {
+				$( "#expsrPeriodDiv" ).show();
+			} else {
+				$( "#expsrPeriodDiv" ).hide();
+			}
+		});
 
-    	// 카테고리 선택시 커리큘럼 재정렬
-    	$("[name='ctgrySn']").change( function() {
+		// 카테고리 선택시 커리큘럼 재정렬
+		$("[name='ctgrySn']").change( function() {
 
-    		var parntsClSn = $(this).val();
+			var parntsClSn = $(this).val();
 
-    		// 커리큘럼 검색 ajax
-    		// ajax START
-    		var url = '/admin/classCategoryCl02/live/getListByParntsClSnAjax';
-            $.ajax( {
-                url: url,
-                type: "GET",
-                dataType: "json",
-                async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-                data: {parntsClSn : parntsClSn},	// 부모 클래스 일련번호 setting
-                contentType: "application/json",
-                success: function ( result ) {
-                 // callback 함수 연결 -> callback함수로 구현
-                 if ( typeof getListByParntsClSnAjaxCallback === 'function' ) {
-                 	getListByParntsClSnAjaxCallback( result );
-                 } else {
-                     console.log( 'getListByParntsClSnAjaxCallback( result ) funnction is required. getListByParntsClSnAjaxCallback( result ) 콜백함수 not found!' );
-                 }
+			// 커리큘럼 검색 ajax
+			// ajax START
+			var url = '/admin/classCategoryCl02/live/getListByParntsClSnAjax';
+			$.ajax( {
+				url: url,
+				type: "GET",
+				dataType: "json",
+				async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+				data: {parntsClSn : parntsClSn},	// 부모 클래스 일련번호 setting
+				contentType: "application/json",
+				success: function ( result ) {
+				 // callback 함수 연결 -> callback함수로 구현
+				 if ( typeof getListByParntsClSnAjaxCallback === 'function' ) {
+				 	getListByParntsClSnAjaxCallback( result );
+				 } else {
+					 console.log( 'getListByParntsClSnAjaxCallback( result ) funnction is required. getListByParntsClSnAjaxCallback( result ) 콜백함수 not found!' );
+				 }
 
-                },
-                error : function (jqXHR, textStatus, errorThrown){
-            		console.log(jqXHR);  //응답 메시지
-            		console.log(textStatus); //"error"로 고정인듯함
-            		console.log(errorThrown);
-            	}
-            } );
-            // ajax END
-    	});
+				},
+				error : function (jqXHR, textStatus, errorThrown){
+					console.log(jqXHR);  //응답 메시지
+					console.log(textStatus); //"error"로 고정인듯함
+					console.log(errorThrown);
+				}
+			} );
+			// ajax END
+		});
 
-        // 요일 체크
-        var classSn = [[${schClassSn}]];	            // classSn setting
-        var url = basicPath + "/live/getClassWeekListAjax"; // ajax Url setting
-        $.ajax( {
-            url: url,
-            type: "GET",
-            dataType: "json",
-            async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-            data: {classSn : classSn},	// classSn 값 setting
-            contentType: "application/json",
-            success: function ( result ) {
+		// 요일 체크
+		var classSn = [[${schClassSn}]];				// classSn setting
+		var url = basicPath + "/live/getClassWeekListAjax"; // ajax Url setting
+		$.ajax( {
+			url: url,
+			type: "GET",
+			dataType: "json",
+			async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+			data: {classSn : classSn},	// classSn 값 setting
+			contentType: "application/json",
+			success: function ( result ) {
 
-                // resultList 가 존재하는지 체크
-                if( result.resultList != null && result.resultList.length > 0 ) {
-                    // 반복문 돌면서 해당하는 요일 value에 체크하기
-                    for ( let item of result.resultList ) {
-                        $("input[name='classWeek'][value="+item.classDayCd+"]").prop("checked",true);
-                    }
-                }
-            }
-        } );
+				// resultList 가 존재하는지 체크
+				if( result.resultList != null && result.resultList.length > 0 ) {
+					// 반복문 돌면서 해당하는 요일 value에 체크하기
+					for ( let item of result.resultList ) {
+						$("input[name='classWeek'][value="+item.classDayCd+"]").prop("checked",true);
+					}
+				}
+			}
+		} );
 
-        // 표시기간이 기간설정일 경우 기간 부분 노출
-        var classPdSetYn = $("[name='classPdSetYn']:checked").val();
-        if ( classPdSetYn == 'Y' ) {
-            $( "#expsrPeriodDiv" ).show();
-        } else {
-            $( "#expsrPeriodDiv" ).hide();
-        }
+		// 표시기간이 기간설정일 경우 기간 부분 노출
+		var classPdSetYn = $("[name='classPdSetYn']:checked").val();
+		if ( classPdSetYn == 'Y' ) {
+			$( "#expsrPeriodDiv" ).show();
+		} else {
+			$( "#expsrPeriodDiv" ).hide();
+		}
 
-    });
-    // $( function () {}); end
+	});
+	// $( function () {}); end
 
-    // re arrange crseSn
-    function getListByParntsClSnAjaxCallback( result ) {
+	// re arrange crseSn
+	function getListByParntsClSnAjaxCallback( result ) {
 
-    	// rearrange CrseSn
+		// rearrange CrseSn
 
-    	// 커리큘럼 전체 삭제
-    	$("[name='crseSn']").empty();
+		// 커리큘럼 전체 삭제
+		$("[name='crseSn']").empty();
 
-    	// 커리큘럼 추가 (전체)
-    	$("[name='crseSn']").append("<option value=''>선택안함</option>");
+		// 커리큘럼 추가 (전체)
+		$("[name='crseSn']").append("<option value=''>선택안함</option>");
 
-    	// 커리큘럼 추가
-    	for ( let item of result.resultList ) {
-    		 $("[name='crseSn']").append("<option value='" + item.clSn + "'>" + item.clNm + "</option>");
-        }
-    }
+		// 커리큘럼 추가
+		for ( let item of result.resultList ) {
+			 $("[name='crseSn']").append("<option value='" + item.clSn + "'>" + item.clNm + "</option>");
+		}
+	}
 
-    // form submit 시 유효성 검사
-    function submitValidCheck() {
+	// form submit 시 유효성 검사
+	function submitValidCheck() {
 
-        // 표시기간 유효성 체크
-        var classPdSetYn = $( "[name='classPdSetYn']:checked" ).val();
-        if ( classPdSetYn == 'Y' && $("#classBeginDt").val() == '' ) {
-            alert("표시 시작 일시를 입력해주세요.");
-            $( "#classBeginDt" ).focus();
-            return false;
-        }
-        if ( classPdSetYn == 'Y' && $("#classEndDt").val() == '' ) {
-            alert("표시 종료 일시를 입력해주세요.");
-            $( "#classEndDt" ).focus();
-            return false;
-        }
-        
-          
-     	// ==================== 유효성 모두 통과 후 dataset 정리 ==================================
-        // ==================== 유효성 모두 통과 후 dataset 정리 ==================================
-        	
-       
-        // 입력항목 정보 배열 처리 :
-        // 입력항목 정보들 각각 값들을 배열화시켜 submit
-        // div name : clsDtlAddDiv 중 newForm 이 아닌 div 를 배열로 정리
-        $( "[name='clsDtlAddDiv']" ).not( '.newForm' ).each( function ( index ) {
-                // 입력 유형, 입력 항목, 필수 여부
-                $( this ).find( "[name=classDetailItemTyCd]" ).attr( "name", "classDetails[" + index + "].classDetailItemTyCd" );	// 입력 유형
-                $( this ).find( "[name=classDetailItemCn]" ).attr( "name", "classDetails[" + index + "].classDetailItemCn" );		// 입력 항목
-                $( this ).find( "[name=classDetailEssntlYn]" ).attr( "name", "classDetails[" + index + "].classDetailEssntlYn" );	// 필수 여부
-        });
-        	
-        return true;
-    }
-    
-    
-    // 입력항목 추가 > 저장 버튼 클릭 event
-    function addClsDtl() {
-        // target 신청입력항목 div
-        var $targetDiv = $( "[name='clsDtlAddDiv'].newForm" );
-
-        // 유효성 검사
-        if ( !clsDtlValidCheck( $targetDiv ) ) return false;
-
-        // radio setting
-        // 필수 여부 (라디오) 값 hidden 태그에 저장
-        $targetDiv.find( "[name='classDetailEssntlYn']" ).val( $targetDiv.find( "[name='classDetailEssntlYnRadio']:checked" ).val() );
-
-        // 입력항목을 clsDtlTable 테이블에 표시 한 뒤  새로운 clsDtlAddDiv 생성
-        addClsDtlRow( $targetDiv );    // 신청 입력 항목 테이블에추가
-
-        // 모든 clsDtlAddDiv newForm 제거
-        $( "[name='clsDtlAddDiv']" ).removeClass( "newForm" );
-        // 모든 clsDtlAddDiv 숨기기
-        $( "[name='clsDtlAddDiv']" ).hide();
-
-        // 새로운 폼 추가
-        var $newClsDtlForm = $( "<div name='clsDtlAddDiv' class='newForm'>" ).load( "/admin/cls/addClsDtlFormModal.html" );
-        $( "#addClsDtlModalBody" ).append( $newClsDtlForm );
-
-        // 모달창 닫기
-        $( "#addClsDtlModal" ).modal( 'hide' );
-        return true;
-    }
-
-    // 신청입력항목 수정 버튼 클릭 > 수정정보 tr에 현행화
-    function updateClsDtl() {
-
-        // target 신청입력항목 div setting
-        var $targetDiv = $( "[name='clsDtlModDiv']" );
-
-        // 유효성 검사
-        if ( !clsDtlValidCheck( $targetDiv ) ) return false;
-
-        // 필수여부 (라디오) 값 hidden 태그에 저장
-        $targetDiv.find( "[name='classDetailEssntlYn']" ).val( $targetDiv.find( "[name='classDetailEssntlYnRadio']:checked" ).val() );
-    
-
-        // S : trNum 번째 찾기
-        var $trNumDiv = $( "[name='clsDtlAddDiv'].modifyForm" );
-        var trNum = $trNumDiv.prevAll().length - 1;
-        // E : trNum 번째 찾기
-
-        // 신청입력항목정보 테이블의 trNum 번째 신청입력항목에 수정한 값을 매핑하여표시하기
-        modifyClsDtlRow( $targetDiv, trNum );    // 신청입력항목정보테이블에추가
-
-        // modifyForm 내용을 targetDiv 내용으로 교체
-        var $cloneDiv = $targetDiv.clone();
-        $cloneDiv = $cloneDiv.contents().unwrap();
-        $trNumDiv.empty();
-        $cloneDiv.appendTo( $trNumDiv );
-
-        // targetDiv 안의 내용 지우기
-        $targetDiv.empty();
-
-        // 모든 clsDtlAddDiv modifyForm 제거
-        $( "[name='clsDtlAddDiv']" ).removeClass( "modifyForm" );
-
-        // 모달창 닫기
-        $( "#addClsDtlModal" ).modal( 'hide' );
-
-        return true;
-
-    }
-
-    // 입력항목 모달 저장시 유효성 검사
-    function clsDtlValidCheck( $targetDiv ) {
-
-        var classDetailItemTyCd =   $targetDiv.find( "[name='classDetailItemTyCd'] :selected" ).val();          // 입력 유형
-        var classDetailItemCn =     $targetDiv.find( "[name='classDetailItemCn']" ).val();                      // 입력 내용
-        var classDetailEssntlYnRadio =   $targetDiv.find( "[name='classDetailEssntlYnRadio']:checked" ).val();            // 필수 여부
-
-        if ( classDetailItemTyCd == null || classDetailItemTyCd == ''  ) {
-            alert( "입력 유형을 선택해주세요." );
-            return false;
-        } else if ( classDetailItemCn == null || classDetailItemCn == '' ) {
-            alert( "입력 항목을 입력하세요." );
-            return false;
-        } else if ( classDetailEssntlYnRadio == null || classDetailEssntlYnRadio == '' ) {
-            alert( "필수 여부를 선택해주세요." );
-            return false;
-        }
-
-        return true;
-    }
-
-    // 모달로 추가한 입력항목을 화면에 표출
-    function addClsDtlRow( $targetDiv ) {
-
-        // 추가
-        $( "#clsDtlTableBody" ).append (
-            $( "<tr>" ).append(
-                $( "<td>" ).attr( "name", "trNum" ).append( $( "#clsDtlTableBody tr" ).length + 1 ),                                                                    // 순번
-                $( "<td>" ).attr( "name", "classDetailItemTyNm" ).append( $targetDiv.find( "[name='classDetailItemTyCd'] :selected" ).text() ),                         // 유형
-                $( "<td>" ).attr( "name", "classDetailItemTyCd" ).attr( "class", "hide").append( $targetDiv.find( "[name='classDetailItemTyCd'] :selected" ).val() ),                         // 유형
-                $( "<td>" ).attr( "name", "classDetailItemCn" ).append( $targetDiv.find( "[name='classDetailItemCn']" ).val()  ),                                       // 입력 항목
-                $( "<td>" ).attr( "name", "classDetailEssntlYnRadio" ).append( $targetDiv.find( "[name='classDetailEssntlYnRadio']:checked" ).val() == "Y" ? "필수" : "선택" ),     // 필수 여부
-                $( "<td>" ).append(                                                         // 관리
-                    $( "<button>" ).attr( "onclick", "modifyClsDtl(this)" ).attr( "type", "button" ).addClass( "btn btn-success btn-sm table-btn" ).append( "수정" ),
-                    $( "<button>" ).attr( "onclick", "deleteClsDtl(this)" ).attr( "type", "button" ).addClass( "btn btn-danger btn-sm table-btn" ).append( "삭제" )
-                )
-            )
-        );
-    }
-
-    // 입력항목 정보 테이블에 변경사항 수정
-    function modifyClsDtlRow( $targetDiv, trNum ) {
-
-        $modifyTr = $( "#clsDtlTableBody tr" ).eq( trNum );
-
-        $modifyTr.find( "[name='classDetailItemTyNm']" ).text( $targetDiv.find( "[name='classDetailItemTyCd'] :selected" ).text() );
-        $modifyTr.find( "[name='classDetailItemTyCd']" ).text( $targetDiv.find( "[name='classDetailItemTyCd'] :selected" ).val() );
-        $modifyTr.find( "[name='classDetailItemCn']" ).text( $targetDiv.find( "[name='classDetailItemCn']" ).val() );
-        $modifyTr.find( "[name='classDetailEssntlYnRadio']" ).text( $targetDiv.find( "[name='classDetailEssntlYnRadio']:checked" ).val() == "Y" ? "필수" : "선택" );
-    }
-
-    // 신청입력항목 (등록된 항목에서) 수정 버튼 > modal 출력
-    function modifyClsDtl( e ) {
+		// 표시기간 유효성 체크
+		var classPdSetYn = $( "[name='classPdSetYn']:checked" ).val();
+		if ( classPdSetYn == 'Y' && $("#classBeginDt").val() == '' ) {
+			alert("표시 시작 일시를 입력해주세요.");
+			$( "#classBeginDt" ).focus();
+			return false;
+		}
+		if ( classPdSetYn == 'Y' && $("#classEndDt").val() == '' ) {
+			alert("표시 종료 일시를 입력해주세요.");
+			$( "#classEndDt" ).focus();
+			return false;
+		}
 		
-        // 모달 하단의 버튼 설정
-        setModalBtn( "U" );
+		  
+	 	// ==================== 유효성 모두 통과 후 dataset 정리 ==================================
+		// ==================== 유효성 모두 통과 후 dataset 정리 ==================================
+			
+	   
+		// 입력항목 정보 배열 처리 :
+		// 입력항목 정보들 각각 값들을 배열화시켜 submit
+		// div name : clsDtlAddDiv 중 newForm 이 아닌 div 를 배열로 정리
+		$( "[name='clsDtlAddDiv']" ).not( '.newForm' ).each( function ( index ) {
+				// 입력 유형, 입력 항목, 필수 여부
+				$( this ).find( "[name=classDetailItemTyCd]" ).attr( "name", "classDetails[" + index + "].classDetailItemTyCd" );	// 입력 유형
+				$( this ).find( "[name=classDetailItemCn]" ).attr( "name", "classDetails[" + index + "].classDetailItemCn" );		// 입력 항목
+				$( this ).find( "[name=classDetailEssntlYn]" ).attr( "name", "classDetails[" + index + "].classDetailEssntlYn" );	// 필수 여부
+		});
+			
+		return true;
+	}
+	
+	
+	// 입력항목 추가 > 저장 버튼 클릭 event
+	function addClsDtl() {
+		// target 신청입력항목 div
+		var $targetDiv = $( "[name='clsDtlAddDiv'].newForm" );
 
-        // 햔재 선택된 신청입력항목의 number 체크 후(trNum)
-        // trNum 번째 찾기 setting
-        var trNum = $( e ).closest( 'tr' ).prevAll().length;
+		// 유효성 검사
+		if ( !clsDtlValidCheck( $targetDiv ) ) return false;
 
-        // [name='clsDtlModDiv'] div empty
-        $( "[name='clsDtlModDiv']" ).empty();
+		// radio setting
+		// 필수 여부 (라디오) 값 hidden 태그에 저장
+		$targetDiv.find( "[name='classDetailEssntlYn']" ).val( $targetDiv.find( "[name='classDetailEssntlYnRadio']:checked" ).val() );
 
-        // contents().unwrap() : 하위항목들만 남기고 최상위태그 제거 ( 자식 요소를 그대로 둔 채 현재 태그를 제거 )
-        // $( "[name='clsDtlAddDiv']" ).eq( trNum ).contents().unwrap().clone().appendTo("[name='clsDtlModDiv']");
-        var $cloneDiv = $( "[name='clsDtlAddDiv']" ).eq( trNum ).clone();
-        $cloneDiv = $cloneDiv.contents().unwrap();
+		// 입력항목을 clsDtlTable 테이블에 표시 한 뒤  새로운 clsDtlAddDiv 생성
+		addClsDtlRow( $targetDiv );	// 신청 입력 항목 테이블에추가
 
-        $cloneDiv.appendTo( "[name='clsDtlModDiv']" );
-        // 모든 clsDtlAddDiv 숨기기
-        $( "[name='clsDtlAddDiv']" ).hide();
-        // clsDtlModDiv show
-        $( "[name='clsDtlModDiv']" ).show();
+		// 모든 clsDtlAddDiv newForm 제거
+		$( "[name='clsDtlAddDiv']" ).removeClass( "newForm" );
+		// 모든 clsDtlAddDiv 숨기기
+		$( "[name='clsDtlAddDiv']" ).hide();
 
-        // 모든 clsDtlAddDiv 에 modifyForm class 제거 후, trNum 번째에만 modifyForm class 추가
-        $( "[name='clsDtlAddDiv']" ).removeClass( "modifyForm" );
-        $( "[name='clsDtlAddDiv']" ).eq( trNum ).addClass( "modifyForm" );
+		// 새로운 폼 추가
+		var $newClsDtlForm = $( "<div name='clsDtlAddDiv' class='newForm'>" ).load( "/admin/cls/addClsDtlFormModal.html" );
+		$( "#addClsDtlModalBody" ).append( $newClsDtlForm );
 
-        // 현재 선택한 라디오버튼 강제로 값 checked 처리 (안해주면 checked 처리가 풀려있음).
-        // 필수 = Y , 선택 = N
-        var classDetailEssntlYnRadioVal = $( e ).parent().siblings( "[name='classDetailEssntlYnRadio']" ).text() == "필수" ? "Y" : "N";
-        if ( classDetailEssntlYnRadioVal == "Y" ) {
-            $( "[name='clsDtlModDiv']" ).find( "[name='classDetailEssntlYnRadio'][value='Y']" ).prop( "checked", true );
-            $( "[name='clsDtlModDiv']" ).find( "[name='classDetailEssntlYnRadio'][value='Y']" ).trigger("click");	// 클릭 트리거 실행해야 체크한것 처럼 표시됨.
-        } else if ( classDetailEssntlYnRadioVal == "N" ) {
-            $( "[name='clsDtlModDiv']" ).find( "[name='classDetailEssntlYnRadio'][value='N']" ).prop( "checked", true );
-            $( "[name='clsDtlModDiv']" ).find( "[name='classDetailEssntlYnRadio'][value='N']" ).trigger("click");	// 클릭 트리거 실행해야 체크한것 처럼 표시됨.
-        }
+		// 모달창 닫기
+		$( "#addClsDtlModal" ).modal( 'hide' );
+		return true;
+	}
 
-        // 현재 선택한 입력 유형 강제 선택 처리
-        var classDetailItemTyCdVal = $( e ).parent().siblings( "[name='classDetailItemTyCd']" ).text();
-        $( "[name='clsDtlModDiv']" ).find( "[name='classDetailItemTyCd']" ).val(classDetailItemTyCdVal).prop( "selected", true );
+	// 신청입력항목 수정 버튼 클릭 > 수정정보 tr에 현행화
+	function updateClsDtl() {
 
-        $( "#addClsDtlModal" ).modal( 'show' );
-    }
+		// target 신청입력항목 div setting
+		var $targetDiv = $( "[name='clsDtlModDiv']" );
 
-    // 신청입력항목 (등록된 항목에서) 삭제 버튼
-    function deleteClsDtl( e ) {
-        if ( confirm( "해당 신청입력항목를 삭제합니다." ) ) {
-            // 몇번째 테이블인지 체크
-            var trNum = $( e ).closest( 'tr' ).prevAll().length;
+		// 유효성 검사
+		if ( !clsDtlValidCheck( $targetDiv ) ) return false;
 
-            // 테이블의 tr 과 모달의 trNum 번째 div 2가지를 remove 한다.
-            // - 테이블 tr remove
-            $( e ).parent().parent().remove();
-            // - 모달의 trNum 번째 div remove
-            $( "[name='clsDtlAddDiv']" ).eq( trNum ).remove();
+		// 필수여부 (라디오) 값 hidden 태그에 저장
+		$targetDiv.find( "[name='classDetailEssntlYn']" ).val( $targetDiv.find( "[name='classDetailEssntlYnRadio']:checked" ).val() );
+	
 
-            $( '#clsDtlTable tr' ).each( function () {
-                $( this ).find( "[name='trNum']" ).text( ( $( this ).prevAll().length ) + 1 );
-            } );
-        }
-    }
+		// S : trNum 번째 찾기
+		var $trNumDiv = $( "[name='clsDtlAddDiv'].modifyForm" );
+		var trNum = $trNumDiv.prevAll().length - 1;
+		// E : trNum 번째 찾기
 
-    // 모달 버튼 setting
-    function setModalBtn( mode ) {
+		// 신청입력항목정보 테이블의 trNum 번째 신청입력항목에 수정한 값을 매핑하여표시하기
+		modifyClsDtlRow( $targetDiv, trNum );	// 신청입력항목정보테이블에추가
 
-        // mode : C, U
-        // C : 등록 (create)
-        // U : 수정 (update)
+		// modifyForm 내용을 targetDiv 내용으로 교체
+		var $cloneDiv = $targetDiv.clone();
+		$cloneDiv = $cloneDiv.contents().unwrap();
+		$trNumDiv.empty();
+		$cloneDiv.appendTo( $trNumDiv );
 
-        if ( mode == "C" ) {
-            // 모달창의 수정 버튼 숨기고 저장 버튼을 표시
-            $( "#addClsDtlBtn" ).show();
-            $( "#updateClsDtlBtn" ).hide();
+		// targetDiv 안의 내용 지우기
+		$targetDiv.empty();
 
-            // clsDtlAddDiv newForm show
-            $( "[name='clsDtlAddDiv'].newForm" ).show();
-            // clsDtlModDiv hide
-            $( "[name='clsDtlModDiv']" ).hide();
+		// 모든 clsDtlAddDiv modifyForm 제거
+		$( "[name='clsDtlAddDiv']" ).removeClass( "modifyForm" );
 
-        } else if ( mode == "U" ) {
-            // 모달창의 저장 버튼 숨기고 수정 버튼을 표시
-            $( "#addClsDtlBtn" ).hide();
-            $( "#updateClsDtlBtn" ).show();
+		// 모달창 닫기
+		$( "#addClsDtlModal" ).modal( 'hide' );
 
-            // clsDtlModDiv show
-            $( "[name='clsDtlModDiv']" ).show();
-            // clsDtlAddDiv newForm hide
-            $( "[name='clsDtlAddDiv'].newForm" ).hide();
-        }
-    }
+		return true;
+
+	}
+
+	// 입력항목 모달 저장시 유효성 검사
+	function clsDtlValidCheck( $targetDiv ) {
+
+		var classDetailItemTyCd =   $targetDiv.find( "[name='classDetailItemTyCd'] :selected" ).val();		  // 입력 유형
+		var classDetailItemCn =	 $targetDiv.find( "[name='classDetailItemCn']" ).val();					  // 입력 내용
+		var classDetailEssntlYnRadio =   $targetDiv.find( "[name='classDetailEssntlYnRadio']:checked" ).val();			// 필수 여부
+
+		if ( classDetailItemTyCd == null || classDetailItemTyCd == ''  ) {
+			alert( "입력 유형을 선택해주세요." );
+			return false;
+		} else if ( classDetailItemCn == null || classDetailItemCn == '' ) {
+			alert( "입력 항목을 입력하세요." );
+			return false;
+		} else if ( classDetailEssntlYnRadio == null || classDetailEssntlYnRadio == '' ) {
+			alert( "필수 여부를 선택해주세요." );
+			return false;
+		}
+
+		return true;
+	}
+
+	// 모달로 추가한 입력항목을 화면에 표출
+	function addClsDtlRow( $targetDiv ) {
+
+		// 추가
+		$( "#clsDtlTableBody" ).append (
+			$( "<tr>" ).append(
+				$( "<td>" ).attr( "name", "trNum" ).append( $( "#clsDtlTableBody tr" ).length + 1 ),																	// 순번
+				$( "<td>" ).attr( "name", "classDetailItemTyNm" ).append( $targetDiv.find( "[name='classDetailItemTyCd'] :selected" ).text() ),						 // 유형
+				$( "<td>" ).attr( "name", "classDetailItemTyCd" ).attr( "class", "hide").append( $targetDiv.find( "[name='classDetailItemTyCd'] :selected" ).val() ),						 // 유형
+				$( "<td>" ).attr( "name", "classDetailItemCn" ).append( $targetDiv.find( "[name='classDetailItemCn']" ).val()  ),									   // 입력 항목
+				$( "<td>" ).attr( "name", "classDetailEssntlYnRadio" ).append( $targetDiv.find( "[name='classDetailEssntlYnRadio']:checked" ).val() == "Y" ? "필수" : "선택" ),	 // 필수 여부
+				$( "<td>" ).append(														 // 관리
+					$( "<button>" ).attr( "onclick", "modifyClsDtl(this)" ).attr( "type", "button" ).addClass( "btn btn-success btn-sm table-btn" ).append( "수정" ),
+					$( "<button>" ).attr( "onclick", "deleteClsDtl(this)" ).attr( "type", "button" ).addClass( "btn btn-danger btn-sm table-btn" ).append( "삭제" )
+				)
+			)
+		);
+	}
+
+	// 입력항목 정보 테이블에 변경사항 수정
+	function modifyClsDtlRow( $targetDiv, trNum ) {
+
+		$modifyTr = $( "#clsDtlTableBody tr" ).eq( trNum );
+
+		$modifyTr.find( "[name='classDetailItemTyNm']" ).text( $targetDiv.find( "[name='classDetailItemTyCd'] :selected" ).text() );
+		$modifyTr.find( "[name='classDetailItemTyCd']" ).text( $targetDiv.find( "[name='classDetailItemTyCd'] :selected" ).val() );
+		$modifyTr.find( "[name='classDetailItemCn']" ).text( $targetDiv.find( "[name='classDetailItemCn']" ).val() );
+		$modifyTr.find( "[name='classDetailEssntlYnRadio']" ).text( $targetDiv.find( "[name='classDetailEssntlYnRadio']:checked" ).val() == "Y" ? "필수" : "선택" );
+	}
+
+	// 신청입력항목 (등록된 항목에서) 수정 버튼 > modal 출력
+	function modifyClsDtl( e ) {
+		
+		// 모달 하단의 버튼 설정
+		setModalBtn( "U" );
+
+		// 햔재 선택된 신청입력항목의 number 체크 후(trNum)
+		// trNum 번째 찾기 setting
+		var trNum = $( e ).closest( 'tr' ).prevAll().length;
+
+		// [name='clsDtlModDiv'] div empty
+		$( "[name='clsDtlModDiv']" ).empty();
+
+		// contents().unwrap() : 하위항목들만 남기고 최상위태그 제거 ( 자식 요소를 그대로 둔 채 현재 태그를 제거 )
+		// $( "[name='clsDtlAddDiv']" ).eq( trNum ).contents().unwrap().clone().appendTo("[name='clsDtlModDiv']");
+		var $cloneDiv = $( "[name='clsDtlAddDiv']" ).eq( trNum ).clone();
+		$cloneDiv = $cloneDiv.contents().unwrap();
+
+		$cloneDiv.appendTo( "[name='clsDtlModDiv']" );
+		// 모든 clsDtlAddDiv 숨기기
+		$( "[name='clsDtlAddDiv']" ).hide();
+		// clsDtlModDiv show
+		$( "[name='clsDtlModDiv']" ).show();
+
+		// 모든 clsDtlAddDiv 에 modifyForm class 제거 후, trNum 번째에만 modifyForm class 추가
+		$( "[name='clsDtlAddDiv']" ).removeClass( "modifyForm" );
+		$( "[name='clsDtlAddDiv']" ).eq( trNum ).addClass( "modifyForm" );
+
+		// 현재 선택한 라디오버튼 강제로 값 checked 처리 (안해주면 checked 처리가 풀려있음).
+		// 필수 = Y , 선택 = N
+		var classDetailEssntlYnRadioVal = $( e ).parent().siblings( "[name='classDetailEssntlYnRadio']" ).text() == "필수" ? "Y" : "N";
+		if ( classDetailEssntlYnRadioVal == "Y" ) {
+			$( "[name='clsDtlModDiv']" ).find( "[name='classDetailEssntlYnRadio'][value='Y']" ).prop( "checked", true );
+			$( "[name='clsDtlModDiv']" ).find( "[name='classDetailEssntlYnRadio'][value='Y']" ).trigger("click");	// 클릭 트리거 실행해야 체크한것 처럼 표시됨.
+		} else if ( classDetailEssntlYnRadioVal == "N" ) {
+			$( "[name='clsDtlModDiv']" ).find( "[name='classDetailEssntlYnRadio'][value='N']" ).prop( "checked", true );
+			$( "[name='clsDtlModDiv']" ).find( "[name='classDetailEssntlYnRadio'][value='N']" ).trigger("click");	// 클릭 트리거 실행해야 체크한것 처럼 표시됨.
+		}
+
+		// 현재 선택한 입력 유형 강제 선택 처리
+		var classDetailItemTyCdVal = $( e ).parent().siblings( "[name='classDetailItemTyCd']" ).text();
+		$( "[name='clsDtlModDiv']" ).find( "[name='classDetailItemTyCd']" ).val(classDetailItemTyCdVal).prop( "selected", true );
+
+		$( "#addClsDtlModal" ).modal( 'show' );
+	}
+
+	// 신청입력항목 (등록된 항목에서) 삭제 버튼
+	function deleteClsDtl( e ) {
+		if ( confirm( "해당 신청입력항목를 삭제합니다." ) ) {
+			// 몇번째 테이블인지 체크
+			var trNum = $( e ).closest( 'tr' ).prevAll().length;
+
+			// 테이블의 tr 과 모달의 trNum 번째 div 2가지를 remove 한다.
+			// - 테이블 tr remove
+			$( e ).parent().parent().remove();
+			// - 모달의 trNum 번째 div remove
+			$( "[name='clsDtlAddDiv']" ).eq( trNum ).remove();
+
+			$( '#clsDtlTable tr' ).each( function () {
+				$( this ).find( "[name='trNum']" ).text( ( $( this ).prevAll().length ) + 1 );
+			} );
+		}
+	}
+
+	// 모달 버튼 setting
+	function setModalBtn( mode ) {
+
+		// mode : C, U
+		// C : 등록 (create)
+		// U : 수정 (update)
+
+		if ( mode == "C" ) {
+			// 모달창의 수정 버튼 숨기고 저장 버튼을 표시
+			$( "#addClsDtlBtn" ).show();
+			$( "#updateClsDtlBtn" ).hide();
+
+			// clsDtlAddDiv newForm show
+			$( "[name='clsDtlAddDiv'].newForm" ).show();
+			// clsDtlModDiv hide
+			$( "[name='clsDtlModDiv']" ).hide();
+
+		} else if ( mode == "U" ) {
+			// 모달창의 저장 버튼 숨기고 수정 버튼을 표시
+			$( "#addClsDtlBtn" ).hide();
+			$( "#updateClsDtlBtn" ).show();
+
+			// clsDtlModDiv show
+			$( "[name='clsDtlModDiv']" ).show();
+			// clsDtlAddDiv newForm hide
+			$( "[name='clsDtlAddDiv'].newForm" ).hide();
+		}
+	}
 
 </script>
 <!-- E : Javascript functions	-->
 <th:block layout:fragment="content">
-    <!-- S: content -->
-    <div class="row">
-        <div class="col-md-12 col-sm-12 ">
-            <div class="x_panel">
-                <div class="x_content">
-                    <form id="updateForm" name="updateForm" method="post" th:action="@{ {basicPath}/{mcd}/update ( basicPath = ${basicPath}, mcd = ${mcd} ) }" enctype="multipart/form-data" th:onsubmit="return submitValidCheck();">
-                        <input type="hidden" name="classSn" th:value="${targetDto.classSn}"/>
-                    	<div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">분류<span class="required">*</span></label>
-                            <div class="col-md-2 col-sm-6">
-                            	<select class="form-control" name="ctgrySn" id="classCategoryCl01List" required="required">
-                                    <option th:each="item : ${ctgrySnList}" th:value="${item.clSn}" th:text="${item.clNm}" th:selected="${item.clSn} == ${targetDto.ctgrySn}"></option>
-                                </select>
-                            </div>
-                            <div class="col-md-2 col-sm-6">
-                            	<select class="form-control" name="crseSn" id="classCategoryCl02List" >
-                                    <option value="" th:selected="${targetDto.ctgrySn} == ''">선택안함</option>
-                                    <option th:each="item : ${crseSnList}" th:value="${item.clSn}" th:text="${item.clNm}" th:selected="${item.clSn} == ${targetDto.crseSn}"></option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">썸네일 이미지</label>
-                            <div class="col-md-6 col-sm-6">
-                                <div class="filebox preview-image">
-                                    <div class="upload-display">
-                                        <div class="upload-thumb-wrap">
-                                            <img alt="프로필 이미지" class="upload-thumb noimg" 		th:if = 	"${targetDto.thumbAtchFileSn == null}" >
-                                            <img alt="프로필 이미지" class="upload-thumb" 				th:unless = "${targetDto.thumbAtchFileSn == null}" th:src="@{/getImage(atchFileSn=${targetDto.thumbAtchFileSn})}"  >
-                                        </div>
-                                    </div>
-                                    <div class="upload-file-name">
-                                        <input class="input-file-name" value="" disabled="disabled" >
-                                    </div>
-                                    <div class="upload-btn mt_10p">
-                                        <label class="btn btn-purple">업로드
-                                            <input type="file" name="thumbFile" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" th:value="${targetDto.thumbAtchFileSn}" onchange="fileChange(this)">
-                                        </label>
-                                        <button type="button" class="btn btn-purple" id="removeImageBtn" onclick="removeImage(this);" th:if = 	"${targetDto.thumbAtchFileSn != null}">이미지제거</button>
-                                    </div>
-                                    <input type="hidden" name="thumbAtchFileSn" 	    th:value="${targetDto.thumbAtchFileSn}" />
-                                    <input type="hidden" name="thumbAtchFileSnOri" 		th:value="${targetDto.thumbAtchFileSn}" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">클래스 제목<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control"name="classSj" required="required" placeholder="클래스 제목을 입력해주세요." th:value="${targetDto.classSj}"/>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">금액<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control"name="classAmt" required="required" placeholder="금액 입력" type="number" th:value="${targetDto.classAmt}" />
-                                <small class="font-gray-dark">
-                                    금액을 입력해주세요. 숫자만 입력 가능. 해당 금액은 표시용입니다. (실제 지불할 금액은 수업 관리에서 설정)
-                                </small>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">할인전 금액</label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control"name="classDscntBfeAmt" placeholder="할인전금액 입력" type="number" th:value="${targetDto.classDscntBfeAmt}"/>
-                                <small class="font-gray-dark">
-                                    할인 적용시 할인하기 전 금액을 입력해주세요. 금액보다 큰 값이어야 합니다.
-                                </small>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">대상<span class="required">*</span></label>
-                            <div class="col-md-2 col-sm-6">
-                            	<select class="form-control" name="classTrgtCd" id="classTrgtCd">
-                                    <option value="">대상 선택</option>
+	<!-- S: content -->
+	<div class="row">
+		<div class="col-md-12 col-sm-12 ">
+			<div class="x_panel">
+				<div class="x_content">
+					<form id="updateForm" name="updateForm" method="post" th:action="@{ {basicPath}/{mcd}/update ( basicPath = ${basicPath}, mcd = ${mcd} ) }" enctype="multipart/form-data" th:onsubmit="return submitValidCheck();">
+						<input type="hidden" name="classSn" th:value="${targetDto.classSn}"/>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">분류<span class="required">*</span></label>
+							<div class="col-md-2 col-sm-6">
+								<select class="form-control" name="ctgrySn" id="classCategoryCl01List" required="required">
+									<option th:each="item : ${ctgrySnList}" th:value="${item.clSn}" th:text="${item.clNm}" th:selected="${item.clSn} == ${targetDto.ctgrySn}"></option>
+								</select>
+							</div>
+							<div class="col-md-2 col-sm-6">
+								<select class="form-control" name="crseSn" id="classCategoryCl02List" >
+									<option value="" th:selected="${targetDto.ctgrySn} == ''">선택안함</option>
+									<option th:each="item : ${crseSnList}" th:value="${item.clSn}" th:text="${item.clNm}" th:selected="${item.clSn} == ${targetDto.crseSn}"></option>
+								</select>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">썸네일 이미지</label>
+							<div class="col-md-6 col-sm-6">
+								<div class="filebox preview-image">
+									<div class="upload-display">
+										<div class="upload-thumb-wrap">
+											<img alt="프로필 이미지" class="upload-thumb noimg" 		th:if = 	"${targetDto.thumbAtchFileSn == null}" >
+											<img alt="프로필 이미지" class="upload-thumb" 				th:unless = "${targetDto.thumbAtchFileSn == null}" th:src="@{/getImage(atchFileSn=${targetDto.thumbAtchFileSn})}"  >
+										</div>
+									</div>
+									<div class="upload-file-name">
+										<input class="input-file-name" value="" disabled="disabled" >
+									</div>
+									<div class="upload-btn mt_10p">
+										<label class="btn btn-purple">업로드
+											<input type="file" name="thumbFile" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" th:value="${targetDto.thumbAtchFileSn}" onchange="fileChange(this)">
+										</label>
+										<button type="button" class="btn btn-purple" id="removeImageBtn" onclick="removeImage(this);" th:if = 	"${targetDto.thumbAtchFileSn != null}">이미지제거</button>
+									</div>
+									<input type="hidden" name="thumbAtchFileSn" 		th:value="${targetDto.thumbAtchFileSn}" />
+									<input type="hidden" name="thumbAtchFileSnOri" 		th:value="${targetDto.thumbAtchFileSn}" />
+								</div>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">클래스 제목<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<input class="form-control"name="classSj" required="required" placeholder="클래스 제목을 입력해주세요." th:value="${targetDto.classSj}"/>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">금액<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<input class="form-control"name="classAmt" required="required" placeholder="금액 입력" type="number" th:value="${targetDto.classAmt}" />
+								<small class="font-gray-dark">
+									금액을 입력해주세요. 숫자만 입력 가능. 해당 금액은 표시용입니다. (실제 지불할 금액은 수업 관리에서 설정)
+								</small>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">할인전 금액</label>
+							<div class="col-md-6 col-sm-6">
+								<input class="form-control"name="classDscntBfeAmt" placeholder="할인전금액 입력" type="number" th:value="${targetDto.classDscntBfeAmt}"/>
+								<small class="font-gray-dark">
+									할인 적용시 할인하기 전 금액을 입력해주세요. 금액보다 큰 값이어야 합니다.
+								</small>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">대상<span class="required">*</span></label>
+							<div class="col-md-2 col-sm-6">
+								<select class="form-control" name="classTrgtCd" id="classTrgtCd">
+									<option value="">대상 선택</option>
 									<option th:each="item : ${classTrgtCdList}" th:value="${item.cdDetailVal1}" th:text="${item.cdDetailNm}" th:selected="${item.cdDetailVal1} == ${targetDto.classTrgtCd}" >
-                                </select>
-                            </div>
-                            <small class="font-gray-dark" style="padding-top: 10px;">
-                                미선택시, 클래스 상세 화면에서 대상정보가 표출되지 않습니다.
-                            </small>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">요일선택</label>
-                            <div class="col-md-10 col-sm-6">
-                                <th:block th:each="data : ${day7List}">
-                                    <input th:id="'day'+${data.cdDetailSeq}" type="checkbox" name="classWeek" th:value="${data.cdDetailVal1}"/>
-                                    <label th:for="'day'+${data.cdDetailSeq}"><span class="cbTitle">[[${data.cdDetailNm}]]</span></label>
-                                </th:block>
-                            </div>
-                        </div>
-                        <div class="field item form-group" id="ClsDtlAddDiv">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">신청 입력 항목</label>
-                            <div class="div_menu_detail row col-md-10">
-                                <div class="col-md-12 col-sm-12 ">
-                                    <div class="x_panel mb-0" style="height:auto;overflow: scroll; max-height:350px;">
-                                        <div class="x_content mt_5p">
-                                            <button type="button" class="btn btn-purple mb_15p" data-toggle="modal" data-target=".bs-example-modal-lg" onclick="setModalBtn('C')">
-                                                신청 입력 항목 추가
-                                            </button>
-                                            <!-- 신청 입력 항목 등록 모달 -->
-                                            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="addClsDtlModal" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-                                                <div class="modal-dialog modal-dialog-centered modal-lg modal-xlg">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">입력 항목 추가</h4>
-                                                            <button type="button" class="close" data-dismiss="modal">
-                                                                <span aria-hidden="true">×</span> <!-- 닫기 버튼 -->
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body" id="addClsDtlModalBody">
-                                                            <div name="clsDtlModDiv" class="modForm" style="display: none;">
-                                                                <!-- 클래스 입력 항목 수정시 여기서 수정 작업 -->
-                                                            </div>
-                                                            <div name="clsDtlAddDiv" th:replace="~{admin/cls/modClsDtlFormModal :: clsDtlDiv(${targetClsDtlList}) }"></div>
-                                                            <div name="clsDtlAddDiv" class="newForm" th:insert="admin/cls/addClsDtlFormModal.html">
-                                                                <!-- 클래스 입력 항목 추가 모달 (/admin/cls/addClsDtlFormModal.html) -->
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-white" data-dismiss="modal">
-                                                                닫기
-                                                            </button>
-                                                            <button type="button" class="btn btn-purple" id="addClsDtlBtn" onclick="addClsDtl()">
-                                                                저장
-                                                            </button>
-                                                            <button type="button" class="btn btn-success" id="updateClsDtlBtn" onclick="updateClsDtl()" style="display:none;">
-                                                                수정
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- 입력항목 표시 영역 -->
-                                            <table class="table table-bordered text-center" id="clsDtlTable">
-                                                <thead>
-                                                <tr>
-                                                    <th>순번</th>
-                                                    <th>유형</th>
-                                                    <th class="hide">유형(값)</th>
-                                                    <th>입력 항목</th>
-                                                    <th>필수여부</th>
-                                                    <th>관리</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody id="clsDtlTableBody">
-                                                <!-- 신청 입력 항목 추가 테이블 -->
-                                                	<tr th:if = "${!targetClsDtlList.isEmpty()}" th:each=" data : ${targetClsDtlList} ">
-						                                <td name="trNum" th:text="${dataStat.count}"></td>
-						                                <td name="classDetailItemTyNm" th:text="${data.classDetailItemTyNm}"></td>
-						                                <td class="hide" name="classDetailItemTyCd" th:text="${data.classDetailItemTyCd}"></td>
-						                                <td name="classDetailItemCn" th:text="${data.classDetailItemCn}"></td>
-						                                <td name="classDetailEssntlYnRadio" th:text="${data.classDetailEssntlYnNm}"></td>
-						                                <td>
-						                                	<button onclick="modifyClsDtl(this)" type="button" class="btn btn-success btn-sm table-btn">수정</button>
-						                                	<button onclick="deleteClsDtl(this)" type="button" class="btn btn-danger btn-sm table-btn">	삭제</button>
-						                                </td>
-						                            </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">클래스 요약<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                            	<textarea id="classSumry" name="classSumry"  class="form-control"  th:text="${targetDto.classSumry}"></textarea>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">클래스 설명<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                            	<textarea id="classDc" name="classDc"  class="form-control"  th:text="${targetDto.classDc}"></textarea>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">표시여부</label>
-                            <div class="col-md-2 col-sm-4">
-                                <div class="btn-group radiobox">
-                                    <input type="radio" id="classExpsrYn1" name="classExpsrYn" value="Y" th:checked="${targetDto.classExpsrYn eq 'Y'}" class="join-btn">
-                                    <label for="classExpsrYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">표시</label>
-                                    <input type="radio" id="classExpsrYn2" name="classExpsrYn" value="N" th:checked="${targetDto.classExpsrYn eq 'N'}" class="join-btn">
-                                    <label for="classExpsrYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">미표시</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">표시기간</label>
-                            <div class="col-md-2 col-sm-4">
-                                <div class="btn-group radiobox">
-                                    <input type="radio" id="classPdSetYn1" name="classPdSetYn" value="N" th:checked="${targetDto.classPdSetYn eq 'N'}" class="join-btn">
-                                    <label for="classPdSetYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">상시</label>
-                                    <input type="radio" id="classPdSetYn2" name="classPdSetYn" value="Y" th:checked="${targetDto.classPdSetYn eq 'Y'}" class="join-btn">
-                                    <label for="classPdSetYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">기간설정</label>
-                                </div>
-                            </div>
-                            <div id="expsrPeriodDiv" style="display:none;" class="col-md-4 col-sm-4" >
-                                <div class="col-md-5 col-sm-12">
-                                    <input class="form-control" type="text" name="classBeginDt"	id="classBeginDt"	data-pickr="dateTime"   th:value="${targetDto.classBeginDt}"	placeholder="표시 시작일시 선택" >
-                                </div>
-                                <div class="col-md-1 col-sm-12 period-wave"></div>
-                                <div class="col-md-5 col-sm-12">
-                                    <input class="form-control" type="text" name="classEndDt"	id="classEndDt"		data-pickr="dateTime"   th:value="${targetDto.classEndDt}"	placeholder="표시 종료일시 선택" >
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일 목록</label>
-                            <div id="attachFileDiv">
-                                <div id="attachFileList">
-                                    <div class="upload-thumb-wrap" th:if="${targetDto.atchFileSn != null}">
-                                        <input type="hidden" id="atchFileSn" name="atchFileSn" th:value="${targetDto.atchFileSn}">
-                                        <div th:if="${!atchFileList.isEmpty()}" th:each=" data : ${atchFileList} ">
-                                            <span th:text="${data.orignlFileNm}"></span>
-                                            <span class="badge badge-dark" style="cursor:pointer"><a
-                                                    th:href="@{/fileDownload(atchFileSn=${data.AtchFileDetailPk.atchFileSn}, fileSeq=${data.AtchFileDetailPk.fileSeq})}">다운로드</a></span>
-                                            <span class="badge badge-dark" style="cursor:pointer"><a
-                                                    th:onclick="javascript:fnfileDelete([[${data.AtchFileDetailPk.atchFileSn}]],[[${data.AtchFileDetailPk.fileSeq}]]);">삭제</a></span>
-                                        </div>
-                                    </div>
-                                    <div lass="upload-thumb-wrap" th:if="${targetDto.atchFileSn == null}">
-                                        <p class="card-text">
-                                            <span>첨부파일이 없습니다.</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일 추가</label>
-                            <div class="col-md-6 col-sm-6">
-                                <table id="file_table">
-                                    <td id="fileNoData">
-                                        선택된 파일이 없습니다.
-                                    </td>
-                                </table>
-                                <input type="file" id="multi-add" class="btn-add" name="atchFile" multiple style="display: none;">
-                                <button type="button" class="btn-add" id="file_add">파일추가</button>
+								</select>
+							</div>
+							<small class="font-gray-dark" style="padding-top: 10px;">
+								미선택시, 클래스 상세 화면에서 대상정보가 표출되지 않습니다.
+							</small>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">요일선택</label>
+							<div class="col-md-10 col-sm-6">
+								<th:block th:each="data : ${day7List}">
+									<input th:id="'day'+${data.cdDetailSeq}" type="checkbox" name="classWeek" th:value="${data.cdDetailVal1}"/>
+									<label th:for="'day'+${data.cdDetailSeq}"><span class="cbTitle">[[${data.cdDetailNm}]]</span></label>
+								</th:block>
+							</div>
+						</div>
+						<div class="field item form-group" id="ClsDtlAddDiv">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">신청 입력 항목</label>
+							<div class="div_menu_detail row col-md-10">
+								<div class="col-md-12 col-sm-12 ">
+									<div class="x_panel mb-0" style="height:auto;overflow: scroll; max-height:350px;">
+										<div class="x_content mt_5p">
+											<button type="button" class="btn btn-purple mb_15p" data-toggle="modal" data-target=".bs-example-modal-lg" onclick="setModalBtn('C')">
+												신청 입력 항목 추가
+											</button>
+											<!-- 신청 입력 항목 등록 모달 -->
+											<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="addClsDtlModal" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+												<div class="modal-dialog modal-dialog-centered modal-lg modal-xlg">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h4 class="modal-title">입력 항목 추가</h4>
+															<button type="button" class="close" data-dismiss="modal">
+																<span aria-hidden="true">×</span> <!-- 닫기 버튼 -->
+															</button>
+														</div>
+														<div class="modal-body" id="addClsDtlModalBody">
+															<div name="clsDtlModDiv" class="modForm" style="display: none;">
+																<!-- 클래스 입력 항목 수정시 여기서 수정 작업 -->
+															</div>
+															<div name="clsDtlAddDiv" th:replace="~{admin/cls/modClsDtlFormModal :: clsDtlDiv(${targetClsDtlList}) }"></div>
+															<div name="clsDtlAddDiv" class="newForm" th:insert="admin/cls/addClsDtlFormModal.html">
+																<!-- 클래스 입력 항목 추가 모달 (/admin/cls/addClsDtlFormModal.html) -->
+															</div>
+														</div>
+														<div class="modal-footer">
+															<button type="button" class="btn btn-white" data-dismiss="modal">
+																닫기
+															</button>
+															<button type="button" class="btn btn-purple" id="addClsDtlBtn" onclick="addClsDtl()">
+																저장
+															</button>
+															<button type="button" class="btn btn-success" id="updateClsDtlBtn" onclick="updateClsDtl()" style="display:none;">
+																수정
+															</button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- 입력항목 표시 영역 -->
+											<table class="table table-bordered text-center" id="clsDtlTable">
+												<thead>
+												<tr>
+													<th>순번</th>
+													<th>유형</th>
+													<th class="hide">유형(값)</th>
+													<th>입력 항목</th>
+													<th>필수여부</th>
+													<th>관리</th>
+												</tr>
+												</thead>
+												<tbody id="clsDtlTableBody">
+												<!-- 신청 입력 항목 추가 테이블 -->
+													<tr th:if = "${!targetClsDtlList.isEmpty()}" th:each=" data : ${targetClsDtlList} ">
+														<td name="trNum" th:text="${dataStat.count}"></td>
+														<td name="classDetailItemTyNm" th:text="${data.classDetailItemTyNm}"></td>
+														<td class="hide" name="classDetailItemTyCd" th:text="${data.classDetailItemTyCd}"></td>
+														<td name="classDetailItemCn" th:text="${data.classDetailItemCn}"></td>
+														<td name="classDetailEssntlYnRadio" th:text="${data.classDetailEssntlYnNm}"></td>
+														<td>
+															<button onclick="modifyClsDtl(this)" type="button" class="btn btn-success btn-sm table-btn">수정</button>
+															<button onclick="deleteClsDtl(this)" type="button" class="btn btn-danger btn-sm table-btn">	삭제</button>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">클래스 요약<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<textarea id="classSumry" name="classSumry"  class="form-control"  th:text="${targetDto.classSumry}"></textarea>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">클래스 설명<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<textarea id="classDc" name="classDc"  class="form-control"  th:text="${targetDto.classDc}"></textarea>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">표시여부</label>
+							<div class="col-md-2 col-sm-4">
+								<div class="btn-group radiobox">
+									<input type="radio" id="classExpsrYn1" name="classExpsrYn" value="Y" th:checked="${targetDto.classExpsrYn eq 'Y'}" class="join-btn">
+									<label for="classExpsrYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">표시</label>
+									<input type="radio" id="classExpsrYn2" name="classExpsrYn" value="N" th:checked="${targetDto.classExpsrYn eq 'N'}" class="join-btn">
+									<label for="classExpsrYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">미표시</label>
+								</div>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">표시기간</label>
+							<div class="col-md-2 col-sm-4">
+								<div class="btn-group radiobox">
+									<input type="radio" id="classPdSetYn1" name="classPdSetYn" value="N" th:checked="${targetDto.classPdSetYn eq 'N'}" class="join-btn">
+									<label for="classPdSetYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">상시</label>
+									<input type="radio" id="classPdSetYn2" name="classPdSetYn" value="Y" th:checked="${targetDto.classPdSetYn eq 'Y'}" class="join-btn">
+									<label for="classPdSetYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">기간설정</label>
+								</div>
+							</div>
+							<div id="expsrPeriodDiv" style="display:none;" class="col-md-4 col-sm-4" >
+								<div class="col-md-5 col-sm-12">
+									<input class="form-control" type="text" name="classBeginDt"	id="classBeginDt"	data-pickr="dateTime"   th:value="${targetDto.classBeginDt}"	placeholder="표시 시작일시 선택" >
+								</div>
+								<div class="col-md-1 col-sm-12 period-wave"></div>
+								<div class="col-md-5 col-sm-12">
+									<input class="form-control" type="text" name="classEndDt"	id="classEndDt"		data-pickr="dateTime"   th:value="${targetDto.classEndDt}"	placeholder="표시 종료일시 선택" >
+								</div>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일 목록</label>
+							<div id="attachFileDiv">
+								<div id="attachFileList">
+									<div class="upload-thumb-wrap" th:if="${targetDto.atchFileSn != null}">
+										<input type="hidden" id="atchFileSn" name="atchFileSn" th:value="${targetDto.atchFileSn}">
+										<div th:if="${!atchFileList.isEmpty()}" th:each=" data : ${atchFileList} ">
+											<span th:text="${data.orignlFileNm}"></span>
+											<span class="badge badge-dark" style="cursor:pointer"><a
+													th:href="@{/fileDownload(atchFileSn=${data.AtchFileDetailPk.atchFileSn}, fileSeq=${data.AtchFileDetailPk.fileSeq})}">다운로드</a></span>
+											<span class="badge badge-dark" style="cursor:pointer"><a
+													th:onclick="javascript:fnfileDelete([[${data.AtchFileDetailPk.atchFileSn}]],[[${data.AtchFileDetailPk.fileSeq}]]);">삭제</a></span>
+										</div>
+									</div>
+									<div lass="upload-thumb-wrap" th:if="${targetDto.atchFileSn == null}">
+										<p class="card-text">
+											<span>첨부파일이 없습니다.</span>
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일 추가</label>
+							<div class="col-md-6 col-sm-6">
+								<table id="file_table">
+									<td id="fileNoData">
+										선택된 파일이 없습니다.
+									</td>
+								</table>
+								<input type="file" id="multi-add" class="btn-add" name="atchFile" multiple style="display: none;">
+								<button type="button" class="btn-add" id="file_add">파일추가</button>
 
-                            </div>
-                        </div>
-                        <div class="ln_solid"></div>
-                        <!-- 저장버튼 -->
-                        <div class="col-md-12 bottom-btn-group">
-                            <!-- bottom left area -->
-                            <div class="col-md-2 col-sm-3 text-left">
-                                <a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >목록</a>
-                            </div>
-                            <!-- bottom c	enter area -->
-                            <div class="col-md-8 col-sm-6 text-center">
-                                <a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >취소</a>
-                                <button type="submit" class="btn btn-purple w120p">저장</button>
-                            </div>
-                            <!-- bottom right area -->
-                            <div class="col-md-2 col-sm-3 text-right">
-                                <a th:href="'javascript:deleteItem(\'' + ${targetDto.classSn} + '\');'" class="btn btn-danger btn-xs">
-                                    <i class="fa fa-trash-o"></i>삭제
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-                    <form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/{mcd}/delete ( basicPath = ${basicPath}, mcd = ${mcd} ) }">
-	            		<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
-	            	</form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- E : content -->
+							</div>
+						</div>
+						<div class="ln_solid"></div>
+						<!-- 저장버튼 -->
+						<div class="col-md-12 bottom-btn-group">
+							<!-- bottom left area -->
+							<div class="col-md-2 col-sm-3 text-left">
+								<a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >목록</a>
+							</div>
+							<!-- bottom c	enter area -->
+							<div class="col-md-8 col-sm-6 text-center">
+								<a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >취소</a>
+								<button type="submit" class="btn btn-purple w120p">저장</button>
+							</div>
+							<!-- bottom right area -->
+							<div class="col-md-2 col-sm-3 text-right">
+								<a th:href="'javascript:deleteItem(\'' + ${targetDto.classSn} + '\');'" class="btn btn-danger btn-xs">
+									<i class="fa fa-trash-o"></i>삭제
+								</a>
+							</div>
+						</div>
+					</form>
+					<form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/{mcd}/delete ( basicPath = ${basicPath}, mcd = ${mcd} ) }">
+						<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- E : content -->
 </th:block>
 </html>

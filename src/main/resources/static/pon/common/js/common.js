@@ -2,6 +2,19 @@
 // ------------- function () 함수 실행  호출시점 : DOM Tree 생성 완료 후 -----------------
 $( function () {
 	
+	 
+	 // 팝업 show
+	$(".show_pop").on("click", function(e) {
+		var layerId = $(this).data("layerId")	;	// 클릭한 레이어 팝업의 id 값 setting 
+		showPopup(layerId);
+	});
+
+	 
+	// 팝업 hide
+	$(".hide_pop").on("click", function(e) {
+		var layerId = $(this).data("layerId")	;	// 클릭한 레이어 팝업의 id 값 setting 
+		hidePopup(layerId);
+	});
 
 
 } );
@@ -86,15 +99,6 @@ $( function () {
     } ).filter( ':eq(0)' ).click();
 } );
 
-$( '.inquiry' ).click( function () {
-    $( '.chatWrap' ).addClass( 'show' )
-    $( '.chat_close' ).addClass( 'show' )
-} )
-$( '.chat_close' ).click( function () {
-    $( '.chatWrap' ).removeClass( 'show' )
-    $( '.chat_close' ).removeClass( 'show' )
-} )
-
 
 
 // 클래스 조회 
@@ -127,6 +131,25 @@ function searchListPage( e ) {
 // 클래스 > 상세보기 event
 function detailClass( classSn ) {
 	location.href = "/class/mcdClass/detail?pk=" + classSn;
+}
+
+// 팝업창 실행 event 
+function showPopup( layerId ) {
+	
+	$(".layer_" + layerId ).show();
+	$("#pop_dim").fadeIn();
+}
+
+
+// 팝업창 숨김 
+function hidePopup( layerId ) {
+	
+	$(".layer_" + layerId ).hide();
+	$("#pop_dim").fadeOut();
+	
+	$("#pop_dim").fadeOut( '10', function(){
+		$(".layer_" + layerId ).fadeOut('20');
+	});
 }
 
 

@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout/layout}">
+	  layout:decorate="~{admin/layout/layout}">
 <!-- S : Javascript functions	-->
 
 <script layout:fragment="script">
 
-    $( function () {
+	$( function () {
 
-    	// 표시기간 선택시 표시기간 표출 처리
-        $( "[name='bannerPdSetYn']" ).change( function () {
-            if ( $( this ).val() == 'Y' ) {
-                $( "#expsrPeriodDiv" ).show();
-                $("#bannerBeginDt, #bannerEndDt").attr("required", "required");
-            } else {
-                $( "#expsrPeriodDiv" ).hide();
-                $("#bannerBeginDt, #bannerEndDt").removeAttr("required");
-            }
-        });
-    	
-    	// 클래스매핑여부 선택시 이벤트 처리 
-        $( "[name='classMapngYn']" ).change( function () {
-            if ( $( this ).val() == 'Y' ) {
+		// 표시기간 선택시 표시기간 표출 처리
+		$( "[name='bannerPdSetYn']" ).change( function () {
+			if ( $( this ).val() == 'Y' ) {
+				$( "#expsrPeriodDiv" ).show();
+				$("#bannerBeginDt, #bannerEndDt").attr("required", "required");
+			} else {
+				$( "#expsrPeriodDiv" ).hide();
+				$("#bannerBeginDt, #bannerEndDt").removeAttr("required");
+			}
+		});
+		
+		// 클래스매핑여부 선택시 이벤트 처리 
+		$( "[name='classMapngYn']" ).change( function () {
+			if ( $( this ).val() == 'Y' ) {
 				// url 매핑 클래스 여부 Y 일시 
 				// url input readonly
 				// 매핑클래스 활성화
@@ -28,10 +28,10 @@
 				$("[name='url']").prop("readonly", true);
 				$("[name='url']").attr("placeholder", "매핑클래스 항목을 선택해주시면 url 이 자동으로 매핑됩니다.");
 				$("[name='url']").val("");
-                $( ".mappingClassDiv" ).show();
-                $("#ctgrySn, #crseSn, #classSn").attr("required", "required");
-                
-            } else {
+				$( ".mappingClassDiv" ).show();
+				$("#ctgrySn, #crseSn, #classSn").attr("required", "required");
+				
+			} else {
 				// url 매핑 클래스 여부 N 일시 
 				// url input readonly 풀기
 				// 매핑클래스 비활성화
@@ -44,54 +44,54 @@
 				
 				// 카테고리 default 항목으로 강제선택
 				$("[name='ctgrySn']").val("").prop("selected", true);
-    	
-		    	// 커리큘럼 전체 삭제 후 default 항목 추가
-		    	$("[name='crseSn']").empty();
-		    	$("[name='crseSn']").append("<option value=''>커리큘럼 선택</option>");
-		            	
-		    	// 클래스 전체 삭제 후 default 항목 추가
-		    	$("[name='classSn']").empty();
-		    	$("[name='classSn']").append("<option value=''>클래스 선택</option>");
-		    	
-		    	$("#ctgrySn, #crseSn, #classSn").removeAttr("required");
+		
+				// 커리큘럼 전체 삭제 후 default 항목 추가
+				$("[name='crseSn']").empty();
+				$("[name='crseSn']").append("<option value=''>커리큘럼 선택</option>");
+						
+				// 클래스 전체 삭제 후 default 항목 추가
+				$("[name='classSn']").empty();
+				$("[name='classSn']").append("<option value=''>클래스 선택</option>");
 				
-            }
-        });
+				$("#ctgrySn, #crseSn, #classSn").removeAttr("required");
+				
+			}
+		});
 
-    	// 배너분류 선택시 배너상세분류 재정렬
-    	$("[name='bannerClCd']").change( function() {
-    		
-    		var detailCdYn = $(this).find("option:selected").data( 'detailCdYn' );		// 하위분류 검색 여부 : Y일 경우에만 검색할 수 있도록
-    		var clCd = $(this).find("option:selected").data( 'clCd' );					// 검색할 하위 분류 코드 
-    		 
-    		
-    		if ( detailCdYn == 'Y' ) {
+		// 배너분류 선택시 배너상세분류 재정렬
+		$("[name='bannerClCd']").change( function() {
+			
+			var detailCdYn = $(this).find("option:selected").data( 'detailCdYn' );		// 하위분류 검색 여부 : Y일 경우에만 검색할 수 있도록
+			var clCd = $(this).find("option:selected").data( 'clCd' );					// 검색할 하위 분류 코드 
+			 
+			
+			if ( detailCdYn == 'Y' ) {
 				// 하위분류 선택으로 설정
 				
 				$(".detailCdArea").show();	// 배너상세분류 부분 표시
 				$("#bannerClDetailCd").attr("required", "required");
 
 				// 배너상세분류코드 검색 ajax
-	    		// ajax START
-	    		var url = '/admin/cmmnCdDetail/live/getListByCdNmAjax';
-	            $.ajax( {
-	                url: url, 
-	                type: "GET",
-	                dataType: "json",
-	                async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-	                data: {cdNm : clCd},	// 배너 분류 할 코드명으로 공통코드 조회
-	                contentType: "application/json",
-	                success: function ( result ) {
-	                 // callback 함수 연결 -> callback함수로 구현
-	                 if ( typeof getListByCdNmAjaxCallback === 'function' ) {
-	                 	getListByCdNmAjaxCallback( result );
-	                 } else {
-	                     console.log( 'getListByCdNmAjaxCallback( result ) funnction is required. getListByCdNmAjaxCallback( result ) 콜백함수 not found!' );
-	                 }
-	                    
-	                }
-	            } );
-	            // ajax END
+				// ajax START
+				var url = '/admin/cmmnCdDetail/live/getListByCdNmAjax';
+				$.ajax( {
+					url: url, 
+					type: "GET",
+					dataType: "json",
+					async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+					data: {cdNm : clCd},	// 배너 분류 할 코드명으로 공통코드 조회
+					contentType: "application/json",
+					success: function ( result ) {
+					 // callback 함수 연결 -> callback함수로 구현
+					 if ( typeof getListByCdNmAjaxCallback === 'function' ) {
+					 	getListByCdNmAjaxCallback( result );
+					 } else {
+						 console.log( 'getListByCdNmAjaxCallback( result ) funnction is required. getListByCdNmAjaxCallback( result ) 콜백함수 not found!' );
+					 }
+						
+					}
+				} );
+				// ajax END
 				
 			} else if ( detailCdYn != 'Y' ) {
 				// 하위분류 선택 안하게 설정
@@ -101,341 +101,341 @@
 				$("#bannerClDetailCd").removeAttr("required");
 				
 			}
-    		
-    	});
-    	
-    	
-    	// 카테고리 선택시 커리큘럼 목록 재정렬 
-    	$("[name='ctgrySn']").change( function() {
-    		
-    		var parntsClSn = $(this).val();
-    		
-    		// 커리큘럼 검색 ajax
-    		// ajax START
-    		var url = '/admin/classCategoryCl02/live/getListByParntsClSnAjax';
-            $.ajax( {
-                url: url, 
-                type: "GET",
-                dataType: "json",
-                async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-                data: {parntsClSn : parntsClSn},	// 부모 클래스 일련번호 setting
-                contentType: "application/json",
-                success: function ( result ) {
-                 // callback 함수 연결 -> callback함수로 구현
-                 if ( typeof getListByParntsClSnAjaxCallback === 'function' ) {
-                 	getListByParntsClSnAjaxCallback( result );
-                 } else {
-                     console.log( 'getListByParntsClSnAjaxCallback( result ) funnction is required. getListByParntsClSnAjaxCallback( result ) 콜백함수 not found!' );
-                 }
-                    
-                }
-            });
-            // ajax END
-    	});
-    	
-    	// 커리큘럼 선택시 클래스 목록 재정렬 
-    	$("[name='crseSn']").change( function() {
-    		
-    		var ctgrySn = $("[name='ctgrySn']").val();
-    		var crseSn = $(this).val();
-    		
-    		// 커리큘럼 검색 ajax
-    		// ajax START
-    		var url = '/admin/class/live/getClassListByCrseSnAjax';
-            $.ajax( {
-                url: url, 
-                type: "GET",
-                dataType: "json",
-                async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-                data: {ctgrySn : ctgrySn, crseSn : crseSn},	// 커리큘럼 일련번호로 검색 ( 커리큘럼일련번호가 전체일 경우는 카테고리로 검색 )
-                contentType: "application/json",
-                success: function ( result ) {
-                 // callback 함수 연결 -> callback함수로 구현
-                 if ( typeof getClassListByCrseSnAjaxCallback === 'function' ) {
-                 	getClassListByCrseSnAjaxCallback( result );
-                 } else {
-                     console.log( 'getClassListByCrseSnAjaxCallback( result ) funnction is required. getClassListByCrseSnAjaxCallback( result ) 콜백함수 not found!' );
-                 }
-                    
-                }
-            });
-            // ajax END
-    	});
-    	
-    		
-    	// 클래스 선택 시 url 자동 세팅
-    	$("[name='classSn']").change( function() {
-    		
-    		var classSn = $(this).val();
-    		$("[name='url']").val("/class/list?pk="+classSn);
-    	});
-    	
-    	
-    	
+			
+		});
+		
+		
+		// 카테고리 선택시 커리큘럼 목록 재정렬 
+		$("[name='ctgrySn']").change( function() {
+			
+			var parntsClSn = $(this).val();
+			
+			// 커리큘럼 검색 ajax
+			// ajax START
+			var url = '/admin/classCategoryCl02/live/getListByParntsClSnAjax';
+			$.ajax( {
+				url: url, 
+				type: "GET",
+				dataType: "json",
+				async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+				data: {parntsClSn : parntsClSn},	// 부모 클래스 일련번호 setting
+				contentType: "application/json",
+				success: function ( result ) {
+				 // callback 함수 연결 -> callback함수로 구현
+				 if ( typeof getListByParntsClSnAjaxCallback === 'function' ) {
+				 	getListByParntsClSnAjaxCallback( result );
+				 } else {
+					 console.log( 'getListByParntsClSnAjaxCallback( result ) funnction is required. getListByParntsClSnAjaxCallback( result ) 콜백함수 not found!' );
+				 }
+					
+				}
+			});
+			// ajax END
+		});
+		
+		// 커리큘럼 선택시 클래스 목록 재정렬 
+		$("[name='crseSn']").change( function() {
+			
+			var ctgrySn = $("[name='ctgrySn']").val();
+			var crseSn = $(this).val();
+			
+			// 커리큘럼 검색 ajax
+			// ajax START
+			var url = '/admin/class/live/getClassListByCrseSnAjax';
+			$.ajax( {
+				url: url, 
+				type: "GET",
+				dataType: "json",
+				async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+				data: {ctgrySn : ctgrySn, crseSn : crseSn},	// 커리큘럼 일련번호로 검색 ( 커리큘럼일련번호가 전체일 경우는 카테고리로 검색 )
+				contentType: "application/json",
+				success: function ( result ) {
+				 // callback 함수 연결 -> callback함수로 구현
+				 if ( typeof getClassListByCrseSnAjaxCallback === 'function' ) {
+				 	getClassListByCrseSnAjaxCallback( result );
+				 } else {
+					 console.log( 'getClassListByCrseSnAjaxCallback( result ) funnction is required. getClassListByCrseSnAjaxCallback( result ) 콜백함수 not found!' );
+				 }
+					
+				}
+			});
+			// ajax END
+		});
+		
+			
+		// 클래스 선택 시 url 자동 세팅
+		$("[name='classSn']").change( function() {
+			
+			var classSn = $(this).val();
+			$("[name='url']").val("/class/list?pk="+classSn);
+		});
+		
+		
+		
 
-    });
-    // $( function () {}); end
+	});
+	// $( function () {}); end
 
-    // re arrange bannerClDetailCd
-    function getListByCdNmAjaxCallback( result ) {
-    	
-    	// 배너 상세 분류 전체 삭제
-    	$("[name='bannerClDetailCd']").empty();
-    	
-    	// 배너 상세 분류 추가 (전체)
-    	$("[name='bannerClDetailCd']").append("<option value=''>배너 상세 분류 선택</option>");
-    	
-    	// 배너 상세 분류 selectbox 에 추가
-    	for ( let item of result.resultList ) {
-    		 $("[name='bannerClDetailCd']").append("<option value='" + item.cdDetailVal1 + "'>" + item.cdDetailNm + "</option>");
-        }
-    }
-    
-    
-    // re arrange crseSn
-    function getListByParntsClSnAjaxCallback( result ) {
-    	
-    	// rearrange CrseSn
-    	
-    	// 커리큘럼 전체 삭제
-    	$("[name='crseSn']").empty();
-    	
-    	// 커리큘럼 추가 (전체)
-    	$("[name='crseSn']").append("<option value=''>커리큘럼 선택</option>");
-    	$("[name='crseSn']").append("<option value='0'>전체(선택없음)</option>");
-    	
-    	// 커리큘럼 추가
-    	for ( let item of result.resultList ) {
-    		 $("[name='crseSn']").append("<option value='" + item.clSn + "'>" + item.clNm + "</option>");
-        }
-            	
-    	// 클래스 전체 삭제
-    	$("[name='classSn']").empty();
-    	
-    	// 클래스 추가 (전체)
-    	$("[name='classSn']").append("<option value=''>클래스 선택</option>");
-    	
-    }
-    
-    
-    // re arrange clasSn
-    function getClassListByCrseSnAjaxCallback( result ) {
-    	
-    	// rearrange clasSn
-    	
-    	// 클래스 전체 삭제
-    	$("[name='classSn']").empty();
-    	
-    	// 클래스 추가 (전체)
-    	$("[name='classSn']").append("<option value=''>클래스 선택</option>");
-    	
-    	// 클래스 추가
-    	for ( let item of result.resultList ) {
-    		 $("[name='classSn']").append("<option value='" + item.classSn + "'>" + item.classSj + "</option>");
-        }
-    }
+	// re arrange bannerClDetailCd
+	function getListByCdNmAjaxCallback( result ) {
+		
+		// 배너 상세 분류 전체 삭제
+		$("[name='bannerClDetailCd']").empty();
+		
+		// 배너 상세 분류 추가 (전체)
+		$("[name='bannerClDetailCd']").append("<option value=''>배너 상세 분류 선택</option>");
+		
+		// 배너 상세 분류 selectbox 에 추가
+		for ( let item of result.resultList ) {
+			 $("[name='bannerClDetailCd']").append("<option value='" + item.cdDetailVal1 + "'>" + item.cdDetailNm + "</option>");
+		}
+	}
+	
+	
+	// re arrange crseSn
+	function getListByParntsClSnAjaxCallback( result ) {
+		
+		// rearrange CrseSn
+		
+		// 커리큘럼 전체 삭제
+		$("[name='crseSn']").empty();
+		
+		// 커리큘럼 추가 (전체)
+		$("[name='crseSn']").append("<option value=''>커리큘럼 선택</option>");
+		$("[name='crseSn']").append("<option value='0'>전체(선택없음)</option>");
+		
+		// 커리큘럼 추가
+		for ( let item of result.resultList ) {
+			 $("[name='crseSn']").append("<option value='" + item.clSn + "'>" + item.clNm + "</option>");
+		}
+				
+		// 클래스 전체 삭제
+		$("[name='classSn']").empty();
+		
+		// 클래스 추가 (전체)
+		$("[name='classSn']").append("<option value=''>클래스 선택</option>");
+		
+	}
+	
+	
+	// re arrange clasSn
+	function getClassListByCrseSnAjaxCallback( result ) {
+		
+		// rearrange clasSn
+		
+		// 클래스 전체 삭제
+		$("[name='classSn']").empty();
+		
+		// 클래스 추가 (전체)
+		$("[name='classSn']").append("<option value=''>클래스 선택</option>");
+		
+		// 클래스 추가
+		for ( let item of result.resultList ) {
+			 $("[name='classSn']").append("<option value='" + item.classSn + "'>" + item.classSj + "</option>");
+		}
+	}
 
 
-    // form submit 시 유효성 검사
-    function submitValidCheck() {
+	// form submit 시 유효성 검사
+	function submitValidCheck() {
 		
 		// 배너 이미지 첨부파일 유효성 체크
-        // 배너 이미지는 메인상단배너 분류로 선택시에만 유효성 체크 진행 ( 메인클래스 영역은 클래스에서 등록한 이미지로 자동으로 매핑 )
-        if ( $("#bannerClCd").val() == 'MAIN_TOP') {
-            if ( $( "[name='atchFile']" )[0].files[0] == null ) {
-                alert( "배너 이미지(첨부파일)를 등록해주세요." );
-                $( "[name='atchFile']" ).focus();
-                return false;
-            }
-        }
+		// 배너 이미지는 메인상단배너 분류로 선택시에만 유효성 체크 진행 ( 메인클래스 영역은 클래스에서 등록한 이미지로 자동으로 매핑 )
+		if ( $("#bannerClCd").val() == 'MAIN_TOP') {
+			if ( $( "[name='atchFile']" )[0].files[0] == null ) {
+				alert( "배너 이미지(첨부파일)를 등록해주세요." );
+				$( "[name='atchFile']" ).focus();
+				return false;
+			}
+		}
 		
-        // url 클래스 매핑 여부 항목 체크
-        // Y 일 경우 url 값 유효성 체크
-        var classMapngYn = $( "[name='classMapngYn']:checked" ).val();
-        
-        if ( classMapngYn == 'Y' && $("[name='url']").val() == '' ) {
+		// url 클래스 매핑 여부 항목 체크
+		// Y 일 경우 url 값 유효성 체크
+		var classMapngYn = $( "[name='classMapngYn']:checked" ).val();
+		
+		if ( classMapngYn == 'Y' && $("[name='url']").val() == '' ) {
 			alert("url 값을 입력해주세요.");
-            $( "[name='url']" ).focus();
-            return false;
+			$( "[name='url']" ).focus();
+			return false;
 		}
 		
 		
-        // 표시기간 유효성 체크
-        var bannerPdSetYn = $( "[name='bannerPdSetYn']:checked" ).val();
-        if ( bannerPdSetYn == 'Y' && $("#bannerBeginDt").val() == '' ) {
-            alert("배너 표시 시작 일시를 입력해주세요.");
-            $( "#bannerBeginDt" ).focus();
-            return false;
-        }
-        if ( bannerPdSetYn == 'Y' && $("#bannerEndDt").val() == '' ) {
-            alert("배너 표시 종료 일시를 입력해주세요.");
-            $( "#bannerEndDt" ).focus();
-            return false;
-        }
+		// 표시기간 유효성 체크
+		var bannerPdSetYn = $( "[name='bannerPdSetYn']:checked" ).val();
+		if ( bannerPdSetYn == 'Y' && $("#bannerBeginDt").val() == '' ) {
+			alert("배너 표시 시작 일시를 입력해주세요.");
+			$( "#bannerBeginDt" ).focus();
+			return false;
+		}
+		if ( bannerPdSetYn == 'Y' && $("#bannerEndDt").val() == '' ) {
+			alert("배너 표시 종료 일시를 입력해주세요.");
+			$( "#bannerEndDt" ).focus();
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
 
 </script>
 <!-- E : Javascript functions	-->
 <th:block layout:fragment="content">
-    <!-- S: content -->
-    <div class="row">
-        <div class="col-md-12 col-sm-12 ">
-            <div class="x_panel">
-                <div class="x_content">
-                    <form id="insertForm" name="insertForm" method="post" th:action="@{ {basicPath}/{mcd}/insert ( basicPath = ${basicPath}, mcd = ${mcd} ) }" enctype="multipart/form-data" th:onsubmit="return submitValidCheck();">
-                    	<div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">분류<span class="required">*</span></label>
-                            <div class="col-md-2 col-sm-4">
-                            	<select class="form-control" name="bannerClCd" id="bannerClCd" required="required" >
-                                    <option value="">배너분류 선택</option>
-                                    <option th:each="item : ${bannerClCdList}" th:value="${item.cdDetailVal1}" th:data-detail-cd-yn="|${item.cdDetailVal2}|" th:data-cl-cd="|${item.cdDetailVal3}|" >[[${item.cdDetailNm}]]
-                                </select>
-                            </div>
-                            <div class="col-md-2 col-sm-4 detailCdArea" style="display:none;">
-                            	<select class="form-control" name="bannerClDetailCd" id="bannerClDetailCd" >
-                                    <option value="">배너상세분류 선택</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">배너 이미지<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <div class="filebox preview-image bn-img">
-                                    <div class="upload-display">
-                                        <div class="upload-thumb-wrap">
-                                            <img alt="썸네일 이미지" class="upload-thumb noimg">
-                                        </div>
-                                    </div>
-                                    <div class="upload-file-name">
-                                        <input class="input-file-name" value="선택된 파일 없음(.gif, .jpg, .png)" disabled="disabled">
-                                    </div>
-                                    <div class="upload-btn mt_10p">
-                                        <label class="btn btn-purple">업로드
-                                            <input type="file" name="atchFile" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
-                                        </label>
-                                    </div>
-                                    <small class="font-gray-dark">
-                                        배너 이미지 사이즈 규격 :  1695 x 580   (px)
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">배너 이름<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control"name="bannerNm" required="required" placeholder="배너 이름을 입력해주세요."/>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">배너 순번<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <input type="number" class="form-control" name="bannerExpsrSeq" required="required" placeholder="배너순번 을(를) 입력해주세요." />
-                                <small class="font-gray-dark">
-                                    배너 순번을 입력해주세요. *(숫자만 입력 가능)
-                                </small>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">배너 설명</label>
-                            <div class="col-md-6 col-sm-6">
-                            	<textarea id="bannerDc" name="bannerDc" class="form-control" rows="10"></textarea>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">url 클래스 매핑 여부<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-4">
-                                <div class="btn-group radiobox">
-                                    <input type="radio" id="classMapngYn1" name="classMapngYn" value="Y" class="join-btn" required="required">
-                                    <label for="classMapngYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">예</label>
-                                    <input type="radio" id="classMapngYn2" name="classMapngYn" value="N" class="join-btn" required="required">
-                                    <label for="classMapngYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">아니오</label>
-                                </div>
-                                <br >
-                                <small class="font-gray-dark">
-                                   클래스를 선택하여 해당 클래스로 url을 자동으로 연결합니다. ('예' 선택시 매핑 클래스 영역 활성화. url은 클래스 기준으로 자동으로 매핑)
-                                </small>
-                            </div>
-                        </div>
-                        <div class="field item form-group mappingClassDiv" style="display:none;">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">매핑 클래스<span class="required">*</span></label>
-                            <div class="col-md-2 col-sm-6">
-                            	<select class="form-control" name="ctgrySn" id="ctgrySn">
-                                    <option value="">카테고리 선택</option>
-                                    <option th:each="item : ${classCategoryCl01List}" th:value="${item.clSn}">[[${item.clNm}]]
-                                </select>
-                            </div>
-                            <div class="col-md-2 col-sm-6">
-                            	<select class="form-control" name="crseSn" id="crseSn" >
-                                    <option value="">커리큘럼 선택</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2 col-sm-6">
-                            	<select class="form-control" name="classSn" id="classSn" >
-                                    <option value="">클래스 선택</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">URL<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control"name="url" required="required" placeholder="url을 입력해주세요."/>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">배너 표시기간<span class="required">*</span></label> 
-                            <div class="col-md-2 col-sm-4">
-                                <div class="btn-group radiobox">
-                                    <input type="radio" id="bannerPdSetYn1" name="bannerPdSetYn" value="N" class="join-btn" required="required">
-                                    <label for="bannerPdSetYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">상시</label>
-                                    <input type="radio" id="bannerPdSetYn2" name="bannerPdSetYn" value="Y" class="join-btn" required="required">
-                                    <label for="bannerPdSetYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">기간설정</label>
-                                </div>
-                            </div>
-                            <div id="expsrPeriodDiv" style="display:none;" class="col-md-4 col-sm-4" >
-                                <div class="col-md-5 col-sm-12">
-                                    <input class="form-control" type="text" name="bannerBeginDt"	id="bannerBeginDt"	data-pickr="dateTime"	placeholder="표시 시작일시 선택" >
-                                </div>
-                                <div class="col-md-1 col-sm-12 period-wave"></div>
-                                <div class="col-md-5 col-sm-12">
-                                    <input class="form-control" type="text" name="bannerEndDt"	id="bannerEndDt"		data-pickr="dateTime"	placeholder="표시 종료일시 선택" >
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">사용여부<span class="required">*</span></label> 
-                            <div class="col-md-2 col-sm-4">
-                                <div class="btn-group radiobox">
-                                    <input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn" required="required">
-                                    <label for="useYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">사용</label>
-                                    <input type="radio" id="useYn2" name="useYn" value="N" class="join-btn" required="required">
-                                    <label for="useYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">미사용</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ln_solid"></div>
-                        <!-- 저장버튼 -->
-                        <div class="col-md-12 bottom-btn-group">
-                            <!-- bottom left area -->
-                            <div class="col-md-2 col-sm-3 text-left">
-                                <a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >목록</a>
-                            </div>
-                            <!-- bottom c	enter area -->
-                            <div class="col-md-8 col-sm-6 text-center">
-                                <a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >취소</a>
-                                <button type="submit" class="btn btn-purple w120p">저장</button>
-                            </div>
-                            <!-- bottom right area -->
-                            <div class="col-md-2 col-sm-3 text-right">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- E : content -->
+	<!-- S: content -->
+	<div class="row">
+		<div class="col-md-12 col-sm-12 ">
+			<div class="x_panel">
+				<div class="x_content">
+					<form id="insertForm" name="insertForm" method="post" th:action="@{ {basicPath}/{mcd}/insert ( basicPath = ${basicPath}, mcd = ${mcd} ) }" enctype="multipart/form-data" th:onsubmit="return submitValidCheck();">
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">분류<span class="required">*</span></label>
+							<div class="col-md-2 col-sm-4">
+								<select class="form-control" name="bannerClCd" id="bannerClCd" required="required" >
+									<option value="">배너분류 선택</option>
+									<option th:each="item : ${bannerClCdList}" th:value="${item.cdDetailVal1}" th:data-detail-cd-yn="|${item.cdDetailVal2}|" th:data-cl-cd="|${item.cdDetailVal3}|" >[[${item.cdDetailNm}]]
+								</select>
+							</div>
+							<div class="col-md-2 col-sm-4 detailCdArea" style="display:none;">
+								<select class="form-control" name="bannerClDetailCd" id="bannerClDetailCd" >
+									<option value="">배너상세분류 선택</option>
+								</select>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">배너 이미지<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<div class="filebox preview-image bn-img">
+									<div class="upload-display">
+										<div class="upload-thumb-wrap">
+											<img alt="썸네일 이미지" class="upload-thumb noimg">
+										</div>
+									</div>
+									<div class="upload-file-name">
+										<input class="input-file-name" value="선택된 파일 없음(.gif, .jpg, .png)" disabled="disabled">
+									</div>
+									<div class="upload-btn mt_10p">
+										<label class="btn btn-purple">업로드
+											<input type="file" name="atchFile" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
+										</label>
+									</div>
+									<small class="font-gray-dark">
+										배너 이미지 사이즈 규격 :  1695 x 580   (px)
+									</small>
+								</div>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">배너 이름<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<input class="form-control"name="bannerNm" required="required" placeholder="배너 이름을 입력해주세요."/>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">배너 순번<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<input type="number" class="form-control" name="bannerExpsrSeq" required="required" placeholder="배너순번 을(를) 입력해주세요." />
+								<small class="font-gray-dark">
+									배너 순번을 입력해주세요. *(숫자만 입력 가능)
+								</small>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">배너 설명</label>
+							<div class="col-md-6 col-sm-6">
+								<textarea id="bannerDc" name="bannerDc" class="form-control" rows="10"></textarea>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">url 클래스 매핑 여부<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-4">
+								<div class="btn-group radiobox">
+									<input type="radio" id="classMapngYn1" name="classMapngYn" value="Y" class="join-btn" required="required">
+									<label for="classMapngYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">예</label>
+									<input type="radio" id="classMapngYn2" name="classMapngYn" value="N" class="join-btn" required="required">
+									<label for="classMapngYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">아니오</label>
+								</div>
+								<br >
+								<small class="font-gray-dark">
+								   클래스를 선택하여 해당 클래스로 url을 자동으로 연결합니다. ('예' 선택시 매핑 클래스 영역 활성화. url은 클래스 기준으로 자동으로 매핑)
+								</small>
+							</div>
+						</div>
+						<div class="field item form-group mappingClassDiv" style="display:none;">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">매핑 클래스<span class="required">*</span></label>
+							<div class="col-md-2 col-sm-6">
+								<select class="form-control" name="ctgrySn" id="ctgrySn">
+									<option value="">카테고리 선택</option>
+									<option th:each="item : ${classCategoryCl01List}" th:value="${item.clSn}">[[${item.clNm}]]
+								</select>
+							</div>
+							<div class="col-md-2 col-sm-6">
+								<select class="form-control" name="crseSn" id="crseSn" >
+									<option value="">커리큘럼 선택</option>
+								</select>
+							</div>
+							<div class="col-md-2 col-sm-6">
+								<select class="form-control" name="classSn" id="classSn" >
+									<option value="">클래스 선택</option>
+								</select>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">URL<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<input class="form-control"name="url" required="required" placeholder="url을 입력해주세요."/>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">배너 표시기간<span class="required">*</span></label> 
+							<div class="col-md-2 col-sm-4">
+								<div class="btn-group radiobox">
+									<input type="radio" id="bannerPdSetYn1" name="bannerPdSetYn" value="N" class="join-btn" required="required">
+									<label for="bannerPdSetYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">상시</label>
+									<input type="radio" id="bannerPdSetYn2" name="bannerPdSetYn" value="Y" class="join-btn" required="required">
+									<label for="bannerPdSetYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">기간설정</label>
+								</div>
+							</div>
+							<div id="expsrPeriodDiv" style="display:none;" class="col-md-4 col-sm-4" >
+								<div class="col-md-5 col-sm-12">
+									<input class="form-control" type="text" name="bannerBeginDt"	id="bannerBeginDt"	data-pickr="dateTime"	placeholder="표시 시작일시 선택" >
+								</div>
+								<div class="col-md-1 col-sm-12 period-wave"></div>
+								<div class="col-md-5 col-sm-12">
+									<input class="form-control" type="text" name="bannerEndDt"	id="bannerEndDt"		data-pickr="dateTime"	placeholder="표시 종료일시 선택" >
+								</div>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">사용여부<span class="required">*</span></label> 
+							<div class="col-md-2 col-sm-4">
+								<div class="btn-group radiobox">
+									<input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn" required="required">
+									<label for="useYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">사용</label>
+									<input type="radio" id="useYn2" name="useYn" value="N" class="join-btn" required="required">
+									<label for="useYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">미사용</label>
+								</div>
+							</div>
+						</div>
+						<div class="ln_solid"></div>
+						<!-- 저장버튼 -->
+						<div class="col-md-12 bottom-btn-group">
+							<!-- bottom left area -->
+							<div class="col-md-2 col-sm-3 text-left">
+								<a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >목록</a>
+							</div>
+							<!-- bottom c	enter area -->
+							<div class="col-md-8 col-sm-6 text-center">
+								<a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >취소</a>
+								<button type="submit" class="btn btn-purple w120p">저장</button>
+							</div>
+							<!-- bottom right area -->
+							<div class="col-md-2 col-sm-3 text-right">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- E : content -->
 </th:block>
 </html>

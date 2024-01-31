@@ -1,745 +1,745 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout/layout}">
+	  layout:decorate="~{admin/layout/layout}">
 <!-- S : Javascript functions	-->
 <script layout:fragment="script">
-    let typeAdm = '[[${@environment.getProperty('key.default.admin')}]]';
-    let typeUser = '[[${@environment.getProperty('key.default.user')}]]';
-    let type = '[[${type}]]';
-    let sel;
-    let ref;
-    let menuCreating = 'N';
+	let typeAdm = '[[${@environment.getProperty('key.default.admin')}]]';
+	let typeUser = '[[${@environment.getProperty('key.default.user')}]]';
+	let type = '[[${type}]]';
+	let sel;
+	let ref;
+	let menuCreating = 'N';
 
-    $( function () {
+	$( function () {
 
-        // form validator 체크 ( blur , input , change 이벤트시에 유효성을 체크하여 뿌려준다)
-        var validatorInsert = new FormValidator( {
-            "events": [ 'blur', 'input', 'change' ]
-        }, document.forms[0] );
+		// form validator 체크 ( blur , input , change 이벤트시에 유효성을 체크하여 뿌려준다)
+		var validatorInsert = new FormValidator( {
+			"events": [ 'blur', 'input', 'change' ]
+		}, document.forms[0] );
 
-        // form validator 체크 ( blur , input , change 이벤트시에 유효성을 체크하여 뿌려준다)
-        var validatorUpdate = new FormValidator( {
-            "events": [ 'blur', 'input', 'change' ]
-        }, document.forms[1] );
+		// form validator 체크 ( blur , input , change 이벤트시에 유효성을 체크하여 뿌려준다)
+		var validatorUpdate = new FormValidator( {
+			"events": [ 'blur', 'input', 'change' ]
+		}, document.forms[1] );
 
-        // searchDTO 는 layout.html에 선언
-        if ( searchDTO != null &&
-            searchDTO.category != undefined &&
-            searchDTO.category != null &&
-            searchDTO.category.lv1Sn != null &&
-            type == typeAdm
-        ) {
-            searchCateAjax( basicPath + '/live/' + type + '/getMenuListAjax' );
-        } else if ( type == typeUser ) {
-            // ajax START
-            $.ajax( {
-                url: basicPath + '/live/' + type + '/getMenuListAjax',
-                type: "GET",
-                dataType: "json",
-                async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-                // data: data, // 검색할 값 listDto 안에 categoryDto 변수 추가
-                contentType: "application/json",
-                success: function ( result ) {
-                    // callback 함수 연결 -> callback함수로 구현
-                    if ( typeof searchCateAjaxCallback === 'function' ) {
-                        searchCateAjaxCallback( result );
-                    } else {
-                        console.log( 'searchCateAjaxCallback( result ) funnction is required. searchCateAjaxCallback( result ) 콜백함수 not found!' );
-                    }
-                }
-            } );
-            // ajax END
-        }
+		// searchDTO 는 layout.html에 선언
+		if ( searchDTO != null &&
+			searchDTO.category != undefined &&
+			searchDTO.category != null &&
+			searchDTO.category.lv1Sn != null &&
+			type == typeAdm
+		) {
+			searchCateAjax( basicPath + '/live/' + type + '/getMenuListAjax' );
+		} else if ( type == typeUser ) {
+			// ajax START
+			$.ajax( {
+				url: basicPath + '/live/' + type + '/getMenuListAjax',
+				type: "GET",
+				dataType: "json",
+				async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+				// data: data, // 검색할 값 listDto 안에 categoryDto 변수 추가
+				contentType: "application/json",
+				success: function ( result ) {
+					// callback 함수 연결 -> callback함수로 구현
+					if ( typeof searchCateAjaxCallback === 'function' ) {
+						searchCateAjaxCallback( result );
+					} else {
+						console.log( 'searchCateAjaxCallback( result ) funnction is required. searchCateAjaxCallback( result ) 콜백함수 not found!' );
+					}
+				}
+			} );
+			// ajax END
+		}
 
-        // 수정 button click event
-        $( "[name='updateBtn']" ).click( function () {
+		// 수정 button click event
+		$( "[name='updateBtn']" ).click( function () {
 
-            // 유효성 검사
-            var valid = requiredCheckForm( $( "#updateForm" ) );
+			// 유효성 검사
+			var valid = requiredCheckForm( $( "#updateForm" ) );
 
-            if ( valid && confirm( "수정하시겠습니까?" ) ) {
+			if ( valid && confirm( "수정하시겠습니까?" ) ) {
 
-                var params = $( "#updateForm" ).serializeArray();
-                url = basicPath + "/live/" + type + "/updateMenuAjax";
+				var params = $( "#updateForm" ).serializeArray();
+				url = basicPath + "/live/" + type + "/updateMenuAjax";
 
-                menuAjax( params, url );
-            }
-        } )
+				menuAjax( params, url );
+			}
+		} )
 
-        // 등록 button click event
-        $( "[name='insertBtn']" ).click( function () {
+		// 등록 button click event
+		$( "[name='insertBtn']" ).click( function () {
 
-            // 유효성 검사
-            var valid = requiredCheckForm( $( "#insertForm" ) );
+			// 유효성 검사
+			var valid = requiredCheckForm( $( "#insertForm" ) );
 
-            if ( valid && confirm( "등록하시겠습니까?" ) ) {
-                var params = $( "#insertForm" ).serializeArray();
-                url = basicPath + "/live/" + type + "/insertMenuAjax";
+			if ( valid && confirm( "등록하시겠습니까?" ) ) {
+				var params = $( "#insertForm" ).serializeArray();
+				url = basicPath + "/live/" + type + "/insertMenuAjax";
 
-                menuAjax( params, url );
-            }
-        } )
-    } );
+				menuAjax( params, url );
+			}
+		} )
+	} );
 
-    function searchCateAjaxCallback( result ) {
-        // 메뉴 리스트 jstree구조로 뿌리기  ( 데이터 없을시는 문구 표출 )
+	function searchCateAjaxCallback( result ) {
+		// 메뉴 리스트 jstree구조로 뿌리기  ( 데이터 없을시는 문구 표출 )
 
-        // menuStructure 내부 html 비움
-        $( "#menuStructure" ).empty();
-        // 메뉴 form 초기화 작업
-        menuFormAreaInit( 'E' );
-        menuCreating = 'N';
+		// menuStructure 내부 html 비움
+		$( "#menuStructure" ).empty();
+		// 메뉴 form 초기화 작업
+		menuFormAreaInit( 'E' );
+		menuCreating = 'N';
 
-        if ( result.resultList != null && result.resultList.length != 0 ) {
-            // 데이터 있을 시
-            drawMenuTree( result.resultList );
-        } else {
-            // 데이터가 없을 시
-            $( "#menuStructure" ).append(
-                $( "<div>" ).attr( "class", "noData" ).append(
-                    $( "<span>" ).append( "등록된 메뉴가 없습니다. <br /> 메뉴를 등록해주세요. " )
-                )
-            );
-        }
-    }
+		if ( result.resultList != null && result.resultList.length != 0 ) {
+			// 데이터 있을 시
+			drawMenuTree( result.resultList );
+		} else {
+			// 데이터가 없을 시
+			$( "#menuStructure" ).append(
+				$( "<div>" ).attr( "class", "noData" ).append(
+					$( "<span>" ).append( "등록된 메뉴가 없습니다. <br /> 메뉴를 등록해주세요. " )
+				)
+			);
+		}
+	}
 
-    function menuCreate() {
+	function menuCreate() {
 
-        ref = $( '#menuStructureJsTree' ).jstree( true );
-        
-        if ( $( ".noSelect" ).length ) {
-            alert( "권한을 선택해 주세요." );
-            return false;
-        } else if ( ref == false ) {
+		ref = $( '#menuStructureJsTree' ).jstree( true );
+		
+		if ( $( ".noSelect" ).length ) {
+			alert( "권한을 선택해 주세요." );
+			return false;
+		} else if ( ref == false ) {
 
-            confirmMsg = ""
+			confirmMsg = ""
 
-            if ( type == typeAdm ) {
-                confirmMsg = "현재 권한에서 등록된 메뉴가 없습니다.\n관리자 메뉴를 시작하기 위한 루트메뉴를 등록하시겠습니까?";
-            } else if ( type == typeUser ) {
-                confirmMsg = "등록된 메뉴가 없습니다.\n사용자 메뉴를 시작하기 위한 루트메뉴를 등록하시겠습니까?";
-            }
+			if ( type == typeAdm ) {
+				confirmMsg = "현재 권한에서 등록된 메뉴가 없습니다.\n관리자 메뉴를 시작하기 위한 루트메뉴를 등록하시겠습니까?";
+			} else if ( type == typeUser ) {
+				confirmMsg = "등록된 메뉴가 없습니다.\n사용자 메뉴를 시작하기 위한 루트메뉴를 등록하시겠습니까?";
+			}
 
-            if ( type != null ) {
+			if ( type != null ) {
 
-                if ( confirm( confirmMsg ) ) {
-                    // ajax url setting
+				if ( confirm( confirmMsg ) ) {
+					// ajax url setting
 
-                    var url = basicPath + "/live/" + type + "/rootMenuInsertAjax";
+					var url = basicPath + "/live/" + type + "/rootMenuInsertAjax";
 
-                    var params = {};
+					var params = {};
 
-                    if( type == typeAdm ) {
+					if( type == typeAdm ) {
 
-                        if ( $( ".category-list-area .category-group-box ul li.on" ).length ) {
+						if ( $( ".category-list-area .category-group-box ul li.on" ).length ) {
 
-                            $( ".category-list-area .category-group-box ul li.on" ).each( function ( i, item ) {
-                                if ( i == 0 ) {
-                                    params['roleSnList[0]'] = $( this ).val();
-                                }
-                            } );
+							$( ".category-list-area .category-group-box ul li.on" ).each( function ( i, item ) {
+								if ( i == 0 ) {
+									params['roleSnList[0]'] = $( this ).val();
+								}
+							} );
 
-                        } else {
-                            alert( "검색 옵션을 선택해주세요." );
-                        }
-                        // data['roleSn'] =
-                    }
+						} else {
+							alert( "검색 옵션을 선택해주세요." );
+						}
+						// data['roleSn'] =
+					}
 
-                    menuAjax( params, url );
+					menuAjax( params, url );
 
-                    // ajax END
-                    return false;
-                } else {
-                    return false;
-                }
+					// ajax END
+					return false;
+				} else {
+					return false;
+				}
 
-            } else {
-                alert( "화면타입을 확인해 주세요." )
-                return false;
-            }
+			} else {
+				alert( "화면타입을 확인해 주세요." )
+				return false;
+			}
 
-        }
+		}
 
-        sel = ref.get_selected();
+		sel = ref.get_selected();
 
-        if ( !sel.length ) {
-            alert( "등록할 메뉴의 상위메뉴를 선택해주세요. " );
-            return false;
-        }
+		if ( !sel.length ) {
+			alert( "등록할 메뉴의 상위메뉴를 선택해주세요. " );
+			return false;
+		}
 
-        sel = sel[0];
-        var parentNode = $( "#menuStructureJsTree" ).jstree( true ).get_node( sel ).original;
+		sel = sel[0];
+		var parentNode = $( "#menuStructureJsTree" ).jstree( true ).get_node( sel ).original;
 
-        if ( parentNode.parntsMenuYn == 'N' ) {
-            alert( "부모메뉴로 설정되어있지 않는 메뉴 하위에는 메뉴를 등록할 수 없습니다." );
-            return false;
-        } else if ( parentNode.level > 2 ) {
-            alert( "3레벨 이상의 경로에는 메뉴를 등록할 수 없습니다." );
-            return false;
-        }
+		if ( parentNode.parntsMenuYn == 'N' ) {
+			alert( "부모메뉴로 설정되어있지 않는 메뉴 하위에는 메뉴를 등록할 수 없습니다." );
+			return false;
+		} else if ( parentNode.level > 2 ) {
+			alert( "3레벨 이상의 경로에는 메뉴를 등록할 수 없습니다." );
+			return false;
+		}
 
-        if ( menuCreating == 'Y' && confirm( "기존 작성중인 메뉴등록 양식이 있습니다. 이어서 작성하시겠습니까?\n(취소시 새 메뉴 등록)" ) ) {
+		if ( menuCreating == 'Y' && confirm( "기존 작성중인 메뉴등록 양식이 있습니다. 이어서 작성하시겠습니까?\n(취소시 새 메뉴 등록)" ) ) {
 
-            // 기존에 등록하던 메뉴등록 정보 이어서 등록
+			// 기존에 등록하던 메뉴등록 정보 이어서 등록
 
-            // formArea 전부 숨긴 뒤 insertFormDiv 만 보이게
-            $( "#formArea" ).children().hide();
-            $( "#insertFormDiv" ).show();
+			// formArea 전부 숨긴 뒤 insertFormDiv 만 보이게
+			$( "#formArea" ).children().hide();
+			$( "#insertFormDiv" ).show();
 
-        } else {
-            // 새 메뉴 form 으로 등록
-            menuCreating = 'Y';
-            menuFormAreaInit( 'C' );
+		} else {
+			// 새 메뉴 form 으로 등록
+			menuCreating = 'Y';
+			menuFormAreaInit( 'C' );
 
-            // target 메뉴 setting
-            if ( type == typeAdm ) {
-                parentNode.upperMenuSn = parentNode.menuSn;
-                var url = basicPath + "/live/getPossibleRoleListAjax";
+			// target 메뉴 setting
+			if ( type == typeAdm ) {
+				parentNode.upperMenuSn = parentNode.menuSn;
+				var url = basicPath + "/live/getPossibleRoleListAjax";
 
-                // 해당 메뉴로 다른권한에서 연동 가능한지 여부 확인 (ajax)
-                $.ajax( {
-                    url: url,
-                    type: "GET",
-                    dataType: "json",
-                    async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-                    data: {
-                        upperMenuSn: parentNode.upperMenuSn,
-                        menuSn: parentNode.menuSn
-                    }, // 검색할 값 listDtok 안에 조회 변수 set
-                    contentType: "application/json",
-                    success: function ( result ) {
-                        // result : 연동가능한 권한들의 list
-                        // 권한 setting 함수
-                        menuRoleSet( result, 'C' );
-                    }
-                } );
-                // ajax END
-            }
+				// 해당 메뉴로 다른권한에서 연동 가능한지 여부 확인 (ajax)
+				$.ajax( {
+					url: url,
+					type: "GET",
+					dataType: "json",
+					async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+					data: {
+						upperMenuSn: parentNode.upperMenuSn,
+						menuSn: parentNode.menuSn
+					}, // 검색할 값 listDtok 안에 조회 변수 set
+					contentType: "application/json",
+					success: function ( result ) {
+						// result : 연동가능한 권한들의 list
+						// 권한 setting 함수
+						menuRoleSet( result, 'C' );
+					}
+				} );
+				// ajax END
+			}
 
-        }
-    };
+		}
+	};
 
-    function menuDelete() {
+	function menuDelete() {
 
-        // 현재 삭제할 menuSn 있는지 체크
-        // menuSn = updateForm 에 있는 menuSn
+		// 현재 삭제할 menuSn 있는지 체크
+		// menuSn = updateForm 에 있는 menuSn
 
-        var menuSn = $( "#updateForm" ).find( "[name='menuSn']" ).val();
-        var parntsMenuYn = $( "#updateForm" ).find( "[name='parntsMenuYn']:checked" ).val();
+		var menuSn = $( "#updateForm" ).find( "[name='menuSn']" ).val();
+		var parntsMenuYn = $( "#updateForm" ).find( "[name='parntsMenuYn']:checked" ).val();
 
-        if ( menuSn == null && menuSn == '' ) {
-            alert( "선택된 메뉴가 없습니다." );
-            return false;
-        } else if ( parntsMenuYn == 'Y' ) {
-            alert( "부모메뉴로 설정되어있는 메뉴는 삭제가 불가능합니다. 하위 메뉴 부터 삭제해주세요." );
-            return false;
-        }
+		if ( menuSn == null && menuSn == '' ) {
+			alert( "선택된 메뉴가 없습니다." );
+			return false;
+		} else if ( parntsMenuYn == 'Y' ) {
+			alert( "부모메뉴로 설정되어있는 메뉴는 삭제가 불가능합니다. 하위 메뉴 부터 삭제해주세요." );
+			return false;
+		}
 
-        if ( confirm( "삭제하시겠습니까?" ) ) {
+		if ( confirm( "삭제하시겠습니까?" ) ) {
 
-            var params = $( "#updateForm" ).serializeArray();
-            url = basicPath + "/live/" + type + "/deleteMenuAjax";
-            menuAjax( params, url );
-        }
-    }
+			var params = $( "#updateForm" ).serializeArray();
+			url = basicPath + "/live/" + type + "/deleteMenuAjax";
+			menuAjax( params, url );
+		}
+	}
 
-    function menuAjax( params, url ) {
+	function menuAjax( params, url ) {
 
-        // ajax START
-        $.ajax( {
-            url: url,
-            type: "GET",
-            dataType: "json",
-            data: params, // 검색할 값
-            contentType: "application/json",
-            success: function ( result ) {
-                // return type : result.resultMsg (String)
-                alert( result.resultMsg );
+		// ajax START
+		$.ajax( {
+			url: url,
+			type: "GET",
+			dataType: "json",
+			data: params, // 검색할 값
+			contentType: "application/json",
+			success: function ( result ) {
+				// return type : result.resultMsg (String)
+				alert( result.resultMsg );
 
-                if ( type == typeAdm ) {
-                    // menulist 재 출력
-                    searchCateAjax( basicPath + '/live/' + type + '/getMenuListAjax' );
+				if ( type == typeAdm ) {
+					// menulist 재 출력
+					searchCateAjax( basicPath + '/live/' + type + '/getMenuListAjax' );
 
-                } else if ( type == typeUser ) {
+				} else if ( type == typeUser ) {
 
-                    // ajax START
-                    $.ajax( {
-                        url: basicPath + '/live/' + type + '/getMenuListAjax',
-                        type: "GET",
-                        dataType: "json",
-                        async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-                        // data: data, // 검색할 값 listDto 안에 categoryDto 변수 추가
-                        contentType: "application/json",
-                        success: function ( result ) {
-                            // callback 함수 연결 -> callback함수로 구현
-                            if ( typeof searchCateAjaxCallback === 'function' ) {
-                                searchCateAjaxCallback( result );
-                            } else {
-                                console.log( 'searchCateAjaxCallback( result ) funnction is required. searchCateAjaxCallback( result ) 콜백함수 not found!' );
-                            }
-                        }
-                    } );
-                    // ajax END
-                }
-            }
-        } );
-        // ajax END
-    }
+					// ajax START
+					$.ajax( {
+						url: basicPath + '/live/' + type + '/getMenuListAjax',
+						type: "GET",
+						dataType: "json",
+						async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+						// data: data, // 검색할 값 listDto 안에 categoryDto 변수 추가
+						contentType: "application/json",
+						success: function ( result ) {
+							// callback 함수 연결 -> callback함수로 구현
+							if ( typeof searchCateAjaxCallback === 'function' ) {
+								searchCateAjaxCallback( result );
+							} else {
+								console.log( 'searchCateAjaxCallback( result ) funnction is required. searchCateAjaxCallback( result ) 콜백함수 not found!' );
+							}
+						}
+					} );
+					// ajax END
+				}
+			}
+		} );
+		// ajax END
+	}
 
 </script>
 <!-- E : Javascript functions	-->
 
 <th:block layout:fragment="content">
 
-    <!-- S: content -->
+	<!-- S: content -->
 
-    <!-- S : 분류 영역 -->
-    <div class="div_menu_detail row" th:if="${ type == @environment.getProperty('key.default.admin') }">
-        <div class="col-md-12 col-sm-12 ">
-            <div class="x_panel category-area">
-                <!-- 분류 영역 > 카테고리 그룹 영역 -->
-                <div class="col-md-10 category-list-area">
-                    <div class="category-group-box">
-                        <!-- lv1 -->
-                        <div class="data-group">
-                            <span class="category-title">권한</span>
-                            <ul data-next-step-all-yn="Y">
-                                <!--  lv1 -->
-                                <li onclick="getCateNextLvList('', this );"
-                                    th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'on'"
-                                    value="0">전체
-                                </li>
-                                <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('', this );"
-                                    th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.categorySn ) } ? 'on'"
-                                    th:value="${data.categorySn}">[[${data.categoryNm}]]
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- 분류 영역 > 우측영역 ( 선택한 카테고리 텍스트 표출, 카테고리검색 버튼) -->
-                <div class="col-md-2 col-sm-6 category-right">
-                    <div class="picked-cate" id="picked-cate">
-                        <div class="cateLv0 blink"></div>
-                        <div class="cateLv1 blink"></div>
-                        <div class="cateLv2 blink"></div>
-                        <div class="cateLv3 blink"></div>
-                        <div class="cateLv4 blink"></div>
-                    </div>
-                    <div class="btn-group float-right" role="group">
-                    	<!-- th:data-search-cate-url : 검색 url setting -->
-                        <button name="searchCateBtn" type="button" class="btn btn-purple w120p"
-                                th:data-search-cate-url="|${basicPath}/live/${type}/getMenuListAjax|"	
-                                th:onclick="searchCateAjax( this.getAttribute('data-search-cate-url') )">보기
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- E : 분류 영역 -->
+	<!-- S : 분류 영역 -->
+	<div class="div_menu_detail row" th:if="${ type == @environment.getProperty('key.default.admin') }">
+		<div class="col-md-12 col-sm-12 ">
+			<div class="x_panel category-area">
+				<!-- 분류 영역 > 카테고리 그룹 영역 -->
+				<div class="col-md-10 category-list-area">
+					<div class="category-group-box">
+						<!-- lv1 -->
+						<div class="data-group">
+							<span class="category-title">권한</span>
+							<ul data-next-step-all-yn="Y">
+								<!--  lv1 -->
+								<li onclick="getCateNextLvList('', this );"
+									th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'on'"
+									value="0">전체
+								</li>
+								<li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('', this );"
+									th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.categorySn ) } ? 'on'"
+									th:value="${data.categorySn}">[[${data.categoryNm}]]
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- 분류 영역 > 우측영역 ( 선택한 카테고리 텍스트 표출, 카테고리검색 버튼) -->
+				<div class="col-md-2 col-sm-6 category-right">
+					<div class="picked-cate" id="picked-cate">
+						<div class="cateLv0 blink"></div>
+						<div class="cateLv1 blink"></div>
+						<div class="cateLv2 blink"></div>
+						<div class="cateLv3 blink"></div>
+						<div class="cateLv4 blink"></div>
+					</div>
+					<div class="btn-group float-right" role="group">
+						<!-- th:data-search-cate-url : 검색 url setting -->
+						<button name="searchCateBtn" type="button" class="btn btn-purple w120p"
+								th:data-search-cate-url="|${basicPath}/live/${type}/getMenuListAjax|"	
+								th:onclick="searchCateAjax( this.getAttribute('data-search-cate-url') )">보기
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- E : 분류 영역 -->
 
-    <div class="row">
-        <!-- 메뉴 jstree 영역 ( left ) -->
-        <div class="col-md-4 col-sm-6 menu-left-area">
-            <div class="x_panel menu-structure-area">
-                <div class="x_title">
-                    <h2>메뉴 구조 <small>[]는 메뉴 순번</small></h2>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="x_content" id="menuStructure">
-                    <th:block th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null )}">
-                        <!--                        <div id="menuStructureJsTree" th:if="${!resultList != null }">-->
-                        <!--                        </div>-->
-                        <div class="noData">
-                            <span>등록된 메뉴가 없습니다. <br/>메뉴를 등록해주세요.</span>
-                        </div>
-                    </th:block>
-                    <div th:unless="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null )}"
-                         class="noData noSelect">
-                        <span>권한을 선택해주세요.</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- 메뉴 등록 수정 삭제 영역 ( right ) -->
-        <div class="col-md-8 col-sm-6 menu-right-area">
-            <div class="x_panel menu-form-area">
-                <div class="x_title">
-                    <!-- 버튼 영역 -->
-                    <div class="btn-group float-left" role="group">
-                        <button type="button" class="btn btn-purple" onclick="menuCreate()">메뉴 등록</button>
-                        <button type="button" class="btn btn-danger ml_10p" onclick="menuDelete();">메뉴 삭제</button>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="x_content" id="formArea">
-                    <div id="insertFormDiv" style="display: none">
-                        <form id="insertForm" name="insertForm">
-                            <input type="hidden" name="menuSn"/>
-                            <input type="hidden" name="upperMenuSn"/>
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴명<span
-                                        class="required"> * </span></label>
-                                <div class="col-md-8 col-sm-6">
-                                    <input name="menuNm" id="menuNm" class="form-control" title="메뉴명"
-                                           required="required" data-parsley-minlength="1"/>
-                                </div>
-                            </div>
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2  col-sm-6 label-align">메뉴경로<span class="required"> * </span></label>
-                                <div class="col-md-8 col-sm-6">
-                                    <input name="menuPath" id="menuPath" title="메뉴경로" class="form-control"
-                                           required="required" readonly/>
-                                    <small class="font-gray-dark">
-                                        메뉴의 경로 변경은 왼쪽 트리구조에서 메뉴를 선택하여 드래그 해주세요.
-                                    </small>
-                                </div>
+	<div class="row">
+		<!-- 메뉴 jstree 영역 ( left ) -->
+		<div class="col-md-4 col-sm-6 menu-left-area">
+			<div class="x_panel menu-structure-area">
+				<div class="x_title">
+					<h2>메뉴 구조 <small>[]는 메뉴 순번</small></h2>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content" id="menuStructure">
+					<th:block th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null )}">
+						<!--						<div id="menuStructureJsTree" th:if="${!resultList != null }">-->
+						<!--						</div>-->
+						<div class="noData">
+							<span>등록된 메뉴가 없습니다. <br/>메뉴를 등록해주세요.</span>
+						</div>
+					</th:block>
+					<div th:unless="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null )}"
+						 class="noData noSelect">
+						<span>권한을 선택해주세요.</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 메뉴 등록 수정 삭제 영역 ( right ) -->
+		<div class="col-md-8 col-sm-6 menu-right-area">
+			<div class="x_panel menu-form-area">
+				<div class="x_title">
+					<!-- 버튼 영역 -->
+					<div class="btn-group float-left" role="group">
+						<button type="button" class="btn btn-purple" onclick="menuCreate()">메뉴 등록</button>
+						<button type="button" class="btn btn-danger ml_10p" onclick="menuDelete();">메뉴 삭제</button>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content" id="formArea">
+					<div id="insertFormDiv" style="display: none">
+						<form id="insertForm" name="insertForm">
+							<input type="hidden" name="menuSn"/>
+							<input type="hidden" name="upperMenuSn"/>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">메뉴명<span
+										class="required"> * </span></label>
+								<div class="col-md-8 col-sm-6">
+									<input name="menuNm" id="menuNm" class="form-control" title="메뉴명"
+										   required="required" data-parsley-minlength="1"/>
+								</div>
+							</div>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2  col-sm-6 label-align">메뉴경로<span class="required"> * </span></label>
+								<div class="col-md-8 col-sm-6">
+									<input name="menuPath" id="menuPath" title="메뉴경로" class="form-control"
+										   required="required" readonly/>
+									<small class="font-gray-dark">
+										메뉴의 경로 변경은 왼쪽 트리구조에서 메뉴를 선택하여 드래그 해주세요.
+									</small>
+								</div>
 
-                            </div>
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴순번<span class="required"> * </span></label>
-                                <div class="col-md-8 col-sm-6">
-                                    <input name="menuSeq" id="menuSeq" class="form-control" title="메뉴순번"
-                                           required="required" data-parsley-minlength="1" type="number"/>
-                                    <small class="font-gray-dark">
-                                        <b>중복 불가</b> 같은 부모경로를 가지고 있는 메뉴들간의 순서입니다. 중복되지 않도록 유의해주세요.
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴코드<span class="required"> * </span></label>
-                                <div class="col-md-8 col-sm-6">
-                                    <input name="menuCd" id="menuCd" class="form-control" title="메뉴코드"
-                                           required="required" data-parsley-minlength="1"/>
-                                    <small class="font-gray-dark">
-                                        <b>유일한 값</b> 이어야 합니다. 다른 메뉴의 코드와 중복 되면 안됩니다.
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴url</label>
-                                <div class="col-md-8 col-sm-6">
-                                    <input name="menuUrl" id="menuUrl" class="form-control"
-                                           placeholder="부모메뉴 설정 시 url 설정이 불가능합니다."/>
-                                </div>
-                            </div>
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">부모메뉴여부<span
-                                        class="required"> * </span></label>
-                                <div class="col-md-8 col-sm-6">
-                                    <div class="btn-group radiobox">
-                                        <input type="radio" id="parntsMenuYn1" name="parntsMenuYn" value="Y" title="부모메뉴여부"
-                                               class="join-btn" required/>
-                                        <label for="parntsMenuYn1" class="btn btn-outline-purple w100p"
-                                               data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default">Y</label>
-                                        <input type="radio" id="parntsMenuYn2" name="parntsMenuYn" value="N" title="부모메뉴여부"
-                                               class="join-btn" required/>
-                                        <label for="parntsMenuYn2" class="btn btn-outline-purple w100p"
-                                               data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default">N</label>
-                                    </div>
-                                    <br>
-                                    <small class="font-gray-dark">
-                                        URL기능이 아닌 아코디언(접고펼쳐지는) 기능으로써의 역할이 됩니다.
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="field item form-group" th:if="${type == 'adm'}">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명설정여부<span
-                                        class="required"> * </span></label>
-                                <div class="col-md-8 col-sm-6">
-                                    <div class="btn-group radiobox">
-                                        <input type="radio" id="menuDcSetYn1" name="menuDcSetYn" value="Y" title="메뉴설명설정여부"
-                                               class="join-btn" required/>
-                                        <label for="menuDcSetYn1" class="btn btn-outline-purple w100p"
-                                               data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default">Y</label>
-                                        <input type="radio" id="menuDcSetYn2" name="menuDcSetYn" value="N" title="메뉴설명설정여부"
-                                               class="join-btn" required/>
-                                        <label for="menuDcSetYn2" class="btn btn-outline-purple w100p"
-                                               data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default">N</label>
-                                    </div>
-                                    <br>
-                                    <small class="font-gray-dark">
-                                        해당 기능 사용시 메뉴에 진입하면 설명문구가 표출됩니다.
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명</label>
-                                <div class="col-md-8 col-sm-6">
-                                    <input name="menuDc" id="menuDc" class="form-control"/>
-                                    <small class="font-gray-dark" th:if="${type == 'adm'}">
-                                        메뉴의 상단에 표시됩니다. (1줄로 간단히 설명)
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴상세설명</label>
-                                <div class="col-md-8 col-sm-6">
-                                    <textarea rows="15" name="menuDetailDc" id="menuDetailDc"></textarea>
-                                    <small class="font-gray-dark" th:if="${type == 'adm'}">
-                                        메뉴의 상단에 상세보기를 펼쳤을 시 나오는 문구입니다.
-                                    </small>
-                                </div>
-                            </div>
-                            <!-- atch_file_sn (추후에..) -->
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">사용여부<span class="required"> * </span></label>
-                                <div class="col-md-8 col-sm-6">
-                                    <div class="btn-group radiobox">
-                                        <input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn" title="사용여부"
-                                               required/>
-                                        <label for="useYn1" class="btn btn-outline-purple w100p"
-                                               data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default">Y</label>
-                                        <input type="radio" id="useYn2" name="useYn" value="N" class="join-btn" title="사용여부"
-                                               required/>
-                                        <label for="useYn2" class="btn btn-outline-purple w100p"
-                                               data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default">N</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">새창여부<span class="required"> * </span></label>
-                                <div class="col-md-8 col-sm-6">
-                                    <div class="btn-group radiobox">
-                                        <input type="radio" id="newWindowYn1" name="newWindowYn" value="Y" title="새창여부"
-                                               class="join-btn" required/>
-                                        <label for="newWindowYn1" class="btn btn-outline-purple w100p"
-                                               data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default">Y</label>
-                                        <input type="radio" id="newWindowYn2" name="newWindowYn" value="N" title="새창여부"
-                                               class="join-btn" required/>
-                                        <label for="newWindowYn2" class="btn btn-outline-purple w100p"
-                                               data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default">N</label>
-                                    </div>
-                                    <br>
-                                    <small class="font-gray-dark">
-                                        해당 기능 선택시 메뉴를 클릭하면 새창으로 띄워집니다.
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="field item form-group" th:if="${type == 'adm'}">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">권한 적용</label>
-                                <div class="col-md-8 col-sm-6 pt_5p">
-                                    <div class="possibleRole">
-                                        <th:block th:each="data : ${cateLv1List}">
-                                                <input th:id="'roleSnList'+${dataStat.count}" type="checkbox" name="roleSnList" th:value="${data.categorySn}"/>
-                                                <label th:for="'roleSnList'+${dataStat.count}"><span class="cbTitle">[[${data.categoryNm}]]</span></label>
-                                        </th:block>
-                                    </div>
-                                    <small class="font-gray-dark">
-                                        해당 메뉴의 부모메뉴가 존재하지 않는 권한에는 적용할 수 없습니다.
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="col-md-12 bottom-btn-group mt_10p">
-                                <!-- bottom left area -->
-                                <div class="col-md-2 col-sm-3 text-left">
-                                </div>
-                                <!-- bottom center area -->
-                                <div class="col-md-8 col-sm-6 text-center">
-                                    <button name="insertBtn" type="button" class="btn btn-purple w120p">등록</button>
-                                </div>
-                                <!-- bottom right area -->
-                                <div class="col-md-2 col-sm-3 text-right">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div id="updateFormDiv" style="display: none">
-                        <form id="updateForm" name="updateForm">
-                            <input type="hidden" name="menuSn"/>
-                            <input type="hidden" name="upperMenuSn"/>
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴명<span
-                                        class="required"> * </span></label>
-                                <div class="col-md-8 col-sm-6">
-                                    <input name="menuNm" class="form-control" title="메뉴명" required="required"
-                                           data-parsley-minlength="1"/>
-                                </div>
-                            </div>
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2  col-sm-6 label-align">메뉴경로<span class="required"> * </span></label>
-                                <div class="col-md-8 col-sm-6">
-                                    <input name="menuPath" title="메뉴경로" class="form-control" required="required"
-                                           readonly/>
-                                    <small class="font-gray-dark">
-                                        메뉴의 경로 변경은 왼쪽 트리구조에서 메뉴를 선택하여 드래그 해주세요.
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴순번<span class="required"> * </span></label>
-                                <div class="col-md-8 col-sm-6">
-                                    <input name="menuSeq" type="number" class="form-control" title="메뉴순번"
-                                           required="required" data-parsley-minlength="1"/>
-                                    <small class="font-gray-dark">
-                                        <b>중복 불가</b> 같은 부모경로를 가지고 있는 메뉴들간의 순서입니다. 중복되지 않도록 유의해주세요.
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴코드<span class="required"> * </span></label>
-                                <div class="col-md-8 col-sm-6">
-                                    <input name="menuCd" class="form-control" title="메뉴코드" required="required"
-                                           data-parsley-minlength="1"/>
-                                    <small class="font-gray-dark">
-                                        <b>유일한 값</b> 이어야 합니다. 다른 메뉴의 코드와 중복 되면 안됩니다.
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴url</label>
-                                <div class="col-md-8 col-sm-6">
-                                    <input name="menuUrl" class="form-control" placeholder="부모메뉴 설정 시 url 설정이 불가능합니다."/>
-                                </div>
-                            </div>
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">부모메뉴여부<span
-                                        class="required"> * </span></label>
-                                <div class="col-md-8 col-sm-6">
-                                    <div class="btn-group radiobox">
-                                        <input type="radio" id="parntsMenuYn3" name="parntsMenuYn" value="Y" title="부모메뉴여부"
-                                               class="join-btn"/>
-                                        <label for="parntsMenuYn3" class="btn btn-outline-purple w100p"
-                                               data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default">Y</label>
-                                        <input type="radio" id="parntsMenuYn4" name="parntsMenuYn" value="N" title="부모메뉴여부"
-                                               class="join-btn"/>
-                                        <label for="parntsMenuYn4" class="btn btn-outline-purple w100p"
-                                               data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default">N</label>
-                                    </div>
-                                    <br>
-                                    <small class="font-gray-dark">
-                                        URL기능이 아닌 아코디언(접고펼쳐지는) 기능으로써의 역할이 됩니다.
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="field item form-group" th:if="${type == 'adm'}" >
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명설정여부<span
-                                        class="required"> * </span></label>
-                                <div class="col-md-8 col-sm-6">
-                                    <div class="btn-group radiobox">
-                                        <input type="radio" id="menuDcSetYn3" name="menuDcSetYn" value="Y" title="메뉴설명설정여부"
-                                               class="join-btn"/>
-                                        <label for="menuDcSetYn3" class="btn btn-outline-purple w100p"
-                                               data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default">Y</label>
-                                        <input type="radio" id="menuDcSetYn4" name="menuDcSetYn" value="N" title="메뉴설명설정여부"
-                                               class="join-btn"/>
-                                        <label for="menuDcSetYn4" class="btn btn-outline-purple w100p"
-                                               data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default">N</label>
-                                    </div>
-                                    <br>
-                                    <small class="font-gray-dark">
-                                        해당 기능 사용시 메뉴에 진입하면 설명문구가 표출됩니다.
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="field item form-group" >
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명</label>
-                                <div class="col-md-8 col-sm-6">
-                                    <input name="menuDc" class="form-control"/>
-                                    <small class="font-gray-dark">
-                                        메뉴의 상단에 표시됩니다. (1줄로 간단히 설명)
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">메뉴상세설명</label>
-                                <div class="col-md-8 col-sm-6">
-                                    <textarea rows="15" name="menuDetailDc"></textarea>
-                                    <small class="font-gray-dark" th:if="${type == 'adm'}">
-                                        메뉴의 상단에 상세보기를 펼쳤을 시 나오는 문구입니다.
-                                    </small>
-                                </div>
-                            </div>
-                            <!-- atch_file_sn (추후에..) -->
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">사용여부<span class="required"> * </span></label>
-                                <div class="col-md-8 col-sm-6">
-                                    <div class="btn-group radiobox">
-                                        <input type="radio" id="useYn3" name="useYn" value="Y" class="join-btn" title="사용여부" />
-                                        <label for="useYn3" class="btn btn-outline-purple w100p"
-                                               data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default">Y</label>
-                                        <input type="radio" id="useYn4" name="useYn" value="N" class="join-btn" title="사용여부" />
-                                        <label for="useYn4" class="btn btn-outline-purple w100p"
-                                               data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default">N</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="field item form-group">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">새창여부<span class="required"> * </span></label>
-                                <div class="col-md-8 col-sm-6">
-                                    <div class="btn-group radiobox">
-                                        <input type="radio" id="newWindowYn3" name="newWindowYn" value="Y" title="새창여부"
-                                               class="join-btn"/>
-                                        <label for="newWindowYn3" class="btn btn-outline-purple w100p"
-                                               data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default">Y</label>
-                                        <input type="radio" id="newWindowYn4" name="newWindowYn" value="N" title="새창여부"
-                                               class="join-btn"/>
-                                        <label for="newWindowYn4" class="btn btn-outline-purple w100p"
-                                               data-toggle-class="btn-primary"
-                                               data-toggle-passive-class="btn-default">N</label>
-                                    </div>
-                                    <br>
-                                    <small class="font-gray-dark">
-                                        해당 기능 선택시 메뉴를 클릭하면 새창으로 띄워집니다.
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="field item form-group" th:if="${type == 'adm'}">
-                                <label class="col-form-label col-md-2 col-sm-6 label-align">권한 적용</label>
-                                <div class="col-md-8 col-sm-6 pt_5p">
-                                    <div class="possibleRole">
-                                        <th:block th:each="data : ${cateLv1List}">
-                                                <input th:id="'roleSnList' + ${dataStat.count} + '_U'" type="checkbox"
-                                                       name="roleSnList" th:value="${data.categorySn}"/>
-                                                <label th:for="'roleSnList' + ${dataStat.count} + '_U'"><span
-                                                        class="cbTitle">[[${data.categoryNm}]]</span></label>
-                                        </th:block>
-                                    </div>
-                                    <small class="font-gray-dark">
-                                        해당 메뉴의 부모메뉴가 존재하지 않는 권한에는 적용할 수 없습니다.
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="col-md-12 bottom-btn-group mt_10p">
-                                <!-- bottom left area -->
-                                <div class="col-md-2 col-sm-3 text-left">
-                                    <small class="nowSelectMenuNm">
-                                    </small>
-                                </div>
-                                <!-- bottom center area -->
-                                <div class="col-md-8 col-sm-6 text-center">
-                                    <button name="updateBtn" type="button" class="btn btn-purple w120p">수정</button>
-                                    <button name="deleteBtn" type="button" class="btn btn-danger ml_10p w120p" onclick="menuDelete();">삭제</button>
-                                </div>
-                                <!-- bottom right area -->
-                                <div class="col-md-2 col-sm-3 text-right">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="noData">
-                        <span>메뉴를 선택해주세요.</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- E : content -->
+							</div>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">메뉴순번<span class="required"> * </span></label>
+								<div class="col-md-8 col-sm-6">
+									<input name="menuSeq" id="menuSeq" class="form-control" title="메뉴순번"
+										   required="required" data-parsley-minlength="1" type="number"/>
+									<small class="font-gray-dark">
+										<b>중복 불가</b> 같은 부모경로를 가지고 있는 메뉴들간의 순서입니다. 중복되지 않도록 유의해주세요.
+									</small>
+								</div>
+							</div>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">메뉴코드<span class="required"> * </span></label>
+								<div class="col-md-8 col-sm-6">
+									<input name="menuCd" id="menuCd" class="form-control" title="메뉴코드"
+										   required="required" data-parsley-minlength="1"/>
+									<small class="font-gray-dark">
+										<b>유일한 값</b> 이어야 합니다. 다른 메뉴의 코드와 중복 되면 안됩니다.
+									</small>
+								</div>
+							</div>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">메뉴url</label>
+								<div class="col-md-8 col-sm-6">
+									<input name="menuUrl" id="menuUrl" class="form-control"
+										   placeholder="부모메뉴 설정 시 url 설정이 불가능합니다."/>
+								</div>
+							</div>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">부모메뉴여부<span
+										class="required"> * </span></label>
+								<div class="col-md-8 col-sm-6">
+									<div class="btn-group radiobox">
+										<input type="radio" id="parntsMenuYn1" name="parntsMenuYn" value="Y" title="부모메뉴여부"
+											   class="join-btn" required/>
+										<label for="parntsMenuYn1" class="btn btn-outline-purple w100p"
+											   data-toggle-class="btn-primary"
+											   data-toggle-passive-class="btn-default">Y</label>
+										<input type="radio" id="parntsMenuYn2" name="parntsMenuYn" value="N" title="부모메뉴여부"
+											   class="join-btn" required/>
+										<label for="parntsMenuYn2" class="btn btn-outline-purple w100p"
+											   data-toggle-class="btn-primary"
+											   data-toggle-passive-class="btn-default">N</label>
+									</div>
+									<br>
+									<small class="font-gray-dark">
+										URL기능이 아닌 아코디언(접고펼쳐지는) 기능으로써의 역할이 됩니다.
+									</small>
+								</div>
+							</div>
+							<div class="field item form-group" th:if="${type == 'adm'}">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명설정여부<span
+										class="required"> * </span></label>
+								<div class="col-md-8 col-sm-6">
+									<div class="btn-group radiobox">
+										<input type="radio" id="menuDcSetYn1" name="menuDcSetYn" value="Y" title="메뉴설명설정여부"
+											   class="join-btn" required/>
+										<label for="menuDcSetYn1" class="btn btn-outline-purple w100p"
+											   data-toggle-class="btn-primary"
+											   data-toggle-passive-class="btn-default">Y</label>
+										<input type="radio" id="menuDcSetYn2" name="menuDcSetYn" value="N" title="메뉴설명설정여부"
+											   class="join-btn" required/>
+										<label for="menuDcSetYn2" class="btn btn-outline-purple w100p"
+											   data-toggle-class="btn-primary"
+											   data-toggle-passive-class="btn-default">N</label>
+									</div>
+									<br>
+									<small class="font-gray-dark">
+										해당 기능 사용시 메뉴에 진입하면 설명문구가 표출됩니다.
+									</small>
+								</div>
+							</div>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명</label>
+								<div class="col-md-8 col-sm-6">
+									<input name="menuDc" id="menuDc" class="form-control"/>
+									<small class="font-gray-dark" th:if="${type == 'adm'}">
+										메뉴의 상단에 표시됩니다. (1줄로 간단히 설명)
+									</small>
+								</div>
+							</div>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">메뉴상세설명</label>
+								<div class="col-md-8 col-sm-6">
+									<textarea rows="15" name="menuDetailDc" id="menuDetailDc"></textarea>
+									<small class="font-gray-dark" th:if="${type == 'adm'}">
+										메뉴의 상단에 상세보기를 펼쳤을 시 나오는 문구입니다.
+									</small>
+								</div>
+							</div>
+							<!-- atch_file_sn (추후에..) -->
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">사용여부<span class="required"> * </span></label>
+								<div class="col-md-8 col-sm-6">
+									<div class="btn-group radiobox">
+										<input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn" title="사용여부"
+											   required/>
+										<label for="useYn1" class="btn btn-outline-purple w100p"
+											   data-toggle-class="btn-primary"
+											   data-toggle-passive-class="btn-default">Y</label>
+										<input type="radio" id="useYn2" name="useYn" value="N" class="join-btn" title="사용여부"
+											   required/>
+										<label for="useYn2" class="btn btn-outline-purple w100p"
+											   data-toggle-class="btn-primary"
+											   data-toggle-passive-class="btn-default">N</label>
+									</div>
+								</div>
+							</div>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">새창여부<span class="required"> * </span></label>
+								<div class="col-md-8 col-sm-6">
+									<div class="btn-group radiobox">
+										<input type="radio" id="newWindowYn1" name="newWindowYn" value="Y" title="새창여부"
+											   class="join-btn" required/>
+										<label for="newWindowYn1" class="btn btn-outline-purple w100p"
+											   data-toggle-class="btn-primary"
+											   data-toggle-passive-class="btn-default">Y</label>
+										<input type="radio" id="newWindowYn2" name="newWindowYn" value="N" title="새창여부"
+											   class="join-btn" required/>
+										<label for="newWindowYn2" class="btn btn-outline-purple w100p"
+											   data-toggle-class="btn-primary"
+											   data-toggle-passive-class="btn-default">N</label>
+									</div>
+									<br>
+									<small class="font-gray-dark">
+										해당 기능 선택시 메뉴를 클릭하면 새창으로 띄워집니다.
+									</small>
+								</div>
+							</div>
+							<div class="field item form-group" th:if="${type == 'adm'}">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">권한 적용</label>
+								<div class="col-md-8 col-sm-6 pt_5p">
+									<div class="possibleRole">
+										<th:block th:each="data : ${cateLv1List}">
+												<input th:id="'roleSnList'+${dataStat.count}" type="checkbox" name="roleSnList" th:value="${data.categorySn}"/>
+												<label th:for="'roleSnList'+${dataStat.count}"><span class="cbTitle">[[${data.categoryNm}]]</span></label>
+										</th:block>
+									</div>
+									<small class="font-gray-dark">
+										해당 메뉴의 부모메뉴가 존재하지 않는 권한에는 적용할 수 없습니다.
+									</small>
+								</div>
+							</div>
+							<div class="col-md-12 bottom-btn-group mt_10p">
+								<!-- bottom left area -->
+								<div class="col-md-2 col-sm-3 text-left">
+								</div>
+								<!-- bottom center area -->
+								<div class="col-md-8 col-sm-6 text-center">
+									<button name="insertBtn" type="button" class="btn btn-purple w120p">등록</button>
+								</div>
+								<!-- bottom right area -->
+								<div class="col-md-2 col-sm-3 text-right">
+								</div>
+							</div>
+						</form>
+					</div>
+					<div id="updateFormDiv" style="display: none">
+						<form id="updateForm" name="updateForm">
+							<input type="hidden" name="menuSn"/>
+							<input type="hidden" name="upperMenuSn"/>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">메뉴명<span
+										class="required"> * </span></label>
+								<div class="col-md-8 col-sm-6">
+									<input name="menuNm" class="form-control" title="메뉴명" required="required"
+										   data-parsley-minlength="1"/>
+								</div>
+							</div>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2  col-sm-6 label-align">메뉴경로<span class="required"> * </span></label>
+								<div class="col-md-8 col-sm-6">
+									<input name="menuPath" title="메뉴경로" class="form-control" required="required"
+										   readonly/>
+									<small class="font-gray-dark">
+										메뉴의 경로 변경은 왼쪽 트리구조에서 메뉴를 선택하여 드래그 해주세요.
+									</small>
+								</div>
+							</div>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">메뉴순번<span class="required"> * </span></label>
+								<div class="col-md-8 col-sm-6">
+									<input name="menuSeq" type="number" class="form-control" title="메뉴순번"
+										   required="required" data-parsley-minlength="1"/>
+									<small class="font-gray-dark">
+										<b>중복 불가</b> 같은 부모경로를 가지고 있는 메뉴들간의 순서입니다. 중복되지 않도록 유의해주세요.
+									</small>
+								</div>
+							</div>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">메뉴코드<span class="required"> * </span></label>
+								<div class="col-md-8 col-sm-6">
+									<input name="menuCd" class="form-control" title="메뉴코드" required="required"
+										   data-parsley-minlength="1"/>
+									<small class="font-gray-dark">
+										<b>유일한 값</b> 이어야 합니다. 다른 메뉴의 코드와 중복 되면 안됩니다.
+									</small>
+								</div>
+							</div>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">메뉴url</label>
+								<div class="col-md-8 col-sm-6">
+									<input name="menuUrl" class="form-control" placeholder="부모메뉴 설정 시 url 설정이 불가능합니다."/>
+								</div>
+							</div>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">부모메뉴여부<span
+										class="required"> * </span></label>
+								<div class="col-md-8 col-sm-6">
+									<div class="btn-group radiobox">
+										<input type="radio" id="parntsMenuYn3" name="parntsMenuYn" value="Y" title="부모메뉴여부"
+											   class="join-btn"/>
+										<label for="parntsMenuYn3" class="btn btn-outline-purple w100p"
+											   data-toggle-class="btn-primary"
+											   data-toggle-passive-class="btn-default">Y</label>
+										<input type="radio" id="parntsMenuYn4" name="parntsMenuYn" value="N" title="부모메뉴여부"
+											   class="join-btn"/>
+										<label for="parntsMenuYn4" class="btn btn-outline-purple w100p"
+											   data-toggle-class="btn-primary"
+											   data-toggle-passive-class="btn-default">N</label>
+									</div>
+									<br>
+									<small class="font-gray-dark">
+										URL기능이 아닌 아코디언(접고펼쳐지는) 기능으로써의 역할이 됩니다.
+									</small>
+								</div>
+							</div>
+							<div class="field item form-group" th:if="${type == 'adm'}" >
+								<label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명설정여부<span
+										class="required"> * </span></label>
+								<div class="col-md-8 col-sm-6">
+									<div class="btn-group radiobox">
+										<input type="radio" id="menuDcSetYn3" name="menuDcSetYn" value="Y" title="메뉴설명설정여부"
+											   class="join-btn"/>
+										<label for="menuDcSetYn3" class="btn btn-outline-purple w100p"
+											   data-toggle-class="btn-primary"
+											   data-toggle-passive-class="btn-default">Y</label>
+										<input type="radio" id="menuDcSetYn4" name="menuDcSetYn" value="N" title="메뉴설명설정여부"
+											   class="join-btn"/>
+										<label for="menuDcSetYn4" class="btn btn-outline-purple w100p"
+											   data-toggle-class="btn-primary"
+											   data-toggle-passive-class="btn-default">N</label>
+									</div>
+									<br>
+									<small class="font-gray-dark">
+										해당 기능 사용시 메뉴에 진입하면 설명문구가 표출됩니다.
+									</small>
+								</div>
+							</div>
+							<div class="field item form-group" >
+								<label class="col-form-label col-md-2 col-sm-6 label-align">메뉴설명</label>
+								<div class="col-md-8 col-sm-6">
+									<input name="menuDc" class="form-control"/>
+									<small class="font-gray-dark">
+										메뉴의 상단에 표시됩니다. (1줄로 간단히 설명)
+									</small>
+								</div>
+							</div>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">메뉴상세설명</label>
+								<div class="col-md-8 col-sm-6">
+									<textarea rows="15" name="menuDetailDc"></textarea>
+									<small class="font-gray-dark" th:if="${type == 'adm'}">
+										메뉴의 상단에 상세보기를 펼쳤을 시 나오는 문구입니다.
+									</small>
+								</div>
+							</div>
+							<!-- atch_file_sn (추후에..) -->
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">사용여부<span class="required"> * </span></label>
+								<div class="col-md-8 col-sm-6">
+									<div class="btn-group radiobox">
+										<input type="radio" id="useYn3" name="useYn" value="Y" class="join-btn" title="사용여부" />
+										<label for="useYn3" class="btn btn-outline-purple w100p"
+											   data-toggle-class="btn-primary"
+											   data-toggle-passive-class="btn-default">Y</label>
+										<input type="radio" id="useYn4" name="useYn" value="N" class="join-btn" title="사용여부" />
+										<label for="useYn4" class="btn btn-outline-purple w100p"
+											   data-toggle-class="btn-primary"
+											   data-toggle-passive-class="btn-default">N</label>
+									</div>
+								</div>
+							</div>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">새창여부<span class="required"> * </span></label>
+								<div class="col-md-8 col-sm-6">
+									<div class="btn-group radiobox">
+										<input type="radio" id="newWindowYn3" name="newWindowYn" value="Y" title="새창여부"
+											   class="join-btn"/>
+										<label for="newWindowYn3" class="btn btn-outline-purple w100p"
+											   data-toggle-class="btn-primary"
+											   data-toggle-passive-class="btn-default">Y</label>
+										<input type="radio" id="newWindowYn4" name="newWindowYn" value="N" title="새창여부"
+											   class="join-btn"/>
+										<label for="newWindowYn4" class="btn btn-outline-purple w100p"
+											   data-toggle-class="btn-primary"
+											   data-toggle-passive-class="btn-default">N</label>
+									</div>
+									<br>
+									<small class="font-gray-dark">
+										해당 기능 선택시 메뉴를 클릭하면 새창으로 띄워집니다.
+									</small>
+								</div>
+							</div>
+							<div class="field item form-group" th:if="${type == 'adm'}">
+								<label class="col-form-label col-md-2 col-sm-6 label-align">권한 적용</label>
+								<div class="col-md-8 col-sm-6 pt_5p">
+									<div class="possibleRole">
+										<th:block th:each="data : ${cateLv1List}">
+												<input th:id="'roleSnList' + ${dataStat.count} + '_U'" type="checkbox"
+													   name="roleSnList" th:value="${data.categorySn}"/>
+												<label th:for="'roleSnList' + ${dataStat.count} + '_U'"><span
+														class="cbTitle">[[${data.categoryNm}]]</span></label>
+										</th:block>
+									</div>
+									<small class="font-gray-dark">
+										해당 메뉴의 부모메뉴가 존재하지 않는 권한에는 적용할 수 없습니다.
+									</small>
+								</div>
+							</div>
+							<div class="col-md-12 bottom-btn-group mt_10p">
+								<!-- bottom left area -->
+								<div class="col-md-2 col-sm-3 text-left">
+									<small class="nowSelectMenuNm">
+									</small>
+								</div>
+								<!-- bottom center area -->
+								<div class="col-md-8 col-sm-6 text-center">
+									<button name="updateBtn" type="button" class="btn btn-purple w120p">수정</button>
+									<button name="deleteBtn" type="button" class="btn btn-danger ml_10p w120p" onclick="menuDelete();">삭제</button>
+								</div>
+								<!-- bottom right area -->
+								<div class="col-md-2 col-sm-3 text-right">
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="noData">
+						<span>메뉴를 선택해주세요.</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- E : content -->
 </th:block>
 </html>

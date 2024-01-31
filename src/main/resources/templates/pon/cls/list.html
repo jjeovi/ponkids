@@ -45,11 +45,11 @@
 			<div class="class_1dep">
 				<ul class="tabnav">
 					<li>
-	                    <a href="#tab0" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'active'">전체</a> 	
-	                </li>					
+						<a href="#tab0" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'active'">전체</a> 	
+					</li>					
 					<li th:each="data : ${cateLv1List}" >
-	                    <a th:href="|#tab${data.clSn}|" th:text="${data.clNm}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) } ? 'active'" /> 	
-	                </li>
+						<a th:href="|#tab${data.clSn}|" th:text="${data.clNm}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) } ? 'active'" /> 	
+					</li>
 				</ul>
 			</div>
 			<div class="class_2dep">

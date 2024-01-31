@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"    layout:decorate="~{admin/layout/layout}">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"	layout:decorate="~{admin/layout/layout}">
 <title layout:fragment="title">pioneerkids (Admin-bbs) - 게시물 등록</title>
 
 <script  layout:fragment="script">
@@ -12,105 +12,105 @@ $(document).ready(function() {
 
 <!-- S : Javascript functions	-->
 <th:block layout:fragment="content">
-    <!-- S: 메인 등록 영역 -->
-    <div class="row">
-        <div class="col-md-12 col-sm-12 ">
-            <div class="x_panel">
-                <div class="x_content">
-                    <form id="insertForm" name="insertForm" method="post"  th:action="@{ {basicPath}/mcd/insert ( basicPath = ${basicPath} ) }"
-                          th:object="${nttSaveReqDto}"  enctype="multipart/form-data">
-                        <input type="hidden" name="bbsSn" th:value="${bbsSn}"/>
-                        <!-- TODO 프로필 이미지 추가 작업 -->
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">제목<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="input" id="nttNm" name="nttNm"
-                                       title="Minimum 8 Characters Including An Upper And Lower Case Letter, A Number And A Unique Character"
-                                       required/>
-                                <span style="position: absolute;right:15px;top:7px;" onclick="hideshow()">
+	<!-- S: 메인 등록 영역 -->
+	<div class="row">
+		<div class="col-md-12 col-sm-12 ">
+			<div class="x_panel">
+				<div class="x_content">
+					<form id="insertForm" name="insertForm" method="post"  th:action="@{ {basicPath}/mcd/insert ( basicPath = ${basicPath} ) }"
+						  th:object="${nttSaveReqDto}"  enctype="multipart/form-data">
+						<input type="hidden" name="bbsSn" th:value="${bbsSn}"/>
+						<!-- TODO 프로필 이미지 추가 작업 -->
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3  label-align">제목<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<input class="form-control" type="input" id="nttNm" name="nttNm"
+									   title="Minimum 8 Characters Including An Upper And Lower Case Letter, A Number And A Unique Character"
+									   required/>
+								<span style="position: absolute;right:15px;top:7px;" onclick="hideshow()">
 									<i id="slash" class="fa fa-eye-slash" style="display:none;"></i>
 									<i id="eye" class="fa fa-eye"></i>
-                                </span>
-                            </div>
-                        </div>
-                        <!--포토형일 경우 표시  -->
-                        <div  th:if = "${bbsSeCd == '01'}">
-	                      <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">썸네일 이미지<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <div class="filebox preview-image">
-                                    <div class="upload-display">
-                                        <div class="upload-thumb-wrap">
-                                            <img alt="프로필 이미지" class="upload-thumb noimg">
-                                        </div>
-                                    </div>
-                                    <div class="upload-file-name">
-                                        <input class="input-file-name" value="선택된 파일 없음" disabled="disabled">
-                                    </div>
-                                    <div class="upload-btn mt_10p">
-                                        <label class="btn btn-purple">업로드
-                                            <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
-                                        </label>
-                                    </div>
+								</span>
+							</div>
+						</div>
+						<!--포토형일 경우 표시  -->
+						<div  th:if = "${bbsSeCd == '01'}">
+						  <div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">썸네일 이미지<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<div class="filebox preview-image">
+									<div class="upload-display">
+										<div class="upload-thumb-wrap">
+											<img alt="프로필 이미지" class="upload-thumb noimg">
+										</div>
+									</div>
+									<div class="upload-file-name">
+										<input class="input-file-name" value="선택된 파일 없음" disabled="disabled">
+									</div>
+									<div class="upload-btn mt_10p">
+										<label class="btn btn-purple">업로드
+											<input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
+										</label>
+									</div>
 
-                                </div>
-                            </div>
-                           </div>   
-                        </div>
-                        <div  th:if = "${bbsSeCd == '02'}">
-                             <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">내용<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                  <textarea id="summernote" name="nttCn"  class="form-control"></textarea>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">공지설정<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6 ">
-                                <div class="btn-group radiobox">
-                                    <input type="radio" id="noticeSetYn1" name="noticeSetYn" value="Y" class="join-btn" required>
-                                    <label for="noticeSetYn1" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">설정</label>
-                                    <input type="radio" id="noticeSetYn2" name="noticeSetYn" value="N" class="join-btn" required checked>
-                                    <label for="noticeSetYn2" class="btn btn-outline-purple w100p"
-                                           data-toggle-class="btn-primary"
-                                           data-toggle-passive-class="btn-default">미설정</label>
-                                </div>
-                            </div>
-                         </div>
-                         <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일</label>
-                            <div class="col-md-6 col-sm-6">
+								</div>
+							</div>
+						   </div>   
+						</div>
+						<div  th:if = "${bbsSeCd == '02'}">
+							 <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3  label-align">내용<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								  <textarea id="summernote" name="nttCn"  class="form-control"></textarea>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">공지설정<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6 ">
+								<div class="btn-group radiobox">
+									<input type="radio" id="noticeSetYn1" name="noticeSetYn" value="Y" class="join-btn" required>
+									<label for="noticeSetYn1" class="btn btn-outline-purple w100p"
+										   data-toggle-class="btn-primary"
+										   data-toggle-passive-class="btn-default">설정</label>
+									<input type="radio" id="noticeSetYn2" name="noticeSetYn" value="N" class="join-btn" required checked>
+									<label for="noticeSetYn2" class="btn btn-outline-purple w100p"
+										   data-toggle-class="btn-primary"
+										   data-toggle-passive-class="btn-default">미설정</label>
+								</div>
+							</div>
+						 </div>
+						 <div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">첨부파일</label>
+							<div class="col-md-6 col-sm-6">
 							   <table  id= "file_table">
 							   </table>
 							   <input type="file" id="multi-add" class="btn-add"   name="multiFile" value="" multiple>
-                            </div>
-                         </div>   
-                        <div class="ln_solid"></div>
-                        <!-- 저장버튼 -->
-                       <div class="col-md-12">
-                            <!-- bottom left area -->
-                            <div class="col-md-2 col-sm-3 text-left">
+							</div>
+						 </div>   
+						<div class="ln_solid"></div>
+						<!-- 저장버튼 -->
+						<div class="col-md-12">
+							<!-- bottom left area -->
+							<div class="col-md-2 col-sm-3 text-left">
 								<a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath}  , bbsSn =  ${bbsSn} ) }" class="btn btn-white w120p">목록</a>
-                            </div>
-                            <!-- bottom center area -->
-                            <div class="col-md-8 col-sm-6 text-center">
-                               	<a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath}  , bbsSn =  ${bbsSn} ) }" class="btn btn-white w120p">취소</a>
-                                <button type="submit" class="btn btn-purple w120p">저장</button>
-                            </div>
-                            <!-- bottom right area -->
-                            <div class="col-md-2 col-sm-3 text-right">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- E: 메인 등록 영역 -->
+							</div>
+							<!-- bottom center area -->
+							<div class="col-md-8 col-sm-6 text-center">
+							   	<a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath}  , bbsSn =  ${bbsSn} ) }" class="btn btn-white w120p">취소</a>
+								<button type="submit" class="btn btn-purple w120p">저장</button>
+							</div>
+							<!-- bottom right area -->
+							<div class="col-md-2 col-sm-3 text-right">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- E: 메인 등록 영역 -->
 </th:block>
 <!-- E : Javascript functions	-->
 </html>

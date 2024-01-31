@@ -1,28 +1,28 @@
 <!-- 페이징 -->
 <!-- paging ( *form , *resultList ) -->
-<!-- *form       : submit할 form의 name값 -->
+<!-- *form	   : submit할 form의 name값 -->
 <!-- *resultList : 결과데이터 (Page<T> 오브젝트)-->
 <!-- 전역 변수 선언 -->
 <th:block  th:fragment = "paging(form,resultList)" th:if = "${!resultList.isEmpty()}"
-           th:with = "
-     pageNumber     = ${resultList.pageable.pageNumber},
-     pageSize       = ${resultList.pageable.pageSize},
-     totalPages     = ${resultList.totalPages},
-     startPage      = ${T(java.lang.Math).floor(pageNumber / 10) * 10 + 1},
-     tempEndPage    = ${startPage + 10 - 1},
-     endPage        = (${tempEndPage < totalPages ? tempEndPage : totalPages})">
-    <span>
-        <a th:href="${resultList.first} ? '#' : 'javascript:searchListPage(\'' + ${form} + '\', '+ ${pageNumber -1 } + ');'">
-            <img src="/pon/common/image/paging_left_ico.svg" alt="">
-        </a>
-    </span>
-    <span 	th:each = "page: ${#numbers.sequence(startPage, endPage)}" th:classappend = "${page == pageNumber + 1} ? 'active'" class="page_num"
-    		th:data-form="${form}" th:data-page="${page-1}" onclick="searchListPage( this );">
-        <a th:text="${page}" th:href="'javascript:;'"></a >
-    </span>
-    <span th:classappend = "${resultList.last} ? 'disabled'">
-        <a th:href="${resultList.last} ? '#' : 'javascript:searchListPage(\'' + ${form} + '\', '+ ${pageNumber +1 } + ');'">
-            <img src="/pon/common/image/paging_right_ico.svg" alt="">
-        </a>
-    </span>
+		   th:with = "
+	 pageNumber	 = ${resultList.pageable.pageNumber},
+	 pageSize	   = ${resultList.pageable.pageSize},
+	 totalPages	 = ${resultList.totalPages},
+	 startPage	  = ${T(java.lang.Math).floor(pageNumber / 10) * 10 + 1},
+	 tempEndPage	= ${startPage + 10 - 1},
+	 endPage		= (${tempEndPage < totalPages ? tempEndPage : totalPages})">
+	<span>
+		<a th:href="${resultList.first} ? '#' : 'javascript:searchListPage(\'' + ${form} + '\', '+ ${pageNumber -1 } + ');'">
+			<img src="/pon/common/image/paging_left_ico.svg" alt="">
+		</a>
+	</span>
+	<span 	th:each = "page: ${#numbers.sequence(startPage, endPage)}" th:classappend = "${page == pageNumber + 1} ? 'active'" class="page_num"
+			th:data-form="${form}" th:data-page="${page-1}" onclick="searchListPage( this );">
+		<a th:text="${page}" th:href="'javascript:;'"></a >
+	</span>
+	<span th:classappend = "${resultList.last} ? 'disabled'">
+		<a th:href="${resultList.last} ? '#' : 'javascript:searchListPage(\'' + ${form} + '\', '+ ${pageNumber +1 } + ');'">
+			<img src="/pon/common/image/paging_right_ico.svg" alt="">
+		</a>
+	</span>
 </th:block>

@@ -1,198 +1,198 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout/layout}">
+	  layout:decorate="~{admin/layout/layout}">
 <!-- S : Javascript functions	-->
 <script layout:fragment="script">
 
-    // DOM 준비 된 이후 실행
-    $( function () {
+	// DOM 준비 된 이후 실행
+	$( function () {
 
 
 
-    });
+	});
 
 </script>
 <!-- E : Javascript functions	-->
 <th:block layout:fragment="content">
-    <!-- S : 분류 영역 -->
-    <div class="div_menu_detail row">
-        <div class="col-md-12 col-sm-12 ">
-            <div class="x_panel category-area">
-                <!-- 분류 영역 > 카테고리 그룹 영역 -->
-                <div class="col-md-10 category-list-area">
-                    <div class="category-group-box">
-                        <div class="data-group">
-                            <span class="category-title">분류</span>
-                            <ul data-next-step-all-yn="Y">
-                                <!--  lv1 -->
-                                <li onclick="getCateNextLvList('/admin/banner/live/getBannerClDetailListByBannerClCdAjax', this );"
-                                    th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'on'"
-                                    value="0">전체
-                                </li>
-                                <li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('/admin/banner/live/getBannerClDetailListByBannerClCdAjax', this );"
-                                    th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.cdDetailSn ) } ? 'on'"
-                                    th:value="${data.cdDetailSn}">[[${data.cdDetailNm}]]
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="data-group">
-                            <span class="category-title">상세분류</span>
-                            <ul> <!--  data-next-step-all-yn : 다음 단계의 ul 에서의 '전체' 항목 설정할지 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
-                                <!--  lv2 -->
-                                <th:block th:if="${cateLv2List ne null}">
-                                    <li onclick="getCateNextLvList('', this );"
-                                        th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == 0 ) } ? 'on'"
-                                        value="0">전체
-                                    </li>
-                                    <li onclick="getCateNextLvList('', this );"
-                                        th:each="data : ${cateLv2List}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == data.cdDetailSn ) } ? 'on'"
-                                        th:value="${data.cdDetailSn}">[[${data.cdDetailNm}]]
-                                    </li>
-                                </th:block>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- 분류 영역 > 우측영역 ( 선택한 카테고리 텍스트 표출, 카테고리검색 버튼) -->
-                <div class="col-md-2 col-sm-6 category-right">
-                    <div class="picked-cate" id="picked-cate">
-                        <div class="cateLv0 blink"></div>
-                        <div class="cateLv1 blink"></div>
-                        <div class="cateLv2 blink"></div>
-                        <div class="cateLv3 blink"></div>
-                        <div class="cateLv4 blink"></div>
-                    </div>
-                    <div class="btn-group float-right" role="group">
-                        <button name="searchCateBtn" type="button" class="btn btn-purple w120p"
-                                th:data-search-cate-url="|${basicPath}/${mcd}/list|"
-                                th:onclick="searchCate( this.getAttribute('data-search-cate-url') )">보기
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- E : 분류 영역 -->
-    <!-- S: content -->
-    <div class="x_panel">
-        <div class="x_content">
-            <div class="row">
-                <form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd}) }" class="form">
-                    <input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
-                    <!-- S : 테이블 상단 검색 창 -->
-                    <!-- totalCount -->
-                    <div class="col-md-1 col-sm-2 mt_10p pl_15p">
-                        총 <span th:utext="${resultList.totalElements}"></span>건
-                    </div>
-                    <div class="col-md-11 col-sm-10 mb_10p">
-                        <div class="btn-group float-right" role="group">
-                            <select class="form-control" name="bannerPdSetYn">
-                                <option value="">기간설정</option>
-                                <option value="Y" th:selected=" ${searchDTO.bannerPdSetYn} == 'Y' ">기간</option>
-                                <option value="N" th:selected=" ${searchDTO.bannerPdSetYn} == 'N' ">상시</option>
-                            </select>
-                            <select class="form-control" name="useYn">
-                                <option value="">사용여부</option>
-                                <option value="Y" th:selected=" ${searchDTO.useYn} == 'Y' ">사용</option>
-                                <option value="N" th:selected=" ${searchDTO.useYn} == 'N' ">미사용</option>
-                            </select>
-                            <div class="vl ml_5p"></div>
-                            <select class="form-control ml_5p w_55r" name="schOption">
-                                <option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">제목</option>
-                                <option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">url</option>
-                                <!--                                <option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">이름</option>-->
-                            </select>
-                            <input type="text" name="schCntn" th:value="${searchDTO.schCntn}" class="form-control input-sm" placeholder="검색어 입력" aria-controls="datatable-responsive">
-                            <button type="submit" class="btn btn-purple w250p">검색</button>
-                        </div>
-                    </div>
-                    <!-- E : 테이블 상단 검색 창 -->
-                    <!-- S : 테이블 -->
-                    <div class="col-md-12 col-sm-12 ">
-                        <table id="listTable" class="table table-bordered text-center">
-                            <colgroup>
-                                <col width="55px;">
-                                <col width="auto;">
-                                <col width="55px;">
-                                <col width="20%;">
-                                <col width="auto;">
-                                <col width="130px;">
-                                <col width="80px;">
-                                <col width="300px;">
-                                <col width="80px;">
-                            </colgroup>
-                            <thead>
-                            <tr>
-                                <th>순번</th>
-                                <th>분류</th>
-                                <th>순번</th>
-                                <th>배너이름</th>
-                                <th>url</th>
-                                <th>이미지</th>
-                                <th>기간설정</th>
-                                <th>노출기간</th>
-                                <th>사용여부</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-	                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
-	                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
-	                                <td> [[${data.bannerClNm}]] <th:block th:if="${data.bannerClDetailCd != null && data.bannerClDetailCd != '' }"><br/>[ [[${data.bannerClDetailNm}]] ] </th:block> </td>
-	                                <td th:text="${data.bannerExpsrSeq}"></td>
-	                                <td>
-	                                    <a class="b-link" th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.bannerSn} ) }" th:text="${data.bannerNm}">
-	                                    </a>
-	                                </td>
-	                                <td th:text="${data.url}"></td>
-	                                <td>
-	                                    <img th:alt="|배너_${data.bannerNm}|" class="upload-thumb img-table"  th:if = "${data.atchFileSn != null}" th:src="@{/getImage(atchFileSn=${data.atchFileSn})}"  >
-	                                </td>
-	                                <td th:text="${data.bannerPdSetYnNm}"></td>
-	                                <td th:text="${data.bannerExpsrPeriod}"></td>
-	                                <td th:text="${data.useYn eq 'Y' ? '사용' : '미사용'}"></td>
-	                            </tr>
-	                            <tr th:unless = "${!resultList.isEmpty()}">
-	                                <td class="noDataTd" style="display: none;">
-	                                    데이터가 없습니다.
-	                                </td>
-	                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- E : 테이블 -->
-                    <!-- S : 하단 목록 -->
-                    <div class="col-md-12 col-sm-12">
-                        <!-- bottom left area -->
-                        <div class="col-md-2 col-sm-3 text-left">
-                            <a th:href="@{ {basicPath}/mcd/regist ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">등록</a>
-                        </div>
-                        <!-- S : 테이블 하단 페이징 -->
-                        <div class="col-md-8 col-sm-6 text-center"
-                             th:insert="~{admin/layout/tiles/paging :: paging('listForm', ${resultList})}">
-                            <!-- parameter : ( submit할 form 의 name값 ), ( ${resultList} 는 Page<T> 오브젝트 )  -->
-                        </div>
-                        <!-- E : 테이블 하단 페이징 -->
-                        <!-- bottom right area -->
-                        <div class="col-md-2 col-sm-3 text-right">
-                            <select class="form-control" name="size" onchange="searchListSize('listForm',this.value);">
-                                <option value="10" th:selected=" ${resultList.pageable.pageSize} == '10' ">10개씩 보기
-                                </option>
-                                <option value="30" th:selected=" ${resultList.pageable.pageSize} == '30' ">30개씩 보기
-                                </option>
-                                <option value="50" th:selected=" ${resultList.pageable.pageSize} == '50' ">50개씩 보기
-                                </option>
-                                <option value="100" th:selected=" ${resultList.pageable.pageSize} == '100' ">100개씩 보기
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                </form>
-                <form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/{mcd}/delete ( basicPath = ${basicPath}, mcd = ${mcd} ) }">
-                    <input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- E : content -->
+	<!-- S : 분류 영역 -->
+	<div class="div_menu_detail row">
+		<div class="col-md-12 col-sm-12 ">
+			<div class="x_panel category-area">
+				<!-- 분류 영역 > 카테고리 그룹 영역 -->
+				<div class="col-md-10 category-list-area">
+					<div class="category-group-box">
+						<div class="data-group">
+							<span class="category-title">분류</span>
+							<ul data-next-step-all-yn="Y">
+								<!--  lv1 -->
+								<li onclick="getCateNextLvList('/admin/banner/live/getBannerClDetailListByBannerClCdAjax', this );"
+									th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'on'"
+									value="0">전체
+								</li>
+								<li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('/admin/banner/live/getBannerClDetailListByBannerClCdAjax', this );"
+									th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.cdDetailSn ) } ? 'on'"
+									th:value="${data.cdDetailSn}">[[${data.cdDetailNm}]]
+								</li>
+							</ul>
+						</div>
+						<div class="data-group">
+							<span class="category-title">상세분류</span>
+							<ul> <!--  data-next-step-all-yn : 다음 단계의 ul 에서의 '전체' 항목 설정할지 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
+								<!--  lv2 -->
+								<th:block th:if="${cateLv2List ne null}">
+									<li onclick="getCateNextLvList('', this );"
+										th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == 0 ) } ? 'on'"
+										value="0">전체
+									</li>
+									<li onclick="getCateNextLvList('', this );"
+										th:each="data : ${cateLv2List}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == data.cdDetailSn ) } ? 'on'"
+										th:value="${data.cdDetailSn}">[[${data.cdDetailNm}]]
+									</li>
+								</th:block>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- 분류 영역 > 우측영역 ( 선택한 카테고리 텍스트 표출, 카테고리검색 버튼) -->
+				<div class="col-md-2 col-sm-6 category-right">
+					<div class="picked-cate" id="picked-cate">
+						<div class="cateLv0 blink"></div>
+						<div class="cateLv1 blink"></div>
+						<div class="cateLv2 blink"></div>
+						<div class="cateLv3 blink"></div>
+						<div class="cateLv4 blink"></div>
+					</div>
+					<div class="btn-group float-right" role="group">
+						<button name="searchCateBtn" type="button" class="btn btn-purple w120p"
+								th:data-search-cate-url="|${basicPath}/${mcd}/list|"
+								th:onclick="searchCate( this.getAttribute('data-search-cate-url') )">보기
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- E : 분류 영역 -->
+	<!-- S: content -->
+	<div class="x_panel">
+		<div class="x_content">
+			<div class="row">
+				<form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd}) }" class="form">
+					<input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
+					<!-- S : 테이블 상단 검색 창 -->
+					<!-- totalCount -->
+					<div class="col-md-1 col-sm-2 mt_10p pl_15p">
+						총 <span th:utext="${resultList.totalElements}"></span>건
+					</div>
+					<div class="col-md-11 col-sm-10 mb_10p">
+						<div class="btn-group float-right" role="group">
+							<select class="form-control" name="bannerPdSetYn">
+								<option value="">기간설정</option>
+								<option value="Y" th:selected=" ${searchDTO.bannerPdSetYn} == 'Y' ">기간</option>
+								<option value="N" th:selected=" ${searchDTO.bannerPdSetYn} == 'N' ">상시</option>
+							</select>
+							<select class="form-control" name="useYn">
+								<option value="">사용여부</option>
+								<option value="Y" th:selected=" ${searchDTO.useYn} == 'Y' ">사용</option>
+								<option value="N" th:selected=" ${searchDTO.useYn} == 'N' ">미사용</option>
+							</select>
+							<div class="vl ml_5p"></div>
+							<select class="form-control ml_5p w_55r" name="schOption">
+								<option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">제목</option>
+								<option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">url</option>
+								<!--								<option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">이름</option>-->
+							</select>
+							<input type="text" name="schCntn" th:value="${searchDTO.schCntn}" class="form-control input-sm" placeholder="검색어 입력" aria-controls="datatable-responsive">
+							<button type="submit" class="btn btn-purple w250p">검색</button>
+						</div>
+					</div>
+					<!-- E : 테이블 상단 검색 창 -->
+					<!-- S : 테이블 -->
+					<div class="col-md-12 col-sm-12 ">
+						<table id="listTable" class="table table-bordered text-center">
+							<colgroup>
+								<col width="55px;">
+								<col width="auto;">
+								<col width="55px;">
+								<col width="20%;">
+								<col width="auto;">
+								<col width="130px;">
+								<col width="80px;">
+								<col width="300px;">
+								<col width="80px;">
+							</colgroup>
+							<thead>
+							<tr>
+								<th>순번</th>
+								<th>분류</th>
+								<th>순번</th>
+								<th>배너이름</th>
+								<th>url</th>
+								<th>이미지</th>
+								<th>기간설정</th>
+								<th>노출기간</th>
+								<th>사용여부</th>
+							</tr>
+							</thead>
+							<tbody>
+								<tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
+									<td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
+									<td> [[${data.bannerClNm}]] <th:block th:if="${data.bannerClDetailCd != null && data.bannerClDetailCd != '' }"><br/>[ [[${data.bannerClDetailNm}]] ] </th:block> </td>
+									<td th:text="${data.bannerExpsrSeq}"></td>
+									<td>
+										<a class="b-link" th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.bannerSn} ) }" th:text="${data.bannerNm}">
+										</a>
+									</td>
+									<td th:text="${data.url}"></td>
+									<td>
+										<img th:alt="|배너_${data.bannerNm}|" class="upload-thumb img-table"  th:if = "${data.atchFileSn != null}" th:src="@{/getImage(atchFileSn=${data.atchFileSn})}"  >
+									</td>
+									<td th:text="${data.bannerPdSetYnNm}"></td>
+									<td th:text="${data.bannerExpsrPeriod}"></td>
+									<td th:text="${data.useYn eq 'Y' ? '사용' : '미사용'}"></td>
+								</tr>
+								<tr th:unless = "${!resultList.isEmpty()}">
+									<td class="noDataTd" style="display: none;">
+										데이터가 없습니다.
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- E : 테이블 -->
+					<!-- S : 하단 목록 -->
+					<div class="col-md-12 col-sm-12">
+						<!-- bottom left area -->
+						<div class="col-md-2 col-sm-3 text-left">
+							<a th:href="@{ {basicPath}/mcd/regist ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">등록</a>
+						</div>
+						<!-- S : 테이블 하단 페이징 -->
+						<div class="col-md-8 col-sm-6 text-center"
+							 th:insert="~{admin/layout/tiles/paging :: paging('listForm', ${resultList})}">
+							<!-- parameter : ( submit할 form 의 name값 ), ( ${resultList} 는 Page<T> 오브젝트 )  -->
+						</div>
+						<!-- E : 테이블 하단 페이징 -->
+						<!-- bottom right area -->
+						<div class="col-md-2 col-sm-3 text-right">
+							<select class="form-control" name="size" onchange="searchListSize('listForm',this.value);">
+								<option value="10" th:selected=" ${resultList.pageable.pageSize} == '10' ">10개씩 보기
+								</option>
+								<option value="30" th:selected=" ${resultList.pageable.pageSize} == '30' ">30개씩 보기
+								</option>
+								<option value="50" th:selected=" ${resultList.pageable.pageSize} == '50' ">50개씩 보기
+								</option>
+								<option value="100" th:selected=" ${resultList.pageable.pageSize} == '100' ">100개씩 보기
+								</option>
+							</select>
+						</div>
+					</div>
+				</form>
+				<form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/{mcd}/delete ( basicPath = ${basicPath}, mcd = ${mcd} ) }">
+					<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- E : content -->
 </th:block>
 </html>

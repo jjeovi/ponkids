@@ -1,0 +1,269 @@
+
+/* layer popup */
+.pop_dim {
+/*    display: none;*/
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.51);
+    z-index: 10;
+}
+
+.show_pop , .hide_pop {
+    cursor: pointer;
+}
+
+
+.pop_wrap {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 50rem;
+    min-height: 30rem;
+    max-width: 95vw;
+    max-height: 80vh;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 255, 255);
+    border-radius: 1rem;
+    padding: 2rem 2rem 2rem;
+    box-sizing: border-box;
+}
+
+
+
+.pop_wrap.login, .pop_wrap.join_result {
+    min-width: 22rem;
+    width: 32rem;
+}
+
+.pop_wrap .pop_close {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.5rem;
+    border: none;
+    background: none;
+}
+
+.pop_wrap .pop_content {
+    width: 100%;
+    max-height: 70vh;
+    height: auto;
+    overflow-y: hidden;
+    padding-right: 15px;
+    margin-right: -15px;
+    position: relative;
+    max-height: 500px;
+}
+
+.pop_wrap .pop_header .pop_title {
+    color: rgb(187 139 227);
+    font-size: 1.7rem;
+    margin-bottom: 2.5rem;
+    margin-top: 0.8rem;
+    font-family: 'yg-jalnan';
+}
+
+.login_wrap {
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.login_wrap .kakao {
+    background-color: rgb(254, 229, 0);
+    background-image: url(../image/kakao.png);
+    background-size: 1.4rem;
+    background-position: 13px 50%;
+    background-repeat: no-repeat;
+    color: rgb(60, 30, 30);
+    border-color: rgb(255, 235, 0);
+}
+
+.login_wrap .naver {
+    background-color: rgb(27, 192, 2);
+    border: 1px solid rgb(21, 198, 84);
+    color: rgb(255, 255, 255);
+    background-image: url(../image/naver.png);
+    background-size: 1.2rem;
+    background-position: 15px 50%;
+    background-repeat: no-repeat;
+}
+
+
+.login_wrap .or_text {
+    display: flex;
+    position: relative;
+    padding: 1rem 0px;
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.login_wrap .input_wrap {
+    display: flex;
+    flex-flow: column wrap;
+    gap: 1rem;
+    width: 100%;
+}
+
+.login_wrap .login_btn {
+	background-color: rgb(74 163 170);
+    color: rgb(255, 255, 255);
+    border-color: rgb(29 126 134);
+    transition: background-color 0.2s ease 0s;
+}
+
+.login_wrap button.btn_sns {
+	padding: 0.6rem 0px;
+    width: 100%;
+    margin: 0.6rem 0px;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.login_wrap button.btn_login_default {
+	padding: 2.2rem 0px;
+    width: 100%;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+
+.login_wrap .user_wrap {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    width: 90%;
+    margin-top: 1rem;
+}
+
+.login_wrap .user_wrap a {
+    color: rgb(135, 135, 135);
+}
+
+.login_wrap .user_wrap a {
+    color: rgb(135, 135, 135);
+}
+
+.layer_popup {
+	z-index:100;
+}
+
+.chatWrap {
+	position: fixed;
+	bottom: 90px;
+	right: 24px;
+	height: calc((100% - 110px));
+	width: 390px;
+	background-color: #fff;
+	box-shadow: rgba(255, 255, 255, 0.12) 0px 0px 2px 0px inset, rgba(0, 0, 0, 0.05) 0px 0px 2px 1px, rgba(0, 0, 0, 0.3) 0px 12px 60px;
+	border-radius: 20px;
+	padding: 20px 0;
+	box-sizing: border-box;
+	max-height: 700px;
+	font-family: "NanumSquare";
+/*	transition: 0.3s;*/
+}
+
+.chatWrap.show{opacity: 1; visibility: visible;}
+.chatWrap .chat_box{position: relative;height: 100%;}
+.chatWrap .chat_nav{position: absolute; bottom: 0; left: 0; width: 100%; }
+.chatWrap .chat_nav .tabnav {display: flex;justify-content: space-between; width: 100%; align-items: center; line-height: 1.2; font-weight: 600; }
+.chatWrap .chat_nav .tabnav li {text-align: center; flex: 1;}
+.chatWrap .chat_nav .tabnav li a span{font-size: 14px; margin-top: 8px;}
+.chat_tit_form input{border: none; outline: none; border: none;}
+.chat_tit_form input, .chat_disc_form textarea {width: 100%; padding: 10px; box-sizing: border-box; border-radius: 8px; outline: none;  resize: none;}
+.chatWrap .chat_top_box{display: flex;padding: 10px 20px; margin-bottom: 10px;  border-bottom: 1px solid #E6E6E6; }
+.chatWrap .chat_top_box .logo{max-width: 100px;}
+
+.home_ico_active, .chat_ico_active ,.faq_ico_active{display: none;}
+.chat_nav_ico img{max-width: 24px;}
+.chatWrap .chat_nav .tabnav li a {color: #8D8D8D;}
+.chatWrap .chat_nav .tabnav li a.active {color: #000;}
+.chat_inquiry button{background: linear-gradient(90deg, rgb(128, 216, 251) 48.41%, rgb(128, 195, 251)) 100% center; border: none;color: none;cursor: pointer; padding: 6px 20px; color: #fff; border-radius: 8px;}
+.chat_top_box{display: flex; align-items: center; justify-content: space-between; }
+.send_btn{text-align: right; margin-top: 10px;}
+
+.send_btn button{background: linear-gradient(90deg, rgb(128, 216, 251) 48.41%, rgb(128, 195, 251)) 100% center; border: none;color: none;cursor: pointer; padding: 6px 20px; color: #fff; border-radius: 8px;}
+.chat_disc_form{height: 100%;    margin-top: 20px;}
+
+.chat_tit_form input{background-color: rgba(0, 0, 0, 0.03);}
+.chat_disc_form textarea{background-color: rgba(0, 0, 0, 0.03); border: none; min-height: 400px;}
+
+.chat_form_box{padding:10px 20px;}
+.chatWrap #tab02, .chatWrap #tab03{padding: 20px;}
+.chatWrap .chat_nav .tabnav li a .chat_nav_ico img:last-child{display: none;}
+.chatWrap .chat_nav .tabnav li a.active .chat_nav_ico img:last-child{display: block;}
+.chatWrap .chat_nav .tabnav li a.active .chat_nav_ico img:first-child{display: none;}
+.chatWrap .chat_nav .tabnav li a{display: flex; flex-direction: column; align-items: center;}
+
+.chatWrap .chat_nav .tabnav li a .chat_nav_ico img{vertical-align : bottom}
+
+.chat_close{position: fixed; bottom: 20px;right: 24px;box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.1) 0px 4px 6px, rgba(0, 0, 0, 0.15) 0px 8px 30px; z-index: 10;    background: #fff;padding: 10px;box-sizing: border-box;border-radius: 20px;cursor: pointer; transition: 0.3s;}
+
+
+.icon_inquiry{position: fixed; bottom: 90px; right: 24px; }
+
+
+@media(max-width:500px){
+    .chatWrap.show{width: 90%;}   
+    .chat_disc_form textarea{min-height: auto;}
+    .chatWrap{height: calc(100% - 200px);}
+    
+}
+
+
+
+
+
+.hidden, caption, legend {
+    overflow: hidden;
+    position: absolute;
+    border: 0;
+    width: 1px;
+    height: 1px;
+    clip: rect(1px, 1px, 1px, 1px);
+}
+
+.pop_wrap .pop_header {
+	text-align: center;
+}
+
+.pop_header img{
+	text-align: center;
+    position: relative;
+    top: -10px;
+}
+
+.login_wrap .input_wrap input {
+    height: 2.2rem;
+}
+
+.pop_content .sns_login_wrap {
+	gap:20px;
+	width: 90%;
+}
+
+.pop_content .default_login_wrap {
+    display: flex;
+    gap: 20px;
+    width: 90%;
+    padding-top: 2px;
+}
+
+.pop_content .default_login_wrap .input_wrap{
+	width:65%;
+}
+
+.pop_content .default_login_wrap .login_btn_wrap{
+	width:30%;
+}
+
+/*.pop_wrap .login_wrap */

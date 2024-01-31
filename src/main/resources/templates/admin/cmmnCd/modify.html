@@ -1,129 +1,129 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout/layout}">
+	  layout:decorate="~{admin/layout/layout}">
 <!-- S : Javascript functions	-->
 <script layout:fragment="script">
 
-    // DOM 준비 된 이후 실행
-    $( function () {
+	// DOM 준비 된 이후 실행
+	$( function () {
 
-    });
+	});
 
 </script>
 <!-- E : Javascript functions	-->
 <th:block layout:fragment="content">
 	
-    <!-- S: content -->
-    <div class="row">
-        <div class="col-md-12 col-sm-12 ">
-            <div class="x_panel">
-                <div class="x_content">
-                    <form id="updateForm" name="updateForm" method="post" th:action="@{ {basicPath}/mcd/update ( basicPath = ${basicPath} ) }">
+	<!-- S: content -->
+	<div class="row">
+		<div class="col-md-12 col-sm-12 ">
+			<div class="x_panel">
+				<div class="x_content">
+					<form id="updateForm" name="updateForm" method="post" th:action="@{ {basicPath}/mcd/update ( basicPath = ${basicPath} ) }">
 						<input type="hidden" name="cdSn" th:value="${targetDto.cdSn}" />
-                        <!-- TODO : 코드 이름 중복 체크 필요함.  -->
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드 이름<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control" data-validate-length-range="2,50" name="cdNm" required="required" placeholder="코드 이름을 입력해주세요." th:value="${targetDto.cdNm}" readonly="readonly"/>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드 설명<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <input type="text" class="form-control" name="cdDc" required="required" placeholder="코드 설명을 입력해주세요." th:value="${targetDto.cdDc}" />
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드값 1 </label>
-                            <div class="col-md-6 col-sm-6">
-                                <input type="text" class="form-control" name="cdVal1"  placeholder="코드값 1 을(를) 입력해주세요." th:value="${targetDto.cdVal1}" />
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드값 2 </label>
-                            <div class="col-md-6 col-sm-6">
-                                <input type="text" class="form-control" name="cdVal2"  placeholder="코드값 2 을(를) 입력해주세요." th:value="${targetDto.cdVal2}" />
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드값 3 </label>
-                            <div class="col-md-6 col-sm-6">
-                                <input type="text" class="form-control" name="cdVal3"  placeholder="코드값 3 을(를) 입력해주세요." th:value="${targetDto.cdVal3}" />
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드값 4 </label>
-                            <div class="col-md-6 col-sm-6">
-                                <input type="text" class="form-control" name="cdVal4"  placeholder="코드값 4 을(를) 입력해주세요." th:value="${targetDto.cdVal4}" />
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">코드값 5 </label>
-                            <div class="col-md-6 col-sm-6">
-                                <input type="text" class="form-control" name="cdVal5"  placeholder="코드값 5 을(를) 입력해주세요." th:value="${targetDto.cdVal5}" />
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">분류 코드</label>
-                            <div class="col-md-6 col-sm-6">
-                                <input type="text" class="form-control" name="clCd"  placeholder="분류코드 을(를) 입력해주세요." th:value="${targetDto.clCd}" />
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">비고</label>
-                            <div class="col-md-6 col-sm-6">
-                                <textarea name="remark"  class="form-control" th:text="${targetDto.remark}"></textarea>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">사용여부<span class="required">*</span></label>
-                            <div class="col-md-2 col-sm-4">
-                                <div class="btn-group radiobox">
-                                    <input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn" th:checked="${targetDto.useYn eq 'Y'}">
-                                    <label for="useYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">사용</label>
-                                    <input type="radio" id="useYn2" name="useYn" value="N" class="join-btn" th:checked="${targetDto.useYn eq 'N'}">
-                                    <label for="useYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">미사용</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3 label-align">시스템 필수 코드 여부<span class="required">*</span></label>
-                            <div class="col-md-2 col-sm-4">
-                                <div class="btn-group radiobox">
-                                    <input type="radio" id="sysEssntlCmmnYn1" name="sysEssntlCmmnYn" value="Y" class="join-btn" th:checked="${targetDto.sysEssntlCmmnYn eq 'Y'}">
-                                    <label for="sysEssntlCmmnYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">예</label>
-                                    <input type="radio" id="sysEssntlCmmnYn2" name="sysEssntlCmmnYn" value="N" class="join-btn" th:checked="${targetDto.sysEssntlCmmnYn eq 'N'}">
-                                    <label for="sysEssntlCmmnYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">아니오</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ln_solid"></div>
-                        <!-- 저장버튼 -->
-                        <div class="col-md-12">
-                            <!-- bottom left area -->
-                            <div class="col-md-2 col-sm-3 text-left">
-                                <a th:href="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="btn btn-white w120p">목록</a>
-                            </div>
-                            <!-- bottom center area -->
-                            <div class="col-md-8 col-sm-6 text-center">
-                                <a th:href="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="btn btn-white w120p">취소</a>
-                                <button type="submit" class="btn btn-purple w120p">저장</button>
-                            </div>
-                            <!-- bottom right area -->
-                            <div class="col-md-2 col-sm-3 text-right">
+						<!-- TODO : 코드 이름 중복 체크 필요함.  -->
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3  label-align">코드 이름<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<input class="form-control" data-validate-length-range="2,50" name="cdNm" required="required" placeholder="코드 이름을 입력해주세요." th:value="${targetDto.cdNm}" readonly="readonly"/>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3  label-align">코드 설명<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<input type="text" class="form-control" name="cdDc" required="required" placeholder="코드 설명을 입력해주세요." th:value="${targetDto.cdDc}" />
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3  label-align">코드값 1 </label>
+							<div class="col-md-6 col-sm-6">
+								<input type="text" class="form-control" name="cdVal1"  placeholder="코드값 1 을(를) 입력해주세요." th:value="${targetDto.cdVal1}" />
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3  label-align">코드값 2 </label>
+							<div class="col-md-6 col-sm-6">
+								<input type="text" class="form-control" name="cdVal2"  placeholder="코드값 2 을(를) 입력해주세요." th:value="${targetDto.cdVal2}" />
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3  label-align">코드값 3 </label>
+							<div class="col-md-6 col-sm-6">
+								<input type="text" class="form-control" name="cdVal3"  placeholder="코드값 3 을(를) 입력해주세요." th:value="${targetDto.cdVal3}" />
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3  label-align">코드값 4 </label>
+							<div class="col-md-6 col-sm-6">
+								<input type="text" class="form-control" name="cdVal4"  placeholder="코드값 4 을(를) 입력해주세요." th:value="${targetDto.cdVal4}" />
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3  label-align">코드값 5 </label>
+							<div class="col-md-6 col-sm-6">
+								<input type="text" class="form-control" name="cdVal5"  placeholder="코드값 5 을(를) 입력해주세요." th:value="${targetDto.cdVal5}" />
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3  label-align">분류 코드</label>
+							<div class="col-md-6 col-sm-6">
+								<input type="text" class="form-control" name="clCd"  placeholder="분류코드 을(를) 입력해주세요." th:value="${targetDto.clCd}" />
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3  label-align">비고</label>
+							<div class="col-md-6 col-sm-6">
+								<textarea name="remark"  class="form-control" th:text="${targetDto.remark}"></textarea>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">사용여부<span class="required">*</span></label>
+							<div class="col-md-2 col-sm-4">
+								<div class="btn-group radiobox">
+									<input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn" th:checked="${targetDto.useYn eq 'Y'}">
+									<label for="useYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">사용</label>
+									<input type="radio" id="useYn2" name="useYn" value="N" class="join-btn" th:checked="${targetDto.useYn eq 'N'}">
+									<label for="useYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">미사용</label>
+								</div>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">시스템 필수 코드 여부<span class="required">*</span></label>
+							<div class="col-md-2 col-sm-4">
+								<div class="btn-group radiobox">
+									<input type="radio" id="sysEssntlCmmnYn1" name="sysEssntlCmmnYn" value="Y" class="join-btn" th:checked="${targetDto.sysEssntlCmmnYn eq 'Y'}">
+									<label for="sysEssntlCmmnYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">예</label>
+									<input type="radio" id="sysEssntlCmmnYn2" name="sysEssntlCmmnYn" value="N" class="join-btn" th:checked="${targetDto.sysEssntlCmmnYn eq 'N'}">
+									<label for="sysEssntlCmmnYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">아니오</label>
+								</div>
+							</div>
+						</div>
+						<div class="ln_solid"></div>
+						<!-- 저장버튼 -->
+						<div class="col-md-12">
+							<!-- bottom left area -->
+							<div class="col-md-2 col-sm-3 text-left">
+								<a th:href="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="btn btn-white w120p">목록</a>
+							</div>
+							<!-- bottom center area -->
+							<div class="col-md-8 col-sm-6 text-center">
+								<a th:href="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="btn btn-white w120p">취소</a>
+								<button type="submit" class="btn btn-purple w120p">저장</button>
+							</div>
+							<!-- bottom right area -->
+							<div class="col-md-2 col-sm-3 text-right">
 								<a th:href="'javascript:deleteItem(\'' + ${targetDto.cdSn} + '\');'" class="btn btn-danger btn-xs">
-                                    <i class="fa fa-trash-o"></i>삭제
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-                    <form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/{mcd}/delete ( basicPath = ${basicPath}, mcd = ${mcd} ) }">
-	            		<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
-	            	</form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- E : content -->
+									<i class="fa fa-trash-o"></i>삭제
+								</a>
+							</div>
+						</div>
+					</form>
+					<form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/{mcd}/delete ( basicPath = ${basicPath}, mcd = ${mcd} ) }">
+						<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- E : content -->
 </th:block>
 </html>

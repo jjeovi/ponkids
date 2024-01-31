@@ -1,117 +1,117 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout/layout}">
+	  layout:decorate="~{admin/layout/layout}">
 <!-- S : Javascript functions	-->
 <script layout:fragment="script">
 
-    // DOM 준비 된 이후 실행
-    $( function () {
+	// DOM 준비 된 이후 실행
+	$( function () {
 
-    });
+	});
 
 </script>
 <!-- E : Javascript functions	-->
 <th:block layout:fragment="content">
 
-    <!-- S: content -->
-    <div class="x_panel">
-        <div class="x_content">
-            <div class="row">
-                <form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd}) }" class="form">
-                    <input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
-                    <!-- S : 테이블 상단 검색 창 -->
-                    <!-- totalCount -->
-                    <div class="col-md-1 col-sm-2 mt_10p pl_15p">
-                        총 <span th:utext="${resultList.totalElements}"></span>건
-                    </div>
-                    <div class="col-md-11 col-sm-10 mb_10p">
-                        <div class="btn-group float-right" role="group">
-                            <select class="form-control ml_5p w_55r" name="schOption">
-                                <option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">제목</option>
-<!--                                <option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">이름</option>-->
-                            </select>
-                            <input type="text" name="schCntn" th:value="${searchDTO.schCntn}"
-                                   class="form-control input-sm" placeholder="검색어 입력"
-                                   aria-controls="datatable-responsive">
-                            <button type="submit" class="btn btn-purple w250p">검색</button>
-                        </div>
-                    </div>
-                    <!-- E : 테이블 상단 검색 창 -->
-                    <!-- S : 테이블 -->
-                    <div class="col-md-12 col-sm-12 ">
-                        <table id="listTable" class="table table-bordered text-center">
-                            <thead>
-	                            <tr>
-	                                <th>순번</th>
-	                                <th>이름</th>
-	                                <th>분류순서</th>
-	                                <th>등록자</th>
-	                                <th>등록일</th>
-	                                <th>관리</th>
-	                            </tr>
-                            </thead>
-                            <tbody>
-	                            <tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
-	                            	
-	                                <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
-	                                <td th:text="${data.clNm}"></td>
-	                                <td th:text="${data.clSeq}"></td>
-	                                <td th:text="${data.registerId}"></td>
-	                                <td th:text="${#temporals.format(data.regDt, 'yyyy-MM-dd HH:MM:SS')}"></td>
-	                                <td th:with = "cnt = ${data.childCnt}, childCnt =  (${data.childCnt > 99 ? '99+' : cnt } )">	<!-- 항목개수가 99 보다 크면 99+ 로 표시 -->
-	                                    <a th:href="@{/admin/classCategoryCl02/{mcd}/{pk}/list ( mcd = ${mcd}, pk = ${data.clSn} ) }" class="btn btn-success btn-xs">
-	                                    	<i class="fa fa-pencil"></i>항목관리 [ [[${childCnt}]] ]
-	                                    </a>
-	                                    <a th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.clSn} ) }" class="btn btn-primary btn-xs">
-	                                    	<i class="fa fa-pencil"></i>수정
-	                                    </a>
-	                                    <a th:href="'javascript:deleteItem(\'' + ${data.clSn} + '\');'" class="btn btn-danger btn-xs">
-	                                    	<i class="fa fa-trash-o"></i>삭제
-	                                    </a>
-	                                </td>
-	                            </tr>
-	                            <tr th:unless = "${!resultList.isEmpty()}">
-	                                <td class="noDataTd" style="display: none;">
-	                                    데이터가 없습니다.
-	                                </td>
-	                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- E : 테이블 -->
-                    <!-- S : 하단 목록 -->
-                    <div class="col-md-12 col-sm-12">
-                        <!-- bottom left area -->
-                        <div class="col-md-2 col-sm-3 text-left">
-                            <a th:href="@{ {basicPath}/{mcd}/regist ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="btn btn-white w120p">등록</a>
-                        </div>
-                        <!-- S : 테이블 하단 페이징 -->
-                        <div class="col-md-8 col-sm-6 text-center"
-                             th:insert="~{admin/layout/tiles/paging :: paging('listForm', ${resultList})}">
-                            <!-- parameter : ( submit할 form 의 name값 ), ( ${resultList} 는 Page<T> 오브젝트 )  -->
-                        </div>
-                        <!-- E : 테이블 하단 페이징 -->
-                        <!-- bottom right area -->
-                        <div class="col-md-2 col-sm-3 text-right">
-                            <select class="form-control" name="size" onchange="searchListSize('listForm',this.value);">
-                                <option value="10" th:selected=" ${resultList.pageable.pageSize} == '10' ">10개씩 보기
-                                </option>
-                                <option value="30" th:selected=" ${resultList.pageable.pageSize} == '30' ">30개씩 보기
-                                </option>
-                                <option value="50" th:selected=" ${resultList.pageable.pageSize} == '50' ">50개씩 보기
-                                </option>
-                                <option value="100" th:selected=" ${resultList.pageable.pageSize} == '100' ">100개씩 보기
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                </form>
-                <form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/{mcd}/delete ( basicPath = ${basicPath}, mcd = ${mcd} ) }">
-            		<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
-            	</form>
-            </div>
-        </div>
-    </div>
-    <!-- E : content -->
+	<!-- S: content -->
+	<div class="x_panel">
+		<div class="x_content">
+			<div class="row">
+				<form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd}) }" class="form">
+					<input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
+					<!-- S : 테이블 상단 검색 창 -->
+					<!-- totalCount -->
+					<div class="col-md-1 col-sm-2 mt_10p pl_15p">
+						총 <span th:utext="${resultList.totalElements}"></span>건
+					</div>
+					<div class="col-md-11 col-sm-10 mb_10p">
+						<div class="btn-group float-right" role="group">
+							<select class="form-control ml_5p w_55r" name="schOption">
+								<option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">제목</option>
+<!--								<option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">이름</option>-->
+							</select>
+							<input type="text" name="schCntn" th:value="${searchDTO.schCntn}"
+								   class="form-control input-sm" placeholder="검색어 입력"
+								   aria-controls="datatable-responsive">
+							<button type="submit" class="btn btn-purple w250p">검색</button>
+						</div>
+					</div>
+					<!-- E : 테이블 상단 검색 창 -->
+					<!-- S : 테이블 -->
+					<div class="col-md-12 col-sm-12 ">
+						<table id="listTable" class="table table-bordered text-center">
+							<thead>
+								<tr>
+									<th>순번</th>
+									<th>이름</th>
+									<th>분류순서</th>
+									<th>등록자</th>
+									<th>등록일</th>
+									<th>관리</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
+									
+									<td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
+									<td th:text="${data.clNm}"></td>
+									<td th:text="${data.clSeq}"></td>
+									<td th:text="${data.registerId}"></td>
+									<td th:text="${#temporals.format(data.regDt, 'yyyy-MM-dd HH:MM:SS')}"></td>
+									<td th:with = "cnt = ${data.childCnt}, childCnt =  (${data.childCnt > 99 ? '99+' : cnt } )">	<!-- 항목개수가 99 보다 크면 99+ 로 표시 -->
+										<a th:href="@{/admin/classCategoryCl02/{mcd}/{pk}/list ( mcd = ${mcd}, pk = ${data.clSn} ) }" class="btn btn-success btn-xs">
+											<i class="fa fa-pencil"></i>항목관리 [ [[${childCnt}]] ]
+										</a>
+										<a th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.clSn} ) }" class="btn btn-primary btn-xs">
+											<i class="fa fa-pencil"></i>수정
+										</a>
+										<a th:href="'javascript:deleteItem(\'' + ${data.clSn} + '\');'" class="btn btn-danger btn-xs">
+											<i class="fa fa-trash-o"></i>삭제
+										</a>
+									</td>
+								</tr>
+								<tr th:unless = "${!resultList.isEmpty()}">
+									<td class="noDataTd" style="display: none;">
+										데이터가 없습니다.
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- E : 테이블 -->
+					<!-- S : 하단 목록 -->
+					<div class="col-md-12 col-sm-12">
+						<!-- bottom left area -->
+						<div class="col-md-2 col-sm-3 text-left">
+							<a th:href="@{ {basicPath}/{mcd}/regist ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="btn btn-white w120p">등록</a>
+						</div>
+						<!-- S : 테이블 하단 페이징 -->
+						<div class="col-md-8 col-sm-6 text-center"
+							 th:insert="~{admin/layout/tiles/paging :: paging('listForm', ${resultList})}">
+							<!-- parameter : ( submit할 form 의 name값 ), ( ${resultList} 는 Page<T> 오브젝트 )  -->
+						</div>
+						<!-- E : 테이블 하단 페이징 -->
+						<!-- bottom right area -->
+						<div class="col-md-2 col-sm-3 text-right">
+							<select class="form-control" name="size" onchange="searchListSize('listForm',this.value);">
+								<option value="10" th:selected=" ${resultList.pageable.pageSize} == '10' ">10개씩 보기
+								</option>
+								<option value="30" th:selected=" ${resultList.pageable.pageSize} == '30' ">30개씩 보기
+								</option>
+								<option value="50" th:selected=" ${resultList.pageable.pageSize} == '50' ">50개씩 보기
+								</option>
+								<option value="100" th:selected=" ${resultList.pageable.pageSize} == '100' ">100개씩 보기
+								</option>
+							</select>
+						</div>
+					</div>
+				</form>
+				<form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/{mcd}/delete ( basicPath = ${basicPath}, mcd = ${mcd} ) }">
+					<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- E : content -->
 </th:block>
 </html>

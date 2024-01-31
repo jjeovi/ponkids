@@ -1,90 +1,90 @@
 <ul class="nav side-menu" name="snb-menu">
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        // 권한별 메뉴리스트
-        let _menuList;   // 상수 선언
-        let _mcd = [[${mcd}]];
-        let _currentPageUrl = [[${currentPageUrl}]];
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		// 권한별 메뉴리스트
+		let _menuList;   // 상수 선언
+		let _mcd = [[${mcd}]];
+		let _currentPageUrl = [[${currentPageUrl}]];
 
-        $( function () {
-            _menuList =  /*[[${menuList}]]*/;
-            drawSNB( _menuList );      // 메뉴 그리기
-            currentPage(_mcd,_currentPageUrl);
-        } );
+		$( function () {
+			_menuList =  /*[[${menuList}]]*/;
+			drawSNB( _menuList );	  // 메뉴 그리기
+			currentPage(_mcd,_currentPageUrl);
+		} );
 
-        function drawSNB( _menuList ) {
-        	
-        	if( _menuList != null ) {
-	            for ( const [ i, item ] of _menuList.entries() ) {
+		function drawSNB( _menuList ) {
+			
+			if( _menuList != null ) {
+				for ( const [ i, item ] of _menuList.entries() ) {
 	
-	                if ( i == 0 ) {
-	                    $( "[name='snb-menu']" ).attr( "id", "ul_" + item.menuSn );
-	                    // 최초 메뉴는 루트메뉴라서 표시 X
-	                    continue;
-	                }
+					if ( i == 0 ) {
+						$( "[name='snb-menu']" ).attr( "id", "ul_" + item.menuSn );
+						// 최초 메뉴는 루트메뉴라서 표시 X
+						continue;
+					}
 	
-	                if ( i > 0 ) {
-	                    $( "#ul_" + item.upperMenuSn ).append(
-	                        $( "<li>" ).attr( "id", "li_" + item.menuSn ).attr( "class", "li_mcd"+item.menuCd+" level_" + item.level ).append(
-	                            $( "<a>" ).attr( "id", "a_" + item.menuSn ).append(
-	                                $( "<span>" ).append( item.menuNm )
-	                            )
-	                        )
-	                    );
-	                    
-	                    if ( item.parntsMenuYn == 'Y' ) {
-	                    	// 부모 메뉴 설정이 Y 일 때
-	                        $( "#li_" + item.menuSn ).append(
-	                            $( "<ul>" ).attr( "id", "ul_" + item.menuSn ).attr( "class", "nav child_menu" ).append()
-	                        );
-	                        $( "#a_" + item.menuSn ).append(
-	                            $( "<span>" ).attr( "class", "fa fa-chevron-down" ).append( "" )
-	                        )
-	                    } else if (item.parntsMenuYn == 'N' ) {
-	                    	// 부모 메뉴 설정이 N 일 때
-	                        $( "#a_" + item.menuSn ).attr("href", item.menuUrl);
-	                        
-	                        // 새창 열기 설정 적용
-	                        if (item.newWindowYn == 'Y') {
+					if ( i > 0 ) {
+						$( "#ul_" + item.upperMenuSn ).append(
+							$( "<li>" ).attr( "id", "li_" + item.menuSn ).attr( "class", "li_mcd"+item.menuCd+" level_" + item.level ).append(
+								$( "<a>" ).attr( "id", "a_" + item.menuSn ).append(
+									$( "<span>" ).append( item.menuNm )
+								)
+							)
+						);
+						
+						if ( item.parntsMenuYn == 'Y' ) {
+							// 부모 메뉴 설정이 Y 일 때
+							$( "#li_" + item.menuSn ).append(
+								$( "<ul>" ).attr( "id", "ul_" + item.menuSn ).attr( "class", "nav child_menu" ).append()
+							);
+							$( "#a_" + item.menuSn ).append(
+								$( "<span>" ).attr( "class", "fa fa-chevron-down" ).append( "" )
+							)
+						} else if (item.parntsMenuYn == 'N' ) {
+							// 부모 메뉴 설정이 N 일 때
+							$( "#a_" + item.menuSn ).attr("href", item.menuUrl);
+							
+							// 새창 열기 설정 적용
+							if (item.newWindowYn == 'Y') {
 								$( "#a_" + item.menuSn ).attr("target", "_blank");	
 							}
-	                    }
-	                }
-	            }
-        	}
-        }
+						}
+					}
+				}
+			}
+		}
 
-        function currentPage( _mcd, _currentPageUrl ) {
-            if( _mcd != null && _mcd != '' && _currentPageUrl != null && _currentPageUrl != '' ) {
+		function currentPage( _mcd, _currentPageUrl ) {
+			if( _mcd != null && _mcd != '' && _currentPageUrl != null && _currentPageUrl != '' ) {
 				
 				// (1) currentPageUrl 이 있으면 currentPageUrl 을 현재메뉴로 인식
 				// (2) currentPageUrl 이 없으면, mcd값으로 현재메뉴 탐색
 
 
-                if ($( "a[href='" + _currentPageUrl + "']" ).length ) {
+				if ($( "a[href='" + _currentPageUrl + "']" ).length ) {
 					// (1) currentPageUrl 이 있으면 currentPageUrl 을 현재메뉴로 인식
 
 					
-                    // current-page class 추가
-                    $( "a[href='" + _currentPageUrl + "']" ).parent().addClass("current-page");
+					// current-page class 추가
+					$( "a[href='" + _currentPageUrl + "']" ).parent().addClass("current-page");
 
-                    // 해당 메뉴 펼치는 작업
-                    var $li = $( "a[href='" + _currentPageUrl + "']" );
-                    while( !$li.parent().find("[name='snb-menu']").length ) {
-                        // parent 로 올라가면서 li 이면 active 클래스 추가
-                        if ( $li[0].tagName == "LI") {
-                            $li.addClass("active");
-                        }
+					// 해당 메뉴 펼치는 작업
+					var $li = $( "a[href='" + _currentPageUrl + "']" );
+					while( !$li.parent().find("[name='snb-menu']").length ) {
+						// parent 로 올라가면서 li 이면 active 클래스 추가
+						if ( $li[0].tagName == "LI") {
+							$li.addClass("active");
+						}
 
-                        // parent 로 올라가면서 ul 이면 display block추가
-                        if ( $li[0].tagName == "UL") {
-                            $li.css("display","block");
-                        }
-                        $li = $li.parent();
+						// parent 로 올라가면서 ul 이면 display block추가
+						if ( $li[0].tagName == "UL") {
+							$li.css("display","block");
+						}
+						$li = $li.parent();
 
-                    }
+					}
 
-                } else {
+				} else {
 					// (2) currentPageUrl 이 없으면, mcd값으로 현재메뉴 탐색
 					
 					$(".li_" + _mcd ).each(function(){
@@ -92,25 +92,25 @@
 						var $li = $(this);
 						
 						while( !$li.find("[name='snb-menu']").length ) {
-	                        // parent 로 올라가면서 li 이면 active 클래스 추가
-	                        if ( $li[0].tagName == "LI") {
-	                            $li.addClass("active");
-	                        }
+							// parent 로 올라가면서 li 이면 active 클래스 추가
+							if ( $li[0].tagName == "LI") {
+								$li.addClass("active");
+							}
 	
-	                        // parent 로 올라가면서 ul 이면 display block추가
-	                        if ( $li[0].tagName == "UL") {
-	                            $li.css("display","block");
-	                        }
-	                        $li = $li.parent();
+							// parent 로 올라가면서 ul 이면 display block추가
+							if ( $li[0].tagName == "UL") {
+								$li.css("display","block");
+							}
+							$li = $li.parent();
 
-                    	}
+						}
 					});
 					
 				}
-            }
-        }
+			}
+		}
 
-        /*]]>*/
-    </script>
+		/*]]>*/
+	</script>
 
 </ul>

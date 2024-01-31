@@ -1,63 +1,63 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout/layout}">
+	  layout:decorate="~{admin/layout/layout}">
 <!-- S : Javascript functions	-->
 <script layout:fragment="script">
 
-    // DOM 준비 된 이후 실행
-    $( function () {
+	// DOM 준비 된 이후 실행
+	$( function () {
 
-    });
+	});
 
 </script>
 <!-- E : Javascript functions	-->
 <th:block layout:fragment="content">
 	
-    <!-- S: content -->
-    <div class="row">
-        <div class="col-md-12 col-sm-12 ">
-            <div class="x_panel">
-                <div class="x_content">
-                    <form id="insertForm" name="insertForm" method="post" th:action="@{ {basicPath}/mcd/insert ( basicPath = ${basicPath} ) }">
-	                    <!-- hidden type  -->
-                        <input type="hidden" name="clSn" />	 <!--  primary key -->
+	<!-- S: content -->
+	<div class="row">
+		<div class="col-md-12 col-sm-12 ">
+			<div class="x_panel">
+				<div class="x_content">
+					<form id="insertForm" name="insertForm" method="post" th:action="@{ {basicPath}/mcd/insert ( basicPath = ${basicPath} ) }">
+						<!-- hidden type  -->
+						<input type="hidden" name="clSn" />	 <!--  primary key -->
 
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">이름<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <input class="form-control" data-validate-length-range="2,50" name="clNm" required="required" placeholder="이름을 입력해주세요." />
-                            </div>
-                        </div>
-                        <div class="field item form-group">
-                            <label class="col-form-label col-md-2 col-sm-3  label-align">분류순서<span class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <input type="number" class="form-control" name="clSeq" required="required" placeholder="분류순서를 입력해주세요." />
-                                <small class="font-gray-dark">
-                                    분류 표시순서를 입력해주세요. *(숫자만 입력 가능)
-                                </small>
-                            </div>
-                        </div>
-                        <div class="ln_solid"></div>
-                        <!-- 저장버튼 -->
-                        <div class="col-md-12">
-                            <!-- bottom left area -->
-                            <div class="col-md-2 col-sm-3 text-left">
-                                <a th:href="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="btn btn-white w120p">목록</a>
-                            </div>
-                            <!-- bottom center area -->
-                            <div class="col-md-8 col-sm-6 text-center">
-                                <a th:href="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="btn btn-white w120p">취소</a>
-                                <button type="submit" class="btn btn-purple w120p">저장</button>
-                            </div>
-                            <!-- bottom right area -->
-                            <div class="col-md-2 col-sm-3 text-right">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- E : content -->
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3  label-align">이름<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<input class="form-control" data-validate-length-range="2,50" name="clNm" required="required" placeholder="이름을 입력해주세요." />
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3  label-align">분류순서<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<input type="number" class="form-control" name="clSeq" required="required" placeholder="분류순서를 입력해주세요." />
+								<small class="font-gray-dark">
+									분류 표시순서를 입력해주세요. *(숫자만 입력 가능)
+								</small>
+							</div>
+						</div>
+						<div class="ln_solid"></div>
+						<!-- 저장버튼 -->
+						<div class="col-md-12">
+							<!-- bottom left area -->
+							<div class="col-md-2 col-sm-3 text-left">
+								<a th:href="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="btn btn-white w120p">목록</a>
+							</div>
+							<!-- bottom center area -->
+							<div class="col-md-8 col-sm-6 text-center">
+								<a th:href="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="btn btn-white w120p">취소</a>
+								<button type="submit" class="btn btn-purple w120p">저장</button>
+							</div>
+							<!-- bottom right area -->
+							<div class="col-md-2 col-sm-3 text-right">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- E : content -->
 </th:block>
 </html>
