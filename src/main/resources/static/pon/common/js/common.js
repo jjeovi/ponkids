@@ -136,6 +136,7 @@ function detailClass( classSn ) {
 // 팝업창 실행 event 
 function showPopup( layerId ) {
 	
+	$("[class^='layer_']").hide();
 	$(".layer_" + layerId ).show();
 	$("#pop_dim").fadeIn();
 }
