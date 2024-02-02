@@ -54,11 +54,11 @@ $( function () {
     $( '.detail_day button' ).click( function () {
         $( '.detail_day button' ).removeClass( 'active' );
         $( this ).addClass( 'active' );
-        return false;
-    } );
+		return false;
+	} );
 
 
-    $( '.detail_tab_content div' ).hide();
+	$( '.detail_tab_content div' ).hide();
 //    $( '.detail_tab_nav a' ).click( function () {
 //        $( '.detail_tab_content div' ).hide().filter( this.hash ).fadeIn();
 //        $( '.detail_tab_nav a' ).removeClass( 'active' );

@@ -4,6 +4,7 @@ const telNoRegexp = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
 $( function() {
     
 });
+
 // S : file upload (img) 관련
 //preview image
 function fileChange( e ) {
@@ -29,36 +30,31 @@ function fileChange( e ) {
 
             parent2.children( '.upload-file-name' ).prepend( '<input class="input-file-name" value="' + $( e )[0].files[0].name + '" disabled="disabled">' );
 
-            //image 파일만
+			// image 파일만
             if ( !$( e )[0].files[0].type.match( /image\// ) ) {
-                parent.prepend( '<div class="upload-display"><div class="upload-thumb-wrap"><img class="upload-thumb noimg" name="thumbSrc"></div></div>' );
+				parent.prepend( '<div class="upload-display"><div class="upload-thumb-wrap"><img class="upload-thumb noimg" name="thumbSrc"></div></div>' );
                 return;
             }
 
-            var reader = new FileReader();
-            reader.onload = function ( e ) {
-                var src = e.target.result;
-                parent.prepend( '<div class="upload-display"><div class="upload-thumb-wrap"><img src="' + src + '" class="upload-thumb" name="thumbSrc"></div></div>' );
-            }
-            reader.readAsDataURL( $( e )[0].files[0] );
-        } else {
-            // var imgSrc = document.selection.createRange().text;
-//            parent.prepend( '<div class="upload-file-name"><input class="input-file-name" value="선택된 파일 없음" disabled="disabled"></div>' );
-            
-            parent2.children( '.upload-file-name' ).prepend( '<input class="input-file-name" value="선택된 파일 없음(.gif, .jpg, .png)" disabled="disabled">' );
-            parent.prepend( '<div class="upload-display"><div class="upload-thumb-wrap"><img class="upload-thumb noimg" name="thumbSrc"></div></div>' );
-            //
-            // img[0].style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\""+imgSrc+"\")";
-        }
-    }
+			var reader = new FileReader();
+			reader.onload = function ( e ) {
+				var src = e.target.result;
+				parent.prepend( '<div class="upload-display"><div class="upload-thumb-wrap"><img src="' + src + '" class="upload-thumb" name="thumbSrc"></div></div>' );
+			}
+			reader.readAsDataURL( $( e )[0].files[0] );
+		} else {
+			// var imgSrc = document.selection.createRange().text;
+//			parent.prepend( '<div class="upload-file-name"><input class="input-file-name" value="선택된 파일 없음" disabled="disabled"></div>' );
+			
+			parent2.children( '.upload-file-name' ).prepend( '<input class="input-file-name" value="선택된 파일 없음(.gif, .jpg, .png)" disabled="disabled">' );
+			parent.prepend( '<div class="upload-display"><div class="upload-thumb-wrap"><img class="upload-thumb noimg" name="thumbSrc"></div></div>' );
+			//
+			// img[0].style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\""+imgSrc+"\")";
+		}
+	}
 }
 
-
-
 // E : file upload (img) 관련
-
-
-
 
 
 // 라디오 버튼 클릭시 active 클래스 추가
@@ -67,8 +63,6 @@ function clickRadioEvent( e ) {
     $( e ).parent().siblings( "label" ).removeClass( "active" );
     $( e ).parent().addClass( "active" );
 }
-
-
 
 
 // 자녀 추가 버튼 클릭
@@ -137,25 +131,21 @@ function chldrnValidCheck( $targetChldrnDiv ) {
 	}
 
 	return true;
-
 }
 
 
 // 이름 유효성 검사
 // - 2자 < name < 10자
 function validCheckName( name ) {
-    if ( name == '' ) {
-        alert( "이름을 입력해주세요." );
-        return false;
-    } else if ( name.length < 2 || name.length > 10 ) {
-        alert( "이름은 2자 이상 10자 이하로 입력해주세요." );
-        return false;
-    }
-    return true;
+	if ( name == '' ) {
+		alert( "이름을 입력해주세요." );
+		return false;
+	} else if ( name.length < 2 || name.length > 10 ) {
+		alert( "이름은 2자 이상 10자 이하로 입력해주세요." );
+		return false;
+	}
+	return true;
 }
-
-
-
 
 // 자녀 정보 테이블에 add
 function addChldrnRow( $targetChldrnDiv ) {
@@ -215,7 +205,6 @@ function addChldrnRow( $targetChldrnDiv ) {
 //		)
 	);
 }
-
 
 
 
