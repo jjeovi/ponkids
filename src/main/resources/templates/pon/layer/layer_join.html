@@ -1,3 +1,21 @@
+<script>
+	$( function () {
+		
+		$("#join_resideArea").change(function(){
+			var value = $(this).val();
+			
+			if ( value == '' ) {
+				$("#join_resideArea").removeClass("choiced");
+				
+			} else {
+				$("#join_resideArea").addClass("choiced");
+			}
+			
+		})
+	
+	})
+	
+</script>
 <div class="pop_wrap join" data-layer-wrap="join" >
 	<div class="pop_top">
 		<button class="pop_close hide_pop" data-layer-id="join" >
@@ -16,34 +34,74 @@
 						<img alt="프로필 이미지" class="upload-thumb noimg">
 					</div>
 				</div>
-				
 				<div class="upload-file-name">
-					<input class="input-file-name" value="선택된 파일 없음(.gif, .jpg, .png)" disabled="disabled">
-				</div><div class="upload-btn mt_10p">
-					<label class="btn btn-purple">업로드
+				</div><div class="upload-btn mt_10p" style="margin-bottom: 13px;">
+					<label class="btn btn-purple" >업로드
 						<input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
-					</label>
+					</label><div class="upload-file-name" style="display: inline-block;">
+					<input class="input-file-name" value="선택된 파일 없음(.gif, .jpg, .png)" disabled="disabled">
+				</div>
 				</div>
 			</div>
-			<input tyle="text" name="userNm" placeholder="이름" >
+			<input type="text" name="userNm" placeholder="이름">
 			<div class="btn-group radiobox">
 				<input type="radio" id="gender1" name="gender" value="M" class="join-btn" required="">
 				<label for="gender1" class="btn btnFirst w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">남자</label>
 				<input type="radio" id="gender2" name="gender" value="F" class="join-btn" required="">
 				<label for="gender2" class="btn btnLast w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">여자</label>
 			</div>
-			<input tyle="text" name="userNm" placeholder="이메일 (로그인 id, 비밀번호 찾기 시 이메일로 메일이 전송됩니다.)" >
-			<input tyle="text" name="userNm" placeholder="비밀번호" >
-			<input tyle="text" name="userNm" placeholder="비밀번호 재입력" >
-			<input tyle="text" name="userNm" placeholder="생년월일 (숫자8자리로 입력해주세요. YYYYMMDD ex)19930119 " >
+			<input type="text" name="userNm" placeholder="이메일 (로그인 id, 비밀번호 찾기 시 이메일로 메일이 전송됩니다.)">
+			<input type="text" name="userNm" placeholder="비밀번호">
+			<input type="text" name="userNm" placeholder="비밀번호 재입력">
+			<input type="text" name="userNm" placeholder="생년월일 (숫자8자리로 입력해주세요. YYYYMMDD ex)19930119 ">
 			<div class="btn-group radiobox">
 				<input type="radio" id="resideArea1" name="resideArea" value="대한민국" class="join-btn" required="">
 				<label for="resideArea1" class="btn btnFirst w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">대한민국</label>
 				<input type="radio" id="resideArea2" name="resideArea" value="other" class="join-btn" required="">
 				<label for="resideArea2" class="btn btnLast w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">그 외</label>
 			</div>
-			<input tyle="text" name="userNm" placeholder="연락처" >
-			
+			<input type="text" name="userNm" placeholder="연락처" >
+			<select name="resideArea" class="selectbox" id="join_resideArea">
+				<option value="" class="lang-option">최애 프로그래밍 언어</option>
+				<option value="Python" class="lang-option">Python</option>
+				<option value="Java" class="lang-option">Java</option>
+				<option value="JavaScript" class="lang-option">JavaScript</option>
+				<option value="C#" class="lang-option">C#</option>
+				<option value="C/C++" class="lang-option">C/C++</option>
+			</select>
+		</div>
+		<div class="join_chldrn_title_wrap" >
+			<div class="sub_title">자녀 정보</div>	
+		</div>
+		<div class="join_wrap add_chldrn">
+			<div class="chldrn_list" id="chldrnTableBody">
+<!--				<div class="info_chldrn_list list_1">-->
+<!--					<div class="filebox preview-image">-->
+<!--						<div class="upload-display">-->
+<!--							<div class="upload-thumb-wrap">-->
+<!--								<img alt="프로필 이미지" class="upload-thumb noimg">-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--					<input type="text" name="userNm" placeholder="이름">-->
+<!--					<input type="text" name="userNm" placeholder="연락처">-->
+<!--					<input type="text" name="userNm" placeholder="생년월일">-->
+<!--					<input type="text" name="userNm" placeholder="이메일">-->
+<!--					<div class="right"">-->
+<!--						<label class="btn btn_delete" >-->
+<!--							삭제-->
+<!--						</label>-->
+<!--					</div>-->
+<!--				</div>-->
+			</div>
+			<div class="plus-chldrn-btn">
+				<img class="plus_chldrn_btn show_pop_lv2" src="/pon/common/image/plus_icon.png" data-layer-id="addChldrn" alt="자녀 추가" >
+			</div> 
+		</div>
+		<div class="pop_footer join_pop">
+			<label class="btn btn-purple">
+				회원가입
+			</label>
 		</div>
 	</div>
 </div>

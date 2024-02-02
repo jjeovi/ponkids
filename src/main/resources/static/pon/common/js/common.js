@@ -8,12 +8,24 @@ $( function () {
 		var layerId = $(this).data("layerId")	;	// 클릭한 레이어 팝업의 id 값 setting 
 		showPopup(layerId);
 	});
+	 
+	 // 팝업 show : 다른 팝업들 켜져있다면 유지하고 해당 팝업만 show ( close 할때도 해당 팝업만 close 하도록 구현 ) 
+	$(".show_pop_lv2").on("click", function(e) {
+		var layerId = $(this).data("layerId")	;	// 클릭한 레이어 팝업의 id 값 setting 
+		showPopupLv2(layerId);
+	});
 
 	 
 	// 팝업 hide
 	$(".hide_pop").on("click", function(e) {
 		var layerId = $(this).data("layerId")	;	// 클릭한 레이어 팝업의 id 값 setting 
 		hidePopup(layerId);
+	});
+	 
+	// 팝업 hide : 다른 팝업들 켜져있다면 유지하고 해당 팝업만 hide 
+	$(".hide_pop_lv2").on("click", function(e) {
+		var layerId = $(this).data("layerId")	;	// 클릭한 레이어 팝업의 id 값 setting 
+		hidePopupLv2(layerId);
 	});
 
 
@@ -58,7 +70,21 @@ $( function () {
         $( '.detail_tab_nav a' ).removeClass( 'active' );
         $( this ).addClass( 'active' );
         return false;
-    } ).filter( ':eq(0)' ).click();;
+    } ).filter( ':eq(0)' ).click();
+    
+    
+        
+    
+    
+//    		
+//		$("#join_resideArea").change(function(){
+//			alert($(this).val());
+//		})
+//		
+//		$("[name='resideArea']").change( function() {
+//			alert("ttt");
+//			});
+
 
 } );
 
@@ -142,6 +168,14 @@ function showPopup( layerId ) {
 }
 
 
+// 팝업창 실행 event 
+function showPopupLv2( layerId ) {
+	
+	$(".layer_" + layerId ).show();
+	$("#pop_dim_lv2").fadeIn();
+}
+
+
 // 팝업창 숨김 
 function hidePopup( layerId ) {
 	
@@ -151,6 +185,14 @@ function hidePopup( layerId ) {
 	$("#pop_dim").fadeOut( '10', function(){
 		$(".layer_" + layerId ).fadeOut('20');
 	});
+}
+
+
+// 팝업창 숨김 
+function hidePopupLv2( layerId ) {
+	
+	$(".layer_" + layerId ).hide();
+	$("#pop_dim_lv2").fadeOut();
 }
 
 

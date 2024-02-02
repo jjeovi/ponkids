@@ -221,20 +221,28 @@
 
 
 <!-- layer popup  -->
-<div class="pop_dim" id="pop_dim" style="display: none;"></div>
+<div class="pop_dim" 		id="pop_dim"		style="display: none;"></div>
+<div class="pop_dim_lv2" 	id="pop_dim_lv2"	style="display: none;"></div>
 <!-- popup id -->
-<!-- 아이디/비밀번호 찾기 -->		<div class="layer_findUser"	style="display: none;"	th:insert="/pon/layer/layer_findUser.html"	/>
-<!-- 회원가입 -->				<div class="layer_join"		style="display: none;"	th:insert="/pon/layer/layer_join.html"		/>
-<!-- 로그인 -->				<div class="layer_login"	style="display: none;"	th:insert="/pon/layer/layer_login.html"		/>
-<!-- 이용약관 개인정보처리방침 -->	<div class="layer_policy"	style="display: none;"	th:insert="/pon/layer/layer_policy.html"	/>
-<!-- 문의하기 -->				<div class="layer_inquiry"	style="display: none;"	th:insert="/pon/layer/layer_inquiry.html"	/>
+<!-- 아이디/비밀번호 찾기 -->		<div class="layer_findUser"			style="display: none;"	th:insert="/pon/layer/layer_findUser.html"	/>
+<!-- 회원가입 -->				<div class="layer_join"				style="display: none;"	th:insert="/pon/layer/layer_join.html"		/>
+<!-- 회원가입 - 자녀추가 -->		<div class="layer_addChldrn lv2"	style="display: none;"	th:insert="/pon/layer/layer_addChldrn.html"	/>
+<!-- 로그인 -->				<div class="layer_login"			style="display: none;"	th:insert="/pon/layer/layer_login.html"		/>
+<!-- 이용약관 개인정보처리방침 -->	<div class="layer_policy"			style="display: none;"	th:insert="/pon/layer/layer_policy.html"	/>
+<!-- 문의하기 -->				<div class="layer_inquiry"			style="display: none;"	th:insert="/pon/layer/layer_inquiry.html"	/>
 
 </body>
 <!--e: body-->
 
+<!--validator -->
+	<script src="/common/bootstrap/vendors/validator/multifield.js"></script>
+	<script src="/common/bootstrap/vendors/validator/validator.js"></script>
+	
 <!--S : script -->
 <!-- main -->
 <script src="/pon/common/js/common.js"></script>
+<!-- layer -->
+<script src="/pon/common/js/layer.js"></script>
 
 <div layout:fragment="script">
 	<!-- script 내용 작성 -->
