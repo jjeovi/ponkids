@@ -119,6 +119,9 @@ public class UserAdmController {
             
         } else {
             // 회원가입 처리
+        	
+        	// 관리자 처리 
+        	saveDto.setMngrYn("Y");
             
             // 첨부파일 존재시 파일 저장
             if ( !files.isEmpty() ) {

@@ -77,7 +77,7 @@ $( function () {
     
     
 //    		
-//		$("#join_resideArea").change(function(){
+//		$("#join_countryList").change(function(){
 //			alert($(this).val());
 //		})
 //		

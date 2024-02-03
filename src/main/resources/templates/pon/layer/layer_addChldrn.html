@@ -1,5 +1,5 @@
-<div name="chldarnAddDiv" class="pop_wrap addChldrn newForm" data-layer-wrap="addChldrn" >
-	<input type="hidden" name="chldrnGender" />
+<div class="pop_wrap addChldrn" data-layer-wrap="addChldrn" >
+	
 	<div class="pop_top">
 		<button class="pop_close hide_pop_lv2" data-layer-id="addChldrn" >
 			<img src="/pon/common/image/chat_close.svg" alt="">
@@ -9,45 +9,20 @@
 		<img src="/pon/common/image/logo.svg" alt="피오니키즈 로고">
 		<h2 class="pop_title">자녀 추가</h2>
 	</div>
-	<div class="pop_content">
-		<div class="addChldrn_wrap">
-			<div class="filebox preview-image">
-				<div class="upload-display">
-					<div class="upload-thumb-wrap">
-						<img name="thumbSrc" alt="프로필 이미지" class="upload-thumb noimg">
-					</div>
-				</div>
-				<div class="upload-btn mt_10p" style="margin-bottom: 13px;">
-					<label class="btn btn-purple" >업로드
-						<input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
-					</label>
-					<div class="upload-file-name" style="display: inline-block;">
-						<input class="input-file-name" value="선택된 파일 없음(.gif, .jpg, .png)" disabled="disabled">
-					</div>
-				</div>
-			</div>
-			<input type="text" name="chldrnNm" placeholder="이름">
-			<div class="btn-group radiobox">
-				<label	class="l4px btn btn-outline-purple w100p"
-						data-toggle-class="btn-primary"
-						data-toggle-passive-class="btn-default">
-				<input type="radio" name="chldrnGenderRadio" value="M" class="join-btn chldrnGenderRadio" onclick="clickRadioEvent(this)"> 남자
-				</label>
-				<label	class="r4px btn btn-outline-purple w100p"
-						data-toggle-class="btn-primary"
-						data-toggle-passive-class="btn-default">
-				<input type="radio" name="chldrnGenderRadio" value="F" class="join-btn chldrnGenderRadio" onclick="clickRadioEvent(this)">여자
-				</label>
-			</div>
-			<input type="text"	name="chldrnBrdtDate"	placeholder="생년월일 ( YYYYMMDD ex)20130119" maxlength="8">
-			<input type="tel"	name="chldrnTelNo"		placeholder="연락처"	data-validate-length-range="10,11"	maxlength="11"	>
-			<input type="text"	name="chldrnEmail"		placeholder="이메일" >
-			
-			<div class="pop_footer">
-				<label class="btn btn-purple" onclick="addChldrn()">
-					자녀 추가
-				</label>
-			</div>
+	<div class="pop_content" id="addChldrnModalBody">
+		<div name="chldrnModDiv" class="modForm" style="display: none;">
+			<!-- 자녀 수정시 여기서 수정 작업 -->
 		</div>
+		<div name="chldrnAddDiv" class="addChldrn_wrap newForm" th:insert="/pon/layer/addChldrnForm.html">
+			<!-- 자녀 등록 form 호출 -->
+		</div>
+	</div>
+	<div class="pop_footer">
+		<label class="btn btn-purple" onclick="addChldrn()" id="addChldrnBtn" >		<!-- 추가 -->
+			추가
+		</label>
+		<label class="btn btn-purple" onclick="addChldrn()" id="updateChldrnBtn" >	<!-- 수정 -->
+			수정
+		</label>
 	</div>
 </div>

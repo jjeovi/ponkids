@@ -1,17 +1,44 @@
 <script>
 	$( function () {
 		
-		$("#join_resideArea").change(function(){
+		$("#join_countryList").change(function(){
 			var value = $(this).val();
 			
 			if ( value == '' ) {
-				$("#join_resideArea").removeClass("choiced");
+				$("#join_countryList").removeClass("choiced");
 				
 			} else {
-				$("#join_resideArea").addClass("choiced");
+				$("#join_countryList").addClass("choiced");
 			}
-			
-		})
+		});
+		
+		// 거주지역 그 외만 선택 했을 시 return false;
+		var resideArea = $( "input:radio[name='resideArea']:checked" ).val();
+		var country = $("#join_countryList option:selected").val();
+		if ( resideArea == 'other' ) {
+			if ( country == '' ) {
+				alert( "거주지역을 선택해주세요." );
+				$( "#join_countryList" ).focus();
+				return false;
+			} else {
+				$( "[name='resideArea']" ).val( country );
+			}
+		}
+		
+		
+		
+		// 거주지역 변동시 셀렉트박스 표출 처리
+		$( "input:radio[name='resideArea']" ).change( function () {
+
+			// 그 외 거주지역 선택시 나라 선택하도록 setting
+			var country = $( this ).val();
+
+			if ( country == 'other' ) {
+				$( "#join_countryList" ).show();
+			} else {
+				$( "#join_countryList" ).hide();
+			}
+		} );
 	
 	})
 	
@@ -27,6 +54,7 @@
 		<h2 class="pop_title">회원가입</h2>
 	</div>
 	<div class="pop_content">
+		<form id="userInsertForm" name="userInsertForm" method="post" th:action="@{ /user/mcd/insert }"  enctype="multipart/form-data">
 		<div class="join_wrap">
 			<div class="filebox preview-image">
 				<div class="upload-display">
@@ -43,6 +71,21 @@
 				</div>
 				</div>
 			</div>
+			<div class="input_comment_wrap">
+				<input type="text" name="userId" class="form-control" placeholder="ID (이메일 형태. 계정 찾기 시 이메일로 인증메일 발송)" required="required">
+				<div class="input_comment">
+					<span id="checkResult"></span>
+				</div>
+				
+			</div>
+			<input type="password" id="password1" name="password" class="form-control" pattern="(?=.*\d)(?=.*[a-z])(?=.*[!@#$%^&*]).{8,}" required placeholder="비밀번호 (영문, 숫자, 특수문자를 포함 최소8자리)">
+			<div class="input_comment_wrap">
+				<input type="password" name="password2" class="form-control" data-validate-linked='password' required='required' placeholder="비밀번호 재입력" onchange="checkPasswordMatching();">
+				<div class="input_comment">
+					<span id="passwordMatchingResult"></span>
+				</div>
+			</div>
+			
 			<input type="text" name="userNm" placeholder="이름">
 			<div class="btn-group radiobox">
 				<input type="radio" id="gender1" name="gender" value="M" class="join-btn" required="">
@@ -50,58 +93,249 @@
 				<input type="radio" id="gender2" name="gender" value="F" class="join-btn" required="">
 				<label for="gender2" class="btn btnLast w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">여자</label>
 			</div>
-			<input type="text" name="userNm" placeholder="이메일 (로그인 id, 비밀번호 찾기 시 이메일로 메일이 전송됩니다.)">
-			<input type="text" name="userNm" placeholder="비밀번호">
-			<input type="text" name="userNm" placeholder="비밀번호 재입력">
-			<input type="text" name="userNm" placeholder="생년월일 (숫자8자리로 입력해주세요. YYYYMMDD ex)19930119 ">
+			<input type="text" name="brdtDate" placeholder="생년월일 (숫자8자리로 입력해주세요. YYYYMMDD ex)19930119 ">
+			<input type="text" name="telNo" placeholder="연락처" >
 			<div class="btn-group radiobox">
 				<input type="radio" id="resideArea1" name="resideArea" value="대한민국" class="join-btn" required="">
 				<label for="resideArea1" class="btn btnFirst w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">대한민국</label>
 				<input type="radio" id="resideArea2" name="resideArea" value="other" class="join-btn" required="">
 				<label for="resideArea2" class="btn btnLast w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">그 외</label>
 			</div>
-			<input type="text" name="userNm" placeholder="연락처" >
-			<select name="resideArea" class="selectbox" id="join_resideArea">
-				<option value="" class="lang-option">최애 프로그래밍 언어</option>
-				<option value="Python" class="lang-option">Python</option>
-				<option value="Java" class="lang-option">Java</option>
-				<option value="JavaScript" class="lang-option">JavaScript</option>
-				<option value="C#" class="lang-option">C#</option>
-				<option value="C/C++" class="lang-option">C/C++</option>
+			<select name="resideArea" class="selectbox" id="join_countryList" style="display:none;">
+				<option value=''>국가선택</option>
+				<option value='가나'>가나</option>
+				<option value='가나'>가나</option>
+				<option value='가봉'>가봉</option>
+				<option value='가이아나'>가이아나</option>
+				<option value='감비아'>감비아</option>
+				<option value='과테말라'>과테말라</option>
+				<option value='괌'>괌</option>
+				<option value='그레나다'>그레나다</option>
+				<option value='그리스'>그리스</option>
+				<option value='기니'>기니</option>
+				<option value='기니비사우'>기니비사우</option>
+				<option value='나미비아'>나미비아</option>
+				<option value='나우루'>나우루</option>
+				<option value='나이지리아'>나이지리아</option>
+				<option value='남극'>남극</option>
+				<option value='남아프리카공화국'>남아프리카공화국</option>
+				<option value='네덜란드'>네덜란드</option>
+				<option value='네덜란드령보네르'>네덜란드령보네르</option>
+				<option value='네덜란드령아루바'>네덜란드령아루바</option>
+				<option value='네팔'>네팔</option>
+				<option value='노르웨이'>노르웨이</option>
+				<option value='뉴질랜드'>뉴질랜드</option>
+				<option value='뉴질랜드령니우에'>뉴질랜드령니우에</option>
+				<option value='뉴질랜드령토켈라우제도'>뉴질랜드령토켈라우제도</option>
+				<option value='니제르'>니제르</option>
+				<option value='니카라과'>니카라과</option>
+				<option value='덴마크'>덴마크</option>
+				<option value='덴마크령그린란드'>덴마크령그린란드</option>
+				<option value='덴마크령페로제도'>덴마크령페로제도</option>
+				<option value='도미니카공화국'>도미니카공화국</option>
+				<option value='독일'>독일</option>
+				<option value='동티모르'>동티모르</option>
+				<option value='라오스'>라오스</option>
+				<option value='라이베리아'>라이베리아</option>
+				<option value='라트비아'>라트비아</option>
+				<option value='러시아/카자흐스탄'>러시아/카자흐스탄</option>
+				<option value='레바논'>레바논</option>
+				<option value='레소토'>레소토</option>
+				<option value='루마니아'>루마니아</option>
+				<option value='룩셈부르크'>룩셈부르크</option>
+				<option value='르완다'>르완다</option>
+				<option value='리비아'>리비아</option>
+				<option value='리투아니아'>리투아니아</option>
+				<option value='리히텐슈타인'>리히텐슈타인</option>
+				<option value='마다가스카르'>마다가스카르</option>
+				<option value='마셜제도공화국'>마셜제도공화국</option>
+				<option value='마요트'>마요트</option>
+				<option value='마이크로네시아연방'>마이크로네시아연방</option>
+				<option value='마카오'>마카오</option>
+				<option value='마케도니아공화국'>마케도니아공화국</option>
+				<option value='말라위'>말라위</option>
+				<option value='말레이시아'>말레이시아</option>
+				<option value='말리'>말리</option>
+				<option value='멕시코'>멕시코</option>
+				<option value='모나코'>모나코</option>
+				<option value='모로코'>모로코</option>
+				<option value='모리셔스'>모리셔스</option>
+				<option value='모리타니아'>모리타니아</option>
+				<option value='모잠비크'>모잠비크</option>
+				<option value='몬테네그로'>몬테네그로</option>
+				<option value='몰도바'>몰도바</option>
+				<option value='몰디브'>몰디브</option>
+				<option value='몰타'>몰타</option>
+				<option value='몽골'>몽골</option>
+				<option value='미국'>미국</option>
+				<option value='미국령북마리아나제도'>미국령북마리아나제도</option>
+				<option value='미얀마'>미얀마</option>
+				<option value='바누아투'>바누아투</option>
+				<option value='바레인'>바레인</option>
+				<option value='바베이도스'>바베이도스</option>
+				<option value='바하마'>바하마</option>
+				<option value='방글라데시'>방글라데시</option>
+				<option value='베냉'>베냉</option>
+				<option value='베네수엘라'>베네수엘라</option>
+				<option value='베트남'>베트남</option>
+				<option value='벨기에'>벨기에</option>
+				<option value='벨라루스'>벨라루스</option>
+				<option value='벨리즈'>벨리즈</option>
+				<option value='보스니아헤르체고비나'>보스니아헤르체고비나</option>
+				<option value='보츠와나'>보츠와나</option>
+				<option value='볼리비아'>볼리비아</option>
+				<option value='부룬디'>부룬디</option>
+				<option value='부르키나파소'>부르키나파소</option>
+				<option value='부탄'>부탄</option>
+				<option value='불가리아'>불가리아</option>
+				<option value='브라질'>브라질</option>
+				<option value='브루나이'>브루나이</option>
+				<option value='사모아'>사모아</option>
+				<option value='사우디아라비아'>사우디아라비아</option>
+				<option value='산마리노'>산마리노</option>
+				<option value='상투메프린시페'>상투메프린시페</option>
+				<option value='세네갈'>세네갈</option>
+				<option value='세르비아'>세르비아</option>
+				<option value='세이셀'>세이셀</option>
+				<option value='세인트빈센트그레나딘'>세인트빈센트그레나딘</option>
+				<option value='소말리아'>소말리아</option>
+				<option value='솔로몬제도'>솔로몬제도</option>
+				<option value='수단'>수단</option>
+				<option value='수리남'>수리남</option>
+				<option value='스리랑카'>스리랑카</option>
+				<option value='스와질랜드'>스와질랜드</option>
+				<option value='스웨덴'>스웨덴</option>
+				<option value='스위스'>스위스</option>
+				<option value='스페인'>스페인</option>
+				<option value='슬로바키아'>슬로바키아</option>
+				<option value='슬로베니아'>슬로베니아</option>
+				<option value='시리아'>시리아</option>
+				<option value='시에라리온'>시에라리온</option>
+				<option value='싱가포르'>싱가포르</option>
+				<option value='아랍에미리트'>아랍에미리트</option>
+				<option value='아르메니아'>아르메니아</option>
+				<option value='아르헨티나'>아르헨티나</option>
+				<option value='아메리칸사모아'>아메리칸사모아</option>
+				<option value='아이슬란드'>아이슬란드</option>
+				<option value='아이티'>아이티</option>
+				<option value='아일랜드'>아일랜드</option>
+				<option value='아제르바이잔'>아제르바이잔</option>
+				<option value='아프가니스탄'>아프가니스탄</option>
+				<option value='안도라'>안도라</option>
+				<option value='알바니아'>알바니아</option>
+				<option value='알제리'>알제리</option>
+				<option value='앙골라'>앙골라</option>
+				<option value='에디오피아'>에디오피아</option>
+				<option value='에리트레아'>에리트레아</option>
+				<option value='에스토니아'>에스토니아</option>
+				<option value='에콰도르'>에콰도르</option>
+				<option value='엘살바도르'>엘살바도르</option>
+				<option value='영국'>영국</option>
+				<option value='영국령세인트헬레나'>영국령세인트헬레나</option>
+				<option value='영국령인도양지역'>영국령인도양지역</option>
+				<option value='영국령지브롤터'>영국령지브롤터</option>
+				<option value='영국령포클랜드제도'>영국령포클랜드제도</option>
+				<option value='예멘'>예멘</option>
+				<option value='오만'>오만</option>
+				<option value='오스트레일리아의외'>오스트레일리아의외</option>
+				<option value='오스트리아'>오스트리아</option>
+				<option value='온두라스'>온두라스</option>
+				<option value='요르단'>요르단</option>
+				<option value='우간다'>우간다</option>
+				<option value='우루과이'>우루과이</option>
+				<option value='우즈베키스탄'>우즈베키스탄</option>
+				<option value='우크라이나'>우크라이나</option>
+				<option value='이라크'>이라크</option>
+				<option value='이란'>이란</option>
+				<option value='이스라엘'>이스라엘</option>
+				<option value='이집트'>이집트</option>
+				<option value='이탈리아'>이탈리아</option>
+				<option value='인도'>인도</option>
+				<option value='인도네시아'>인도네시아</option>
+				<option value='일본'>일본</option>
+				<option value='자메이카'>자메이카</option>
+				<option value='잠비아'>잠비아</option>
+				<option value='적도기니'>적도기니</option>
+				<option value='조지아'>조지아</option>
+				<option value='중국'>중국</option>
+				<option value='중앙아프리카공화국'>중앙아프리카공화국</option>
+				<option value='지부티'>지부티</option>
+				<option value='짐바브웨'>짐바브웨</option>
+				<option value='차드'>차드</option>
+				<option value='체코'>체코</option>
+				<option value='칠레'>칠레</option>
+				<option value='카메룬'>카메룬</option>
+				<option value='카보베르데'>카보베르데</option>
+				<option value='카타르'>카타르</option>
+				<option value='캄보디아왕국'>캄보디아왕국</option>
+				<option value='캐나다'>캐나다</option>
+				<option value='케냐'>케냐</option>
+				<option value='코모로'>코모로</option>
+				<option value='코스타리카'>코스타리카</option>
+				<option value='코트디부아르'>코트디부아르</option>
+				<option value='콜롬비아'>콜롬비아</option>
+				<option value='콩고'>콩고</option>
+				<option value='콩고민주공화국'>콩고민주공화국</option>
+				<option value='쿠바'>쿠바</option>
+				<option value='쿠웨이트'>쿠웨이트</option>
+				<option value='쿡제도'>쿡제도</option>
+				<option value='크로아티아'>크로아티아</option>
+				<option value='키르기스스탄'>키르기스스탄</option>
+				<option value='키리바시'>키리바시</option>
+				<option value='키프로스'>키프로스</option>
+				<option value='타이완'>타이완</option>
+				<option value='타지키스탄'>타지키스탄</option>
+				<option value='탄자니아'>탄자니아</option>
+				<option value='태국'>태국</option>
+				<option value='터키'>터키</option>
+				<option value='토고'>토고</option>
+				<option value='통가'>통가</option>
+				<option value='투르크메니스탄'>투르크메니스탄</option>
+				<option value='튀니지'>튀니지</option>
+				<option value='트리니다드토바고'>트리니다드토바고</option>
+				<option value='파나마'>파나마</option>
+				<option value='파라과이'>파라과이</option>
+				<option value='파키스탄'>파키스탄</option>
+				<option value='파푸아뉴기니'>파푸아뉴기니</option>
+				<option value='팔라우'>팔라우</option>
+				<option value='팔레스타인'>팔레스타인</option>
+				<option value='페루'>페루</option>
+				<option value='포르투갈'>포르투갈</option>
+				<option value='폴란드'>폴란드</option>
+				<option value='푸에르토리코'>푸에르토리코</option>
+				<option value='프랑스'>프랑스</option>
+				<option value='프랑스령과들루프'>프랑스령과들루프</option>
+				<option value='프랑스령기아나'>프랑스령기아나</option>
+				<option value='프랑스령뉴칼레도니아'>프랑스령뉴칼레도니아</option>
+				<option value='프랑스령레위니옹'>프랑스령레위니옹</option>
+				<option value='프랑스령마르티니크'>프랑스령마르티니크</option>
+				<option value='프랑스령생피에르미클롱'>프랑스령생피에르미클롱</option>
+				<option value='프랑스령월리스푸투나제'>프랑스령월리스푸투나제</option>
+				<option value='프랑스령폴리네시아'>프랑스령폴리네시아</option>
+				<option value='피지'>피지</option>
+				<option value='핀란드'>핀란드</option>
+				<option value='필리핀'>필리핀</option>
+				<option value='헝가리'>헝가리</option>
+				<option value='호주'>호주</option>
+				<option value='홍콩'>홍콩</option>
 			</select>
 		</div>
 		<div class="join_chldrn_title_wrap" >
 			<div class="sub_title">자녀 정보</div>	
 		</div>
+		<div class="addChldrnData"></div>
 		<div class="join_wrap add_chldrn">
 			<div class="chldrn_list" id="chldrnTableBody">
-<!--				<div class="info_chldrn_list list_1">-->
-<!--					<div class="filebox preview-image">-->
-<!--						<div class="upload-display">-->
-<!--							<div class="upload-thumb-wrap">-->
-<!--								<img alt="프로필 이미지" class="upload-thumb noimg">-->
-<!--							</div>-->
-<!--						</div>-->
-<!--					</div>-->
-<!--					<input type="text" name="userNm" placeholder="이름">-->
-<!--					<input type="text" name="userNm" placeholder="연락처">-->
-<!--					<input type="text" name="userNm" placeholder="생년월일">-->
-<!--					<input type="text" name="userNm" placeholder="이메일">-->
-<!--					<div class="right"">-->
-<!--						<label class="btn btn_delete" >-->
-<!--							삭제-->
-<!--						</label>-->
-<!--					</div>-->
-<!--				</div>-->
 			</div>
 			<div class="plus-chldrn-btn">
-				<img class="plus_chldrn_btn show_pop_lv2" src="/pon/common/image/plus_icon.png" data-layer-id="addChldrn" alt="자녀 추가" >
+				<img class="plus_chldrn_btn" src="/pon/common/image/plus_icon.png" data-layer-id="addChldrn" alt="자녀 추가" onclick="setModalBtn('C')" >
 			</div> 
 		</div>
-		<div class="pop_footer join_pop">
-			<label class="btn btn-purple">
-				회원가입
-			</label>
-		</div>
+		</form>
+	</div>
+	<div class="pop_footer join_pop">
+		<label class="btn btn-purple" onclick="return userInsert();">
+			회원가입
+		</label>
 	</div>
 </div>
