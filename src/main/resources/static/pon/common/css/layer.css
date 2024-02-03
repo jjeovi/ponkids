@@ -558,6 +558,7 @@
     border-right-width:2px;
     padding-left: 9px;
     width: 70%;
+    min-width:150px;
 }
 
 .join_wrap input:first-of-type {

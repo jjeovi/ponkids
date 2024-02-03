@@ -51,7 +51,7 @@ public class UserController {
      * description    : user insert method
      */
     @Transactional
-    @PostMapping( BASIC_PATH + "/{mcd}/insert" )
+    @PostMapping( BASIC_PATH + "/live/{mcd}/insertAjax" )
     public String insert(
             @RequestParam( "file" ) MultipartFile files,
             @ModelAttribute UserSaveDto saveDto,

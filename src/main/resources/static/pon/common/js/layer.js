@@ -68,7 +68,6 @@ function fileChange( e ) {
         	if ( $("[name='fileAtchActYn']").val() != 'Y' ) {
 				$("[name='fileAtchActYn']").val("Y");
 			}
-			
 		}
 
         if ( window.FileReader && $( e )[0].files[0] != null ) {
@@ -356,8 +355,36 @@ function userInsert() {
 		alert(validCheck.msg);
 		return false;
 	} else {
+		// 유효성 끝난 후 값 setting 작업
+
+		// ==================== 유효성 모두 통과 후 dataset 정리 ==================================
+		// ==================== 유효성 모두 통과 후 dataset 정리 ==================================
+
+		// 거주지역 그 외만 선택 했을 시 return false;
+		var resideArea = $( "input:radio[name='resideArea']:checked" ).val();
+		var country = $("#join_countryList option:selected").val();
+		// 거주지역 set
+		if ( resideArea == 'other' ) {
+			$( "[name='resideArea']" ).val( country );
+		}
+
+
+		// 자녀정보 배열 처리 :
+		// 자녀정보들 각각 값들을 배열화시켜 submit
+		// div name : chldrnAddDiv / newForm 이 아닌 div 를 배열로 정리
+		$( "[name='chldrnAddDiv']" ).not( '.newForm' ).each( function ( index ) {
+			// 자녀이름, 자녀성별, 자녀생년월일, 자녀이메일, 자녀연락처
+			$( this ).find( "[name=chldrnNm]" ).attr( "name", "userChldrns[" + index + "].chldrnNm" );					// 자녀 이름
+			$( this ).find( "[name=chldrnGender]" ).attr( "name", "userChldrns[" + index + "].chldrnGender" );			// 자녀 성별
+			$( this ).find( "[name=chldrnBrdtDate]" ).attr( "name", "userChldrns[" + index + "].chldrnBrdtDate" );		// 자녀 생년월일
+			$( this ).find( "[name=chldrnEmail]" ).attr( "name", "userChldrns[" + index + "].chldrnEmail" );			// 자녀 이메일
+			$( this ).find( "[name=chldrnTelNo]" ).attr( "name", "userChldrns[" + index + "].chldrnTelNo" );			// 자녀 연락처
+			$( this ).find( "[name=file]" ).attr( "name", "userChldrns[" + index + "].file" );							// 파일
+
+		});
+
 		
-		var url = "" 
+		var url = "/user/list/mcd/insertAjax"
 		$.ajax( {
 		            url: url,
 		            type: "POST",	// 회원저장 POST로
@@ -444,77 +471,93 @@ function idDupResult( dupCheckFlag, checkResult ) {
 
 // 사용자 회원가입 유효성 체크
 function validUserForm(formName) {
-	
+	var result = {};
 	// 이메일 체크 ( 정규식 )
 	var userId = $( "#userInsertForm" ).find("[name='userId']").val();
 	
-	if ( !emailValidChk( userId ) ) { 
-		alert("이메일을 확인해주세요.");
-		return false;
+	if ( !emailValidChk( userId ) ) {
+		result.flag = false;
+		result.msg = "이메일을 확인해주세요.";
+		return result;
 	}
 	
-	if ( !dupCheckFlag ) { 
-		alert("중복된 이메일이 존재합니다.");
-		return false;
+	if ( !dupCheckFlag ) {
+		result.flag = false;
+		result.msg = "중복된 이메일이 존재합니다.";
+		return result;
 	}
-	
-	
+
+
+	// 비밀번호 유효성 체크
+	var password = $( "#userInsertForm" ).find("[name='password']").val();
+	var passwordRe = $( "#userInsertForm" ).find("[name='password2']").val();
+
+	if ( passwordRegexp.test( password ) === false ) {
+		result.flag = false;
+		result.msg = "비밀번호는 영문, 숫자, 문자 조합으로 구성된 8~20자리 여야 합니다.";
+		return result;
+	}
+
+	if ( ! passwordMatchCheckFlag ) {
+		result.flag = false;
+		result.msg = "비밀번호와 비밀번호재입력이 일치하지 않습니다.";
+		return result;
+	}
+
+	if ( password != passwordRe ) {
+		result.flag = false;
+		result.msg = "비밀번호와 비밀번호재입력이 일치하지 않습니다. 다시 확인하여 주세요.";
+		return result;
+	}
+
+
 	// 이름 체크 (2자 이상 )
-	var name =  $( "#userInsertForm" ).find("[name='name']").val();
+	var name =  $( "#userInsertForm" ).find("[name='userNm']").val();
 	
     if ( name == '' ) {
-        alert( "이름을 입력해주세요." );
-        return false;
+		result.flag = false;
+		result.msg = "이름을 입력해주세요.";
+		return result;
+
     } else if ( name.length < 2 || name.length > 10 ) {
-        alert( "이름은 2자 이상 10자 이하로 입력해주세요." );
-        return false;
+		result.flag = false;
+		result.msg = "이름은 2자 이상 10자 이하로 입력해주세요.";
+		return result;
+
     }
 	
 	// 성별 체크 
 	var gender =  $( "#userInsertForm" ).find("[name='gender']:checked").val();
 	
 	if ( gender == null || gender == '' ) {
-		alert("성별을 선택해 주세요.");
-		return false;
+		result.flag = false;
+		result.msg = "성별을 선택해 주세요.";
+		return result;
 	}
-	
-	
-	var gender =  $( "#userInsertForm" ).find("[name='gender']:checked").val();
-	
-	// 비밀번호 유효성 체크 
-	var password = $( "#userInsertForm" ).find("[name='password']").val();
-	var passwordRe = $( "#userInsertForm" ).find("[name='password2']").val();
-	
-	if ( passwordRegexp.test( password ) === false ) {
-		alert("비밀번호는 영문, 숫자, 문자 조합으로 구성된 8~20자리 여야 합니다.");
-		return false;
+
+	// 생년월일 체크
+	var brdrDate = $( "#userInsertForm" ).find("[name='brdrDate']").val();
+
+	if ( brdrDate != '' &&  !brdrDateRegexp.test( brdrDate ) ) {	// telNoRegexp = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
+		result.flag = false;
+		result.msg = "생년월일 형식은 YYYYMMDD 형식의 숫자 8자리로 입력해주세요. ( ex ) 930119 ) ";
+		return result;
 	}
-	
-	if ( ! passwordMatchCheckFlag ) {
-		alert("비밀번호와 비밀번호재입력이 일치하지 않습니다.");
-		return false;
-	}
-	
-	if ( password != passwordRe ) {
-		alert("비밀번호와 비밀번호재입력이 일치하지 않습니다. 다시 확인하여 주세요.");
-		return false;
-	}
-	
-	
+
 	// 연락처 체크
 	var telNo = $( "#userInsertForm" ).find("[name='telNo']").val();
 	
 	
 	if ( telNo != '' &&  !telNoRegexp.test( telNo ) ) {	// telNoRegexp = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
-		alert("연락처 형식에 맞게 입력해주세요.");
-		return false;
+		result.flag = false;
+		result.msg = "연락처 형식에 맞게 입력해주세요.";
+		return result;
 	}
-	
-	
-	
-	
-	alert("통과");
-	return false;
+
+	result.flag = true;
+	// result.msg = "통과"
+	return result;
+
 }
 
 
