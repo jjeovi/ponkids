@@ -117,20 +117,20 @@ function handler ( event ){
 			drag.dragging = drag.proxy = data.elem = false; // deactivate element
 			break;
 		}
-	};
+	}
 
 // set event type to custom value, and handle it
 function hijack ( event, type, elem ){
 	event.type = type; // force the event type
 	var result = ($.event.dispatch || $.event.handle).call( elem, event );
 	return result===false ? false : result || event.result;
-	};
+	}
 
 // return the value squared
-function squared ( value ){ return Math.pow( value, 2 ); };
+function squared ( value ){ return Math.pow( value, 2 ); }
 
 // suppress default dragstart IE events...
-function dontStart(){ return ( drag.dragging === false ); };
+function dontStart(){ return ( drag.dragging === false ); }
 
 // toggles text selection attributes
 function selectable ( elem, bool ){
@@ -139,7 +139,7 @@ function selectable ( elem, bool ){
 	elem.unselectable = bool ? "off" : "on"; // IE
 	if ( elem.style ) elem.style.MozUserSelect = bool ? "" : "none"; // FF
 	$.event[ bool ? "remove" : "add" ]( elem, "selectstart mousedown", dontStart ); // IE/Opera
-	};
+	}
 
 /*******************************************************************************************/
 })( jQuery ); // confine scope

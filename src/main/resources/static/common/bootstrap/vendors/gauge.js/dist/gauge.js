@@ -472,7 +472,7 @@
       var bval, gval, i, rval, _i, _ref1, _results;
       this.percentColors = null;
       if (this.options.percentColors !== void 0) {
-        this.percentColors = new Array();
+        this.percentColors = [];
         _results = [];
         for (i = _i = 0, _ref1 = this.options.percentColors.length - 1; 0 <= _ref1 ? _i <= _ref1 : _i >= _ref1; i = 0 <= _ref1 ? ++_i : --_i) {
           rval = parseInt((cutHex(this.options.percentColors[i][1])).substring(0, 2), 16);

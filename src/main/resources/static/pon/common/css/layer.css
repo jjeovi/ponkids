@@ -1319,3 +1319,9 @@ input[type="radio"][disabled]:checked+label{
 	margin-top: 27px;
     margin-bottom: 20px;
 }
+
+/* 스크롤 바 전체에 대한 스타일 지정 */
+.pop_content::-webkit-scrollbar {
+    display:none;
+}
+

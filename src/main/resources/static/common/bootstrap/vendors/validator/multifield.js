@@ -47,7 +47,7 @@
 		}
 		
 		combine.apply(this);
-	};
+	}
 	// After each 'change' event of any of the fields, combine all the values to the hidden input.	
 	function combine(){
 		var hidden =  $(this).siblings('input[type=hidden]').val('')[0];		

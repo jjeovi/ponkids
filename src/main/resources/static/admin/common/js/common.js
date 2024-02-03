@@ -103,7 +103,7 @@ function emailValidChk( email ) {
 // 특정 문자열 전체 replace
 function replaceAll( str, searchStr, replaceStr ) {
     return str.split( searchStr ).join( replaceStr );
-};
+}
 
 // 중복확인 결과 뿌리기
 function idDupResult( dupCheckFlag, checkResult ) {
@@ -782,7 +782,7 @@ function requiredCheckForm( e ) {
                 result = false;
                 return false;
             }
-            ;
+
         } else if ( ele.type == "radio" || ele.type == "checkbox" ) {
 
             // ele : radio 일 때
@@ -792,7 +792,7 @@ function requiredCheckForm( e ) {
                 result = false;
                 return false;
             }
-            ;
+
         }
     } );
     return result;
@@ -876,7 +876,7 @@ $( "#file_add" ).on( 'click', function () {
 } );
 
 
-var $fileListArr = new Array();
+var $fileListArr = [];
 var $totSize = 0;
 var $keyNum = 0;
 var $limit = 0;
@@ -888,7 +888,7 @@ $( "#multi-add" ).on( 'change', function () {
 
     var files = $( this )[0].files;
 
-    var fileArr = new Array();
+    var fileArr = [];
 
     fileArr = $fileListArr;
     $limit = $totSize;
@@ -911,7 +911,7 @@ $( "#multi-add" ).on( 'change', function () {
     }
 
 
-    $fileListArr = new Array();
+    $fileListArr = [];
     $fileListArr = fileArr;
     //$('#totSize').text("");
     //$('#totSize').text(Math.floor($totSize / 1000000));
@@ -936,7 +936,7 @@ $( document ).on( "click", '.deleteFile', function () {
     var DeleteFileSize = $( this ).parent().next().next().children( 'p' ).text();
 
     //삭제하는 파일의 크기값(바이트)
-    var fileSizeByteArr = new Array();
+    var fileSizeByteArr = [];
     fileSizeByteArr = DeleteFileSize.split( ' ' );
     var fileSize = Number( fileSizeByteArr[0] ) * 1000;
 
@@ -947,7 +947,7 @@ $( document ).on( "click", '.deleteFile', function () {
 
     fileArr.splice( DeleteArrNum, 1 );
     $keyNum = 0
-    $fileListArr = new Array();
+    $fileListArr = [];
     $( '#file_table' ).children().remove();
     $totSize = 0;
     for ( var i = 0; i < fileArr.length; i++ ) {
@@ -990,7 +990,7 @@ function fnfileDelete( atchFileSn, fileSeq ) {
                     html += '<div>';
                     html += '<span>' + result[i].orignlFileNm + '</span>';
                     html += '<span  class="badge badge-dark"  style="cursor:pointer"> <a href="/fileDownloand?atchFileSn=\'' + result[i].atchFileDetailPk.atchFileSn + '\'&fileSeq=\'' + result[i].atchFileDetailPk.fileSeq + '\');">다운로드</a></span>';
-                    html += '<span  class="badge badge-dark"  style="cursor:pointer"> <a onclick="javascript:fnfileDelete(\'' + result[i].atchFileDetailPk.atchFileSn + '\',\'' + result[i].atchFileDetailPk.fileSeq + '\');" >삭제</a></span>';
+                    html += '<span  class="badge badge-dark"  style="cursor:pointer"> <a onclick="fnfileDelete(\'' + result[i].atchFileDetailPk.atchFileSn + '\',\'' + result[i].atchFileDetailPk.fileSeq + '\');" >삭제</a></span>';
                     html += "</div>";
                 }
 

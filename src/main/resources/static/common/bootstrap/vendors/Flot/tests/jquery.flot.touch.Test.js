@@ -500,7 +500,7 @@ describe("flot touch plugin", function () {
             var eventHolder = plot.getEventHolder(),
                 spy = jasmine.createSpy('tap handler'),
                 initalCoords = [{x: 10, y: 20}],
-                moveCoords = [{x: 30, y: 60}];;
+                moveCoords = [{x: 30, y: 60}];
 
             eventHolder.addEventListener('tap', spy);
 

@@ -58,11 +58,11 @@
 						<ul class="tabnav_2dep">
 							<li>
 								<img src="/pon/common/image/check_ico.svg" alt="" th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) && ( searchDTO.category.lv2Sn == 0 ) }">
-								<a	href="javascript:;" onclick="searchClassList( this )" th:data-parnts-cl-sn="0" data-cl-sn="0"
-									th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) && ( searchDTO.category.lv2Sn == 0 ) } ? 'active'" th:text="전체" />
+								<a href="javascript:" onclick="searchClassList( this )" th:data-parnts-cl-sn="0" data-cl-sn="0"
+								   th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) && ( searchDTO.category.lv2Sn == 0 ) } ? 'active'" th:text="전체" />
 							</li>
 							<li th:each=" item : ${ cateLv2List } ">
-								<a href="javascript:;" onclick="searchClassList( this )" th:data-parnts-cl-sn="${item.parntsClSn}" th:data-cl-sn="${item.clSn}"  th:text="${item.clNm}" /> 
+								<a href="javascript:" onclick="searchClassList( this )" th:data-parnts-cl-sn="${item.parntsClSn}" th:data-cl-sn="${item.clSn}" th:text="${item.clNm}" />
 							</li>
 						</ul>
 					</div>
@@ -74,14 +74,14 @@
 							<li>
 								<img 	src="/pon/common/image/check_ico.svg" alt=""
 										th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) && ( searchDTO.category.lv2Sn == 0 ) }">
-								<a 	href="javascript:;" onclick="searchClassList( this )" th:data-parnts-cl-sn="${data.clSn}" data-cl-sn="0" th:text="전체"
-									th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) && ( searchDTO.category.lv2Sn == 0 ) } ? 'active'" />
+								<a href="javascript:" onclick="searchClassList( this )" th:data-parnts-cl-sn="${data.clSn}" data-cl-sn="0" th:text="전체"
+								   th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) && ( searchDTO.category.lv2Sn == 0 ) } ? 'active'" />
 							</li>
 							<li th:each=" item : ${ cateLv2List } " th:if=" ${ data.clSn == item.parntsClSn }" >
 								<img 	src="/pon/common/image/check_ico.svg" alt=""
 										th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) && ( searchDTO.category.lv2Sn == item.clSn ) }">
-								<a 	href="javascript:;" onclick="searchClassList( this )" th:data-parnts-cl-sn="${data.clSn}" th:data-cl-sn="${item.clSn}"  th:text="${item.clNm}"
-									th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) && ( searchDTO.category.lv2Sn == item.clSn ) } ? 'active'" /> 
+								<a href="javascript:" onclick="searchClassList( this )" th:data-parnts-cl-sn="${data.clSn}" th:data-cl-sn="${item.clSn}" th:text="${item.clNm}"
+								   th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) && ( searchDTO.category.lv2Sn == item.clSn ) } ? 'active'" />
 							</li>
 						</ul>
 					</div>

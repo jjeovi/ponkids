@@ -3996,7 +3996,7 @@
 
     // Side effect imports
 
-    ;
+
 
     //! moment.js
     //! version : 2.13.0

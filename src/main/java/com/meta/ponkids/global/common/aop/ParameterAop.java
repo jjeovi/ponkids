@@ -72,7 +72,7 @@ public class ParameterAop {
         String fullUri = getfullUriExp( request );
         
         // 관리자URL인지 체크하는 flag . Y 이면 관리자URL로 판단.
-        boolean adminUrlYn = ( requestUri.startsWith("/admin/") ) ? true : false;
+        boolean adminUrlYn = requestUri.startsWith( "/admin/" );
         
         
         if ( !(requestUri.endsWith( "Ajax" )) && requestUri.contains( "/mcd") ) {
@@ -142,8 +142,8 @@ public class ParameterAop {
                             // mcd 값 model 에 추가
                             model.addAttribute( MCD, mcd );
                             
-                            MenuHierarchyDto presentMenuDto = ( adminUrlYn ) ? ( (AdminMenuHierarchyDto) adminMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( fullUri.replaceAll( "\\\\", "" ) , "N" ) ) 
-                            												 : ( (UserMenuHierarchyDto) userMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( fullUri.replaceAll( "\\\\", "" ) , "N" ) );
+                            MenuHierarchyDto presentMenuDto = ( adminUrlYn ) ? adminMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( fullUri.replaceAll( "\\\\", "" ) , "N" )
+                            												 : userMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( fullUri.replaceAll( "\\\\", "" ) , "N" );
                             
                             // 현재 메뉴 정보 (currentMenu) model 에 추가
                             model.addAttribute( "currentMenu", presentMenuDto );
@@ -169,8 +169,8 @@ public class ParameterAop {
                     
                     // 메뉴 url 이 맞지 않더라도 currnetMenu 를 인식할 수 있게 추가
                     String menuCd = mcd.replaceAll( "mcd", "" );
-                    MenuHierarchyDto presentMenuDto = ( adminUrlYn ) ? ( (AdminMenuHierarchyDto) adminMenuHierarchyService.findTop1ByMenuCdAndDelYnOrderByMenuSn( menuCd , "N" ) ) 
-																	 : ( (UserMenuHierarchyDto) userMenuHierarchyService.findTop1ByMenuCdAndDelYnAndLevelNotOrderByMenuSn( menuCd , "N", (long) 0 ) );
+                    MenuHierarchyDto presentMenuDto = ( adminUrlYn ) ? adminMenuHierarchyService.findTop1ByMenuCdAndDelYnOrderByMenuSn( menuCd , "N" )
+																	 : userMenuHierarchyService.findTop1ByMenuCdAndDelYnAndLevelNotOrderByMenuSn( menuCd , "N", (long) 0 );
                     
                     if ( presentMenuDto != null ) {
                         // 현재 메뉴 정보 (currentMenu) model 에 추가
@@ -183,8 +183,8 @@ public class ParameterAop {
                     
                     model.addAttribute( MCD, mcd );
                     
-                    MenuHierarchyDto presentMenuDto = ( adminUrlYn ) ? ( (AdminMenuHierarchyDto) adminMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( fullUri , "N" ) ) 
-																	 : ( (UserMenuHierarchyDto) userMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( fullUri , "N" ) );
+                    MenuHierarchyDto presentMenuDto = ( adminUrlYn ) ? adminMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( fullUri , "N" )
+																	 : userMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( fullUri , "N" );
                     
                     // 현재 메뉴 정보 (currentMenu) model 에 추가
                     model.addAttribute( "currentMenu", presentMenuDto );
@@ -206,8 +206,8 @@ public class ParameterAop {
                 String menuCd = mcd.replaceAll( "mcd", "" );
                 
                 
-                MenuHierarchyDto presentMenuDto = ( adminUrlYn ) ? ( (AdminMenuHierarchyDto) adminMenuHierarchyService.findTop1ByMenuCdAndDelYnOrderByMenuSn( menuCd , "N" ) ) 
-						 										 : ( (UserMenuHierarchyDto) userMenuHierarchyService.findTop1ByMenuCdAndDelYnAndLevelNotOrderByMenuSn( menuCd , "N", (long) 0 ) );
+                MenuHierarchyDto presentMenuDto = ( adminUrlYn ) ? adminMenuHierarchyService.findTop1ByMenuCdAndDelYnOrderByMenuSn( menuCd , "N" )
+						 										 : userMenuHierarchyService.findTop1ByMenuCdAndDelYnAndLevelNotOrderByMenuSn( menuCd , "N", (long) 0 );
                 
                 if ( presentMenuDto != null ) {
                     // 현재 메뉴 정보 (currentMenu) model 에 추가
@@ -233,8 +233,8 @@ public class ParameterAop {
                         model.addAttribute( MCD, mcd );
 
                         
-                        MenuHierarchyDto presentMenuDto = ( adminUrlYn ) ? ( (AdminMenuHierarchyDto) adminMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( requestUri , "N" ) ) 
-																		 : ( (UserMenuHierarchyDto) userMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( requestUri , "N" ) );
+                        MenuHierarchyDto presentMenuDto = ( adminUrlYn ) ? adminMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( requestUri , "N" )
+																		 : userMenuHierarchyService.findTop1ByMenuUrlAndDelYnOrderByMenuSn( requestUri , "N" );
                         // 현재 메뉴 정보 (currentMenu) model 에 추가
                         model.addAttribute( "currentMenu", presentMenuDto );
                         

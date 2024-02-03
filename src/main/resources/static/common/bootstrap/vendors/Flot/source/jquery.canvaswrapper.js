@@ -521,7 +521,7 @@ don't work unless the canvas is attached to the DOM.
                     layer.removeChild(layer.firstChild);
                 }
             }
-        };
+        }
 
         this._textCache = {};
     };

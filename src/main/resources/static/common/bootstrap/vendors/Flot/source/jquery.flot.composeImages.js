@@ -163,7 +163,7 @@ temporary images load their data.
                 binaryString = binaryString + binarySubString;
             }
             return binaryString;
-        };
+        }
 
         var rules = getCSSRules(document),
             source = embedCSSRulesInSVG(rules, svg),

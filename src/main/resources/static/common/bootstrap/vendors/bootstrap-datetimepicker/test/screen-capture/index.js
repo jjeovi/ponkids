@@ -9,7 +9,7 @@ var fs = require('fs');
             page.viewportSize = {
                 width: 1000,
                 height: 800
-            };;
+            };
             page.open(path, function(status) {
                 window.setTimeout(function () {
                 console.log(status);

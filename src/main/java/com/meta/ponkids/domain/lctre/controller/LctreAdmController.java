@@ -65,8 +65,8 @@ public class LctreAdmController {
             boolean validResult = ( boolean ) classValidCheck.get( "validResult" ); // 체크 결과
             
             if ( !validResult ) {
-                model.addAttribute( "resultMsg", ( String ) classValidCheck.get( "resultMsg" ) );
-                model.addAttribute( "moveUrl", ( String ) classValidCheck.get( "moveUrl" ) );
+                model.addAttribute( "resultMsg", classValidCheck.get( "resultMsg" ) );
+                model.addAttribute( "moveUrl", classValidCheck.get( "moveUrl" ) );
                 
                 return "common/alert";
             } else {
@@ -147,8 +147,8 @@ public class LctreAdmController {
         Map<String, Object> classValidCheck = classValidCheck( classSn, mcd, model );
         boolean validResult = ( boolean ) classValidCheck.get( "validResult" );
         if ( !validResult ) {
-            model.addAttribute( "resultMsg", ( String ) classValidCheck.get( "resultMsg" ) );
-            model.addAttribute( "moveUrl", ( String ) classValidCheck.get( "moveUrl" ) );
+            model.addAttribute( "resultMsg", classValidCheck.get( "resultMsg" ) );
+            model.addAttribute( "moveUrl", classValidCheck.get( "moveUrl" ) );
             
             return "common/alert";
         }
@@ -187,8 +187,8 @@ public class LctreAdmController {
         Map<String, Object> classValidCheck = classValidCheck( classSn, mcd, model );
         boolean validResult = ( boolean ) classValidCheck.get( "validResult" );
         if ( !validResult ) {
-            model.addAttribute( "resultMsg", ( String ) classValidCheck.get( "resultMsg" ) );
-            model.addAttribute( "moveUrl", ( String ) classValidCheck.get( "moveUrl" ) );
+            model.addAttribute( "resultMsg", classValidCheck.get( "resultMsg" ) );
+            model.addAttribute( "moveUrl", classValidCheck.get( "moveUrl" ) );
             
             return "common/alert";
         }
@@ -236,8 +236,8 @@ public class LctreAdmController {
         Map<String, Object> classValidCheck = classValidCheck( classSn, mcd, model );
         boolean validResult = ( boolean ) classValidCheck.get( "validResult" );
         if ( !validResult ) {
-            model.addAttribute( "resultMsg", ( String ) classValidCheck.get( "resultMsg" ) );
-            model.addAttribute( "moveUrl", ( String ) classValidCheck.get( "moveUrl" ) );
+            model.addAttribute( "resultMsg", classValidCheck.get( "resultMsg" ) );
+            model.addAttribute( "moveUrl", classValidCheck.get( "moveUrl" ) );
             
             return "common/alert";
         }
@@ -291,8 +291,8 @@ public class LctreAdmController {
         Map<String, Object> classValidCheck = classValidCheck( classSn, mcd, model );
         boolean validResult = ( boolean ) classValidCheck.get( "validResult" );
         if ( !validResult ) {
-            model.addAttribute( "resultMsg", ( String ) classValidCheck.get( "resultMsg" ) );
-            model.addAttribute( "moveUrl", ( String ) classValidCheck.get( "moveUrl" ) );
+            model.addAttribute( "resultMsg", classValidCheck.get( "resultMsg" ) );
+            model.addAttribute( "moveUrl", classValidCheck.get( "moveUrl" ) );
             
             return "common/alert";
         }
@@ -331,8 +331,8 @@ public class LctreAdmController {
             Map<String, Object> classValidCheck = classValidCheck( classSn, mcd, model );
             boolean validResult = ( boolean ) classValidCheck.get( "validResult" );
             if ( !validResult ) {
-                model.addAttribute( "resultMsg", ( String ) classValidCheck.get( "resultMsg" ) );
-                model.addAttribute( "moveUrl", ( String ) classValidCheck.get( "moveUrl" ) );
+                model.addAttribute( "resultMsg", classValidCheck.get( "resultMsg" ) );
+                model.addAttribute( "moveUrl", classValidCheck.get( "moveUrl" ) );
                 
                 return "common/alert";
             }
@@ -449,9 +449,8 @@ public class LctreAdmController {
             }
             
             // classSn으로 class 정보 조회
-            if ( classSn != null && schCategoryDto.getLv3Sn().equals(classSn) ) {
+            if ( schCategoryDto.getLv3Sn().equals( classSn ) ) {
                 //  1-1. classSn과 schCategoryDto.getLv3Sn() 값이 같은 경우 : 바로 return
-                return;
             } else if ( classSn != null && ! (schCategoryDto.getLv3Sn().equals(classSn)) ) {
                 //  1-2. classSn과 schCategoryDto.getLv3Sn() 값이 다른 경우 : BASIC_PATH + "/{mcd}/{classSn}/list" 경로로 redirect 한다.
                 
@@ -483,7 +482,6 @@ public class LctreAdmController {
                 }
                 
             } else {
-                return;
             }
             
         } else if ( schCategoryDto != null ) {
@@ -507,7 +505,6 @@ public class LctreAdmController {
                 }
                 
             } else {
-                return;
             }
         }
     }

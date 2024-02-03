@@ -139,7 +139,7 @@
 				return { pass: result };
 			}
 		}
-	};
+	}
 
 	function toEqualOneOf() {
 		return {

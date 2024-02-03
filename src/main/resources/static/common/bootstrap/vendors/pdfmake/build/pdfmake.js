@@ -18799,7 +18799,7 @@
 	      for (key in _ref) {
 	        val = _ref[key];
 	        if (typeof val === 'string') {
-	          val = new String(val);
+	          val = String(val);
 	        }
 	        this._info.data[key] = val;
 	      }
@@ -27795,7 +27795,7 @@
 	          }
 	          else if ((op & 64) === 0) {          /* 2nd level distance code */
 	            here = dcode[(here & 0xffff)/*here.val*/ + (hold & ((1 << op) - 1))];
-	            continue dodist;
+	            continue;
 	          }
 	          else {
 	            strm.msg = 'invalid distance code';
@@ -27808,7 +27808,7 @@
 	      }
 	      else if ((op & 64) === 0) {              /* 2nd level length code */
 	        here = lcode[(here & 0xffff)/*here.val*/ + (hold & ((1 << op) - 1))];
-	        continue dolen;
+	        continue;
 	      }
 	      else if (op & 32) {                     /* end-of-block */
 	        //Tracevv((stderr, "inflate:         end of block\n"));
@@ -27838,7 +27838,7 @@
 	  strm.avail_out = (_out < end ? 257 + (end - _out) : 257 - (_out - end));
 	  state.hold = hold;
 	  state.bits = bits;
-	  return;
+
 	};
 
 
@@ -67292,7 +67292,7 @@
 	          throw new Error("Incomplete or corrupt PNG file");
 	        }
 	      }
-	      return;
+
 	    }
 
 	    PNG.prototype.read = function(bytes) {
@@ -67489,7 +67489,7 @@
 	      }
 	      delete options.color;
 	      if (typeof options.Dest === 'string') {
-	        options.Dest = new String(options.Dest);
+	        options.Dest = String(options.Dest);
 	      }
 	      for (key in options) {
 	        val = options[key];
@@ -67505,7 +67505,7 @@
 	        options = {};
 	      }
 	      options.Subtype = 'Text';
-	      options.Contents = new String(contents);
+	      options.Contents = String(contents);
 	      options.Name = 'Comment';
 	      if (options.color == null) {
 	        options.color = [243, 223, 92];
@@ -67519,7 +67519,7 @@
 	      options.Subtype = 'Link';
 	      options.A = this.ref({
 	        S: 'URI',
-	        URI: new String(url)
+	        URI: String(url)
 	      });
 	      options.A.end();
 	      return this.annotate(x, y, w, h, options);
@@ -67531,7 +67531,7 @@
 	      }
 	      _ref = this._convertRect(x, y, w, h), x1 = _ref[0], y1 = _ref[1], x2 = _ref[2], y2 = _ref[3];
 	      options.QuadPoints = [x1, y2, x2, y2, x1, y1, x2, y1];
-	      options.Contents = new String;
+	      options.Contents = String;
 	      return this.annotate(x, y, w, h, options);
 	    },
 	    highlight: function(x, y, w, h, options) {
@@ -67563,7 +67563,7 @@
 	        options = {};
 	      }
 	      options.Subtype = 'Line';
-	      options.Contents = new String;
+	      options.Contents = String;
 	      options.L = [x1, this.page.height - y1, x2, this.page.height - y2];
 	      return this.annotate(x1, y1, x2, y2, options);
 	    },
@@ -67572,7 +67572,7 @@
 	        options = {};
 	      }
 	      options.Subtype = 'Square';
-	      options.Contents = new String;
+	      options.Contents = String;
 	      return this.annotate(x, y, w, h, options);
 	    },
 	    ellipseAnnotation: function(x, y, w, h, options) {
@@ -67580,7 +67580,7 @@
 	        options = {};
 	      }
 	      options.Subtype = 'Circle';
-	      options.Contents = new String;
+	      options.Contents = String;
 	      return this.annotate(x, y, w, h, options);
 	    },
 	    textAnnotation: function(x, y, w, h, text, options) {
@@ -67588,8 +67588,8 @@
 	        options = {};
 	      }
 	      options.Subtype = 'FreeText';
-	      options.Contents = new String(text);
-	      options.DA = new String;
+	      options.Contents = String(text);
+	      options.DA = String;
 	      return this.annotate(x, y, w, h, options);
 	    },
 	    _convertRect: function(x1, y1, w, h) {
