@@ -8,6 +8,7 @@ import com.meta.ponkids.domain.user.repository.UserRepository;
 import com.meta.ponkids.domain.user.repository.UserRoleRepository;
 import com.meta.ponkids.domain.system.file.service.AtchFileService;
 import com.meta.ponkids.domain.user.dto.*;
+import com.meta.ponkids.global.util.date.DateUtils;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,20 +46,30 @@ public class UserService {
     private final AtchFileService atchFileService;
     
     @Transactional
-    public UserSaveDto save( UserSaveDto userSaveDto, UserRoleSaveDto userRoleSaveDto, MultiUserChldrnSaveDto userChldrns, HttpServletRequest request ) throws IOException {
+    public UserSaveDto save( UserSaveDto userSaveDto, UserRoleSaveDto userRoleSaveDto, MultiUserChldrnSaveDto userChldrns, HttpServletRequest request ) throws IOException, ParseException {
         
         userSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );                        // 회원 IP 저장
         userSaveDto.setUpdusrIp( IpUtils.getClientIP( request ) );                            // Ip set : update
         
         userSaveDto.setPassword( passwordEncoder.encode( userSaveDto.getPassword() ) );    // 비밀번호 암호화
         
+        // 유저 날짜 형식 체크하여 yyyy-MM-dd 아닐 경우 체크 하여 포맷 변환
+        if ( ! DateUtils.checkDateFormat(userSaveDto.getBrdtDate(), "yyyy-MM-dd") ) {
+        	
+        	if ( DateUtils.checkDateFormat(userSaveDto.getBrdtDate(), "yyyyMMdd") ) {
+        		String changeFormatBrdtDate = DateUtils.setChangeDateFormat( userSaveDto.getBrdtDate(), "yyyy-MM-dd" );
+        		userSaveDto.setBrdtDate(changeFormatBrdtDate);
+        	}
+        	
+        }
+        
         User newUser = userRepository.save( userSaveDto.toEntity() );                        // ** 회원 save -> save된 정보 newUser 로 저장
         
         // 관리자 여부 Y 일 때 권한 등록
         if ( userSaveDto.getMngrYn().equals( "Y" ) ) {
-            userRoleSaveDto.setUserSn( newUser.getUserSn() );                                    // 등록한 ID의 sn값 바로 호출 (newUser에서 값 호출)
+            userRoleSaveDto.setUserSn( newUser.getUserSn() );                               // 등록한 ID의 sn값 바로 호출 (newUser에서 값 호출)
             userRoleSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );                // 관리자 IP 저장
-            userRoleSaveDto.setRegisterId( SessionUtils.getClientId() );                    // TODO : 현재 세션의 userId값으로 수정
+            userRoleSaveDto.setRegisterId( SessionUtils.getClientId() );                    // 등록자 ID setting
             
             userRoleRepository.save( userRoleSaveDto.toEntity() );                            // * 권한 save
         }
@@ -73,10 +85,23 @@ public class UserService {
                 
                 userChldrn.setRegisterIp( IpUtils.getClientIP( request ) );                                        // 관리자 IP 저장
                 userChldrn.setRegisterId( SessionUtils.getClientId() );                                                // TODO : 현재 세션의 userId값으로 수정
+                if ( userChldrn.getRegisterId() == null ) {
+                	userChldrn.setRegisterId( userSaveDto.getUserId() );
+                }
                 
                 // 자녀 프로필 존재시 추가
                 if ( !userChldrn.getFile().isEmpty() ) {
                     userChldrn.setAtchFileSn( atchFileService.save( userChldrn.getFile() ) );
+                }
+                
+                // 날짜 유효성 체크하여 포맷 변경
+                if ( ! DateUtils.checkDateFormat(userChldrn.getChldrnBrdtDate(), "yyyy-MM-dd") ) {
+                	
+                	if ( DateUtils.checkDateFormat(userChldrn.getChldrnBrdtDate(), "yyyyMMdd") ) {
+                		String changeFormatBrdtDate = DateUtils.setChangeDateFormat( userChldrn.getChldrnBrdtDate(), "yyyy-MM-dd" );
+                		userChldrn.setChldrnBrdtDate(changeFormatBrdtDate);
+                	}
+                	
                 }
                 
                 userChldrnList.add( userChldrn.toEntity() );                                                    // userlist add

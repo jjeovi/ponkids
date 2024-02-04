@@ -22,14 +22,15 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         
         HttpSession session = request.getSession();
         // 로그인 후 이동 URL ( 지정되어 있을 때만 )
-        String loginAfterMoveUrl = ( String ) session.getAttribute( "loginAfterMoveUrl" );
+        String returnUrlAfterLogin = ( String ) session.getAttribute( "returnUrlAfterLogin" );
         
-        if ( loginAfterMoveUrl != null ) {
-            // (1) loginAfterMoveUrl 세션값이 있으면 loginAfterMoveUrl 로 redirect
-            session.removeAttribute( "loginAfterMoveUrl" );
-            response.sendRedirect( loginAfterMoveUrl );
+        if ( returnUrlAfterLogin != null ) {
+            // (1) returnUrlAfterLogin 세션값이 있으면 returnUrlAfterLogin 로 redirect
+            session.removeAttribute( "returnUrlAfterLogin" );
+            session.removeAttribute( "returnUrlAfterLoginFail" );
+            response.sendRedirect( returnUrlAfterLogin );
         } else {
-            // (2) loginAfterMoveUrl 세션값이 없으면 / 로 redirect
+            // (2) returnUrlAfterLogin 세션값이 없으면 / 로 redirect
             response.sendRedirect( "/admin/home" );
         }
         

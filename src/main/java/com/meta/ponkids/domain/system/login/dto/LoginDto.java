@@ -67,6 +67,9 @@ public class LoginDto implements UserDetails {
     
     private String updusrIp;            // 수정자 IP
     
+    private String returnUrlAfterLogin;	// 로그인 후 이동할 url 
+    private String returnUrlAfterLoginFail;	// 로그인 후 이동할 url 
+    
     @ColumnDefault( "N" )                             // del_yn 컬럼에 공통으로 추가
     @Column( insertable = false, updatable = false )  // del_yn 컬럼에 공통으로 추가 (등록 시, 수정 시 해당컬럼 신경쓰지 않음.)
     private String delYn;                           // 삭제 여부
@@ -101,8 +104,12 @@ public class LoginDto implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<GrantedAuthority> auth = new ArrayList<GrantedAuthority>();
-        auth.add( new SimpleGrantedAuthority( roleNm ) );
-        return auth;
+        if ( roleNm == null ) {
+        	return null;
+        } else {
+	        auth.add( new SimpleGrantedAuthority( roleNm ) );
+	        return auth;
+        }
     }
     
     @Override

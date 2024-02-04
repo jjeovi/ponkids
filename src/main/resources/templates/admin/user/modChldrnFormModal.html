@@ -19,7 +19,7 @@
 				</div>
 				<div class="upload-btn mt_10p">
 					<label class="btn btn-purple">업로드
-						<input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" th:value="${data.atchFileSn}" onchange="fileChange(this)">
+						<input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .jpeg, .png" style="display: none;" th:value="${data.atchFileSn}" onchange="fileChange(this)">
 					</label>
 					<button type="button" class="btn btn-purple" id="removeImageBtn" onclick="removeImage(this);" th:if ="${data.atchFileSn != null}">이미지제거</button>
 				</div>
@@ -73,7 +73,7 @@
 	<div class="field item form-group">
 		<label class="col-form-label col-md-2 col-sm-3 label-align">이메일</label>
 		<div class="col-md-6 col-sm-6">
-			<input name="chldrnEmail" class="form-control" th:value="${data.chldrnTelNo}"/>
+			<input name="chldrnEmail" class="form-control" th:value="${data.chldrnEmail}"/>
 		</div>
 	</div>
 

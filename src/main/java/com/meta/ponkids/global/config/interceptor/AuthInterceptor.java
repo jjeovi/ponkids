@@ -40,7 +40,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 // loginDto 가 없을 시
                 
                 // 로그인 페이지로 이동
-                goToLogin( fullUrl, request, response );
+                goToLogin( fullUrl, request, response, "E6" );	// 
                 return false;
                 
             } else {
@@ -49,14 +49,15 @@ public class AuthInterceptor implements HandlerInterceptor {
                 // loginDto로 변경
                 LoginDto loginDto = ( LoginDto ) principal;
                 
-                if ( loginDto.getMngrYn().equals( "N" ) || loginDto.getMngrConfmYn().equals( "N" ) ) {
-                    // 관리자가 아닐 때 or 관리자 승인이 아직 이루어지지 않았을 때
-                    
-                    // 로그인 페이지로 이동
-                    goToLogin( fullUrl, request, response );
-                    return false;
-                    
+                if ( loginDto.getMngrYn() != null && loginDto.getMngrYn().equals("N") ) {
+                	goToLogin( fullUrl, request, response, "E7" );
+                	return false;
                 }
+                
+                if ( loginDto.getMngrYn() != null && loginDto.getMngrYn().equals("Y") &&  ( loginDto.getMngrConfmYn() == null || !( loginDto.getMngrConfmYn().equals("Y")) )  ) {
+                	goToLogin( fullUrl, request, response, "E8" );
+               	 	return false;
+                } 
             }
             
         }
@@ -66,11 +67,11 @@ public class AuthInterceptor implements HandlerInterceptor {
         return HandlerInterceptor.super.preHandle( request, response, handler );
     }
     
-    void goToLogin( String fullUrl, HttpServletRequest request, HttpServletResponse response ) throws Exception {
+    void goToLogin( String fullUrl, HttpServletRequest request, HttpServletResponse response, String errCd ) throws Exception {
         
         HttpSession session = request.getSession();
-        session.setAttribute( "errCd", "E6" );
-        session.setAttribute( "loginAfterMoveUrl", fullUrl );
+        session.setAttribute( "errCd", errCd );
+        session.setAttribute( "returnUrlAfterLogin", fullUrl );
         
         response.sendRedirect( "/admLogin?auth=" + AUTH ); // 인증이 성공한 후에는 root로 이동
         

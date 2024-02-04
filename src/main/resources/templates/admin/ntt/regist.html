@@ -49,7 +49,7 @@ $(document).ready(function() {
 									</div>
 									<div class="upload-btn mt_10p">
 										<label class="btn btn-purple">업로드
-											<input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
+											<input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .jpeg, .png" style="display: none;" onchange="fileChange(this)">
 										</label>
 									</div>
 
@@ -58,7 +58,7 @@ $(document).ready(function() {
 						   </div>   
 						</div>
 						<div  th:if = "${bbsSeCd == '02'}">
-							 <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
+							 <input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .jpeg, .png" style="display: none;" onchange="fileChange(this)">
 						</div>
 						<div class="field item form-group">
 							<label class="col-form-label col-md-2 col-sm-3  label-align">내용<span class="required">*</span></label>

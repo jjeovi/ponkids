@@ -8,18 +8,18 @@
 		<img src="/pon/common/image/logo.svg" alt="피오니키즈 로고">
 		<h2 class="pop_title">로그인</h2>
 	</div>
+	<form  id="loginForm" name="loginForm" method="POST"   th:action="@{ /login }"   >
 	<div class="pop_content">
 		<div class="login_wrap">
 			<div class="default_login_wrap">
 				<div class="input_wrap">
-					<input type="hidden" id="login_userName" name="userName">
-					<input type="hidden" id="login_snsKind" name="snsKind">
-					<input type="hidden" id="login_snsId" name="snsId">
-					<input type="text" id="login_userEmail" name="userEmail" class="id_input" placeholder="이메일">
-					<input type="password" id="login_userPassword" name="userPassword" class="pw_input" placeholder="비밀번호">
+					<input type="hidden"	name="returnUrlAfterLoginFail"	value="/?status=login"	/>
+					<input type="hidden"	name="returnUrlAfterLogin"	/>
+					<input type="text" 		name="username" placeholder="이메일">
+					<input type="password"  name="password" placeholder="비밀번호">
 				</div>
 				<div class="login_btn_wrap">
-					<button class="btn_login_default login_btn" id="loginBtn">로그인</button>		
+					<button type="button" class="btn btn_login_default login_btn" onclick="goLogin();">로그인</button>		
 				</div>
 			</div>
 			<div class="or"></div>
@@ -33,4 +33,5 @@
 			</div>
 		</div>
 	</div>
+	</form>
 </div>

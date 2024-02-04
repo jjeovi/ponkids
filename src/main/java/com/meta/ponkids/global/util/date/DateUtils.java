@@ -1,5 +1,6 @@
 package com.meta.ponkids.global.util.date;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -479,6 +480,91 @@ public class DateUtils implements DateConstants {
         // return str.replaceAll("\\D", "");
         
         // 모두 사용가능하다.
+    }
+    
+    
+
+    /**
+     * 첫번쨰 변수 (String) 을 두번째 변수 포맷으로 변환 (String) 문자열 -> 문자열 로 변환
+     * <pre>
+     * setChangeDateFormat("20220101", "yyyy-mm-dd") => return "2022-01-01" ;  
+     * @param dateString 기준일자 (yyyyMMdd)
+     * @param dateFormat 반환될 날짜형식
+     * @return
+     * @throws ParseException 
+     */
+    public static String setChangeDateFormat( String dateString, String dateFormat) throws ParseException {
+    	
+    	String processDate = "";
+    	
+    	// 들어온 dateString 인자 값이 날짜 형식이 맞는지 확인
+    	if (isDate(dateString, "yyyyMMdd") ) {
+    		
+    		
+    		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyyMMdd");
+    		//Date로 파싱
+    		Date date = dateFormatter.parse(dateString);
+    		//변경할 타입으로의 형 변환
+    		processDate = new SimpleDateFormat(dateFormat).format(date);
+    		
+    		
+    	} else {
+    		
+    		// 오류로 판단
+    		return "9999-12-31";
+    	}
+    	
+    	
+    	return processDate;
+    	
+    	
+    }
+    
+    public static boolean isDate(String date, String format ) { 
+    	String pattern = "";
+    	
+    	switch ( format ) { 
+	    	case "yyyy-MM-dd"	:
+	    		pattern = "^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$";
+	    		break;
+	    	case "yyyy/MM/dd"	:
+	    		pattern = "^\\d{4}\\/(0[1-9]|1[012])\\/(0[1-9]|[12][0-9]|3[01])$";
+	    		break;
+	    	case "yyyy.MM.dd"	:
+	    		pattern = "^\\d{4}\\.(0[1-9]|1[012])\\.(0[1-9]|[12][0-9]|3[01])$";
+	    		break;
+	    	case "yyyyMMdd"		:
+	    		pattern = "^\\d{4}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])$";
+	    		break;
+    	}
+    	return date.matches(pattern);
+    	
+    	
+    }
+    
+    
+    /**
+     * 날짜 포맷 검증하기 ( 유효성 체크 ) 
+     * 인자로 받은 String 의 날짜 형식 문자열이 
+     * yyyy-MM-dd 형식이 맞는지 체크 하기
+     * 
+     * <pre>
+     * setChangeDateFormat("20220101", "yyyy-MM-dd") => return false ;  
+     * @param dateString 기준일자 (yyyyMMdd)
+     * @param dateFormat 반환될 날짜형식
+     * @return
+     * @throws ParseException 
+     */
+    public static boolean checkDateFormat( String checkDate, String dateFormat ) {
+        try {
+//            SimpleDateFormat dateFormatParser = new SimpleDateFormat("yyyy/MM/dd"); //검증할 날짜 포맷 설정
+            SimpleDateFormat dateFormatParser = new SimpleDateFormat( dateFormat ); //검증할 날짜 포맷 설정
+            dateFormatParser.setLenient(false); //false일경우 처리시 입력한 값이 잘못된 형식일 시 오류가 발생
+            dateFormatParser.parse(checkDate); //대상 값 포맷에 적용되는지 확인
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
     
 }

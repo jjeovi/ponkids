@@ -40,6 +40,7 @@
 		/*<![CDATA[*/
 		let searchDTO;	// 카테고리DTO (searchDTO) 정의 
 		let basicPath;	// 기본경로 
+		const urlParams = new URL(location.href).searchParams;
 		$(function(){
 		searchDTO =  /*[[${searchDTO}]]*/;	// 상수선언
 			basicPath =  /*[[${basicPath}]]*/;	// 상수선언
@@ -224,12 +225,16 @@
 <div class="pop_dim" 		id="pop_dim"		style="display: none;"></div>
 <div class="pop_dim_lv2" 	id="pop_dim_lv2"	style="display: none;"></div>
 <!-- popup id -->
-<!-- 아이디/비밀번호 찾기 -->		<div class="layer_findUser"			style="display: none;"	th:insert="/pon/layer/layer_findUser.html"	/>
-<!-- 회원가입 -->				<div class="layer_join"				style="display: none;"	th:insert="/pon/layer/layer_join.html"		/>
-<!-- 회원가입 - 자녀추가 -->		<div class="layer_addChldrn lv2"	style="display: none;"	th:insert="/pon/layer/layer_addChldrn.html"	/>
-<!-- 로그인 -->				<div class="layer_login"			style="display: none;"	th:insert="/pon/layer/layer_login.html"		/>
-<!-- 이용약관 개인정보처리방침 -->	<div class="layer_policy"			style="display: none;"	th:insert="/pon/layer/layer_policy.html"	/>
-<!-- 문의하기 -->				<div class="layer_inquiry"			style="display: none;"	th:insert="/pon/layer/layer_inquiry.html"	/>
+<!-- 아이디/비밀번호 찾기 -->		<div class="layer_findUser"			style="display: none;"	th:insert="/pon/layer/layer_findUser.html"		/>
+<form id="userInsertForm" name="userInsertForm" method="post" th:action="@{ / }"  enctype="multipart/form-data" onsubmit="return false;">
+<!-- 회원가입 -->				<div class="layer_join"				style="display: none;"	th:insert="/pon/layer/layer_join.html"			/>
+<!-- 회원가입 - 자녀추가 -->		<div class="layer_addChldrn lv2"	style="display: none;"	th:insert="/pon/layer/layer_addChldrn.html"		/>
+<!-- 회원가입완료 layer -->		<div class="layer_completeJoin"		style="display: none;"	th:insert="/pon/layer/layer_completeJoin.html"			/>
+</form>
+<!-- 로그인 -->				<div class="layer_login"			style="display: none;"	th:insert="/pon/layer/layer_login.html"			/>
+<!-- 이용약관 -->				<div class="layer_termsOfUse lv2"	style="display: none;"	th:insert="/pon/layer/layer_termsOfUse.html"	/>
+<!-- 개인정보처리방침 -->			<div class="layer_personalInfo lv2"	style="display: none;"	th:insert="/pon/layer/layer_personalInfo.html"	/>
+<!-- 문의하기 -->				<div class="layer_inquiry"			style="display: none;"	th:insert="/pon/layer/layer_inquiry.html"		/>
 
 </body>
 <!--e: body-->

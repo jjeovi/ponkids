@@ -5,7 +5,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.meta.ponkids.domain.system.login.dto.LoginDto;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -69,6 +77,35 @@ public class LoginAdmController {
         
     }
     
+
+    
+
+    @ResponseBody
+    @PostMapping( "/admin/readyLogin" )
+    public Map<String, Object> login( 	HttpServletRequest request,
+    						@ModelAttribute LoginDto loginDto,
+    						HttpSession session,
+                            Model model ) {
+    	Map<String, Object> result = new HashMap<String, Object>();
+    	
+    	session.setAttribute("returnUrlAfterLoginFail", loginDto.getReturnUrlAfterLoginFail() );
+    	result.put("flag", "S");
+//    	
+//    	// 비밀번호 암호화
+//    	loginDto.setPassword( passwordEncoder.encode( loginDto.getPassword() ) );
+        
+//        return loginService.userLogin( loginDto, request );
+        return result;
+        
+    }
+    
+    
+    
+    
+    // ========================= Util method =========================
+    // ========================= Util method =========================
+    // ========================= Util method =========================
+    
     
     private String getErrorMessage( String errCd ) {
         String resultMsg = "";
@@ -86,9 +123,14 @@ public class LoginAdmController {
                 resultMsg = "알 수 없는 이유로 로그인에 실패하였습니다 관리자에게 문의하세요.";
             } else if ( errCd.equals( "E6" ) ) {
                 resultMsg = "로그인이 필요합니다.";
+            } else if ( errCd.equals( "E7" ) ) {
+                resultMsg = "접근할 수 있는 권한이 없습니다. 관리자 계정으로 로그인해주세요.";
+            } else if ( errCd.equals( "E8" ) ) {
+                resultMsg = "관리자의 승인이 필요합니다.";
             }
         }
         
         return resultMsg;
     }
+    
 }

@@ -63,7 +63,13 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
         
         HttpSession session = request.getSession();
         session.setAttribute( "errCd", errCd );
-        response.sendRedirect( "/admLogin?auth=" + AUTH ); // 인증이 성공한 후에는 root로 이동
+        
+        String returnUrlAfterLoginFail = ( String ) session.getAttribute( "returnUrlAfterLoginFail" );
+        
+        session.removeAttribute( "returnUrlAfterLogin" );
+        session.removeAttribute( "returnUrlAfterLoginFail" );
+        
+        response.sendRedirect( returnUrlAfterLoginFail ); // 인증이 성공한 후에는 root로 이동
         
     }
 }

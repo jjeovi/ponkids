@@ -1067,3 +1067,35 @@ this.getTextWidth = function(text, font){
     var metrics = context.measureText(text);
     return metrics.width;
 };
+
+
+
+function goLogin() {
+		
+	
+	var form = $( "#loginForm" )[0];
+    var formData = new FormData(form);
+
+		var url = "/admin/readyLogin"
+		$.ajax({
+					url: url,
+		            type: "POST",	// 회원저장 POST로
+		            async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+		            data: formData, // 검색할 값
+		            cache: false,
+                    contentType : false,
+			        processData : false ,
+	                success: function ( result ) {
+	                    // return type : List<CategoryDto>
+	                    
+		                if ( result.flag == "E" ) {
+							alert(result.msg);
+							
+						} else if ( result.flag == "S" ) {
+							// TODO : ajax 통신 이후 로직 ( 성공시 ) 구현 
+							
+							$( "#loginForm" ).submit();	// 로그인 구현
+						}
+	                }
+	        	});
+}

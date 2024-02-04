@@ -195,6 +195,14 @@ function hidePopupLv2( layerId ) {
 	$("#pop_dim_lv2").fadeOut();
 }
 
+// 모든 팝업창 숨김 
+function hideAllPopup( layerId ) {
+	
+	$("[class^='layer_']").hide();
+	$("#pop_dim").fadeOut();
+	$("#pop_dim_lv2").fadeOut();
+	
+}
 
 
 // 카카오 로그인

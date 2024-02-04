@@ -66,12 +66,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Interceptor (AuthInterceptor)에서 진행하기로 함.
         http.
                 authorizeRequests( ( authorizeHttpRequests ) -> authorizeHttpRequests.
-                        requestMatchers( new AntPathRequestMatcher( "/**" ) ).permitAll() )
+                        										requestMatchers( new AntPathRequestMatcher( "/**" ) ).permitAll() )
                 .formLogin()
                 .loginPage( "/admLogin" )                        // 사용자 정의 로그인 페이지
 //    	        .defaultSuccessUrl("/home11")							// 로그인 성공 후 이동 페이지
                 .failureHandler( customLoginFailureHandler )
-                .loginProcessingUrl( "/admin/login" )                    // 로그인 Form Action Url
+                .loginProcessingUrl( "/login" )                    // 로그인 Form Action Url
                 .successHandler( customLoginSuccessHandler )            // 로그인 성공 후 핸들러
 //                .successHandler( customLoginSuccessHandler )    //  로그인 성공시 handle
 //                .permitAll()

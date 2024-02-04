@@ -7,6 +7,8 @@ import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
 import com.meta.ponkids.domain.user.repository.UserRepository;
 import com.meta.ponkids.domain.user.service.UserRoleService;
 import com.meta.ponkids.domain.user.service.UserService;
+import com.meta.ponkids.global.util.ip.IpUtils;
+import com.meta.ponkids.global.util.session.SessionUtils;
 import com.meta.ponkids.domain.user.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.text.ParseException;
 import java.time.LocalDateTime;
 
 /**
@@ -96,6 +99,7 @@ public class UserAdmController {
      * methodName    : insert
      * date           : 11/17/23
      * description    : user insert method
+     * @throws ParseException 
      */
     @Transactional
     @PostMapping( BASIC_PATH + "/{mcd}/insert" )
@@ -106,7 +110,7 @@ public class UserAdmController {
             @PathVariable String mcd,
             MultiUserChldrnSaveDto userChldrns,
             HttpServletRequest request,
-            Model model ) throws IOException {
+            Model model ) throws IOException, ParseException {
         
         if ( userRepository.existsByUserId( saveDto.getUserId() ) ) {
             // 중복 ID 존재시 가입 불가
@@ -119,9 +123,6 @@ public class UserAdmController {
             
         } else {
             // 회원가입 처리
-        	
-        	// 관리자 처리 
-        	saveDto.setMngrYn("Y");
             
             // 첨부파일 존재시 파일 저장
             if ( !files.isEmpty() ) {
@@ -129,8 +130,10 @@ public class UserAdmController {
             }
             
             // 관리자 승인여부 Y 이면 승인일시 now로 setting
-            if ( saveDto.getMngrConfmYn().equals( "Y" ) ) {
+            if ( saveDto.getMngrConfmYn() != null && saveDto.getMngrConfmYn().equals( "Y" ) ) {
                 saveDto.setConfmDt( LocalDateTime.now() );
+                saveDto.setConfmerIp( IpUtils.getClientIP( request ) );
+                saveDto.setConfmerId( SessionUtils.getClientId() );
             }
             
             // save

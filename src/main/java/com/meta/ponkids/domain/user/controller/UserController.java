@@ -20,7 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * className      : UserController
@@ -49,31 +52,37 @@ public class UserController {
      * methodName    : insert
      * date           : 11/17/23
      * description    : user insert method
+     * @throws ParseException 
      */
+    @ResponseBody
     @Transactional
     @PostMapping( BASIC_PATH + "/live/{mcd}/insertAjax" )
-    public String insert(
+    public Map<String, Object> insert(
             @RequestParam( "file" ) MultipartFile files,
             @ModelAttribute UserSaveDto saveDto,
             @PathVariable String mcd,
             MultiUserChldrnSaveDto userChldrns,
             HttpServletRequest request,
             Model model ) throws IOException {
+    	
+    	Map<String, Object> result = new HashMap<String, Object>();
+    	
         
         if ( userRepository.existsByUserId( saveDto.getUserId() ) ) {
             // 중복 ID 존재시 가입 불가
             
-            // 메시지 출력 및 url 이동 처리
-            model.addAttribute( "resultMsg", "해당ID로 가입된 ID가 있습니다. 다시 시도해주세요." );
-            model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+        	// 결과코드 및 결과메시지 추가
+            result.put("flag", "E");
+            result.put("msg", "해당ID로 가입된 ID가 있습니다. 다시 시도해주세요.");
             
-            return "common/alert";
+            return result;
             
         } else {
             // 회원가입 처리
         	
         	// 사용자 처리
         	saveDto.setMngrYn("N");	// 관리자 여부 N 으로 setting
+        	saveDto.setMngrConfmYn("Y");	// 관리자 여부 N 으로 setting
             
             // 첨부파일 존재시 파일 저장
             if ( !files.isEmpty() ) {
@@ -81,19 +90,24 @@ public class UserController {
             }
             
             // 관리자 승인여부 Y 이면 승인일시 now로 setting
-            if ( saveDto.getMngrConfmYn().equals( "Y" ) ) {
+            if ( saveDto.getMngrConfmYn() != null && saveDto.getMngrConfmYn().equals( "Y" ) ) {
                 saveDto.setConfmDt( LocalDateTime.now() );
             }
             
             // save
-            userService.save( saveDto, new UserRoleSaveDto(), userChldrns, request );
+            try {
+				userService.save( saveDto, new UserRoleSaveDto(), userChldrns, request );
+			} catch (IOException | ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
         
-        // 메시지 출력 및 url 이동 처리
-        model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+        // 결과코드 및 결과메시지 추가
+        result.put("flag", "S");
+        result.put("msg", "회원가입이 완료되었습니다.");
         
-        return "common/alert";
+        return result;
     }
     
     

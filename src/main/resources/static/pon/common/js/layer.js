@@ -1,5 +1,4 @@
 const emailRegexp = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;   // 이메일 유효성 검사
-const brdrDateRegexp = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$/;
 const telNoRegexp = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
 const passwordRegexp = /^(?=.*\d)(?=.*[a-z])(?=.*[!@#$%^&*]).{8,20}$/;
 
@@ -10,6 +9,12 @@ var passwordMatchCheckFlag	= false;  	// 비밀번호 비교 일치 여부 확�
 
 $( function() {
 	
+	const lgstatus = urlParams.get('status');
+	if ( lgstatus == 'login' ) {
+		showPopup(lgstatus);	
+	}
+	
+
 	// 아이디 입력 focusout 처리 ( 중복체크 로직 )
 	$( "#userInsertForm" ).find("[name='userId']").focusout( function () {
 		dupCheckFlag = false;
@@ -382,47 +387,36 @@ function userInsert() {
 			$( this ).find( "[name=file]" ).attr( "name", "userChldrns[" + index + "].file" );							// 파일
 
 		});
-
 		
-		var url = "/user/list/mcd/insertAjax"
-		$.ajax( {
+        var form = $( "#userInsertForm" )[0];
+        var formData = new FormData(form);
+
+		var url = "/user/live/mcd/insertAjax"
+		$.ajax({
 		            url: url,
 		            type: "POST",	// 회원저장 POST로
-		            dataType: "json",
 		            async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-		            data: cateSchData, // 검색할 값
-		            contentType: "application/json",
+		            data: formData, // 검색할 값
+		            cache: false,
+                    contentType : false,
+			        processData : false ,
 		            success: function ( result ) {
 		                // return type : List<CategoryDto>
-		                var nextStepAllYn = $ul.data( 'nextStepAllYn' );
-		                var nextStepLiOnclickParamUrl = $ul.data( 'nextStepLiOnclickParamUrl' );
-		
-		                if ( nextStepLiOnclickParamUrl != null && nextStepLiOnclickParamUrl != '' ) {
-		                    url = nextStepLiOnclickParamUrl;
-		                } else {
-		                    url = '';
-		                }
-		
-		                if ( nextStepAllYn != null && nextStepAllYn == 'Y' ) {
-		                    $( ".category-list-area .category-group-box ul" ).eq( ulNum + 1 ).append(
-		                        $( "<li>" ).attr( "onclick", "getCateNextLvList('" + url + "', this )" ).attr( "value", "" ).append( "전체" )
-		                    );
-		                }
-		                if( result.resultList != null && result.resultList.length > 0 ) {
-			                for ( let item of result.resultList ) {
-								var flowText = "" ;
-								var textWidth = getTextWidth( item.category['categoryNm'].replace(/\n/g, "").split("  ").join("") );
-								console.log(item.category['categoryNm'] +  ":" + textWidth );
-								if ( textWidth > categoryLiMaxWidth ) {
-									flowText = "flow-text";
-								}
-								
-			                    $( ".category-list-area .category-group-box ul" ).eq( ulNum + 1 ).append(
-			                        $( "<li>" ).attr( "onclick", "getCateNextLvList('" + url + "', this )" ).attr( "value", item.category['categorySn'] ).attr("class", flowText).append( item.category['categoryNm'] )
-			                    );
-			                    
-			                }
-		                }
+		                
+		                if ( result.flag == "E" ) {
+							alert(result.msg);
+							
+						} else if ( result.flag == "S" ) {
+							// TODO : ajax 통신 이후 로직 ( 성공시 ) 구현 
+							
+							alert(result.msg); 
+							
+							// 로그인 하러 가기 layer 표출
+							hideAllPopup(); 
+							showPopup( 'completeJoin' );
+							
+						}
+		                
 		            }
 	        	});
 		
@@ -471,13 +465,16 @@ function idDupResult( dupCheckFlag, checkResult ) {
 
 // 사용자 회원가입 유효성 체크
 function validUserForm(formName) {
+	
 	var result = {};
+	
+	
 	// 이메일 체크 ( 정규식 )
 	var userId = $( "#userInsertForm" ).find("[name='userId']").val();
 	
 	if ( !emailValidChk( userId ) ) {
 		result.flag = false;
-		result.msg = "이메일을 확인해주세요.";
+		result.msg = "ID는 이메일 형식으로 입력해주세요.";
 		return result;
 	}
 	
@@ -536,23 +533,43 @@ function validUserForm(formName) {
 	}
 
 	// 생년월일 체크
-	var brdrDate = $( "#userInsertForm" ).find("[name='brdrDate']").val();
-
-	if ( brdrDate != '' &&  !brdrDateRegexp.test( brdrDate ) ) {	// telNoRegexp = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
+	var brdtDate = $( "#userInsertForm" ).find("[name='brdtDate']").val();
+	
+	if (!isValidDate(brdtDate) ) {
 		result.flag = false;
-		result.msg = "생년월일 형식은 YYYYMMDD 형식의 숫자 8자리로 입력해주세요. ( ex ) 930119 ) ";
+		result.msg = "날짜는 yyyymmdd 형식으로 입력해주세요. ex) 19930119"
 		return result;
 	}
 
 	// 연락처 체크
 	var telNo = $( "#userInsertForm" ).find("[name='telNo']").val();
 	
-	
 	if ( telNo != '' &&  !telNoRegexp.test( telNo ) ) {	// telNoRegexp = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
 		result.flag = false;
 		result.msg = "연락처 형식에 맞게 입력해주세요.";
 		return result;
 	}
+	
+	
+	// 이용약관 동의 처리 체크 여부
+	var agreeUseofTermsBool = $( "#userInsertForm" ).find("[name='agreeUseofTerms']").is(":checked")
+	
+	if ( !agreeUseofTermsBool ) {
+		result.flag = false;
+		result.msg = "이용약관에 동의해주세요.";
+		return result;
+	}
+	
+	// 개인정보처리방침 동의 처리
+	var agreePersonalInfoBool = $( "#userInsertForm" ).find("[name='agreePersonalInfo']").is(":checked");
+		
+	if ( !agreePersonalInfoBool ) {
+		result.flag = false;
+		result.msg = "개인정보 처리방침에 동의해주세요.";
+		return result;
+	}
+	
+	
 
 	result.flag = true;
 	// result.msg = "통과"
@@ -589,3 +606,56 @@ function checkPasswordMatching() {
 	
 	
 }
+
+function refreshAndShowLoginPop() {
+	location.href = '?status=login';
+}
+
+function goLogin(){
+	
+	// 비밀번호 유효성 체크
+	var userId = $( "#userInsertForm" ).find("[name='password']").val();
+	var password = $( "#userInsertForm" ).find("[name='password2']").val();
+	
+	
+	var pathName = window.location.pathname;
+	var queryString = window.location.search;
+	
+	// returnUrl setting
+	var returnUrl = pathName + queryString;
+	
+	// failUrl setting 
+	var faileUrl = (queryString.indexOf('?') != -1) ? ( pathName + queryString + '&status=login' ) : ( pathName + '?status=login' );
+	
+	$( "#loginForm" ).find("[name='returnUrlAfterLogin']").val( returnUrl );
+	$( "#loginForm" ).find("[name='returnUrlAfterLoginFail']").val( faileUrl );
+	
+	var form = $( "#loginForm" )[0];
+    var formData = new FormData(form);
+
+		var url = "/readyLogin"
+		$.ajax({
+					url: url,
+		            type: "POST",	// 회원저장 POST로
+		            async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+		            data: formData, // 검색할 값
+		            cache: false,
+                    contentType : false,
+			        processData : false ,
+	                success: function ( result ) {
+	                    // return type : List<CategoryDto>
+	                    
+		                if ( result.flag == "E" ) {
+							alert(result.msg);
+							
+						} else if ( result.flag == "S" ) {
+							// TODO : ajax 통신 이후 로직 ( 성공시 ) 구현 
+							
+							$( "#loginForm" ).submit();	// 로그인 구현
+						}
+	                }
+	        	});
+	
+}
+
+

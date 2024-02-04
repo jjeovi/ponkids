@@ -27,7 +27,7 @@
 </script>
 
 <body class="text-center">
-<form class="form-signin" th:action="@{/admin/login}" method="post">
+<form id="loginForm" class="form-signin" th:action="@{/login}" method="post">
 	<a th:href="@{/}"><img class="mb-4" src="https://getbootstrap.com/docs/4.5/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"></a>
 	<h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
 	<div th:if="${param.error}" class="alert alert-danger" role="alert">
@@ -65,6 +65,7 @@
 	<b>Authenticated admin role:</b>
 	<div sec:authorize="isAuthenticated()" sec:authentication="principal.authorities"></div>
 
+	<input type="hidden" name="returnUrlAfterLoginFail" value="/admLogin?auth=pon" />
 	<label for="username" class="sr-only">Username</label>
 	<input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
 	<label for="inputPassword" class="sr-only">Password</label>
@@ -74,7 +75,7 @@
 		<input type="checkbox" value="remember-me"> Remember me
 	  </label>
 	</div> -->
-	<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+	<button class="btn btn-lg btn-primary btn-block" type="type" onclick="goLogin();">Sign in</button>
 	<p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
 </form>
 

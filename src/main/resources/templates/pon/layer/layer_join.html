@@ -45,7 +45,7 @@
 </script>
 <div class="pop_wrap join" data-layer-wrap="join" >
 	<div class="pop_top">
-		<button class="pop_close hide_pop" data-layer-id="join" >
+		<button type="button" class="pop_close hide_pop" data-layer-id="join" >
 			<img src="/pon/common/image/chat_close.svg" alt="">
 		</button>
 	</div>
@@ -54,7 +54,6 @@
 		<h2 class="pop_title">회원가입</h2>
 	</div>
 	<div class="pop_content">
-		<form id="userInsertForm" name="userInsertForm" method="post" th:action="@{ /user/mcd/insert }"  enctype="multipart/form-data">
 		<div class="join_wrap">
 			<div class="filebox preview-image">
 				<div class="upload-display">
@@ -65,7 +64,7 @@
 				<div class="upload-file-name">
 				</div><div class="upload-btn mt_10p" style="margin-bottom: 13px;">
 					<label class="btn btn-purple" >업로드
-						<input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .png" style="display: none;" onchange="fileChange(this)">
+						<input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .jpeg, .png" style="display: none;" onchange="fileChange(this)">
 					</label><div class="upload-file-name" style="display: inline-block;">
 					<input class="input-file-name" value="선택된 파일 없음(.gif, .jpg, .png)" disabled="disabled">
 				</div>
@@ -331,9 +330,18 @@
 				<img class="plus_chldrn_btn" src="/pon/common/image/plus_icon.png" data-layer-id="addChldrn" alt="자녀 추가" onclick="setModalBtn('C')" >
 			</div> 
 		</div>
-		</form>
 	</div>
 	<div class="pop_footer join_pop">
+		<div class="join_agree_wrap">
+			<input id="agreeUseofTermsCb" type="checkbox" name="agreeUseofTerms" value="Y">
+    		<label for="agreeUseofTermsCb"></label>
+    		<span class="cbTitle show_pop_lv2" data-layer-id="termsOfUse">[필수] 피오니키즈 이용약관에 동의합니다.</span>
+		</div>
+		<div class="join_agree_wrap">
+			<input id="agreePersonalInfoCb" type="checkbox" name="agreePersonalInfo" value="Y">
+    		<label for="agreePersonalInfoCb"></label>
+    		<span class="cbTitle show_pop_lv2" data-layer-id="personalInfo">[필수] 피오니키즈 개인정보 처리방침에 동의합니다.</span>
+		</div>
 		<label class="btn btn-purple" onclick="return userInsert();">
 			회원가입
 		</label>
