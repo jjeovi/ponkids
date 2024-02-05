@@ -1006,50 +1006,6 @@ function fnfileDelete( atchFileSn, fileSeq ) {
 }
 
 
-// dateTime 선택 (date, time 모두 선택시)
-$.fn.datePickr = function () {
-    // dateTime 선택 (date 선택시)
-    // 날짜 및 시간 형식 : Y-m-d , ex) 2023-09-12
-    // 언어 : 한국어
-
-    var result = true;
-
-    this.each( function () {
-
-        flatpickr( '#' + this.id, {
-            dateFormat: 'Y-m-d', // 날짜 및 시간 형식 설정 (예: 2023-09-12 15:30)
-            enableTime: true,        // 시간 선택 활성화
-            allowInput: true, // prevent "readonly" prop
-            locale: 'ko',            // 한국어로 지역화
-        } );
-
-    } );
-
-    return result;
-};
-
-// dateTime 선택 (date, time 모두 선택시)
-$.fn.dateTimePickr = function () {
-    // dateTime 선택 (date, time 모두 선택시)
-    // 날짜 및 시간 형식 : Y-m-d H:i , ex) 2023-09-12 15:30
-    // 언어 : 한국어
-
-    var result = true;
-
-    this.each( function () {
-
-        flatpickr( '#' + this.id, {
-            dateFormat: 'Y-m-d H:i', // 날짜 및 시간 형식 설정 (예: 2023-09-12 15:30)
-            enableTime: true,        // 시간 선택 활성화
-            allowInput: true, // prevent "readonly" prop
-            locale: 'ko',            // 한국어로 지역화
-        } );
-
-    } );
-
-    return result;
-};
-
 // 카테고리 검색 초기 세팅 함수
 function cateItemSet( searchDTO ){	
 
@@ -1070,32 +1026,9 @@ this.getTextWidth = function(text, font){
 
 
 
-function goLogin() {
-		
-	
-	var form = $( "#loginForm" )[0];
-    var formData = new FormData(form);
 
-		var url = "/admin/readyLogin"
-		$.ajax({
-					url: url,
-		            type: "POST",	// 회원저장 POST로
-		            async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-		            data: formData, // 검색할 값
-		            cache: false,
-                    contentType : false,
-			        processData : false ,
-	                success: function ( result ) {
-	                    // return type : List<CategoryDto>
-	                    
-		                if ( result.flag == "E" ) {
-							alert(result.msg);
-							
-						} else if ( result.flag == "S" ) {
-							// TODO : ajax 통신 이후 로직 ( 성공시 ) 구현 
-							
-							$( "#loginForm" ).submit();	// 로그인 구현
-						}
-	                }
-	        	});
+function goLogout() {
+	
+	$( "#logoutForm" ).submit();	// 로그아웃 구현
+	
 }

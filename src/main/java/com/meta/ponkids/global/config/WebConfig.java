@@ -1,6 +1,7 @@
 package com.meta.ponkids.global.config;
 
 import com.meta.ponkids.global.config.interceptor.AuthInterceptor;
+import com.meta.ponkids.global.config.interceptor.ErrorInterceptor;
 import com.meta.ponkids.global.config.interceptor.MenuAdmInterceptor;
 import com.meta.ponkids.global.config.interceptor.MenuInterceptor;
 
@@ -17,6 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
     private final AuthInterceptor authInterceptor;
     private final MenuAdmInterceptor menuAdmInterceptor;
     private final MenuInterceptor menuInterceptor;
+    private final ErrorInterceptor errorInterceptor;
     
     @Override
     public void addInterceptors( InterceptorRegistry registry ) {
@@ -29,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
         // 권한 처리 및 세션 처리 Interceptor (preHandle)
         registry.addInterceptor( authInterceptor )
                 .addPathPatterns( "/admin/**" )             			// 1. 체크 하는 로직은 /admin/ 하위 path 만 검사
-                .excludePathPatterns( "/admLogin" );        			// 2. 로그인 페이지는 검사하지 않음.
+                .excludePathPatterns( "/admLogin" , "/admin/readyLogin");        			// 2. 로그인 페이지는 검사하지 않음.
         
         // admin : 관리자 부분
         // ==========================================================
@@ -56,7 +58,20 @@ public class WebConfig implements WebMvcConfigurer {
                 						"/**/*.jpg", 	"/**/*.jpg", 
                 						"/**/*.woff2" )        			// 제외 목록 : 정적 컨텐츠 
                 .excludePathPatterns( 	"/admLogin" )        			// 제외 목록 : 로그인 페이지
+                .excludePathPatterns( 	"/admin/**" )        			// 제외 목록 : 로그인 페이지
         		.excludePathPatterns( 	"/getImage" );					// 제외 목록 : 첨부파일 조회시
+        
+        // error 감지해서 error메시지 추출
+        registry.addInterceptor( errorInterceptor )
+        .addPathPatterns( "/**" )             					// 1. 체크 하는 로직은 /하위 전체 
+        .excludePathPatterns( 	"/**/*Ajax" )        			// 제외 목록 : Ajax 통신 
+        .excludePathPatterns( 	"/**/*.js", 	"/**/*.css", 
+        		"/**/*.svg", 	"/**/*.png",
+        		"/**/*.jpg", 	"/**/*.jpg", 
+        		"/**/*.woff2" )        			// 제외 목록 : 정적 컨텐츠 
+        .excludePathPatterns( 	"/admLogin" )        			// 제외 목록 : 로그인 페이지
+        .excludePathPatterns( 	"/admin/**" )        			// 제외 목록 : 로그인 페이지
+        .excludePathPatterns( 	"/getImage" );					// 제외 목록 : 첨부파일 조회시
     }
     
     @Override

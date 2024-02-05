@@ -40,10 +40,12 @@
 		/*<![CDATA[*/
 		let searchDTO;	// 카테고리DTO (searchDTO) 정의 
 		let basicPath;	// 기본경로 
+		let errMsg;		// error message setting
 		const urlParams = new URL(location.href).searchParams;
 		$(function(){
-		searchDTO =  /*[[${searchDTO}]]*/;	// 상수선언
-			basicPath =  /*[[${basicPath}]]*/;	// 상수선언
+			searchDTO	=	/*[[${searchDTO}]]*/;	// 상수선언
+			basicPath	=	/*[[${basicPath}]]*/;	// 상수선언
+			errMsg		=	/*[[${errMsg}]]*/;		// error message
 		});
 		/*]]>*/
 	</script>
@@ -58,9 +60,19 @@
 	<!-- TODO : 메뉴 뿌리기-->
 	<div class="header_top">
 		<ol>
-			<li>
-				<a href="javascript:" class="show_pop" data-layer-id="login"	>로그인</a>
-			</li>
+			<th:block sec:authorize="isAnonymous()">
+				<li>
+					<a href="javascript:" class="show_pop" data-layer-id="login"	>로그인</a>
+				</li>
+			</th:block>
+			<th:block sec:authorize="isAuthenticated()">
+				<li>
+					<a href="javascript:goLogout();" >로그아웃</a>
+				</li>
+				<li>
+					<a href="javascript:" class="show_pop" data-layer-id="login"	>마이페이지</a>
+				</li>
+			</th:block>
 			<li>
 				<a href="#">학부모 상담요청</a>
 			</li>
@@ -236,6 +248,10 @@
 <!-- 개인정보처리방침 -->			<div class="layer_personalInfo lv2"	style="display: none;"	th:insert="/pon/layer/layer_personalInfo.html"	/>
 <!-- 문의하기 -->				<div class="layer_inquiry"			style="display: none;"	th:insert="/pon/layer/layer_inquiry.html"		/>
 
+<form id="logoutForm" name="logoutForm" th:action="@{ /logout}" method="post">
+	
+	<input type="hidden" name="returnUrl" >
+</form>
 </body>
 <!--e: body-->
 

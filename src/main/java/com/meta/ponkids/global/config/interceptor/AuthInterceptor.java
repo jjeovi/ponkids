@@ -2,8 +2,11 @@ package com.meta.ponkids.global.config.interceptor;
 
 
 import com.meta.ponkids.domain.system.login.dto.LoginDto;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -24,6 +27,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         String requestUri = request.getRequestURI();
         String fullUrl = getFullURL( request );
         
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
         // 관리자 URL 인지 체크
@@ -44,17 +48,24 @@ public class AuthInterceptor implements HandlerInterceptor {
                 return false;
                 
             } else {
-                // loginDto 있을 때
+                // loginDto 있을 때 ( 권한 문제 or 승인 문제 ... ) 
                 
                 // loginDto로 변경
                 LoginDto loginDto = ( LoginDto ) principal;
                 
                 if ( loginDto.getMngrYn() != null && loginDto.getMngrYn().equals("N") ) {
+                	if ( auth != null ) {
+                		new SecurityContextLogoutHandler().logout(request, response, auth);
+                	}
                 	goToLogin( fullUrl, request, response, "E7" );
                 	return false;
                 }
                 
                 if ( loginDto.getMngrYn() != null && loginDto.getMngrYn().equals("Y") &&  ( loginDto.getMngrConfmYn() == null || !( loginDto.getMngrConfmYn().equals("Y")) )  ) {
+                	if ( auth != null ) {
+                		new SecurityContextLogoutHandler().logout(request, response, auth);
+                	}
+                	
                 	goToLogin( fullUrl, request, response, "E8" );
                	 	return false;
                 } 

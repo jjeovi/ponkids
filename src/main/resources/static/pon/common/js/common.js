@@ -214,3 +214,25 @@ function kakaoLogin(){
 function googleLogin(){
 	
 }
+
+
+function replaceAll(string, search, replace) {
+	return string.replace(new RegExp(search, 'g'), replace);
+}
+
+
+
+function goLogout() {
+	
+	var pathName = window.location.pathname;
+	var queryString = window.location.search;
+	
+	// returnUrl setting
+	var returnUrl = pathName + queryString;
+	var returnUrl = replaceAll(returnUrl, 'lgStatus=login', '');
+	
+	$( "#logoutForm" ).find("[name='returnUrl']").val( returnUrl );
+	
+	$( "#logoutForm" ).submit();	// 로그아웃 구현
+	
+}

@@ -38,6 +38,10 @@ public class MenuAdmInterceptor implements HandlerInterceptor {
         
         // loginDto Setting
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        
+        if ( principal.getClass() != LoginDto.class ) {
+        	return ;
+        }
         LoginDto loginDto = ( LoginDto ) principal;
         
         // listDto Setting

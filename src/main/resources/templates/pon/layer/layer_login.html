@@ -8,7 +8,7 @@
 		<img src="/pon/common/image/logo.svg" alt="피오니키즈 로고">
 		<h2 class="pop_title">로그인</h2>
 	</div>
-	<form  id="loginForm" name="loginForm" method="POST"   th:action="@{ /login }"   >
+	<form  id="loginForm" name="loginForm" method="POST"   th:action="@{ /login }" onsubmit="return readyLogin();">
 	<div class="pop_content">
 		<div class="login_wrap">
 			<div class="default_login_wrap">
@@ -19,7 +19,7 @@
 					<input type="password"  name="password" placeholder="비밀번호">
 				</div>
 				<div class="login_btn_wrap">
-					<button type="button" class="btn btn_login_default login_btn" onclick="goLogin();">로그인</button>		
+					<button type="button" class="btn btn_login_default login_btn" onclick="readyLogin();">로그인</button>		
 				</div>
 			</div>
 			<div class="or"></div>

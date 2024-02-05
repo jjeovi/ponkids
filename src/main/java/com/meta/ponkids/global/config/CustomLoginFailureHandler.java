@@ -68,6 +68,7 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
         
         session.removeAttribute( "returnUrlAfterLogin" );
         session.removeAttribute( "returnUrlAfterLoginFail" );
+        session.removeAttribute( "loginType" );
         
         response.sendRedirect( returnUrlAfterLoginFail ); // 인증이 성공한 후에는 root로 이동
         

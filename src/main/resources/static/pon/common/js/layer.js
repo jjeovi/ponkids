@@ -9,9 +9,13 @@ var passwordMatchCheckFlag	= false;  	// 비밀번호 비교 일치 여부 확�
 
 $( function() {
 	
-	const lgstatus = urlParams.get('status');
-	if ( lgstatus == 'login' ) {
-		showPopup(lgstatus);	
+	const lgStatus = urlParams.get('lgStatus');
+	if ( lgStatus == 'login' ) {
+		showPopup(lgStatus);
+		
+		if ( errMsg != null && errMsg != '' ) {
+			alert(errMsg);
+		}
 	}
 	
 
@@ -181,6 +185,7 @@ function chldrnValidCheck( $targetChldrnDiv ) {
 
 	return true;
 }
+
 
 
 // 이름 유효성 검사
@@ -608,10 +613,10 @@ function checkPasswordMatching() {
 }
 
 function refreshAndShowLoginPop() {
-	location.href = '?status=login';
+	location.href = '?lgStatus=login';
 }
 
-function goLogin(){
+function readyLogin(){
 	
 	// 비밀번호 유효성 체크
 	var userId = $( "#userInsertForm" ).find("[name='password']").val();
@@ -623,9 +628,17 @@ function goLogin(){
 	
 	// returnUrl setting
 	var returnUrl = pathName + queryString;
+	var returnUrl = replaceAll(returnUrl, 'lgStatus=login', '');
 	
 	// failUrl setting 
-	var faileUrl = (queryString.indexOf('?') != -1) ? ( pathName + queryString + '&status=login' ) : ( pathName + '?status=login' );
+	if ( queryString.indexOf('?') != -1  && queryString.indexOf('lgStatus=login') != -1) {
+		
+	} else if ( queryString.indexOf('?') != -1  && queryString.indexOf('lgStatus=login') == -1 ) {
+		queryString = queryString + '&lgStatus=login';
+	} else {
+		queryString = queryString + '?lgStatus=login'; 
+	}
+	var faileUrl = pathName + queryString;
 	
 	$( "#loginForm" ).find("[name='returnUrlAfterLogin']").val( returnUrl );
 	$( "#loginForm" ).find("[name='returnUrlAfterLoginFail']").val( faileUrl );
@@ -639,6 +652,7 @@ function goLogin(){
 		            type: "POST",	// 회원저장 POST로
 		            async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
 		            data: formData, // 검색할 값
+		            async: false,
 		            cache: false,
                     contentType : false,
 			        processData : false ,

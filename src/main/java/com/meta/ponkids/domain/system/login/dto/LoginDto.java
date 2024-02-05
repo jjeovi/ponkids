@@ -69,6 +69,7 @@ public class LoginDto implements UserDetails {
     
     private String returnUrlAfterLogin;	// 로그인 후 이동할 url 
     private String returnUrlAfterLoginFail;	// 로그인 후 이동할 url 
+    private String loginType;			// 로그인 유형 구분할 타입 변수 ( 사용자 : pon , 관리자 : adm ) 
     
     @ColumnDefault( "N" )                             // del_yn 컬럼에 공통으로 추가
     @Column( insertable = false, updatable = false )  // del_yn 컬럼에 공통으로 추가 (등록 시, 수정 시 해당컬럼 신경쓰지 않음.)
