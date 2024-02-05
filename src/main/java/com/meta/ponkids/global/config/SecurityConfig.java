@@ -77,7 +77,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .permitAll()
 //                .and()
 //                .logout()
-                .permitAll();
+                .permitAll()
+                .and().oauth2Login();
         
         // 여기서부터 로그아웃 API 내용~!
         http.logout()
