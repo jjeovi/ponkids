@@ -24,6 +24,7 @@ spring :
         active : prod
         include : 
           - sns
+          - file-logging
     mvc :
         converters :
             preferred-json-mapper : gson
@@ -37,6 +38,22 @@ server :
             persistent : true           # 재기동 해도 스프링 관련 세션 유지.
             timeout : 3600              # 세션 시간 (60분: 3600 )
 
+# log 
+log : 
+    config : 
+        path: playLog/ 
+        filename : ssibalbalbal
+# logging
+logging:
+  config: classpath:logback-spring.xml
+  level:
+      org.springframework.security: DEBUG
+      
+error:
+    log:
+        config:
+            filename: error
+            
 #p6spy query logging
 decorator :
     datasource :
