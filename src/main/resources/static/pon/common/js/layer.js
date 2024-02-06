@@ -669,7 +669,15 @@ function readyLogin(){
 						}
 	                }
 	        	});
-	
+}
+
+
+function goKakaoLogin() {
+
+}
+
+function goGoogleLogin() {
+	location.href="/oauth2/authorization/google";
 }
 
 
