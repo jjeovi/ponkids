@@ -38,7 +38,8 @@ import java.util.Map;
 public class NttAdmController {
     
     
-    private final static String BASIC_PATH = "/admin/ntt";
+    private final static String BASIC_VIEW_PATH = "admin/ntt";
+    private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
     private final NttService nttService;
     private final BbsService bbsService;
     private final NttReplyService nttReplyService;
@@ -88,7 +89,7 @@ public class NttAdmController {
         }
         
         
-        return BASIC_PATH + screen;
+        return BASIC_VIEW_PATH + screen;
     }
     
     
@@ -109,7 +110,7 @@ public class NttAdmController {
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
-        return BASIC_PATH + "/regist";
+        return BASIC_VIEW_PATH + "/regist";
     }
     
     
@@ -204,7 +205,7 @@ public class NttAdmController {
         if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/modify" ) ) remainPath = "modify";
         
         
-        return BASIC_PATH + "/" + remainPath;
+        return BASIC_VIEW_PATH + "/" + remainPath;
         
     }
     

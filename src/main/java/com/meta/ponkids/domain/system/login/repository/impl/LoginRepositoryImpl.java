@@ -74,7 +74,11 @@ public class LoginRepositoryImpl implements LoginRepositoryCustom {
                                 user.confmerId,
                                 user.confmerIp,
                                 user.confmDt,
-                                user.cntnSns,
+                                user.cntnSnsKakao,
+                                user.cntnSnsGoogle,
+                                user.cntnSnsNaver,
+                                user.cntnSnsFacebook,
+                                user.cntnSnsApple,
                                 user.lastLoginDt
                         )
                 )

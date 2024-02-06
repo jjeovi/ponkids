@@ -37,7 +37,7 @@ public class ClassController {
 	
     
     private final static String BASIC_PATH = "/class";
-    private final static String BASIC_DIR_PATH = "/pon/cls";
+    private final static String BASIC_VIEW_PATH = "pon/cls";
     
     private final ClassService classService;
     private final ClassWeekService classWeekService;
@@ -82,7 +82,7 @@ public class ClassController {
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
-        return BASIC_DIR_PATH + "/list";
+        return BASIC_VIEW_PATH + "/list";
     }
 	
     
@@ -148,7 +148,7 @@ public class ClassController {
     	// 기본 경로 setting
     	model.addAttribute( "basicPath", BASIC_PATH );
     	
-    	return BASIC_DIR_PATH + "/detail";
+    	return BASIC_VIEW_PATH + "/detail";
     }
 	
 	

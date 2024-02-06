@@ -31,7 +31,9 @@ public class LctreController {
     
     private final CmmnCdDetailService cmmnCdDetailService;
     
-    private final static String BASIC_PATH = "/lctre";
+    private final static String BASIC_VIEW_PATH = "lctre";
+    private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
+    
     
     // 수업리스트 검색 ( classSn, ClassDayCd : 클래스sn과 , 요일로 검색 ) 
     @ResponseBody

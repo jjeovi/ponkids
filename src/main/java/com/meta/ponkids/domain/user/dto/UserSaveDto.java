@@ -63,7 +63,15 @@ public class UserSaveDto {
     
     private LocalDateTime confmDt;  // 승인일시
     
-    private String cntnSns;         // 연계SNS
+    private String cntnSnsKakao;        // 연계 SNS Kakao
+    
+    private String cntnSnsGoogle;       // 연계 SNS google
+    
+    private String cntnSnsNaver;        // 연계 SNS naver
+    
+    private String cntnSnsFacebook;     // 연계 SNS facebook
+    
+    private String cntnSnsApple;        // 연계 SNS apple
     
     private String registerIp;      // 등록자 IP
     
@@ -75,7 +83,7 @@ public class UserSaveDto {
     
     // builder 생성
     @Builder
-    public UserSaveDto( String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSns, String registerIp, String updusrId, String updusrIp, String delYn ) {
+    public UserSaveDto( String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSnsKakao, String cntnSnsGoogle, String cntnSnsNaver, String cntnSnsFacebook, String cntnSnsApple, String registerIp, String updusrId, String updusrIp, String delYn ) {
         this.userId = userId;
         this.password = password;
         this.userNm = userNm;
@@ -92,7 +100,11 @@ public class UserSaveDto {
         this.confmerId = confmerId;
         this.confmerIp = confmerIp;
         this.confmDt = confmDt;
-        this.cntnSns = cntnSns;
+        this.cntnSnsKakao = cntnSnsKakao;
+        this.cntnSnsGoogle = cntnSnsGoogle;
+        this.cntnSnsNaver = cntnSnsNaver;
+        this.cntnSnsFacebook = cntnSnsFacebook;
+        this.cntnSnsApple = cntnSnsApple;
         this.registerIp = registerIp;
         this.updusrId = updusrId;
         this.updusrIp = updusrIp;
@@ -118,7 +130,11 @@ public class UserSaveDto {
                 .confmerId( confmerId )
                 .confmerIp( confmerIp )
                 .confmDt( confmDt )
-                .cntnSns( cntnSns )
+                .cntnSnsKakao( cntnSnsKakao )
+                .cntnSnsGoogle( cntnSnsGoogle )
+                .cntnSnsNaver( cntnSnsNaver )
+                .cntnSnsFacebook( cntnSnsFacebook )
+                .cntnSnsApple( cntnSnsApple )
                 .registerIp( registerIp )
                 .build();
     }

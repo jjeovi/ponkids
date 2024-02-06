@@ -57,7 +57,15 @@ public class LoginDto implements UserDetails {
     
     private LocalDateTime confmDt;      // 승인 일시
     
-    private String cntnSns;             // 연계
+    private String cntnSnsKakao;        // 연계 SNS Kakao
+    
+    private String cntnSnsGoogle;       // 연계 SNS google
+    
+    private String cntnSnsNaver;        // 연계 SNS naver
+    
+    private String cntnSnsFacebook;     // 연계 SNS facebook
+    
+    private String cntnSnsApple;        // 연계 SNS apple
     
     private LocalDateTime lastLoginDt;  // 마지막 로그인한 일시
     
@@ -77,7 +85,7 @@ public class LoginDto implements UserDetails {
     
     
     @QueryProjection
-    public LoginDto( Long userSn, String userId, String password, Long roleSn, String roleNm, String roleDc, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSns, LocalDateTime lastLoginDt ) {
+    public LoginDto( Long userSn, String userId, String password, Long roleSn, String roleNm, String roleDc, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSnsKakao, String cntnSnsGoogle, String cntnSnsNaver, String cntnSnsFacebook, String cntnSnsApple,  LocalDateTime lastLoginDt ) {
         this.userSn = userSn;
         this.userId = userId;
         this.password = password;
@@ -98,7 +106,11 @@ public class LoginDto implements UserDetails {
         this.confmerId = confmerId;
         this.confmerIp = confmerIp;
         this.confmDt = confmDt;
-        this.cntnSns = cntnSns;
+        this.cntnSnsKakao =cntnSnsKakao;
+        this.cntnSnsGoogle = cntnSnsGoogle;
+        this.cntnSnsNaver =cntnSnsNaver;
+        this.cntnSnsFacebook = cntnSnsFacebook;
+        this.cntnSnsApple = cntnSnsApple;
         this.lastLoginDt = lastLoginDt;
     }
     

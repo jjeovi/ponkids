@@ -44,7 +44,7 @@ public class LoginoutAdmController {
         // admin 접근시 경로 : /admin/login?auth=pon
         if ( !StringUtils.hasText( auth ) ) {
             // 권한체크 실패
-            return "/error/401";
+            return "error/401";
         }
         
         String errCd = ( String ) session.getAttribute( "errCd" );
@@ -57,7 +57,7 @@ public class LoginoutAdmController {
         
         model.addAttribute( "auth", auth );
         model.addAttribute( "successCode", AUTH );
-        return "/admin/login/login";
+        return "admin/login/login";
         
     }
 

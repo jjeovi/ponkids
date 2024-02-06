@@ -46,7 +46,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BannerAdmController {
     
-    private final static String BASIC_PATH = "/admin/banner";
+    private final static String BASIC_VIEW_PATH = "admin/banner";
+    private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
     private final BannerService bannerService;
     
     private final CmmnCdService cmmnCdService;
@@ -97,7 +98,7 @@ public class BannerAdmController {
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
-        return BASIC_PATH + "/list";
+        return BASIC_VIEW_PATH + "/list";
     }
     
     @GetMapping( BASIC_PATH + "/{mcd}/regist" )
@@ -120,7 +121,7 @@ public class BannerAdmController {
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
-        return BASIC_PATH + "/regist";
+        return BASIC_VIEW_PATH + "/regist";
     }
     
     
@@ -253,7 +254,7 @@ public class BannerAdmController {
         if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/detail" ) ) remainPath = "detail";
         if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/modify" ) ) remainPath = "modify";
         
-        return BASIC_PATH + "/" + remainPath;
+        return BASIC_VIEW_PATH + "/" + remainPath;
     }
     
     @Transactional

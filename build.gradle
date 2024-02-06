@@ -16,6 +16,7 @@ plugins {
 
 group = 'com.meta'
 version = '0.0.1-SNAPSHOT'
+apply plugin: 'war'
 
 java {
 	sourceCompatibility = '17'
@@ -105,4 +106,10 @@ clean {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+bootWar {
+	archiveBaseName = '-'
+	archiveFileName = 'ponkids.war'
+	archiveVersion = '0.0.0'
 }

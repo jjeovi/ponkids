@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 public class CustomErrorController implements ErrorController {
     
     // view default path setting
-    private final String DEFAULT_ADMIN_VIEW_PATH = "/admin/error/";
-    private final String DEFAULT_VIEW_PATH = "/error/";
+    private final String DEFAULT_ADMIN_VIEW_PATH = "admin/error/";
+    private final String DEFAULT_VIEW_PATH = "error/";
     
     @RequestMapping( value = "/error" )
     public String handleError( HttpServletRequest request, Model model ) {

@@ -36,7 +36,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MenuAdmController {
     
-    private final static String BASIC_PATH = "/admin/menu";
+    private final static String BASIC_VIEW_PATH = "admin/menu";
+    private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
+    
     private final MenuService menuService;
     private final RoleRepository roleRepository;
     private final MenuRoleRepository menuRoleRepository;
@@ -76,7 +78,7 @@ public class MenuAdmController {
         model.addAttribute( "basicPath", BASIC_PATH );
         model.addAttribute( "type", type );
         
-        return BASIC_PATH + "/list";
+        return BASIC_VIEW_PATH + "/list";
     }
     
     @GetMapping( BASIC_PATH + "/regist" )
@@ -92,7 +94,7 @@ public class MenuAdmController {
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
-        return BASIC_PATH + "/regist";
+        return BASIC_VIEW_PATH + "/regist";
     }
     
     @GetMapping( value = {
@@ -119,7 +121,7 @@ public class MenuAdmController {
         if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/detail" ) ) remainPath = "detail";
         if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/modify" ) ) remainPath = "modify";
         
-        return BASIC_PATH + "/" + remainPath;
+        return BASIC_VIEW_PATH + "/" + remainPath;
     }
     
     @Transactional

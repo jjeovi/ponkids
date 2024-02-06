@@ -673,7 +673,7 @@ function readyLogin(){
 
 
 function goKakaoLogin() {
-
+	location.href='/oauth2/authorization/kakao';
 }
 
 function goGoogleLogin() {

@@ -38,7 +38,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
     
-    private final static String BASIC_PATH = "/user";
+	private final static String BASIC_VIEW_PATH = "user";
+	private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
+    
+    
     private final UserService userService;
     private final UserRoleService userRoleService;
     private final UserChldrnRepository userChldrnRepository;

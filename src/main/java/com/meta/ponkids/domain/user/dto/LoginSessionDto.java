@@ -35,7 +35,15 @@ public class LoginSessionDto {
     
     private String mngrConfmYn;         // 관리자 승인 여부
     
-    private String cntnSns;             // 연계
+    private String cntnSnsKakao;        // 연계 SNS Kakao
+    
+    private String cntnSnsGoogle;       // 연계 SNS google
+    
+    private String cntnSnsNaver;        // 연계 SNS naver
+    
+    private String cntnSnsFacebook;     // 연계 SNS facebook
+    
+    private String cntnSnsApple;        // 연계 SNS apple
     
     private LocalDateTime lastLoginDt;  // 마지막 로그인한 일시
     

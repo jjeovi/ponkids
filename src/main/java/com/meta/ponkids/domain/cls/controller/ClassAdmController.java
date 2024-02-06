@@ -43,7 +43,7 @@ import lombok.RequiredArgsConstructor;
 public class ClassAdmController {
     
     private final static String BASIC_PATH = "/admin/class";
-    private final static String BASIC_DIR_PATH = "/admin/cls";
+    private final static String BASIC_VIEW_PATH = "admin/cls";
     
     private final ClassService classService;
     private final ClassWeekService classWeekService;
@@ -91,7 +91,7 @@ public class ClassAdmController {
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
-        return BASIC_DIR_PATH + "/list";
+        return BASIC_VIEW_PATH + "/list";
     }
     
     @GetMapping( BASIC_PATH + "/{mcd}/regist" )
@@ -120,7 +120,7 @@ public class ClassAdmController {
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
-        return BASIC_DIR_PATH + "/regist";
+        return BASIC_VIEW_PATH + "/regist";
     }
     
     @Transactional
@@ -234,7 +234,7 @@ public class ClassAdmController {
         if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/detail" ) ) remainPath = "detail";
         if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/modify" ) ) remainPath = "modify";
         
-        return BASIC_DIR_PATH + "/" + remainPath;
+        return BASIC_VIEW_PATH + "/" + remainPath;
     }
     
     @Transactional

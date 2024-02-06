@@ -69,7 +69,15 @@ public class UserModDto {
     
     private LocalDateTime confmDt;  // 승인일시
     
-    private String cntnSns;         // 연계SNS
+    private String cntnSnsKakao;        // 연계 SNS Kakao
+    
+    private String cntnSnsGoogle;       // 연계 SNS google
+    
+    private String cntnSnsNaver;        // 연계 SNS naver
+    
+    private String cntnSnsFacebook;     // 연계 SNS facebook
+    
+    private String cntnSnsApple;        // 연계 SNS apple
     
     private String updusrId;        // 수정자 ID
     
@@ -79,7 +87,7 @@ public class UserModDto {
     
     // builder 생성
     @Builder
-    public UserModDto( Long userSn, String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSns, String updusrId, String updusrIp, String delYn ) {
+    public UserModDto( Long userSn, String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSnsKakao, String cntnSnsGoogle, String cntnSnsNaver, String cntnSnsFacebook, String cntnSnsApple, String updusrId, String updusrIp, String delYn ) {
         this.userSn = userSn;
         this.userId = userId;
         this.password = password;
@@ -97,7 +105,11 @@ public class UserModDto {
         this.confmerId = confmerId;
         this.confmerIp = confmerIp;
         this.confmDt = confmDt;
-        this.cntnSns = cntnSns;
+        this.cntnSnsKakao = cntnSnsKakao;
+        this.cntnSnsGoogle = cntnSnsGoogle;
+        this.cntnSnsNaver = cntnSnsNaver;
+        this.cntnSnsFacebook = cntnSnsFacebook;
+        this.cntnSnsApple = cntnSnsApple;
         this.updusrId = updusrId;
         this.updusrIp = updusrIp;
         this.delYn = delYn;
@@ -123,7 +135,11 @@ public class UserModDto {
                 .confmerId( confmerId )
                 .confmerIp( confmerIp )
                 .confmDt( confmDt )
-                .cntnSns( cntnSns )
+                .cntnSnsKakao( cntnSnsKakao )
+                .cntnSnsGoogle( cntnSnsGoogle )
+                .cntnSnsNaver( cntnSnsNaver )
+                .cntnSnsFacebook( cntnSnsFacebook )
+                .cntnSnsApple( cntnSnsApple )
                 .updusrId( updusrId )
                 .updusrIp( updusrIp )
                 .build();
@@ -149,7 +165,11 @@ public class UserModDto {
                 .confmerId( user.getConfmerId() )
                 .confmerIp( user.getConfmerIp() )
                 .confmDt( user.getConfmDt() )
-                .cntnSns( user.getCntnSns() )
+                .cntnSnsKakao( user.getCntnSnsKakao() )
+                .cntnSnsGoogle( user.getCntnSnsGoogle() )
+                .cntnSnsNaver( user.getCntnSnsNaver() )
+                .cntnSnsFacebook( user.getCntnSnsFacebook() )
+                .cntnSnsApple( user.getCntnSnsApple() )
                 .updusrId( user.getUpdusrId() )
                 .updusrIp( user.getUpdusrIp() )
                 .build();

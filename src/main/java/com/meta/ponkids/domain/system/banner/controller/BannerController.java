@@ -17,7 +17,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BannerController {
     
-    private final static String BASIC_PATH = "/banner";
+    private final static String BASIC_VIEW_PATH = "banner";
+    private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
     
     private final static String BANNER_MAIN_TOP = "MAIN_TOP";
     private final static String BANNER_MAIN_CLASS = "MAIN_CLASS";

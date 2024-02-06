@@ -31,7 +31,8 @@ public class MenuController {
     @Value( "${key.default.userRootMenuSn}" )
     private Long USER_ROOT_MENU_SN;
     
-    private final static String BASIC_PATH = "/menu";
+    private final static String BASIC_VIEW_PATH = "menu";
+    private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
     
     private final MenuService menuService;
 

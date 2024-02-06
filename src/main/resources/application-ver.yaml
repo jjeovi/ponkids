@@ -1,0 +1,28 @@
+##################################           ver product  properties !!        ####################################
+##################################           ver product  properties !!        ####################################
+##################################           ver product  properties !!        ####################################
+##################################           ver product  properties !!        ####################################
+##################################           ver product  properties !!        ####################################
+
+
+#########################################        Properties           #########################################
+spring :
+    datasource :
+        driver-class-name : org.postgresql.Driver
+        url : jdbc:postgresql://db.jjeovi.gabia.io:5432/dbjjeovi
+        username : jjeovi
+        password : ponkids2023!
+    jpa :
+        properties :
+            hibernate :
+                default_schema : ponkids_dev
+
+#########################################        System Variables           #########################################
+
+key :
+    upload :
+        path : /web/ponkids/upload                                    # 업로드 파일 저장 경로  : 운영 서버
+    menu:
+        jsonFilePath : /file/menu/json/pon/                            # 사용자 메뉴 파일 생성 경로 : 운영 서버
+        
+######################################################################################################################

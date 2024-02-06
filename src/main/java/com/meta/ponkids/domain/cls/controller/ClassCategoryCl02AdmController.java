@@ -35,7 +35,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ClassCategoryCl02AdmController {
     
-    private final static String BASIC_PATH = "/admin/classCategoryCl02";
+    private final static String BASIC_VIEW_PATH = "admin/classCategoryCl02";
+    private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
+    
     private final ClassCategoryCl02Service classCategoryCl02Service;
     private final ClassCategoryCl01Service classCategoryCl01Service;
     
@@ -80,7 +82,7 @@ public class ClassCategoryCl02AdmController {
         // 부모 카테고리 Sn 값 setting
         model.addAttribute( "parntsClSn", parntsClSn );
         
-        return BASIC_PATH + "/list";
+        return BASIC_VIEW_PATH + "/list";
     }
     
     @GetMapping( BASIC_PATH + "/{mcd}/{parntsClSn}/regist" )
@@ -110,7 +112,7 @@ public class ClassCategoryCl02AdmController {
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
-        return BASIC_PATH + "/regist";
+        return BASIC_VIEW_PATH + "/regist";
     }
     
     @Transactional
@@ -197,7 +199,7 @@ public class ClassCategoryCl02AdmController {
         if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/detail" ) ) remainPath = "detail";
         if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/modify" ) ) remainPath = "modify";
         
-        return BASIC_PATH + "/" + remainPath;
+        return BASIC_VIEW_PATH + "/" + remainPath;
     }
     
     @Transactional

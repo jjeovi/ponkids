@@ -17,7 +17,7 @@ public class HomeAdmController {
         
         // E : 필요한 객체 setting
         
-        return "/admin/home";
+        return "admin/home";
     }
     
 }

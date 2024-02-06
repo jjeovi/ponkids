@@ -43,7 +43,8 @@ public class LctreAdmController {
     
     private final CmmnCdDetailService cmmnCdDetailService;
     
-    private final static String BASIC_PATH = "/admin/lctre";
+    private final static String BASIC_VIEW_PATH = "admin/lctre";
+    private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
     
     
     @GetMapping( value = { BASIC_PATH + "/{mcd}/list",
@@ -133,7 +134,7 @@ public class LctreAdmController {
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
-        return BASIC_PATH + "/list";
+        return BASIC_VIEW_PATH + "/list";
     }
     
     @GetMapping( BASIC_PATH + "/{mcd}/{classSn}/regist" )
@@ -169,7 +170,7 @@ public class LctreAdmController {
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
-        return BASIC_PATH + "/regist";
+        return BASIC_VIEW_PATH + "/regist";
     }
     
     @Transactional
@@ -273,7 +274,7 @@ public class LctreAdmController {
         if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/detail" ) ) remainPath = "detail";
         if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/modify" ) ) remainPath = "modify";
         
-        return BASIC_PATH + "/" + remainPath;
+        return BASIC_VIEW_PATH + "/" + remainPath;
     }
     
     @Transactional
