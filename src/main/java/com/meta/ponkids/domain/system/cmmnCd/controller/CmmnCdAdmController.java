@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -20,12 +21,17 @@ import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdListDto;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdModDto;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdSaveDto;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdService;
+import com.meta.ponkids.global.util.file.FileUtils;
 
 import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
 public class CmmnCdAdmController {
+	
+
+    @Value( "${key.cmmnCd.jsonFilePath}" )
+    private String JSON_FILE_PATH;
     
     private final static String BASIC_VIEW_PATH = "admin/cmmnCd";
     private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
@@ -91,6 +97,11 @@ public class CmmnCdAdmController {
         // save
         cmmnCdService.save( saveDto, request );
 //        cmmnCdService.save( saveDto, cmmnCdRoleSaveDto, request );
+        
+        // TODO : 공통코드 폴더 존재 체크 및 생성 작업 수행
+        String rootPath = System.getProperty( "user.dir" );
+        FileUtils.createPath( rootPath + JSON_FILE_PATH + saveDto.getCdNm()  );
+        
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );

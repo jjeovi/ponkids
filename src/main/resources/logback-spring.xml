@@ -1,40 +1,99 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 15초마다 설정 파일의 변경을 확인 하여 변경시 갱신 -->
-<configuration scan="true" scanPeriod="30 seconds">
-  
-	  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>%d{HH:mm:ss.SSS} [%-5level] - %msg%n</Pattern>
-        </layout>
-    </appender>
-  
-    <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-      <!-- Rolling 정책 -->  
-      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./logs/logback-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <!-- 7일까지 보관 -->
-            <maxHistory>7</maxHistory>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <!-- or whenever the file size reaches 100MB -->
-                <maxFileSize>100MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-        </rollingPolicy>
-      
-        <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-      
-    </appender>
-  
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 60초마다 설정 파일의 변경을 확인하여 변경시 갱신 -->
+<configuration scan="true" scanPeriod="60 seconds">
+	<!-- 로그 패턴에 색상 적용 %clr(pattern){color} https://logback.qos.ch/manual/layouts.html#coloring -->
+	<conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
 
+	<!-- springProfile 태그를 사용하여 profile 별 property 값 설정 -->
+	<springProfile name="local">
+		<!-- local log file path -->
+		<property name="LOG_PATH" value="log/ponkids_local/"/>
+		<property name="LOG_LEVEL" value="WARN"/>
+	</springProfile>
+	<springProfile name="ver">
+		<!-- dev log file path -->
+		<property name="LOG_PATH" value="log/ponkids_ver/"/>
+		<property name="LOG_PATH" value="log/ponkids_ver/"/>
+	</springProfile>
 
-    <root level="INFO">
-        <appender-ref ref="STDOUT" />
-    </root>
+	<!-- Environment 내의 프로퍼티들을 개별적으로 설정 -->
+	<springProperty scope="context" name="LOG_LEVEL" source="logging.level.root"/>
 
-    <logger name="graduation.alcoholic.web.board.alcohol" level="INFO">
-        <appender-ref ref="ROLLING" />
-    </logger>
+	<!-- log file name -->
+	<property name="LOG_FILE_NAME" value="console"/>
+	<!-- err log file name -->
+	<property name="ERR_LOG_FILE_NAME" value="console_error"/>
+	<!-- console log pattern -->
+	<property name="CONSOLE_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}:%-3relative]  %clr(%-5level) %clr(${PID:-}){magenta} %clr(---){faint} %clr([%15.15thread]){faint} %clr(%-40.40logger{36}){cyan} %clr(:){faint} %msg%n"/>
+	<!-- file log pattern -->
+	<property name="FILE_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}:%-3relative] %-5level ${PID:-} --- [%15.15thread] %-40.40logger{36} : %msg%n"/>
 
+	<!-- Console Appender -->
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${CONSOLE_LOG_PATTERN}</pattern>
+		</encoder>
+	</appender>
 
+	<!-- File Appender -->
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 파일경로 설정 -->
+		<file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+
+		<!-- 출력패턴 설정 -->
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${FILE_LOG_PATTERN}</pattern>
+		</encoder>
+
+		<!-- Rolling 정책 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- .gz .zip 등을 넣으면 자동 일자별 로그 파일 압축 -->
+			<fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}_%i.gz</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				파일당 최고 용량 kb, mb, gb
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- 일자별 로그 파일 최대 보관주기(~일), 해당 설정일 이상된 파일은 자동으로 제거 -->
+			<maxHistory>30</maxHistory>
+			<!-- 전체 파일 크기를 제어하며, 전체 크기 제한을 조과하면 가장 오래된 파일을 삭제 -->
+			<totalSizeCap>40MB</totalSizeCap>
+		</rollingPolicy>
+	</appender>
+
+	<!-- 에러의 경우 파일에 로그 처리 -->
+	<appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>error</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>${LOG_PATH}/${ERR_LOG_FILE_NAME}.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${FILE_LOG_PATTERN}</pattern>
+		</encoder>
+
+		<!-- Rolling 정책 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- .gz .zip 등을 넣으면 자동 일자별 로그파일 압축 -->
+			<fileNamePattern>${LOG_PATH}/${ERR_LOG_FILE_NAME}.%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				파일당 최고 용량 kb, mb, gb
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- 일자별 로그 파일 최대 보관주기(~일), 해당 설정일 이상된 파일은 자동으로 제거 -->
+			<maxHistory>60</maxHistory>
+		</rollingPolicy>
+	</appender>
+	
+	<!-- Logger -->
+    <logger name="com.study" level="DEBUG" appender-ref="console" />
+    <logger name="jdbc.sqlonly" level="WARN" appender-ref="console-infolog" />
+    <logger name="jdbc.resultsettable" level="INFO" appender-ref="console-infolog" />
+
+	<!-- root 레벨 설정 -->
+	<root level="INFO">
+		<appender-ref ref="CONSOLE"/>
+		<appender-ref ref="FILE"/>
+		<appender-ref ref="ERROR"/>
+	</root>
 </configuration>

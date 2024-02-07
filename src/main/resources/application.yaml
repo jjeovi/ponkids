@@ -5,11 +5,6 @@ spring :
         multipart :
             maxFileSize : 10MB      # 파일 하나의 최대 크기
             maxRequestSize : 30MB   # 한 번에 최대 업로드 가능 용량
-    devtools :
-        livereload :
-            enabled : true
-        restart :
-            enabled : true
     jpa :
         properties :
             hibernate :
@@ -18,13 +13,10 @@ spring :
                         non_contextual_creation : 'true'
         hibernate :
             ddl-auto : none
-    thymeleaf :
-        cache : false
     profiles :
         active : prod
         include : 
           - sns
-          - file-logging
     mvc :
         converters :
             preferred-json-mapper : gson
@@ -37,6 +29,8 @@ server :
         session :
             persistent : true           # 재기동 해도 스프링 관련 세션 유지.
             timeout : 3600              # 세션 시간 (60분: 3600 )
+    tomcat:
+        connection-timeout: 15000 # 10000 = 10sec / 컨넥션 타임아웃 . 15초 이상 지연되면 타임아웃 exception 
 
 # log 
 log : 

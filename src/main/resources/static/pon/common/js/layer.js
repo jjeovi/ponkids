@@ -10,11 +10,13 @@ var passwordMatchCheckFlag	= false;  	// 비밀번호 비교 일치 여부 확�
 $( function() {
 	
 	const lgStatus = urlParams.get('lgStatus');
-	if ( lgStatus == 'login' ) {
+	if ( lgStatus == 'login' || lgStatus == 'userIntegrated' ) {
 		showPopup(lgStatus);
 		
 		if ( errMsg != null && errMsg != '' ) {
 			alert(errMsg);
+		} else if ( infoMsg != null && infoMsg != '' ) {
+			alert(infoMsg);
 		}
 	}
 	
@@ -616,7 +618,7 @@ function refreshAndShowLoginPop() {
 	location.href = '?lgStatus=login';
 }
 
-function readyLogin(){
+function readyLogin( loginType ) {
 	
 	// 비밀번호 유효성 체크
 	var userId = $( "#userInsertForm" ).find("[name='password']").val();
@@ -665,19 +667,29 @@ function readyLogin(){
 						} else if ( result.flag == "S" ) {
 							// TODO : ajax 통신 이후 로직 ( 성공시 ) 구현 
 							
-							$( "#loginForm" ).submit();	// 로그인 구현
+							switch ( loginType ) {
+								
+								case 'default':
+									
+									$( "#loginForm" ).submit();	// 로그인 구현
+									break;
+									
+								case 'kakao':
+									
+									location.href='/oauth2/authorization/kakao';
+									break;
+									
+								case 'google':
+									
+									location.href="/oauth2/authorization/google";
+									break;
+									
+								default:
+									
+									$( "#loginForm" ).submit();	// 로그인 구현
+							}
+							
 						}
 	                }
 	        	});
 }
-
-
-function goKakaoLogin() {
-	location.href='/oauth2/authorization/kakao';
-}
-
-function goGoogleLogin() {
-	location.href="/oauth2/authorization/google";
-}
-
-

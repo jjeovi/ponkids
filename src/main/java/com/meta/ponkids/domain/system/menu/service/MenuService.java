@@ -34,6 +34,7 @@ import com.meta.ponkids.domain.system.menu.entity.UserMenuHierarchy;
 import com.meta.ponkids.domain.system.menu.repository.MenuRepository;
 import com.meta.ponkids.domain.system.menu.repository.MenuRoleRepository;
 import com.meta.ponkids.domain.system.role.dto.RoleListDto;
+import com.meta.ponkids.global.util.file.FileUtils;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
 
@@ -345,35 +346,15 @@ public class MenuService {
         MenuListDto menuListDto = new MenuListDto();
         
         List<MenuListDto> menuListDtos = this.getUserMenuList( menuListDto );
+      
+        // 해당 path 에 fileData 의 내용의 fileName 이름의 파일 생성
+        String path = System.getProperty( "user.dir" ) + JSON_FILE_PATH;			// rootPath(System.getProperty("user.dir"))부터 path 설정
+        String fileName = "pon-menu-list";											// [ .json ] 은 추가하지 않음.
+        Object fileData = menuListDtos;												// 실제 file안에 채워질 json 형태의 데이터
         
-        // Gson 사용
-        String json = new Gson().toJson( menuListDtos );
+        // fileCreate to json 
+        FileUtils.createJsonFile(path, fileName, fileData ) ;
         
-        Gson gson = new Gson();
-        
-        // lecture 객체를 파일에 쓰기
-        String rootPath = System.getProperty( "user.dir" );
-        
-        String compareFilePath = rootPath + JSON_FILE_PATH + "pon-menu-list.json";
-        compareFilePath = compareFilePath.replaceAll( "\\\\", "/" );
-        
-        File file = new File( compareFilePath );
-        
-        Path existPath = Paths.get( rootPath + JSON_FILE_PATH + "pon-menu-list.json" );
-        Path oldPath = Paths.get( rootPath + JSON_FILE_PATH + "pon-menu-list_old.json" );
-        
-        if ( file.exists() ) {
-            // 파일이 존재하면 old 버전으로 복사
-            Files.copy( existPath, oldPath, StandardCopyOption.REPLACE_EXISTING ); // oldPath 가 존재한다 하더라도 덮어쓰기로 old 파일 생성
-        }
-        
-        // 파일이 존재하지 않다면 : 새로 생성
-        try ( PrintWriter out = new PrintWriter( new FileWriter( rootPath + JSON_FILE_PATH + "pon-menu-list.json" ) ) ) {
-            String jsonString = gson.toJson( menuListDtos );
-            out.write( jsonString );
-        } catch ( Exception e ) {
-            e.printStackTrace();
-        }
     }
     
 }

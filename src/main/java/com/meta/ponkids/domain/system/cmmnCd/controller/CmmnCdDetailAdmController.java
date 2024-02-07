@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -28,12 +29,22 @@ import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdModDto;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdService;
 import com.meta.ponkids.global.common.dto.CategoryDto;
+import com.meta.ponkids.global.util.file.FileUtils;
 
 import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
 public class CmmnCdDetailAdmController {
+	
+
+    @Value( "${key.cmmnCd.jsonFilePath}" )
+    private String JSON_FILE_PATH;
+    
+    
+    @Value( "${key.divider}" )
+    private String DIVIDER;
+    
     
     private final static String BASIC_VIEW_PATH = "admin/cmmnCdDetail";
     private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
@@ -147,6 +158,9 @@ public class CmmnCdDetailAdmController {
         // save
         cmmnCdDetailService.save( saveDto, request );
         
+        // 공통코드 json 파일 생성 및 업데이트 작업 수행
+        makeJsonOrUpdateJson( saveDto.getCdNm() );
+        
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
         model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/" + cdSn + "/list" );
@@ -243,6 +257,9 @@ public class CmmnCdDetailAdmController {
         // update 구현
         cmmnCdDetailService.update( modDto, request );
         
+        // 공통코드 json 파일 생성 및 업데이트 작업 수행
+        makeJsonOrUpdateJson( modDto.getCdNm() );
+        
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
         model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/" + cdSn + "/list" );
@@ -261,6 +278,9 @@ public class CmmnCdDetailAdmController {
         
         // 삭제 처리
         cmmnCdDetailService.deleteAllById( pk );        // By 뒤에는 custom
+        
+        // TODO : 공통코드 json 파일 생성 및 업데이트 작업 수행
+        
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
@@ -325,6 +345,22 @@ public class CmmnCdDetailAdmController {
                 listDto.setCategory( categoryDto );
             }
         }
+    }
+    
+    
+    private void makeJsonOrUpdateJson( String cdNm ) throws IOException {
+    	
+        List<CmmnCdDetailListDto> cmmnCdDetailListDtos = cmmnCdDetailService.getList( cdNm );
+        // 해당 path 에 fileData 의 내용의 fileName 이름의 파일 생성
+        String path = System.getProperty( "user.dir" ) + JSON_FILE_PATH + cdNm;	// rootPath(System.getProperty("user.dir"))부터 path 설정
+        String fileName = cdNm;													// [ .json ] 은 추가하지 않음.
+        Object fileData = cmmnCdDetailListDtos;													// 실제 file안에 채워질 json 형태의 데이터
+
+        // path 생성 * ( 기존에 있더라도 혹시 모르니 한번 더 경로 생성해줌. 기존에 있다면 return ) 
+        FileUtils.createPath( path );						
+        // fileCreate to json 
+        FileUtils.createJsonFile( path + DIVIDER, fileName, fileData ) ;
+    	
     }
     
     

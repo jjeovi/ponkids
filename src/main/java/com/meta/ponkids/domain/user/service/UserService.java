@@ -130,6 +130,17 @@ public class UserService {
     }
     
     
+    public UserModDto findByUserId( String userId ) {
+    	
+    	User user = userRepository.findByUserId( userId );
+    	
+    	UserModDto userModDto = new UserModDto();
+    	userModDto = userModDto.toDto( user );
+    	
+    	return userModDto;
+    }
+    
+    
     @Transactional
 //    public UserSaveDto save( UserSaveDto userSaveDto, UserRoleSaveDto userRoleSaveDto, MultiUserChldrnSaveDto userChldrns, HttpServletRequest request ) throws IOException {
     public void update( UserModDto modDto, UserRoleModDto userRoleModDto, MultiUserChldrnSaveDto userChldrns, HttpServletRequest request ) throws IOException {

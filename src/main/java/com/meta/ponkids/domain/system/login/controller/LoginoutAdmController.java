@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.meta.ponkids.domain.system.login.dto.LoginDto;
 import com.meta.ponkids.global.util.error.ErrorUtils;
+import com.meta.ponkids.global.util.message.MessageUtils;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +41,7 @@ public class LoginoutAdmController {
     public String admLogin( @RequestParam( "auth" ) String auth,
                             HttpServletRequest request,
                             HttpSession session,
-                            Model model ) {
+                            Model model ) throws FileNotFoundException {
         
         // admin 접근시 경로 : /admin/login?auth=pon
         if ( !StringUtils.hasText( auth ) ) {
@@ -51,7 +53,7 @@ public class LoginoutAdmController {
         if ( StringUtils.hasText( errCd ) ) {
             session.removeAttribute( "errCd" );
             
-            String errMsg = ErrorUtils.getErrorMessage( errCd );
+            String errMsg = MessageUtils.getMessageFromCmmnCd( "ERR_MSG_CD", errCd );
             model.addAttribute( "errMsg", errMsg );
         }
         

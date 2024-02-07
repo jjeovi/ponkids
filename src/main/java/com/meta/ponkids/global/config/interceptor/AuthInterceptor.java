@@ -44,7 +44,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 // loginDto 가 없을 시
                 
                 // 로그인 페이지로 이동
-                goToLogin( fullUrl, request, response, "E6" );	// 
+                goToLogin( fullUrl, request, response, "LGNEMCD006" );	// 
                 return false;
                 
             } else {
@@ -57,7 +57,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 	if ( auth != null ) {
                 		new SecurityContextLogoutHandler().logout(request, response, auth);
                 	}
-                	goToLogin( fullUrl, request, response, "E7" );
+                	goToLogin( fullUrl, request, response, "LGNEMCD007" );
                 	return false;
                 }
                 
@@ -66,7 +66,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 		new SecurityContextLogoutHandler().logout(request, response, auth);
                 	}
                 	
-                	goToLogin( fullUrl, request, response, "E8" );
+                	goToLogin( fullUrl, request, response, "LGNEMCD008" );
                	 	return false;
                 } 
             }

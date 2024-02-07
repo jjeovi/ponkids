@@ -10,6 +10,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.meta.ponkids.global.util.error.ErrorUtils;
+import com.meta.ponkids.global.util.message.MessageUtils;
 
 @Component
 public class ErrorInterceptor implements HandlerInterceptor {
@@ -23,7 +24,7 @@ public class ErrorInterceptor implements HandlerInterceptor {
         if ( StringUtils.hasText( errCd ) ) {
             session.removeAttribute( "errCd" );
             
-            String errMsg = ErrorUtils.getErrorMessage( errCd );
+            String errMsg = MessageUtils.getMessageFromCmmnCd( "ERR_MSG_CD", errCd );
             request.setAttribute( "errMsg", errMsg );
         }
         

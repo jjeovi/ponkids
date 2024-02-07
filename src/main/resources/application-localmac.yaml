@@ -7,6 +7,13 @@
 
 #########################################        Properties           #############################################
 spring :
+    devtools :
+        livereload :
+            enabled : true
+        restart : 
+            enabled : true
+    thymeleaf : 
+        cache : false
     datasource :
         driver-class-name : org.postgresql.Driver
         url : jdbc:postgresql://db.jjeovi.gabia.io:5432/dbjjeovi
@@ -24,5 +31,8 @@ key :
         path : /Users/jjeoV/Desktop/jjeoV/2023/pioneerKids/upload/      # 업로드 파일 저장 경로 ( 개발용 ) ( Mac )
     menu:
         jsonFilePath : /file/menu/json/pon/                             # 사용자 메뉴 파일 생성 경로 ( Mac )
+    cmmnCd:
+        jsonFilePath : /file/cmmnCd/                                   # 사용자 메뉴 파일 생성 경로 ( window )
+    divider: \                                                          # 파일 구분자 ( window )
         
 ####################################################################################################################
