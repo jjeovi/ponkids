@@ -13,14 +13,18 @@ import com.meta.ponkids.global.util.error.ErrorUtils;
 import com.meta.ponkids.global.util.message.MessageUtils;
 
 @Component
-public class ErrorInterceptor implements HandlerInterceptor {
+public class MessageInterceptor implements HandlerInterceptor {
     
     @Override
     public void postHandle( HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView ) throws Exception {
     	
     	HttpSession session = request.getSession();
     	
+    	// 1. errCd 값으로 에러 메시지를 조회하여 model 에 추가
+    	// 2. infoCd 값으로 안내성 메시지를 조회하여 model에 추가
     	
+    	
+    	// 1. errCd 값으로 에러 메시지를 조회하여 model 에 추가
     	// errCd
     	// 1. session 
     	// 2. model
@@ -34,6 +38,22 @@ public class ErrorInterceptor implements HandlerInterceptor {
             
             String errMsg = MessageUtils.getMessageFromCmmnCd( "ERR_MSG_CD", errCd );
             request.setAttribute( "errMsg", errMsg );
+        }
+        
+        // 2. infoCd 값으로 안내성 메시지를 조회하여 model에 추가
+        // infoCd
+        // 1. session 
+        // 2. model
+        // 2군데 모두 탐색하여 infoCd 값을 찾고, 없으면 return
+        
+        String infoCd = ( String ) session.getAttribute( "infoCd" ) ;
+        if ( StringUtils.hasText( infoCd ) ) infoCd = ( String ) modelAndView.getModel().get( "infoCd" );
+        
+        if ( StringUtils.hasText( infoCd ) ) {
+        	session.removeAttribute( "infoCd" );
+        	
+        	String errMsg = MessageUtils.getMessageFromCmmnCd( "INFO_MSG_CD", infoCd );
+        	request.setAttribute( "infoCd", infoCd );
         }
         
     }

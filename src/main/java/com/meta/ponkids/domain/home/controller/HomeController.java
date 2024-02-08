@@ -40,7 +40,6 @@ public class HomeController {
         // home 선언하여 차별점 둠 ( layout.html > pon-contents class 삭제 )
         model.addAttribute( "mcd", "home" );
         
-        
         // E : 필요한 객체 setting
         
         return "pon/index";

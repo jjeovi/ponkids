@@ -28,12 +28,18 @@ public class MessageUtils {
     }
 
     @SuppressWarnings("unchecked")
-	public static String getMessageFromCmmnCd( String cdNm,  String cdDetailNm ) throws FileNotFoundException {
+	public static String getMessageFromCmmnCd( String cdNm,  String cdDetailNm )  {
     	
     	// file read
 		String path = System.getProperty( "user.dir" ) + JSON_FILE_PATH + cdNm;	// rootPath(System.getProperty("user.dir"))부터 path 설정
 		String fileName = cdNm;
-		List<JsonDto> messageList = (List<JsonDto> ) FileUtils.readJsonFile( path + DIVIDER , fileName );
+		List<JsonDto> messageList = null;
+		try {
+			messageList = (List<JsonDto> ) FileUtils.readJsonFile( path + DIVIDER , fileName );
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		Optional<JsonDto> messageDto =  messageList.stream().filter( f -> f.getCdDetailNm().equals(cdDetailNm) ).findAny();
 		

@@ -20,7 +20,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.meta.ponkids.domain.system.login.repository.LoginRepository;
 import com.meta.ponkids.domain.user.entity.User;
 import com.meta.ponkids.domain.user.repository.UserRepository;
 
@@ -30,11 +29,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OAuth2UserService extends DefaultOAuth2UserService{
 	
-	private final UserRepository userRepository;
+	private final UserRepository 	userRepository;
+	
+	@Value( "${key.admin.auth}" )
+	private String ADMIN_AUTH;
+	
 	
     @Value( "${key.default.user}" )
     private String TYPE_USER;
 	
+    
+    @Value( "${key.default.admin}" )
+    private String TYPE_ADMIN;
+    
 	@SuppressWarnings("unchecked")
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest ) throws OAuth2AuthenticationException {
@@ -43,7 +50,8 @@ public class OAuth2UserService extends DefaultOAuth2UserService{
 		
 		HttpServletResponse response = ( ( ServletRequestAttributes ) RequestContextHolder.currentRequestAttributes() ).getResponse();
 		
-		  HttpSession session = request.getSession();
+		
+		HttpSession session = request.getSession();
 //		- SNS 로그인을 했을때
 //		1. sns의 email 을 추출하여 해당 이메일로 가입된 계정이 있는지를 조회 
 //		 1-1. 같은 이메일로 가입된 계정(A)이 있을 경우
@@ -56,7 +64,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService{
 //		    -> 1-2-(1)(최초 1회)) 회원가입 진행 : 회원가입시 이메일은 disabled 처리하여 수정못하게 하고, 비밀번호와 나머지 입력은 기존 회원가입과 동일하게 수행. 
 //		           => "최초 로그인 시 회원 정보 등록이 필요합니다. 회원정보 등록 후 재로그인 해주세요. (추후 일반로그인으로도 로그인이 가능합니다.)"
 //		    -> 1-2-(2) 최초 1회 로그인이 아닐시 : 1-1-(2) 로직으로 이동
-	
 		
 //		String provider = userRequest.getClientRegistration().getClientId();
 //		String providerId = oAuth2User.getAttribute("sub");
@@ -71,7 +78,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService{
 		// 구글용 email 추출
 		String googleEmail = oAuth2User.getAttribute("email");		// 구글용
 		
-		
 		// 카카오용 email 추출
 		LinkedHashMap<String, String> kakaoAccount = (LinkedHashMap<String, String>) oAuth2User.getAttribute("kakao_account");
 		String kakaoEmail = "";
@@ -80,17 +86,17 @@ public class OAuth2UserService extends DefaultOAuth2UserService{
 			
 		}
 		
+		// snsType 체크 
 		if ( StringUtils.hasText( googleEmail ) ) {
 			
 			userId = googleEmail;
 			snsType = "google";
 			
-		} else if ( StringUtils.hasText( kakaoEmail )) {
+		} else if ( StringUtils.hasText( kakaoEmail ) ) {
 			
 			userId = kakaoEmail;
 			snsType = "kakao";
 		}
-		
 		
 		boolean isExistUser = userRepository.existsByUserId( userId );
 		
@@ -118,17 +124,19 @@ public class OAuth2UserService extends DefaultOAuth2UserService{
 			}
 			
 			if ( !snsCntnYn ) {
-//				=> (1) (최초 1회)연동이 되어 있지 않을 경우 : 기존 계정 A 의 비밀번호를 확인받은 뒤, 연동된다는 안내와 함께 연동작업 수행
+//				=> 1-1-(1) (최초 1회)연동이 되어 있지 않을 경우 : 기존 계정 A 의 비밀번호를 확인받은 뒤, 연동된다는 안내와 함께 연동작업 수행
 //				  => "이미 가입되어있는 계정이 존재합니다. 해당 SNS로그인을 사용하시려면 기존 계정의 비밀번호를 입력 후 계정통합을 한 뒤, 재로그인 해주세요."
 				
 				try {
+					// 계정 통합 페이지로 redirect
 					session.setAttribute("oAuthStatus", "loginIntegrated");										// 검증용 key
-					response.sendRedirect( "login/oauth2/ " + snsType + "/userIntegrated?userId=" + userId );	// email 값 전달
+					response.sendRedirect( "/login/oauth2/" + snsType + "/userIntegrated?userId=" + userId );	// email 값 전달
 				} catch (IOException e) {
 					e.printStackTrace();
 				} 
+				
 			} else {
-//				=> (2) 연동이 되어 있는 경우 : 강제 로그인 처리 후  수행
+//				=> 1-1-(2) 연동이 되어 있는 경우 : 강제 로그인 처리 후  수행
 				  
 				  
 				  // 강제 로그인 처리 수행. 
@@ -140,6 +148,11 @@ public class OAuth2UserService extends DefaultOAuth2UserService{
 			        String returnUrlAfterLogin = ( String ) session.getAttribute( "returnUrlAfterLogin" );
 			        String loginType = ( String ) session.getAttribute( "loginType" );
 			        
+			        if ( !StringUtils.hasText( returnUrlAfterLogin) ) {
+			        	if (loginType.equals( TYPE_ADMIN)) returnUrlAfterLogin = "/admLogin?auth=" + ADMIN_AUTH;
+			        	else returnUrlAfterLogin = "/";
+			        }
+			        
 			        session.removeAttribute( "returnUrlAfterLogin" );
 			        session.removeAttribute( "returnUrlAfterLoginFail" );
 			        session.removeAttribute( "loginType" );
@@ -150,14 +163,19 @@ public class OAuth2UserService extends DefaultOAuth2UserService{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}	
-				
 			}
-			
-			
 			
 			
 		} else  {
 //			 1-2. 같은 이메일로 가입된 계정이 없는 경우
+
+			try {
+				// 회원가입 for SNS redirect
+				session.setAttribute("oAuthStatus", "joinForSns");										// 검증용 key
+				response.sendRedirect( "/login/oauth2/" + snsType + "/joinForSns?userId=" + userId );	// email 값 전달
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			
 		}
 		

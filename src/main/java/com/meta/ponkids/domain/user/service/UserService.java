@@ -134,6 +134,9 @@ public class UserService {
     	
     	User user = userRepository.findByUserId( userId );
     	
+    	if ( user == null ) {
+    		return null;
+    	}
     	UserModDto userModDto = new UserModDto();
     	userModDto = userModDto.toDto( user );
     	

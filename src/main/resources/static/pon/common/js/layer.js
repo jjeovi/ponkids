@@ -10,7 +10,7 @@ var passwordMatchCheckFlag	= false;  	// 비밀번호 비교 일치 여부 확�
 $( function() {
 	
 	const lgStatus = urlParams.get('lgStatus');
-	if ( lgStatus == 'login' || lgStatus == 'userIntegrated' ) {
+	if ( lgStatus == 'login' || lgStatus == 'userIntegrated' || lgStatus == 'joinForSns' ) {
 		showPopup(lgStatus);
 		
 		if ( errMsg != null && errMsg != '' ) {
@@ -630,12 +630,14 @@ function readyLogin( loginType ) {
 	
 	// returnUrl setting
 	var returnUrl = pathName + queryString;
-	var returnUrl = replaceAll(returnUrl, 'lgStatus=login', '');
+	var returnUrl = replaceAll(returnUrl, 'lgStatus=login', 			'' );
+	var returnUrl = replaceAll(returnUrl, 'lgStatus=joinForSns',		'' );
+	var returnUrl = replaceAll(returnUrl, 'lgStatus=userIntegrated',	'' );
 	
 	// failUrl setting 
-	if ( queryString.indexOf('?') != -1  && queryString.indexOf('lgStatus=login') != -1) {
+	if ( queryString.indexOf('?') != -1  && queryString.indexOf('lgStatus=') != -1) {
 		
-	} else if ( queryString.indexOf('?') != -1  && queryString.indexOf('lgStatus=login') == -1 ) {
+	} else if ( queryString.indexOf('?') != -1  && queryString.indexOf('lgStatus=') == -1 ) {
 		queryString = queryString + '&lgStatus=login';
 	} else {
 		queryString = queryString + '?lgStatus=login'; 

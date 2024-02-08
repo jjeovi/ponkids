@@ -11,21 +11,15 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.meta.ponkids.domain.system.login.dto.LoginDto;
-import com.meta.ponkids.domain.system.login.service.LoginService;
-import com.meta.ponkids.global.util.error.ErrorUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -69,13 +63,10 @@ public class LoginoutController {
 		String returnUrlAfterLogout = request.getParameter("returnUrl");
 		
 //		String returnUrlAfterLogout = ( String ) session.getAttribute( "returnUrlAfterLogout" );
-    	
         
     	if ( auth != null ) {
     		new SecurityContextLogoutHandler().logout( request, response, auth );
     	}
-    	
-
     	
     	if ( returnUrlAfterLogout == null || returnUrlAfterLogout.equals("") ) {
     		return "redirect:/";
