@@ -21,6 +21,10 @@ public class CustomErrorController implements ErrorController {
     public String handleError( HttpServletRequest request, Model model ) {
         Object status = request.getAttribute( RequestDispatcher.ERROR_STATUS_CODE );
         
+        System.out.println( "this log is the error !! :::" + request );
+        System.out.println( "this log is the error !! :::" + status );
+        
+        
         if ( status != null ) {
             int statusCode = Integer.valueOf( status.toString() );
             model.addAttribute( "statusCode", statusCode );
@@ -63,6 +67,9 @@ public class CustomErrorController implements ErrorController {
                                           Model model ) {
         
         model.addAttribute( "statusCode", statusCode );
+        
+        System.out.println( "this log is the error !! :::" + request );
+        System.out.println( "this log is the error !! :::" + request );
         
         if ( statusCode == HttpStatus.BAD_REQUEST.value() ) {
             

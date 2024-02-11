@@ -7,15 +7,17 @@ import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import javax.persistence.Column;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 @NoArgsConstructor
 @Data
-public class LoginDto implements UserDetails {
+public class LoginDto implements UserDetails , OAuth2User {
     
     private Long userSn;
     
@@ -57,17 +59,27 @@ public class LoginDto implements UserDetails {
     
     private LocalDateTime confmDt;      // 승인 일시
     
-    private String cntnSnsKakao;        // 연계 SNS Kakao
+    private String   snsKakaoCntnYn;     // SNS Kakao 연계 여부
     
-    private String cntnSnsGoogle;       // 연계 SNS google
+    private String   snsKakaoCntnDt;     // SNS Kakao 연계 일시
     
-    private String cntnSnsNaver;        // 연계 SNS naver
+    private String   snsGoogleCntnYn;    // SNS Google 연계 여부
     
-    private String cntnSnsFacebook;     // 연계 SNS facebook
+    private String   snsGoogleCntnDt;    // SNS Google 연계 일시
     
-    private String cntnSnsApple;        // 연계 SNS apple
+    private String   snsNaverCntnYn;     // SNS Naver 연계 여부
     
-    private LocalDateTime lastLoginDt;  // 마지막 로그인한 일시
+    private String   snsNaverCntnDt;     // SNS Naver 연계 일시
+    
+    private String   snsFacebookCntnYn;  // SNS Facebook 연계 여부
+    
+    private String   snsFacebookCntnDt;  // SNS Facebook 연계 일시
+    
+    private String   snsAppleCntnYn;     // SNS Apple 연계 여부
+    
+    private String   snsAppleCntnDt;     // SNS Apple 연계 일시
+    
+    private String   lastLoginDt;        // 마지막 로그인한 일시
     
     private String registerIp;          // 등록자 IP
     
@@ -75,17 +87,23 @@ public class LoginDto implements UserDetails {
     
     private String updusrIp;            // 수정자 IP
     
-    private String returnUrlAfterLogin;	// 로그인 후 이동할 url 
-    private String returnUrlAfterLoginFail;	// 로그인 후 이동할 url 
+    private String returnUrlAfterLogin;	// 로그인 후 이동할 url
+    
+    private String returnUrlAfterLoginFail;	// 로그인 후 이동할 url
+    
     private String loginType;			// 로그인 유형 구분할 타입 변수 ( 사용자 : pon , 관리자 : adm ) 
     
     @ColumnDefault( "N" )                             // del_yn 컬럼에 공통으로 추가
     @Column( insertable = false, updatable = false )  // del_yn 컬럼에 공통으로 추가 (등록 시, 수정 시 해당컬럼 신경쓰지 않음.)
     private String delYn;                           // 삭제 여부
     
+    // ----------------------------------- OAuth2User 관련 변수  ---------------------------------------
+    private Map<String, Object> attributes;
+    // ----------------------------------- OAuth2User 관련 변수  ---------------------------------------
+    
     
     @QueryProjection
-    public LoginDto( Long userSn, String userId, String password, Long roleSn, String roleNm, String roleDc, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSnsKakao, String cntnSnsGoogle, String cntnSnsNaver, String cntnSnsFacebook, String cntnSnsApple,  LocalDateTime lastLoginDt ) {
+    public LoginDto( Long userSn, String userId, String password, Long roleSn, String roleNm, String roleDc, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String snsKakaoCntnYn, String snsKakaoCntnDt, String snsGoogleCntnYn, String snsGoogleCntnDt, String snsNaverCntnYn, String snsNaverCntnDt, String snsFacebookCntnYn, String snsFacebookCntnDt, String snsAppleCntnYn, String snsAppleCntnDt, String lastLoginDt ) {
         this.userSn = userSn;
         this.userId = userId;
         this.password = password;
@@ -106,12 +124,27 @@ public class LoginDto implements UserDetails {
         this.confmerId = confmerId;
         this.confmerIp = confmerIp;
         this.confmDt = confmDt;
-        this.cntnSnsKakao =cntnSnsKakao;
-        this.cntnSnsGoogle = cntnSnsGoogle;
-        this.cntnSnsNaver =cntnSnsNaver;
-        this.cntnSnsFacebook = cntnSnsFacebook;
-        this.cntnSnsApple = cntnSnsApple;
+        this.snsKakaoCntnYn =snsKakaoCntnYn;
+        this.snsKakaoCntnDt =snsKakaoCntnDt;
+        this.snsGoogleCntnYn = snsGoogleCntnYn;
+        this.snsGoogleCntnDt = snsGoogleCntnDt;
+        this.snsNaverCntnYn = snsNaverCntnYn;
+        this.snsNaverCntnDt = snsNaverCntnDt;
+        this.snsFacebookCntnYn = snsFacebookCntnYn;
+        this.snsFacebookCntnDt = snsFacebookCntnDt;
+        this.snsAppleCntnYn = snsAppleCntnYn;
+        this.snsAppleCntnDt = snsAppleCntnDt;
         this.lastLoginDt = lastLoginDt;
+    }
+    
+    @Override
+    public <A> A getAttribute( String name ) {
+        return OAuth2User.super.getAttribute( name );
+    }
+    
+    @Override
+    public Map<String, Object> getAttributes() {
+        return null;
     }
     
     @Override
@@ -153,5 +186,10 @@ public class LoginDto implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+    
+    @Override
+    public String getName() {
+        return null;
     }
 }

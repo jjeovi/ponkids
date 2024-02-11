@@ -32,7 +32,7 @@ public class LoginoutController {
     private String TYPE_USER;
     	
     @ResponseBody
-    @PostMapping( "/readyLogin" )
+    @PostMapping( "/readyLoginAjax" )
     public Map<String, Object> readyLogin( 	HttpServletRequest request,
     						@ModelAttribute LoginDto loginDto,
     						HttpSession session,

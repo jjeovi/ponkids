@@ -263,19 +263,19 @@
 }
 
 
-.login_wrap .user_wrap {
+.pop_footer .user_wrap {
     display: flex;
     justify-content: space-between;
     font-size: 0.9rem;
-    width: 90%;
-    margin-top: 3rem;
+    width: 100%;
+    margin-top: 3.6rem;
 }
 
-.login_wrap .user_wrap a {
+.pop_footer .user_wrap a {
     color: rgb(135, 135, 135);
 }
 
-.login_wrap .user_wrap a {
+.pop_footer .user_wrap a {
     color: rgb(135, 135, 135);
 }
 
@@ -663,7 +663,7 @@
     min-width:150px;
 }
 
-.join_wrap input:first-of-type {
+.join_wrap input.first {
 	border-top-left-radius: 6px;
     border-top-right-radius: 6px;
     border-top-width: 2px;
@@ -807,6 +807,13 @@ input[type="radio"][disabled]:checked+label{
 
 .pop_content select:focus, .pop_content select.choiced {
 	color : #000;
+}
+
+select.displaySnsType {
+    color: #d20101 !important;
+    font-weight: 600;
+    font-size: 14px;
+    background: #c8c6c6;
 }
 
 /* E : selectbox 디자인 */
@@ -1242,18 +1249,21 @@ input[type="radio"][disabled]:checked+label{
 /* S : selectbox 디자인 */
 
 .pop_content select {
-	width : 72.9%;
+    border-radius: 0px;
+	width : 73.2%;
 	height : 2.5rem;
 	padding : 5px;
-	border : 1px solid #dedbdb;
+	border : 1px solid #dddbdb;
 	border-left-width : 2px;
 	border-right-width : 2px;
-	border-radius : 3px;
 	-moz-appearance : none;
 	appearance : none;
 	padding-left : 9px;
 	color : #d8d4d4;
-	border-bottom-left-radius: 6px;
+}
+
+.pop_content select.last{
+    border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
 }
 
@@ -1421,7 +1431,7 @@ input[type="radio"][disabled]:checked+label{
 }
 
 
-.join_wrap .btn, .pop_footer .btn {
+.join_wrap .btn, .pop_footer .btn, .integrated_wrap .btn {
 	color: #fff;
     background-color: #9674f1;
     border-color: #a08bd8;
@@ -1647,3 +1657,68 @@ input[type="radio"][disabled]:checked+label{
 }
 
 
+.pop_wrap input:read-only {
+    background-color: #c9c6c6;
+}
+
+
+
+
+
+/* ===================================================================== */
+/* ===================================================================== */
+/* ===================================================================== */
+/* layer_userIntegrated  */
+/* ===================================================================== */
+/* ===================================================================== */
+/* ===================================================================== */
+
+.integrated_wrap .agree_wrap {
+    width: 90%;
+    margin-top:1rem;
+}
+.integrated_wrap .join_agree_wrap .agree-cb-box {
+    width: 22px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+
+.integrated_wrap .join_agree_wrap .agree-title {
+    width: calc(100% - 30px);
+    display: inline-block;
+}
+
+.integrated_wrap .btn {
+    width: 100%;
+    padding: 0.5rem 0.5rem 0.1rem;
+    padding-top: 0.4rem;
+    float: left;
+    left: -9px;
+    position: relative;
+    border-radius: 6px;
+    margin-top: 30px;
+}
+
+
+.pop_content .integrated_wrap .default_login_wrap {
+    display: flex;
+    gap: 7px;
+    width: 90%;
+    padding-top: 2px;
+}
+
+.pop_content .integrated_wrap .default_login_wrap .input_wrap{
+    width:100%;
+}
+
+.pop_content .integrated_wrap .default_login_wrap .login_btn_wrap{
+    width:30%;
+}
+
+.layer_userIntegrated .pop_wrap {
+    min-height: 24rem;
+}
+.pop_footer.userIntegrated .user_wrap {
+    margin-top: 2rem;
+}

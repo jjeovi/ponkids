@@ -84,6 +84,8 @@ public class CmmnCdDetailService {
     }
     
     
+    // 공통코드 상세 조회
+    // 공통상세코드 1건 조회 s
     public CmmnCdDetailModDto findTop1ByCdNmAndCdDetailVal1( String cdNm, String cdDetailVal1 ) {    // TODO 타입 체크 필요
     	
     	CmmnCdDetail cmmnCdDetail = cmmnCdDetailRepository.findTop1ByCdNmAndCdDetailVal1( cdNm, cdDetailVal1 ).orElse( null );

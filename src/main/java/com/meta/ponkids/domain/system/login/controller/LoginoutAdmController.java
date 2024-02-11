@@ -63,7 +63,7 @@ public class LoginoutAdmController {
     }
 
     @ResponseBody
-    @PostMapping( "/admin/readyLogin" )
+    @PostMapping( "/admin/readyLoginAjax" )
     public Map<String, Object> login( 	HttpServletRequest request,
     						@ModelAttribute LoginDto loginDto,
     						HttpSession session,

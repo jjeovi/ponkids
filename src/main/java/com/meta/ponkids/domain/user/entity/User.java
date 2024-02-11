@@ -88,15 +88,25 @@ public class User extends BaseTimeEntity {
     
     private LocalDateTime confmDt;      // 승인 일시
     
-    private String cntnSnsKakao;        // 연계 SNS Kakao
+    private String          snsKakaoCntnYn;     // SNS Kakao 연계 여부
     
-    private String cntnSnsGoogle;       // 연계 SNS google
+    private LocalDateTime   snsKakaoCntnDt;     // SNS Kakao 연계 일시
     
-    private String cntnSnsNaver;        // 연계 SNS naver
+    private String          snsGoogleCntnYn;    // SNS Google 연계 여부
     
-    private String cntnSnsFacebook;     // 연계 SNS facebook
+    private LocalDateTime   snsGoogleCntnDt;    // SNS Google 연계 일시
     
-    private String cntnSnsApple;        // 연계 SNS apple
+    private String          snsNaverCntnYn;     // SNS Naver 연계 여부
+    
+    private LocalDateTime   snsNaverCntnDt;     // SNS Naver 연계 일시
+    
+    private String          snsFacebookCntnYn;  // SNS Facebook 연계 여부
+    
+    private LocalDateTime   snsFacebookCntnDt;  // SNS Facebook 연계 일시
+    
+    private String          snsAppleCntnYn;     // SNS Apple 연계 여부
+    
+    private LocalDateTime   snsAppleCntnDt;     // SNS Apple 연계 일시
     
     private LocalDateTime lastLoginDt;  // 마지막 로그인한 일시
     

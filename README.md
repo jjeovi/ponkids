@@ -69,6 +69,11 @@ DB phpPgAdmin : http://db.jjeovi.gabia.io/pgadmin/?_gl=1*15jm1ly*_ga*ODI1NTQ5MzY
 계정 / 비밀번호 : ponkids / ponkids2023!
 스키마 : ponkids 
 개발 스키마 : ponkids_dev (개발용으로 우선 작업  ponkids 스키마는 추후 운영에서 사용 예정... ) 
+
+운영 에서 프로젝트 실행 하는 법 : nohup java -jar -Dspring.profiles.active=prod  /web/ponkids/ponkids.war &
+운영 에서 프로젝트 종료 하는 법 : ps -ef | grep java 후 , pid 확인하여, kill -9 [pid]
+
+
 </details>
 
 

@@ -63,15 +63,29 @@ public class UserSaveDto {
     
     private LocalDateTime confmDt;  // 승인일시
     
-    private String cntnSnsKakao;        // 연계 SNS Kakao
+    private String          snsKakaoCntnYn;     // SNS Kakao 연계 여부
     
-    private String cntnSnsGoogle;       // 연계 SNS google
+    private LocalDateTime   snsKakaoCntnDt;     // SNS Kakao 연계 일시
     
-    private String cntnSnsNaver;        // 연계 SNS naver
+    private String          snsGoogleCntnYn;    // SNS Google 연계 여부
     
-    private String cntnSnsFacebook;     // 연계 SNS facebook
+    private LocalDateTime   snsGoogleCntnDt;    // SNS Google 연계 일시
     
-    private String cntnSnsApple;        // 연계 SNS apple
+    private String          snsNaverCntnYn;     // SNS Naver 연계 여부
+    
+    private LocalDateTime   snsNaverCntnDt;     // SNS Naver 연계 일시
+    
+    private String          snsFacebookCntnYn;  // SNS Facebook 연계 여부
+    
+    private LocalDateTime   snsFacebookCntnDt;  // SNS Facebook 연계 일시
+    
+    private String          snsAppleCntnYn;     // SNS Apple 연계 여부
+    
+    private LocalDateTime   snsAppleCntnDt;     // SNS Apple 연계 일시
+    
+    private LocalDateTime   lastLoginDt;        // 마지막 로그인한 일시
+    
+    private String snsType;
     
     private String registerIp;      // 등록자 IP
     
@@ -83,7 +97,7 @@ public class UserSaveDto {
     
     // builder 생성
     @Builder
-    public UserSaveDto( String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String cntnSnsKakao, String cntnSnsGoogle, String cntnSnsNaver, String cntnSnsFacebook, String cntnSnsApple, String registerIp, String updusrId, String updusrIp, String delYn ) {
+    public UserSaveDto( String userId, String password, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String snsKakaoCntnYn, LocalDateTime snsKakaoCntnDt, String snsGoogleCntnYn, LocalDateTime snsGoogleCntnDt, String snsNaverCntnYn, LocalDateTime snsNaverCntnDt, String snsFacebookCntnYn, LocalDateTime snsFacebookCntnDt, String snsAppleCntnYn, LocalDateTime snsAppleCntnDt, LocalDateTime lastLoginDt,  String registerIp, String updusrId, String updusrIp, String delYn ) {
         this.userId = userId;
         this.password = password;
         this.userNm = userNm;
@@ -100,11 +114,17 @@ public class UserSaveDto {
         this.confmerId = confmerId;
         this.confmerIp = confmerIp;
         this.confmDt = confmDt;
-        this.cntnSnsKakao = cntnSnsKakao;
-        this.cntnSnsGoogle = cntnSnsGoogle;
-        this.cntnSnsNaver = cntnSnsNaver;
-        this.cntnSnsFacebook = cntnSnsFacebook;
-        this.cntnSnsApple = cntnSnsApple;
+        this.snsKakaoCntnYn =snsKakaoCntnYn;
+        this.snsKakaoCntnDt =snsKakaoCntnDt;
+        this.snsGoogleCntnYn = snsGoogleCntnYn;
+        this.snsGoogleCntnDt = snsGoogleCntnDt;
+        this.snsNaverCntnYn = snsNaverCntnYn;
+        this.snsNaverCntnDt = snsNaverCntnDt;
+        this.snsFacebookCntnYn = snsFacebookCntnYn;
+        this.snsFacebookCntnDt = snsFacebookCntnDt;
+        this.snsAppleCntnYn = snsAppleCntnYn;
+        this.snsAppleCntnDt = snsAppleCntnDt;
+        this.lastLoginDt = lastLoginDt;
         this.registerIp = registerIp;
         this.updusrId = updusrId;
         this.updusrIp = updusrIp;
@@ -130,11 +150,17 @@ public class UserSaveDto {
                 .confmerId( confmerId )
                 .confmerIp( confmerIp )
                 .confmDt( confmDt )
-                .cntnSnsKakao( cntnSnsKakao )
-                .cntnSnsGoogle( cntnSnsGoogle )
-                .cntnSnsNaver( cntnSnsNaver )
-                .cntnSnsFacebook( cntnSnsFacebook )
-                .cntnSnsApple( cntnSnsApple )
+                .snsKakaoCntnYn( snsKakaoCntnYn )
+                .snsKakaoCntnDt( snsKakaoCntnDt )
+                .snsGoogleCntnYn( snsGoogleCntnYn )
+                .snsGoogleCntnDt( snsGoogleCntnDt )
+                .snsNaverCntnYn( snsNaverCntnYn )
+                .snsNaverCntnDt( snsNaverCntnDt )
+                .snsFacebookCntnYn( snsFacebookCntnYn )
+                .snsFacebookCntnDt( snsFacebookCntnDt )
+                .snsAppleCntnYn( snsAppleCntnYn )
+                .snsAppleCntnDt( snsAppleCntnDt )
+                .lastLoginDt( lastLoginDt )
                 .registerIp( registerIp )
                 .build();
     }

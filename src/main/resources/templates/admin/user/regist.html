@@ -7,7 +7,6 @@
 
 	// DOM 준비 된 이후 실행
 	$( function () {
-
 		// initialize a validator instance from the "FormValidator" constructor.
 		// A "<form>" element is optionally passed as an argument, but is not a must
 
@@ -37,7 +36,7 @@
 				return false;
 			}
 
-			// 거주지역 그 외만 선택 했을 시 return false;
+			// 거주지역 그 외만 선택 했을 시 return false;2
 			var resideArea = $( "input:radio[name='resideArea']:checked" ).val();
 			var country = $( "#countryList" ).val();
 			if ( resideArea == 'other' ) {
@@ -516,8 +515,7 @@
 								<select class="form-control" name="otherResideArea" id="countryList"
 										style="display: none;">
 									<option value="">국가 선택</option>
-										<option th:each="item : ${resideAreaList}" th:value="${item.cdDetailVal1}">
-										[[${item.cdDetailNm}]]
+									<option th:each="item : ${resideAreaList}" th:value="${item.cdDetailVal1}" th:text="${item.cdDetailNm}">
 								</select>
 							</div>
 						</div>

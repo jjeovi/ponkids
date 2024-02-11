@@ -18,10 +18,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +64,33 @@ public class UserService {
         		userSaveDto.setBrdtDate(changeFormatBrdtDate);
         	}
         	
+        }
+        
+        
+        // joinForSns ( sns 회원가입) 시 snsType 으로 회원가입 여부 조회
+        if ( StringUtils.hasText( userSaveDto.getSnsType() ) ) {
+            switch ( userSaveDto.getSnsType() ) {
+                case "kakao" :
+                    userSaveDto.setSnsKakaoCntnYn( "Y" );
+                    userSaveDto.setSnsKakaoCntnDt( LocalDateTime.now() );
+                    break;
+                case "google" :
+                    userSaveDto.setSnsGoogleCntnYn( "Y" );
+                    userSaveDto.setSnsGoogleCntnDt( LocalDateTime.now() );
+                    break;
+                case "naver" :
+                    userSaveDto.setSnsNaverCntnYn( "Y" );
+                    userSaveDto.setSnsNaverCntnDt( LocalDateTime.now() );
+                    break;
+                case "facebook" :
+                    userSaveDto.setSnsFacebookCntnYn( "Y" );
+                    userSaveDto.setSnsFacebookCntnDt( LocalDateTime.now() );
+                    break;
+                case "apple" :
+                    userSaveDto.setSnsAppleCntnYn( "Y" );
+                    userSaveDto.setSnsAppleCntnDt( LocalDateTime.now() );
+                    break;
+            }
         }
         
         User newUser = userRepository.save( userSaveDto.toEntity() );                        // ** 회원 save -> save된 정보 newUser 로 저장
@@ -247,13 +277,65 @@ public class UserService {
                 if ( !userChldrn.getFile().isEmpty() ) {
                     userChldrn.setAtchFileSn( atchFileService.save( userChldrn.getFile() ) );
                 }
-                
                 userChldrnList.add( userChldrn.toEntity() );                                                    // userlist add
             }
-            
             userChldrnRepository.saveAll( userChldrnList );                                                    // * userChldrn save. 한꺼번에 save. 각각 save보다 빠르다.
         }
+    }
+    
+    // user sns 계정통합 업데이트
+    @Transactional
+    public void updateSnsCntn( Long userSn, String snsType ) throws IOException {
+        HttpServletRequest request = ( ( ServletRequestAttributes ) RequestContextHolder.currentRequestAttributes() ).getRequest();
         
+        //  user sns 계정통합 업데이트
+        // ================================================================================
+        
+        // target 조회
+        User user = userRepository.findByUserSn( userSn );
+        
+        // target object 전환 ( entity to dto )
+        UserModDto targetDto = new UserModDto();
+        targetDto = targetDto.toDto( user );
+        
+        // target object 에 수정사항 set
+        // snsType에 따라 값을 수정
+        
+        // joinForSns ( sns 회원가입) 시 snsType 으로 회원가입 여부 조회
+        if ( StringUtils.hasText( snsType ) ) {
+            switch ( snsType ) {
+                case "kakao" :
+                    targetDto.setSnsKakaoCntnYn( "Y" );
+                    targetDto.setSnsKakaoCntnDt( LocalDateTime.now() );
+                    break;
+                case "google" :
+                    targetDto.setSnsGoogleCntnYn( "Y" );
+                    targetDto.setSnsGoogleCntnDt( LocalDateTime.now() );
+                    break;
+                case "naver" :
+                    targetDto.setSnsNaverCntnYn( "Y" );
+                    targetDto.setSnsNaverCntnDt( LocalDateTime.now() );
+                    break;
+                case "facebook" :
+                    targetDto.setSnsFacebookCntnYn( "Y" );
+                    targetDto.setSnsFacebookCntnDt( LocalDateTime.now() );
+                    break;
+                case "apple" :
+                    targetDto.setSnsAppleCntnYn( "Y" );
+                    targetDto.setSnsAppleCntnDt( LocalDateTime.now() );
+                    break;
+            }
+        }
+        
+        // id,ip setting
+        targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
+        targetDto.setUpdusrId( SessionUtils.getClientId() );
+        
+        // target object 전환 ( dto to entity )
+        user = targetDto.toEntity();
+        
+        // 수정사항 적용
+        userRepository.save( user );
     }
     
     

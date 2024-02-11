@@ -8,30 +8,33 @@
 		<img src="/pon/common/image/logo.svg" alt="피오니키즈 로고">
 		<h2 class="pop_title">로그인</h2>
 	</div>
-	<form  id="loginForm" name="loginForm" method="POST"   th:action="@{ /login }" onsubmit="return readyLogin('default');">
 	<div class="pop_content">
-		<div class="login_wrap">
-			<div class="default_login_wrap">
-				<div class="input_wrap">
-					<input type="hidden"	name="returnUrlAfterLoginFail"	value="/?status=login"	/>
-					<input type="hidden"	name="returnUrlAfterLogin"	/>
-					<input type="text" 		name="username" placeholder="이메일">
-					<input type="password"  name="password" placeholder="비밀번호">
+		<form  id="loginForm" name="loginForm" method="POST"   th:action="@{ /login }" onsubmit="return readyLogin('default');">
+			<div class="login_wrap">
+				<div class="default_login_wrap">
+					<div class="input_wrap">
+						<input type="hidden"	name="returnUrlAfterLoginFail"	value="/?status=login"	/>
+						<input type="hidden"	name="returnUrlAfterLogin"	/>
+						<input type="text" 		name="username" placeholder="이메일">
+						<input type="password"  name="password" placeholder="비밀번호" autocomplete="off" >
+					</div>
+					<div class="login_btn_wrap">
+						<button type="button" class="btn btn_login_default login_btn" onclick="readyLogin('default');">로그인</button>
+					</div>
 				</div>
-				<div class="login_btn_wrap">
-					<button type="button" class="btn btn_login_default login_btn" onclick="readyLogin('default');">로그인</button>		
+				<div class="or"></div>
+				<div class="sns_login_wrap">
+					<button type="button" class="btn_sns kakao" id="kakao_login_btn" onclick="readyLogin('kakao');" >카카오로 로그인</button>
+					<button type="button" class="btn_sns naver" id="google_login_btn" onclick="readyLogin('google');" >구글로 로그인</button>
 				</div>
 			</div>
-			<div class="or"></div>
-			<div class="sns_login_wrap">
-				<button type="button" class="btn_sns kakao" id="kakao_login_btn" onclick="readyLogin('kakao');" >카카오로 로그인</button>
-				<button type="button" class="btn_sns naver" id="google_login_btn" onclick="readyLogin('google');" >구글로 로그인</button>
-			</div>
-			<div class="user_wrap">
-				<a href="javascript:void(0);" class="show_pop" data-layer-id="join">회원가입</a>
-				<a href="javascript:void(0);" class="show_pop" data-layer-id="findUser">아이디 &middot; 비밀번호 찾기</a>
-			</div>
+		</form>
+	</div>
+	<div class="pop_footer">
+		<div class="user_wrap">
+			<a href="javascript:void(0);" class="show_pop" data-layer-id="join">회원가입</a>
+			<a href="javascript:void(0);" class="show_pop" data-layer-id="findUser">아이디 &middot; 비밀번호 찾기</a>
 		</div>
 	</div>
-	</form>
+
 </div>

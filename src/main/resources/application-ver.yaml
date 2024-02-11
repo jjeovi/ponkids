@@ -24,5 +24,8 @@ key :
         path : /web/ponkids/upload                                    # 업로드 파일 저장 경로  : 운영 서버
     menu:
         jsonFilePath : /file/menu/json/pon/                            # 사용자 메뉴 파일 생성 경로 : 운영 서버
+    cmmnCd :
+        jsonFilePath : /file/cmmnCd/
+    divider : /
         
 ######################################################################################################################

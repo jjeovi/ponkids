@@ -36,7 +36,7 @@ function readyLogin() {
 	var form = $( "#loginForm" )[0];
     var formData = new FormData(form);
 
-		var url = "/admin/readyLogin"
+		var url = "/admin/readyLoginAjax"
 		$.ajax({
 					url: url,
 		            type: "POST",	// 회원저장 POST로

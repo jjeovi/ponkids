@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -249,15 +250,15 @@ public class UserAdmController {
             @PathVariable String mcd,
             Model model ) {
         
-        // 삭제 처리
-        userService.deleteAllByUserSn( userSn );
-        
         // 첨부파일 삭제
         Long atchFileSn = userService.findByUserSn( userSn ).getAtchFileSn();
         if ( atchFileSn != null ) {
             atchFileService.delete( atchFileSn );
         }
         
+        // 삭제 처리
+        userService.deleteAllByUserSn( userSn );
+       
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
         model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );

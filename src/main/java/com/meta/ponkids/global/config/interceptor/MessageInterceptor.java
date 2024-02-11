@@ -31,7 +31,7 @@ public class MessageInterceptor implements HandlerInterceptor {
     	// 2군데 모두 탐색하여 errCd 값을 찾고, 없으면 return
 
         String errCd = ( String ) session.getAttribute( "errCd" ) ;
-        if ( StringUtils.hasText( errCd ) ) errCd = ( String ) modelAndView.getModel().get( "errCd" );
+        if ( !StringUtils.hasText( errCd ) && modelAndView != null ) errCd = ( String ) modelAndView.getModel().get( "errCd" );
         
         if ( StringUtils.hasText( errCd ) ) {
             session.removeAttribute( "errCd" );
@@ -47,13 +47,13 @@ public class MessageInterceptor implements HandlerInterceptor {
         // 2군데 모두 탐색하여 infoCd 값을 찾고, 없으면 return
         
         String infoCd = ( String ) session.getAttribute( "infoCd" ) ;
-        if ( StringUtils.hasText( infoCd ) ) infoCd = ( String ) modelAndView.getModel().get( "infoCd" );
+        if ( !StringUtils.hasText( infoCd ) && modelAndView != null ) infoCd = ( String ) modelAndView.getModel().get( "infoCd" );
         
         if ( StringUtils.hasText( infoCd ) ) {
         	session.removeAttribute( "infoCd" );
         	
-        	String errMsg = MessageUtils.getMessageFromCmmnCd( "INFO_MSG_CD", infoCd );
-        	request.setAttribute( "infoCd", infoCd );
+        	String infoMsg = MessageUtils.getMessageFromCmmnCd( "INFO_MSG_CD", infoCd );
+        	request.setAttribute( "infoMsg", infoMsg );
         }
         
     }

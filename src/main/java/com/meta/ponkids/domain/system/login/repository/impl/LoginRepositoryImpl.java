@@ -3,10 +3,12 @@ package com.meta.ponkids.domain.system.login.repository.impl;
 import com.meta.ponkids.domain.system.login.dto.LoginDto;
 import com.meta.ponkids.domain.system.login.dto.QLoginDto;
 import com.meta.ponkids.domain.system.login.repository.custom.LoginRepositoryCustom;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import static com.meta.ponkids.domain.cls.entity.QClass.class$;
 import static com.meta.ponkids.domain.system.role.entity.QRole.role;
 import static com.meta.ponkids.domain.user.entity.QUser.user;
 import static com.meta.ponkids.domain.user.entity.QUserRole.userRole;
@@ -74,12 +76,17 @@ public class LoginRepositoryImpl implements LoginRepositoryCustom {
                                 user.confmerId,
                                 user.confmerIp,
                                 user.confmDt,
-                                user.cntnSnsKakao,
-                                user.cntnSnsGoogle,
-                                user.cntnSnsNaver,
-                                user.cntnSnsFacebook,
-                                user.cntnSnsApple,
-                                user.lastLoginDt
+                                user.snsKakaoCntnYn,
+                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.snsKakaoCntnDt, "YYYY-MM-DD HH:MM:SS" ),
+                                user.snsGoogleCntnYn,
+                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.snsGoogleCntnDt, "YYYY-MM-DD HH:MM:SS" ),
+                                user.snsNaverCntnYn,
+                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.snsNaverCntnDt, "YYYY-MM-DD HH:MM:SS" ),
+                                user.snsFacebookCntnYn,
+                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.snsFacebookCntnDt, "YYYY-MM-DD HH:MM:SS" ),
+                                user.snsAppleCntnYn,
+                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.snsAppleCntnDt, "YYYY-MM-DD HH:MM:SS" ),
+                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.lastLoginDt, "YYYY-MM-DD HH:MM:SS" )
                         )
                 )
                 // from  ( ~left join .. )

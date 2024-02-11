@@ -32,7 +32,7 @@ public class WebConfig implements WebMvcConfigurer {
         // 권한 처리 및 세션 처리 Interceptor (preHandle)
         registry.addInterceptor( authInterceptor )
                 .addPathPatterns( "/admin/**" )             			// 1. 체크 하는 로직은 /admin/ 하위 path 만 검사
-                .excludePathPatterns( "/admLogin" , "/admin/readyLogin");        			// 2. 로그인 페이지는 검사하지 않음.
+                .excludePathPatterns( "/admLogin" , "/admin/readyLoginAjax");        			// 2. 로그인 페이지는 검사하지 않음.
         
         // admin : 관리자 부분
         // admin : 관리자 부분
@@ -46,7 +46,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns( 	"/**/*Ajax" )        			// 제외 목록 : Ajax 통신 
                 .excludePathPatterns( 	"/**/*.js", 	"/**/*.css", 
                 						"/**/*.svg", 	"/**/*.png",
-                						"/**/*.jpg", 	"/**/*.jpg", 
+                						"/**/*.jpg", 	"/**/*.map",
                 						"/**/*.woff2" )        			// 제외 목록 : 정적 컨텐츠 
                 .excludePathPatterns( 	"/admLogin" )        			// 제외 목록 : 로그인 페이지
         		.excludePathPatterns( 	"/getImage" );					// 제외 목록 : 첨부파일 조회시
@@ -57,7 +57,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns( 	"/**/*Ajax" )        			// 제외 목록 : Ajax 통신 
                 .excludePathPatterns( 	"/**/*.js", 	"/**/*.css", 
                 						"/**/*.svg", 	"/**/*.png",
-                						"/**/*.jpg", 	"/**/*.jpg", 
+                						"/**/*.jpg", 	"/**/*.map",
                 						"/**/*.woff2" )        			// 제외 목록 : 정적 컨텐츠 
                 .excludePathPatterns( 	"/admLogin" )        			// 제외 목록 : 로그인 페이지
         		.excludePathPatterns( 	"/getImage" );					// 제외 목록 : 첨부파일 조회시
@@ -76,7 +76,7 @@ public class WebConfig implements WebMvcConfigurer {
         		.excludePathPatterns( 	"/**/*Ajax" )        			// 제외 목록 : Ajax 통신 
                 .excludePathPatterns( 	"/**/*.js", 	"/**/*.css", 
                 						"/**/*.svg", 	"/**/*.png",
-                						"/**/*.jpg", 	"/**/*.jpg", 
+                						"/**/*.jpg", 	"/**/*.map",
                 						"/**/*.woff2" )        			// 제외 목록 : 정적 컨텐츠 
                 .excludePathPatterns( 	"/admLogin" )        			// 제외 목록 : 로그인 페이지
                 .excludePathPatterns( 	"/admin/**" )        			// 제외 목록 : 로그인 페이지
@@ -88,7 +88,7 @@ public class WebConfig implements WebMvcConfigurer {
         .excludePathPatterns( 	"/**/*Ajax" )        			// 제외 목록 : Ajax 통신 
         .excludePathPatterns( 	"/**/*.js", 	"/**/*.css", 
         		"/**/*.svg", 	"/**/*.png",
-        		"/**/*.jpg", 	"/**/*.jpg", 
+        		"/**/*.jpg", 	"/**/*.map",
         		"/**/*.woff2" )        			// 제외 목록 : 정적 컨텐츠 
         .excludePathPatterns( 	"/admLogin" )        			// 제외 목록 : 로그인 페이지
         .excludePathPatterns( 	"/admin/**" )        			// 제외 목록 : 로그인 페이지

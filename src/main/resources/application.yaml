@@ -32,16 +32,12 @@ server :
     tomcat:
         connection-timeout: 15000 # 10000 = 10sec / 컨넥션 타임아웃 . 15초 이상 지연되면 타임아웃 exception 
 
-# log 
-log : 
-    config : 
-        path: playLog/ 
-        filename : ssibalbalbal
 # logging
 logging:
   config: classpath:logback-spring.xml
   level:
-      org.springframework.security: DEBUG
+      org.springframework.security: INFO
+      org.hibernate.sql: INFO
       
 error:
     log:
