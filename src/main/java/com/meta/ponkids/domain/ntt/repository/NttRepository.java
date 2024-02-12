@@ -23,7 +23,6 @@ public interface NttRepository extends JpaRepository<Ntt, Long>, NttRepositoryCu
     
     int getExistsNtt( Long bbsSn );
     
-    
     @Modifying( clearAutomatically = true )
     @Query( value = "UPDATE tb_ntt "
             + "      SET del_yn = 'Y'"

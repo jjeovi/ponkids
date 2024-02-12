@@ -31,8 +31,11 @@ public class WebConfig implements WebMvcConfigurer {
         
         // 권한 처리 및 세션 처리 Interceptor (preHandle)
         registry.addInterceptor( authInterceptor )
-                .addPathPatterns( "/admin/**" )             			// 1. 체크 하는 로직은 /admin/ 하위 path 만 검사
-                .excludePathPatterns( "/admLogin" , "/admin/readyLoginAjax");        			// 2. 로그인 페이지는 검사하지 않음.
+                .addPathPatterns( "/admin/**" )             			                // 1. 체크 하는 로직은 /admin/ 하위 path 만 검사
+                .excludePathPatterns( 	"/**/*.js", 	"/**/*.css",
+                        "/**/*.png",    "/**/*.jpg", 	"/**/*.map",
+                        "/**/*.gif",    "/**/*.woff2",  "/**/*.svg" )                   // 제외 목록 : 정적 컨텐츠
+                .excludePathPatterns( "/admLogin" , "/admin/readyLoginAjax");        	// 2. 로그인 페이지는 검사하지 않음.
         
         // admin : 관리자 부분
         // admin : 관리자 부분
@@ -44,10 +47,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor( menuAdmInterceptor )
                 .addPathPatterns( 		"/admin/**" )             		// 1. 체크 하는 로직은 /admin/ 하위 path 만 검사
                 .excludePathPatterns( 	"/**/*Ajax" )        			// 제외 목록 : Ajax 통신 
-                .excludePathPatterns( 	"/**/*.js", 	"/**/*.css", 
-                						"/**/*.svg", 	"/**/*.png",
-                						"/**/*.jpg", 	"/**/*.map",
-                						"/**/*.woff2" )        			// 제외 목록 : 정적 컨텐츠 
+                .excludePathPatterns( 	"/**/*.js", 	"/**/*.css",
+                        "/**/*.png",    "/**/*.jpg", 	"/**/*.map",
+                        "/**/*.gif",    "/**/*.woff2",  "/**/*.svg" )   // 제외 목록 : 정적 컨텐츠
                 .excludePathPatterns( 	"/admLogin" )        			// 제외 목록 : 로그인 페이지
         		.excludePathPatterns( 	"/getImage" );					// 제외 목록 : 첨부파일 조회시
         
@@ -55,14 +57,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor( messageInterceptor )
                 .addPathPatterns( 		"/admin/**" )             		// 1. 체크 하는 로직은 /admin/ 하위 path 만 검사
                 .excludePathPatterns( 	"/**/*Ajax" )        			// 제외 목록 : Ajax 통신 
-                .excludePathPatterns( 	"/**/*.js", 	"/**/*.css", 
-                						"/**/*.svg", 	"/**/*.png",
-                						"/**/*.jpg", 	"/**/*.map",
-                						"/**/*.woff2" )        			// 제외 목록 : 정적 컨텐츠 
+                .excludePathPatterns( 	"/**/*.js", 	"/**/*.css",
+                        "/**/*.png",    "/**/*.jpg", 	"/**/*.map",
+                        "/**/*.gif",    "/**/*.woff2",  "/**/*.svg" )   // 제외 목록 : 정적 컨텐츠
                 .excludePathPatterns( 	"/admLogin" )        			// 제외 목록 : 로그인 페이지
         		.excludePathPatterns( 	"/getImage" );					// 제외 목록 : 첨부파일 조회시
-        
-        
         
         // pon : 사용자 부분
         // pon : 사용자 부분
@@ -74,29 +73,24 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor( menuInterceptor )
         		.addPathPatterns( "/**" )             					// 1. 체크 하는 로직은 /하위 전체 
         		.excludePathPatterns( 	"/**/*Ajax" )        			// 제외 목록 : Ajax 통신 
-                .excludePathPatterns( 	"/**/*.js", 	"/**/*.css", 
-                						"/**/*.svg", 	"/**/*.png",
-                						"/**/*.jpg", 	"/**/*.map",
-                						"/**/*.woff2" )        			// 제외 목록 : 정적 컨텐츠 
+                .excludePathPatterns( 	"/**/*.js", 	"/**/*.css",
+                        "/**/*.png",    "/**/*.jpg", 	"/**/*.map",
+                        "/**/*.gif",    "/**/*.woff2",  "/**/*.svg" )   // 제외 목록 : 정적 컨텐츠
                 .excludePathPatterns( 	"/admLogin" )        			// 제외 목록 : 로그인 페이지
                 .excludePathPatterns( 	"/admin/**" )        			// 제외 목록 : 로그인 페이지
         		.excludePathPatterns( 	"/getImage" );					// 제외 목록 : 첨부파일 조회시
         
         //  메세지성코드 감지해서 메시지 추출 (postHandle : 메서드 호출 이후 )
         registry.addInterceptor( messageInterceptor )
-        .addPathPatterns( "/**" )             					// 1. 체크 하는 로직은 /하위 전체 
-        .excludePathPatterns( 	"/**/*Ajax" )        			// 제외 목록 : Ajax 통신 
-        .excludePathPatterns( 	"/**/*.js", 	"/**/*.css", 
-        		"/**/*.svg", 	"/**/*.png",
-        		"/**/*.jpg", 	"/**/*.map",
-        		"/**/*.woff2" )        			// 제외 목록 : 정적 컨텐츠 
-        .excludePathPatterns( 	"/admLogin" )        			// 제외 목록 : 로그인 페이지
-        .excludePathPatterns( 	"/admin/**" )        			// 제외 목록 : 로그인 페이지
-        .excludePathPatterns( 	"/getImage" );					// 제외 목록 : 첨부파일 조회시
-        
+                .addPathPatterns( "/**" )             					// 1. 체크 하는 로직은 /하위 전체
+                .excludePathPatterns( 	"/**/*Ajax" )        			// 제외 목록 : Ajax 통신
+                .excludePathPatterns( 	"/**/*.js", 	"/**/*.css",
+                        "/**/*.png",    "/**/*.jpg", 	"/**/*.map",
+                        "/**/*.gif",    "/**/*.woff2",  "/**/*.svg" )   // 제외 목록 : 정적 컨텐츠
+                .excludePathPatterns( 	"/admLogin" )        			// 제외 목록 : 로그인 페이지
+                .excludePathPatterns( 	"/admin/**" )        			// 제외 목록 : 로그인 페이지
+                .excludePathPatterns( 	"/getImage" );					// 제외 목록 : 첨부파일 조회시
     }
-    
-    
     
     @Override
     public void addResourceHandlers( final ResourceHandlerRegistry registry ) {

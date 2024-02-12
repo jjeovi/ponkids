@@ -4,8 +4,10 @@ package com.meta.ponkids.domain.bbs.repository.impl;
 import com.meta.ponkids.domain.bbs.dto.BbsListDto;
 import com.meta.ponkids.domain.bbs.dto.QBbsListDto;
 import com.meta.ponkids.domain.bbs.repository.custom.BbsRepositoryCustom;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,8 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 import static com.meta.ponkids.domain.bbs.entity.QBbs.bbs;
+import static com.meta.ponkids.domain.cls.entity.QClass.class$;
+import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
 
 
 /**
@@ -46,11 +50,14 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom {
                 // select
                 .select( new QBbsListDto(
                         bbs.bbsSn,
-                        new CaseBuilder()
-                                .when( bbs.bbsSeCd.eq( "01" ) ).then( "포토형" )
-                                .when( bbs.bbsSeCd.eq( "02" ) ).then( "리스트형" )
-                                .otherwise( "" )
-                                .as( "bbsSeCd" ),
+                        bbs.bbsSeCd,
+                        ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
+                                .from( cmmnCdDetail )
+                                .where(
+                                        cmmnCdDetail.cdNm.eq("BBS_SE_CD"),
+                                        cmmnCdDetail.cdDetailVal1.eq( bbs.bbsSeCd ),
+                                        cmmnCdDetail.useYn.eq( "Y" ),
+                                        cmmnCdDetail.delYn.eq( "N" ) ), "bbsSeNm" ),
                         bbs.bbsNm,
                         new CaseBuilder()
                                 .when( bbs.replySetYn.eq( "Y" ) ).then( "사용" )

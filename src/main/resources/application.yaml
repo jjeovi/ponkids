@@ -58,7 +58,10 @@ key :
       adminRootMenuSn : 100                                           # 관리자 루트 메뉴sn
       user  : pon                                                     # 사용자 화면 기본 변수 key
       userRootMenuSn  : 200                                           # 사용자 루트 메뉴sn
+      directoryPath:
+          user: pon                                                   # 사용자 디렉토리 경로 (path) default
+      
     admin : 
-        auth : pon                                                    # 로그인 인증용 key (일반로그인 . SNS는 아님 XX )
+        auth : pon                                                    # 로그인(관리자) 인증용 key (admLogin?auth="pon" 부분.  일반로그인이랑 SNS는 해당되지 않음. )
     menuCd : 
         auth : mcd                                                    # 메뉴 코드 인증용 key

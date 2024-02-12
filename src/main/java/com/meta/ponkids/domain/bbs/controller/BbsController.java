@@ -1,0 +1,94 @@
+package com.meta.ponkids.domain.bbs.controller;
+
+import com.meta.ponkids.domain.bbs.dto.BbsListDto;
+import com.meta.ponkids.domain.bbs.dto.BbsModDto;
+import com.meta.ponkids.domain.bbs.dto.BbsSaveReqDto;
+import com.meta.ponkids.domain.bbs.service.BbsService;
+import com.meta.ponkids.domain.ntt.repository.NttRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+
+
+/**
+ * className      : BbsController
+ * author         : ehlee
+ * date           : 2023-12-01
+ * description    : class of 게시판관리 Controller
+ * ===========================================================
+ * DATE              AUTHOR               NOTE
+ * -----------------------------------------------------------
+ * 2023-12-01        ehlee             최초 생성
+ */
+@Controller
+@RequiredArgsConstructor
+public class BbsController {
+    
+    private final static String BASIC_VIEW_PATH = "bbs";
+    private final static String BASIC_PATH      = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
+    private final BbsService bbsService;
+    private final NttRepository nttRepository;
+    
+    /**
+     * methodName    : bbsList > 게시판 list
+     * date          : 23/12/11
+     * description   : bbs list method
+     */
+    @GetMapping( BASIC_PATH + "/{mcd}/{bbsSn}/list" )
+    public String list( @ModelAttribute BbsListDto bbsListDto,
+                        @PageableDefault( size = 10 ) Pageable pageable,
+                        @PathVariable String mcd,
+                        Model model ) {
+        // 목록 조회
+        Page<BbsListDto> resultList = bbsService.getList( bbsListDto, pageable );
+        model.addAttribute( "resultList", resultList );
+        
+        // 검색 dto setting
+        model.addAttribute( "searchDTO", bbsListDto );
+        
+        // 기본 경로 setting
+        model.addAttribute( "basicPath", BASIC_PATH );
+        
+        return BASIC_VIEW_PATH + "/list";
+    }
+    
+    /**
+     * methodName    : modify
+     * date          : 23/12/02
+     * description   : bbs detail or bbs modify method
+     */
+    @GetMapping( value = {
+            BASIC_PATH + "/{mcd}/detail",
+            
+            BASIC_PATH + "/{mcd}/modify" } )
+    public String modify(
+            @RequestParam( required = true ) Long bbsSn,
+            @PathVariable String mcd,
+            HttpServletRequest request,
+            Model model ) {
+        
+        // target object 조회
+        model.addAttribute( "targetDto", bbsService.findByBbsSn( bbsSn ) );
+        
+        // 기본 경로 setting
+        model.addAttribute( "basicPath", BASIC_PATH );
+        
+        
+        String urlPath = request.getServletPath();
+        String remainPath = "";
+        
+        if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/detail" ) ) remainPath = "detail";
+        if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/modify" ) ) remainPath = "modify";
+        
+        
+        return BASIC_VIEW_PATH + "/" + remainPath;
+    }
+    
+}

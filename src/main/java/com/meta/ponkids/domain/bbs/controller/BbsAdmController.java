@@ -5,6 +5,7 @@ import com.meta.ponkids.domain.bbs.service.BbsService;
 import com.meta.ponkids.domain.bbs.dto.BbsListDto;
 import com.meta.ponkids.domain.bbs.dto.BbsModDto;
 import com.meta.ponkids.domain.ntt.repository.NttRepository;
+import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +36,9 @@ public class BbsAdmController {
     private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
     private final BbsService bbsService;
     private final NttRepository nttRepository;
+    
+    private final CmmnCdDetailService cmmnCdDetailService;
+    
     
     /**
      * methodName    : bbsList
@@ -72,6 +76,11 @@ public class BbsAdmController {
         
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
+        
+        // 게시판 구분 코드 list ( 목록형, 포토형, ... )
+        model.addAttribute( "bbsSeCdList", cmmnCdDetailService.getList( "BBS_SE_CD" ) );   // 게시판 구분 코드 리스트
+        
+        
         
         return BASIC_VIEW_PATH + "/regist";
     }

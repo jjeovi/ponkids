@@ -91,7 +91,6 @@ public class SnsLoginCallbackController {
         
         rttr.addFlashAttribute( "infoCd", "UILIMCD001" );    // 이미 가입되어있는 계정이 존재합니다. 해당 SNS로그인을 사용하시려면 기존 계정의 비밀번호를 입력 후 계정통합을 한 뒤, 재로그인 해주세요.
         
-        
         if (returnUrlAfterLogin == null || returnUrlAfterLogin.equals("") ) {
         	
         	if( loginType != null ) {
@@ -170,7 +169,6 @@ public class SnsLoginCallbackController {
         return "redirect:" + returnUrlAfterLogin ;        // 메인페이지 로드 후 계정통합 레이어 호출
     }
     
-    
     // 계정통합 ready ajax
     @ResponseBody
     @PostMapping( "/readyUserIntegratedAjax" )
@@ -190,7 +188,6 @@ public class SnsLoginCallbackController {
         return result;
         
     }
-    
     
     // 계정 통합 callback
     @ResponseBody
@@ -219,20 +216,15 @@ public class SnsLoginCallbackController {
                 userService.updateSnsCntn( loginDto.getUserSn() , snsType );
             } catch ( IOException e ) {
                 // TODO : exception
-                
             }
             
             result.put( "flag", "S" );
             result.put( "msg", MessageUtils.getMessageFromCmmnCd( "INFO_MSG_CD", "UILIMCD002" ) );  // 계정통합이 완료되었습니다.
         } else {
-            
             result.put( "flag", "E" );
             result.put( "msg", MessageUtils.getMessageFromCmmnCd( "ERR_MSG_CD", "LGNEMCD010" ) );   // 비밀번호가 맞지 않습니다.
         }
         
         return result;
     }
-    
 }
-
-

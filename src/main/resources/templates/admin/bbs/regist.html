@@ -23,14 +23,12 @@
 					<form id="insertForm" name="insertForm" method="post"  th:action="@{ {basicPath}/mcd/insert ( basicPath = ${basicPath} ) }" th:object="${bbsSaveReqDto}">
 					   <div class="field item form-group">
 						   <label class="col-form-label col-md-2 col-sm-3 label-align">게시판 구분<span class="required">*</span></label>
-						   <div class="col-md-6 col-sm-6 ">
-							   <div class="btn-group radiobox">
-									<input type="radio" id="bbsSeCd1" name="bbsSeCd" value="01" class="join-btn" required>
-									<label for="bbsSeCd1" class="btn btn-outline-purple w100p"  data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">포토형</label>
-									<input type="radio" id="bbsSeCd2" name="bbsSeCd" value="02" class="join-btn" required>
-									<label for="bbsSeCd2" class="btn btn-outline-purple w100p"  data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">리스트형</label>
-								</div>
-							</div>
+						   <div class="col-md-2 col-sm-6">
+							   <select class="form-control" name="bbsSeCd">
+								   <option value="">게시판 구분 선택</option>
+								   <option th:each="item : ${bbsSeCdList}" th:value="${item.cdDetailVal1}" th:text="${item.cdDetailNm}">
+							   </select>
+						   </div>
 						</div>
 						<div class="field item form-group">
 							<label class="col-form-label col-md-2 col-sm-3  label-align">게시판 이름<span class="required">*</span></label>

@@ -1,5 +1,6 @@
 package com.meta.ponkids.domain.ntt.controller;
 
+import com.meta.ponkids.domain.bbs.dto.BbsModDto;
 import com.meta.ponkids.domain.bbs.service.BbsService;
 import com.meta.ponkids.domain.ntt.dto.*;
 import com.meta.ponkids.domain.ntt.service.NttReplyService;
@@ -52,8 +53,8 @@ public class NttAdmController {
      * date          : 23/12/04
      * description   : ntt list method
      */
-    @GetMapping( BASIC_PATH + "/{mcd}/list" )
-    public String nttList( @RequestParam( required = true ) Long bbsSn,
+    @GetMapping( BASIC_PATH + "/{mcd}/{bbsSn}/list" )
+    public String nttList( @PathVariable Long bbsSn,
                            @ModelAttribute NttListDto nttListDto,
                            @PathVariable String mcd,
                            @PageableDefault( size = 10 ) Pageable pageable,
@@ -63,6 +64,17 @@ public class NttAdmController {
         model.addAttribute( "bbsSn", bbsSn );
         
         nttListDto.setBbsSn( bbsSn );
+        
+        // 게시판 구분 코드 찾기
+        BbsModDto bbsModDto = bbsService.findByBbsSn( bbsSn );
+        
+        // 게시판 이 존재하지 않을 경우
+        if ( bbsModDto == null || bbsModDto.getBbsSeCd() == null || bbsModDto.getBbsSeCd().equals("") ) {
+            // 메시지 출력 및 url 이동 처리
+            model.addAttribute( "resultMsg", "게시판 ID를 다시 확인해주세요." );
+            model.addAttribute( "moveUrl", "/admin/bbs/mcd/list" );
+            return "common/alert";
+        }
         
         // 공지설정 목록 조회 
         List<NttListDto> noticeList = nttService.getNoticeList( bbsSn );
@@ -78,20 +90,9 @@ public class NttAdmController {
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
-        //리스트형, 포토형 화면 다름 .
-        String bbsSeCd = bbsService.getBbsSeCd( bbsSn );
-        String screen = "";
-        
-        if ( bbsSeCd.equals( "01" ) ) { // 포토형
-            screen = "/photoList.html";
-        } else {
-            screen = "/list";
-        }
-        
-        
-        return BASIC_VIEW_PATH + screen;
+        String viewName = bbsModDto.getBbsSeCd();
+        return BASIC_VIEW_PATH + "/" + viewName;
     }
-    
     
     /**
      * methodName  : regist
@@ -112,7 +113,6 @@ public class NttAdmController {
         
         return BASIC_VIEW_PATH + "/regist";
     }
-    
     
     /**
      * methodName    : insert
@@ -149,7 +149,6 @@ public class NttAdmController {
         
         return "common/alert";
     }
-    
     
     /**
      * methodName    : modify
@@ -190,13 +189,11 @@ public class NttAdmController {
             model.addAttribute( "atchFileList", atchFileList );
         }
         
-        
         // 조회수 업데이트
         nttService.update( nttSn, request );
         
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
-        
         
         String urlPath = request.getServletPath();
         String remainPath = "";
@@ -204,11 +201,8 @@ public class NttAdmController {
         if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/detail" ) ) remainPath = "detail";
         if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/modify" ) ) remainPath = "modify";
         
-        
         return BASIC_VIEW_PATH + "/" + remainPath;
-        
     }
-    
     
     /**
      * methodName    : update
@@ -241,7 +235,6 @@ public class NttAdmController {
                 modDto.setAtchFileSn( null );
             }
         }
-        
         
         Long cnAtchFileSn = modDto.getCnAtchFileSn();
         
@@ -276,10 +269,8 @@ public class NttAdmController {
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
         model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list?bbsSn=" + bbsSn );
         
-        
         return "common/alert";
     }
-    
     
     /**
      * methodName    : delete
@@ -305,9 +296,7 @@ public class NttAdmController {
         model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list?bbsSn=" + bbsSn );
         
         return "common/alert";
-        
     }
-    
     
     /**
      * methodName    : fnReplyInsert
@@ -321,12 +310,10 @@ public class NttAdmController {
         
         NttReplySaveReqDto nttReplySaveReqDto = new NttReplySaveReqDto();
         
-        
         String gubun = ( String ) map.get( "gubun" );
         
         nttReplySaveReqDto.setNttSn( Long.parseLong( ( String ) map.get( "nttSn" ) ) );
         nttReplySaveReqDto.setNttReplyCn( ( String ) map.get( "nttReplyCn" ) );
-        
         
         if ( gubun.equals( "R" ) ) { // R : 댓글 등록
             
@@ -334,7 +321,6 @@ public class NttAdmController {
             nttReplySaveReqDto.setStep( 1 );
             // 댓글 등록
             nttReplyService.save( nttReplySaveReqDto, request );
-            
             
         } else {    //  A: 답글 등록
             
@@ -345,10 +331,7 @@ public class NttAdmController {
         }
         
         return "success";
-        
-        
     }
-    
     
     /**
      * methodName    : nttReplyUpdate
@@ -369,8 +352,6 @@ public class NttAdmController {
         nttReplyService.update( modDto, request );
         
         return "success";
-        
-        
     }
     
     /**
@@ -382,15 +363,11 @@ public class NttAdmController {
     @PostMapping( "/reply/nttReplyDelete" )
     public String nttReplyDelete( @RequestParam( "nttReplySn" ) Long nttReplySn,
                                   HttpServletRequest request ) {
-        
         // 댓글 삭제
         nttReplyService.deleteAllByNttReplySn( nttReplySn );
         
         return "success";
-        
-        
     }
-    
     
     /**
      * methodName    : answerReplyList
@@ -405,9 +382,7 @@ public class NttAdmController {
         List<NttReplyListDto> replyList = nttReplyService.getList( nttSn );
         
         return replyList;
-        
     }
-    
     
     /**
      * methodName    : answerReplyList
@@ -422,7 +397,6 @@ public class NttAdmController {
         List<NttReplyListDto> answerReplyList = nttReplyService.getAnswerReplyList( nttReplySn ); //부모 키
         
         return answerReplyList;
-        
     }
     
 }

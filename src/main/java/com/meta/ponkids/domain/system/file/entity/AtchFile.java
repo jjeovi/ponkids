@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
 // delelte 시 실행 (ex ) ~Repository.deleteById)
 @SequenceGenerator(
         name = "SEQ_TB_ATCH_FILE_SN",
-        sequenceName = "SEQ_TB_ACTH_FILE_SN",
+        sequenceName = "SEQ_TB_ATCH_FILE_SN",
         initialValue = 1,
         allocationSize = 1
 )
@@ -44,7 +44,7 @@ import java.time.LocalDateTime;
 public class AtchFile {
     
     @Id
-    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_ACTH_FILE_SN" )
+    @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_ATCH_FILE_SN" )
     private Long atchFileSn;
     
     @Comment( value = "등록일시" )

@@ -47,5 +47,17 @@ public class HomeController {
         
         return "pon/index";
     }
+    
+    
+    @GetMapping( "/introduce" )
+    public String introduce( HttpServletRequest request,
+                         Model model ) {
+        
+        // S : 필요한 객체 setting
+        
+        // E : 필요한 객체 setting
+        
+        return "pon/introduce/introduce";
+    }
 }
 

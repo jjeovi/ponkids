@@ -12,7 +12,9 @@ public class BbsListDto {
     
     private Long bbsSn;
     
-    private String bbsSeCd;
+    private String bbsSeCd; // 게시판 구분 코드
+    
+    private String bbsSeNm; // 게시판 구분 명
     
     private String bbsNm;
     
@@ -32,10 +34,11 @@ public class BbsListDto {
     
     
     @QueryProjection
-    public BbsListDto( Long bbsSn, String bbsSeCd, String bbsNm, String replySetYn, String useYn, String openYn, String registerId, LocalDateTime regDt ) {
+    public BbsListDto( Long bbsSn, String bbsSeCd, String bbsSeNm, String bbsNm, String replySetYn, String useYn, String openYn, String registerId, LocalDateTime regDt ) {
         
         this.bbsSn = bbsSn;
         this.bbsSeCd = bbsSeCd;
+        this.bbsSeNm = bbsSeNm;
         this.bbsNm = bbsNm;
         this.replySetYn = replySetYn;
         this.useYn = useYn;

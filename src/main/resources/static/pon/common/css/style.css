@@ -162,7 +162,8 @@
 
 
 /*! class*/
-.pon-contents{padding:0 20px; box-sizing: border-box;}
+.pon-contents{padding:0; box-sizing: border-box;}
+/*.pon-contents{padding:0 20px; box-sizing: border-box;}*/
 .pon-contents .top_tit{display: flex; margin-bottom: 50px;  align-items: center;}
 .pon-contents .top_tit h3{    font-family: 'yg-jalnan';color: #333333;font-size: 30px;margin-left: 5px; margin-left: 15px;}
 .pon-contents .top_tit span{color: #555;margin-left: 15px;}

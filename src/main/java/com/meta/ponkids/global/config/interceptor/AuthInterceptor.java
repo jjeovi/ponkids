@@ -73,7 +73,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             
         }
         
-        System.out.println( "prehandle() " + fullUrl );
+        System.out.println( "AuthInterceptor : prehandle() " + fullUrl );
         
         return HandlerInterceptor.super.preHandle( request, response, handler );
     }

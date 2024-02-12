@@ -26,7 +26,7 @@
 								<option value="Y" th:selected=" ${searchDTO.useYn} == 'Y' ">사용</option>
 								<option value="N" th:selected=" ${searchDTO.useYn} == 'N' ">미사용</option>
 							</select>
-				  
+
 							<div class="vl ml_5p"></div>
 							<select class="form-control ml_5p" name="schOption" style="width: 55%;">
 								<option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">게시판 이름</option>
@@ -36,7 +36,7 @@
 							<input type="text" name="schCntn" th:value="${searchDTO.schCntn}"
 								   class="form-control input-sm" placeholder="검색어 입력"
 								   aria-controls="datatable-responsive">
-							<div class="vl ml_5p"></div>	  
+							<div class="vl ml_5p"></div>
 							<button type="submit" class="btn btn-purple w250p">검색</button>
 						</div>
 					</div>
@@ -59,15 +59,15 @@
 							<tbody>
 							<tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
 								<td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
-								<td th:text="${data.bbsSeCd}"></td>
+								<td th:text="${data.bbsSeNm}"></td>
 								<td th:text="${data.bbsNm}"></td>
 								<td th:text="${data.replySetYn}"></td>
 								<td th:text="${data.openYn}"></td>
 								<td th:text="${data.useYn}"></td>
 								<td th:text="${#temporals.format(data.regDt, 'yyyy-MM-dd HH:MM:SS')}"></td>
-								<td> 
+								<td>
 									<a th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd} , bbsSn = ${data.bbsSn} ) }" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>
-									<a th:href="@{/admin/ntt/{mcd}/list(bbsSn=${data.bbsSn} ,  mcd = ${mcd} )}"   class="btn btn-success btn-xs"><i class="fa fa-pencil"></i>게시물관리</a>	  
+									<a th:href="@{/admin/ntt/{mcd}/{bbsSn}/list ( mcd = ${mcd}, bbsSn = ${data.bbsSn} )}"   class="btn btn-success btn-xs"><i class="fa fa-pencil"></i>게시물관리</a>
 								</td>
 							</tr>
 							<tr th:unless = "${!resultList.isEmpty()}">

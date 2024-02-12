@@ -252,6 +252,7 @@
     border-radius: 6px;
     font-size: 1.1rem;
     font-weight: 500;
+    cursor: pointer;
 }
 
 .login_wrap button.btn_login_default {
