@@ -33,6 +33,14 @@ public class MessageUtils {
     	
     	// file read
 		String path = System.getProperty( "user.dir" ) + JSON_FILE_PATH + cdNm;	// rootPath(System.getProperty("user.dir"))부터 path 설정
+		
+		
+		System.out.println("MessageUtils > getMessageFromCmmnCd");
+		System.out.println("path : " + path );
+		System.out.println("cdNm : " + cdNm );
+		System.out.println("cdDetailNm : " + cdDetailNm );
+		
+		
 		String fileName = cdNm;
 		List<JsonDto> messageList = null;
 		try {

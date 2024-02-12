@@ -22,7 +22,7 @@ spring :
     jpa :
         properties :
             hibernate :
-                default_schema : ponkids_dev
+                default_schema : ponkids
 
 #########################################        System Variables           #########################################
 
