@@ -17,6 +17,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailListDto;
@@ -36,19 +37,16 @@ public class FileUtils {
 			Files.createDirectory(directoryPath);			
 			System.out.println(directoryPath + " 디렉토리가 생성되었습니다.");		
 			
-			
 		} catch (FileAlreadyExistsException e) {			
 		
 			// Nothing
-			
-		} catch (NoSuchFileException e) {		
+		} catch (NoSuchFileException e) {
 			
 			System.out.println("디렉토리 경로가 존재하지 않습니다");		
 			
 		}catch (IOException e) {		
 			
 			e.printStackTrace();		
-			
 		}
 	}
 	
@@ -61,6 +59,9 @@ public class FileUtils {
 		
 		String isExistFile_Path = path + fileName + ".json";	// 파일이 실제 존재하는지 체크하기 위한 경로 : String 변수
 		isExistFile_Path = isExistFile_Path.replaceAll( "\\\\", "/" );
+		
+		System.out.println("[ createJsonFile ] isExistFile_Path : " + isExistFile_Path);
+		System.out.println("[ createJsonFile ] path : " + path +  fileName + ".json");
 		
 		File file = new File( isExistFile_Path );
 		
@@ -89,6 +90,9 @@ public class FileUtils {
 		
 		String isExistFile_Path = path + fileName + ".json";	// 파일이 실제 존재하는지 체크하기 위한 경로 : String 변수
 		isExistFile_Path = isExistFile_Path.replaceAll( "\\\\", "/" );
+		
+		
+		System.out.println("[ readJsonFile ] isExistFile_Path : " + isExistFile_Path);
 		
 	     // FileReader 생성        
 		Reader reader = new FileReader( isExistFile_Path );         

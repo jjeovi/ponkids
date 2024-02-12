@@ -41,18 +41,16 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class NttController {
     
-    public static String PON_VIEW_PATH;
+    public static String USER_VIEW_PATH;
     
     // path 경로 : pon
     @Value( "${key.default.directoryPath.user}" )
-    public void setPonViewPath(String value) {
-        PON_VIEW_PATH = value;
+    public void setUserViewPath(String value) {
+        USER_VIEW_PATH = value;
     }
     
     private final static String BASIC_DOMAIN = "ntt";
-    private final static String BASIC_PATH = "/" + BASIC_DOMAIN;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
-    private final static String BASIC_VIEW_PATH = PON_VIEW_PATH + "/" + BASIC_DOMAIN;
-    
+    private final static String BASIC_PATH = "/" + BASIC_DOMAIN;	// USER_VIEW_PATH + "/" + BASIC_DOMAIN 는  앞의 "/" 를 제거해야 함.
     
     private final NttService nttService;
     private final BbsService bbsService;
@@ -117,7 +115,7 @@ public class NttController {
         model.addAttribute( "basicPath", BASIC_PATH );
         
         String viewName = bbsModDto.getBbsSeCd();
-        return BASIC_VIEW_PATH + "/" + viewName;
+        return USER_VIEW_PATH + "/" + BASIC_DOMAIN + "/" + viewName;
     }
     
     /**
@@ -126,10 +124,10 @@ public class NttController {
      * description   : ntt detail or ntt modify method
      */
     @GetMapping( value = {
-            BASIC_PATH + "/{mcd}/detail",
-            BASIC_PATH + "/{mcd}/modify" } )
+            BASIC_PATH + "/{mcd}/{bbsSn}/detail",
+            BASIC_PATH + "/{mcd}/{bbsSn}/modify" } )
     public String modify( @RequestParam( required = true ) Long nttSn,
-                          @RequestParam( required = true ) String bbsSeCd,
+                          @PathVariable Long bbsSn,
                           @PathVariable String mcd,
                           Model model,
                           HttpServletRequest request ) throws IOException {
@@ -143,7 +141,9 @@ public class NttController {
         model.addAttribute( "targetDto", targetDto );
         model.addAttribute( "replySetYn", replySetYn );
         model.addAttribute( "nttSn", nttSn );
-        model.addAttribute( "bbsSeCd", bbsSeCd );
+        // 게시판 구분 코드 찾기
+        BbsModDto bbsModDto = bbsService.findByBbsSn( bbsSn );
+        
         
         //댓글 설정 Y일 경우
         if ( replySetYn.equals( "Y" ) ) {
@@ -171,7 +171,7 @@ public class NttController {
         if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/detail" ) ) remainPath = "detail";
         if ( urlPath.split( BASIC_PATH )[ 1 ].endsWith( "/modify" ) ) remainPath = "modify";
         
-        return BASIC_VIEW_PATH + "/" + remainPath;
+        return USER_VIEW_PATH + "/" + BASIC_DOMAIN + "/" + remainPath;
     }
     
     

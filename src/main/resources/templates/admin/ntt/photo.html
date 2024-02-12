@@ -58,7 +58,7 @@
 								  <td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
 								  <td th:text="${data.nttNm}"></td>
 								  <td th:text="${data.registerId}"></td>
-								  <td th:text="${#temporals.format(data.regDt, 'yyyy-MM-dd')}"></td>
+								  <td th:text="${data.regDt}"></td>
 								  <td th:text="${data.nttRdcnt}"></td>
 								  <td> 
 							  		<a th:href="@{ {basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, nttSn=${data.nttSn},bbsSeCd='01' ) }" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i>수정</a>

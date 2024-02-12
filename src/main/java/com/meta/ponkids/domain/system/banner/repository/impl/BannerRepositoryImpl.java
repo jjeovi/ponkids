@@ -6,9 +6,11 @@ import com.meta.ponkids.domain.system.banner.dto.QBannerListDto;
 import com.meta.ponkids.domain.system.banner.repository.custom.BannerRepositoryCustom;
 import com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail;
 import com.meta.ponkids.global.common.dto.CategoryDto;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +23,10 @@ import org.springframework.util.StringUtils;
 import java.sql.Timestamp;
 import java.util.List;
 
+import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl01.classCategoryCl01;
 import static com.meta.ponkids.domain.system.banner.entity.QBanner.banner;
 import static com.meta.ponkids.domain.cls.entity.QClass.class$;
+import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
 
 @Repository
 @RequiredArgsConstructor
@@ -56,6 +60,11 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                         banner.url,
                         banner.classMapngYn,
                         banner.classSn,
+                        ExpressionUtils.as( JPAExpressions.select( classCategoryCl01.clNm )
+                                .from( classCategoryCl01 )
+                                .where(
+                                        classCategoryCl01.clSn.eq( class$.ctgrySn ),
+                                        classCategoryCl01.delYn.eq( "N" ) ), "ctgryNm" ),
                         class$.classSj,
                         class$.classAmt,
                         class$.classDscntBfeAmt,
@@ -151,6 +160,11 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                         banner.url,
                         banner.classMapngYn,
                         banner.classSn,
+                        ExpressionUtils.as( JPAExpressions.select( classCategoryCl01.clNm )
+                                .from( classCategoryCl01 )
+                                .where(
+                                        classCategoryCl01.clSn.eq( class$.ctgrySn ),
+                                        classCategoryCl01.delYn.eq( "N" ) ), "ctgryNm" ),
                         class$.classSj,
                         class$.classAmt,
                         class$.classDscntBfeAmt,

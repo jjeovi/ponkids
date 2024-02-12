@@ -4,6 +4,7 @@ import com.meta.ponkids.domain.ntt.dto.NttListDto;
 import com.meta.ponkids.domain.ntt.dto.QNttListDto;
 import com.meta.ponkids.domain.ntt.repository.custom.NttRepositoryCustom;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+import static com.meta.ponkids.domain.cls.entity.QClass.class$;
 import static com.meta.ponkids.domain.ntt.entity.QNtt.ntt;
 
 
@@ -49,7 +51,7 @@ public class NttRepositoryImpl implements NttRepositoryCustom {
                         ntt.openYn,
                         ntt.noticeSetYn,
                         ntt.registerId,
-                        ntt.regDt
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", ntt.regDt, "YYYY-MM-DD HH:MM:SS" )
                 ) ).from( ntt )
                 .where(
                         eqOption( nttListDto.getSchOption(), nttListDto.getSchCntn() ),
@@ -141,7 +143,7 @@ public class NttRepositoryImpl implements NttRepositoryCustom {
                         ntt.openYn,
                         ntt.registerId,
                         ntt.registerId,
-                        ntt.regDt
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", ntt.regDt, "YYYY-MM-DD HH:MM:SS" )
                 ) )
                 .from( ntt )
                 .where( ntt.bbsSn.eq( bbsSn ),

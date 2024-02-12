@@ -33,6 +33,8 @@ public class BannerListDto {
     
     private Long    classSn;                // 클래스 일련번호
     
+    private String  ctgryNm;                // 카테고리 명
+    
     private String  classSj;                // 클래스 제목
     
     private Long    classAmt;               // 클래스 금액
@@ -62,7 +64,7 @@ public class BannerListDto {
     
     @QueryProjection
     public BannerListDto( Long bannerSn, String bannerClCd, String bannerClNm, String bannerClDetailCd, String bannerClDetailNm, Long bannerExpsrSeq,
-                          String bannerNm, String bannerDc, Long atchFileSn, String url, String classMapngYn, Long classSn, String classSj, Long classAmt, Long classDscntBfeAmt, Long classThumbAtchFileSn,
+                          String bannerNm, String bannerDc, Long atchFileSn, String url, String classMapngYn, Long classSn, String ctgryNm, String classSj, Long classAmt, Long classDscntBfeAmt, Long classThumbAtchFileSn,
                           String useYn, String bannerPdSetYn, String bannerPdSetYnNm, String bannerBeginDt, String bannerEndDt ,String bannerExpsrPeriod) {
         this.bannerSn = bannerSn;
         this.bannerClCd = bannerClCd;
@@ -76,6 +78,7 @@ public class BannerListDto {
         this.url = url;
         this.classMapngYn = classMapngYn;
         this.classSn = classSn;
+        this.ctgryNm = ctgryNm;
         this.classSj = classSj;
         this.classAmt = classAmt;
         this.classDscntBfeAmt = classDscntBfeAmt;

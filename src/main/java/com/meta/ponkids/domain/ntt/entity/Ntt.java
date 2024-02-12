@@ -54,7 +54,7 @@ public class Ntt extends BaseTimeEntity {
     private Long cnAtchFileSn;  // 첨부파일
     
     
-    private int nttRdcnt;     // 조회수  
+    private int nttRdcnt;     // 조회수
     
     @Column( updatable = false )
     private String openYn;      // 공개여부
