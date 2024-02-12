@@ -1,10 +1,12 @@
 package com.meta.ponkids.domain.oauth2.service;
 
-import com.meta.ponkids.domain.system.login.dto.LoginDto;
-import com.meta.ponkids.domain.system.login.repository.LoginRepository;
-import com.meta.ponkids.domain.user.entity.User;
-import com.meta.ponkids.domain.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -15,11 +17,12 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.LinkedHashMap;
+import com.meta.ponkids.domain.system.login.dto.LoginDto;
+import com.meta.ponkids.domain.system.login.repository.LoginRepository;
+import com.meta.ponkids.domain.user.entity.User;
+import com.meta.ponkids.domain.user.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -173,7 +176,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
             }
             
         }
-        
         
         return super.loadUser( userRequest );
         

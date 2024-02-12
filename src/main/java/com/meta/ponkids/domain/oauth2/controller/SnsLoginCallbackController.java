@@ -1,32 +1,36 @@
 package com.meta.ponkids.domain.oauth2.controller;
 
-import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailModDto;
-import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
-import com.meta.ponkids.domain.system.login.dto.LoginDto;
-import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
-import com.meta.ponkids.domain.user.dto.UserModDto;
-import com.meta.ponkids.domain.user.entity.User;
-import com.meta.ponkids.domain.user.repository.UserRepository;
-import com.meta.ponkids.domain.user.service.UserService;
-import com.meta.ponkids.global.util.message.MessageUtils;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailModDto;
+import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
+import com.meta.ponkids.domain.system.login.dto.LoginDto;
+import com.meta.ponkids.domain.user.dto.UserModDto;
+import com.meta.ponkids.domain.user.service.UserService;
+import com.meta.ponkids.global.util.message.MessageUtils;
+
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
@@ -41,9 +45,7 @@ public class SnsLoginCallbackController {
     @Value( "${key.default.admin}" )
     private String TYPE_ADMIN;
     
-    
     private final UserService userService;
-    private final UserRepository userRepository;
     private final CmmnCdDetailService cmmnCdDetailService;
     
     // 계정 통합 페이지로 redirect
@@ -63,6 +65,12 @@ public class SnsLoginCallbackController {
             return "/";
         }
         
+        String returnUrlAfterLogin = ( String ) session.getAttribute( "returnUrlAfterLogin" );
+        String loginType = ( String ) session.getAttribute( "loginType" );
+        
+        session.removeAttribute( "returnUrlAfterLogin" );
+        session.removeAttribute( "returnUrlAfterLoginFail" );
+        session.removeAttribute( "loginType" );
         
         // 로그아웃 처리
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -83,7 +91,22 @@ public class SnsLoginCallbackController {
         
         rttr.addFlashAttribute( "infoCd", "UILIMCD001" );    // 이미 가입되어있는 계정이 존재합니다. 해당 SNS로그인을 사용하시려면 기존 계정의 비밀번호를 입력 후 계정통합을 한 뒤, 재로그인 해주세요.
         
-        return "redirect:/?lgStatus=userIntegrated";        // 메인페이지 로드 후 계정통합 레이어 호출
+        
+        if (returnUrlAfterLogin == null || returnUrlAfterLogin.equals("") ) {
+        	
+        	if( loginType != null ) {
+        		if ( loginType.equals(TYPE_ADMIN)) {
+        			returnUrlAfterLogin = "/admLogin?auth=" + ADMIN_AUTH;
+        		} else {
+        			returnUrlAfterLogin = "/" ;
+        		}
+        	} else {
+        		returnUrlAfterLogin = "/" ;
+        	}
+        }
+        	
+        rttr.addFlashAttribute( "lgStatus", "userIntegrated" );   	
+        return "redirect:" + returnUrlAfterLogin ;        // 메인페이지 로드 후 계정통합 레이어 호출
         
     }
     
@@ -104,6 +127,13 @@ public class SnsLoginCallbackController {
             return "/";
         }
         
+        String returnUrlAfterLogin = ( String ) session.getAttribute( "returnUrlAfterLogin" );
+        String loginType = ( String ) session.getAttribute( "loginType" );
+        
+        session.removeAttribute( "returnUrlAfterLogin" );
+        session.removeAttribute( "returnUrlAfterLoginFail" );
+        session.removeAttribute( "loginType" );
+        
         // 로그아웃 처리
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if ( auth != null ) {
@@ -121,12 +151,27 @@ public class SnsLoginCallbackController {
         rttr.addFlashAttribute( "lgStatus", "joinForSns" );
         rttr.addFlashAttribute( "infoCd", "JFSIMCD001" );    // 최초 로그인 시 회원 정보 등록이 필요합니다. 회원정보 등록 후 재로그인 해주세요. (추후 일반로그인으로도 로그인이 가능합니다.)
         
-        return "redirect:/?lgStatus=joinForSns";            // 메인페이지 로드 후 계정통합 레이어 호출
+        rttr.addFlashAttribute( "loginSnsTypeList", cmmnCdDetailService.getList( "LOGIN_SNS_CD" ) );    // 로그인 sns 코드 목록
         
+        if (returnUrlAfterLogin == null || returnUrlAfterLogin.equals("") ) {
+        	
+        	if( loginType != null ) {
+        		if ( loginType.equals(TYPE_ADMIN)) {
+        			returnUrlAfterLogin = "/admLogin?auth=" + ADMIN_AUTH;
+        		} else {
+        			returnUrlAfterLogin = "/" ;
+        		}
+        	} else {
+        		returnUrlAfterLogin = "/" ;
+        	}
+        }
+        
+        rttr.addFlashAttribute( "lgStatus", "joinForSns" );
+        return "redirect:" + returnUrlAfterLogin ;        // 메인페이지 로드 후 계정통합 레이어 호출
     }
     
     
-    
+    // 계정통합 ready ajax
     @ResponseBody
     @PostMapping( "/readyUserIntegratedAjax" )
     public Map<String, Object> readyUserIntegratedAjax( 	HttpServletRequest request,
@@ -141,14 +186,11 @@ public class SnsLoginCallbackController {
         
         session.setAttribute("oAuthStatus", "userIntegratedCallbackAjax" );
         result.put("flag", "S");
-//
-//    	// 비밀번호 암호화
-//    	loginDto.setPassword( passwordEncoder.encode( loginDto.getPassword() ) );
-
-//        return loginService.userLogin( loginDto, request );
+        
         return result;
         
     }
+    
     
     // 계정 통합 callback
     @ResponseBody
@@ -167,7 +209,6 @@ public class SnsLoginCallbackController {
         }
         
         // 로그인 되었는지 여부 확인
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
         if ( principal != null && principal.getClass() == LoginDto.class  ) {
@@ -192,5 +233,6 @@ public class SnsLoginCallbackController {
         return result;
     }
     
-    
 }
+
+
