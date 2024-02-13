@@ -1,100 +1,104 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{pon/layout/layout}">
+	  layout:decorate="~{pon/layout/layout}">
 
 <head layout:fragment="head">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="_csrf" th:content="${_csrf.token}">
-    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<!-- Meta, title, CSS, favicons, etc. -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="_csrf" th:content="${_csrf.token}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
 
-    <title layout:fragment="title">피오니키즈</title>
+	<title layout:fragment="title">피오니키즈</title>
 
-    <!-- css -->
-    <link rel="stylesheet" href="/pon/common/css/reset.css">
-    <link rel="stylesheet" href="/pon/common/css/common.css">
-    <link rel="stylesheet" href="/pon/common/css/style.css">
-    <link rel="stylesheet" href="/pon/npm/swiper11/css/swiper-bundle.min.css">
+	<!-- css -->
+	<link rel="stylesheet" href="/pon/common/css/reset.css">
+	<link rel="stylesheet" href="/pon/common/css/common.css">
+	<link rel="stylesheet" href="/pon/common/css/style.css">
+	<link rel="stylesheet" href="/pon/npm/swiper11/css/swiper-bundle.min.css">
 
 </head>
 <title layout:fragment="title">피오니키즈 - pioneerkids</title>
 <!-- S : Javascript functions	-->
 <div layout:fragment="script">
-    <!-- js -->
+	<!-- js -->
 </div>
 
 <!-- E : Javascript functions	-->
 <div layout:fragment="content" class="sub_box">
-    <div class="top_tit">
-        <div class="star"><img src="/pon/common/image/bell_color.svg" alt=""></div>
-        <h3>공지사항</h3>
-
-        <img class="bg_ico1" src="/pon/common/image/star_3d_color.png" alt="">
-        <img class="bg_ico2" src="/pon/common/image/atom2.png" alt="">
-    </div>
-    <div class="class_1dep">
-        <div class="notice_article">
-            <div class="search_article">
-                <div class="search_input">
-                    <input type="text" placeholder="검색어를 입력하세요">
-                    <span>검색</span>
-                </div>
-            </div>
-            <div class="article_list_box">
-                <ol class="article_list">
-                    <th:block th:each=" data : ${noticeList} ">
-                        <li class="article_item">
-                            <a th:href="@{/ntt/{mcd}/{bbsSn}/detail ( mcd = ${mcd}, bbsSn = ${bbsSn},  pk = ${data.nttSn} ) }">
-                                <div class="article_num">공지
-                                </div>
-                                <div class="article_body">
-                                    <div class="article_tit" th:text="${data.nttNm}">게시물 제목</div>
-                                    <div class="article_info">
-                                        <div class="article_date" th:text="${data.regDt}">2023-09-12 17:53</div>
-                                        <div class="article_comment">
-                                            <span>
-                                                <img src="/pon/common/image/comment.svg" alt="">
-                                            </span>
-                                            <span th:text="${data.nttRdcnt}">조회수</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                    </th:block>
-                    <th:block th:each=" data : ${resultList} ">
-                        <li class="article_item">
-                            <a th:href="@{/ntt/{mcd}/{bbsSn}/detail ( mcd = ${mcd}, bbsSn = ${bbsSn},  pk = ${data.nttSn} ) }">
-                                <div class="article_num"
-                                     th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }">
-                                </div>
-                                <div class="article_body">
-                                    <div class="article_tit" th:text="${data.nttNm}">게시물 제목</div>
-                                    <div class="article_info">
-                                        <div class="article_date" th:text="${data.regDt}">2023-09-12 17:53</div>
-                                        <div class="article_comment">
-                                            <span>
-                                                <img src="/pon/common/image/comment.svg" alt="">
-                                            </span>
-                                            <span th:text="${data.nttRdcnt}">조회수</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                    </th:block>
-                </ol>
-            </div>
-            <div class="bg_ico3">
-                <img src="/pon/common/image/space_one.png" alt="">
-            </div>
-        </div>
-        <div class="paging_box" th:insert="~{pon/layout/tiles/paging :: paging('listForm', ${resultList})}">
-        </div>
-    </div>
+	<div class="top_tit">
+		<div class="star"> 
+			<img src="/pon/common/image/bell_color.svg" alt="배경아이콘_종">
+		</div>
+		<h3 th:text="${currentMenu != null && currentMenu.menuNm!= null } ? ${currentMenu.menuNm} : '게시판' " >메뉴명</h3>
+		<span th:text="${currentMenu != null && currentMenu.menuNm!= null } ? ${currentMenu.menuDc} : '피오니키즈의 공지사항을 확인하세요.' " >메뉴설명</span>
+		<img class="bg_ico1" src="/pon/common/image/star_3d_color.png" alt="배경아이콘_별_3D">
+		<img class="bg_ico2" src="/pon/common/image/atom2.png" alt="배경아이콘_원자">
+	</div>
+	<div class="class_1dep">
+		<div class="notice_article">
+			<div class="search_article">
+				<div class="search_input no-bd-top">
+					<input type="text" placeholder="검색어를 입력하세요">
+					<span>검색</span>
+				</div>
+			</div>
+			<div class="article_list_box">
+				<ol class="article_list">
+					<th:block th:each=" data : ${noticeList} ">
+						<li class="article_item notice_item">
+							<a th:href="@{/ntt/{mcd}/{bbsSn}/detail ( mcd = ${mcd}, bbsSn = ${bbsSn},  pk = ${data.nttSn} ) }">
+								<div class="article_num">공지
+								</div>
+								<div class="article_body">
+									<div class="article_tit" th:text="${data.nttNm}">게시물 제목</div>
+									<div class="article_info">
+										<div class="article_date" th:text="${data.regDt}">2023-09-12 17:53</div>
+										<div class="article_comment">
+											<span>
+												<img src="/pon/common/image/comment.svg" alt="">
+											</span>
+											<span th:text="${data.nttRdcnt}">조회수</span>
+										</div>
+									</div>
+								</div>
+							</a>
+						</li>
+					</th:block>
+					<th:block th:each=" data : ${resultList} ">
+						<li class="article_item">
+							<a th:href="@{/ntt/{mcd}/{bbsSn}/detail ( mcd = ${mcd}, bbsSn = ${bbsSn},  pk = ${data.nttSn} ) }">
+								<div class="article_num" th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }">
+								</div>
+								<div class="article_body">
+									<div class="article_tit" th:text="${data.nttNm}">게시물 제목</div>
+									<div class="article_info">
+										<div class="article_date" th:text="${data.regDt}">2023-09-12 17:53</div>
+										<div class="article_comment">
+											<span>
+												<img src="/pon/common/image/comment.svg" alt="">
+											</span>
+											<span th:text="${data.nttRdcnt}">조회수</span>
+										</div>
+									</div>
+								</div>
+							</a>
+						</li>
+					</th:block>
+					<li th:unless = "${!resultList.isEmpty()}" class="article_item no-data">
+						데이터가 존재하지 않습니다. 
+					</li>
+				</ol>
+			</div>
+			<div class="bg_ico3">
+				<img src="/pon/common/image/space_one.png" alt="">
+			</div>
+		</div>
+		<div class="paging_box" th:insert="~{pon/layout/tiles/paging :: paging('listForm', ${resultList})}">
+		</div>
+	</div>
 </div>
 
 </html>

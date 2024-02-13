@@ -47,11 +47,12 @@ public class NttRepositoryImpl implements NttRepositoryCustom {
                         ntt.bbsSn,
                         ntt.nttNm,
                         ntt.nttCn,
+                        ntt.atchFileSn,
                         ntt.nttRdcnt,
                         ntt.openYn,
                         ntt.noticeSetYn,
                         ntt.registerId,
-                        Expressions.stringTemplate( "to_char({0}, '{1s}')", ntt.regDt, "YYYY-MM-DD HH:MM:SS" )
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", ntt.regDt, "YYYY-MM-DD HH:MM" )
                 ) ).from( ntt )
                 .where(
                         eqOption( nttListDto.getSchOption(), nttListDto.getSchCntn() ),
@@ -139,11 +140,12 @@ public class NttRepositoryImpl implements NttRepositoryCustom {
                         ntt.bbsSn,
                         ntt.nttNm,
                         ntt.nttCn,
+                        ntt.atchFileSn,
                         ntt.nttRdcnt,
                         ntt.openYn,
                         ntt.registerId,
                         ntt.registerId,
-                        Expressions.stringTemplate( "to_char({0}, '{1s}')", ntt.regDt, "YYYY-MM-DD HH:MM:SS" )
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", ntt.regDt, "YYYY-MM-DD HH:MM" )
                 ) )
                 .from( ntt )
                 .where( ntt.bbsSn.eq( bbsSn ),

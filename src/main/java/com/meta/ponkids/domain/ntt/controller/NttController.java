@@ -14,10 +14,12 @@ import com.meta.ponkids.domain.system.file.service.AtchFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -70,7 +72,7 @@ public class NttController {
     public String nttList( @PathVariable Long bbsSn,
                            @ModelAttribute NttListDto nttListDto,
                            @PathVariable String mcd,
-                           @PageableDefault( size = 10 ) Pageable pageable,
+                           @PageableDefault( size = 8 ) Pageable pageable,
                            Model model ) {
         
         // target object 조회
@@ -92,20 +94,29 @@ public class NttController {
         // 게시판 구분 코드 상세 조회
         CmmnCdDetailModDto bbsSeCdDto = cmmnCdDetailService.findTop1ByCdNmAndCdDetailVal1( "BBS_SE_CD", bbsModDto.getBbsSeCd() );
         
+        int defaultPageSize = 8;
         // 게시판 bbsSeCdDto 가 없을 시.
         if ( bbsSeCdDto == null ) {
             // 메시지 출력 및 url 이동 처리
             model.addAttribute( "resultMsg", "게시판 타입 정보를 찾을 수 없습니다. 관리자에게 문의해주세요." );
             model.addAttribute( "moveUrl", "/" );
             return "common/alert";
+        } else {
+        	String cdDetailVal2 = bbsSeCdDto.getCdDetailVal2();
+        	if ( cdDetailVal2 != null && cdDetailVal2.matches("[+-]?\\d*(\\.\\d+)?")) {
+        		defaultPageSize = Integer.parseInt( cdDetailVal2 );
+        		
+        	}
+        	
         }
+        Pageable customPageable = PageRequest.of(pageable.getPageNumber(), defaultPageSize );
         
         // 공지설정 목록 조회
         List<NttListDto> noticeList = nttService.getNoticeList( bbsSn );
         model.addAttribute( "noticeList", noticeList );
         
         // 목록 조회
-        Page<NttListDto> resultList = nttService.getList( nttListDto, pageable );
+        Page<NttListDto> resultList = nttService.getList( nttListDto, customPageable );
         model.addAttribute( "resultList", resultList );
         
         // 검색 dto setting
@@ -126,21 +137,22 @@ public class NttController {
     @GetMapping( value = {
             BASIC_PATH + "/{mcd}/{bbsSn}/detail",
             BASIC_PATH + "/{mcd}/{bbsSn}/modify" } )
-    public String modify( @RequestParam( required = true ) Long nttSn,
+    public String modify( @RequestParam( required = true ) Long pk,
                           @PathVariable Long bbsSn,
                           @PathVariable String mcd,
                           Model model,
                           HttpServletRequest request ) throws IOException {
         
         // target object 조회
-        NttModDto targetDto = nttService.findByNttSn( nttSn );
+        NttModDto targetDto = nttService.findByNttSn( pk );
         
         //댓글 설정여부
         String replySetYn = bbsService.getSetReplySetYn( targetDto.getBbsSn() );
         
+        model.addAttribute( "bbsSn", bbsSn );
         model.addAttribute( "targetDto", targetDto );
         model.addAttribute( "replySetYn", replySetYn );
-        model.addAttribute( "nttSn", nttSn );
+        model.addAttribute( "nttSn", pk );
         // 게시판 구분 코드 찾기
         BbsModDto bbsModDto = bbsService.findByBbsSn( bbsSn );
         
@@ -148,7 +160,7 @@ public class NttController {
         //댓글 설정 Y일 경우
         if ( replySetYn.equals( "Y" ) ) {
             // 댓글 목록 조회
-            List<NttReplyListDto> replyList = nttReplyService.getList( nttSn );
+            List<NttReplyListDto> replyList = nttReplyService.getList( pk );
             model.addAttribute( "replyList", replyList );
         }
         
@@ -160,7 +172,7 @@ public class NttController {
         }
         
         // 조회수 업데이트
-        nttService.update( nttSn, request );
+        nttService.update( pk, request );
         
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );

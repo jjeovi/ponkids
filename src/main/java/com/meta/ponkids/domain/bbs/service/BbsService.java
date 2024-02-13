@@ -79,7 +79,6 @@ public class BbsService {
         bbsModDto = bbsModDto.toDto( bbs );
         
         return bbsModDto;
-        
     }
     
     // 게시판 댓글 설정여부 조회

@@ -121,7 +121,7 @@ public class NttService {
         
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
         targetDto.setUpdusrId( "ehlee" ); // 임시 셋팅
-        targetDto.setUpdtDt( LocalDateTime.now() );
+//        targetDto.setUpdtDt( LocalDateTime.now() );	// -> Ntt 의 toEntity 에 선언
         
         // target object 에 수정사항 set
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가

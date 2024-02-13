@@ -58,7 +58,7 @@ public class NttReplyRepositoryImpl {
                                 nttReply.nttReplySeq,
                                 nttReply.nttReplyCn,
                                 nttReply.registerId,
-                                Expressions.stringTemplate( "to_char({0}, '{1s}')", nttReply.updtDt, "YYYY-MM-DD HH:MM:SS" ),
+                                Expressions.stringTemplate( "to_char({0}, '{1s}')", nttReply.updtDt, "YYYY-MM-DD HH:MM" ),
                                 nttReply.delYn,
                                 ExpressionUtils.as( JPAExpressions.select( subNttReply.count() )
                                         .from( subNttReply )
@@ -89,7 +89,7 @@ public class NttReplyRepositoryImpl {
                         nttReply.nttReplySeq,
                         nttReply.nttReplyCn,
                         nttReply.registerId,
-                        Expressions.stringTemplate( "to_char({0}, '{1s}')", nttReply.updtDt, "YYYY-MM-DD HH:MM:SS" ),
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", nttReply.updtDt, "YYYY-MM-DD HH:MM" ),
                         nttReply.delYn,
                         ExpressionUtils.as( JPAExpressions.select( subNttReply.count() )
                                 .from( subNttReply )

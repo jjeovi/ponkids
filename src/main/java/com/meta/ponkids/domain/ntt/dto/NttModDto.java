@@ -1,6 +1,8 @@
 package com.meta.ponkids.domain.ntt.dto;
 
 import com.meta.ponkids.domain.ntt.entity.Ntt;
+import com.meta.ponkids.global.util.date.DateUtils;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +24,7 @@ public class NttModDto {
     private String noticeSetYn;
     private String updusrId;
     private String updusrIp;
-    private LocalDateTime updtDt;
+    private String updtDt;
     private Long atchFileSn;        // 첨부파일 일련번호
     private Long atchFileSnOri;     // 첨부파일 일련번호
     private Long cnAtchFileSn;
@@ -31,7 +33,7 @@ public class NttModDto {
     // builder 생성
     @Builder
     public NttModDto( Long nttSn, Long bbsSn, String nttNm, String nttCn, String noticeSetYn,
-                      int nttRdcnt, String updusrId, String updusrIp, LocalDateTime updtDt, Long atchFileSn, Long cnAtchFileSn ) {
+                      int nttRdcnt, String updusrId, String updusrIp, String updtDt, Long atchFileSn, Long cnAtchFileSn ) {
         
         this.nttSn = nttSn;
         this.bbsSn = bbsSn;
@@ -58,7 +60,7 @@ public class NttModDto {
                 .nttRdcnt( nttRdcnt )
                 .updusrId( updusrId )
                 .updusrIp( updusrIp )
-                .updtDt( updtDt )
+                .updtDt( LocalDateTime.now() )
                 .atchFileSn( atchFileSn )
                 .cnAtchFileSn( cnAtchFileSn )
                 .build();
@@ -75,7 +77,7 @@ public class NttModDto {
                 .nttRdcnt( ntt.getNttRdcnt() )
                 .updusrId( ntt.getUpdusrId() )
                 .updusrIp( ntt.getUpdusrIp() )
-                .updtDt( ntt.getUpdtDt() )
+                .updtDt( DateUtils.LDTToString("yyyy-MM-dd HH:mm", ntt.getUpdtDt() )  )
                 .atchFileSn( ntt.getAtchFileSn() )
                 .cnAtchFileSn( ntt.getCnAtchFileSn() )
                 .build();

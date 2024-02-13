@@ -2,6 +2,8 @@ package com.meta.ponkids.global.util.date;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -565,6 +567,12 @@ public class DateUtils implements DateConstants {
         } catch (Exception e) {
             return false;
         }
+    }
+    
+    public static String LDTToString(String dateFormat, LocalDateTime date ) {
+    	String parsedLocalDateTimeNow = date.format( DateTimeFormatter.ofPattern( dateFormat ) );
+    			
+    	return parsedLocalDateTimeNow;
     }
     
 }
