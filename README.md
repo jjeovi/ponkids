@@ -120,6 +120,18 @@ order by backend_start asc;
 
 
 -- 2. 1에서 확인한 pid 값을 대입시켜 세션을 강제종료 ex : SELECT pg_terminate_backend('177283');  
+-- 2. 1에서 확인한 pid 값 한번에 강제종료하기
+ SELECT 
+    pg_terminate_backend(pid) 
+FROM 
+    pg_stat_activity 
+WHERE 
+    -- don't kill my own connection!
+    pid <> pg_backend_pid()
+    -- don't kill the connections to other databases
+    AND datname = 'dbjjeovi'
+    and state = 'idle'
+   and current_timestamp - query_start > '60s'; -- 60초 이상 지연되어있는 세션에 한해 제거
 
 -- 세션 종료 명령어  
 
