@@ -708,6 +708,40 @@ function readyLogin( loginType ) {
 }
 
 
+/* 아이디 찾기 */
+function findUsername(){
+    //사용자 입력 값 가져오기
+    var username = $("#username").val();
+    var phone = $("#phone").val();
+
+    // 서버로 전송할 데이터 구성
+    var requestData = {
+        username: username,
+        phone: phone
+    };
+
+    // Ajax 를 사용한 서버로의 요청
+    $.ajax({
+        url: "/findUsername",
+        type: "POST",
+        data: JSON.stringify(requestData),
+        contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            if (result.success) {
+                alert("아이디는" + result.username + "입니다");
+            } else {
+                alert("아이디를 찾을 수 없습니다. 다시 확인해주세요");
+            }
+        },
+        error: function (){
+            alert("서버와의 통신 중 오류가 발생하였습니다.")
+        }
+    })
+
+}
+
+
+
 // 회원 계정 통합
 function userIntegrated() {
 
@@ -881,3 +915,8 @@ function getMakeUrlParamLgStatus( status ) {
 
 
 }
+
+/* S : 아이디/비밀번호 스크립트 */
+
+
+/* E : 아이디/비밀번호 스크립트 */

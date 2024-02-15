@@ -1,7 +1,13 @@
-<div id="popup_layer_find_account" class="pop_wrap login" data-layer-wrap="user_find" style="display: block;">
+<div class="pop_wrap login user_find" data-layer-wrap="user_find" style="display: block;">
 	<div class="pop_top">
+		<!-- 기존 코드
 		<p></p>
-		<button class="pop_close" id="popup_layer_find_account_close"><i class="fas fa-times"><span class="hidden">팝업닫기</span></i></button>
+		<button class="pop_close" id="popup_layer_find_account_close"><i class="fas fa-times"><span class="hidden">팝업닫기</span></i></button>-->
+		<!-- S : 성환 : 팝업창 닫기 버튼-->
+		<button class="pop_close hide_pop" data-layer-id="user_find" >
+			<img src="/pon/common/image/chat_close.svg" alt="">
+		</button>
+		<!-- E : 성환 : 팝업창 닫기 버튼-->
 	</div>
 	<div class="pop_content">
 		<h2 class="pop_title">아이디 · 비밀번호 찾기</h2>
@@ -11,15 +17,25 @@
 					<a href="javascript:void(0);" data-tab="tab1" class="active">아이디 찾기</a>
 					<a href="javascript:void(0);" data-tab="tab2">비밀번호 찾기</a>
 				</div>
-				<div class="tab_cont current" data-tab-wrap="tab1">
-					<div class="input_wrap">
-						<input id="findId_userName" class="name_input" type="text" placeholder="이름을 입력해주세요.">
-						
-						<input id="findId_userBirthday" class="date_cal hasDatepicker" readonly="" type="text" onkeypress="return false" placeholder="생년월일을 입력해주세요.">
+
+
+				<form th:action = "@{/findUsername}" method = "post" onsubmit="return findUsername()">
+					<div class="tab_cont current" data-tab-wrap="tab1">
+						<div class="input_wrap">
+							<input id="findId_userName" class="name_input" type="text" placeholder="이름을 입력해주세요.">
+
+							<!--<input id="findId_userBirthday" class="date_cal hasDatepicker" readonly="" type="text" onkeypress="return false" placeholder="휴대폰 번호를 입력해주세요.">-->
+							<input id="findId_usertelNo" type="number"  placeholder="휴대폰 번호를 입력해주세요.">
+						</div>
+						<!-- S : 성환: 아이디 찾기 버튼-->
+						<button type="button" class="btn btn_login_default login_btn" onclick="findUserId('default');">아이디 찾기</button>
+						<!-- E : 성환: 아이디 찾기 버튼-->
+						<!-- 기존코드 <button id="findId_find_btn" class="find_btn">아이디 찾기</button>-->
 					</div>
-					
-					<button id="findId_find_btn" class="find_btn">아이디 찾기</button>
-				</div>
+				</form>
+
+
+
 				<div class="tab_cont" data-tab-wrap="tab2">
 					<div class="input_wrap">
 						<input id="findPw_name" class="name_input" type="text" placeholder="이름을 입력해주세요.">
@@ -30,8 +46,14 @@
 							<button id="findPw_send_auth_number" class="cert_btn">인증번호 발송<!-- 재발송 (03:00) 발송시 텍스트 변경 --></button>
 						</div>
 					</div>
-					
-					<button id="findPw_find_btn" class="find_btn">비밀번호 찾기</button>
+
+					<!-- S : 성환 : 비밀번호 찾기 버튼-->
+					<div class="login_btn_wrap">
+						<button type="button" class="btn btn_login_default login_btn" onclick="readyLogin('default');">비밀번호 찾기</button>
+					</div>
+					<!-- E : 성환 : 비밀번호 찾기 버튼-->
+
+					<!--기존코드 <button id="findPw_find_btn" class="find_btn">비밀번호 찾기</button>-->
 				</div>
 			</div>
 		</div>
