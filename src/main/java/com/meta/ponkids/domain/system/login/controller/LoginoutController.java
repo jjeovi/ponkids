@@ -47,11 +47,16 @@ public class LoginoutController {
     	session.setAttribute("returnUrlAfterLogin", loginDto.getReturnUrlAfterLogin() );
     	session.setAttribute("returnUrlAfterLoginFail", loginDto.getReturnUrlAfterLoginFail() );
     	result.put("flag", "S");
+<<<<<<< HEAD
 //    	
 //    	// 비밀번호 암호화
 //    	loginDto.setPassword( passwordEncoder.encode( loginDto.getPassword() ) );
 
 //        return loginService.userLogin( loginDto, request );
+=======
+    	
+    	
+>>>>>>> ca09599b92dea63ff667990b2bf367df86086fbc
         return result;
 
     }
@@ -65,9 +70,13 @@ public class LoginoutController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		String returnUrlAfterLogout = request.getParameter("returnUrl");
+<<<<<<< HEAD
 
 //		String returnUrlAfterLogout = ( String ) session.getAttribute( "returnUrlAfterLogout" );
 
+=======
+		
+>>>>>>> ca09599b92dea63ff667990b2bf367df86086fbc
     	if ( auth != null ) {
     		new SecurityContextLogoutHandler().logout( request, response, auth );
     	}

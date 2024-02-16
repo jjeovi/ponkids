@@ -1,22 +1,22 @@
 package com.meta.ponkids.domain.system.login.dto;
 
-import com.meta.ponkids.domain.user.entity.User;
-import com.meta.ponkids.global.util.date.DateUtils;
-import com.querydsl.core.annotations.QueryProjection;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+
+import javax.persistence.Column;
+
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import javax.persistence.Column;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
+import com.querydsl.core.annotations.QueryProjection;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
@@ -104,7 +104,7 @@ public class LoginDto implements UserDetails , OAuth2User {
     private Map<String, Object> attributes;
     // ----------------------------------- OAuth2User 관련 변수  ---------------------------------------
     
-    @Builder
+    
     @QueryProjection
     public LoginDto( Long userSn, String userId, String password, Long roleSn, String roleNm, String roleDc, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String snsKakaoCntnYn, String snsKakaoCntnDt, String snsGoogleCntnYn, String snsGoogleCntnDt, String snsNaverCntnYn, String snsNaverCntnDt, String snsFacebookCntnYn, String snsFacebookCntnDt, String snsAppleCntnYn, String snsAppleCntnDt, String lastLoginDt ) {
         this.userSn = userSn;
@@ -195,40 +195,4 @@ public class LoginDto implements UserDetails , OAuth2User {
     public String getName() {
         return null;
     }
-
-
-    //entity to dto
-    public LoginDto toDto( User user ) {
-        return LoginDto.builder()
-                .userId( user.getUserId() )
-                .password( user.getPassword() )
-                .userNm( user.getUserNm() )
-                .gender( user.getGender() )
-                .brdtDate( user.getBrdtDate() )
-                .telNo( user.getTelNo() )
-                .resideArea( user.getResideArea() )
-                .zip( user.getZip() )
-                .rdnmAdr( user.getRdnmAdr() )
-                .detailAdr( user.getDetailAdr() )
-                .atchFileSn( user.getAtchFileSn() )
-                .mngrYn( user.getMngrYn() )
-                .mngrConfmYn( user.getMngrConfmYn() )
-                .confmerId( user.getConfmerId() )
-                .confmerIp( user.getConfmerIp() )
-                .snsKakaoCntnYn( user.getSnsKakaoCntnYn() )
-                .snsKakaoCntnDt( DateUtils.LDTToString("yyyy-MM-dd HH:mm", user.getSnsKakaoCntnDt() ) )
-                .snsGoogleCntnYn( user.getSnsGoogleCntnYn() )
-                .snsGoogleCntnDt( DateUtils.LDTToString("yyyy-MM-dd HH:mm", user.getSnsGoogleCntnDt() ) )
-                .snsNaverCntnYn( user.getSnsNaverCntnYn() )
-                .snsNaverCntnDt( DateUtils.LDTToString("yyyy-MM-dd HH:mm", user.getSnsNaverCntnDt() ) )
-                .snsFacebookCntnYn( user.getSnsFacebookCntnYn() )
-                .snsFacebookCntnDt( DateUtils.LDTToString("yyyy-MM-dd HH:mm", user.getSnsFacebookCntnDt() ) )
-                .snsAppleCntnYn( user.getSnsAppleCntnYn() )
-                .snsAppleCntnDt( DateUtils.LDTToString("yyyy-MM-dd HH:mm", user.getSnsAppleCntnDt() ) )
-                .lastLoginDt( DateUtils.LDTToString("yyyy-MM-dd HH:mm", user.getLastLoginDt() ) )
-                .build();
-
-
-    }
-
 }

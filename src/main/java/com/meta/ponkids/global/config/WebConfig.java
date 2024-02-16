@@ -16,10 +16,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
     
-    private final AuthInterceptor authInterceptor;
-    private final MenuAdmInterceptor menuAdmInterceptor;
-    private final MenuInterceptor menuInterceptor;
-    private final MessageInterceptor messageInterceptor;
+    private final AuthInterceptor		authInterceptor;
+    private final MenuAdmInterceptor	menuAdmInterceptor;
+    private final MenuInterceptor		menuInterceptor;
+    private final MessageInterceptor	messageInterceptor;
     
     @Override
     public void addInterceptors( InterceptorRegistry registry ) {
