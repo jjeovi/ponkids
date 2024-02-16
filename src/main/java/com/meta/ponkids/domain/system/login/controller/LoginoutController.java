@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -80,16 +82,15 @@ public class LoginoutController {
 
 	// 아이디 찾기
 	@PostMapping("/findUsername")
-	public @ResponseBody Result findUsername(@RequestBody UserRequest request) {
-		// 여기에서 실제 아이디를 찾는 로직을 결과를 반환합니다.
-		// Result 클래스는 서버에서 클라이언트로 응답할때 사용할 데이터 구조입니다.
-	    if ("John Doe".equals(request.getUsername()) && "1234567890".equals(request.getPhone())) {
-		// 아이디를 찾았다고 가정
-		return new Result(true, "john_doe_id");
-	} else {
-		return new Result(false, "아이디를 찾을 수 없습니다. 입력 정보를 확인해주세요.");
+	public ResponseEntity<String> findUsername(@RequestBody LoginDto request) {
+		// 여기에서 실제 아이디를 찾는 로직을 구현하고 결과를 반환합니다.
+		if ("홍길동".equals(request.getUsername()) && "01011112222".equals(request.getTelNo())) {
+			// 아이디를 찾았다고 가정
+			return ResponseEntity.ok("아이디는 hongSSI 입니다.");
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("아이디를 찾을 수 없습니다. 입력 정보를 확인해주세요.");
+		}
 	}
-}
 
 
 	/* 코드 리뷰

@@ -1,3 +1,6 @@
+<meta name="_csrf_header" th:content="${_csrf.headerName}">
+<meta name="_csrf" th:content="${_csrf.token}">
+
 <div class="pop_wrap login user_find" data-layer-wrap="user_find" style="display: block;">
 	<div class="pop_top">
 		<!-- 기존 코드
@@ -22,13 +25,13 @@
 				<form th:action = "@{/findUsername}" method = "post" onsubmit="return findUsername()">
 					<div class="tab_cont current" data-tab-wrap="tab1">
 						<div class="input_wrap">
-							<input id="findId_userName" class="name_input" type="text" placeholder="이름을 입력해주세요.">
+							<input id="username" name="username" class="name_input" type="text" placeholder="이름을 입력해주세요.">
 
 							<!--<input id="findId_userBirthday" class="date_cal hasDatepicker" readonly="" type="text" onkeypress="return false" placeholder="휴대폰 번호를 입력해주세요.">-->
-							<input id="findId_usertelNo" type="number"  placeholder="휴대폰 번호를 입력해주세요.">
+							<input id="phone" name="phone" type="number"  placeholder="휴대폰 번호를 입력해주세요.">
 						</div>
 						<!-- S : 성환: 아이디 찾기 버튼-->
-						<button type="button" class="btn btn_login_default login_btn" onclick="findUserId('default');">아이디 찾기</button>
+						<button type="button" class="btn btn_login_default login_btn" onclick="findUsername()">아이디 찾기</button>
 						<!-- E : 성환: 아이디 찾기 버튼-->
 						<!-- 기존코드 <button id="findId_find_btn" class="find_btn">아이디 찾기</button>-->
 					</div>

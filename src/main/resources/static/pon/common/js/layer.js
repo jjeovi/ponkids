@@ -720,13 +720,19 @@ function findUsername(){
         phone: phone
     };
 
+    var header = $("meta[name='_csrf_header']").attr('content');
+    var token = $("meta[name='_csrf']").attr('content');
+
     // Ajax 를 사용한 서버로의 요청
     $.ajax({
         url: "/findUsername",
         type: "POST",
         data: JSON.stringify(requestData),
         contentType: "application/json; charset=utf-8",
-        success: function (result) {
+        beforeSend: function(xhr){
+            xhr.setRequestHeader(header, token);
+        },
+       success: function (result) {
             if (result.success) {
                 alert("아이디는" + result.username + "입니다");
             } else {
@@ -734,7 +740,7 @@ function findUsername(){
             }
         },
         error: function (){
-            alert("서버와의 통신 중 오류가 발생하였습니다.")
+            alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error)
         }
     })
 
