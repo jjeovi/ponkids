@@ -932,7 +932,9 @@ function findUsername(){
             } else if ( result.flag == "S" ) {
                 // TODO 마스킹 된 id 계정을 뿌려주는 작업 필요..
                  alert(result.maskingUserId);
-                // $("#dddd").text(result.maskingUserId);
+              /*   $("#userIdInfo").text(result.maskingUserId);*/
+                showSuccessScreen(result.maskingUserId);
+
             }
 
 
@@ -941,5 +943,15 @@ function findUsername(){
             alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error)
         }
     })
+}
+
+
+
+// 아이디 찾기 성공 후의 처리
+function showSuccessScreen(userId) {
+    // 성공 화면을 보이도록 설정
+    $('.user_find').hide(); // 기존 화면 감춤
+    $('#userId').text(userId); // 찾은 아이디를 성공 화면에 출력
+    $('.findUser_info').show(); // 성공 화면 보이기
 }
 /* E : 아이디 찾기 */
