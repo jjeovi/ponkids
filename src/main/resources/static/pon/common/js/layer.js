@@ -708,57 +708,7 @@ function readyLogin( loginType ) {
 }
 
 
-/* 아이디 찾기 */
-function findUsername(){
-    //사용자 입력 값 가져오기
-    var username = $("#username").val();
-    var phone = $("#phone").val();
 
-    // 서버로 전송할 데이터 구성
-    var requestData = {
-        userNm: username,
-        telNo: phone
-    };
-
-    data = new FormData();
-    data.append( "userNm", username );
-    data.append( "telNo", phone );
-
-    var header = $("meta[name='_csrf_header']").attr('content');
-    var token = $("meta[name='_csrf']").attr('content');
-
-    // Ajax 를 사용한 서버로의 요청
-    $.ajax({
-        url: "/findUsername",
-        type: "POST",
-        data: data,
-        cache: false,
-        contentType: false,
-        processData: false,
-        // contentType: "application/json; charset=utf-8",
-         beforeSend: function(xhr){
-             xhr.setRequestHeader(header, token);
-         },
-       success: function (result) {
-
-            // 통신 이후 로직
-           if ( result.flag == "E" ) {
-               alert( result.msg );
-
-           } else if ( result.flag == "S" ) {
-               // TODO 마스킹 된 id 계정을 뿌려주는 작업 필요..
-               // alert(result.maskingUserId);
-               // $("#dddd").text(result.maskingUserId);
-           }
-
-
-        },
-        error: function (){
-            alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error)
-        }
-    })
-
-}
 
 
 
@@ -940,3 +890,56 @@ function getMakeUrlParamLgStatus( status ) {
 
 
 /* E : 아이디/비밀번호 스크립트 */
+
+
+/* S : 아이디 찾기 */
+function findUsername(){
+    //사용자 입력 값 가져오기
+    var username = $("#username").val();
+    var phone = $("#phone").val();
+
+    // 서버로 전송할 데이터 구성
+    var requestData = {
+        userNm: username,
+        telNo: phone
+    };
+
+    data = new FormData();
+    data.append( "userNm", username );
+    data.append( "telNo", phone );
+
+    var header = $("meta[name='_csrf_header']").attr('content');
+    var token = $("meta[name='_csrf']").attr('content');
+
+    // Ajax 를 사용한 서버로의 요청
+    $.ajax({
+        url: "/findUsername",
+        type: "POST",
+        data: data,
+        cache: false,
+        contentType: false,
+        processData: false,
+        // contentType: "application/json; charset=utf-8",
+        beforeSend: function(xhr){
+            xhr.setRequestHeader(header, token);
+        },
+        success: function (result) {
+
+            // 통신 이후 로직
+            if ( result.flag == "E" ) {
+                alert( result.msg );
+
+            } else if ( result.flag == "S" ) {
+                // TODO 마스킹 된 id 계정을 뿌려주는 작업 필요..
+                 alert(result.maskingUserId);
+                // $("#dddd").text(result.maskingUserId);
+            }
+
+
+        },
+        error: function (){
+            alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error)
+        }
+    })
+}
+/* E : 아이디 찾기 */

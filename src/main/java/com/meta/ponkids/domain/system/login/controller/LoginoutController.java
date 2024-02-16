@@ -80,30 +80,20 @@ public class LoginoutController {
 
     }
 
-
-	// id/pw 찾기
-
 	// 아이디 찾기
 	@ResponseBody
 	@PostMapping("/findUsername")
 	public Map<String, Object> findUsername( HttpServletRequest request,
 											@ModelAttribute LoginDto loginDto,
-//											@RequestParam String userNm,
-//											@RequestParam String telNo,
 											HttpSession session,
 											Model model
-
 	) {
-
+		//메소드가 실행되고 나서 클라이언트에게 반환될 데이터를 담기 위한 자료구조를 생성하는 부분
 		Map<String, Object> result = new HashMap<String, Object>();
 
 		// 여기에서 실제 아이디를 찾는 로직을 구현하고 결과를 반환합니다.
-//		1. 이름/전화번호로 계정을 찾음
-//		1-1. 해당 입력값으로 찾은 계정이 있을 떄
-//		1-2. 해당 입력값으로 찾은 계정이 없을 때
-
-
 		// TODO 1. 1. 이름/전화번호 / (관리자여부) 로 계정을 찾음
+		// 아이디 찾기 기능에서 실제로 사용자 정보를 데이터베이스에서 조회하는 부분
 		LoginDto targetDto = loginService.findByUserNmAndTelNoAndMngrYn(loginDto);
 
 
@@ -122,25 +112,10 @@ public class LoginoutController {
 			result.put("msg", "입력하신 정보와 일치하는 계정이 존재하지 않습니다. 다시 시도해주세요. ");
 		}
 
-
 		return result;
-
-//
-//
-//		if ("홍길동".equals(loginDto.getUserNm()) && "01011112222".equals(loginDto.getTelNo())) {
-////		if ("홍길동".equals(userNm) && "01011112222".equals(telNo)) {
-//			// 아이디를 찾았다고 가정
-////			return ResponseEntity.ok("아이디는 hongSSI 입니다.");
-//		} else {
-////			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("아이디를 찾을 수 없습니다. 입력 정보를 확인해주세요.");
-//		}
-//		return null;
 	}
 
 
-	/* 코드 리뷰
-	https://political-moth-bb9.notion.site/LoginoutController-68136941b0f0494d916acf0a50359c1c?pvs=4
-	*/
 	// 비밀번호 변경 뷰
 //	@RequestMapping(value = "/pwUpdate", method = RequestMethod.GET)
 //	public String pwUpdate() throws Exception{
