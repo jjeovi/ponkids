@@ -100,12 +100,17 @@ public class LoginoutController {
 		if ( targetDto != null ) {
 			// 1-1. 해당 입력값으로 찾은 계정이 있을 떄
 			result.put("flag", "S");
-			String maskingUserId = targetDto.getUserId();
+			String userId  = targetDto.getUserId();
 
 			// TODO masking 처리 @ 기준 왼쪽 4개 문자 마스킹 처리
-
-			result.put("maskingUserId", maskingUserId);
-
+			// 마스킹 처리 - '@' 문자를 기준으로 왼쪽 4개 문자를 마스킹
+			int atIndex = userId.indexOf('@');
+			if (atIndex != -1) { // '@' 문자가 존재하는 경우
+				userId  = maskString(userId, 0, atIndex - 1, '*') + userId.substring(atIndex);
+				result.put("maskingUserId", userId );
+			}else{
+				result.put("msg","이메일정보가 올바르지 않습니다. 관리자에게 문의해주세요.");
+			}
 		} else if ( targetDto == null ) {
 			// 1-2. 해당 입력값으로 찾은 계정이 없을 때
 			result.put("flag", "E");
@@ -114,7 +119,19 @@ public class LoginoutController {
 
 		return result;
 	}
+	// 문자열 일부를 마스킹 처리하는 함수
+	private String maskString(String str, int start, int end, char maskChar) {
+		if (str == null || start < 0 || end >= str.length()) {
+			return str;
+		}
 
+		char[] chars = str.toCharArray();
+		for (int i = start; i <= end; i++) {
+			chars[i] = maskChar;
+		}
+
+		return new String(chars);
+	}
 
 	// 비밀번호 변경 뷰
 //	@RequestMapping(value = "/pwUpdate", method = RequestMethod.GET)
