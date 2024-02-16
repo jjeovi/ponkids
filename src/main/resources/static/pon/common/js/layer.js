@@ -952,6 +952,10 @@ function showSuccessScreen(userId) {
     // 성공 화면을 보이도록 설정
     $('.user_find').hide(); // 기존 화면 감춤
     $('#userId').text(userId); // 찾은 아이디를 성공 화면에 출력
-    $('.findUser_info').show(); // 성공 화면 보이기
+    showPopup( 'findUserInfo' );   // 아이디 찾기 결과 팝업 호출
+    // showPopup(
+    // showPopupLv2(
+    // 2가지 함수 만들어 놨는데, 둘중 뭐로 호출해야 할지는 한번 생각해보세요. 다른 함수 추가해야되면 추가해주시공,,
+    // 다시 한번 해볼래요? 넵!
 }
 /* E : 아이디 찾기 */
