@@ -158,11 +158,18 @@
 						</select>
 					</div>
 					<div class="detail_chldrn">
-						<p>자녀선택 <small>필수</small></p>
+						<p>자녀선택 <small>(필수)</small></p>
 						<!-- TODO : 인증 권한 체크 하여 분기를 나누어 로그인 시에는 자녀정보 표출  -->
 						<select name="" id="" required="required">
-							<option value="">옵션1</option>
-							<option value="">옵션2</option>
+							<th:block sec:authorize="isAnonymous()"> <!-- 인증 X 일 때  -->
+								<option value="">로그인이 필요한 서비스입니다.</option>
+							</th:block>
+							<th:block sec:authorize="isAuthenticated()" th:if = "${!targetChldrnDtoList.isEmpty()}" th:each=" data : ${targetChldrnDtoList} "> <!-- 인증계정 있고, 자녀 존재시  -->
+								<option th:value="${data.chldrnSn}" th:text="${data.chldrnNm}"/>
+							</th:block>
+							<th:block sec:authorize="isAuthenticated()" th:unless = "${!targetChldrnDtoList.isEmpty()}" th:each=" data : ${targetChldrnDtoList} "> <!-- 인증계정 있으나, 자녀 존재하지 않을 시  -->
+								<option value="">자녀 정보가 존재하지 않습니다. 마이페이지에서 자녀 정보를 추가해주세요.</option>
+							</th:block>
 						</select>
 					</div>
 					<div>
