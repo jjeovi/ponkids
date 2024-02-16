@@ -105,4 +105,21 @@ public class LoginService implements UserDetailsService {
     	
     	return result;
     }
+
+
+	// 회원이름 / 전화번호 / 관리자여부 3가지로 계정 찾기 (1건만)
+	public LoginDto findByUserNmAndTelNoAndMngrYn(LoginDto loginDto) {
+
+		// 쿼리 구현
+		User target = loginRepository.findTop1ByUserNmAndTelNoAndMngrYn(loginDto.getUserNm(), loginDto.getTelNo(), "N").orElse(null);
+
+		// null 일때
+		if ( target == null ) {
+			return null;
+		}
+
+		// entity 룰 dto 로 변환하여 return
+		LoginDto targetDto = new LoginDto();
+		return targetDto.toDto(target);
+	}
 }

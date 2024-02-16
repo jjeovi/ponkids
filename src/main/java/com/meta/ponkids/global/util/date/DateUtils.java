@@ -570,6 +570,10 @@ public class DateUtils implements DateConstants {
     }
     
     public static String LDTToString(String dateFormat, LocalDateTime date ) {
+        if ( date == null ) {
+            return null;
+        }
+
     	String parsedLocalDateTimeNow = date.format( DateTimeFormatter.ofPattern( dateFormat ) );
     			
     	return parsedLocalDateTimeNow;

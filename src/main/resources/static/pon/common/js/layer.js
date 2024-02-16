@@ -716,9 +716,13 @@ function findUsername(){
 
     // 서버로 전송할 데이터 구성
     var requestData = {
-        username: username,
-        phone: phone
+        userNm: username,
+        telNo: phone
     };
+
+    data = new FormData();
+    data.append( "userNm", username );
+    data.append( "telNo", phone );
 
     var header = $("meta[name='_csrf_header']").attr('content');
     var token = $("meta[name='_csrf']").attr('content');
@@ -727,17 +731,27 @@ function findUsername(){
     $.ajax({
         url: "/findUsername",
         type: "POST",
-        data: JSON.stringify(requestData),
-        contentType: "application/json; charset=utf-8",
-        beforeSend: function(xhr){
-            xhr.setRequestHeader(header, token);
-        },
+        data: data,
+        cache: false,
+        contentType: false,
+        processData: false,
+        // contentType: "application/json; charset=utf-8",
+         beforeSend: function(xhr){
+             xhr.setRequestHeader(header, token);
+         },
        success: function (result) {
-            if (result.success) {
-                alert("아이디는" + result.username + "입니다");
-            } else {
-                alert("아이디를 찾을 수 없습니다. 다시 확인해주세요");
-            }
+
+            // 통신 이후 로직
+           if ( result.flag == "E" ) {
+               alert( result.msg );
+
+           } else if ( result.flag == "S" ) {
+               // TODO 마스킹 된 id 계정을 뿌려주는 작업 필요..
+               // alert(result.maskingUserId);
+               // $("#dddd").text(result.maskingUserId);
+           }
+
+
         },
         error: function (){
             alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error)

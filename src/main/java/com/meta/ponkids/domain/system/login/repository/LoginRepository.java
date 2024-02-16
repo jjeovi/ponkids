@@ -14,4 +14,9 @@ public interface LoginRepository extends JpaRepository<User, Long>, LoginReposit
 	
 	Optional<User> findByUserId( String userId ) ;
 
+	Optional<User> findTop1ByUserNmAndTelNoAndMngrYn( String userNm, String telNo, String mngrYn ) ;
+
+
+
+
 }

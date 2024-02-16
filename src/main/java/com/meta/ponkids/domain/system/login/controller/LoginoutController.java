@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.meta.ponkids.domain.system.login.service.LoginService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,8 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 public class LoginoutController {
+
+	private final LoginService loginService;
 
 
     @Value( "${key.default.user}" )
@@ -81,15 +84,57 @@ public class LoginoutController {
 	// id/pw 찾기
 
 	// 아이디 찾기
+	@ResponseBody
 	@PostMapping("/findUsername")
-	public ResponseEntity<String> findUsername(@RequestBody LoginDto request) {
+	public Map<String, Object> findUsername( HttpServletRequest request,
+											@ModelAttribute LoginDto loginDto,
+//											@RequestParam String userNm,
+//											@RequestParam String telNo,
+											HttpSession session,
+											Model model
+
+	) {
+
+		Map<String, Object> result = new HashMap<String, Object>();
+
 		// 여기에서 실제 아이디를 찾는 로직을 구현하고 결과를 반환합니다.
-		if ("홍길동".equals(request.getUsername()) && "01011112222".equals(request.getTelNo())) {
-			// 아이디를 찾았다고 가정
-			return ResponseEntity.ok("아이디는 hongSSI 입니다.");
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("아이디를 찾을 수 없습니다. 입력 정보를 확인해주세요.");
+//		1. 이름/전화번호로 계정을 찾음
+//		1-1. 해당 입력값으로 찾은 계정이 있을 떄
+//		1-2. 해당 입력값으로 찾은 계정이 없을 때
+
+
+		// TODO 1. 1. 이름/전화번호 / (관리자여부) 로 계정을 찾음
+		LoginDto targetDto = loginService.findByUserNmAndTelNoAndMngrYn(loginDto);
+
+
+		if ( targetDto != null ) {
+			// 1-1. 해당 입력값으로 찾은 계정이 있을 떄
+			result.put("flag", "S");
+			String maskingUserId = targetDto.getUserId();
+
+			// TODO masking 처리 @ 기준 왼쪽 4개 문자 마스킹 처리
+
+			result.put("maskingUserId", maskingUserId);
+
+		} else if ( targetDto == null ) {
+			// 1-2. 해당 입력값으로 찾은 계정이 없을 때
+			result.put("flag", "E");
+			result.put("msg", "입력하신 정보와 일치하는 계정이 존재하지 않습니다. 다시 시도해주세요. ");
 		}
+
+
+		return result;
+
+//
+//
+//		if ("홍길동".equals(loginDto.getUserNm()) && "01011112222".equals(loginDto.getTelNo())) {
+////		if ("홍길동".equals(userNm) && "01011112222".equals(telNo)) {
+//			// 아이디를 찾았다고 가정
+////			return ResponseEntity.ok("아이디는 hongSSI 입니다.");
+//		} else {
+////			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("아이디를 찾을 수 없습니다. 입력 정보를 확인해주세요.");
+//		}
+//		return null;
 	}
 
 
