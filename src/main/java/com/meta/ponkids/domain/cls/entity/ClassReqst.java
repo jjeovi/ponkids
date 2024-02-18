@@ -31,35 +31,11 @@ public class ClassReqst extends BaseTimeEntity {
     
     @Id
     @GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_CLASS_REQST_SN" )
-    private Long 	classSn;                // 클래스일련번호
+    private Long classReqstSn;              // 클래스 신청 일련번호
     
-    private Long 	ctgrySn;                // 카테고리코드
+    private Long classSn;                   // 클래스 일련번호
     
-    private Long 	crseSn;               	// 커리큘럼코드
-    
-    private String 	classSj;                // 클래스제목
-    
-    private String 	classSumry;            	// 클래스요약
-    
-    private String 	classDc;                // 클래스설명
-    
-    private Long 	classAmt;            	// 클래스금액
-    
-    private Long 	classDscntBfeAmt;    	// 클래스할인전금액
-    
-    private String 	classTrgtCd;			// 클래스 대상 코드
-    
-    private String 	classPdSetYn;        	// 클래스기간설정여부
-    
-    private String 	classBeginDt;        	// 클래스시작일시
-    
-    private String 	classEndDt;            	// 클래스종료일시
-    
-    private Long 	thumbAtchFileSn;        // 썸네일첨부파일일련번호
-    
-    private Long 	atchFileSn;            	// 첨부파일일련번호
-    
-    private String 	classExpsrYn;        	// 클래스표시여부
+    private Long userSn;                    // 사용자 일련번호
     
     @Column( updatable = false )
     private String 	registerId;            	// 등록자ID

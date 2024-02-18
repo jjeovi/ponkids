@@ -1,36 +1,29 @@
 package com.meta.ponkids.domain.cls.controller;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.meta.ponkids.domain.cls.dto.ClassListDto;
+import com.meta.ponkids.domain.cls.dto.ClassReqstSaveDto;
+import com.meta.ponkids.domain.cls.service.*;
+import com.meta.ponkids.domain.lctre.dto.LctreReqstDetailSaveDto;
+import com.meta.ponkids.domain.lctre.dto.LctreReqstSaveDto;
+import com.meta.ponkids.domain.lctre.service.LctreService;
+import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
+import com.meta.ponkids.domain.system.file.service.AtchFileDetailService;
+import com.meta.ponkids.domain.system.login.dto.LoginDto;
+import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
+import com.meta.ponkids.global.util.session.SessionUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import com.meta.ponkids.domain.cls.dto.ClassListDto;
-import com.meta.ponkids.domain.cls.service.ClassCategoryCl01Service;
-import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
-import com.meta.ponkids.domain.cls.service.ClassDetailService;
-import com.meta.ponkids.domain.cls.service.ClassService;
-import com.meta.ponkids.domain.cls.service.ClassWeekService;
-import com.meta.ponkids.domain.lctre.service.LctreService;
-import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
-import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
-import com.meta.ponkids.domain.system.file.repository.AtchFileDetailRepository;
-import com.meta.ponkids.domain.system.file.service.AtchFileDetailService;
-import com.meta.ponkids.domain.system.file.service.AtchFileService;
-import com.meta.ponkids.domain.system.login.dto.LoginDto;
-import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
-import com.meta.ponkids.global.util.session.SessionUtils;
-
-import lombok.RequiredArgsConstructor;
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.List;
 
 
 @Controller
@@ -159,6 +152,38 @@ public class ClassController {
 		
 		return BASIC_VIEW_PATH + "/detail";
 	}
+	
+	
+	
+	
+	/**
+	 * methodName    : insert
+	 * date           : 11/17/23
+	 * description    : class insert method
+	 * @throws ParseException
+	 */
+	@Transactional
+	@PostMapping( BASIC_PATH + "/{mcd}/insert" )
+	public String insert(
+			@ModelAttribute ClassReqstSaveDto classReqstSaveDto,
+			@ModelAttribute LctreReqstSaveDto lctreReqstSaveDto,
+			@ModelAttribute LctreReqstDetailSaveDto lctreReqstDetailSaveDto,
+//			@ModelAttribute List<LctreReqstDetailSaveDto> lctreReqstDetailSaveDto,
+			@PathVariable String mcd,
+//			MultiUserChldrnSaveDto userChldrns,
+			HttpServletRequest request,
+			Model model ) throws IOException, ParseException {
+		
+		
+		// 메시지 출력 및 url 이동 처리
+		model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
+		model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+		
+		return "common/alert";
+	}
+	
+	
+	
 	
 
 }
