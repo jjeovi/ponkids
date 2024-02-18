@@ -48,6 +48,9 @@
 			}
 		});
 		
+		// 현재 추가한 수업의 총 금액 
+		let totalLctrePriceAmt = 0;
+		
 		
 		function selectWeekDay( e ) {
 			var classSn = $(e).data("classSn");
@@ -104,6 +107,8 @@
 			
 			// 수업추가 html 박스 생성
 			lctreAddDrawHtml();
+			
+			// form 데이터용 추가
 		}
 		
 		
@@ -177,10 +182,10 @@
 			
 			// 수업 박스 추가 
 			$(".added_lctre_area").append(
-				$( "<div>" ).attr( "class", "lctre_box" ).append(
+				$( "<div>" ).attr( "class", "lctre_box" ).attr("data-lctre-amt", $( "#lctreSn option:selected" ).data( 'lctreAmt' ) ).append(
 					
 						$( "<button>" ).attr( 	"class", 	"close_box" 						).append(
-							$(" <img> " ).attr( "src", "/pon/common/image/chat_close.svg" ).attr( "class", "close_icon" ).attr( "alt", "아이콘 닫기" ).append()
+							$(" <img> " ).attr( "src", "/pon/common/image/chat_close.svg" ).attr( "class", "close_icon" ).attr( "alt", "아이콘 닫기" ).attr("onclick","removeBoxLctre(this)").append()
 						),
 						$( "<div>" ).attr( 		"class" , 	"lctre_detail_application_area" 	).append(
 							// 자녀 , 요일+수업 , 신청입력항목 
@@ -202,13 +207,18 @@
 							$(" <p> ").attr( "class" , "lctre_item_price" ).append(
 								$( "#lctreSn option:selected" ).data( 'lctreAmt' ) + " 원"
 							)
+						),
+						$( "<div>" ).attr( 		"class" , 	"input_data" 						).append(
+							$(" <input> ").attr( "type" , "hidden" ).attr("name","chldrnSn").attr("value",$( "#userChldrn option:selected" ).val() ).append(),
+							$(" <input> ").attr( "type" , "hidden" ).attr("name","lctreSn").attr("value", $( "#lctreSn option:selected" ).val() ).append()
 						)
 				)	
 			)
 			
 			// 수업 박스 > 수업상세 내용 ( .lctre_detail_application_area )  > 신청입력항목
-			
 		    // 신청 입력 항목 전체 순회
+		    
+		    var index=0;
 		    $( ".clsDtlInput" ).each( function ( i, item ) {
 				
 				// 빈값이 아닐 경우에 수업박스에 추가.
@@ -219,9 +229,22 @@
 							$(this).val()
 						)
 					)
+					
+					$(".input_data").eq(-1).append(
+						$(" <input> ").attr( "type" , "hidden" ).attr("name","lctreReqstDetails[" + index + "].classDetailSn").attr("value", $(this).data('classDetailSn')).append(),
+						$(" <input> ").attr( "type" , "hidden" ).attr("name","lctreReqstDetails[" + index + "].classDetailAnswer").attr("value", $(this).val()).append()
+					)
+					index++;
+					
 				}
 				
 		    });
+		    
+		    // 총 금액 재계산
+		    totalLctrePriceAmt +=  $( "#lctreSn option:selected" ).data( 'lctreAmt' );
+		    $("#totalLctrePriceAmt").text(totalLctrePriceAmt);
+		    // $( "#lctreSn option:selected" ).data( 'lctreAmt' )
+		    
 		}
 		
 		
@@ -252,6 +275,38 @@
 			return result;
 		}
 		
+		// 신청한 수업 X표시 눌러서 제거
+		function removeBoxLctre( e ) {
+			
+			// 제거 대상 lctreBox set
+			var removeTarget = $( e ).parent().parent();
+			
+		    // 총 금액 재계산
+		    totalLctrePriceAmt -=  removeTarget.data("lctreAmt");
+		    $("#totalLctrePriceAmt").text(totalLctrePriceAmt);
+		    // $( "#lctreSn option:selected" ).data( 'lctreAmt' )
+			
+			// 박스 제거 실행
+			removeTarget.remove();
+			
+			// 제거 후 수업박스 개수가 0개인지 확인하여 
+			// 0개 일 경우, no_item 추가작업 실행
+			if ( $(".added_lctre_area .lctre_box").not( '.no_item' ).length == 0 ) {
+				
+				// no_item 영역 추가
+				addNoItem();
+				
+			}
+			
+		}
+		
+		// no_item 영역 추가
+		function addNoItem(){
+			
+			$(".added_lctre_area").append(
+				$( "<div>" ).attr("class", "lctre_box no_item" ).append("수업을 추가해 주세요.")
+			);
+		}
 		
 		// 수업 신청
 		function insertLctre() {
@@ -262,16 +317,32 @@
 			
 			if ( lctreBoxCnt < 1 ) {
 				alert("수업을 추가해주세요.");
-				return ;
+				return false;
 			}
-			
-			// ==================== 유효성 모두 통과 후 dataset 정리 ==================================
-			// ==================== 유효성 모두 통과 후 dataset 정리 ==================================
 			
 			// 수업 신청 진행
 			if ( confirm("수업을 신청하시겠습니까?") ) {
+				// TODO 
+				// 수업 신청 진행
 				
+				// ==================== 유효성 모두 통과 후 dataset 정리 ==================================
+				// ==================== 유효성 모두 통과 후 dataset 정리 ==================================
+				
+				// 수업박스의 input 내용을 배열 처리하여 재정렬
+				// 수업sn, 자녀sn, 입력항목sn setting
+				$( ".input_data" ).each( function ( index ) {
+					// 수업sn, 자녀sn, 입력항목sn setting
+					$( this ).find("input").each( function ( i ) {
+						$(this).attr("name", "lctreReqsts[" + index + "]." + $(this)[0].name );
+					})
+				} );
+				
+				
+				return true;
 			}
+			
+			
+			return false;
 			
 		}
 		
@@ -293,7 +364,7 @@
 	</div>
 	<!-- 클래스 정보 영역 시작 -->
 	<div class="class_detail_contanier">
-		<form id="insertForm" name="insertForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="form">
+		<form id="insertForm" name="insertForm" method="POST" th:action="@{ {basicPath}/{mcd}/insert ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="form" onsubmit="return insertLctre();" >
 			<input type="hidden"name="classSn" th:value="${targetDto.classSn}" />
 			
 			<!-- class detail box 시작 --> 
@@ -339,13 +410,13 @@
 					</div>
 					<div class="detail_lctre">
 						<p>수업선택 <small>(필수)</small></p>
-						<select name="lctreSn" id="lctreSn" required="required" >
+						<select name="lctreSn" id="lctreSn"  >
 							<option value="">요일을 선택해 주세요.</option>
 						</select>
 					</div>
 					<div class="detail_chldrn">
 						<p>자녀선택 <small>(필수)</small></p>
-						<select name="userChldrn" id="userChldrn" required="required">
+						<select name="userChldrn" id="userChldrn" >
 							<th:block sec:authorize="isAnonymous()"> <!-- 인증 X 일 때  -->
 								<option value="">로그인이 필요한 서비스입니다.</option>
 							</th:block>
@@ -366,7 +437,7 @@
 									<th:block th:text="${data.classDetailItemCn}"></th:block>
 									<th:block th:if="${data.classDetailEssntlYn eq 'Y'}"><small>필수</small></th:block>
 								</p>
-								<input type="text" class="clsDtlInput" th:classappend="${data.classDetailEssntlYn eq 'Y'} ? 'required'" />
+								<input type="text" class="clsDtlInput" th:data-class-detail-sn="${data.classDetailSn}" th:classappend="${data.classDetailEssntlYn eq 'Y'} ? 'required'" />
 							</th:block>
 							<!-- 다른 유형 추가 했을 시 작업 필요..  -->
 						</div>
@@ -379,32 +450,91 @@
 					<div class="added_info_area">
 						<small>※ 자녀를 기준으로 같은 수업을 중복으로 추가할 수 없습니다.</small>
 					</div>
-					<!-- E : 수압 추가 버튼  -->
+					<!-- E : 수업추가 버튼  -->
 					<!-- S : 신청한 항목 영역 -->
-					<div>
-						<div class="added_lctre_area">
-							<div class="lctre_box no_item">
-						    	수업을 추가해 주세요.
-							</div>
-<!--							<div class="lctre_box">-->
+					<div class="added_lctre_area">
+						<div class="lctre_box no_item">
+					    	수업을 추가해 주세요.
+						</div>
+<!--						<div class="lctre_box" data-lctre-amt="30000">-->
+<!--							<button class="close_box">-->
+<!--								<img src="/pon/common/image/chat_close.svg" class="close_icon" alt="아이콘 닫기" onclick="removeBoxLctre(this)">-->
+<!--							</button>-->
+<!--							<div class="lctre_detail_application_area">-->
+<!--								<p class="application_userChldrn item" data-chldrn-sn="119">자녀 : 첫쨰용</p>-->
+<!--								<p class="application_lctreInfo item" data-lctre-sn="100009">수업 : 월요일, 2월20일 (30000원)</p>-->
+<!--								<p class="application_clsDtl item">123</p>-->
+<!--								<p class="application_clsDtl item">23</p>-->
+<!--								<p class="application_clsDtl item">23</p>-->
+<!--							</div>-->
+<!--							<div class="lctre_bill">-->
+<!--								<p class="lctre_item_price">30000 원</p>-->
+<!--							</div>-->
+<!--							<div class="input_data">-->
+<!--								<input type="hidden" name="lctreReqsts[0].chldrnSn" value="0">-->
+<!--								<input type="hidden" name="lctreReqsts[0].lctreReqstSn" value="1">-->
+<!--								<input type="hidden" name="lctreReqsts[0].lctreReqstDetails[0].classDetailSn" value="100050">-->
+<!--								<input type="hidden" name="lctreReqsts[0].lctreReqstDetails[0].classDetailAnswer" value="123">-->
+<!--								<input type="hidden" name="lctreReqsts[0].lctreReqstDetails[1].classDetailSn" value="100051">-->
+<!--								<input type="hidden" name="lctreReqsts[0].lctreReqstDetails[1].classDetailAnswer" value="23">-->
+<!--								<input type="hidden" name="lctreReqsts[0].lctreReqstDetails[2].classDetailSn" value="100052">-->
+<!--								<input type="hidden" name="lctreReqsts[0].lctreReqstDetails[2].classDetailAnswer" value="23">-->
+<!--							</div>-->
+<!--						</div>-->
+<!--						<div class="lctre_box" data-lctre-amt="30000">-->
+<!--							<button class="close_box">-->
+<!--								<img src="/pon/common/image/chat_close.svg" class="close_icon" alt="아이콘 닫기" onclick="removeBoxLctre(this)">-->
+<!--							</button>-->
+<!--							<div class="lctre_detail_application_area">-->
+<!--								<p class="application_userChldrn item" data-chldrn-sn="120">자녀 : 둘째임</p>-->
+<!--								<p class="application_lctreInfo item" data-lctre-sn="100009">수업 : 월요일, 2월20일 (30000원)</p>-->
+<!--								<p class="application_clsDtl item">123</p>-->
+<!--								<p class="application_clsDtl item">23</p>-->
+<!--								<p class="application_clsDtl item">23</p>-->
+<!--							</div>-->
+<!--							<div class="lctre_bill">-->
+<!--								<p class="lctre_item_price">30000 원</p>-->
+<!--							</div>-->
+<!--							<div class="input_data">-->
+<!--								<input type="hidden" name="lctreReqsts[1].chldrnSn" value="0">-->
+<!--								<input type="hidden" name="lctreReqsts[1].lctreReqstSn" value="1">-->
+<!--								<input type="hidden" name="lctreReqsts[1].lctreReqstDetails[0].classDetailSn" value="100050">-->
+<!--								<input type="hidden" name="lctreReqsts[1].lctreReqstDetails[0].classDetailAnswer" value="123">-->
+<!--								<input type="hidden" name="lctreReqsts[1].lctreReqstDetails[1].classDetailSn" value="100051">-->
+<!--								<input type="hidden" name="lctreReqsts[1].lctreReqstDetails[1].classDetailAnswer" value="23">-->
+<!--								<input type="hidden" name="lctreReqsts[1].lctreReqstDetails[2].classDetailSn" value="100052">-->
+<!--								<input type="hidden" name="lctreReqsts[1].lctreReqstDetails[2].classDetailAnswer" value="23">-->
+<!--							</div>-->
+<!--						</div>-->
+<!--							<div class="lctre_box" data-lctre-amt="30000">-->
 <!--								<button class="close_box">-->
-<!--									<img src="/pon/common/image/chat_close.svg" class="close_icon" alt="아이콘_닫기">-->
+<!--									<img src="/pon/common/image/chat_close.svg" class="close_icon" alt="아이콘 닫기" onclick="removeBoxLctre(this)">-->
 <!--								</button>-->
 <!--								<div class="lctre_detail_application_area">-->
-<!--									<span>1</span>-->
-<!--									<p>2</p>-->
-<!--									<em>3</em>-->
-<!--									<p>4</p>-->
+<!--									<p class="application_userChldrn item" data-chldrn-sn="119">자녀 : 첫쨰용</p>-->
+<!--									<p class="application_lctreInfo item" data-lctre-sn="100009">수업 : 월요일, 2월20일 (30000원)</p>-->
+<!--									<p class="application_clsDtl item">12</p>-->
+<!--									<p class="application_clsDtl item">1222</p>-->
 <!--								</div>-->
 <!--								<div class="lctre_bill">-->
-<!--									<span class="lctre_item_price">36,000 원</span>-->
+<!--									<p class="lctre_item_price">30000 원</p>-->
+<!--								</div>-->
+<!--								<div class="inputData">-->
+<!--									<input type="hidden" name="" value="">  자녀 -->
+<!--									<input type="hidden" name="" value="">  수업 -->
+<!--									<input type="hidden" name="" value="">  클래스 상세 일련번호 -->
+<!--									<input type="hidden" name="" value="">  클래스 상세 답변 -->
+<!--									<input type="hidden" name="" value="">  클래스 상세 일련번호 -->
+<!--									<input type="hidden" name="" value="">  클래스 상세 답변 -->
 <!--								</div>-->
 <!--							</div>-->
-						</div>
 					</div>
 					<!-- E : 신청한 항목 영역 -->
-					<div class="detail_purchase"> <!-- TODO : 버튼 이벤트 처리 설정 --> 
-						<button type="button" onclick="insertLctre();" >신청하기</button>
+					<div class="detail_purchase">
+						<span class="total_price">
+							<span class="totalLctrePriceAmt" id="totalLctrePriceAmt">0</span>원
+						</span> 
+						<button type="submit">신청하기</button>
 					</div>
 				</div>
 			</div>
@@ -500,6 +630,5 @@
 		<div class="swiper-button-prev"></div>
 	</div>
 	<!-- 같은 카테고리 다른 클래스 종료 -->
-	
 </div>
 </html>

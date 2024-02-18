@@ -1,5 +1,7 @@
 package com.meta.ponkids.domain.lctre.dto;
 
+import java.util.List;
+
 import com.meta.ponkids.domain.lctre.entity.LctreReqst;
 import lombok.Builder;
 import lombok.Data;
@@ -26,6 +28,10 @@ public class LctreReqstSaveDto  {
     private String  updusrId;               // 수정자 id
     
     private String  updusrIp;               // 수정자 ip
+    
+    private List<LctreReqstSaveDto> lctreReqsts;				// list
+    
+    private List<LctreReqstDetailSaveDto> lctreReqstDetails;	// list
     
     @Builder
     public LctreReqstSaveDto( Long lctreReqstSn, Long classReqstSn, Long lctreSn, Long chldrnSn, String registerId, String registerIp, String updusrId, String updusrIp ) {

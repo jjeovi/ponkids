@@ -254,4 +254,15 @@
 	font-size : 14px;
 }
 
+.detail_purchase .total_price {
+	float: right;
+    font-size: 22px;
+    padding: 5px;
+    padding-bottom: 10px;
+    font-weight: bold;
+}
+
+.added_lctre_area .input_data {
+/*	display: none;*/
+}
 /* E : 수업 추가 영역 */

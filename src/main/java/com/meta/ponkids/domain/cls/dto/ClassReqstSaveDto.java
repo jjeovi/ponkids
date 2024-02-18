@@ -1,7 +1,11 @@
 package com.meta.ponkids.domain.cls.dto;
 
+import java.util.List;
+
 import com.meta.ponkids.domain.cls.entity.Class;
 import com.meta.ponkids.domain.cls.entity.ClassReqst;
+import com.meta.ponkids.domain.lctre.dto.LctreReqstSaveDto;
+
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,6 +29,8 @@ public class ClassReqstSaveDto {
     private String 	updusrId;               // 수정자 ID
     
     private String 	updusrIp;               // 수정자 IP
+
+    private List<ClassReqstSaveDto> classReqstSaveDtoList;	// list
     
     @Builder
     public ClassReqstSaveDto(

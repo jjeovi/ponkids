@@ -5,6 +5,7 @@ import com.meta.ponkids.domain.cls.dto.ClassReqstSaveDto;
 import com.meta.ponkids.domain.cls.service.*;
 import com.meta.ponkids.domain.lctre.dto.LctreReqstDetailSaveDto;
 import com.meta.ponkids.domain.lctre.dto.LctreReqstSaveDto;
+import com.meta.ponkids.domain.lctre.service.LctreReqstService;
 import com.meta.ponkids.domain.lctre.service.LctreService;
 import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
 import com.meta.ponkids.domain.system.file.service.AtchFileDetailService;
@@ -39,7 +40,11 @@ public class ClassController {
 	private final ClassCategoryCl01Service classCategoryCl01Service;
 	private final ClassCategoryCl02Service classCategoryCl02Service;
 	
+	private final ClassReqstService classReqstService;
+	
 	private final LctreService lctreService;
+	
+	private final LctreReqstService lctreReqstService;
 	
 	private final AtchFileDetailService atchFileDetailService;
 
@@ -71,7 +76,6 @@ public class ClassController {
 		
 		// 기본 경로 setting
 		model.addAttribute( "basicPath", BASIC_PATH );
-		
 		return BASIC_VIEW_PATH + "/list";
 	}
 	
@@ -166,24 +170,64 @@ public class ClassController {
 	@PostMapping( BASIC_PATH + "/{mcd}/insert" )
 	public String insert(
 			@ModelAttribute ClassReqstSaveDto classReqstSaveDto,
-			@ModelAttribute LctreReqstSaveDto lctreReqstSaveDto,
-			@ModelAttribute LctreReqstDetailSaveDto lctreReqstDetailSaveDto,
-//			@ModelAttribute List<LctreReqstDetailSaveDto> lctreReqstDetailSaveDto,
+			@ModelAttribute LctreReqstSaveDto lctreReqsts,
 			@PathVariable String mcd,
-//			MultiUserChldrnSaveDto userChldrns,
 			HttpServletRequest request,
 			Model model ) throws IOException, ParseException {
 		
+		// insert process 
+		// ===========================================
+		// 1. TB_CLASS_REQST insert
+		// 2. TB_LCTRE_REQST insert
+		// 3. TB_LCTRE_REQST_DETAIL insert
+		
+		
+		// 1. TB_CLASS_REQST insert
+		// ===========================================
+		
+		// 1-1. classSn 체크
+		if ( classReqstSaveDto == null || classReqstSaveDto.getClassSn() == null ) {
+			// 메시지 출력 및 url 이동 처리
+			model.addAttribute( "resultMsg", "등록 중 문제가 발생하였습니다. 다시 시도해주세요." );
+			model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+			
+			return "common/alert";
+		}
+		
+		// 1-2. userSn 체크 
+		// 로그인 안되어 있으면 return 
+		LoginDto loginDto = SessionUtils.getAuthentication(); 
+		if ( loginDto == null || loginDto.getUserSn() == null ) {
+			// 메시지 출력 및 url 이동 처리
+			model.addAttribute( "resultMsg", "로그인 세션을 확인해주세요." );
+			model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+			
+			return "common/alert";
+		}
+		
+		// 로그인 세션의 userSn 값으로 set
+		classReqstSaveDto.setUserSn( loginDto.getUserSn() );
+		
+		// 1-3. insert
+		classReqstSaveDto = classReqstService.save(classReqstSaveDto, request);
+		
+		// 2. TB_LCTRE_REQST insert
+		// 1 개 이상의 multi data 
+		// ===========================================
+		// 2-1. 클래스 신청 일련번호 (classReqstSn 값 set) set
+		// 3. TB_LCTRE_REQST_DETAIL insert
+		// ===========================================
+		
+		// 클래스신청일련번호 setting
+		lctreReqsts.setClassReqstSn( classReqstSaveDto.getClassReqstSn() );
+		
+		lctreReqstService.save(lctreReqsts, request );
 		
 		// 메시지 출력 및 url 이동 처리
-		model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
-		model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+		model.addAttribute( "resultMsg", "정상적으로 신청 되었습니다." );
+		model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/detail?pk=" + classReqstSaveDto.getClassSn());
 		
 		return "common/alert";
 	}
-	
-	
-	
-	
 
 }
