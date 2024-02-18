@@ -37,7 +37,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ClassController {
 	
-	
 	private final static String BASIC_PATH = "/class";
 	private final static String BASIC_VIEW_PATH = "pon/cls";
 	
@@ -122,13 +121,11 @@ public class ClassController {
 		// 2. 클래스 의 수업 정보 : classLctreList > ByClassSn
 		model.addAttribute("classLctreList", lctreService.getListByClassSn( targetDto.getClassSn() ) );		// 클래스 수업 : classSn 으로 검색
 		
-		
 		// 3. 클래스 의 요일 정보 : classWeekList > ByClassSn
 		model.addAttribute("classWeekList", classWeekService.getListByClassSn( targetDto.getClassSn() ) );	// 클래스 요일 classSn으로 검색
 		
 //		// 요일 List add
 //		model.addAttribute( "day7List", cmmnCdDetailService.getList( "DAY_7_CD" ) );	// 요일리스트
-		
 		
 		// 4. 클래스 의 후기 : classReviewList > ByClassSn
 		// TODO
@@ -148,11 +145,13 @@ public class ClassController {
 			// chldrn target object 조회
 			model.addAttribute( "targetChldrnDtoList", userChldrnRepository.getListByUserSn( loginDto.getUserSn() ) );
 			
-		} else {
+			// 8. 해당 클래스르 신청한 이력이 있는지 확인
+			// 이력이 있다면 '해당 클래스를 신청한 이력이 존재합니다. (마이페이지로 이동)  ' 할 수 있는 버튼을 구현 할지 
+			// TODO : 추후 예정.. *( 필요하다면 ? ) 
 			
 		}
-//		if ()
-	 
+		
+		
 		// E : 필요한 객체 setting
 		
 		// 기본 경로 setting
