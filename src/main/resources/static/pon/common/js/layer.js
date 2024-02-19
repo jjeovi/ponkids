@@ -954,9 +954,51 @@ function showSuccessScreen(userId) {
 /* E : 아이디 찾기 */
 
 
+/* S: 비밀번호 찾기 - 이메일 찾기 */
+function findUseremail(){
+    //사용자 입력 값 가져오기
+    var findpwname = $("#findPw_name").val();
+    var findpwemail = $("#findPw_email").val();
 
-/* S : 비밀번호 찾기 */
+    // 서버로 전송할 데이터 구성
+
+    data = new FormData();
+    data.append( "userNm", findpwname );
+    data.append( "userId", findpwemail );
+
+    var header = $("meta[name='_csrf_header']").attr('content');
+    var token = $("meta[name='_csrf']").attr('content');
+
+    // Ajax 를 사용한 서버로의 요청
+    $.ajax({
+        url: "/findUseremail",
+        type: "POST",
+        data: data,
+        cache: false,
+        contentType: false,
+        processData: false,
+        // contentType: "application/json; charset=utf-8",
+        beforeSend: function(xhr){
+            xhr.setRequestHeader(header, token);
+        },
+        success: function (result) {
+
+            // 통신 이후 로직
+            if ( result.flag == "E" ) {
+                alert( result.msg );
+
+            } else if ( result.flag == "S" ) {
+                // TODO 존재하는 계정정보일 경우 인증번호 발송되었다고 알림
+                alert(result.msg);
+            }
+        },
+        error: function (){
+            alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error)
+        }
+    })
 
 
 
-/* E : 비밀번호 찾기 */
+}
+
+/* E: 비밀번호 찾기 - 이메일 찾기 */

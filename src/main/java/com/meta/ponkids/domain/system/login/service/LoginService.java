@@ -107,7 +107,7 @@ public class LoginService implements UserDetailsService {
     }
 
 
-	// 회원이름 / 전화번호 / 관리자여부 3가지로 계정 찾기 (1건만)
+	// 회원이름 / 전화번호 / 관리자여부 3가지로 계정 찾기 (1건만) -- 아이디 찾기
 	public LoginDto findByUserNmAndTelNoAndMngrYn(LoginDto loginDto) {
 
 		// 쿼리 구현
@@ -123,6 +123,22 @@ public class LoginService implements UserDetailsService {
 		return targetDto.toDto(target);
 	}
 
+	// 회원이름 / 이메일 / 관리자여부 3가지로 계정 찾기(1건만)  -- 비밀번호 찾기
+	public LoginDto findByUserNmAndUserIdAndMngrYn(LoginDto loginDto) {
+
+		// 쿼리 구현
+		User target = loginRepository.findByUserNmAndUserIdAndMngrYn(loginDto.getUserNm(), loginDto.getUserId(), "N").orElse(null);
+
+		// null 일때
+		if (target == null){
+			return null;
+		}
+
+		// entity 룰 dto 로 변환하여 return
+		LoginDto targetDto = new LoginDto();
+		return targetDto.toDto(target);
+
+	}
 
 
 

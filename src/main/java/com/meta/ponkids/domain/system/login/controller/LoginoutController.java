@@ -141,10 +141,46 @@ public class LoginoutController {
 	}
 
 
+	//	S : 이메일 확인
+	@ResponseBody
+	@PostMapping("/findUseremail")
+	public Map<String, Object> findUseremail( @ModelAttribute LoginDto loginDto) {
+
+		//메소드가 실행되고 나서 클라이언트에게 반환될 데이터를 담기 위한 자료구조를 생성하는 부분
+		Map<String, Object> result = new HashMap<String, Object>();
+
+		// 여기에서 실제 아이디를 찾는 로직을 구현하고 결과를 반환합니다.
+		if ( loginDto != null ) {
+
+			System.out.println("loginDto.getUserNm" + loginDto.getUserNm());
+			System.out.println("loginDto.getUserNm" + loginDto.getUserNm());
+		} else {
+			System.out.println("loginDTo is null -===============");
+		}
+
+
+		// TODO 1. 1. 이름/ 이메일 / (관리자여부) 로 계정을 찾음
+		// 비밀번호 찾기 기능에서 실제로 사용자 정보를 데이터베이스에서 조회하는 부분
+		LoginDto targetDto = loginService.findByUserNmAndUserIdAndMngrYn(loginDto);
+		System.out.println("targetDto 데이터 :::::: " + targetDto);
+
+		if ( targetDto != null ) {
+			// 1-1. 해당 입력값으로 찾은 계정이 있을 떄
+			result.put("flag", "S");
+			result.put("msg", "인증번호가 발송되었습니다. ");
+
+		} else if ( targetDto == null ) {
+			// 1-2. 해당 입력값으로 찾은 계정이 없을 때
+			result.put("flag", "E");
+			result.put("msg", "입력하신 정보와 일치하는 계정이 존재하지 않습니다. 다시 시도해주세요. ");
+		}
+
+		return result;
+	}
+	//	E : 이메일 확인
+
 
 	// S: SMTP를 사용하여 이메일을 보내기(임시 테스트)
-
-
 	public class EmailSender {
 
 		public static void main(String[] args) {
