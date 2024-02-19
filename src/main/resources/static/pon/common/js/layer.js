@@ -934,18 +934,13 @@ function findUsername(){
                 /* alert(result.maskingUserId);*/
               /*   $("#userIdInfo").text(result.maskingUserId);*/
                 showSuccessScreen(result.maskingUserId);
-
             }
-
-
         },
         error: function (){
             alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error)
         }
     })
 }
-
-
 
 // 아이디 찾기 성공 후의 처리
 function showSuccessScreen(userId) {
@@ -954,9 +949,14 @@ function showSuccessScreen(userId) {
     //+63
     $('#userId').text(userId); // 찾은 아이디를 성공 화면에 출력
     showPopupLv2( 'findUserInfo' );   // 아이디 찾기 결과 팝업 호출
-    // showPopup(
-    // showPopupLv2(
-    // 2가지 함수 만들어 놨는데, 둘중 뭐로 호출해야 할지는 한번 생각해보세요. 다른 함수 추가해야되면 추가해주시공,,
-    // 다시 한번 해볼래요? 넵!
+
 }
 /* E : 아이디 찾기 */
+
+
+
+/* S : 비밀번호 찾기 */
+
+
+
+/* E : 비밀번호 찾기 */

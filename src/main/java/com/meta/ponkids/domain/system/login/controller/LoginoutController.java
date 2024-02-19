@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 import com.meta.ponkids.domain.system.login.service.LoginService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -23,7 +22,14 @@ import org.springframework.web.bind.annotation.*;
 
 import com.meta.ponkids.domain.system.login.dto.LoginDto;
 
+/* S: smtp 이메일 보내기. javamail 라이브러리 사용*/
+import java.util.Properties;
+import javax.mail.*;
+import javax.mail.internet.*;
+/* E: smtp 이메일 보내기. javamail 라이브러리 사용*/
 import lombok.RequiredArgsConstructor;
+
+
 
 @Controller
 @RequiredArgsConstructor
@@ -135,5 +141,52 @@ public class LoginoutController {
 	}
 
 
+
+	// S: SMTP를 사용하여 이메일을 보내기(임시 테스트)
+
+
+	public class EmailSender {
+
+		public static void main(String[] args) {
+			// SMTP 서버 설정
+			String host = "smtp.gmail.com";
+			String port = "587";
+			String username = "your-email@gmail.com";
+			String password = "your-email-password";
+
+			// 메일 속성 설정
+			Properties properties = new Properties();
+			properties.put("mail.smtp.host", host);
+			properties.put("mail.smtp.port", port);
+			properties.put("mail.smtp.auth", "true");
+			properties.put("mail.smtp.starttls.enable", "true");
+
+			// 세션 생성
+			Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(username, password);
+				}
+			});
+
+			try {
+				// 메시지 생성 및 설정
+				Message message = new MimeMessage(session);
+				message.setFrom(new InternetAddress("your-email@gmail.com"));
+				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("recipient-email@example.com"));
+				message.setSubject("제목");
+				message.setText("본문 내용");
+
+				// 메일 전송
+				Transport.send(message);
+
+				System.out.println("이메일이 성공적으로 전송되었습니다.");
+
+			} catch (MessagingException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	// E: SMTP를 사용하여 이메일을 보내기
 
 }
