@@ -2,6 +2,7 @@ package com.meta.ponkids.domain.cls.repository.impl;
 
 
 import static com.meta.ponkids.domain.cls.entity.QClassInqry.classInqry;
+import static com.meta.ponkids.domain.user.entity.QUser.user;
 
 import java.util.List;
 
@@ -43,6 +44,7 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
                 		classInqry.step,
                 		classInqry.parntsInqrySn,
                 		classInqry.userSn,
+                		user.userNm,
                 		classInqry.inqrySj,
                 		classInqry.inqryCn,
                 		classInqry.openYn,
@@ -55,16 +57,20 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
 //                		.as("gender"),
                 		) )					
                 .from( classInqry )
+                // leftJoin
+                .leftJoin( user)
+                .on( 	user.userSn.eq( classInqry.userSn ),
+                		user.delYn.eq("N")
+                )
                 // where
                 .where(
-				eqOption( listDto.getSchOption(), listDto.getSchCntn() ),
-				eqClassSn( listDto.getClassSn() ) 
+						eqOption( listDto.getSchOption(), listDto.getSchCntn() ),
+						eqClassSn( listDto.getClassSn() )
 				)
                 .orderBy( classInqry.classInqrySn.desc())
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )
                 .fetch();
-		
 		
 		// TODO
 		// (2) count
@@ -73,9 +79,56 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
                 .where(
                         eqOption( listDto.getSchOption(), listDto.getSchCntn() )
 		);
-                
 
 		return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
+		
+	}
+	
+	@Override
+	public ClassInqryListDto getByClassInqrySn( ClassInqryListDto listDto ) {
+		
+		// TODO 구현
+		// (1) '결과list' 와 (2)'count' 를 2번에 걸쳐 조회
+		
+		// TODO
+		// (1) 결과list (results).
+		ClassInqryListDto results = query
+				// select
+				.select( new QClassInqryListDto(
+						classInqry.classInqrySn,
+						classInqry.classSn,
+						classInqry.step,
+						classInqry.parntsInqrySn,
+						classInqry.userSn,
+						user.userNm,
+						classInqry.inqrySj,
+						classInqry.inqryCn,
+						classInqry.openYn,
+						classInqry.registerId,
+						Expressions.stringTemplate("to_char({0}, '{1s}')", classInqry.regDt, "YYYY-MM-DD")
+//                		new CaseBuilder()
+//                		.when( user.gender.eq("M")).then("남자")
+//                		.when( user.gender.eq("F")).then("여자")
+//                		.otherwise("")
+//                		.as("gender"),
+						) )					
+				.from( classInqry )
+				// leftJoin
+				.leftJoin( user)
+				.on( 	user.userSn.eq( classInqry.userSn ),
+						user.delYn.eq("N")
+						)
+				// where
+				.where(
+						eqOption( listDto.getSchOption(), listDto.getSchCntn() ),
+						eqClassSn( listDto.getClassSn() ),
+						eqClassInqrySn( listDto.getClassInqrySn() )
+						)
+				.orderBy( classInqry.classInqrySn.desc())
+				.fetchFirst();
+				// fetchOne 말고 fetchFirst 를 쓰자. https://hungseong.tistory.com/87
+		
+		return results;
 		
 	}
 	
@@ -85,7 +138,10 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
     private BooleanExpression eqClassSn( Long pk ) {
         return pk != null ? classInqry.classSn.eq(pk) : null;
     }
-	
+    
+    private BooleanExpression eqClassInqrySn( Long pk ) {
+    	return pk != null ? classInqry.classInqrySn.eq(pk) : null;
+    }
 	
     private BooleanExpression eqOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨

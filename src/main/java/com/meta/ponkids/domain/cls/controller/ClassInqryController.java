@@ -1,6 +1,8 @@
 package com.meta.ponkids.domain.cls.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -15,11 +17,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.meta.ponkids.domain.cls.dto.ClassInqryListDto;
 import com.meta.ponkids.domain.cls.dto.ClassInqryModDto;
 import com.meta.ponkids.domain.cls.dto.ClassInqrySaveDto;
+import com.meta.ponkids.domain.cls.repository.ClassInqryRepository;
 import com.meta.ponkids.domain.cls.service.ClassInqryService;
 import com.meta.ponkids.domain.system.login.dto.LoginDto;
 import com.meta.ponkids.global.util.session.SessionUtils;
@@ -31,9 +35,11 @@ import lombok.RequiredArgsConstructor;
 public class ClassInqryController {
 	
 	private final ClassInqryService classInqryService;
+	private final ClassInqryRepository classInqryRepository;
 	
 	private final static String BASIC_PATH = "/classInqry";
 	private final static String BASIC_VIEW_PATH = "pon/cls";
+	
 	
     @GetMapping( BASIC_PATH + "/{mcd}/list" )
     public String list( @ModelAttribute ClassInqryListDto listDto,
@@ -58,6 +64,7 @@ public class ClassInqryController {
         return BASIC_PATH + "/list";
     }
     
+    
     @GetMapping( BASIC_PATH + "/{mcd}/regist" )
     public String regist( @PathVariable String mcd, Model model ) {
         
@@ -74,11 +81,11 @@ public class ClassInqryController {
         return BASIC_PATH + "/regist";
     }
     
+    
     @Transactional
     @PostMapping( BASIC_PATH + "/{mcd}/insert" )
     public String insert (
             @ModelAttribute ClassInqrySaveDto saveDto,
-//            @ModelAttribute ClassInqryRoleSaveDto classInqryRoleSaveDto,  // required false
             @PathVariable String mcd,
             HttpServletRequest request,
             Model model ) throws IOException {
@@ -119,6 +126,7 @@ public class ClassInqryController {
         
         return "common/alert";
     }
+
     
     @GetMapping( value = { 
     		BASIC_PATH + "/{mcd}/detail",
@@ -136,7 +144,6 @@ public class ClassInqryController {
     	
     	// E : 필요한 객체 setting
         
-        
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
@@ -147,6 +154,7 @@ public class ClassInqryController {
         
         return BASIC_PATH + "/" + remainPath;
     }
+    
     
     @Transactional
     @PostMapping( BASIC_PATH + "/{mcd}/update" )
@@ -162,10 +170,8 @@ public class ClassInqryController {
     	
     	// E : 필요한 객체 setting
         
-        
         // update 구현
     	classInqryService.update( modDto, request );
-//        classInqryService.update( modDto, classInqryRoleModDto, request );
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
@@ -173,23 +179,20 @@ public class ClassInqryController {
         
         return "common/alert";
     }
-    
-    @Transactional
-    @PostMapping( BASIC_PATH + "/{mcd}/delete" )
-    public String delete(
-            @RequestParam( required = true ) Long pk,
-            @PathVariable String mcd,
-            Model model ) {
-        
-        // 삭제 처리
-        classInqryService.deleteAllById( pk );		// By 뒤에는 custom
-        
-        // 메시지 출력 및 url 이동 처리
-        model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
-        
-        return "common/alert";
-    }
-	
 
+    
+    // 클래스 문의 단건 상세조회 ( by classInqrySn )
+    @Transactional
+    @ResponseBody
+    @GetMapping( BASIC_PATH + "/live/detailClassInqryAjax" )
+    public Map<String, Object> detailClassInqryAjax (
+            @ModelAttribute ClassInqryListDto listDto,
+            Model model ) {
+    	Map<String, Object> result = new HashMap<String, Object>();
+    	
+    	result.put( "resultOne" , classInqryRepository.getByClassInqrySn(listDto) );   // 커리큘럼 일련번호로 검색
+        
+    	return result;
+    }
+    
 }

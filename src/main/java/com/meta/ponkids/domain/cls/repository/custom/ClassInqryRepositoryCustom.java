@@ -8,5 +8,8 @@ import com.meta.ponkids.domain.cls.dto.ClassInqryListDto;
 public interface ClassInqryRepositoryCustom {
 	
 	Page<ClassInqryListDto> getList( ClassInqryListDto listDto, Pageable pageable );
+	
+	
+	ClassInqryListDto getByClassInqrySn( ClassInqryListDto listDto );
 
 }

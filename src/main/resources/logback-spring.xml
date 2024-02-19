@@ -87,11 +87,11 @@
 	
 	<!-- Logger -->
     <logger name="com.study" level="WARN" appender-ref="console" />
-    <logger name="jdbc.sqlonly" level="z" appender-ref="console-infolog" />
+    <logger name="jdbc.sqlonly" level="DEBUG" appender-ref="console-infolog" />
     <logger name="jdbc.resultsettable" level="WARN" appender-ref="console-infolog" />
 
 	<!-- root 레벨 설정 -->
-	<root level="WARN">
+	<root level="DEBUG">
 		<appender-ref ref="CONSOLE"/>
 		<appender-ref ref="FILE"/>
 		<appender-ref ref="ERROR"/>

@@ -19,6 +19,8 @@ public class ClassInqryListDto {
 	
 	private Long	userSn;				// 사용자 일련번호
 	
+	private String	userNm;				// 사용자 이름
+	
 	private String	inqrySj;			// 문의 제목
 	
 	private String	inqryCn;			// 문의 내용
@@ -34,19 +36,19 @@ public class ClassInqryListDto {
 	private String	schCntn;			// 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!
 	
 	@QueryProjection
-	public ClassInqryListDto(Long classInqrySn, Long classSn, String step, Long parntsInqrySn, Long userSn,
+	public ClassInqryListDto(Long classInqrySn, Long classSn, String step, Long parntsInqrySn, Long userSn, String userNm,
 			String inqrySj, String inqryCn, String openYn, String registerId, String regDt) {
 		this.classInqrySn = classInqrySn;
 		this.classSn = classSn;
 		this.step = step;
 		this.parntsInqrySn = parntsInqrySn;
 		this.userSn = userSn;
+		this.userNm = userNm;
 		this.inqrySj = inqrySj;
 		this.inqryCn = inqryCn;
 		this.openYn = openYn;
 		this.registerId = registerId;
 		this.regDt = regDt;
 	}
-	
 
 }

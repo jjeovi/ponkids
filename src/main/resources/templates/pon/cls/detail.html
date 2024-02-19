@@ -383,6 +383,26 @@
 			
 			// 문의 상세 조회 layer 표출
 			showPopup('detailClassInqry');
+			
+			// 문의 상세 조회 layer 내용 setting
+			// 특정 클래스의 특정 요일 의 수업 리스트 조회
+			var url = "/classInqry/live/detailClassInqryAjax";
+			$.ajax( {
+				url: url,
+				type: "GET",
+				dataType: "json",
+				async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+				data: {classInqrySn : classInqrySn}, // 검색할 값
+				contentType: "application/json",
+				success: function ( result ) {
+					
+					// return type : Map<String, Object>
+					var resultOne = result.resultOne;
+					
+					console.log( resultOne );
+				}
+			});
+			
 		}
 		
 		/*  E : 문의 */
@@ -574,7 +594,7 @@
 								<div class="article_num" th:text="${classInqryList.totalElements - ( classInqryList.pageable.pageSize * classInqryList.pageable.pageNumber + dataStat.index ) }">
 								</div>
 								<div class="article_body">
-									<div class="article_tit" th:text="${data.inqrySj}">게시물 제목</div>
+									<div class="article_tit" th:text="${data.inqrySj}">문의 제목</div>
 									<div class="article_info">
 										<div class="article_date" th:text="${data.regDt}">2023-09-12 17:53</div>
 									</div>
