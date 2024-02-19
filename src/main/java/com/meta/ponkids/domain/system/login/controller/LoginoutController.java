@@ -107,7 +107,7 @@ public class LoginoutController {
 			int atIndex = userId.indexOf('@');  // indexOf 메서드를 이용해서 '@' 문자가 처음으로 나타나는 위치의 인덱스를 반환 -> atIndex
 
 			if (atIndex != -1) { // '@' 문자가 존재하는 경우
-				userId = maskString(userId, Math.max(0, atIndex - 4), atIndex - 1, '*');
+				userId = maskString(userId, Math.max(0, atIndex - 2), atIndex - 1, '*');
 				result.put("maskingUserId", userId );
 			}else{
 				result.put("msg","이메일정보가 올바르지 않습니다. 관리자에게 문의해주세요.");
