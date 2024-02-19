@@ -165,9 +165,7 @@
 			}
 			
 			return true; 
-			
 		}
-		
 		
 		// 수업추가 [ putInBoxLctre() ]  > html 박스 생성
 		function lctreAddDrawHtml() {
@@ -341,10 +339,53 @@
 				return true;
 			}
 			
-			
 			return false;
+		}
+		
+		
+		/*  S : 문의 */
+		// ======================================================================================
+		// 문의하기 버튼 클릭 event
+		function goClassInqry(){
+				
+			// 1. 로그인 여부 check
+			if ( loginYn == 'N' ) {
+				alert("로그인 후 이용 가능합니다.");
+				showPopup('login');
+				return false;
+			}
+			
+			// 문의 등록 layer 표출
+			showPopup('registClassInqry');
 			
 		}
+		
+		function insertClassInqry(){
+				
+			// 1. 로그인 여부 check
+			if ( loginYn == 'N' ) {
+				alert("로그인 후 이용 가능합니다.");
+				showPopup('login');
+				return false;
+			}
+			
+			// 문의 insert 진행
+			// 수업 신청 진행
+			if ( confirm("문의를 등록하시겠습니까?") ) {
+				
+				return true;
+			}
+			
+			return false;
+		}
+		
+		function detailInqryPopup( classInqrySn ) {
+			
+			// 문의 상세 조회 layer 표출
+			showPopup('detailClassInqry');
+		}
+		
+		/*  E : 문의 */
 		
 	</script>
 </div>
@@ -364,8 +405,8 @@
 	</div>
 	<!-- 클래스 정보 영역 시작 -->
 	<div class="class_detail_contanier">
-		<form id="insertForm" name="insertForm" method="POST" th:action="@{ {basicPath}/{mcd}/insert ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="form" onsubmit="return insertLctre();" >
-			<input type="hidden"name="classSn" th:value="${targetDto.classSn}" />
+		<form name="classReqstInsertForm" method="POST" th:action="@{ {basicPath}/{mcd}/insert ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="form" onsubmit="return insertLctre();" >
+			<input type="hidden" name="classSn" th:value="${targetDto.classSn}" />
 			
 			<!-- class detail box 시작 --> 
 			<div class="class_detail_box">
@@ -454,80 +495,8 @@
 					<!-- S : 신청한 항목 영역 -->
 					<div class="added_lctre_area">
 						<div class="lctre_box no_item">
-					    	수업을 추가해 주세요.
+							수업을 추가해 주세요.
 						</div>
-<!--						<div class="lctre_box" data-lctre-amt="30000">-->
-<!--							<button class="close_box">-->
-<!--								<img src="/pon/common/image/chat_close.svg" class="close_icon" alt="아이콘 닫기" onclick="removeBoxLctre(this)">-->
-<!--							</button>-->
-<!--							<div class="lctre_detail_application_area">-->
-<!--								<p class="application_userChldrn item" data-chldrn-sn="119">자녀 : 첫쨰용</p>-->
-<!--								<p class="application_lctreInfo item" data-lctre-sn="100009">수업 : 월요일, 2월20일 (30000원)</p>-->
-<!--								<p class="application_clsDtl item">123</p>-->
-<!--								<p class="application_clsDtl item">23</p>-->
-<!--								<p class="application_clsDtl item">23</p>-->
-<!--							</div>-->
-<!--							<div class="lctre_bill">-->
-<!--								<p class="lctre_item_price">30000 원</p>-->
-<!--							</div>-->
-<!--							<div class="input_data">-->
-<!--								<input type="hidden" name="lctreReqsts[0].chldrnSn" value="0">-->
-<!--								<input type="hidden" name="lctreReqsts[0].lctreReqstSn" value="1">-->
-<!--								<input type="hidden" name="lctreReqsts[0].lctreReqstDetails[0].classDetailSn" value="100050">-->
-<!--								<input type="hidden" name="lctreReqsts[0].lctreReqstDetails[0].classDetailAnswer" value="123">-->
-<!--								<input type="hidden" name="lctreReqsts[0].lctreReqstDetails[1].classDetailSn" value="100051">-->
-<!--								<input type="hidden" name="lctreReqsts[0].lctreReqstDetails[1].classDetailAnswer" value="23">-->
-<!--								<input type="hidden" name="lctreReqsts[0].lctreReqstDetails[2].classDetailSn" value="100052">-->
-<!--								<input type="hidden" name="lctreReqsts[0].lctreReqstDetails[2].classDetailAnswer" value="23">-->
-<!--							</div>-->
-<!--						</div>-->
-<!--						<div class="lctre_box" data-lctre-amt="30000">-->
-<!--							<button class="close_box">-->
-<!--								<img src="/pon/common/image/chat_close.svg" class="close_icon" alt="아이콘 닫기" onclick="removeBoxLctre(this)">-->
-<!--							</button>-->
-<!--							<div class="lctre_detail_application_area">-->
-<!--								<p class="application_userChldrn item" data-chldrn-sn="120">자녀 : 둘째임</p>-->
-<!--								<p class="application_lctreInfo item" data-lctre-sn="100009">수업 : 월요일, 2월20일 (30000원)</p>-->
-<!--								<p class="application_clsDtl item">123</p>-->
-<!--								<p class="application_clsDtl item">23</p>-->
-<!--								<p class="application_clsDtl item">23</p>-->
-<!--							</div>-->
-<!--							<div class="lctre_bill">-->
-<!--								<p class="lctre_item_price">30000 원</p>-->
-<!--							</div>-->
-<!--							<div class="input_data">-->
-<!--								<input type="hidden" name="lctreReqsts[1].chldrnSn" value="0">-->
-<!--								<input type="hidden" name="lctreReqsts[1].lctreReqstSn" value="1">-->
-<!--								<input type="hidden" name="lctreReqsts[1].lctreReqstDetails[0].classDetailSn" value="100050">-->
-<!--								<input type="hidden" name="lctreReqsts[1].lctreReqstDetails[0].classDetailAnswer" value="123">-->
-<!--								<input type="hidden" name="lctreReqsts[1].lctreReqstDetails[1].classDetailSn" value="100051">-->
-<!--								<input type="hidden" name="lctreReqsts[1].lctreReqstDetails[1].classDetailAnswer" value="23">-->
-<!--								<input type="hidden" name="lctreReqsts[1].lctreReqstDetails[2].classDetailSn" value="100052">-->
-<!--								<input type="hidden" name="lctreReqsts[1].lctreReqstDetails[2].classDetailAnswer" value="23">-->
-<!--							</div>-->
-<!--						</div>-->
-<!--							<div class="lctre_box" data-lctre-amt="30000">-->
-<!--								<button class="close_box">-->
-<!--									<img src="/pon/common/image/chat_close.svg" class="close_icon" alt="아이콘 닫기" onclick="removeBoxLctre(this)">-->
-<!--								</button>-->
-<!--								<div class="lctre_detail_application_area">-->
-<!--									<p class="application_userChldrn item" data-chldrn-sn="119">자녀 : 첫쨰용</p>-->
-<!--									<p class="application_lctreInfo item" data-lctre-sn="100009">수업 : 월요일, 2월20일 (30000원)</p>-->
-<!--									<p class="application_clsDtl item">12</p>-->
-<!--									<p class="application_clsDtl item">1222</p>-->
-<!--								</div>-->
-<!--								<div class="lctre_bill">-->
-<!--									<p class="lctre_item_price">30000 원</p>-->
-<!--								</div>-->
-<!--								<div class="inputData">-->
-<!--									<input type="hidden" name="" value="">  자녀 -->
-<!--									<input type="hidden" name="" value="">  수업 -->
-<!--									<input type="hidden" name="" value="">  클래스 상세 일련번호 -->
-<!--									<input type="hidden" name="" value="">  클래스 상세 답변 -->
-<!--									<input type="hidden" name="" value="">  클래스 상세 일련번호 -->
-<!--									<input type="hidden" name="" value="">  클래스 상세 답변 -->
-<!--								</div>-->
-<!--							</div>-->
 					</div>
 					<!-- E : 신청한 항목 영역 -->
 					<div class="detail_purchase">
@@ -567,21 +536,21 @@
   	<div class="detail_info_tab">
 		<div class="detail_tab_nav">
 			<ul>
-				<li><a href="#tab01" class="active">클래스소개</a></li>
-				<li><a href="#tab02">후기<small>0<!-- TODO : cnt 설정 --></small> </a></li>
-				<li><a href="#tab03">Q&A<small>0<!-- TODO : cnt 설정 --></small> </a></li>
+				<li><a href="#detail_tab01" data-tab-id="detail_tab01" class="active">클래스소개</a></li>
+				<li><a href="#detail_tab02" data-tab-id="detail_tab02" >후기<small>0<!-- TODO : cnt 설정 --></small> </a></li>
+				<li><a href="#detail_tab03" data-tab-id="detail_tab03" >Q&A<small>0<!-- TODO : cnt 설정 --></small> </a></li>
 			</ul>
 		</div>
 		<div class="detail_tab_content">
 			
 			<!-- 상세설명 시작 -->
-			<div class="classDc" id="tab01" th:utext="${targetDto.classDc}">
+			<div class="classDc" id="detail_tab01" th:utext="${targetDto.classDc}">
 				클레스 설명
 			</div>
 			<!-- 상세설명 종료 -->
 			
-			<!-- 후기 종료 -->
-			<div id="tab02">
+			<!-- 후기 시작 -->
+			<div id="detail_tab02" style="display:none;">
 				<div class="detail_tab_reivew">
 					<h5>수업후기</h5>
 					<span>즐거운 수업되셨나요? 구매평 잘 부탁드려요^^ 그리고 오늘 하루 행운이 가득하시길 바랄게요^^</span>
@@ -592,14 +561,42 @@
 			<!-- 후기 종료 -->
 			
 			<!-- Q&A 시작 -->
-			<div id="tab03">
+			<div id="detail_tab03" class="detail_tab" style="display:none;">
 				<div class="detail_tab_reivew">
 					<h5>Q&A</h5>
 					<span>신청하시려는 수업에 대해 궁금한점이 있으신 경우 문의주세요.</span>
 				</div>
 				<!-- TODO : 클래스 Q&A 리스트 뿌리기 -->
-				<h5>Q&A 목록이 없습니다.</h5>
+				<th:block 	th:if = "${!classInqryList.isEmpty() && #lists.size(classInqryList) > 0 }" >
+					<div class="article_list_box">
+						<ol class="article_list">
+							<li class="article_item" th:each="data : ${classInqryList}" th:onclick="|detailInqryPopup('${data.classInqrySn}')|">
+								<div class="article_num" th:text="${classInqryList.totalElements - ( classInqryList.pageable.pageSize * classInqryList.pageable.pageNumber + dataStat.index ) }">
+								</div>
+								<div class="article_body">
+									<div class="article_tit" th:text="${data.inqrySj}">게시물 제목</div>
+									<div class="article_info">
+										<div class="article_date" th:text="${data.regDt}">2023-09-12 17:53</div>
+									</div>
+								</div>
+							</li>
+						</ol>
+					</div>
+				</th:block>
+				<th:block th:unless = "${!classInqryList.isEmpty() && #lists.size(classInqryList) > 0 }"> <!-- 인증계정 있고, 자녀 존재시  -->
+					<h5>Q&A 목록이 없습니다.</h5>
+				</th:block>
+				<div class="button_added_area" >
+					<button type="button" onclick="goClassInqry();">문의하기</button>
+				</div>
 			</div>
+			
+			<!-- 문의등록 layer -->	
+			<div class="layer_registClassInqry"	style="display: none;"	th:insert="pon/layer/layer_registClassInqry.html" />
+			
+			<!-- 문의조회 layer -->	
+			<div class="layer_detailClassInqry"	style="display: none;"	th:insert="pon/layer/layer_detailClassInqry.html" />
+			
 			<!-- Q&A 종료 -->
 		</div>
 	</div>

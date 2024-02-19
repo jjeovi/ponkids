@@ -479,7 +479,7 @@ font-family: 'yg-jalnan';
 .detail_tab_nav{background-color: #1CBCC9; padding: 20px 0; margin: 50px 0; position: relative;}
 
 .detail_tab_nav ul{display: flex; max-width: 1280px;margin: 0 auto; position: relative;}
-.detail_tab_nav ul::after{content: "수강신청하기"; position: absolute; top: 50%; right: 0; transform: translateY(-50%);color: #fff; font-size: 16px; background-color: #157EB9; padding: 10px 15px; border-radius: 5px; box-sizing: border-box;}
+/*.detail_tab_nav ul::after{content: "수강신청하기"; position: absolute; top: 50%; right: 0; transform: translateY(-50%);color: #fff; font-size: 16px; background-color: #157EB9; padding: 10px 15px; border-radius: 5px; box-sizing: border-box;}*/
 .detail_tab_nav ul a{color: #fff; padding: 10px 30px;}
 .detail_tab_nav ul a{display: flex; align-items: center;}
 .detail_tab_nav ul a small{background-color: #fff; color: #1CBCC9; width: 20px;height: 20px;line-height: 20px; text-align: center; display: inline-block; border-radius: 30px; margin-left: 5px; font-size: 12px; font-weight: bold;}
@@ -489,7 +489,7 @@ font-family: 'yg-jalnan';
 .detail_tab_reivew {display: flex !important; justify-content: space-between; padding:20px 0 ; border-bottom:1px solid #eee;}
 .detail_tab_reivew h5{font-weight: 700; font-size: 18px;}
 .detail_tab_reivew span{font-size: 14px; color: #727272;}
-.detail_tab_content #tab02 > h5, .detail_tab_content #tab03 > h5{margin: 30px 0;  text-align: center; color: #727272;}
+.detail_tab_content > div > h5{margin: 30px 0;  text-align: center; color: #727272;}
 .detail_swipe{max-width: 1400px; margin: 50px auto; padding: 40px 20px;}
 .detail_class_info h5{font-size: 18px; font-weight: 800; color: #333; margin: 10px 0;}
 .detail_class_info P{ margin-top:8px; font-size: 13px; color: #1161be;}

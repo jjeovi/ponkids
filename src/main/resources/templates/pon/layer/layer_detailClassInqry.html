@@ -1,0 +1,46 @@
+<div class="pop_wrap detailClassInqry" data-layer-wrap="detailClassInqry">
+	<form name="classInqryInsertForm" method="POST" th:action="@{ /classInqry/{mcd}/insert (  mcd = ${mcd} ) }" class="form" onsubmit="return insertClassInqry();" >
+	<div class="pop_top">
+		<button class="pop_close hide_pop" data-layer-id="detailClassInqry" >
+			<img src="/pon/common/image/chat_close.svg" alt="닫기_아이콘">
+		</button>
+	</div>
+	<div class="pop_header">
+		<img src="/pon/common/image/logo.svg" alt="피오니키즈 로고">
+		<h2 class="pop_title">문의상세조회</h2>
+	</div>
+	<div class="pop_content">
+		<input type="hidden" name="classSn" th:value="${targetDto.classSn}" />
+		<div class="class_info_wrap">
+			<div class="class_detail_box">
+				<div class="class_detail_left">
+					<img th:src="@{/getImage(atchFileSn=${targetDto.thumbAtchFileSn})}" alt="">
+				</div>
+				<div class="class_detail_right">
+					<p th:text="${targetDto.classSj}">클래스제목</p>
+				</div>
+			</div>
+		</div>
+		<div class="title_wrap">
+			<input type="text" name="inqrySj" placeholder="문의 제목 입력.">
+		</div>
+		<div class="content_wrap">
+			<textarea class="textarea" name="inqryCn" placeholder="문의 내용 입력." style="width: 100%;" rows="12"></textarea>
+		</div>
+		<div class="title_wrap">
+			<div class="btn-group radiobox">
+				<input type="radio" id="openYn1" name="openYn" value="Y" class="join-btn" required="">
+				<label for="openYn1" class="btn btnFirst" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">공개</label>
+				<input type="radio" id="openYn2" name="openYn" value="N" class="join-btn" required="">
+				<label for="openYn2" class="btn btnLast" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">비공개</label>
+			</div>
+		</div>
+	</div>
+	<div class="pop_footer">
+		<button type="submit" class="btn btn-purple">
+			등록
+		</button>
+		
+	</div>
+	</form>
+</div>

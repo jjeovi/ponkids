@@ -266,3 +266,17 @@
 /*	display: none;*/
 }
 /* E : 수업 추가 영역 */
+
+
+
+/* S : 문의 */
+.detail_tab .article_item {
+	padding : 15px;
+	cursor : pointer;
+}
+
+/*.detail_tab .article_num, .detail_tab .article_body {*/
+/*	padding-top : 12px;*/
+/*}*/
+
+/* E : 문의 */

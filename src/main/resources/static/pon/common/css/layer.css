@@ -109,7 +109,7 @@
     height: 100%;
     position: fixed;
     background-color: rgba(0, 0, 0, 0.51);
-    z-index: 10;
+    z-index: 5;
 }
 
 /* layer popup */
@@ -133,7 +133,8 @@
     position: fixed;
     top: 50%;
     left: 50%;
-    min-width: 50rem;
+    width: 40rem;
+    min-width: 23rem;
     min-height: 26rem;
     max-width: 95vw;
     max-height: 80vh;
@@ -1723,3 +1724,82 @@ input[type="radio"][disabled]:checked+label{
 .pop_footer.userIntegrated .user_wrap {
     margin-top: 2rem;
 }
+
+
+/* S : 클래스 문의 classInqry */
+.pop_wrap.classInqry .pop_content {
+	width: 90%;
+    margin: 0 auto;
+    padding-right: 0px;
+}
+
+.registClassInqry .class_info_wrap, .detailClassInqry .class_info_wrap {
+	height: 150px;
+    padding: 10px;
+    border: 1px dashed rgb(221 215 223);
+    border-radius: 3px;
+}
+
+.registClassInqry .class_detail_box, .detailClassInqry .class_detail_box {
+	height: 100%;
+	gap: 20px;
+}
+
+.registClassInqry .class_detail_left, .detailClassInqry .class_detail_left {
+	height: auto;
+    min-width: 150px;
+    width: 24%;
+    
+}
+
+.registClassInqry .class_detail_left img, .detailClassInqry .class_detail_left img {
+	height: auto;
+    width: auto;
+    max-height: 150px;
+    max-width: 150px;
+    border-radius: 10px;
+}
+
+.registClassInqry .title_wrap, .classInqry .content_wrap {
+	padding: 10px 0px;
+    display: flex;
+    gap: 20px;
+}
+
+.registClassInqry input {
+	height: 2.2rem;
+    border-radius: 3px;
+    border-color: #c6c3c3;
+    border-style: solid;
+    border-width: 1px;
+    padding-left: 9px;
+    width: 100%;
+}
+
+.registClassInqry .title_wrap .title_name {
+	margin: auto 0;
+}
+
+.registClassInqry .title_wrap .radiobox {
+	width: 100%;
+}
+
+.registClassInqry .title_wrap .radiobox .btn {
+	height: 1.7rem;
+    border-style: solid;
+    border-width: 1px;
+    padding-left: 9px;
+    width: 47.5%;
+    border-color: #dedbdb !important;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 10px;
+}
+
+.content_wrap .textarea {
+	width: 100%;
+	border: 1px solid #c6c3c3;
+	border-radius: 3px;
+	padding: 10px;
+}
+/* S : 클래스 문의 classInqry */

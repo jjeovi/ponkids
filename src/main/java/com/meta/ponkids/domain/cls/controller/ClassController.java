@@ -1,5 +1,6 @@
 package com.meta.ponkids.domain.cls.controller;
 
+import com.meta.ponkids.domain.cls.dto.ClassInqryListDto;
 import com.meta.ponkids.domain.cls.dto.ClassListDto;
 import com.meta.ponkids.domain.cls.dto.ClassReqstSaveDto;
 import com.meta.ponkids.domain.cls.service.*;
@@ -14,6 +15,7 @@ import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
 import com.meta.ponkids.global.util.session.SessionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -41,6 +43,7 @@ public class ClassController {
 	private final ClassCategoryCl02Service classCategoryCl02Service;
 	
 	private final ClassReqstService classReqstService;
+	private final ClassInqryService classInqryService;
 	
 	private final LctreService lctreService;
 	
@@ -48,7 +51,7 @@ public class ClassController {
 	
 	private final AtchFileDetailService atchFileDetailService;
 
-    private final UserChldrnRepository userChldrnRepository;
+	private final UserChldrnRepository userChldrnRepository;
 
 	@GetMapping( BASIC_PATH + "/{mcd}/list" )
 	public String list( @ModelAttribute ClassListDto listDto,
@@ -129,6 +132,12 @@ public class ClassController {
 		
 		// 5. 클래스 의 Q&A : classInqryList > ByClassSn
 		// TODO
+		ClassInqryListDto classInqryListDto = new ClassInqryListDto();
+		classInqryListDto.setClassSn( targetDto.getClassSn() );
+		
+		
+		Pageable customPageable = PageRequest.of(0, 5 );	// 첫번째페이지 (0페이지) , 5개식 조회
+		model.addAttribute("classInqryList", classInqryService.getList( classInqryListDto, customPageable ) );	// 클래스 후기 classSn으로 검색
 		
 		// 6. 클래스 가 속한 카테고리의 다른 클래스들의 정보 : otherClassList ( 본인 클래스는 제외해야함 ) 
 		model.addAttribute("otherClassList", classService.getListTop10OtherClassExceptMeByCtgrySn( targetDto ) );
@@ -209,7 +218,7 @@ public class ClassController {
 		classReqstSaveDto.setUserSn( loginDto.getUserSn() );
 		
 		// 1-3. insert
-		classReqstSaveDto = classReqstService.save(classReqstSaveDto, request);
+		classReqstSaveDto = classReqstService.save( classReqstSaveDto, request );
 		
 		// 2. TB_LCTRE_REQST insert
 		// 1 개 이상의 multi data 
