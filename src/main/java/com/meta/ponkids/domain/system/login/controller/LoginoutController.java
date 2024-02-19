@@ -105,9 +105,9 @@ public class LoginoutController {
 			// TODO masking 처리 @ 기준 왼쪽 4개 문자 마스킹 처리
 			// 마스킹 처리 - '@' 문자를 기준으로 왼쪽 4개 문자를 마스킹
 			int atIndex = userId.indexOf('@');  // indexOf 메서드를 이용해서 '@' 문자가 처음으로 나타나는 위치의 인덱스를 반환 -> atIndex
+
 			if (atIndex != -1) { // '@' 문자가 존재하는 경우
-//				userId  = maskString(userId, 0, atIndex - 1, '*') + userId.substring(atIndex);
-				userId  = maskString(userId, 0, atIndex - 1, '*') ;
+				userId = maskString(userId, Math.max(0, atIndex - 4), atIndex - 1, '*');
 				result.put("maskingUserId", userId );
 			}else{
 				result.put("msg","이메일정보가 올바르지 않습니다. 관리자에게 문의해주세요.");
@@ -133,39 +133,6 @@ public class LoginoutController {
 
 		return new String(chars);
 	}
-
-	// 비밀번호 변경 뷰
-//	@RequestMapping(value = "/pwUpdate", method = RequestMethod.GET)
-//	public String pwUpdate() throws Exception{
-//		return "/member/pwUpdate";
-//	}
-//
-//	// 현재 비밀번호 유효성 검사
-//	@RequestMapping(value = "/pwCheck",method = RequestMethod.POST)
-//	@ResponseBody
-//	public int pwCheck(MemberVO memberVO) throws Exception{
-//		// 1. 회원의 실제 비밀번호를 데이터베이스에서 가져옵니다.
-//		String password = memberService.pwCheck(memberVO.getMemberId());
-//		// 2. 만약 회원이 존재하지 않거나 입력된 비밀번호가 일치하지 않으면 0을 반환합니다.
-//		if(memberVO == null || !BCrypt.checkpw(memberVO.getMemberPw(),password)){
-//			return 0;
-//		}
-//		return 1;
-//	}
-//	// 비밀번호 변경
-//	@RequestMapping(value="/pwUpdate" , method=RequestMethod.POST)
-//	public String pwUpdate(String memberId,String memberPw1,RedirectAttributes rttr,HttpSession session)throws Exception{
-//		// 1. 입력된 비밀번호를 BCrypt를 사용하여 해시화합니다
-//		String hashedPw = BCrypt.hashpw(memberPw1, BCrypt.gensalt());
-//		// 2. 회원의 아이디와 새로운 해시화된 비밀번호를 사용하여 데이터베이스를 업데이트합니다.
-//		memberService.pwUpdate(memberId, hashedPw);
-//		// 3. 현재 세션을 무효화하여 로그아웃을 수행합니다.
-//		session.invalidate();
-//		// 4. 리다이렉트 시에 메시지를 Flash 속성에 추가하여 다음 페이지로 전달합니다.
-//		rttr.addFlashAttribute("msg", "정보 수정이 완료되었습니다. 다시 로그인해주세요.");
-//		// 5. 로그인 화면으로 리다이렉트합니다.
-//		return "redirect:/member/loginView";
-//	}
 
 
 
