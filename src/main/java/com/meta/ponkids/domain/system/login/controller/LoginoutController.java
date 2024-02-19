@@ -100,13 +100,14 @@ public class LoginoutController {
 		if ( targetDto != null ) {
 			// 1-1. 해당 입력값으로 찾은 계정이 있을 떄
 			result.put("flag", "S");
-			String userId  = targetDto.getUserId();
+			String userId  = targetDto.getUserId(); // DTO 로 받은 userid 데이터-> userId
 
 			// TODO masking 처리 @ 기준 왼쪽 4개 문자 마스킹 처리
 			// 마스킹 처리 - '@' 문자를 기준으로 왼쪽 4개 문자를 마스킹
-			int atIndex = userId.indexOf('@');
+			int atIndex = userId.indexOf('@');  // indexOf 메서드를 이용해서 '@' 문자가 처음으로 나타나는 위치의 인덱스를 반환 -> atIndex
 			if (atIndex != -1) { // '@' 문자가 존재하는 경우
-				userId  = maskString(userId, 0, atIndex - 1, '*') + userId.substring(atIndex);
+//				userId  = maskString(userId, 0, atIndex - 1, '*') + userId.substring(atIndex);
+				userId  = maskString(userId, 0, atIndex - 1, '*') ;
 				result.put("maskingUserId", userId );
 			}else{
 				result.put("msg","이메일정보가 올바르지 않습니다. 관리자에게 문의해주세요.");
@@ -119,7 +120,7 @@ public class LoginoutController {
 
 		return result;
 	}
-	// 문자열 일부를 마스킹 처리하는 함수
+	// 문자열 일부를 마스킹 처리하는 함수 -> maskString
 	private String maskString(String str, int start, int end, char maskChar) {
 		if (str == null || start < 0 || end >= str.length()) {
 			return str;
