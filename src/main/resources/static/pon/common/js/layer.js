@@ -983,14 +983,12 @@ function findUseremail(){
         },
         success: function (result) {
 
-            console.log(result)
-
             // 통신 이후 로직
             if ( result.flag == "E" ) {
                 alert( result.msg );
 
             } else if ( result.flag == "S" ) {
-                // TODO 존재하는 계정정보일 경우 인증번호 발송되었다고 알림
+                // 존재하는 계정정보일 경우 인증번호 발송되었다고 알림
                 alert(result.msg);
             }
         },
@@ -998,9 +996,53 @@ function findUseremail(){
             alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error)
         }
     })
+}
+/* E: 비밀번호 찾기 - 이메일 찾기 */
 
 
+/* S : 비밀번호 찾기 - 버튼클릭시 - 인증번호 확인 */
+    function findUserpw(){
+        var authNumber = $("#findPw_auth_number").val()  // 인증번호
+        // 서버로 전송할 데이터 구성
+        // data = new FormData();
+        // data.append( "authNumber", authNumber );
+        var data = {authNumber: authNumber}
+
+        // CSRF 토큰 및 헤더 설정
+        var csrfToken = $("meta[name='_csrf']").attr("content");
+        var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+        var headers = {};
+        headers[csrfHeader] = csrfToken;
+        // Ajax 를 사용한 서버로 인증번호 확인 요청
+        $.ajax({
+            url:"/findUserpw",
+            type:"POST",
+            data: data,
+            // beforeSend: function(xhr){
+            //     xhr.setRequestHeader(header, token);
+            // },
+            headers: headers,
+            success: function (result){
+                if(result.flag ==="S"){
+                    alert("인증에 성공");
+                    // TODO 인증 성공시 원하는 동작 수행
+                    showPwSuccessScreen(result.userId);
+                }else{
+                    alert("인증에 실패했습니다. 다시 시도해주세요");
+                }
+            },
+            error: function (){
+                alert("서버 오류가 발생했습니다.");
+            }
+
+        });
+    }
+
+// 이메일 인증 성공 후의 처리
+function showPwSuccessScreen(userId) {
+    // 비밀번호 재설정 화면을 보이도록 설정
+    $('.user_find').hide(); // 기존 화면 감춤
+    showPopupLv2( 'findUserPw' );   // 비밀번호 재설정 팝업 호출
 
 }
-
-/* E: 비밀번호 찾기 - 이메일 찾기 */
+/* E : 비밀번호 찾기 - 인증번호 확인 */

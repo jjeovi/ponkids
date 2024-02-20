@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.meta.ponkids.domain.system.login.service.LoginService;
+import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
@@ -39,8 +40,9 @@ import lombok.RequiredArgsConstructor;
 public class LoginoutController {
 
 	private final LoginService loginService;
-	// SMTP 사용하여 메일 전송하기
-	private final JavaMailSender javaMailSender;
+	private final JavaMailSender javaMailSender; // SMTP 사용하여 메일 전송하기
+
+	private final HttpSession session; // HttpSession을 멤버 변수로 선언
 
     @Value( "${key.default.user}" )
     private String TYPE_USER;
@@ -155,7 +157,7 @@ public class LoginoutController {
 
 		// 여기에서 실제 로직을 구현하고 결과를 반환합니다.
 
-		// TODO 1. 1. 이름/ 이메일 / (관리자여부) 로 계정을 찾음
+		// 1. 이름/ 이메일 / (관리자여부) 로 계정을 찾음
 		// 비밀번호 찾기 기능에서 실제로 사용자 정보를 데이터베이스에서 조회하는 부분
 		LoginDto targetDto = loginService.findByUserNmAndUserIdAndMngrYn(loginDto);
 
@@ -164,10 +166,10 @@ public class LoginoutController {
 			result.put("flag", "S");
 			result.put("msg", "인증번호가 발송되었습니다. ");
 
-			//TODO 2-1이메일 전송
+			//이메일 전송
 //			sendEmail(targetDto.getUserId(),generateRandomAuthNumber());
 			try{
-				sendEmail(targetDto.getUserId(),generateRandomAuthNumber());
+				sendEmail(targetDto.getUserId(),generateRandomAuthNumber(), session);
 			}catch(MessagingException e){
 				e.printStackTrace();
 				result.put("flag", "E");
@@ -188,7 +190,7 @@ public class LoginoutController {
 
 
 	// 이메일 전송 메서드
-	private void sendEmail(String to, String authNumber)throws MessagingException{
+	private void sendEmail(String to, String authNumber , HttpSession session)throws MessagingException{
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
 
@@ -197,6 +199,9 @@ public class LoginoutController {
 		helper.setText("인증번호: " + authNumber, true);
 
 		javaMailSender.send(mimeMessage);
+
+		// 세션에 인증번호 저장
+		session.setAttribute("authCode", authNumber);
 	}
 
 	// 랜덤한 인증번호 생성 메서드
@@ -204,5 +209,29 @@ public class LoginoutController {
 		// TODO 여기에 랜덤 인증번호 생성 로직 추가 (조건 : 랜덤한 6자리 숫자)
 		return "123456";
 	}
+
+	/* S: 비밀번호 찾기 - 인증번호 검증 */
+	@ResponseBody
+	@PostMapping("/findUserpw")
+	public Map<String,Object> findUserpw(@RequestParam String authNumber, HttpSession session){
+		Map<String, Object> result = new HashMap<>();
+		// 세션에서 저장된 인증번호 가져오기
+		String storedAuthCode = (String) session.getAttribute("authCode");
+
+		if (storedAuthCode != null && storedAuthCode.equals(authNumber)) {
+			// 인증번호 일치
+			result.put("flag", "S");
+			result.put("msg", "인증에 성공했습니다.");
+			// 인증 성공 후 필요한 작업 수행
+		} else {
+			// 인증번호 불일치
+			result.put("flag", "E");
+			result.put("msg", "인증에 실패했습니다. 다시 시도해주세요.");
+		}
+
+		return result;
+	}
+
+
 
 }
