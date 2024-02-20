@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -107,7 +109,7 @@ public class LoginService implements UserDetailsService {
     }
 
 
-	// 회원이름 / 전화번호 / 관리자여부 3가지로 계정 찾기 (1건만) -- 아이디 찾기
+	// S : 회원이름 / 전화번호 / 관리자여부 3가지로 계정 찾기 (1건만) -- 아이디 찾기
 	public LoginDto findByUserNmAndTelNoAndMngrYn(LoginDto loginDto) {
 
 		// 쿼리 구현
@@ -122,8 +124,9 @@ public class LoginService implements UserDetailsService {
 		LoginDto targetDto = new LoginDto();
 		return targetDto.toDto(target);
 	}
+	// E : 회원이름 / 전화번호 / 관리자여부 3가지로 계정 찾기 (1건만) -- 아이디 찾기
 
-	// 회원이름 / 이메일 / 관리자여부 3가지로 계정 찾기(1건만)  -- 비밀번호 찾기
+	// S : 회원이름 / 이메일 / 관리자여부 3가지로 계정 찾기(1건만)  -- 비밀번호 찾기
 	public LoginDto findByUserNmAndUserIdAndMngrYn(LoginDto loginDto) {
 
 		// 쿼리 구현
@@ -139,7 +142,19 @@ public class LoginService implements UserDetailsService {
 		return targetDto.toDto(target);
 
 	}
+	// E : 회원이름 / 이메일 / 관리자여부 3가지로 계정 찾기(1건만)  -- 비밀번호 찾기
 
 
+	/* S : 이메일로 인증번호 보내기 */
+	private JavaMailSender javaMailSender;
 
+	public void sendEmail(String to, String subject, String text) {
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(to);
+		message.setSubject(subject);
+		message.setText(text);
+
+		javaMailSender.send(message);
+	}
+	/* E : 이메일로 인증번호 보내기 */
 }

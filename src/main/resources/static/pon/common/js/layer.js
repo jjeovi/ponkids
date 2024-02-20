@@ -983,6 +983,8 @@ function findUseremail(){
         },
         success: function (result) {
 
+            console.log(result)
+
             // 통신 이후 로직
             if ( result.flag == "E" ) {
                 alert( result.msg );

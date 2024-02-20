@@ -12,6 +12,9 @@ import javax.servlet.http.HttpSession;
 import com.meta.ponkids.domain.system.login.service.LoginService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -36,7 +39,8 @@ import lombok.RequiredArgsConstructor;
 public class LoginoutController {
 
 	private final LoginService loginService;
-
+	// SMTP 사용하여 메일 전송하기
+	private final JavaMailSender javaMailSender;
 
     @Value( "${key.default.user}" )
     private String TYPE_USER;
@@ -53,7 +57,7 @@ public class LoginoutController {
     	session.setAttribute("returnUrlAfterLogin", loginDto.getReturnUrlAfterLogin() );
     	session.setAttribute("returnUrlAfterLoginFail", loginDto.getReturnUrlAfterLoginFail() );
     	result.put("flag", "S");
-//    	
+//
 //    	// 비밀번호 암호화
 //    	loginDto.setPassword( passwordEncoder.encode( loginDto.getPassword() ) );
 
@@ -141,7 +145,7 @@ public class LoginoutController {
 	}
 
 
-	//	S : 이메일 확인
+	//	S : 이메일 확인 및 인증번호 전송
 	@ResponseBody
 	@PostMapping("/findUseremail")
 	public Map<String, Object> findUseremail( @ModelAttribute LoginDto loginDto) {
@@ -149,25 +153,27 @@ public class LoginoutController {
 		//메소드가 실행되고 나서 클라이언트에게 반환될 데이터를 담기 위한 자료구조를 생성하는 부분
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		// 여기에서 실제 아이디를 찾는 로직을 구현하고 결과를 반환합니다.
-		if ( loginDto != null ) {
-
-			System.out.println("loginDto.getUserNm" + loginDto.getUserNm());
-			System.out.println("loginDto.getUserNm" + loginDto.getUserNm());
-		} else {
-			System.out.println("loginDTo is null -===============");
-		}
-
+		// 여기에서 실제 로직을 구현하고 결과를 반환합니다.
 
 		// TODO 1. 1. 이름/ 이메일 / (관리자여부) 로 계정을 찾음
 		// 비밀번호 찾기 기능에서 실제로 사용자 정보를 데이터베이스에서 조회하는 부분
 		LoginDto targetDto = loginService.findByUserNmAndUserIdAndMngrYn(loginDto);
-		System.out.println("targetDto 데이터 :::::: " + targetDto);
 
 		if ( targetDto != null ) {
 			// 1-1. 해당 입력값으로 찾은 계정이 있을 떄
 			result.put("flag", "S");
 			result.put("msg", "인증번호가 발송되었습니다. ");
+
+			//TODO 2-1이메일 전송
+//			sendEmail(targetDto.getUserId(),generateRandomAuthNumber());
+			try{
+				sendEmail(targetDto.getUserId(),generateRandomAuthNumber());
+			}catch(MessagingException e){
+				e.printStackTrace();
+				result.put("flag", "E");
+				result.put("msg","이메일 전송 중 오류가 발생했습니다.");
+				return result;
+			}
 
 		} else if ( targetDto == null ) {
 			// 1-2. 해당 입력값으로 찾은 계정이 없을 때
@@ -177,52 +183,26 @@ public class LoginoutController {
 
 		return result;
 	}
-	//	E : 이메일 확인
+	//	E : 이메일 확인 및 인증번호 전송
 
 
-	// S: SMTP를 사용하여 이메일을 보내기(임시 테스트)
-	public class EmailSender {
 
-		public static void main(String[] args) {
-			// SMTP 서버 설정
-			String host = "smtp.gmail.com";
-			String port = "587";
-			String username = "your-email@gmail.com";
-			String password = "your-email-password";
+	// 이메일 전송 메서드
+	private void sendEmail(String to, String authNumber)throws MessagingException{
+		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
 
-			// 메일 속성 설정
-			Properties properties = new Properties();
-			properties.put("mail.smtp.host", host);
-			properties.put("mail.smtp.port", port);
-			properties.put("mail.smtp.auth", "true");
-			properties.put("mail.smtp.starttls.enable", "true");
+		helper.setTo(to);
+		helper.setSubject("이메일 인증번호");
+		helper.setText("인증번호: " + authNumber, true);
 
-			// 세션 생성
-			Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication(username, password);
-				}
-			});
-
-			try {
-				// 메시지 생성 및 설정
-				Message message = new MimeMessage(session);
-				message.setFrom(new InternetAddress("your-email@gmail.com"));
-				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("recipient-email@example.com"));
-				message.setSubject("제목");
-				message.setText("본문 내용");
-
-				// 메일 전송
-				Transport.send(message);
-
-				System.out.println("이메일이 성공적으로 전송되었습니다.");
-
-			} catch (MessagingException e) {
-				e.printStackTrace();
-			}
-		}
+		javaMailSender.send(mimeMessage);
 	}
 
-	// E: SMTP를 사용하여 이메일을 보내기
+	// 랜덤한 인증번호 생성 메서드
+	private String generateRandomAuthNumber(){
+		// TODO 여기에 랜덤 인증번호 생성 로직 추가 (조건 : 랜덤한 6자리 숫자)
+		return "123456";
+	}
 
 }

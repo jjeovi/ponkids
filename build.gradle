@@ -66,7 +66,7 @@ dependencies {
 
 	// javax.mail 라이브러리를 추가
 	implementation 'com.sun.mail:javax.mail:1.6.2'
-
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 // querydsl에서 사용할 경로 설정(현재 지정한 부분은 .gitignore에 포함됨)
