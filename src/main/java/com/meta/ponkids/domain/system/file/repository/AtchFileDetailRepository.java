@@ -27,7 +27,7 @@ public interface AtchFileDetailRepository extends JpaRepository<AtchFileDetail, 
     
     
     @Modifying( clearAutomatically = true )
-    @Query( value = "DELETE FROM  tb_atch_file_detail "
+    @Query( value = "DELETE FROM {h-schema}tb_atch_file_detail "
             + "    WHERE atch_file_sn = :acthFileSn AND file_seq = :fileSeq", nativeQuery = true )
         // nativeQuery true 없으면 error
     int deleteByAtchFileDetailPk( @Param( "acthFileSn" ) Long acthFileSn, @Param( "fileSeq" ) Long fileSeq );

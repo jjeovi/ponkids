@@ -18,7 +18,7 @@ public interface ClassWeekRepository extends JpaRepository<ClassWeek, Long>, Cla
     
     
     @Modifying( clearAutomatically = true )
-    @Query( value = "UPDATE tb_class_week "
+    @Query( value = "UPDATE {h-schema}tb_class_week "
             +       "   SET del_yn   = 'Y'"
             +       "     , updt_dt  = now()"
             +       " WHERE class_sn = :classSn", nativeQuery = true )

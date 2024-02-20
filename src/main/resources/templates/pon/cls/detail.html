@@ -270,6 +270,26 @@
 				} 
 		    });
 		    
+		    // 이미 신청한 건수 있는지 확인
+		    
+			// 같은 자녀와 수업의 신청건수가 있는지 조회
+			var url = "/lctreReqst/live/existsByLctreSnAndChldrnSnAjax";
+			$.ajax( {
+				url: url,
+				type: "GET",
+				dataType: "json",
+				async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+				data: {chldrnSn : targetChldrnSn, lctreSn : targetLctreSn}, // 검색할 값
+				contentType: "application/json",
+				success: function ( ajaxResult ) {
+					
+					if ( ajaxResult )  {
+						alert("해당 자녀로 신청한 같은 수업내용이 존재합니다. 마이페이지에서 확인해주세요.");
+						result = true;
+					}
+				}
+			});
+		    
 			return result;
 		}
 		
@@ -524,13 +544,18 @@
 							<span class="totalLctrePriceAmt" id="totalLctrePriceAmt">0</span>원
 						</span> 
 						<button type="submit">신청하기</button>
+						
+						<span class="reqst-history" th:if="${ reqstHistoryYn != null && reqstHistoryYn}">
+							이 클래스에 이미 신청한 이력이 존재해요!
+							<a href="/mypage/reqstHistory">신청이력 확인하기</a>
+						</span>
 					</div>
 				</div>
 			</div>
 			<!-- class detail box 종료 -->
 		</form>
 		<!-- 역사 과목 후기 시작 -->
-		<div class="class_detail_review">
+		<div class="class_detail_review"><div>…</div>
 			<h3>역사 과목 후기(136)</h3>
 			<div class="detail_review_item_box">
 				<div class="detail_review_item">
@@ -558,7 +583,7 @@
 			<ul>
 				<li><a href="#detail_tab01" data-tab-id="detail_tab01" class="active">클래스소개</a></li>
 				<li><a href="#detail_tab02" data-tab-id="detail_tab02" >후기<small>0<!-- TODO : cnt 설정 --></small> </a></li>
-				<li><a href="#detail_tab03" data-tab-id="detail_tab03" >Q&A<small>0<!-- TODO : cnt 설정 --></small> </a></li>
+				<li><a href="#detail_tab03" data-tab-id="detail_tab03" >Q&A<small th:utext="${classInqryList.totalElements}"></small> </a></li>
 			</ul>
 		</div>
 		<div class="detail_tab_content">

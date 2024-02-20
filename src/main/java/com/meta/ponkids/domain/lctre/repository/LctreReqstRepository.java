@@ -6,4 +6,5 @@ import com.meta.ponkids.domain.lctre.entity.LctreReqst;
 
 public interface LctreReqstRepository extends JpaRepository<LctreReqst, Long> {
 	
+	boolean existsByLctreSnAndChldrnSn( Long lctreSn, Long chldrnSn );
 }

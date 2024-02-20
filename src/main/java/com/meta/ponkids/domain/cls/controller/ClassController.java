@@ -3,9 +3,11 @@ package com.meta.ponkids.domain.cls.controller;
 import com.meta.ponkids.domain.cls.dto.ClassInqryListDto;
 import com.meta.ponkids.domain.cls.dto.ClassListDto;
 import com.meta.ponkids.domain.cls.dto.ClassReqstSaveDto;
+import com.meta.ponkids.domain.cls.repository.ClassReqstRepository;
 import com.meta.ponkids.domain.cls.service.*;
 import com.meta.ponkids.domain.lctre.dto.LctreReqstDetailSaveDto;
 import com.meta.ponkids.domain.lctre.dto.LctreReqstSaveDto;
+import com.meta.ponkids.domain.lctre.repository.LctreReqstRepository;
 import com.meta.ponkids.domain.lctre.service.LctreReqstService;
 import com.meta.ponkids.domain.lctre.service.LctreService;
 import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
@@ -43,11 +45,13 @@ public class ClassController {
 	private final ClassCategoryCl02Service classCategoryCl02Service;
 	
 	private final ClassReqstService classReqstService;
+	private final ClassReqstRepository classReqstRepository;
 	private final ClassInqryService classInqryService;
 	
 	private final LctreService lctreService;
 	
 	private final LctreReqstService lctreReqstService;
+	private final LctreReqstRepository lctreReqstRepository;
 	
 	private final AtchFileDetailService atchFileDetailService;
 
@@ -129,20 +133,17 @@ public class ClassController {
 		
 		// 4. 클래스 의 후기 : classReviewList > ByClassSn
 		// TODO
+		// 클래스의 후기
 		
 		// 5. 클래스 의 Q&A : classInqryList > ByClassSn
-		// TODO
+		// - 총 건수 : classInqryList.totalElements 로 구함.
 		ClassInqryListDto classInqryListDto = new ClassInqryListDto();
 		classInqryListDto.setClassSn( targetDto.getClassSn() );
-		
-		
-		Pageable customPageable = PageRequest.of(0, 5 );	// 첫번째페이지 (0페이지) , 5개식 조회
+		Pageable customPageable = PageRequest.of(0, 5);	// 첫번째페이지 (0페이지) , 5개식 조회
 		model.addAttribute("classInqryList", classInqryService.getList( classInqryListDto, customPageable ) );	// 클래스 후기 classSn으로 검색
 		
 		// 6. 클래스 가 속한 카테고리의 다른 클래스들의 정보 : otherClassList ( 본인 클래스는 제외해야함 ) 
 		model.addAttribute("otherClassList", classService.getListTop10OtherClassExceptMeByCtgrySn( targetDto ) );
-		
-//		model.addAttribute( "classSn", targetDto.getClassSn() );
 		
 		// 7. 계정정보 get 후 자녀 list 
 		LoginDto loginDto = SessionUtils.getAuthentication();
@@ -153,19 +154,15 @@ public class ClassController {
 			
 			// 8. 해당 클래스르 신청한 이력이 있는지 확인
 			// 이력이 있다면 '해당 클래스를 신청한 이력이 존재합니다. (마이페이지로 이동)  ' 할 수 있는 버튼을 구현 할지 
-			// TODO : 추후 예정.. *( 필요하다면 ? ) 
-			
+			model.addAttribute( "reqstHistoryYn", classReqstRepository.existsByClassSnAndUserSn( targetDto.getClassSn(), loginDto.getUserSn() ) );
 		}
-		
 		
 		// E : 필요한 객체 setting
 		
 		// 기본 경로 setting
 		model.addAttribute( "basicPath", BASIC_PATH );
-		
 		return BASIC_VIEW_PATH + "/detail";
 	}
-	
 	
 	
 	
@@ -186,15 +183,16 @@ public class ClassController {
 		
 		// insert process 
 		// ===========================================
+		// 0. 유효성 체크 작업.
 		// 1. TB_CLASS_REQST insert
 		// 2. TB_LCTRE_REQST insert
 		// 3. TB_LCTRE_REQST_DETAIL insert
+
 		
-		
-		// 1. TB_CLASS_REQST insert
+		// 0. 유효성 체크 작업.
 		// ===========================================
 		
-		// 1-1. classSn 체크
+		// 0-1. classSn 체크
 		if ( classReqstSaveDto == null || classReqstSaveDto.getClassSn() == null ) {
 			// 메시지 출력 및 url 이동 처리
 			model.addAttribute( "resultMsg", "등록 중 문제가 발생하였습니다. 다시 시도해주세요." );
@@ -203,7 +201,7 @@ public class ClassController {
 			return "common/alert";
 		}
 		
-		// 1-2. userSn 체크 
+		// 0-2. userSn 체크 
 		// 로그인 안되어 있으면 return 
 		LoginDto loginDto = SessionUtils.getAuthentication(); 
 		if ( loginDto == null || loginDto.getUserSn() == null ) {
@@ -214,10 +212,23 @@ public class ClassController {
 			return "common/alert";
 		}
 		
+		// 0-3. 이미 등록되어있는 자녀와 수업인지 체크
+		// 같은자녀와수업의 내용으로는 중복등록할 수 없음.
+		
+		if ( lctreReqstRepository.existsByLctreSnAndChldrnSn( lctreReqsts.getLctreSn(), lctreReqsts.getChldrnSn() ) ) {
+			// 메시지 출력 및 url 이동 처리
+			model.addAttribute( "resultMsg", "같은 자녀로 신청된 같은수업이 존재합니다. 마이페이지에서 확인해주세요." );
+			model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/detail?pk=" + classReqstSaveDto.getClassSn());
+			
+			return "common/alert";
+		}
+		
 		// 로그인 세션의 userSn 값으로 set
 		classReqstSaveDto.setUserSn( loginDto.getUserSn() );
 		
-		// 1-3. insert
+		// 1. TB_CLASS_REQST insert
+		// ===========================================
+		// 1. insert
 		classReqstSaveDto = classReqstService.save( classReqstSaveDto, request );
 		
 		// 2. TB_LCTRE_REQST insert

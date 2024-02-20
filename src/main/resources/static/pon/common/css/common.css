@@ -279,4 +279,28 @@
 /*	padding-top : 12px;*/
 /*}*/
 
+
+.reqst-history {
+	font-size: 1.1rem;
+    font-family: 'yg-jalnan';
+    color: #a7a1ad;
+    text-align: center;
+    background-color: #fff;
+    border: none;
+    padding-top: 10px;
+    margin: 0 auto;
+    display: block;
+    line-height: 2.2rem;
+    float:right;
+}
+
+.reqst-history a {
+	color: #bb8be3;
+    font-weight: bold;
+    font-size: 1.5rem;
+    background-color: #fdcece;
+    padding: 11px 20px;
+    border-radius: 10px;
+}
+
 /* E : 문의 */

@@ -26,7 +26,7 @@ import javax.persistence.*;
 )
 @Where( clause = "del_yn = 'N'" ) // DEFAULT 로 WHERE DEL_YN = 'N' 문을 추가하여 조회
 // TODO SQLDelete setting
-@SQLDelete( sql = "UPDATE tb_menu SET del_yn ='Y', updt_dt = now() WHERE menu_sn = ?" )
+@SQLDelete( sql = "UPDATE {h-schema}tb_menu SET del_yn ='Y', updt_dt = now() WHERE menu_sn = ?" )
 // delelte 시 실행 (ex ) ~Repository.deleteById)
 //TODO TB name setting
 @Table( name = "TB_MENU" )
