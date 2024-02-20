@@ -20,14 +20,8 @@ import com.meta.ponkids.global.common.dto.CategoryDto;
 import lombok.RequiredArgsConstructor;
 
 // 공통 유틸
-@RequiredArgsConstructor
 public class CommonUtils {
 	
-    public static ClassCategoryCl01Service classCategoryCl01Service;
-    public static ClassCategoryCl02Service classCategoryCl02Service;
-    
-    public static CmmnCdDetailService cmmnCdDetailService;
-
 	// 조회조건에 따라 url mapping 변경 작업
 	public static void schConditionCombineForResetUrl( CategoryDto schCategoryDto, Long classSn, String BASIC_PATH, String mcd, Model model ) {
 		
@@ -132,7 +126,11 @@ public class CommonUtils {
 	
 	
 	// create Category 함수
-	public static CategoryDto createCategory( CategoryDto targetCategoryDto, ClassModDto classDto ) {
+	public static CategoryDto createCategory( CategoryDto targetCategoryDto, ClassModDto classDto, 
+			ClassCategoryCl01Service classCategoryCl01Service,
+			ClassCategoryCl02Service classCategoryCl02Service,
+			CmmnCdDetailService cmmnCdDetailService
+			) {
 		// 1. class 정보가 있을 경우 : classDto 의 정보로 categoryhDto 의 lv1~lv3 까지 setting . ( lv1 : 카테고리, lv2 : 커리큘럼, lv3 : 클래스명 ) , lv4 는 listDto 에서 존재여부 체크하여 있으면 setting
 		// 2. class 정보가 없을 경우 : listDto의 lv1,lv2만 체크하면 됨 (lv3 or lv4 가 만약 있다면 classDto 가 있는 url 로 redirect 되었을 테니, 이 경우는 생각하지 않아도 됨.)
 		//	listDto의 lv1,lv2 값이 있다면 체크하여 categoryDto 에 setting

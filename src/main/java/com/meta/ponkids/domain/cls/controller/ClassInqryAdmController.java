@@ -25,9 +25,12 @@ import com.meta.ponkids.domain.cls.dto.ClassInqryModDto;
 import com.meta.ponkids.domain.cls.dto.ClassInqrySaveDto;
 import com.meta.ponkids.domain.cls.dto.ClassModDto;
 import com.meta.ponkids.domain.cls.dto.ClassWeekListDto;
+import com.meta.ponkids.domain.cls.service.ClassCategoryCl01Service;
+import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
 import com.meta.ponkids.domain.cls.service.ClassInqryService;
 import com.meta.ponkids.domain.cls.service.ClassService;
 import com.meta.ponkids.domain.cls.service.ClassWeekService;
+import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 import com.meta.ponkids.global.util.common.CommonUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -41,6 +44,9 @@ public class ClassInqryAdmController {
 	private final ClassService classService;
 	private final ClassWeekService classWeekService;
 	
+	private final ClassCategoryCl01Service classCategoryCl01Service;
+	private final ClassCategoryCl02Service classCategoryCl02Service;
+	private final CmmnCdDetailService cmmnCdDetailService;
     
     private final static String BASIC_VIEW_PATH = "admin/classInqry";
     private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
@@ -76,7 +82,10 @@ public class ClassInqryAdmController {
                 if ( classDto != null ) {
                     // 클래스가 존재할 경우 분류 (lv1,lv2..) 값 세팅을 미리 해줌
 //                	listDto.setCategory( createCategory(listDto,classDto) );
-                    listDto.setCategory( CommonUtils.createCategory( listDto.getCategory(), classDto) );
+                    listDto.setCategory( CommonUtils.createCategory( listDto.getCategory(), classDto, 
+                    		classCategoryCl01Service, 
+                    		classCategoryCl02Service,
+                    		cmmnCdDetailService ) );
                 }
             }
         } else {
@@ -84,7 +93,10 @@ public class ClassInqryAdmController {
         	//    listDto의 lv1,lv2 값이 있다면 체크하여 categoryDto 에 setting
         	
 //        	listDto.setCategory( createCategory(listDto, null ) );
-        	listDto.setCategory( CommonUtils.createCategory( listDto.getCategory(), null ) );
+        	listDto.setCategory( CommonUtils.createCategory( listDto.getCategory(), null,
+        			classCategoryCl01Service, 
+            		classCategoryCl02Service,
+            		cmmnCdDetailService) );
         	
         }
         

@@ -43,6 +43,7 @@ public class LctreAdmController {
     private final ClassCategoryCl01Service classCategoryCl01Service;
     private final ClassCategoryCl02Service classCategoryCl02Service;
     
+	
     private final CmmnCdDetailService cmmnCdDetailService;
     
     private final static String BASIC_VIEW_PATH = "admin/lctre";
@@ -78,7 +79,10 @@ public class LctreAdmController {
                 if ( classDto != null ) {
                     // 클래스가 존재할 경우 분류 (lv1,lv2..) 값 세팅을 미리 해줌
 //                	listDto.setCategory( createCategory(listDto,classDto) );
-                    listDto.setCategory( CommonUtils.createCategory( listDto.getCategory(), classDto) );
+                    listDto.setCategory( CommonUtils.createCategory( listDto.getCategory(), classDto,
+                    		classCategoryCl01Service, 
+                    		classCategoryCl02Service,
+                    		cmmnCdDetailService ) );
                 }
             }
         } else {
@@ -86,7 +90,10 @@ public class LctreAdmController {
         	//    listDto의 lv1,lv2 값이 있다면 체크하여 categoryDto 에 setting
         	
 //        	listDto.setCategory( createCategory(listDto, null ) );
-        	listDto.setCategory( CommonUtils.createCategory( listDto.getCategory(), null ) );
+        	listDto.setCategory( CommonUtils.createCategory( listDto.getCategory(), null,
+        			classCategoryCl01Service, 
+            		classCategoryCl02Service,
+            		cmmnCdDetailService ) );
         	
         }
         
