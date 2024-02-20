@@ -1,5 +1,6 @@
 package com.meta.ponkids.domain.cls.dto;
 
+import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.annotations.QueryProjection;
 
 import lombok.Data;
@@ -34,6 +35,8 @@ public class ClassInqryListDto {
 	private String	schOption;			// 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
 
 	private String	schCntn;			// 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!
+	
+	private CategoryDto category;		// 카테고리 검색 : 생성자에는 추가하지 않음!
 	
 	@QueryProjection
 	public ClassInqryListDto(Long classInqrySn, Long classSn, String step, Long parntsInqrySn, Long userSn, String userNm,

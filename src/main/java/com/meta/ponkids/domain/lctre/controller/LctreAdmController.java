@@ -12,6 +12,8 @@ import com.meta.ponkids.domain.lctre.service.LctreService;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailModDto;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 import com.meta.ponkids.global.common.dto.CategoryDto;
+import com.meta.ponkids.global.util.common.CommonUtils;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -75,14 +77,16 @@ public class LctreAdmController {
                 
                 if ( classDto != null ) {
                     // 클래스가 존재할 경우 분류 (lv1,lv2..) 값 세팅을 미리 해줌
-                    listDto.setCategory( createCategory(listDto,classDto) );
+//                	listDto.setCategory( createCategory(listDto,classDto) );
+                    listDto.setCategory( CommonUtils.createCategory( listDto.getCategory(), classDto) );
                 }
             }
         } else {
         	// 2. class 정보가 없을 경우 : listDto의 lv1,lv2만 체크하면 됨 (lv3 or lv4 가 만약 있다면 classDto 가 있는 url 로 redirect 되었을 테니, 이 경우는 생각하지 않아도 됨.)
         	//    listDto의 lv1,lv2 값이 있다면 체크하여 categoryDto 에 setting
         	
-        	listDto.setCategory( createCategory(listDto, null ) );
+//        	listDto.setCategory( createCategory(listDto, null ) );
+        	listDto.setCategory( CommonUtils.createCategory( listDto.getCategory(), null ) );
         	
         }
         
@@ -90,7 +94,8 @@ public class LctreAdmController {
         // 검색 분류 : [ 카테고리 / 커리큘럼 / 클래스 / 요일 ] 순서의 4단계:
         // 1. 카테고리, 커리큘럼 까지만 검색 (~lv2) 했을시, mapping 조건 : BASIC_PATH + "/{mcd}/list"
         // 2. 클래스 까지 검색했을 시 , : BASIC_PATH + "/{mcd}/{classSn}/list"
-        schConditionCombineForResetUrl( listDto, classSn, mcd, model );
+        CommonUtils.schConditionCombineForResetUrl( listDto.getCategory(), classSn, BASIC_PATH, mcd, model );
+//        schConditionCombineForResetUrl( listDto.getCategory(), classSn, mcd, model );
         
         
         // 카테고리 리스트 ( lv1 )
@@ -408,6 +413,8 @@ public class LctreAdmController {
     }
     
     // 조회조건에 따라 url mapping 변경 작업
+    // CommonUtils. 로 옮기면서 삭제 예정
+    // 충분한 테스트 후 추후 삭제 
     private void schConditionCombineForResetUrl( LctreListDto listDto, Long classSn, String mcd, Model model ) {
         
         CategoryDto schCategoryDto = listDto.getCategory();
@@ -512,6 +519,8 @@ public class LctreAdmController {
     
     
     // create Category 함수
+    // CommonUtils. 로 옮기면서 삭제 예정
+    // 충분한 테스트 후 추후 삭제 
     private CategoryDto createCategory( LctreListDto listDto, ClassModDto classDto ) {
     	// 1. class 정보가 있을 경우 : classDto 의 정보로 categoryhDto 의 lv1~lv3 까지 setting . ( lv1 : 카테고리, lv2 : 커리큘럼, lv3 : 클래스명 ) , lv4 는 listDto 에서 존재여부 체크하여 있으면 setting
     	// 2. class 정보가 없을 경우 : listDto의 lv1,lv2만 체크하면 됨 (lv3 or lv4 가 만약 있다면 classDto 가 있는 url 로 redirect 되었을 테니, 이 경우는 생각하지 않아도 됨.)
@@ -594,7 +603,6 @@ public class LctreAdmController {
             		
             	} else {
             		// 그 외
-            		
             		ClassCategoryCl01ModDto classCategoryCl01ModDto = classCategoryCl01Service.findById( listDto.getCategory().getLv1Sn() );
                     listDto.getCategory().setLv1Nm( classCategoryCl01ModDto.getClNm() );
                     categoryNm += classCategoryCl01ModDto.getClNm();
