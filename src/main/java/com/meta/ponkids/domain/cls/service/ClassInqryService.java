@@ -96,6 +96,12 @@ public class ClassInqryService {
         classInqryRepository.save( classInqry );
     	
     }
+    
+    public ClassInqryListDto findByIdAjax( ClassInqryListDto listDto ) {
+    	
+    	return classInqryRepository.getByClassInqrySn(listDto);
+    	
+    }
 
     @Transactional
     public void deleteAllById( Long pk ) {
