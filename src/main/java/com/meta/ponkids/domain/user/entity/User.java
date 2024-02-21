@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -120,7 +121,15 @@ public class User extends BaseTimeEntity {
     @ColumnDefault( "N" )                             // del_yn 컬럼에 공통으로 추가
     @Column( insertable = false, updatable = false )  // del_yn 컬럼에 공통으로 추가 (등록 시, 수정 시 해당컬럼 신경쓰지 않음.)
     private String delYn;                           // 삭제 여부
-    
-    
+
+    /* S: 비빌번호 찾기 -> 비밀번호 재설정*/
+    public void setPassword(String password) {
+
+        //BCryptPasswordEncoder 를 사용하여 비밀번호 해싱
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        this.password = passwordEncoder.encode(password);
+    }
+    /* E: 비밀번호 찾기 -> 비밀번호 재설정*/
+
 }
 

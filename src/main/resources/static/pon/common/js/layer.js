@@ -990,6 +990,8 @@ function findUseremail(){
             } else if ( result.flag == "S" ) {
                 // 존재하는 계정정보일 경우 인증번호 발송되었다고 알림
                 alert(result.msg);
+
+                // TODO : 3분 타이머 해야함
             }
         },
         error: function (){
@@ -1045,4 +1047,25 @@ function showPwSuccessScreen(userId) {
     showPopupLv2( 'findUserPw' );   // 비밀번호 재설정 팝업 호출
 
 }
-/* E : 비밀번호 찾기 - 인증번호 확인 */
+/* E : 성환: 비밀번호 찾기 - 인증번호 확인 */
+
+
+/* S: 성환: 비빌번호 변경 */
+function changePassword(userId,newPassword){
+    $.ajax({
+        type: POST,
+        url: "/changePassword",
+        data:{},
+        success: function (response){
+            //서버로부터 응답처리
+            alert("response")
+        },
+        error: function(error){
+            //오류처리
+            alert("비밀번호 변경 오류발생하였습니다.")
+        }
+    })
+
+}
+
+/* E: 성환: 비빌번호 변경 */

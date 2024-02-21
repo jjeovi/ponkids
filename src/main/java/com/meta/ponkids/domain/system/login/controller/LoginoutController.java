@@ -13,6 +13,7 @@ import com.meta.ponkids.domain.system.login.service.LoginService;
 import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -202,6 +203,7 @@ public class LoginoutController {
 
 		// 세션에 인증번호 저장
 		session.setAttribute("authCode", authNumber);
+		// TODO : 시작 시간 체크
 	}
 
 	// 랜덤한 인증번호 생성 메서드
@@ -222,7 +224,20 @@ public class LoginoutController {
 			// 인증번호 일치
 			result.put("flag", "S");
 			result.put("msg", "인증에 성공했습니다.");
+			// 검증 시간 체크
+			// TODO : 시작 시간 , 검증시간 비교하여 3분 이내인지 확인
+//			if () {
+//				// 3분 이내
+//			result.put("flag", "S");
+//			result.put("msg", "인증에 성공했습니다.");
 			// 인증 성공 후 필요한 작업 수행
+//			} else {
+//				// 3분 넘어가면..
+				// 시간초과 메시지..
+//			result.put("flag", "E");
+//			result.put("msg", "시간이 초과되었습니다.");
+//			}
+
 		} else {
 			// 인증번호 불일치
 			result.put("flag", "E");
@@ -231,7 +246,23 @@ public class LoginoutController {
 
 		return result;
 	}
+	/* E: 비밀번호 찾기 - 인증번호 검증 */
 
+	/* S : 비밀번호 변경 */
+	@PostMapping("/changePassword")
+	public ResponseEntity<String> changePassword(@RequestParam String userId,@RequestParam String newPassword){
+		// 비밀번호 변경 로직 수행
+		LoginDto loginDto = new LoginDto();
+		loginDto.setUserId(userId);
+		boolean success = loginService.changePassword(loginDto, newPassword);
+		if(success){
+			return ResponseEntity.ok("비밀번호 변경 되었습니다.");
+		}else{
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to change password");
+		}
+
+	}
+	/* E : 비밀번호 변경 */
 
 
 }
