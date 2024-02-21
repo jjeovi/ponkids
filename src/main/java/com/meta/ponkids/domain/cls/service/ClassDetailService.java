@@ -126,7 +126,7 @@ public class ClassDetailService {
     @Transactional
     public void deleteAllByClassSn(Long pk ) {
         
-    	classDetailRepository.deleteAllByClassSn(pk);
+    	classDetailRepository.deleteAllByClassSn( pk);
         
     }
 	

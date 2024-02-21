@@ -25,7 +25,7 @@ import javax.persistence.*;
         allocationSize = 1
 )
 @Where( clause = "del_yn = 'N'" ) // DEFAULT 로 WHERE DEL_YN = 'N' 문을 추가하여 조회
-@SQLDelete( sql = "UPDATE tb_cmmn_cd_detail SET del_yn ='Y', updt_dt = now() WHERE cd_detail_sn = ?" )
+@SQLDelete( sql = "UPDATE {h-schema}tb_cmmn_cd_detail SET del_yn ='Y', updt_dt = now() WHERE cd_detail_sn = ?" )
 // delelte 시 실행 (ex ) ~Repository.deleteById)
 @Table( name = "TB_CMMN_CD_DETAIL" )
 public class CmmnCdDetail extends BaseTimeEntity {

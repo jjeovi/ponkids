@@ -33,7 +33,7 @@ import javax.validation.constraints.NotNull;
         name = "SEQ_TB_USER_ROLE_SN",
         sequenceName = "SEQ_TB_USER_ROLE_SN", //매핑할 데이터베이스 시퀀스 이름
         initialValue = 1, allocationSize = 1 )
-@SQLDelete( sql = "UPDATE tb_user_role SET del_yn ='Y', updt_dt = now() WHERE user_sn = ?" )
+@SQLDelete( sql = "UPDATE {h-schema}tb_user_role SET del_yn ='Y', updt_dt = now() WHERE user_sn = ?" )
 @Where( clause = "del_yn = 'N'" )
 @Table( name = "tb_user_role" )
 public class UserRole extends BaseTimeEntity {

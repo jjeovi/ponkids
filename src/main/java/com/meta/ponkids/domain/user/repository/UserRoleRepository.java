@@ -21,7 +21,7 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
     UserRole findByUserSn( Long userSn );
     
     @Modifying( clearAutomatically = true )
-    @Query( value = "UPDATE tb_user_role "
+    @Query( value = "UPDATE {h-schema}tb_user_role "
             + "      SET del_yn = 'Y'"
             + "        , updt_dt = now() "
             + "    WHERE user_sn = :userSn", nativeQuery = true )

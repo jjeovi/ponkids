@@ -26,7 +26,7 @@ import javax.persistence.Table;
 )
 @Where( clause = "del_yn = 'N'") // DEFAULT 로 WHERE DEL_YN = 'N' 문을 추가하여 조회
 // TODO SQLDelete setting
-@SQLDelete(sql = "UPDATE tb_class_detail_optn SET del_yn ='Y', updt_dt = now() WHERE class_detail_optn_sn = ?") // delelte 시 실행 (ex ) ~Repository.deleteById)
+@SQLDelete(sql = "UPDATE {h-schema}tb_class_detail_optn SET del_yn ='Y', updt_dt = now() WHERE class_detail_optn_sn = ?") // delelte 시 실행 (ex ) ~Repository.deleteById)
 //TODO TB name setting
 @Table( name = "TB_class_detail_optn" )
 public class ClassDetailOptn extends BaseTimeEntity {

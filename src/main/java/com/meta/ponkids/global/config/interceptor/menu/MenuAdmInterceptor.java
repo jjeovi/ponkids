@@ -1,4 +1,4 @@
-package com.meta.ponkids.global.config.interceptor;
+package com.meta.ponkids.global.config.interceptor.menu;
 
 import com.meta.ponkids.domain.system.login.dto.LoginDto;
 import com.meta.ponkids.domain.system.menu.dto.MenuListDto;

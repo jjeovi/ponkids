@@ -39,7 +39,7 @@ import java.time.LocalDateTime;
         allocationSize = 1
 )
 @Where( clause = "del_yn = 'N'" ) // DEFAULT 로 WHERE DEL_YN = 'N' 문을 추가하여 조회
-@SQLDelete( sql = "UPDATE tb_user SET del_yn ='Y', updt_dt = now() WHERE user_sn = ?" )
+@SQLDelete( sql = "UPDATE {h-schema}tb_user SET del_yn ='Y', updt_dt = now() WHERE user_sn = ?" )
 // delelte 시 실행 (ex ) ~Repository.deleteById)
 @Table( name = "TB_USER" )
 public class User extends BaseTimeEntity {

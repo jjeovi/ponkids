@@ -16,7 +16,7 @@ public interface BbsRepository extends JpaRepository<Bbs, Long>, BbsRepositoryCu
     
     // 게시판 삭제
     @Modifying( clearAutomatically = true )
-    @Query( value = "UPDATE tb_bbs "
+    @Query( value = "UPDATE {h-schema}tb_bbs "
             + "      SET del_yn = 'Y'"
             + "        , updt_dt = now() "
             + "    WHERE bbs_sn = :bbsSn", nativeQuery = true )

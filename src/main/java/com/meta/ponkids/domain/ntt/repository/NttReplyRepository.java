@@ -24,7 +24,7 @@ public interface NttReplyRepository extends JpaRepository<NttReply, Long>, NttRe
     
     
     @Modifying( clearAutomatically = true )
-    @Query( value = "UPDATE tb_ntt_reply "
+    @Query( value = "UPDATE {h-schema}tb_ntt_reply "
             + "      SET del_yn = 'Y'"
             + "        , updt_dt = now() "
             + "    WHERE ntt_reply_sn = :nttReplySn", nativeQuery = true )

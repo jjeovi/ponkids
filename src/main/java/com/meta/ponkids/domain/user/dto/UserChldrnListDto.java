@@ -20,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @Data
 public class UserChldrnListDto {
+	
+	private Long chldrnSn;
     
     private Long userSn;
     
@@ -45,17 +47,18 @@ public class UserChldrnListDto {
     
     
     @QueryProjection
-    public UserChldrnListDto( Long userSn, Long userChldrnSeq, String chldrnNm, String chldrnGender, String chldrnBrdtDate, String chldrnEmail, String chldrnTelNo, Long atchFileSn, String registerId, String registerIp ) {
-        this.userSn = userSn;
-        this.userChldrnSeq = userChldrnSeq;
-        this.chldrnNm = chldrnNm;
-        this.chldrnGender = chldrnGender;
+    public UserChldrnListDto( Long chldrnSn,  Long userSn, Long userChldrnSeq, String chldrnNm, String chldrnGender, String chldrnBrdtDate, String chldrnEmail, String chldrnTelNo, Long atchFileSn, String registerId, String registerIp ) {
+    	this.chldrnSn 		= chldrnSn;
+        this.userSn 		= userSn;
+        this.userChldrnSeq 	= userChldrnSeq;
+        this.chldrnNm 		= chldrnNm;
+        this.chldrnGender 	= chldrnGender;
         this.chldrnBrdtDate = chldrnBrdtDate;
-        this.chldrnEmail = chldrnEmail;
-        this.chldrnTelNo = chldrnTelNo;
-        this.atchFileSn = atchFileSn;
-        this.registerId = registerId;
-        this.registerIp = registerIp;
+        this.chldrnEmail 	= chldrnEmail;
+        this.chldrnTelNo 	= chldrnTelNo;
+        this.atchFileSn 	= atchFileSn;
+        this.registerId 	= registerId;
+        this.registerIp 	= registerIp;
     }
     
     // DTO to Entity 메소드는 DTO 내부에서 생성.
