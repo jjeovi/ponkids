@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
     
+
     private final AuthAdmInterceptor	authAdmInterceptor;
     private final AuthInterceptor		authInterceptor;
     private final MenuAdmInterceptor	menuAdmInterceptor;

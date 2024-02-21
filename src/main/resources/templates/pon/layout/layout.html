@@ -249,6 +249,8 @@
 <div class="pop_dim_lv2" 	id="pop_dim_lv2"	style="display: none;"></div>
 <!-- popup id -->
 <!-- 아이디/비밀번호 찾기 -->			<div class="layer_findUser"					style="display: none;"	th:insert="pon/layer/layer_findUser.html"		/>
+<!-- 아이디 찾기 결과 findUserResult 가 더 어울릴듯 -->				<div class="layer_findUserInfo lv2"				style="display: none;"	th:insert="pon/layer/layer_findUserInfo.html"	/>
+<!-- 비밀번호 재설정 결과--> 		 	<div class="layer_findUserPw lv2"			style="display: none;"	th:insert="pon/layer/layer_findUserPw.html"	/>
 <form id="userInsertForm" name="userInsertForm" method="post" th:action="@{ / }"  enctype="multipart/form-data" onsubmit="return false;">
 <!-- 회원가입 -->						<div class="layer_join layer_joinForSns"	style="display: none;"	th:insert="pon/layer/layer_join.html"			/>
 <!-- 회원가입 - 자녀추가 -->			<div class="layer_addChldrn lv2"			style="display: none;"	th:insert="pon/layer/layer_addChldrn.html"		/>
@@ -259,6 +261,7 @@
 <!-- 이용약관 -->						<div class="layer_termsOfUse lv2"			style="display: none;"	th:insert="pon/layer/layer_termsOfUse.html"	/>
 <!-- 개인정보처리방침 -->				<div class="layer_personalInfo lv2"			style="display: none;"	th:insert="pon/layer/layer_personalInfo.html"	/>
 <!-- 문의하기 -->						<div class="layer_inquiry"					style="display: none;"	th:insert="pon/layer/layer_inquiry.html"		/>
+
 
 <form id="logoutForm" name="logoutForm" th:action="@{ /logout}" method="post">
 	

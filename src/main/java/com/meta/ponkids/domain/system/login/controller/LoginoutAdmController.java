@@ -76,8 +76,11 @@ public class LoginoutAdmController {
     	session.setAttribute("loginType", TYPE_ADMIN );
     	session.setAttribute("returnUrlAfterLoginFail", loginDto.getReturnUrlAfterLoginFail() );
     	result.put("flag", "S");
-    	
-    	
+//    	
+//    	// 비밀번호 암호화
+//    	loginDto.setPassword( passwordEncoder.encode( loginDto.getPassword() ) );
+        
+//        return loginService.userLogin( loginDto, request );
         return result;
         
     }

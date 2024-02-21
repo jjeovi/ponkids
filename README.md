@@ -120,8 +120,8 @@ order by backend_start asc;
 
 
 -- 2. 1에서 확인한 pid 값을 대입시켜 세션을 강제종료 ex : SELECT pg_terminate_backend('177283');  
--- 2. 1에서 확인한 pid 값 한번에 강제종료하기
 
+-- 2. 1에서 확인한 pid 값 한번에 강제종료하기
 
  --pid 값 한번에 강제종료하기   
  

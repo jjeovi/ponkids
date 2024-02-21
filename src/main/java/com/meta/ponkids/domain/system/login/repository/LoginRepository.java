@@ -14,4 +14,15 @@ public interface LoginRepository extends JpaRepository<User, Long>, LoginReposit
 	
 	Optional<User> findByUserId( String userId ) ;
 
+	// 아이디 찾기 - 회원이름, 휴대폰번호 조회
+	Optional<User> findTop1ByUserNmAndTelNoAndMngrYn( String userNm, String telNo, String mngrYn ) ;
+
+	//	비밀번호 찾기 - 회원이름, 이메일 조회
+	Optional<User> findByUserNmAndUserIdAndMngrYn( String userNm, String userId, String mngrYn ) ;
+
+
+
+
+
+
 }
