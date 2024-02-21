@@ -1,4 +1,4 @@
-package com.meta.ponkids.global.config.interceptor;
+package com.meta.ponkids.global.config.interceptor.message;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

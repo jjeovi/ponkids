@@ -1,4 +1,4 @@
-package com.meta.ponkids.global.config.interceptor;
+package com.meta.ponkids.global.config.interceptor.menu;
 
 import java.util.List;
 

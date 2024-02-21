@@ -29,7 +29,7 @@ import java.time.LocalDateTime;
 @DynamicInsert
 @DynamicUpdate
 @Where( clause = "del_yn = 'N'" )
-@SQLDelete( sql = "UPDATE tb_ntt SET del_yn ='Y', updt_dt = now() WHERE nttSn = ?" )
+@SQLDelete( sql = "UPDATE {h-schema}tb_ntt SET del_yn ='Y', updt_dt = now() WHERE nttSn = ?" )
 @Table( name = "TB_NTT" )
 public class Ntt extends BaseTimeEntity {
     

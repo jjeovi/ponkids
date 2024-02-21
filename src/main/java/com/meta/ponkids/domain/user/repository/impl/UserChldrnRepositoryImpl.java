@@ -34,6 +34,7 @@ public class UserChldrnRepositoryImpl implements UserChldrnRepositoryCustom {
         
         List<UserChldrnListDto> results = query
                 .select( new QUserChldrnListDto(
+                				userChldrn.chldrnSn,
                                 userChldrn.userSn,
                                 userChldrn.userChldrnSeq,
                                 userChldrn.chldrnNm,

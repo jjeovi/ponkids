@@ -24,7 +24,7 @@ public interface NttRepository extends JpaRepository<Ntt, Long>, NttRepositoryCu
     int getExistsNtt( Long bbsSn );
     
     @Modifying( clearAutomatically = true )
-    @Query( value = "UPDATE tb_ntt "
+    @Query( value = "UPDATE {h-schema}tb_ntt "
             + "      SET del_yn = 'Y'"
             + "        , updt_dt = now() "
             + "    WHERE ntt_sn = :nttSn", nativeQuery = true )

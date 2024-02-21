@@ -30,7 +30,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
-@SQLDelete( sql = "UPDATE tb_user_chldrn SET del_yn ='Y', updt_dt = now() WHERE user_sn = ?" )
+@SQLDelete( sql = "UPDATE {h-schema}tb_user_chldrn SET del_yn ='Y', updt_dt = now() WHERE user_sn = ?" )
 @Where( clause = "del_yn = 'N'" )
 @Table( name = "tb_user_chldrn" )
 public class UserChldrn extends BaseTimeEntity {

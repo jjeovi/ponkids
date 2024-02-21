@@ -30,7 +30,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Where( clause = "del_yn = 'N'" )    // DEFAULT 로 WHERE DEL_YN = 'N' 문을 추가하여 조회
-@SQLDelete( sql = "UPDATE tb_atch_file SET del_yn ='Y' WHERE atch_file_sn = ?" )
+@SQLDelete( sql = "UPDATE {h-schema}tb_atch_file SET del_yn ='Y' WHERE atch_file_sn = ?" )
 // delelte 시 실행 (ex ) ~Repository.deleteById)
 @SequenceGenerator(
         name = "SEQ_TB_ATCH_FILE_SN",

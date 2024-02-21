@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
-@SQLDelete( sql = "UPDATE tb_ntt_reply SET del_yn ='Y', updt_dt = now() WHERE nttReplySn = ?" )
+@SQLDelete( sql = "UPDATE {h-schema}tb_ntt_reply SET del_yn ='Y', updt_dt = now() WHERE nttReplySn = ?" )
 @Table( name = "TB_NTT_REPLY" )
 public class NttReply extends BaseTimeEntity {
     

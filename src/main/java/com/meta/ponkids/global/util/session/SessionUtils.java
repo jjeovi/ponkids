@@ -19,4 +19,22 @@ public class SessionUtils {
         
     }
     
+    
+    
+    public static LoginDto getAuthentication() {
+    	
+    	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	
+    	if ( principal == null || principal.equals("anonymousUser") ) { 
+    		return null;
+    	}
+    	
+    	LoginDto loginDto = ( LoginDto ) principal;
+    	
+    	return loginDto;
+    	
+    }
+    
+    
+    
 }

@@ -19,6 +19,14 @@ spring :
         url : jdbc:postgresql://db.jjeovi.gabia.io:5432/dbjjeovi
         username : jjeovi
         password : ponkids2023!
+        hikari:
+            maximumPoolSize : 2
+            #idle-timeout: 1000
+            #idleTimeout: 1000
+            #max-lifetime : 2000
+            #maxLifetime : 2000
+            #keepalive-time : 1000
+            #keepaliveTime : 1000
     jpa :
         properties :
             hibernate :

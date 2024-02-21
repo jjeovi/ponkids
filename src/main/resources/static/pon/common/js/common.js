@@ -34,15 +34,6 @@ $( function () {
 
 $( function () {
 
-    // 1. init main banner area
-    // initMainBanner();
-
-    // 2. init main class area
-    // initMainClass();
-
-    // 3. init main review area
-    // initMainReview();
-
 //    $( '.class_2dep > div' ).hide();
     $( '.class_1dep .tabnav a' ).click( function () {
         $( '.class_2dep > div' ).hide().filter( this.hash ).fadeIn();
@@ -50,7 +41,7 @@ $( function () {
         $( this ).addClass( 'active' );
         return false;
     } );
-
+    
     $( '.detail_day button' ).click( function () {
         $( '.detail_day button' ).removeClass( 'active' );
         $( this ).addClass( 'active' );
@@ -58,24 +49,32 @@ $( function () {
 	} );
 
 
-	$( '.detail_tab_content div' ).hide();
+//	$( '.detail_tab_content > div' ).hide();
 //    $( '.detail_tab_nav a' ).click( function () {
 //        $( '.detail_tab_content div' ).hide().filter( this.hash ).fadeIn();
 //        $( '.detail_tab_nav a' ).removeClass( 'active' );
 //        $( this ).addClass( 'active' );
 //        return false;
 //    } ).filter( ':eq(0)' ).click();
-    $( '.detail_tab_nav a' ).click( function () {
-        $( '.detail_tab_content div' ).hide().filter( this.hash ).fadeIn();
+    	$( '.detail_tab_nav a' ).click( function () {
+//        $( '.detail_tab_content div' ).hide().filter( this.hash ).fadeIn();
         $( '.detail_tab_nav a' ).removeClass( 'active' );
         $( this ).addClass( 'active' );
+        
+        // 모든 tab hide 한 뒤
+        $("[id^='detail_tab']").hide();
+        
+        // 해당 tab 만 show
+        var tabId = $( this ).data("tabId");
+        $("#" + tabId).show();
+        
         return false;
     } ).filter( ':eq(0)' ).click();
-    
-    
-        
-    
-    
+//    
+//    
+//        
+//    $(".button_added_area" ).hide();
+//    $(".button_added_area" ).show();
 //    		
 //		$("#join_countryList").change(function(){
 //			alert($(this).val());

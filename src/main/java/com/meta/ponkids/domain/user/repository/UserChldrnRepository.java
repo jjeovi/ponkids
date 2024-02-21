@@ -26,7 +26,7 @@ public interface UserChldrnRepository extends JpaRepository<UserChldrn, Long>, U
     
     
     @Modifying( clearAutomatically = true )
-    @Query( value = "UPDATE tb_user_chldrn "
+    @Query( value = "UPDATE {h-schema}tb_user_chldrn "
             + "      SET del_yn = 'Y'"
             + "        , updt_dt = now() "
             + "    WHERE user_sn = :userSn", nativeQuery = true )
