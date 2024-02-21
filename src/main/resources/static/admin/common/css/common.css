@@ -2860,6 +2860,12 @@ legend {
   min-height: 70px;
 }
 
+.form-group.manage {
+  min-height: 30px;
+  padding-bottom: 6px;
+  padding-top: 6px;
+}
+
 .validate {
   margin-top: 10px; }
 
@@ -5792,5 +5798,12 @@ input[type="checkbox"][disabled] + label{
   width: 120px;
   max-height:50px;
   object-fit : cover;
+}
+
+/* 문의 상세 조회 */
+.no-textarea {
+	border: none;
+    color: #73879c;
+    padding: 0;
 }
 

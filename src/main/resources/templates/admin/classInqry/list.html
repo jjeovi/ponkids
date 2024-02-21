@@ -30,21 +30,58 @@
 					// 모달 내용 초기화 작업
 					eraseDetailModalData();
 					
+					// 모달 내용 setting
+					setDetailModalData( ajaxResult.resultOne );
+					
 					// 답변 달기 모달 show
 					$( "#targetDetailModal" ).modal( 'show' );
-					
-					// 모달 내용 setting
-					setDetailModalData();
-					
 				}
 			}
 		} );
 	}
 	
-	
+	// 문의 상세 조회 모달창 ( 관리 클릭시) 내용 초기화 작업
 	function eraseDetailModalData(){
+		// detailData 지움
+		$(".detailData").text("");
+		$(".detailData").val("");
+	}
+	
+	
+	// 문의 상세 조회 모달창 내용 setting 작업
+	function setDetailModalData( result ) {
+		
+		// 객체 내부 키값들을 순회 ( 객체 생성자 Object 가 직접 가지고 있는 메서드 활용 Object.keys([list]) )
+		const keys = Object.keys(result) // ['name', 'weight', 'price', 'isFresh']
+		
+		// 순회한 키값 리스트를 재순회 
+		for ( let key of keys ) { 
+			// insertAnswerForm 폼안에 해당 key의 name이 존재하는치 체크
+			value =  result[key];
+			if ( key == 'inqryCn' ) {
+				key = key + 'Ori';
+			}
+			if ( $("[name='insertAnswerForm']").find("[name='" + key + "']").length ) {
+				
+				// insertAnswerForm 폼안의 name이 key인 값을 해당 value 값으로 대입 
+				$("[name='insertAnswerForm']").find("[name='" + key + "']").val( value );
+				$("[name='insertAnswerForm']").find("[name='" + key + "']").text( value );
+			}
+		}
+		
+		// crseNm (2차분류) 가 존재하지 않는다면 해당 부분 숨김처리 ( 중괄호 때문에 숨긴다. ) 
+		if ( $("[name='insertAnswerForm']").find("[name='crseNm']").text() == '' || 
+				$("[name='insertAnswerForm']").find("[name='crseNm']").text() == null )
+		{
+			$("[name='insertAnswerForm']").find("[name='depth2']").hide();
+		} else {
+			$("[name='insertAnswerForm']").find("[name='depth2']").show();
+		}
 		
 	}
+	
+	
+	
 
 </script>
 <!-- E : Javascript functions	-->
