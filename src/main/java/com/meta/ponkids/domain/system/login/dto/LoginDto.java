@@ -10,6 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import javax.persistence.Column;
@@ -231,4 +232,15 @@ public class LoginDto implements UserDetails , OAuth2User {
 
     }
 
+
+
+
+    /* S: 비빌번호 찾기 -> 비밀번호 재설정*/
+    public void setPassword(String password) {
+
+        //BCryptPasswordEncoder 를 사용하여 비밀번호 해싱
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        this.password = passwordEncoder.encode(password);
+    }
+    /* E: 비밀번호 찾기 -> 비밀번호 재설정*/
 }

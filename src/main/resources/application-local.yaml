@@ -19,6 +19,18 @@ spring :
         url : jdbc:postgresql://db.jjeovi.gabia.io:5432/dbjjeovi
         username : jjeovi
         password : ponkids2023!
+# db-connection-pool 개수를 로컬 작업에서는 2로 setting 한다. (너무 렉걸리면 늘리자. 대신 운영 포함 30이 최대 세션개수라서 개발자 인원수를 계산하여 적당히 늘려야 할 것이다. )
+# https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/html/application-properties.html#application-properties.data.spring.datasource.hikari
+# https://stackoverflow.com/questions/50554636/hikaricp-idle-connections-staying-in-connection-pool-as-active 참고
+# https://blog.naver.com/jjsair0412/222577321900
+        hikari:
+            maximumPoolSize: 2
+            #idle-timeout: 1000
+            #idleTimeout: 1000
+            #max-lifetime : 2000
+            #maxLifetime : 2000
+            #keepalive-time : 1000
+            #keepaliveTime : 1000
     jpa :
         properties :
             hibernate :

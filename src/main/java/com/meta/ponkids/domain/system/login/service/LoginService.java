@@ -4,12 +4,14 @@ import com.meta.ponkids.domain.system.login.dto.LoginDto;
 import com.meta.ponkids.domain.system.login.repository.LoginRepository;
 import com.meta.ponkids.domain.user.entity.User;
 
+import com.meta.ponkids.domain.user.repository.UserRepository;
 import com.meta.ponkids.global.util.message.MessageUtils;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +23,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -31,7 +34,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class LoginService implements UserDetailsService {
 
     private final LoginRepository loginRepository;
-    
+    private final BCryptPasswordEncoder passwordEncoder;
+
+
+
     @Override
     public UserDetails loadUserByUsername( String userId ) throws UsernameNotFoundException {
         
@@ -147,6 +153,7 @@ public class LoginService implements UserDetailsService {
 
 	/* S : 이메일로 인증번호 보내기 */
 	private JavaMailSender javaMailSender;
+	private final UserRepository userRepository;
 
 	public void sendEmail(String to, String subject, String text) {
 		SimpleMailMessage message = new SimpleMailMessage();
@@ -157,4 +164,33 @@ public class LoginService implements UserDetailsService {
 		javaMailSender.send(message);
 	}
 	/* E : 이메일로 인증번호 보내기 */
+
+	/* S : 비밀번호 변경 */
+	public boolean changePassword(LoginDto loginDto, String newPassword) {
+		// 사용자 정보 조회
+		User user = loginRepository.findByUserIdAndPassword(loginDto.getUserId(),loginDto.getPassword()).orElse(null);
+
+		// dto 매핑 : user entity to Dto
+
+		// dto에 newPassword 값 setting
+
+		// dto to entity
+
+		if (user != null) {
+			// 새로운 비밀번호를 해싱하여 설정
+			String hashedPassword = passwordEncoder.encode(newPassword);
+//			loginDto.setPassword();
+			user.setPassword(newPassword);
+
+			// 사용자 정보 업데이트
+			loginRepository.save(user);
+
+			return true;
+		}
+
+		return false;
+	}
+	/* E : 비밀번호 변경 */
+
+
 }
