@@ -184,7 +184,7 @@ private final PasswordEncoder passwordEncoder;  // 패스워드 인코딩
 		// newPassword 암호화 필요 (tpwhd1234!) -> 암호화..
 		// 새로운 비밀번호를 해싱하여 설정
 		newPassword = passwordEncoder.encode(newPassword);
-		userSaveDto.setPassword( passwordEncoder.encode( userSaveDto.getPassword() ) );
+//		userSaveDto.setPassword( passwordEncoder.encode( userSaveDto.getPassword() ) );
 
 
 		targetDto.setPassword(newPassword);
