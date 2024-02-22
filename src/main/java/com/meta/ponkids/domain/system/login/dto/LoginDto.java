@@ -1,8 +1,10 @@
 package com.meta.ponkids.domain.system.login.dto;
 
+import com.meta.ponkids.domain.system.banner.entity.Banner;
 import com.meta.ponkids.domain.user.entity.User;
 import com.meta.ponkids.global.util.date.DateUtils;
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -140,7 +142,8 @@ public class LoginDto implements UserDetails , OAuth2User {
         this.snsAppleCntnDt = snsAppleCntnDt;
         this.lastLoginDt = lastLoginDt;
     }
-    
+
+
     @Override
     public <A> A getAttribute( String name ) {
         return OAuth2User.super.getAttribute( name );
@@ -198,9 +201,10 @@ public class LoginDto implements UserDetails , OAuth2User {
     }
 
 
-    //entity to dto
+    // entity to dto
     public LoginDto toDto( User user ) {
         return LoginDto.builder()
+                .userSn( user.getUserSn() )
                 .userId( user.getUserId() )
                 .password( user.getPassword() )
                 .userNm( user.getUserNm() )
@@ -243,4 +247,40 @@ public class LoginDto implements UserDetails , OAuth2User {
         this.password = passwordEncoder.encode(password);
     }
     /* E: 비밀번호 찾기 -> 비밀번호 재설정*/
+
+
+    // Dto to Entity 메소드 생성
+    public User toEntity() {
+        return User.builder()
+                .userSn( userSn )
+                .userId( userId )
+                .password( password )
+                .userNm( userNm )
+                .gender( gender )
+                .brdtDate( brdtDate )
+                .telNo( telNo )
+                .resideArea( resideArea )
+                .zip( zip )
+                .rdnmAdr( rdnmAdr )
+                .detailAdr( detailAdr )
+                .atchFileSn( atchFileSn )
+                .mngrYn( mngrYn )
+                .mngrConfmYn( mngrConfmYn )
+                .confmerId( confmerId )
+                .confmerIp( confmerIp )
+                .snsKakaoCntnYn( snsKakaoCntnYn )
+//                .snsKakaoCntnDt(LocalDateTime.parse(snsKakaoCntnDt))
+                .snsGoogleCntnYn( snsGoogleCntnYn )
+//                .snsGoogleCntnDt(LocalDateTime.parse(snsGoogleCntnDt))
+                .snsNaverCntnYn( snsNaverCntnYn )
+//                .snsNaverCntnDt(LocalDateTime.parse(snsNaverCntnDt))
+                .snsFacebookCntnYn( snsFacebookCntnYn )
+//                .snsFacebookCntnDt(LocalDateTime.parse(snsFacebookCntnDt))
+                .snsAppleCntnYn( snsAppleCntnYn )
+//                .snsAppleCntnDt(LocalDateTime.parse(snsAppleCntnDt))
+//                .lastLoginDt(LocalDateTime.parse(lastLoginDt))
+                .build();
+
+    }
+
 }

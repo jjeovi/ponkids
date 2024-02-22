@@ -24,6 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -34,8 +35,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class LoginService implements UserDetailsService {
 
     private final LoginRepository loginRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
-
+//    private final BCryptPasswordEncoder passwordEncoder;
+private final PasswordEncoder passwordEncoder;  // 패스워드 인코딩
 
 
     @Override
@@ -166,23 +167,39 @@ public class LoginService implements UserDetailsService {
 	/* E : 이메일로 인증번호 보내기 */
 
 	/* S : 비밀번호 변경 */
-	public boolean changePassword(LoginDto loginDto, String newPassword) {
-		// 사용자 정보 조회
-		User user = loginRepository.findByUserIdAndPassword(loginDto.getUserId(),loginDto.getPassword()).orElse(null);
+	public boolean changePassword( LoginDto loginDto, String newPassword  ) {
 
-		// dto 매핑 : user entity to Dto
+		// 1. 사용자 정보 조회 -> entity 가져온다.
+//		User user = loginRepository.findByUserIdAndPassword( loginDto.getUserId(),loginDto.getPassword()  ).orElse(null);
+		// beforeUser
+		User user = loginRepository.findByUserId( loginDto.getUserId() ).orElse(null);
+		System.out.println("beforeUser ::: " + user);
 
-		// dto에 newPassword 값 setting
+		// 2. ( entity to dto ) dto 매핑 : user entity to Dto
+		LoginDto targetDto = new LoginDto();	// 껍데기만 생성
+		targetDto = targetDto.toDto(user);		// targetDto 에 값들 ( userId, ... ) 이 setting (주입)
 
-		// dto to entity
+		// 3. ( 변경할 내용 수정작업 (dto) )
+		// todo dto에 newPassword 값 setting
+		// newPassword 암호화 필요 (tpwhd1234!) -> 암호화..
+		// 새로운 비밀번호를 해싱하여 설정
+		newPassword = passwordEncoder.encode(newPassword);
+//		userSaveDto.setPassword( passwordEncoder.encode( userSaveDto.getPassword() ) );
 
+
+		targetDto.setPassword(newPassword);
+
+		// 4. dto to entity
+		// todo dto to entity
+		// afterUser
+		user = targetDto.toEntity();
+		System.out.println("afterUser ::: " + user);
+
+		// 5. save (update)
 		if (user != null) {
-			// 새로운 비밀번호를 해싱하여 설정
-			String hashedPassword = passwordEncoder.encode(newPassword);
-//			loginDto.setPassword();
-			user.setPassword(newPassword);
 
 			// 사용자 정보 업데이트
+			// beforeUser 와 afterUser의 차이는, password뿐... 나머지는 일치해야함...
 			loginRepository.save(user);
 
 			return true;
