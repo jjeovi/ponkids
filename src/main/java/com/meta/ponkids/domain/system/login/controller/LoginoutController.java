@@ -250,10 +250,12 @@ public class LoginoutController {
 
 	/* S : 비밀번호 변경 */
 	@PostMapping("/changePassword")
-	public ResponseEntity<String> changePassword(@RequestParam String userId,@RequestParam String newPassword){
+	public ResponseEntity<String> changePassword(@RequestParam String newPassword,@RequestParam String userId){
+
 		// 비밀번호 변경 로직 수행
-		LoginDto loginDto = new LoginDto();
-		loginDto.setUserId(userId);
+		LoginDto loginDto = new LoginDto();	// loginDto 생성 -> loginDto { } 라는 객체가 생성.. -> 껍데기 : 현재는 아무런 value 가 setting 이 되어있지 않음.
+ 		loginDto.setUserId(userId);	// loginDto 에 userId 주입
+
 		boolean success = loginService.changePassword(loginDto, newPassword);
 		if(success){
 			return ResponseEntity.ok("비밀번호 변경 되었습니다.");

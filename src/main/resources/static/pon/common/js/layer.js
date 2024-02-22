@@ -1051,11 +1051,49 @@ function showPwSuccessScreen(userId) {
 
 
 /* S: 성환: 비빌번호 변경 */
-function changePassword(userId,newPassword){
+// function changePassword( userId,newPassword ){
+function changePassword( ){
+
+    // 1. 비밀번호변경, 비밀번호변경확인 변수 가져오기
+    var new_Pw = $("#new_Pw").val();
+    var new_check_Pw = $("#new_check_Pw").val();
+    var findpwemail = $("#findPw_email").val();
+
+    // 2-1. 두 값이 같은지 비교하기
+    if ( !checkSameValue(new_Pw, new_check_Pw) ) {
+        // 두 값이 같지 않을 때
+        alert( "두 값이 같지 않습니다.. 확인해주세요...");
+        return false;
+    }
+    // else {
+    //     // continue;.
+    // }
+
+    // 2-2. 유효성 체크..
+    // TODO 유효성 체크해주세요.
+    // if ( !validCheckPw( new_Pw ) ) {
+    //     // 유효성이 맞지 않을떄..
+    //     alert( "유효성 이 맞지 않습니다.. [영문자, 숫자, 기호 혼합 8자 이상] 을 지켜주세요...");
+    //     return false;
+    // }
+
+    // 3. 아이디와 비밀번호변경, 비밀번호변경확인을 ajax로 보내기
+    // 보낼 변수 : 비밀번호, 아이디,  + ( csrf header 에 포함시켜 보내기.. )
+
+    /* S : 보낼 데이터 setting */
+    var data = {    newPassword : new_Pw,
+                    userId : findpwemail };
+
+    var csrfToken = $("meta[name='_csrf']").attr("content");
+    var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+    var headers = {};
+    headers[csrfHeader] = csrfToken;
+    /* E : 보낼 데이터 setting */
     $.ajax({
-        type: POST,
+        type: "POST",
         url: "/changePassword",
-        data:{},
+        data: data,
+        headers: headers,
         success: function (response){
             //서버로부터 응답처리
             alert("response")
@@ -1065,6 +1103,20 @@ function changePassword(userId,newPassword){
             alert("비밀번호 변경 오류발생하였습니다.")
         }
     })
+
+
+
+
+
+}
+
+function checkSameValue( value1, value2 ){
+    // value1, value2 같은지 비교
+    if ( value1 == value2 ) {
+        return true;
+    } else {
+        return false;
+    }
 
 }
 
