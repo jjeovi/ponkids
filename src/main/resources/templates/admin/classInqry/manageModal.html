@@ -1,5 +1,8 @@
-<form id="insertAnswerForm" name="insertAnswerForm" method="post" th:action="@{ {basicPath}/{mcd}/{classSn}/insertAnswer ( basicPath = ${basicPath}, mcd = ${mcd}, classSn = ${classSn} ) }" >
-<input type="hidden" class="detailData" name="classInqrySn" />
+<form id="insertAnswerForm" name="insertAnswerForm" method="post" th:action="@{ {basicPath}/{mcd}/insertReply ( basicPath = ${basicPath}, mcd = ${mcd} ) }" >
+<input type="hidden" class="detailData" name="parntsInqrySn"	/>
+<input type="hidden" class="detailData" name="openYn"			/>
+<input type="hidden" class="detailData" name="classSn"			/>
+<input type="hidden" name="step" value="2"/>
 <!-- TODO 자녀 프로필 이미지 추가 작업 -->
 <div class="field item form-group manage">
 	<label class="col-form-label col-md-2 col-sm-3 label-align">
@@ -24,7 +27,7 @@
 		문의제목 
 	</label>
 	<div class="col-form-label col-md-6 col-sm-6">
-		[<span class="detailData" name="openYnNm"></span>] <span class="detailData" name="inqrySj" ></span>
+		[<span class="detailData" name="openYnNm"></span>] <span class="detailData" name="parntsInqrySj" ></span>
 	</div>
 </div>
 
@@ -51,7 +54,7 @@
 		문의내용 
 	</label>
 	<div class="col-form-label col-md-10 col-sm-6">
-		<textarea class="detailData no-textarea" name="inqryCnOri" rows="6" readonly="readonly"></textarea>
+		<textarea class="detailData no-textarea" name="parntsInqryCn" rows="6" readonly="readonly"></textarea>
 	</div>
 </div>
 

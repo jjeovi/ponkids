@@ -33,8 +33,10 @@ import com.meta.ponkids.domain.cls.service.ClassInqryService;
 import com.meta.ponkids.domain.cls.service.ClassService;
 import com.meta.ponkids.domain.cls.service.ClassWeekService;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
+import com.meta.ponkids.domain.system.login.dto.LoginDto;
 import com.meta.ponkids.domain.system.menu.dto.MenuListDto;
 import com.meta.ponkids.global.util.common.CommonUtils;
+import com.meta.ponkids.global.util.session.SessionUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -143,8 +145,8 @@ public class ClassInqryAdmController {
 	}
 	
 	@Transactional
-	@PostMapping( BASIC_PATH + "/{mcd}/insert" )
-	public String insert (
+	@PostMapping( BASIC_PATH + "/{mcd}/insertReply" )
+	public String insertReply (
 			@ModelAttribute ClassInqrySaveDto saveDto,
 //			@ModelAttribute ClassInqryRoleSaveDto classInqryRoleSaveDto,  // required false
 			@PathVariable String mcd,
@@ -152,6 +154,21 @@ public class ClassInqryAdmController {
 			Model model ) throws IOException {
 		
 		// S : 필요한 객체 setting
+		// 부모targetDto 조회
+		ClassInqryModDto targetParntsDto = classInqryService.findById( saveDto.getParntsInqrySn() );
+		
+		// 부모targetDto를 기준으로 classInqrySaveDto 에 필요한 값 setting
+		// - classSn setting
+		// - inqrySj setting
+		// - openYn setting
+		saveDto.setClassSn( targetParntsDto.getClassSn() );
+		saveDto.setInqrySj( "[RE] " + targetParntsDto.getInqrySj() );	// 제목은 [RE] + 원글
+		saveDto.setOpenYn( targetParntsDto.getOpenYn() );				// 
+		saveDto.setStep("2");											// 답변 : 2로 setting 
+		
+		// - userSn setting
+		LoginDto loginDto = SessionUtils.getAuthentication();
+		saveDto.setUserSn( loginDto.getUserSn() );
 		
 		// E : 필요한 객체 setting
 		
@@ -247,7 +264,7 @@ public class ClassInqryAdmController {
         // 해당 권한에 맞는 menuList 가져온 뒤 drawMenuTree 로 메뉴를 그린다.
         Map<String, Object> result = new HashMap<String, Object>();
         
-        result.put( "resultOne", classInqryService.findByIdAjax( listDto ) );
+        result.put( "resultOne", classInqryService.findById( listDto ) );
         
         return result;
     }

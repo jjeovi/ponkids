@@ -5,7 +5,7 @@ import static com.meta.ponkids.domain.cls.entity.QClass.class$;
 import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl01.classCategoryCl01;
 import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategoryCl02;
 import static com.meta.ponkids.domain.cls.entity.QClassInqry.classInqry;
-import static com.meta.ponkids.domain.lctre.entity.QLctre.lctre;
+import static com.meta.ponkids.domain.ntt.entity.QNttReply.nttReply;
 import static com.meta.ponkids.domain.user.entity.QUser.user;
 
 import java.util.List;
@@ -18,11 +18,15 @@ import org.springframework.util.StringUtils;
 
 import com.meta.ponkids.domain.cls.dto.ClassInqryListDto;
 import com.meta.ponkids.domain.cls.dto.QClassInqryListDto;
+import com.meta.ponkids.domain.cls.entity.QClassInqry;
 import com.meta.ponkids.domain.cls.repository.custom.ClassInqryRepositoryCustom;
+import com.meta.ponkids.domain.ntt.entity.QNttReply;
 import com.meta.ponkids.global.common.dto.CategoryDto;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -33,6 +37,10 @@ import lombok.RequiredArgsConstructor;
 public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
 	
 	private final JPAQueryFactory query;
+	
+	
+	// 답변관련컬럼 조회용 객체 
+	QClassInqry classInqryReply = new QClassInqry( "classInqryReply" );
 	
 	@Override
 	public Page<ClassInqryListDto> getList( ClassInqryListDto listDto, Pageable pageable ) {
@@ -51,6 +59,18 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
                 		classCategoryCl01.clNm.as( "ctgryNm" ),
                 		classCategoryCl02.clNm.as( "crseNm" ),
                 		classInqry.step,
+//                		new CaseBuilder()
+//                			.when( ExpressionUtils.as( JPAExpressions.select( classInqryReply.count() )
+//                                    .from( classInqryReply )
+//                                    .where( classInqryReply.parntsInqrySn.eq( classInqry.classInqrySn ) ).gt(0), "nttReplyCnt" ) ).then
+                		new CaseBuilder()
+            			.when( classInqry.openYn.eq("Y") ).then("공개")
+            			.when( classInqry.openYn.eq("N") ).then("비공개")
+            			.otherwise("")
+            			.as("replyYn"),
+            			ExpressionUtils.as( JPAExpressions.select( classInqryReply.count() )
+                                .from( classInqryReply )
+                                .where( classInqryReply.parntsInqrySn.eq( classInqry.classInqrySn ) ), "replyCnt" ),
                 		classInqry.parntsInqrySn,
                 		classInqry.userSn,
                 		user.userNm,
@@ -100,7 +120,8 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
 						eqCateLv3( listDto.getCategory() ), // 분류 조회 : lv3Sn 값 존재시 검색
 						eqOption( listDto.getSchOption(), listDto.getSchCntn() ),
 						eqOpenYn( listDto.getOpenYn() ),
-						eqClassSn( listDto.getClassSn() )
+						eqClassSn( listDto.getClassSn() ),
+						classInqry.parntsInqrySn.isNull()
 				)
                 .orderBy( classInqry.classInqrySn.desc())
                 .offset( pageable.getOffset() )
@@ -124,7 +145,7 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
 		
 		// TODO 구현
 		// (1) '결과list' 와 (2)'count' 를 2번에 걸쳐 조회
-		
+		boolean passed = true;
 		// TODO
 		// (1) 결과list (results).
 		ClassInqryListDto results = query
@@ -136,6 +157,14 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
                 		classCategoryCl01.clNm.as( "ctgryNm" ),
                 		classCategoryCl02.clNm.as( "crseNm" ),
 						classInqry.step,
+						new CaseBuilder()
+							.when( ExpressionUtils.eqConst( Expressions.constant(passed), true) ).then("1")
+	            			.when( classInqry.openYn.eq("N") ).then("비공개")
+	            			.otherwise("")
+	            			.as("replyYn"),
+            			ExpressionUtils.as( JPAExpressions.select( classInqryReply.count() )
+                                .from( classInqryReply )
+                                .where( classInqryReply.parntsInqrySn.eq( classInqry.classInqrySn ) ), "replyCnt" ),
 						classInqry.parntsInqrySn,
 						classInqry.userSn,
 						user.userNm,
@@ -229,6 +258,7 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
     	return pk != null ? classInqry.classInqrySn.eq(pk) : null;
     }
 	
+    
     private BooleanExpression eqOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨
         if ( StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn ) ) {

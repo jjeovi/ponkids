@@ -97,7 +97,7 @@ public class ClassInqryService {
     	
     }
     
-    public ClassInqryListDto findByIdAjax( ClassInqryListDto listDto ) {
+    public ClassInqryListDto findById( ClassInqryListDto listDto ) {
     	
     	return classInqryRepository.getByClassInqrySn(listDto);
     	

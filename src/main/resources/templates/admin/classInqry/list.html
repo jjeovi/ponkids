@@ -40,43 +40,63 @@
 		} );
 	}
 	
-	// 문의 상세 조회 모달창 ( 관리 클릭시) 내용 초기화 작업
-	function eraseDetailModalData(){
-		// detailData 지움
+	// 문의 상세 조회 모달창 ( 관리 클릭시 ) 내용 초기화 작업
+	function eraseDetailModalData() {
+		// detailData class 전부 초기화작업
 		$(".detailData").text("");
 		$(".detailData").val("");
 	}
-	
 	
 	// 문의 상세 조회 모달창 내용 setting 작업
 	function setDetailModalData( result ) {
 		
 		// 객체 내부 키값들을 순회 ( 객체 생성자 Object 가 직접 가지고 있는 메서드 활용 Object.keys([list]) )
-		const keys = Object.keys(result) // ['name', 'weight', 'price', 'isFresh']
+		const keys = Object.keys(result)
 		
 		// 순회한 키값 리스트를 재순회 
 		for ( let key of keys ) { 
 			// insertAnswerForm 폼안에 해당 key의 name이 존재하는치 체크
 			value =  result[key];
-			if ( key == 'inqryCn' ) {
-				key = key + 'Ori';
-			}
+			
+			// data column 수정 
+			if		( key == 'inqryCn'		)	key = 'parntsInqryCn'; // inqryCn 		-> parntsInqryCn 에 값 대입
+			else if	( key == 'inqrySj'		)	key = 'parntsInqrySj'; // inqrySj 		-> parntsInqrySj 에 값 대입
+			else if	( key == 'classInqrySn' )	key = 'parntsInqrySn'; // classInqrySn 	-> parntsInqrySn 에 값 대입
+			
+			
 			if ( $("[name='insertAnswerForm']").find("[name='" + key + "']").length ) {
 				
 				// insertAnswerForm 폼안의 name이 key인 값을 해당 value 값으로 대입 
 				$("[name='insertAnswerForm']").find("[name='" + key + "']").val( value );
 				$("[name='insertAnswerForm']").find("[name='" + key + "']").text( value );
+				
 			}
 		}
 		
 		// crseNm (2차분류) 가 존재하지 않는다면 해당 부분 숨김처리 ( 중괄호 때문에 숨긴다. ) 
-		if ( $("[name='insertAnswerForm']").find("[name='crseNm']").text() == '' || 
+		if (	$("[name='insertAnswerForm']").find("[name='crseNm']").text() == '' || 
 				$("[name='insertAnswerForm']").find("[name='crseNm']").text() == null )
 		{
 			$("[name='insertAnswerForm']").find("[name='depth2']").hide();
 		} else {
 			$("[name='insertAnswerForm']").find("[name='depth2']").show();
 		}
+		
+	}
+	
+	function insertClassInqryAnswer() {
+		
+		// 유효성 체크
+		// 답변 내용 입력 길이 체크
+		var inqryCn =  $("[name='insertAnswerForm']").find("[name='inqryCn']").val();
+		if ( inqryCn.length < 10 ) {
+			alert("답변내용을 10자이상 입력해주세요.");
+			return false;
+		}
+		// 유효성 체크 종료
+		
+		// form submit
+		$("#insertAnswerForm").submit();
 		
 	}
 	
@@ -301,8 +321,7 @@
 					<button type="button" class="btn btn-white"
 							data-dismiss="modal">닫기
 					</button>
-					<button type="button" class="btn btn-purple"
-							id="addChldrnBtn" onclick="addChldrn()">답변등록
+					<button type="submit" class="btn btn-purple"  onclick="insertClassInqryAnswer()">답변등록
 					</button>
 				</div>
 			</div>

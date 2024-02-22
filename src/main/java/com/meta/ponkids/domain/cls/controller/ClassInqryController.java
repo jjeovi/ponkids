@@ -114,6 +114,9 @@ public class ClassInqryController {
 		// 로그인 userSn 값 setting 
 		saveDto.setUserSn( loginDto.getUserSn() );
     	
+		// step은 1로 setting
+		saveDto.setStep("1");		// 문의글은 1, 답변은 2
+		
     	// E : 필요한 객체 setting
         
         // 등록 처리
