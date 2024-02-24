@@ -24,6 +24,8 @@ public class ClassInqryListDto {
 	
 	private String	replyYn;			// 답변 여부
 	
+	private String	replyYnNm;			// 답변 여부 명칭
+	
 	private Long	replyCnt;			// 답변 개수
 	
 	private Long	parntsInqrySn;		// 부모 문의 일련번호
@@ -55,7 +57,7 @@ public class ClassInqryListDto {
 	private CategoryDto category;		// 카테고리 검색 : 생성자에는 추가하지 않음!
 	
 	@QueryProjection
-	public ClassInqryListDto(Long classInqrySn, Long classSn, String classSj, String ctgryNm, String crseNm, String step, String replyYn, Long replyCnt, Long parntsInqrySn, Long userSn, String userNm, String userId,
+	public ClassInqryListDto(Long classInqrySn, Long classSn, String classSj, String ctgryNm, String crseNm, String step, String replyYn, String replyYnNm, Long replyCnt, Long parntsInqrySn, Long userSn, String userNm, String userId,
 			String inqrySj, String inqryCn, String openYn, String openYnNm, String registerId, String regDt, String regFullDt) {
 		this.classInqrySn = classInqrySn;
 		this.classSn = classSn;
@@ -64,6 +66,7 @@ public class ClassInqryListDto {
 		this.crseNm = crseNm;
 		this.step = step;
 		this.replyYn = replyYn;
+		this.replyYnNm = replyYnNm;
 		this.replyCnt = replyCnt;
 		this.parntsInqrySn = parntsInqrySn;
 		this.userSn = userSn;

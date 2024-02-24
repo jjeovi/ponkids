@@ -207,6 +207,11 @@
 								<option value="Y" th:selected=" ${searchDTO.openYn} == 'Y' ">공개</option>
 								<option value="N" th:selected=" ${searchDTO.openYn} == 'N' ">비공개</option>
 							</select>
+							<select class="form-control" name="replyYn">
+								<option value="">답변여부</option>
+								<option value="Y" th:selected=" ${searchDTO.replyYn} == 'Y' ">답변완료</option>
+								<option value="N" th:selected=" ${searchDTO.replyYn} == 'N' ">답변대기</option>
+							</select>
 							<div class="vl ml_5p"></div>
 							<select class="form-control ml_5p w_55r" name="schOption">
 								<option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">문의 제목</option>
@@ -226,10 +231,9 @@
 							<colgroup>
 								<col width="60px;">
 								<col width="11%;">
-								<col width="auto;">
+								<col width="10%;">
 								<col width="90px;">
 								<col width="auto;">
-								<col width="100px;">
 								<col width="100px;">
 								<col width="200px;">
 								<col width="130px;">
@@ -241,8 +245,7 @@
 									<th>클래스</th>
 									<th>공개여부</th>
 									<th>문의 제목</th>
-									<th>문의자명</th>
-									<th>문의자ID</th>
+									<th>문의자</th>
 									<th>등록일시</th>
 									<th>관리</th>
 								</tr>
@@ -253,9 +256,12 @@
 									<td> [[${data.ctgryNm}]] <th:block th:if="${data.crseNm != null && data.crseNm != '' }"><br/>[ [[${data.crseNm}]] ] </th:block> </td>
 									<td th:text="${data.classSj}"></td>
 									<td th:text="${data.openYnNm}"></td>
-									<td th:text="${data.inqrySj}"></td>
-									<td th:text="${data.userNm}"></td>
-									<td th:text="${data.userId}"></td>
+									<td class="alignLeft">
+										[ [[${data.replyYnNm}]] <th:block th:if="${data.replyYn eq 'Y'}">([[${data.replyCnt}]])</th:block> ] [[${data.inqrySj}]]
+									</td>
+									<td>
+										[[${data.userId}]]<br />[[${data.userNm}]]
+									</td>
 									<td th:text="${data.regFullDt}"></td>
 									<td>
 										<button th:onclick="|manageClassInqry('${data.classInqrySn}');|" type="button" class="btn btn-primary btn-xs">

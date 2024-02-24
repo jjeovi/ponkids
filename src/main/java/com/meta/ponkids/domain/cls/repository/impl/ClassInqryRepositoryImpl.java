@@ -40,7 +40,7 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
 	
 	
 	// 답변관련컬럼 조회용 객체 
-	QClassInqry classInqryReply = new QClassInqry( "classInqryReply" );
+	QClassInqry classInqry_Reply = new QClassInqry( "classInqry_Reply" );
 	
 	@Override
 	public Page<ClassInqryListDto> getList( ClassInqryListDto listDto, Pageable pageable ) {
@@ -60,17 +60,28 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
                 		classCategoryCl02.clNm.as( "crseNm" ),
                 		classInqry.step,
 //                		new CaseBuilder()
-//                			.when( ExpressionUtils.as( JPAExpressions.select( classInqryReply.count() )
-//                                    .from( classInqryReply )
-//                                    .where( classInqryReply.parntsInqrySn.eq( classInqry.classInqrySn ) ).gt(0), "nttReplyCnt" ) ).then
+//                			.when( ExpressionUtils.as( JPAExpressions.select( classInqry_Reply.count() )
+//                                    .from( classInqry_Reply )
+//                                    .where( classInqry_Reply.parntsInqrySn.eq( classInqry.classInqrySn ) ).gt(0), "nttReplyCnt" ) ).then
                 		new CaseBuilder()
-            			.when( classInqry.openYn.eq("Y") ).then("공개")
-            			.when( classInqry.openYn.eq("N") ).then("비공개")
-            			.otherwise("")
+                		.when(ExpressionUtils.isNull( JPAExpressions
+                											.select( classInqry_Reply.classInqrySn.sum() )
+                											.from( classInqry_Reply )
+                											.where( classInqry_Reply.parntsInqrySn.eq( classInqry.classInqrySn )) 
+                									)).then("N")
+            			.otherwise("Y")
             			.as("replyYn"),
-            			ExpressionUtils.as( JPAExpressions.select( classInqryReply.count() )
-                                .from( classInqryReply )
-                                .where( classInqryReply.parntsInqrySn.eq( classInqry.classInqrySn ) ), "replyCnt" ),
+            			new CaseBuilder()
+            			.when(ExpressionUtils.isNull( JPAExpressions
+            					.select( classInqry_Reply.classInqrySn.sum() )
+            					.from( classInqry_Reply )
+            					.where( classInqry_Reply.parntsInqrySn.eq( classInqry.classInqrySn )) 
+            					)).then("답변대기")
+            			.otherwise("답변완료")
+            			.as("replyYnNm"),
+            			ExpressionUtils.as( JPAExpressions.select( classInqry_Reply.count() )
+                                .from( classInqry_Reply )
+                                .where( classInqry_Reply.parntsInqrySn.eq( classInqry.classInqrySn ) ), "replyCnt" ),
                 		classInqry.parntsInqrySn,
                 		classInqry.userSn,
                 		user.userNm,
@@ -120,8 +131,10 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
 						eqCateLv3( listDto.getCategory() ), // 분류 조회 : lv3Sn 값 존재시 검색
 						eqOption( listDto.getSchOption(), listDto.getSchCntn() ),
 						eqOpenYn( listDto.getOpenYn() ),
+						eqReplyYn( listDto.getReplyYn() ),
 						eqClassSn( listDto.getClassSn() ),
-						classInqry.parntsInqrySn.isNull()
+						classInqry.parntsInqrySn.isNull(),
+						classInqry.step.eq("1")
 				)
                 .orderBy( classInqry.classInqrySn.desc())
                 .offset( pageable.getOffset() )
@@ -158,13 +171,24 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
                 		classCategoryCl02.clNm.as( "crseNm" ),
 						classInqry.step,
 						new CaseBuilder()
-							.when( ExpressionUtils.eqConst( Expressions.constant(passed), true) ).then("1")
-	            			.when( classInqry.openYn.eq("N") ).then("비공개")
-	            			.otherwise("")
-	            			.as("replyYn"),
-            			ExpressionUtils.as( JPAExpressions.select( classInqryReply.count() )
-                                .from( classInqryReply )
-                                .where( classInqryReply.parntsInqrySn.eq( classInqry.classInqrySn ) ), "replyCnt" ),
+                		.when(ExpressionUtils.isNull( JPAExpressions
+                											.select( classInqry_Reply.classInqrySn.sum() )
+                											.from( classInqry_Reply )
+                											.where( classInqry_Reply.parntsInqrySn.eq( classInqry.classInqrySn )) 
+                									)).then("N")
+            			.otherwise("Y")
+            			.as("replyYn"),
+            			new CaseBuilder()
+            			.when(ExpressionUtils.isNull( JPAExpressions
+            					.select( classInqry_Reply.classInqrySn.sum() )
+            					.from( classInqry_Reply )
+            					.where( classInqry_Reply.parntsInqrySn.eq( classInqry.classInqrySn )) 
+            					)).then("답변대기")
+            			.otherwise("답변완료")
+            			.as("replyYnNm"),
+            			ExpressionUtils.as( JPAExpressions.select( classInqry_Reply.count() )
+                                .from( classInqry_Reply )
+                                .where( classInqry_Reply.parntsInqrySn.eq( classInqry.classInqrySn ) ), "replyCnt" ),
 						classInqry.parntsInqrySn,
 						classInqry.userSn,
 						user.userNm,
@@ -250,6 +274,19 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
 		return (StringUtils.hasText(openYn) )  ? classInqry.openYn.eq(openYn) : null;
 	}
 	  
+	private BooleanExpression eqReplyYn( String replyYn ) {
+		return ( StringUtils.hasText(replyYn) ) ? (
+			new CaseBuilder()
+            		.when(ExpressionUtils.isNull( JPAExpressions
+							.select( classInqry_Reply.classInqrySn.sum() )
+							.from( classInqry_Reply )
+							.where( classInqry_Reply.parntsInqrySn.eq( classInqry.classInqrySn )) 
+					)).then("N")
+            		.otherwise("Y")
+            		.equalsIgnoreCase(replyYn)
+            ) : null ;
+	}
+	
     private BooleanExpression eqClassSn( Long pk ) {
         return pk != null ? classInqry.classSn.eq(pk) : null;
     }
