@@ -1096,7 +1096,9 @@ function changePassword( ){
         headers: headers,
         success: function (response){
             //서버로부터 응답처리
-            alert("response")
+            alert("정상적으로 비밀번호가 변경되었습니다. 로그인 후 이용해주세요.")
+            // 비밀번호 변경 성공 시 홈 화면으로 리다이렉션
+            window.location.href = "/";
         },
         error: function(error){
             //오류처리
@@ -1104,12 +1106,9 @@ function changePassword( ){
         }
     })
 
-
-
-
-
 }
 
+// 변경할 비밀번호 , 변경할 비밀번호 확인 일치 여부
 function checkSameValue( value1, value2 ){
     // value1, value2 같은지 비교
     if ( value1 == value2 ) {

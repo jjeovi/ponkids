@@ -1,10 +1,8 @@
 package com.meta.ponkids.domain.system.login.dto;
 
-import com.meta.ponkids.domain.system.banner.entity.Banner;
 import com.meta.ponkids.domain.user.entity.User;
 import com.meta.ponkids.global.util.date.DateUtils;
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -240,12 +238,12 @@ public class LoginDto implements UserDetails , OAuth2User {
 
 
     /* S: 비빌번호 찾기 -> 비밀번호 재설정*/
-    public void setPassword(String password) {
-
-        //BCryptPasswordEncoder 를 사용하여 비밀번호 해싱
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        this.password = passwordEncoder.encode(password);
-    }
+//    public void setPassword(String password) {
+//
+//        //BCryptPasswordEncoder 를 사용하여 비밀번호 해싱
+//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//        this.password = passwordEncoder.encode(password);
+//    }
     /* E: 비밀번호 찾기 -> 비밀번호 재설정*/
 
 
