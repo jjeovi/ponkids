@@ -29,6 +29,7 @@ import com.meta.ponkids.domain.system.login.dto.LoginDto;
 
 /* S: smtp 이메일 보내기. javamail 라이브러리 사용*/
 import java.util.Properties;
+import java.util.Random;
 import javax.mail.*;
 import javax.mail.internet.*;
 /* E: smtp 이메일 보내기. javamail 라이브러리 사용*/
@@ -209,9 +210,15 @@ public class LoginoutController {
 	// 랜덤한 인증번호 생성 메서드
 	private String generateRandomAuthNumber(){
 		// TODO 여기에 랜덤 인증번호 생성 로직 추가 (조건 : 랜덤한 6자리 숫자)
-		return "123456";
-	}
+//		return "123456";
+		// 랜덤 인증번호 생성 (6자리 숫자)
+		Random random = new Random();
+		int min = 100000;
+		int max = 999999;
+		int randomAuthNumber = random.nextInt((max - min) + 1) + min;
 
+		return String.valueOf(randomAuthNumber);
+	}
 	/* S: 비밀번호 찾기 - 인증번호 검증 */
 	@ResponseBody
 	@PostMapping("/findUserpw")
