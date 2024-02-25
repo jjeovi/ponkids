@@ -205,6 +205,7 @@ public class LoginoutController {
 		// 세션에 인증번호 저장
 		session.setAttribute("authCode", authNumber);
 		// TODO : 시작 시간 체크
+		session.setAttribute("authStartTime", System.currentTimeMillis());
 	}
 
 	// 랜덤한 인증번호 생성 메서드
@@ -224,26 +225,31 @@ public class LoginoutController {
 	@PostMapping("/findUserpw")
 	public Map<String,Object> findUserpw(@RequestParam String authNumber, HttpSession session){
 		Map<String, Object> result = new HashMap<>();
-		// 세션에서 저장된 인증번호 가져오기
-		String storedAuthCode = (String) session.getAttribute("authCode");
 
-		if (storedAuthCode != null && storedAuthCode.equals(authNumber)) {
+
+		// 세션에서 저장된 [인증번호] 와  [시작 시간]  가져오기
+		String storedAuthCode = (String) session.getAttribute("authCode");
+		Long startTime = (Long) session.getAttribute("authStartTime");
+
+		if (storedAuthCode != null && storedAuthCode.equals(authNumber) && startTime != null) {
 			// 인증번호 일치
 			result.put("flag", "S");
 			result.put("msg", "인증에 성공했습니다.");
 			// 검증 시간 체크
 			// TODO : 시작 시간 , 검증시간 비교하여 3분 이내인지 확인
-//			if () {
-//				// 3분 이내
-//			result.put("flag", "S");
-//			result.put("msg", "인증에 성공했습니다.");
+			long currentTime = System.currentTimeMillis();
+			long timeDifference = currentTime - startTime;
+			if (timeDifference <= 3 * 60 * 1000) { // 3분 (3 * 60 * 1000 밀리초)
+				// 3분 이내
+				result.put("flag", "S");
+				result.put("msg", "인증에 성공했습니다.");
 			// 인증 성공 후 필요한 작업 수행
-//			} else {
-//				// 3분 넘어가면..
+			} else {
+				// 3분 넘어가면..
 				// 시간초과 메시지..
-//			result.put("flag", "E");
-//			result.put("msg", "시간이 초과되었습니다.");
-//			}
+			result.put("flag", "E");
+			result.put("msg", "시간이 초과되었습니다.");
+			}
 
 		} else {
 			// 인증번호 불일치
