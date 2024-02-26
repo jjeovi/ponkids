@@ -4,6 +4,7 @@ package com.meta.ponkids.domain.cls.repository.impl;
 import static com.meta.ponkids.domain.cls.entity.QClass.class$;
 import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl01.classCategoryCl01;
 import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategoryCl02;
+import static com.meta.ponkids.domain.cls.entity.QClassLike.classLike;
 import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
 
 import java.util.List;
@@ -96,7 +97,8 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                         			.otherwise("")
                         			.as("classExpsrPeriod"),
                         class$.registerId,
-                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH:MM:SS" )
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH:MM:SS" ),
+                        classLike.userSn
                 ) )
                 .from( class$ )
                 .leftJoin( classCategoryCl01 )
@@ -108,6 +110,12 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 // join 에는 delYn 조건 필수로 추가
                 .on(    class$.crseSn.eq( classCategoryCl02.clSn ),
                         classCategoryCl02.delYn.eq("N")
+                )
+                .leftJoin( classLike )
+                .on (
+                        classLike.delYn.eq("N"),
+                        classLike.classSn.eq( class$.classSn),
+                        eqUserSn( listDto.getUserSn() )
                 )
                 // where
                 .where( 
@@ -176,7 +184,8 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                                 .otherwise("")
                                 .as("classExpsrPeriod"),
                         class$.registerId,
-                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH:MM:SS" )
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH:MM:SS" ),
+                        classLike.userSn
                 ) )
                 .from( class$ )
                 .leftJoin( classCategoryCl01 )
@@ -188,6 +197,12 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 // join 에는 delYn 조건 필수로 추가
                 .on(    class$.crseSn.eq( classCategoryCl02.clSn ),
                         classCategoryCl02.delYn.eq("N")
+                )
+                .leftJoin( classLike )
+                .on (
+                        classLike.delYn.eq("N"),
+                        classLike.classSn.eq( class$.classSn),
+                        eqUserSn( listDto.getUserSn() )
                 )
                 // where
                 .where(
@@ -202,7 +217,7 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
     
     
     @Override
-    public ClassListDto getByClassSn( Long classSn ) {
+    public ClassListDto getByClassSn( Long classSn, Long userSn ) {
         
         return query
                 // select
@@ -243,7 +258,8 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                                 .otherwise("")
                                 .as("classExpsrPeriod"),
                         class$.registerId,
-                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH:MM:SS" )
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH:MM:SS" ),
+                        classLike.userSn
                 ) )
                 .from( class$ )
                 .leftJoin( classCategoryCl01 )
@@ -255,6 +271,12 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 // join 에는 delYn 조건 필수로 추가
                 .on(    class$.crseSn.eq( classCategoryCl02.clSn ),
                         classCategoryCl02.delYn.eq("N")
+                )
+                .leftJoin( classLike )
+                .on (
+                        classLike.delYn.eq("N"),
+                        classLike.classSn.eq( class$.classSn),
+                        eqUserSn( userSn )
                 )
                 // where
                 .where(
@@ -309,7 +331,8 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                                 .otherwise("")
                                 .as("classExpsrPeriod"),
                         class$.registerId,
-                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH:MM:SS" )
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH:MM:SS" ),
+                        classLike.userSn
                 ) )
                 .from( class$ )
                 .leftJoin( classCategoryCl01 )
@@ -321,6 +344,12 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 // join 에는 delYn 조건 필수로 추가
                 .on(    class$.crseSn.eq( classCategoryCl02.clSn ),
                         classCategoryCl02.delYn.eq("N")
+                )
+                .leftJoin( classLike )
+                .on (
+                        classLike.delYn.eq("N"),
+                        classLike.classSn.eq( class$.classSn),
+                        eqUserSn( listDto.getUserSn() )
                 )
                 // where
                 .where(
@@ -379,6 +408,11 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
     // pk 로 고유값 1건만 조회
     private BooleanExpression neClassSn( Long classSn ) {
     	return ( classSn != null ) ? class$.classSn.ne( classSn ) : null;
+    }
+    
+    // userSn으로 클래스 관심 조회
+    private BooleanExpression eqUserSn( Long userSn ) {
+        return ( userSn == null ) ? ( classLike.userSn.isNull() ) : ( classLike.userSn.eq(userSn) );
     }
     
     

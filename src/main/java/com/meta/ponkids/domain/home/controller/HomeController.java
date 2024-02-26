@@ -41,7 +41,6 @@ public class HomeController {
         
         
         // 로그인 여부 파악 하여 userSn setting 함
-     // 로그인 안되어 있으면 return
         Long userSn = null;
  		LoginDto loginDto = SessionUtils.getAuthentication(); 
  		if ( loginDto != null && loginDto.getUserSn() != null ) {

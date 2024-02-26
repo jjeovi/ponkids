@@ -64,6 +64,12 @@ public class ClassController {
 		
 		// S : 필요한 객체 setting
 		
+		// 로그인 여부 파악 하여 userSn setting 함
+		LoginDto loginDto = SessionUtils.getAuthentication();
+		if ( loginDto != null && loginDto.getUserSn() != null ) {
+			// 메시지 출력 및 url 이동 처리
+			listDto.setUserSn( loginDto.getUserSn() );
+		}
 		// 목록 조회
 		Page<ClassListDto> resultList = classService.getList( listDto, pageable );
 		model.addAttribute( "resultList", resultList );
@@ -97,8 +103,15 @@ public class ClassController {
 		
 		// 1. 클래스 의 정보 : targetDto
 		
+		// 로그인 여부 파악 하여 userSn setting 함
+		Long userSn = null;
+		LoginDto loginDto = SessionUtils.getAuthentication();
+		if ( loginDto != null && loginDto.getUserSn() != null ) {
+			// 메시지 출력 및 url 이동 처리
+			userSn = loginDto.getUserSn();
+		}
 		// target object 조회
-		ClassListDto targetDto = classService.getByClassSn( pk );
+		ClassListDto targetDto = classService.getByClassSn( pk , userSn);
 		
 		if( targetDto == null  || targetDto.getClass() == null ) {
 			
@@ -145,7 +158,6 @@ public class ClassController {
 		model.addAttribute("otherClassList", classService.getListTop10OtherClassExceptMeByCtgrySn( targetDto ) );
 		
 		// 7. 계정정보 get 후 자녀 list 
-		LoginDto loginDto = SessionUtils.getAuthentication();
 		if ( loginDto != null ) {
 			/// 자녀 정보 list get
 			// chldrn target object 조회

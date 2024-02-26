@@ -238,10 +238,9 @@ function goLogout() {
 
 
 // 좋아요 이벤트
-function likeClass( classSn ){
-	
-	
-	
+function likeClass( classSn, e ){
+
+
 		var url = "/live/authenticationCheckAjax";	// 현재 로그인 세션 존재하는지 여부 체크
 		$.ajax( {
 			url: url,
@@ -270,9 +269,7 @@ function likeClass( classSn ){
 					type: "GET",	// 회원저장 POST로
 					async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
 					data: data, // 검색할 값
-					cache: false,
-					contentType: false,
-					processData: false,
+					contentType: "application/json",
 					success: function ( result ) {
 						// return type : List<CategoryDto>
 						if ( result.flag == "E" ) {
@@ -282,9 +279,9 @@ function likeClass( classSn ){
 							var likeStatus = result.likeStatus;
 							
 							if ( likeStatus == 'insert' ){
-							 	
+								$(e).find('img').attr("src", "/pon/common/image/heart-full.svg");
 							} else if ( likeStatus == 'delete' ) {
-								
+								$(e).find('img').attr("src", "/pon/common/image/heart.svg");
 							}
 
 							return ;

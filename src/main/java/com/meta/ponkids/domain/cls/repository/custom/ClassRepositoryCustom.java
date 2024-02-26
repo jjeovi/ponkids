@@ -14,7 +14,7 @@ public interface ClassRepositoryCustom {
     
     List<ClassListDto> getList( ClassListDto listDto);
     
-    ClassListDto getByClassSn( Long classSn ) ;
+    ClassListDto getByClassSn( Long classSn, Long userSn ) ;
     
     // 나의 클래스와 같은 카테고리의 다른 클래스 ( 내 클래스는 제외하고 검색 ) : 10건만 조회
     List<ClassListDto> getListTop10OtherClassExceptMeByCtgrySn( ClassListDto listDto );

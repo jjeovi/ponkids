@@ -287,9 +287,7 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
     }
     
     
-    // 카테고리 lv 2 검색 옵션
-    // 배너 상세 분류 검색
-    // join_bannerClDetailCd.cdDetailSn == lv2sn
+    // userSn으로 클래스 관심 조회
     private BooleanExpression eqUserSn( Long userSn ) {
     	return ( userSn == null ) ? ( classLike.userSn.isNull() ) : ( classLike.userSn.eq(userSn) );
     }

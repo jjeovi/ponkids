@@ -54,6 +54,8 @@ public class ClassListDto {
     
     private String 	regDt;    				// 등록일자
     
+    private Long 	userSn;    				// 사용자 일련번호
+    
     private String 	schOption;   // 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
     
     private String 	schCntn;     // 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!
@@ -62,7 +64,7 @@ public class ClassListDto {
     
     @Builder
     @QueryProjection
-    public ClassListDto( Long classSn, Long ctgrySn, String ctgryNm, Long crseSn, String crseNm, String classSj, String classSumry, String classDc, Long classAmt, Long classDscntBfeAmt, String classTrgtCd, String classTrgtNm, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String classExpsrPeriod, String registerId, String regDt ) {
+    public ClassListDto( Long classSn, Long ctgrySn, String ctgryNm, Long crseSn, String crseNm, String classSj, String classSumry, String classDc, Long classAmt, Long classDscntBfeAmt, String classTrgtCd, String classTrgtNm, String classPdSetYn, String classBeginDt, String classEndDt, Long thumbAtchFileSn, Long atchFileSn, String classExpsrYn, String classExpsrPeriod, String registerId, String regDt, Long userSn ) {
         this.classSn = classSn;
         this.ctgrySn = ctgrySn;
         this.ctgryNm = ctgryNm;
@@ -84,6 +86,7 @@ public class ClassListDto {
         this.classExpsrPeriod = classExpsrPeriod;
         this.registerId = registerId;
         this.regDt = regDt;
+        this.userSn = userSn;
     }
     
     // Entity to Dto 메소드는 DTO 내부에서 생성.
