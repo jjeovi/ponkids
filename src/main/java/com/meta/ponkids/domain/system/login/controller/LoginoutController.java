@@ -29,6 +29,7 @@ import com.meta.ponkids.domain.system.login.dto.LoginDto;
 
 /* S: smtp 이메일 보내기. javamail 라이브러리 사용*/
 import java.util.Properties;
+import java.util.Random;
 import javax.mail.*;
 import javax.mail.internet.*;
 /* E: smtp 이메일 보내기. javamail 라이브러리 사용*/
@@ -148,7 +149,7 @@ public class LoginoutController {
 	}
 
 
-	//	S : 이메일 확인 및 인증번호 전송
+	/* S : 이메일 확인 및 인증번호 전송 */
 	@ResponseBody
 	@PostMapping("/findUseremail")
 	public Map<String, Object> findUseremail( @ModelAttribute LoginDto loginDto) {
@@ -168,7 +169,7 @@ public class LoginoutController {
 			result.put("msg", "인증번호가 발송되었습니다. ");
 
 			//이메일 전송
-//			sendEmail(targetDto.getUserId(),generateRandomAuthNumber());
+			// sendEmail(targetDto.getUserId(),generateRandomAuthNumber());
 			try{
 				sendEmail(targetDto.getUserId(),generateRandomAuthNumber(), session);
 			}catch(MessagingException e){
@@ -186,10 +187,6 @@ public class LoginoutController {
 
 		return result;
 	}
-	//	E : 이메일 확인 및 인증번호 전송
-
-
-
 	// 이메일 전송 메서드
 	private void sendEmail(String to, String authNumber , HttpSession session)throws MessagingException{
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -204,39 +201,54 @@ public class LoginoutController {
 		// 세션에 인증번호 저장
 		session.setAttribute("authCode", authNumber);
 		// TODO : 시작 시간 체크
+		// 세션에 시작시간 저장
+		session.setAttribute("authStartTime", System.currentTimeMillis());
 	}
 
 	// 랜덤한 인증번호 생성 메서드
 	private String generateRandomAuthNumber(){
 		// TODO 여기에 랜덤 인증번호 생성 로직 추가 (조건 : 랜덤한 6자리 숫자)
-		return "123456";
+		// return "123456";
+		// 랜덤 인증번호 생성 (6자리 숫자)
+		Random random = new Random();
+		int min = 100000;
+		int max = 999999;
+		int randomAuthNumber = random.nextInt((max - min) + 1) + min;
+
+		return String.valueOf(randomAuthNumber);
 	}
+	/* E : 이메일 확인 및 인증번호 전송 */
 
 	/* S: 비밀번호 찾기 - 인증번호 검증 */
 	@ResponseBody
 	@PostMapping("/findUserpw")
 	public Map<String,Object> findUserpw(@RequestParam String authNumber, HttpSession session){
 		Map<String, Object> result = new HashMap<>();
-		// 세션에서 저장된 인증번호 가져오기
-		String storedAuthCode = (String) session.getAttribute("authCode");
 
-		if (storedAuthCode != null && storedAuthCode.equals(authNumber)) {
+
+		// 세션에서 저장된 [인증번호] 와  [시작 시간]  가져오기
+		String storedAuthCode = (String) session.getAttribute("authCode");
+		Long startTime = (Long) session.getAttribute("authStartTime");
+
+		if (storedAuthCode != null && storedAuthCode.equals(authNumber) && startTime != null) {
 			// 인증번호 일치
 			result.put("flag", "S");
 			result.put("msg", "인증에 성공했습니다.");
 			// 검증 시간 체크
 			// TODO : 시작 시간 , 검증시간 비교하여 3분 이내인지 확인
-//			if () {
-//				// 3분 이내
-//			result.put("flag", "S");
-//			result.put("msg", "인증에 성공했습니다.");
+			long currentTime = System.currentTimeMillis();
+			long timeDifference = currentTime - startTime;
+			if (timeDifference <= 3 * 60 * 1000) { // 3분 (3 * 60 * 1000 밀리초)
+				// 3분 이내
+				result.put("flag", "S");
+				result.put("msg", "인증에 성공했습니다.");
 			// 인증 성공 후 필요한 작업 수행
-//			} else {
-//				// 3분 넘어가면..
+			} else {
+				// 3분 넘어가면..
 				// 시간초과 메시지..
-//			result.put("flag", "E");
-//			result.put("msg", "시간이 초과되었습니다.");
-//			}
+			result.put("flag", "E");
+			result.put("msg", "시간이 초과되었습니다.");
+			}
 
 		} else {
 			// 인증번호 불일치

@@ -954,7 +954,7 @@ function showSuccessScreen(userId) {
 /* E : 아이디 찾기 */
 
 
-/* S: 비밀번호 찾기 - 이메일 찾기 */
+/* S: 비밀번호 찾기 - 이메일 찾기(이메일 발송, 타이머) */
 function findUseremail(){
     //사용자 입력 값 가져오기
     var findpwname = $("#findPw_name").val();
@@ -988,10 +988,15 @@ function findUseremail(){
                 alert( result.msg );
 
             } else if ( result.flag == "S" ) {
+
+                // TODO : 3분 타이머 해야함
+                // 비동기로 실행....!?
+                startTimer(180);
+
                 // 존재하는 계정정보일 경우 인증번호 발송되었다고 알림
                 alert(result.msg);
 
-                // TODO : 3분 타이머 해야함
+
             }
         },
         error: function (){
@@ -999,7 +1004,30 @@ function findUseremail(){
         }
     })
 }
-/* E: 비밀번호 찾기 - 이메일 찾기 */
+
+// 타이머(3분)
+function startTimer(duration) {
+    var timer = duration, minutes, seconds;
+    var intervalId = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        // 'timerDisplay'라는 ID를 가진 HTML 요소에 타이머 표시
+        $("#timerDisplay").text("재발송 (" + minutes + ":" + seconds + ")");
+
+        if (--timer < 0) {
+            clearInterval(intervalId);
+            // 타이머가 0에 도달하면 버튼 텍스트를 초기 상태로 변경
+            $("#findPw_send_auth_number").text("인증번호 발송");
+            // 선택적으로 타이머가 0에 도달했을 때 추가 작업 수행 가능
+        }
+    }, 1000);
+}
+
+/* E: 비밀번호 찾기 - 이메일 찾기(이메일 발송, 타이머) */
 
 
 /* S : 비밀번호 찾기 - 버튼클릭시 - 인증번호 확인 */
@@ -1026,11 +1054,11 @@ function findUseremail(){
             headers: headers,
             success: function (result){
                 if(result.flag ==="S"){
-                    alert("인증에 성공");
+                    alert(result.msg);
                     // TODO 인증 성공시 원하는 동작 수행
                     showPwSuccessScreen(result.userId);
                 }else{
-                    alert("인증에 실패했습니다. 다시 시도해주세요");
+                    alert(result.msg);
                 }
             },
             error: function (){
@@ -1052,7 +1080,7 @@ function showPwSuccessScreen(userId) {
 
 /* S: 성환: 비빌번호 변경 */
 // function changePassword( userId,newPassword ){
-function changePassword( ){
+function changePassword( ) {
 
     // 1. 비밀번호변경, 비밀번호변경확인 변수 가져오기
     var new_Pw = $("#new_Pw").val();
@@ -1060,64 +1088,75 @@ function changePassword( ){
     var findpwemail = $("#findPw_email").val();
 
     // 2-1. 두 값이 같은지 비교하기
-    if ( !checkSameValue(new_Pw, new_check_Pw) ) {
+    if (!checkSameValue(new_Pw, new_check_Pw)) {
         // 두 값이 같지 않을 때
-        alert( "두 값이 같지 않습니다.. 확인해주세요...");
+        alert("두 값이 같지 않습니다.. 확인해주세요...");
         return false;
     }
-    // else {
-    //     // continue;.
-    // }
 
     // 2-2. 유효성 체크..
     // TODO 유효성 체크해주세요.
-    // if ( !validCheckPw( new_Pw ) ) {
-    //     // 유효성이 맞지 않을떄..
-    //     alert( "유효성 이 맞지 않습니다.. [영문자, 숫자, 기호 혼합 8자 이상] 을 지켜주세요...");
-    //     return false;
-    // }
-
-    // 3. 아이디와 비밀번호변경, 비밀번호변경확인을 ajax로 보내기
-    // 보낼 변수 : 비밀번호, 아이디,  + ( csrf header 에 포함시켜 보내기.. )
-
-    /* S : 보낼 데이터 setting */
-    var data = {    newPassword : new_Pw,
-                    userId : findpwemail };
-
-    var csrfToken = $("meta[name='_csrf']").attr("content");
-    var csrfHeader = $("meta[name='_csrf_header']").attr("content");
-    var headers = {};
-    headers[csrfHeader] = csrfToken;
-    /* E : 보낼 데이터 setting */
-    $.ajax({
-        type: "POST",
-        url: "/changePassword",
-        data: data,
-        headers: headers,
-        success: function (response){
-            //서버로부터 응답처리
-            alert("response")
-        },
-        error: function(error){
-            //오류처리
-            alert("비밀번호 변경 오류발생하였습니다.")
+    if (!validCheckPw(new_Pw)) {
+        // 유효성이 맞지 않을떄..
+            alert( "유효성 이 맞지 않습니다. [영문자, 숫자, 기호 혼합 8자 이상] 을 지켜주세요.");
+            return false;
         }
-    })
 
+        // 3. 아이디와 비밀번호변경, 비밀번호변경확인을 ajax로 보내기
+        // 보낼 변수 : 비밀번호, 아이디,  + ( csrf header 에 포함시켜 보내기.. )
 
+        /* S : 보낼 데이터 setting */
+        var data = {
+            newPassword: new_Pw,
+            userId: findpwemail
+        };
 
+        var csrfToken = $("meta[name='_csrf']").attr("content");
+        var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+        var headers = {};
+        headers[csrfHeader] = csrfToken;
+        /* E : 보낼 데이터 setting */
+        $.ajax({
+            type: "POST",
+            url: "/changePassword",
+            data: data,
+            headers: headers,
+            success: function (response) {
+                //서버로부터 응답처리
+                alert("정상적으로 비밀번호가 변경되었습니다. 로그인 후 이용해주세요.")
+                // 비밀번호 변경 성공 시 홈 화면으로 리다이렉션
+                window.location.href = "/";
+            },
+            error: function (error) {
+                //오류처리
+                alert("비밀번호 변경 오류발생하였습니다.")
+            }
+        })
 
+    }
 
-}
-
-function checkSameValue( value1, value2 ){
+// 변경할 비밀번호 , 변경할 비밀번호 확인 일치 여부
+function checkSameValue(value1, value2) {
     // value1, value2 같은지 비교
-    if ( value1 == value2 ) {
+    if (value1 == value2) {
         return true;
     } else {
         return false;
     }
-
 }
 
-/* E: 성환: 비빌번호 변경 */
+
+// 비밀번호 유효성 체크
+function validCheckPw(password) {
+    // 영문자, 숫자, 기호를 혼합하여 8자 이상인지 확인
+    var regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+{}\[\]:;<>,.?/\\-]).{8,}$/;
+
+    if (!regex.test(password)) {
+        return false;
+    }
+    return true;
+}
+    /* E: 성환: 비빌번호 변경 */
+
+
+
