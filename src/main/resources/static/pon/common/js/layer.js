@@ -913,7 +913,7 @@ function findUsername(){
 
     // Ajax 를 사용한 서버로의 요청
     $.ajax({
-        url: "/findUsername",
+        url: "/live/findUsernameAjax",
         type: "POST",
         data: data,
         cache: false,
@@ -971,7 +971,7 @@ function findUseremail(){
 
     // Ajax 를 사용한 서버로의 요청
     $.ajax({
-        url: "/findUseremail",
+        url: "/live/findUseremailAjax",
         type: "POST",
         data: data,
         cache: false,
@@ -1045,7 +1045,7 @@ function startTimer(duration) {
         headers[csrfHeader] = csrfToken;
         // Ajax 를 사용한 서버로 인증번호 확인 요청
         $.ajax({
-            url:"/findUserpw",
+            url:"/livefindUserpwAjax",
             type:"POST",
             data: data,
             // beforeSend: function(xhr){
@@ -1118,7 +1118,7 @@ function changePassword( ) {
         /* E : 보낼 데이터 setting */
         $.ajax({
             type: "POST",
-            url: "/changePassword",
+            url: "/live/changePasswordAjax",
             data: data,
             headers: headers,
             success: function (response) {

@@ -96,7 +96,7 @@ public class LoginoutController {
 
 	// 아이디 찾기
 	@ResponseBody
-	@PostMapping("/findUsername")
+	@PostMapping("/live/findUsernameAjax")
 	public Map<String, Object> findUsername( HttpServletRequest request,
 											@ModelAttribute LoginDto loginDto,
 											HttpSession session,
@@ -134,24 +134,12 @@ public class LoginoutController {
 
 		return result;
 	}
-	// 문자열 일부를 마스킹 처리하는 함수 -> maskString
-	private String maskString(String str, int start, int end, char maskChar) {
-		if (str == null || start < 0 || end >= str.length()) {
-			return str;
-		}
 
-		char[] chars = str.toCharArray();
-		for (int i = start; i <= end; i++) {
-			chars[i] = maskChar;
-		}
-
-		return new String(chars);
-	}
 
 
 	/* S : 이메일 확인 및 인증번호 전송 */
 	@ResponseBody
-	@PostMapping("/findUseremail")
+	@PostMapping("/live/findUseremailAjax")
 	public Map<String, Object> findUseremail( @ModelAttribute LoginDto loginDto) {
 
 		//메소드가 실행되고 나서 클라이언트에게 반환될 데이터를 담기 위한 자료구조를 생성하는 부분
@@ -187,41 +175,11 @@ public class LoginoutController {
 
 		return result;
 	}
-	// 이메일 전송 메서드
-	private void sendEmail(String to, String authNumber , HttpSession session)throws MessagingException{
-		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
-
-		helper.setTo(to);
-		helper.setSubject("이메일 인증번호");
-		helper.setText("인증번호: " + authNumber, true);
-
-		javaMailSender.send(mimeMessage);
-
-		// 세션에 인증번호 저장
-		session.setAttribute("authCode", authNumber);
-		// TODO : 시작 시간 체크
-		// 세션에 시작시간 저장
-		session.setAttribute("authStartTime", System.currentTimeMillis());
-	}
-
-	// 랜덤한 인증번호 생성 메서드
-	private String generateRandomAuthNumber(){
-		// TODO 여기에 랜덤 인증번호 생성 로직 추가 (조건 : 랜덤한 6자리 숫자)
-		// return "123456";
-		// 랜덤 인증번호 생성 (6자리 숫자)
-		Random random = new Random();
-		int min = 100000;
-		int max = 999999;
-		int randomAuthNumber = random.nextInt((max - min) + 1) + min;
-
-		return String.valueOf(randomAuthNumber);
-	}
 	/* E : 이메일 확인 및 인증번호 전송 */
 
 	/* S: 비밀번호 찾기 - 인증번호 검증 */
 	@ResponseBody
-	@PostMapping("/findUserpw")
+	@PostMapping("/livefindUserpwAjax")
 	public Map<String,Object> findUserpw(@RequestParam String authNumber, HttpSession session){
 		Map<String, Object> result = new HashMap<>();
 
@@ -261,7 +219,7 @@ public class LoginoutController {
 	/* E: 비밀번호 찾기 - 인증번호 검증 */
 
 	/* S : 비밀번호 변경 */
-	@PostMapping("/changePassword")
+	@PostMapping("/live/changePasswordAjax")
 	public ResponseEntity<String> changePassword(@RequestParam String newPassword,@RequestParam String userId){
 
 		// 비밀번호 변경 로직 수행
@@ -277,6 +235,57 @@ public class LoginoutController {
 
 	}
 	/* E : 비밀번호 변경 */
+
+
+
+
+	// ============================ UTIL ======================
+	// ============================ UTIL ======================
+	// ============================ UTIL ======================
+
+	// 이메일 전송 메서드
+	private void sendEmail(String to, String authNumber , HttpSession session)throws MessagingException{
+		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
+
+		helper.setTo(to);
+		helper.setSubject("이메일 인증번호");
+		helper.setText("인증번호: " + authNumber, true);
+
+		javaMailSender.send(mimeMessage);
+
+		// 세션에 인증번호 저장
+		session.setAttribute("authCode", authNumber);
+		// TODO : 시작 시간 체크
+		// 세션에 시작시간 저장
+		session.setAttribute("authStartTime", System.currentTimeMillis());
+	}
+
+	// 랜덤한 인증번호 생성 메서드
+	private String generateRandomAuthNumber(){
+		// TODO 여기에 랜덤 인증번호 생성 로직 추가 (조건 : 랜덤한 6자리 숫자)
+		// return "123456";
+		// 랜덤 인증번호 생성 (6자리 숫자)
+		Random random = new Random();
+		int min = 100000;
+		int max = 999999;
+		int randomAuthNumber = random.nextInt((max - min) + 1) + min;
+
+		return String.valueOf(randomAuthNumber);
+	}
+	// 문자열 일부를 마스킹 처리하는 함수 -> maskString
+	private String maskString(String str, int start, int end, char maskChar) {
+		if (str == null || start < 0 || end >= str.length()) {
+			return str;
+		}
+
+		char[] chars = str.toCharArray();
+		for (int i = start; i <= end; i++) {
+			chars[i] = maskChar;
+		}
+
+		return new String(chars);
+	}
 
 
 }
