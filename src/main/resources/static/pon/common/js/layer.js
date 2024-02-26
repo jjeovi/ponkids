@@ -988,11 +988,15 @@ function findUseremail(){
                 alert( result.msg );
 
             } else if ( result.flag == "S" ) {
+
+                // TODO : 3분 타이머 해야함
+                // 비동기로 실행....!?
+                startTimer(180);
+
                 // 존재하는 계정정보일 경우 인증번호 발송되었다고 알림
                 alert(result.msg);
 
-                // TODO : 3분 타이머 해야함
-                startTimer(180);
+
             }
         },
         error: function (){
@@ -1023,7 +1027,7 @@ function startTimer(duration) {
     }, 1000);
 }
 
-/* E: 비밀번호 찾기 - 이메일 찾기 */
+/* E: 비밀번호 찾기 - 이메일 찾기(이메일 발송, 타이머) */
 
 
 /* S : 비밀번호 찾기 - 버튼클릭시 - 인증번호 확인 */

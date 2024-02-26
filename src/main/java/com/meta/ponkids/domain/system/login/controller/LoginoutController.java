@@ -149,7 +149,7 @@ public class LoginoutController {
 	}
 
 
-	//	S : 이메일 확인 및 인증번호 전송
+	/* S : 이메일 확인 및 인증번호 전송 */
 	@ResponseBody
 	@PostMapping("/findUseremail")
 	public Map<String, Object> findUseremail( @ModelAttribute LoginDto loginDto) {
@@ -169,7 +169,7 @@ public class LoginoutController {
 			result.put("msg", "인증번호가 발송되었습니다. ");
 
 			//이메일 전송
-//			sendEmail(targetDto.getUserId(),generateRandomAuthNumber());
+			// sendEmail(targetDto.getUserId(),generateRandomAuthNumber());
 			try{
 				sendEmail(targetDto.getUserId(),generateRandomAuthNumber(), session);
 			}catch(MessagingException e){
@@ -187,10 +187,6 @@ public class LoginoutController {
 
 		return result;
 	}
-	//	E : 이메일 확인 및 인증번호 전송
-
-
-
 	// 이메일 전송 메서드
 	private void sendEmail(String to, String authNumber , HttpSession session)throws MessagingException{
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -205,13 +201,14 @@ public class LoginoutController {
 		// 세션에 인증번호 저장
 		session.setAttribute("authCode", authNumber);
 		// TODO : 시작 시간 체크
+		// 세션에 시작시간 저장
 		session.setAttribute("authStartTime", System.currentTimeMillis());
 	}
 
 	// 랜덤한 인증번호 생성 메서드
 	private String generateRandomAuthNumber(){
 		// TODO 여기에 랜덤 인증번호 생성 로직 추가 (조건 : 랜덤한 6자리 숫자)
-//		return "123456";
+		// return "123456";
 		// 랜덤 인증번호 생성 (6자리 숫자)
 		Random random = new Random();
 		int min = 100000;
@@ -220,6 +217,8 @@ public class LoginoutController {
 
 		return String.valueOf(randomAuthNumber);
 	}
+	/* E : 이메일 확인 및 인증번호 전송 */
+
 	/* S: 비밀번호 찾기 - 인증번호 검증 */
 	@ResponseBody
 	@PostMapping("/findUserpw")
