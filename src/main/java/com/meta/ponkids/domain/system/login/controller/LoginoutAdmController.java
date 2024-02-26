@@ -85,23 +85,19 @@ public class LoginoutAdmController {
         
     }
     
-    @PostMapping( "/admLogout" )
-    public String admLogout( @RequestParam( "auth" ) String auth,
-                             HttpServletRequest request,
+    @PostMapping( "/adm/logout" )
+    public String admLogout( HttpServletRequest request,
                              HttpServletResponse response,
                              HttpSession session,
                              Model model )  throws IOException  {
     	
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		Authentication loginAuth = SecurityContextHolder.getContext().getAuthentication();
-		
-    	if ( loginAuth != null ) {
-    		new SecurityContextLogoutHandler().logout( request, response, loginAuth );
+    	if ( auth != null ) {
+    		new SecurityContextLogoutHandler().logout( request, response, auth );
     	}
     	
     	return "redirect:/admLogin?auth=" + AUTH;
-    	
-        
     }
     
     

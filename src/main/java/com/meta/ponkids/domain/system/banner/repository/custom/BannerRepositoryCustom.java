@@ -10,6 +10,6 @@ public interface BannerRepositoryCustom {
     
     Page<BannerListDto> getList( BannerListDto listDto, Pageable pageable );
     
-    List<BannerListDto> getMainList( String bannerClCd );
+    List<BannerListDto> getMainList( String bannerClCd , Long userSn );
     
 }

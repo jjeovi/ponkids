@@ -398,7 +398,8 @@ function searchCate( url ){
         } );
         
         // url setting 
-        location.replace(url+searchParams);	// 현재 페이지 내에서 뒤로가기를 적용시키지 않을 거라 location.href 대신 location.repalce를 사용
+        // 현재 페이지 내에서 뒤로가기를 적용시키지 않을 거라 location.href 대신 location.repalce를 사용
+        location.replace( url+searchParams );	
             
 
     } else {

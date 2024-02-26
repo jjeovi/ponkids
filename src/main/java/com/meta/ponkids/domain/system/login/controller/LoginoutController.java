@@ -70,7 +70,7 @@ public class LoginoutController {
 
     }
 
-    @RequestMapping( "/logout" )
+    @RequestMapping( "/pon/logout" )
     public String logout( 	HttpServletRequest request,
 							HttpServletResponse response,
 							HttpSession session,

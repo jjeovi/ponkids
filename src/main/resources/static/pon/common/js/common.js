@@ -34,48 +34,48 @@ $( function () {
 
 $( function () {
 
-//    $( '.class_2dep > div' ).hide();
-    $( '.class_1dep .tabnav a' ).click( function () {
-        $( '.class_2dep > div' ).hide().filter( this.hash ).fadeIn();
-        $( '.class_1dep .tabnav a' ).removeClass( 'active' );
-        $( this ).addClass( 'active' );
-        return false;
-    } );
-    
-    $( '.detail_day button' ).click( function () {
-        $( '.detail_day button' ).removeClass( 'active' );
-        $( this ).addClass( 'active' );
+//	$( '.class_2dep > div' ).hide();
+	$( '.class_1dep .tabnav a' ).click( function () {
+		$( '.class_2dep > div' ).hide().filter( this.hash ).fadeIn();
+		$( '.class_1dep .tabnav a' ).removeClass( 'active' );
+		$( this ).addClass( 'active' );
+		return false;
+	} );
+	
+	$( '.detail_day button' ).click( function () {
+		$( '.detail_day button' ).removeClass( 'active' );
+		$( this ).addClass( 'active' );
 		return false;
 	} );
 
 
 //	$( '.detail_tab_content > div' ).hide();
-//    $( '.detail_tab_nav a' ).click( function () {
-//        $( '.detail_tab_content div' ).hide().filter( this.hash ).fadeIn();
-//        $( '.detail_tab_nav a' ).removeClass( 'active' );
-//        $( this ).addClass( 'active' );
-//        return false;
-//    } ).filter( ':eq(0)' ).click();
-    	$( '.detail_tab_nav a' ).click( function () {
-//        $( '.detail_tab_content div' ).hide().filter( this.hash ).fadeIn();
-        $( '.detail_tab_nav a' ).removeClass( 'active' );
-        $( this ).addClass( 'active' );
-        
-        // 모든 tab hide 한 뒤
-        $("[id^='detail_tab']").hide();
-        
-        // 해당 tab 만 show
-        var tabId = $( this ).data("tabId");
-        $("#" + tabId).show();
-        
-        return false;
-    } ).filter( ':eq(0)' ).click();
-//    
-//    
-//        
-//    $(".button_added_area" ).hide();
-//    $(".button_added_area" ).show();
-//    		
+//	$( '.detail_tab_nav a' ).click( function () {
+//		$( '.detail_tab_content div' ).hide().filter( this.hash ).fadeIn();
+//		$( '.detail_tab_nav a' ).removeClass( 'active' );
+//		$( this ).addClass( 'active' );
+//		return false;
+//	} ).filter( ':eq(0)' ).click();
+		$( '.detail_tab_nav a' ).click( function () {
+//		$( '.detail_tab_content div' ).hide().filter( this.hash ).fadeIn();
+		$( '.detail_tab_nav a' ).removeClass( 'active' );
+		$( this ).addClass( 'active' );
+		
+		// 모든 tab hide 한 뒤
+		$("[id^='detail_tab']").hide();
+		
+		// 해당 tab 만 show
+		var tabId = $( this ).data("tabId");
+		$("#" + tabId).show();
+		
+		return false;
+	} ).filter( ':eq(0)' ).click();
+//	
+//	
+//		
+//	$(".button_added_area" ).hide();
+//	$(".button_added_area" ).show();
+//			
 //		$("#join_countryList").change(function(){
 //			alert($(this).val());
 //		})
@@ -88,40 +88,40 @@ $( function () {
 } );
 
 $( '.class_2dep .tabnav_2dep a' ).click( function () {
-    $( '.class_2dep .tabnav_2dep a' ).removeClass( 'active' );
-    $( this ).addClass( 'active' );
+	$( '.class_2dep .tabnav_2dep a' ).removeClass( 'active' );
+	$( this ).addClass( 'active' );
 } )
 
 $( '.paging_box span.page_num ' ).click( function () {
-    $( '.paging_box  span.page_num' ).removeClass( 'active' );
-    $( this ).addClass( 'active' );
+	$( '.paging_box  span.page_num' ).removeClass( 'active' );
+	$( this ).addClass( 'active' );
 } )
 
 $( '.mb_menu' ).click( function () {
-    $( '.nav_wrap' ).addClass( 'active' );
-    $( '.dark_bg' ).addClass( 'active' );
+	$( '.nav_wrap' ).addClass( 'active' );
+	$( '.dark_bg' ).addClass( 'active' );
 } )
 $( ' .close' ).click( function () {
-    $( '.nav_wrap' ).removeClass( 'active' );
-    $( '.dark_bg' ).removeClass( 'active' );
+	$( '.nav_wrap' ).removeClass( 'active' );
+	$( '.dark_bg' ).removeClass( 'active' );
 } )
 $( '.dark_bg' ).click( function () {
-    $( '.nav_wrap' ).removeClass( 'active' );
-    $( '.dark_bg' ).removeClass( 'active' );
+	$( '.nav_wrap' ).removeClass( 'active' );
+	$( '.dark_bg' ).removeClass( 'active' );
 } )
 
 $( '.mb_search' ).click( function () {
-    $( '.mb_search_form' ).toggleClass( 'active' );
+	$( '.mb_search_form' ).toggleClass( 'active' );
 } )
 
 $( function () {
-    $( '.chatWrap .tabcontent > div' ).hide();
-    $( '.chatWrap .tabnav a' ).click( function () {
-        $( '.chatWrap .tabcontent > div' ).hide().filter( this.hash ).fadeIn();
-        $( '.chatWrap .tabnav a' ).removeClass( 'active' );
-        $( this ).addClass( 'active' );
-        return false;
-    } ).filter( ':eq(0)' ).click();
+	$( '.chatWrap .tabcontent > div' ).hide();
+	$( '.chatWrap .tabnav a' ).click( function () {
+		$( '.chatWrap .tabcontent > div' ).hide().filter( this.hash ).fadeIn();
+		$( '.chatWrap .tabnav a' ).removeClass( 'active' );
+		$( this ).addClass( 'active' );
+		return false;
+	} ).filter( ':eq(0)' ).click();
 } );
 
 
@@ -147,8 +147,8 @@ function searchListPage( e ) {
 	var form = $(e).data("form");		// 분류1 값 setting
 	var page = $(e).data("page");		// 분류1 값 setting
 
-    $( "[name='page']" ).val( page );
-    $( "form[name='" + form + "']" ).submit();
+	$( "[name='page']" ).val( page );
+	$( "form[name='" + form + "']" ).submit();
 }
 
 
@@ -228,10 +228,76 @@ function goLogout() {
 	
 	// returnUrl setting
 	var returnUrl = pathName + queryString;
-	var returnUrl = replaceAll(returnUrl, 'lgStatus=login', '');
+	returnUrl = getUrlExceptLgStatus(returnUrl);
 	
 	$( "#logoutForm" ).find("[name='returnUrl']").val( returnUrl );
 	
 	$( "#logoutForm" ).submit();	// 로그아웃 구현
+	
+}
+
+
+// 좋아요 이벤트
+function likeClass( classSn ){
+	
+	
+	
+		var url = "/live/authenticationCheckAjax";	// 현재 로그인 세션 존재하는지 여부 체크
+		$.ajax( {
+			url: url,
+			type: "GET",	// 회원저장 POST로
+			async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function ( ajaxResult ) {
+				
+				if ( !ajaxResult ) {
+					// 로그인 layer 표출
+					hideAllPopup();
+					showPopup( 'login' );
+					
+				} else {
+				// 좋아요 insert ( classSn / userSn )
+				
+				data = {};
+				data.classSn = classSn;
+					
+
+				var url = "/classLike/live/toggleLikeAjax"
+				$.ajax( {
+					url: url,
+					type: "GET",	// 회원저장 POST로
+					async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+					data: data, // 검색할 값
+					cache: false,
+					contentType: false,
+					processData: false,
+					success: function ( result ) {
+						// return type : List<CategoryDto>
+						if ( result.flag == "E" ) {
+							alert( result.msg );
+							return ;
+						} else if ( result.flag == "S" ) {
+							var likeStatus = result.likeStatus;
+							
+							if ( likeStatus == 'insert' ){
+							 	
+							} else if ( likeStatus == 'delete' ) {
+								
+							}
+
+							return ;
+						}
+					}
+				} );
+					
+				}
+				
+				
+
+			}
+		} );
+	
 	
 }

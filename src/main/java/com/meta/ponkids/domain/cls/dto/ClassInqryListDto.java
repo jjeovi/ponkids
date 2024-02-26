@@ -1,8 +1,10 @@
 package com.meta.ponkids.domain.cls.dto;
 
+import com.meta.ponkids.domain.cls.entity.ClassInqry;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.annotations.QueryProjection;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -56,6 +58,7 @@ public class ClassInqryListDto {
 	
 	private CategoryDto category;		// 카테고리 검색 : 생성자에는 추가하지 않음!
 	
+	@Builder
 	@QueryProjection
 	public ClassInqryListDto(Long classInqrySn, Long classSn, String classSj, String ctgryNm, String crseNm, String step, String replyYn, String replyYnNm, Long replyCnt, Long parntsInqrySn, Long userSn, String userNm, String userId,
 			String inqrySj, String inqryCn, String openYn, String openYnNm, String registerId, String regDt, String regFullDt) {
@@ -80,5 +83,22 @@ public class ClassInqryListDto {
 		this.regDt = regDt;
 		this.regFullDt = regFullDt;
 	}
+	
+	
+	// Entity to Dto 메소드는 DTO 내부에서 생성
+	public ClassInqryListDto toDto( ClassInqry classInqry ) {
+		
+		return ClassInqryListDto.builder()
+				.classInqrySn( classInqry.getClassInqrySn() )
+				.classSn( classInqry.getClassSn() )
+				.step( classInqry.getStep() )
+				.parntsInqrySn( classInqry.getParntsInqrySn() )
+				.userSn( classInqry.getUserSn() )
+				.inqrySj( classInqry.getInqrySj() )
+				.inqryCn( classInqry.getInqryCn() )
+				.openYn( classInqry.getOpenYn() )
+				.build();
+	}
+	
 
 }

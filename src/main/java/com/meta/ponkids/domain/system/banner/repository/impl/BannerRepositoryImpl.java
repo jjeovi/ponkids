@@ -1,6 +1,20 @@
 package com.meta.ponkids.domain.system.banner.repository.impl;
 
 
+import static com.meta.ponkids.domain.cls.entity.QClass.class$;
+import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl01.classCategoryCl01;
+import static com.meta.ponkids.domain.cls.entity.QClassLike.classLike;
+import static com.meta.ponkids.domain.system.banner.entity.QBanner.banner;
+
+import java.sql.Timestamp;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
+
 import com.meta.ponkids.domain.system.banner.dto.BannerListDto;
 import com.meta.ponkids.domain.system.banner.dto.QBannerListDto;
 import com.meta.ponkids.domain.system.banner.repository.custom.BannerRepositoryCustom;
@@ -13,20 +27,8 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.support.PageableExecutionUtils;
-import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
-
-import java.sql.Timestamp;
-import java.util.List;
-
-import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl01.classCategoryCl01;
-import static com.meta.ponkids.domain.system.banner.entity.QBanner.banner;
-import static com.meta.ponkids.domain.cls.entity.QClass.class$;
-import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
 
 @Repository
 @RequiredArgsConstructor
@@ -69,6 +71,7 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                         class$.classAmt,
                         class$.classDscntBfeAmt,
                         class$.thumbAtchFileSn.as("classThumbAtchFileSn"),
+                        null,
                         banner.useYn,
                         banner.bannerPdSetYn,
                         new CaseBuilder()
@@ -137,13 +140,14 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
     }
     
     @Override
-    public List<BannerListDto> getMainList( String bannerClCd ) {
+    public List<BannerListDto> getMainList( String bannerClCd , Long userSn ) {
         // 메인 list
         
         // - 1. 사용여부 Y
         // - 2. 표시기간이 상시
         // - 3. 표시기간이 기간일 경우 , 현재시간(now) 가 시작일~종료일 기간내에 포함되어있는 배너
         
+    	// - 4. userSn 이 존재한다면 classLike 까지 같이 검색하여 조회
         
         List<BannerListDto> results = query
                 // select
@@ -169,6 +173,7 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                         class$.classAmt,
                         class$.classDscntBfeAmt,
                         class$.thumbAtchFileSn.as("classThumbAtchFileSn"),
+                        classLike.userSn,
                         banner.useYn,
                         banner.bannerPdSetYn,
                         new CaseBuilder()
@@ -207,6 +212,13 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                         join_bannerClDetailCd.cdNm.eq("BANNER_CL_DETAIL_CD"),
                         join_bannerClDetailCd.useYn.eq( "Y" ),
                         join_bannerClDetailCd.delYn.eq( "N" )
+                )
+                .leftJoin( classLike )
+                .on (
+                		classLike.delYn.eq("N"),
+                		classLike.classSn.eq( class$.classSn),
+                		eqUserSn(userSn)
+//                		classLike.userSn.eq(userSn)
                 )
                 // where
                 .where(
@@ -272,6 +284,14 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
     private BooleanExpression eqCateLv2( CategoryDto categoryDto ) {
         return ( categoryDto != null && categoryDto.getLv2Sn() != null
                 && categoryDto.getLv2Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? join_bannerClDetailCd.cdDetailSn.eq( categoryDto.getLv2Sn() ) : null;
+    }
+    
+    
+    // 카테고리 lv 2 검색 옵션
+    // 배너 상세 분류 검색
+    // join_bannerClDetailCd.cdDetailSn == lv2sn
+    private BooleanExpression eqUserSn( Long userSn ) {
+    	return ( userSn == null ) ? ( classLike.userSn.isNull() ) : ( classLike.userSn.eq(userSn) );
     }
     
     

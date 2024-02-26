@@ -43,6 +43,8 @@ public class BannerListDto {
     
     private Long    classThumbAtchFileSn;   // 클래스 첨부파일 일련번호
     
+    private Long    userSn;   				// 사용자 일련번호
+    
     private String  useYn;                  // 사용 여부
     
     private String  bannerPdSetYn;          // 배너 기간 설정 여부
@@ -64,7 +66,7 @@ public class BannerListDto {
     
     @QueryProjection
     public BannerListDto( Long bannerSn, String bannerClCd, String bannerClNm, String bannerClDetailCd, String bannerClDetailNm, Long bannerExpsrSeq,
-                          String bannerNm, String bannerDc, Long atchFileSn, String url, String classMapngYn, Long classSn, String ctgryNm, String classSj, Long classAmt, Long classDscntBfeAmt, Long classThumbAtchFileSn,
+                          String bannerNm, String bannerDc, Long atchFileSn, String url, String classMapngYn, Long classSn, String ctgryNm, String classSj, Long classAmt, Long classDscntBfeAmt, Long classThumbAtchFileSn, Long userSn,
                           String useYn, String bannerPdSetYn, String bannerPdSetYnNm, String bannerBeginDt, String bannerEndDt ,String bannerExpsrPeriod) {
         this.bannerSn = bannerSn;
         this.bannerClCd = bannerClCd;
@@ -83,6 +85,7 @@ public class BannerListDto {
         this.classAmt = classAmt;
         this.classDscntBfeAmt = classDscntBfeAmt;
         this.classThumbAtchFileSn = classThumbAtchFileSn;
+        this.userSn = userSn;
         this.useYn = useYn;
         this.bannerPdSetYn = bannerPdSetYn;
         this.bannerPdSetYnNm = bannerPdSetYnNm;

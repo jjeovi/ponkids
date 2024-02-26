@@ -158,7 +158,7 @@ public class ClassCategoryCl02Service {
     // ================================== UTIL ========================================
     
     
-    private ClassCategoryCl02ListDto createCategory(ClassCategoryCl02ListDto listDto ) {
+    private ClassCategoryCl02ListDto createCategory( ClassCategoryCl02ListDto listDto ) {
         
         // 카테고리 값 뿌리기 위한  setting
     	CategoryDto categoryDto = new CategoryDto();

@@ -67,7 +67,7 @@ public class ClassService {
         List<ClassListDto> listDtos = classRepository.getList( listDto );
         
         // 카테고리 값 뿌리기 위한  setting
-        for( ClassListDto dto : listDtos) dto = createCategory(dto);
+        for( ClassListDto dto : listDtos ) dto = createCategory( dto );
         
         return listDtos;
     }

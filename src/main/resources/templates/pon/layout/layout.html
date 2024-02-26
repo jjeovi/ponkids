@@ -81,7 +81,7 @@
 					<a href="javascript:goLogout();" >로그아웃</a>
 				</li>
 				<li>
-					<a href="javascript:" class="show_pop" data-layer-id="login"	>마이페이지</a>
+					<a href="/mypage" >마이페이지</a>
 				</li>
 			</th:block>
 			<li>
@@ -263,8 +263,7 @@
 <!-- 문의하기 -->						<div class="layer_inquiry"					style="display: none;"	th:insert="pon/layer/layer_inquiry.html"		/>
 
 
-<form id="logoutForm" name="logoutForm" th:action="@{ /logout}" method="post">
-	
+<form id="logoutForm" name="logoutForm" th:action="@{ /pon/logout}" method="post">
 	<input type="hidden" name="returnUrl" >
 </form>
 </body>

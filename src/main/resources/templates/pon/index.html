@@ -64,7 +64,8 @@
 							 class="swiper-slide card_item" th:data-class-sn="${class.classSn}">
 							<div class="item_img">
 								<img th:src="@{/getImage(atchFileSn=${class.classThumbAtchFileSn})}" alt="" onclick="detailClass(this);">
-								<img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="좋아요" onclick="likeClass(this);">
+<!--								<img class="card_heart_ico" th:src="|${class.classLikeYn eq 'Y' } ? '/pon/common/image/heart.svg' : '/pon/common/image/heart.svg'|"-->
+<!--								<img class="card_heart_ico" src="/pon/common/image/heart.svg" alt="좋아요" onclick="likeClass(this);">-->
 							</div>
 							<div class="item_info" onclick="detailClass(this);">
 								<span th:text="${class.ctgryNm}" class="item_txt">카테고리명</span>

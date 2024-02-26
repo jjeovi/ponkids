@@ -17,8 +17,6 @@ import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailModDto;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 
-import lombok.RequiredArgsConstructor;
-
 // 공통 유틸
 public class CommonUtils {
 	

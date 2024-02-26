@@ -81,21 +81,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().oauth2Login();
         
         // 여기서부터 로그아웃 API 내용~!
-        http.logout()
-                .logoutUrl( "/admLogout" )   // 로그아웃 처리 URL (= form action url)
-                .logoutSuccessUrl( "/admLogin?auth=pon" ) // 로그아웃 성공 후 targetUrl,
-                // logoutSuccessHandler 가 있다면 효과 없으므로 주석처리.
-                .addLogoutHandler( ( request, response, authentication ) -> {
-                    // 사실 굳이 내가 세션 무효화하지 않아도 됨.
-                    // LogoutFilter가 내부적으로 해줌.
-                    HttpSession session = request.getSession();
-                    if ( session != null ) {
-                        session.invalidate();
-                    }
-                } )  // 로그아웃 핸들러 추가
-                .logoutSuccessHandler( ( request, response, authentication ) -> {
-                    response.sendRedirect( "/admLogin?auth=pon" );
-                } ); // 로그아웃 성공 핸들러
+//        http.logout()
+//                .logoutUrl( "/admLogout" )   // 로그아웃 처리 URL (= form action url)
+//                .logoutSuccessUrl( "/admLogin?auth=pon" ) // 로그아웃 성공 후 targetUrl,
+//                // logoutSuccessHandler 가 있다면 효과 없으므로 주석처리.
+//                .addLogoutHandler( ( request, response, authentication ) -> {
+//                    // 사실 굳이 내가 세션 무효화하지 않아도 됨.
+//                    // LogoutFilter가 내부적으로 해줌.
+//                    HttpSession session = request.getSession();
+//                    if ( session != null ) {
+//                        session.invalidate();
+//                    }
+//                } )  // 로그아웃 핸들러 추가
+//                .logoutSuccessHandler( ( request, response, authentication ) -> {
+//                    response.sendRedirect( "/admLogin?auth=pon" );
+//                } ); // 로그아웃 성공 핸들러
 
 //        http.
 //                authorizeRequests( ( authorizeHttpRequests ) -> authorizeHttpRequests.

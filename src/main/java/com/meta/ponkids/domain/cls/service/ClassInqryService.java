@@ -1,6 +1,8 @@
 package com.meta.ponkids.domain.cls.service;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -100,6 +102,17 @@ public class ClassInqryService {
     public ClassInqryListDto findById( ClassInqryListDto listDto ) {
     	
     	return classInqryRepository.getByClassInqrySn(listDto);
+    	
+    }
+    
+    // 부모 
+    public List<ClassInqryListDto> findReplyByStepAndParntsInqrySn( ClassInqryListDto listDto ) {
+    	
+    	List<ClassInqry> classInqryList = classInqryRepository.findByStepAndParntsInqrySn(listDto.getStep(), listDto.getClassInqrySn());
+    	
+    	ClassInqryListDto classInqryListDto = new ClassInqryListDto();
+    	
+    	return classInqryList.stream().map( m -> classInqryListDto.toDto( m ) ).collect( Collectors.toList() );
     	
     }
 

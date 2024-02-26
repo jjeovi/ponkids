@@ -2,6 +2,7 @@ package com.meta.ponkids.domain.user.controller;
 
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 import com.meta.ponkids.domain.system.file.service.AtchFileService;
+import com.meta.ponkids.domain.system.login.dto.LoginDto;
 import com.meta.ponkids.domain.system.role.repository.RoleRepository;
 import com.meta.ponkids.domain.user.dto.MultiUserChldrnSaveDto;
 import com.meta.ponkids.domain.user.dto.UserRoleSaveDto;
@@ -11,6 +12,9 @@ import com.meta.ponkids.domain.user.repository.UserRepository;
 import com.meta.ponkids.domain.user.service.UserRoleService;
 import com.meta.ponkids.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -111,6 +115,46 @@ public class UserController {
         
         return result;
     }
+    
+    
+    
+	/**
+	 * methodName	 : authenticationCheckAjax
+	 * date		   : 11/17/23
+	 * description	: ajax로 현재 로그인 세션 있는지 여부 체크
+	 */
+	@ResponseBody
+	@RequestMapping( value = "/live/authenticationCheckAjax", method = { RequestMethod.GET } )
+	public boolean authenticationCheckAjax( ) {
+		
+		// 로그인 여부 확인 하여 
+		// request 에 loginYn 추가
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		if ( auth == null ) {
+			return false ;
+		} 
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		 // 세션 체크
+		if ( principal == null || principal.getClass() != LoginDto.class ) {
+			// loginDto 가 없을 시
+			
+			// 로그인 페이지로 이동
+
+			return false;
+			
+		} else {
+			// loginDto 있을 때 ( 권한 문제 or 승인 문제 ... ) 
+			
+			// loginDto로 변경
+			LoginDto loginDto = ( LoginDto ) principal;
+
+			return true;
+			
+		}
+	}
     
     
 }

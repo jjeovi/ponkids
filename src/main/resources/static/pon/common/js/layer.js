@@ -46,23 +46,30 @@ $( function () {
     $( "#userInsertForm" ).find( "[name='userId']" ).focusout( function () {
         dupCheckFlag = false;
         var userId = $( this ).val();	  // userId값 넘기기
-
-        if ( validId( userId ) ) {
-
-            $.ajax( {
-                url: "/live/idDupCheck",
-                type: "GET",
-                dataType: "json",
-                data: { userId: userId },
-                contentType: "application/json",
-                success: function ( result ) {
-                    if ( !result ) dupCheckFlag = true;
-                    idDupResult( dupCheckFlag, "checkResult" );
-                }
-            } );
-        } else {
-            idDupResult( dupCheckFlag, "checkResult" );
-        }
+        
+        // 회원가입 layer 가 활성화 되어있을 때에만 ajax 실행
+        if ( $(".layer_join").css("display") != 'none'  ) {
+		
+	        if ( validId( userId ) ) {
+	
+	            $.ajax( {
+	                url: "/live/idDupCheck",
+	                type: "GET",
+	                dataType: "json",
+	                data: { userId: userId },
+	                contentType: "application/json",
+	                success: function ( result ) {
+	                    if ( !result ) dupCheckFlag = true;
+	                    idDupResult( dupCheckFlag, "checkResult" );
+	                }
+	            } );
+	        } else {
+	            idDupResult( dupCheckFlag, "checkResult" );
+	        }
+        	
+		}
+        
+        
     } )
 
     // 비밀번호 유효성 체크 focusout 처리
@@ -626,7 +633,8 @@ function checkPasswordMatching() {
 }
 
 function refreshAndShowLoginPop() {
-    location.href = '?lgStatus=login';
+	
+    location.href = getMakeUrlParamLgStatus('login');
 }
 
 function readyLogin( loginType ) {

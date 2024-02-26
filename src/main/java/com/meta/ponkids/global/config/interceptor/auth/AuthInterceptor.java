@@ -23,67 +23,16 @@ public class AuthInterceptor implements HandlerInterceptor {
     private String AUTH;
     
     @Override
-    public boolean preHandle( HttpServletRequest request, HttpServletResponse response, Object handler ) throws Exception {
-        
-        String requestUri = request.getRequestURI();
-        String fullUrl = getFullURL( request );
-        
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        
-        // 관리자 URL 인지 체크
-        // 관리자 URL : ( /admin~ 으로 시작 )
-        
-        // 관리자 권한 일 경우
-        // 현재 세션이 있는지 체크하여
-        // 세션이 없으면 login 페이지로 이동
-        
-        if ( requestUri.startsWith( "/admin" ) ) {
-            
-            // 세션 체크
-            if ( principal == null || principal.getClass() != LoginDto.class ) {
-                // loginDto 가 없을 시
-                
-                // 로그인 페이지로 이동
-                goToLogin( fullUrl, request, response, "LGNEMCD006" );	// 
-                return false;
-                
-            } else {
-                // loginDto 있을 때 ( 권한 문제 or 승인 문제 ... ) 
-                
-                // loginDto로 변경
-                LoginDto loginDto = ( LoginDto ) principal;
-                
-                if ( loginDto.getMngrYn() != null && loginDto.getMngrYn().equals("N") ) {
-                	if ( auth != null ) {
-                		new SecurityContextLogoutHandler().logout(request, response, auth);
-                	}
-                	goToLogin( fullUrl, request, response, "LGNEMCD007" );
-                	return false;
-                }
-                
-                if ( loginDto.getMngrYn() != null && loginDto.getMngrYn().equals("Y") &&  ( loginDto.getMngrConfmYn() == null || !( loginDto.getMngrConfmYn().equals("Y")) )  ) {
-                	if ( auth != null ) {
-                		new SecurityContextLogoutHandler().logout(request, response, auth);
-                	}
-                	
-                	goToLogin( fullUrl, request, response, "LGNEMCD008" );
-               	 	return false;
-                } 
-            }
-            
-        }
-        
-        System.out.println( "AuthInterceptor : prehandle() " + fullUrl );
-        
-        return HandlerInterceptor.super.preHandle( request, response, handler );
-    }
-    
-    @Override
     public void postHandle( HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView ) throws Exception {
     	
     	// 로그인 여부 확인 하여 
     	// request 에 loginYn 추가
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	
+    	if ( auth == null ) {
+    		request.setAttribute( "loginYn", "N" );
+    		return ;
+    	} 
     	
     	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     	
