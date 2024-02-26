@@ -234,19 +234,6 @@ public class LoginDto implements UserDetails , OAuth2User {
 
     }
 
-
-
-
-    /* S: 비빌번호 찾기 -> 비밀번호 재설정*/
-//    public void setPassword(String password) {
-//
-//        //BCryptPasswordEncoder 를 사용하여 비밀번호 해싱
-//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//        this.password = passwordEncoder.encode(password);
-//    }
-    /* E: 비밀번호 찾기 -> 비밀번호 재설정*/
-
-
     // Dto to Entity 메소드 생성
     public User toEntity() {
         return User.builder()
@@ -268,13 +255,13 @@ public class LoginDto implements UserDetails , OAuth2User {
                 .confmerIp( confmerIp )
                 .snsKakaoCntnYn( snsKakaoCntnYn )
 //                .snsKakaoCntnDt(LocalDateTime.parse(snsKakaoCntnDt))
-                .snsGoogleCntnYn( snsGoogleCntnYn )
+//                .snsGoogleCntnYn( snsGoogleCntnYn )
 //                .snsGoogleCntnDt(LocalDateTime.parse(snsGoogleCntnDt))
-                .snsNaverCntnYn( snsNaverCntnYn )
+//                .snsNaverCntnYn( snsNaverCntnYn )
 //                .snsNaverCntnDt(LocalDateTime.parse(snsNaverCntnDt))
-                .snsFacebookCntnYn( snsFacebookCntnYn )
+//                .snsFacebookCntnYn( snsFacebookCntnYn )
 //                .snsFacebookCntnDt(LocalDateTime.parse(snsFacebookCntnDt))
-                .snsAppleCntnYn( snsAppleCntnYn )
+//                .snsAppleCntnYn( snsAppleCntnYn )
 //                .snsAppleCntnDt(LocalDateTime.parse(snsAppleCntnDt))
 //                .lastLoginDt(LocalDateTime.parse(lastLoginDt))
                 .build();

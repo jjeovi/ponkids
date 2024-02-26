@@ -121,17 +121,15 @@ private final PasswordEncoder passwordEncoder;  // 패스워드 인코딩
 
 		// 쿼리 구현
 		User target = loginRepository.findTop1ByUserNmAndTelNoAndMngrYn(loginDto.getUserNm(), loginDto.getTelNo(), "N").orElse(null);
-
-		// null 일때
 		if ( target == null ) {
 			return null;
 		}
-
-		// entity 룰 dto 로 변환하여 return
 		LoginDto targetDto = new LoginDto();
 		return targetDto.toDto(target);
 	}
 	// E : 회원이름 / 전화번호 / 관리자여부 3가지로 계정 찾기 (1건만) -- 아이디 찾기
+
+
 
 	// S : 회원이름 / 이메일 / 관리자여부 3가지로 계정 찾기(1건만)  -- 비밀번호 찾기
 	public LoginDto findByUserNmAndUserIdAndMngrYn(LoginDto loginDto) {
@@ -139,12 +137,10 @@ private final PasswordEncoder passwordEncoder;  // 패스워드 인코딩
 		// 쿼리 구현
 		User target = loginRepository.findByUserNmAndUserIdAndMngrYn(loginDto.getUserNm(), loginDto.getUserId(), "N").orElse(null);
 
-		// null 일때
 		if (target == null){
 			return null;
 		}
 
-		// entity 룰 dto 로 변환하여 return
 		LoginDto targetDto = new LoginDto();
 		return targetDto.toDto(target);
 
@@ -152,59 +148,30 @@ private final PasswordEncoder passwordEncoder;  // 패스워드 인코딩
 	// E : 회원이름 / 이메일 / 관리자여부 3가지로 계정 찾기(1건만)  -- 비밀번호 찾기
 
 
-	/* S : 이메일로 인증번호 보내기 */
-	private JavaMailSender javaMailSender;
-	private final UserRepository userRepository;
-
-	public void sendEmail(String to, String subject, String text) {
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setTo(to);
-		message.setSubject(subject);
-		message.setText(text);
-
-		javaMailSender.send(message);
-	}
-	/* E : 이메일로 인증번호 보내기 */
 
 	/* S : 비밀번호 변경 */
 	public boolean changePassword( LoginDto loginDto, String newPassword  ) {
 
 		// 1. 사용자 정보 조회 -> entity 가져온다.
-//		User user = loginRepository.findByUserIdAndPassword( loginDto.getUserId(),loginDto.getPassword()  ).orElse(null);
-		// beforeUser
 		User user = loginRepository.findByUserId( loginDto.getUserId() ).orElse(null);
-		System.out.println("beforeUser ::: " + user);
 
 		// 2. ( entity to dto ) dto 매핑 : user entity to Dto
-		LoginDto targetDto = new LoginDto();	// 껍데기만 생성
-		targetDto = targetDto.toDto(user);		// targetDto 에 값들 ( userId, ... ) 이 setting (주입)
+		LoginDto targetDto = new LoginDto();
+		targetDto = targetDto.toDto(user);
 
 		// 3. ( 변경할 내용 수정작업 (dto) )
-		// todo dto에 newPassword 값 setting
-		// newPassword 암호화 필요 (tpwhd1234!) -> 암호화..
 		// 새로운 비밀번호를 해싱하여 설정
-//		newPassword = passwordEncoder.encode(newPassword);
-//		userSaveDto.setPassword( passwordEncoder.encode( userSaveDto.getPassword() ) );
-
-
 		targetDto.setPassword(passwordEncoder.encode(newPassword));
 
 		// 4. dto to entity
-		// todo dto to entity
-		// afterUser
 		user = targetDto.toEntity();
-		System.out.println("afterUser ::: " + user);
 
 		// 5. save (update)
 		if (user != null) {
-
 			// 사용자 정보 업데이트
-			// beforeUser 와 afterUser의 차이는, password뿐... 나머지는 일치해야함...
 			loginRepository.save(user);
-
 			return true;
 		}
-
 		return false;
 	}
 	/* E : 비밀번호 변경 */

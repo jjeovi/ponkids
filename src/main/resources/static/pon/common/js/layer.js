@@ -930,9 +930,7 @@ function findUsername(){
                 alert( result.msg );
 
             } else if ( result.flag == "S" ) {
-                // TODO 마스킹 된 id 계정을 뿌려주는 작업 필요..
-                /* alert(result.maskingUserId);*/
-              /*   $("#userIdInfo").text(result.maskingUserId);*/
+                // 마스킹 된 id 계정을 뿌려주는 작업
                 showSuccessScreen(result.maskingUserId);
             }
         },
@@ -946,7 +944,6 @@ function findUsername(){
 function showSuccessScreen(userId) {
     // 성공 화면을 보이도록 설정
     $('.user_find').hide(); // 기존 화면 감춤
-    //+63
     $('#userId').text(userId); // 찾은 아이디를 성공 화면에 출력
     showPopupLv2( 'findUserInfo' );   // 아이디 찾기 결과 팝업 호출
 
@@ -989,8 +986,7 @@ function findUseremail(){
 
             } else if ( result.flag == "S" ) {
 
-                // TODO : 3분 타이머 해야함
-                // 비동기로 실행....!?
+                // 3분 타이머
                 startTimer(180);
 
                 // 존재하는 계정정보일 경우 인증번호 발송되었다고 알림
@@ -1055,7 +1051,7 @@ function startTimer(duration) {
             success: function (result){
                 if(result.flag ==="S"){
                     alert(result.msg);
-                    // TODO 인증 성공시 원하는 동작 수행
+                    // 인증 성공시 원하는 동작 수행
                     showPwSuccessScreen(result.userId);
                 }else{
                     alert(result.msg);
@@ -1095,7 +1091,6 @@ function changePassword( ) {
     }
 
     // 2-2. 유효성 체크..
-    // TODO 유효성 체크해주세요.
     if (!validCheckPw(new_Pw)) {
         // 유효성이 맞지 않을떄..
             alert( "유효성 이 맞지 않습니다. [영문자, 숫자, 기호 혼합 8자 이상] 을 지켜주세요.");

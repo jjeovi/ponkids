@@ -80,8 +80,6 @@ public class LoginoutController {
 
 		String returnUrlAfterLogout = request.getParameter("returnUrl");
 
-//		String returnUrlAfterLogout = ( String ) session.getAttribute( "returnUrlAfterLogout" );
-
     	if ( auth != null ) {
     		new SecurityContextLogoutHandler().logout( request, response, auth );
     	}
@@ -105,8 +103,7 @@ public class LoginoutController {
 		//메소드가 실행되고 나서 클라이언트에게 반환될 데이터를 담기 위한 자료구조를 생성하는 부분
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		// 여기에서 실제 아이디를 찾는 로직을 구현하고 결과를 반환합니다.
-		// TODO 1. 1. 이름/전화번호 / (관리자여부) 로 계정을 찾음
+		// 1. 이름/전화번호 / (관리자여부) 로 계정을 찾음
 		// 아이디 찾기 기능에서 실제로 사용자 정보를 데이터베이스에서 조회하는 부분
 		LoginDto targetDto = loginService.findByUserNmAndTelNoAndMngrYn(loginDto);
 
@@ -116,7 +113,7 @@ public class LoginoutController {
 			result.put("flag", "S");
 			String userId  = targetDto.getUserId(); // DTO 로 받은 userid 데이터-> userId
 
-			// TODO masking 처리 @ 기준 왼쪽 4개 문자 마스킹 처리
+			// masking 처리 @ 기준 왼쪽 4개 문자 마스킹 처리
 			// 마스킹 처리 - '@' 문자를 기준으로 왼쪽 4개 문자를 마스킹
 			int atIndex = userId.indexOf('@');  // indexOf 메서드를 이용해서 '@' 문자가 처음으로 나타나는 위치의 인덱스를 반환 -> atIndex
 
@@ -145,8 +142,6 @@ public class LoginoutController {
 		//메소드가 실행되고 나서 클라이언트에게 반환될 데이터를 담기 위한 자료구조를 생성하는 부분
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		// 여기에서 실제 로직을 구현하고 결과를 반환합니다.
-
 		// 1. 이름/ 이메일 / (관리자여부) 로 계정을 찾음
 		// 비밀번호 찾기 기능에서 실제로 사용자 정보를 데이터베이스에서 조회하는 부분
 		LoginDto targetDto = loginService.findByUserNmAndUserIdAndMngrYn(loginDto);
@@ -157,7 +152,6 @@ public class LoginoutController {
 			result.put("msg", "인증번호가 발송되었습니다. ");
 
 			//이메일 전송
-			// sendEmail(targetDto.getUserId(),generateRandomAuthNumber());
 			try{
 				sendEmail(targetDto.getUserId(),generateRandomAuthNumber(), session);
 			}catch(MessagingException e){
@@ -193,7 +187,7 @@ public class LoginoutController {
 			result.put("flag", "S");
 			result.put("msg", "인증에 성공했습니다.");
 			// 검증 시간 체크
-			// TODO : 시작 시간 , 검증시간 비교하여 3분 이내인지 확인
+			// 시작 시간 , 검증시간 비교하여 3분 이내인지 확인
 			long currentTime = System.currentTimeMillis();
 			long timeDifference = currentTime - startTime;
 			if (timeDifference <= 3 * 60 * 1000) { // 3분 (3 * 60 * 1000 밀리초)
@@ -202,28 +196,26 @@ public class LoginoutController {
 				result.put("msg", "인증에 성공했습니다.");
 			// 인증 성공 후 필요한 작업 수행
 			} else {
-				// 3분 넘어가면..
-				// 시간초과 메시지..
+				// 3분 넘어가면 시간초과 메시지
 			result.put("flag", "E");
 			result.put("msg", "시간이 초과되었습니다.");
 			}
-
 		} else {
 			// 인증번호 불일치
 			result.put("flag", "E");
 			result.put("msg", "인증에 실패했습니다. 다시 시도해주세요.");
 		}
-
 		return result;
 	}
 	/* E: 비밀번호 찾기 - 인증번호 검증 */
+
 
 	/* S : 비밀번호 변경 */
 	@PostMapping("/live/changePasswordAjax")
 	public ResponseEntity<String> changePassword(@RequestParam String newPassword,@RequestParam String userId){
 
 		// 비밀번호 변경 로직 수행
-		LoginDto loginDto = new LoginDto();	// loginDto 생성 -> loginDto { } 라는 객체가 생성.. -> 껍데기 : 현재는 아무런 value 가 setting 이 되어있지 않음.
+		LoginDto loginDto = new LoginDto();
  		loginDto.setUserId(userId);	// loginDto 에 userId 주입
 
 		boolean success = loginService.changePassword(loginDto, newPassword);
@@ -232,11 +224,8 @@ public class LoginoutController {
 		}else{
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to change password");
 		}
-
 	}
 	/* E : 비밀번호 변경 */
-
-
 
 
 	// ============================ UTIL ======================
@@ -256,16 +245,14 @@ public class LoginoutController {
 
 		// 세션에 인증번호 저장
 		session.setAttribute("authCode", authNumber);
-		// TODO : 시작 시간 체크
+		// 시작 시간 체크
 		// 세션에 시작시간 저장
 		session.setAttribute("authStartTime", System.currentTimeMillis());
 	}
 
 	// 랜덤한 인증번호 생성 메서드
 	private String generateRandomAuthNumber(){
-		// TODO 여기에 랜덤 인증번호 생성 로직 추가 (조건 : 랜덤한 6자리 숫자)
-		// return "123456";
-		// 랜덤 인증번호 생성 (6자리 숫자)
+		// 랜덤 인증번호 생성 로직 (조건 : 랜덤한 6자리 숫자)
 		Random random = new Random();
 		int min = 100000;
 		int max = 999999;
@@ -278,14 +265,11 @@ public class LoginoutController {
 		if (str == null || start < 0 || end >= str.length()) {
 			return str;
 		}
-
 		char[] chars = str.toCharArray();
 		for (int i = start; i <= end; i++) {
 			chars[i] = maskChar;
 		}
-
 		return new String(chars);
 	}
-
 
 }
