@@ -5,7 +5,6 @@ import com.meta.ponkids.domain.cls.dto.ClassListDto;
 import com.meta.ponkids.domain.cls.dto.ClassReqstSaveDto;
 import com.meta.ponkids.domain.cls.repository.ClassReqstRepository;
 import com.meta.ponkids.domain.cls.service.*;
-import com.meta.ponkids.domain.lctre.dto.LctreReqstDetailSaveDto;
 import com.meta.ponkids.domain.lctre.dto.LctreReqstSaveDto;
 import com.meta.ponkids.domain.lctre.repository.LctreReqstRepository;
 import com.meta.ponkids.domain.lctre.service.LctreReqstService;

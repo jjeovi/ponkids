@@ -83,7 +83,8 @@
 		}
 		
 	}
-	
+
+	// 문의 답변 등록
 	function insertClassInqryAnswer() {
 		
 		// 유효성 체크
@@ -94,10 +95,12 @@
 			return false;
 		}
 		// 유효성 체크 종료
-		
+
+		if ( confirm("답변을 등록하시겠습니까?") ) {
+			$("#insertAnswerForm").submit();
+		}
 		// form submit
-		$("#insertAnswerForm").submit();
-		
+
 	}
 	
 	
@@ -203,12 +206,12 @@
 					<div class="col-md-11 col-sm-10 mb_10p">
 						<div class="btn-group float-right" role="group">
 							<select class="form-control" name="openYn">
-								<option value="">공개여부</option>
+								<option value="">==공개여부 선택==</option>
 								<option value="Y" th:selected=" ${searchDTO.openYn} == 'Y' ">공개</option>
 								<option value="N" th:selected=" ${searchDTO.openYn} == 'N' ">비공개</option>
 							</select>
 							<select class="form-control" name="replyYn">
-								<option value="">답변여부</option>
+								<option value="">==답변여부 선택 ==</option>
 								<option value="Y" th:selected=" ${searchDTO.replyYn} == 'Y' ">답변완료</option>
 								<option value="N" th:selected=" ${searchDTO.replyYn} == 'N' ">답변대기</option>
 							</select>
