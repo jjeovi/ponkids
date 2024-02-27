@@ -18,6 +18,8 @@ public class LctreSaveDto extends LctreDto {
     private Long    lctreSeq;               // 수업 순번
     
     private String  lctreSj;                // 수업 제목
+    
+    private String  lctreDt;                // 수업 일시
 
 	private Long	lctreAmt;				// 수업 금액
     
@@ -42,12 +44,13 @@ public class LctreSaveDto extends LctreDto {
     private String  updusrIp;               // 수정자 ip
     
     @Builder
-    public LctreSaveDto( Long lctreSn, Long classSn, String classDayCd, Long lctreSeq, String lctreSj, Long lctreAmt, String lctreDc, String lctreApplcntGuidance, String rcritNmprSetYn, Long rcritNmprCo, String preparRcritNmprSetYn, Long preparRcritNmprCo, String registerId, String registerIp, String updusrId, String updusrIp ) {
+    public LctreSaveDto( Long lctreSn, Long classSn, String classDayCd, Long lctreSeq, String lctreSj, String lctreDt, Long lctreAmt, String lctreDc, String lctreApplcntGuidance, String rcritNmprSetYn, Long rcritNmprCo, String preparRcritNmprSetYn, Long preparRcritNmprCo, String registerId, String registerIp, String updusrId, String updusrIp ) {
         this.lctreSn = lctreSn;
         this.classSn = classSn;
         this.classDayCd = classDayCd;
         this.lctreSeq = lctreSeq;
         this.lctreSj = lctreSj;
+        this.lctreDt = lctreDt;
         this.lctreAmt = lctreAmt;
         this.lctreDc = lctreDc;
         this.lctreApplcntGuidance = lctreApplcntGuidance;
@@ -69,6 +72,7 @@ public class LctreSaveDto extends LctreDto {
                 .classDayCd( classDayCd )
                 .lctreSeq( lctreSeq )
                 .lctreSj( lctreSj )
+                .lctreDt( lctreDt )
                 .lctreAmt( lctreAmt )
                 .lctreDc( lctreDc )
                 .lctreApplcntGuidance( lctreApplcntGuidance )

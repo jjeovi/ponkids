@@ -4,6 +4,18 @@
 <!-- S : Javascript functions	-->
 
 <script layout:fragment="script">
+	var _mon	= '00';	// 수업제목 중 월 담당
+	var _day	= '00';	// 수업제목 중 일 담당
+	var _apm	= '--';	// am 인지 pm 인지
+	var _hh		= '--'	// 수업제목 중 시 담당
+	var _MM		= '--분'	// 수업제목 중 분 담당 ( 분은 '분' 글자까지 작성 )
+	var _amount = amtSetComma($("[name='lctreAmt']").val());	// 수업금액  
+	var _yoil	= '-';	// 수업제목 중 요일 담당
+	
+	// 수업제목을 결정하는 title ( auto 활성화 시 사용 )
+	var _lctreSjTitle = _mon + '월 ' + _day + '일 ' + '(' + _yoil + ') ' + _apm + ' ' + _hh + '시 ' + _MM + '(' + _amount + '원)';	
+	
+
 
 	$( function () {
 
@@ -38,7 +50,49 @@
 				$( "#preparRcritNmprCo" ).val( "" );
 			}
 		} );
-
+		
+		
+		// 자동제목설정 클릭시 이벤트
+		$( "input[name='autoLctreSjSet']" ).click( function () {
+			
+			if ( $(this).is(':checked') ) {
+				// 자동 설정 start
+				// - 수업제목 비활성화
+				$("[name='lctreSj']").prop( "readonly", true );
+				
+				// 요일, 수업일시, 수업금액 현행화 작업 수행
+				// - 요일, 수업일시는 현행화가 계속 진행중이고, 수업금액만 현행화를 진행하면 됨.
+				_amount = amtSetComma($("[name='lctreAmt']").val());	// 수업금액
+				
+				// - 요일 선택 변경 시 해당 값 setting 및 수업제목 refresh&display
+				$("[name='classDayCd']").attr("onchange","refreshLctreSj();");
+				// - 수업 일시 변경 시 해당 값 setting 및 수업제목 refresh&display
+				$("[name='lctreDt']").attr("onchange","refreshLctreSj();");
+				// - 수업 금액 변경 시 해당 값 setting 및 수업제목 refresh&display
+				$("[name='lctreAmt']").attr("onkeyup","setAmountAndRefreshLctreSj( this );");
+				
+				refreshLctreSj();
+			} else {
+				// 자동 설정 end
+				
+				// -수업제목 활성화 
+				$("[name='lctreSj']").removeAttr("readonly");
+				
+				// 요일, 수업일시, 수업금액 onchange 속성 remove : removeAttr 활용
+				$("[name='classDayCd'], [name='lctreDt']").removeAttr("onchange");
+				$("[name='lctreAmt']").removeAttr("onkeyup");
+			}
+			
+		} );
+		
+		// 요일 변경 시
+		$("[name='classDayCd']").change( function() {
+			if ( $(this).val() != '' ) {
+				_yoil = $(this).find("option:selected").text().substring(0,1);
+			} else {
+				_yoil = '-';
+			}
+		});
 
 	} );
 	// $( function () {}); end
@@ -46,6 +100,13 @@
 	// form submit 시 유효성 검사
 	function submitValidCheck() {
 
+		// 수업일시 체크
+		var lctreDt = $( "[name='lctreDt']" ).val();
+		if ( lctreDt == '' ) {
+			alert( "수업일시를 선택해주세요." );
+			$( "[name='lctreDt']" ).focus();
+			return false;
+		}
 		// 모집인원 설정시 모집인원 수 체크
 		var rcritNmprSetYn = $( "[name='rcritNmprSetYn']:checked" ).val();
 		if ( rcritNmprSetYn == 'Y' && $( "#rcritNmprCo" ).val() == '' ) {
@@ -64,7 +125,32 @@
 
 		return true;
 	}
-
+	
+	
+	function handleDateChange(selectedDates, dateStr, instance) {
+		// date 객체 : selectedDates[0]
+		var selectDate = selectedDates[0];
+		
+		_mon 	= selectDate.getMonth() + 1
+		_day 	= selectDate.getDate();
+		_hh		= selectDate.getHours() < 12 ? selectDate.getHours() : selectDate.getHours()-12 ;
+		_MM		= selectDate.getMinutes() == '0' ? '' : selectDate.getMinutes() + '분 ';
+		_apm	= selectDate.getHours() < 12 ? '오전' : '오후' ;
+		
+		console.log(_mon + '월 ' + _day + '일 ' + '(' + _yoil + ') ' + _apm + ' ' + _hh + '시 ' + _MM + '(' + _amount + '원)');	
+		
+	}
+	
+	function setAmountAndRefreshLctreSj( e ) {
+		_amount = amtSetComma($( e ).val());
+		
+		refreshLctreSj();
+	}
+	
+	function refreshLctreSj() {
+		$("[name='lctreSj']").val(_mon + '월 ' + _day + '일 ' + '(' + _yoil + ') ' + _apm + ' ' + _hh + '시 ' + _MM + '(' + _amount + '원)');
+	}
+	
 </script>
 <!-- E : Javascript functions	-->
 <th:block layout:fragment="content">
@@ -107,6 +193,26 @@
 								<input class="form-control" name="lctreSj" placeholder="수업 제목을 입력해주세요." required/>
 								<small class="font-gray-dark">
 									신청 화면에서 수업이 selectbox로 보여지는 내용입니다. ex ) 1월 1일 (월) 오후 3시 (59,000)
+								</small>
+							</div>
+							<div class="col-md-4 col-sm-3">
+								<input id="autoLctreSjSet" type="checkbox" name="autoLctreSjSet" value="Y"/>
+								<label for="autoLctreSjSet">
+									<span class="cbTitle">제목 자동 설정</span>
+								</label>
+								<br />
+								<small class="font-gray-dark">
+									제목을 설정값으로 자동으로 설정해 줍니다. ex ) 1월 19일 (수) 오후 2시 30분 (59,900원)
+								</small>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">수업 일시<span
+									class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<input type="text" class="form-control" name="lctreDt" placeholder="수업 일시 선택" data-pickr="dateTime" required/>
+								<small class="font-gray-dark">
+									수업 시작하는 일시를 선택해주세요.
 								</small>
 							</div>
 						</div>

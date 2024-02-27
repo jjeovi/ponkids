@@ -35,6 +35,8 @@ public class LctreListDto extends LctreDto {
 	private Long 		lctreSeq;				// 수업 순번
 	
 	private String 		lctreSj;				// 수업 제목
+	
+	private String 		lctreDt;				// 수업 일시
 
 	private Long		lctreAmt;				// 수업 금액
 	
@@ -66,7 +68,7 @@ public class LctreListDto extends LctreDto {
 	
 	@Builder
 	@QueryProjection
-	public LctreListDto( Long lctreSn, Long ctgrySn, String ctgryNm, Long crseSn, String crseNm, Long classSn, String classSj, Long classDaySn, String classDayCd, String classDayNm, Long lctreSeq, String lctreSj, Long lctreAmt, String lctreDc, String lctreApplcntGuidance, String rcritNmprSetYn, String rcritNmprSetYnNm, Long rcritNmprCo, String preparRcritNmprSetYn, String preparRcritNmprSetYnNm, Long preparRcritNmprCo, String registerId, String regDt ) {
+	public LctreListDto( Long lctreSn, Long ctgrySn, String ctgryNm, Long crseSn, String crseNm, Long classSn, String classSj, Long classDaySn, String classDayCd, String classDayNm, Long lctreSeq, String lctreSj, String lctreDt, Long lctreAmt, String lctreDc, String lctreApplcntGuidance, String rcritNmprSetYn, String rcritNmprSetYnNm, Long rcritNmprCo, String preparRcritNmprSetYn, String preparRcritNmprSetYnNm, Long preparRcritNmprCo, String registerId, String regDt ) {
 		this.lctreSn = lctreSn;
 		this.ctgrySn = ctgrySn;
 		this.ctgryNm = ctgryNm;
@@ -79,6 +81,7 @@ public class LctreListDto extends LctreDto {
 		this.classDayNm = classDayNm;
 		this.lctreSeq = lctreSeq;
 		this.lctreSj = lctreSj;
+		this.lctreDt = lctreDt;
 		this.lctreAmt = lctreAmt;
 		this.lctreDc = lctreDc;
 		this.lctreApplcntGuidance = lctreApplcntGuidance;
@@ -100,6 +103,7 @@ public class LctreListDto extends LctreDto {
 				.classDayCd( lctre.getClassDayCd() )
 				.lctreSeq( lctre.getLctreSeq() )
 				.lctreSj( lctre.getLctreSj() )
+				.lctreDt( lctre.getLctreDt() )
 				.lctreAmt( lctre.getLctreAmt() )
 				.lctreDc( lctre.getLctreDc() )
 				.lctreApplcntGuidance( lctre.getLctreApplcntGuidance() )

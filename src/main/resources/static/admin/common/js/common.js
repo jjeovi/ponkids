@@ -38,13 +38,15 @@ $( function () {
     // 1. html 태그에 [ data-pickr ] 값 date		: date  설정
     // 2. html 태그에 [ data-pickr ] 값 time		: time  설정
     // 3. html 태그에 [ data-pickr ] 값 dateTime : date와 time 모두 설정
-    $( '[data-pickr="date"' ).each( function ( i, item ) {
+    $( '[data-pickr="date"]' ).each( function ( i, item ) {
 
-        flatpickr( '#' + item.id, {
-            dateFormat: 'Y-m-d',	// 날짜 및 시간 형식 설정 (예: 2023-09-12 15:30)
-            defaultHour: '09',			// 디폴트 시간 설정 (날짜 선택시 기본으로 설정되어있는 시간)
-            enableTime: true,        	// 시간 선택 활성화
-            locale: 'ko',            	// 한국어로 지역화
+        flatpickr( item, {
+            dateFormat		: 'Y-m-d',				// 날짜 및 시간 형식 설정 (예: 2023-09-12 15:30)
+            defaultHour		: '09',					// 디폴트 시간 설정 (날짜 선택시 기본으로 설정되어있는 시간)
+            enableTime		: true,					// 시간 선택 활성화
+            onChange		: handleDateChange, 	// 날짜 선택 이벤트 핸들러 등록
+            onValueUpdate	: handleValueUpdate,	// 값 변경 시점 이벤트 실행 핸들러 등록
+            locale			: 'ko',					// 한국어로 지역화
         } );
 
     } );
@@ -55,13 +57,15 @@ $( function () {
     // 1. html 태그에 [ data-pickr ] 값 date		: date  설정
     // 2. html 태그에 [ data-pickr ] 값 time		: time  설정
     // 3. html 태그에 [ data-pickr ] 값 dateTime : date와 time 모두 설정
-    $( '[data-pickr="dateTime"' ).each( function ( i, item ) {
+    $( '[data-pickr="dateTime"]' ).each( function ( i, item ) {
 
-        flatpickr( '#' + item.id, {
-            dateFormat: 'Y-m-d H:i',	// 날짜 및 시간 형식 설정 (예: 2023-09-12 15:30)
-            defaultHour: '09',			// 디폴트 시간 설정 (날짜 선택시 기본으로 설정되어있는 시간)
-            enableTime: true,        	// 시간 선택 활성화
-            locale: 'ko',            	// 한국어로 지역화
+        flatpickr( item, {
+            dateFormat		: 'Y-m-d H:i',			// 날짜 및 시간 형식 설정 (예: 2023-09-12 15:30)
+            defaultHour		: '09',					// 디폴트 시간 설정 (날짜 선택시 기본으로 설정되어있는 시간)
+            enableTime		: true,					// 시간 선택 활성화
+            onChange		: handleDateChange, 	// 날짜 선택 이벤트 핸들러 등록
+            onValueUpdate	: handleValueUpdate,	// 값 변경 시점 이벤트 실행 핸들러 등록
+            locale			: 'ko',					// 한국어로 지역화
         } );
 
     } );
@@ -1025,11 +1029,30 @@ this.getTextWidth = function(text, font){
     return metrics.width;
 };
 
+// flatpickr onchange 함수 default
+function handleDateChange(selectedDates, dateStr, instance) {
+	console.log('선택된 날짜1 :', selectedDates);
+	console.log('선택된 날짜2 :', dateStr);
+	console.log('선택된 날짜3 :', instance);
+}
+
+// flatpickr onValueUpdate 함수 default
+function handleValueUpdate(selectedDates, dateStr, instance) {
+	console.log('handleValueUpdate', dateStr);
+}
+
 
 
 
 function goLogout() {
 	
 	$( "#logoutForm" ).submit();	// 로그아웃 구현
+	
+}
+
+
+// 금액 3자리수마다 콤마
+function amtSetComma( val ){
+	return val.replace(/\,/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,')
 	
 }

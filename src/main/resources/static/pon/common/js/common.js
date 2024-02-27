@@ -266,8 +266,8 @@ function likeClass( classSn, e ){
 				var url = "/classLike/live/toggleLikeAjax"
 				$.ajax( {
 					url: url,
-					type: "GET",	// 회원저장 POST로
-					async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+					type: "GET",
+					async: false,
 					data: data, // 검색할 값
 					contentType: "application/json",
 					success: function ( result ) {
