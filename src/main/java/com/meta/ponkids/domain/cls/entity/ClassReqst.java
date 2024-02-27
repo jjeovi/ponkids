@@ -37,6 +37,10 @@ public class ClassReqst extends BaseTimeEntity {
     
     private Long userSn;                    // 사용자 일련번호
     
+    private Long totReqstCnt;               // 총 신청 건수
+    
+    private Long totReqstAmt;               // 총 신청 금액
+    
     @Column( updatable = false )
     private String 	registerId;            	// 등록자ID
     

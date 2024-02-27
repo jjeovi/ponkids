@@ -236,27 +236,25 @@ function goLogout() {
 	
 }
 
-
 // 좋아요 이벤트
 function likeClass( classSn, e ){
 
-
-		var url = "/live/authenticationCheckAjax";	// 현재 로그인 세션 존재하는지 여부 체크
-		$.ajax( {
-			url: url,
-			type: "GET",	// 회원저장 POST로
-			async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-			cache: false,
-			contentType: false,
-			processData: false,
-			success: function ( ajaxResult ) {
+	var url = "/live/authenticationCheckAjax";	// 현재 로그인 세션 존재하는지 여부 체크
+	$.ajax( {
+		url: url,
+		type: "GET",	// 회원저장 POST로
+		async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+		cache: false,
+		contentType: false,
+		processData: false,
+		success: function ( ajaxResult ) {
+			
+			if ( !ajaxResult ) {
+				// 로그인 layer 표출
+				hideAllPopup();
+				showPopup( 'login' );
 				
-				if ( !ajaxResult ) {
-					// 로그인 layer 표출
-					hideAllPopup();
-					showPopup( 'login' );
-					
-				} else {
+			} else {
 				// 좋아요 insert ( classSn / userSn )
 				
 				data = {};
@@ -281,20 +279,33 @@ function likeClass( classSn, e ){
 							if ( likeStatus == 'insert' ){
 								$(e).find('img').attr("src", "/pon/common/image/heart-full.svg");
 							} else if ( likeStatus == 'delete' ) {
-								$(e).find('img').attr("src", "/pon/common/image/heart.svg");
+								
+								// detailLike 는 detail 페이지에 있는 하트 -> detail 페이지와 list 페이지가 기본 하트 색상이 달라서 분기처리.
+								if ( $(e).hasClass('detailLike') ) {
+									$(e).find('img').attr("src", "/pon/common/image/heart_color_bg.svg");
+								} else {
+									$(e).find('img').attr("src", "/pon/common/image/heart.svg");
+									
+								}
 							}
 
 							return ;
 						}
 					}
 				} );
-					
-				}
-				
-				
-
 			}
-		} );
+		}
+	});
+}
+
+
+// 금액 3자리수마다 콤마
+function amtSetComma( val ){
+	if ( typeof(val) == 'number' ){
+		return val.toString().replace(/\,/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,')
+	} else {
+		return val.replace(/\,/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,')
+	}
 	
 	
 }

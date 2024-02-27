@@ -1053,6 +1053,9 @@ function goLogout() {
 
 // 금액 3자리수마다 콤마
 function amtSetComma( val ){
-	return val.replace(/\,/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,')
-	
+	if ( typeof(val) == 'number' ){
+		return val.toString().replace(/\,/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,')
+	} else {
+		return val.replace(/\,/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,')
+	}
 }

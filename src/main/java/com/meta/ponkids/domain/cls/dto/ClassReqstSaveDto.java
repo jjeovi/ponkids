@@ -21,6 +21,10 @@ public class ClassReqstSaveDto {
 	private Long 	classSn;                // 클래스 일련번호
 	
 	private Long 	userSn;                 // 사용자 일련번호
+	
+	private Long 	totReqstCnt;            // 총 신청 건수
+	
+	private Long 	totReqstAmt;            // 총 신청 금액
     
     private String 	registerId;             // 등록자 id
     
@@ -37,18 +41,22 @@ public class ClassReqstSaveDto {
     		Long classReqstSn,
 			Long classSn,
 			Long userSn,
+			Long totReqstCnt,
+			Long totReqstAmt,
 			String registerId, 
 			String registerIp, 
 			String updusrId, 
 			String updusrIp ) {
 		
-		this.classReqstSn 	= classReqstSn;
-		this.classSn 		= classSn;
-		this.userSn 		= userSn;
-		this.registerId 	= registerId;
-		this.registerIp 	= registerIp;
-		this.updusrId 		= updusrId;
-		this.updusrIp 		= updusrIp;
+		this.classReqstSn	= classReqstSn;
+		this.classSn		= classSn;
+		this.userSn			= userSn;
+		this.totReqstCnt	= totReqstCnt;
+		this.totReqstAmt	= totReqstAmt;
+		this.registerId		= registerId;
+		this.registerIp		= registerIp;
+		this.updusrId		= updusrId;
+		this.updusrIp		= updusrIp;
 	}
     
     // Dto to Entity 메소드 생성
@@ -57,6 +65,8 @@ public class ClassReqstSaveDto {
                 .classReqstSn( classReqstSn )
                 .classSn( classSn )
                 .userSn( userSn )
+                .totReqstCnt( totReqstCnt )
+                .totReqstAmt( totReqstAmt )
                 .registerId( registerId )
                 .registerIp( registerIp )
                 .updusrId( updusrId )
