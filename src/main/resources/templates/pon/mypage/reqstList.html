@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{pon/layout/layout}">
+
+<head layout:fragment="head">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<!-- Meta, title, CSS, favicons, etc. -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="_csrf" th:content="${_csrf.token}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+	<title layout:fragment="title">피오니키즈</title>
+
+	<!-- css -->
+	<link rel="stylesheet" href="/pon/common/css/reset.css">
+	<link rel="stylesheet" href="/pon/common/css/common.css">
+	<link rel="stylesheet" href="/pon/common/css/style.css">
+	<link rel="stylesheet" href="/pon/npm/swiper11/css/swiper-bundle.min.css">
+
+</head>
+<title layout:fragment="title">피오니키즈 - pioneerkids</title>
+<!-- S : Javascript functions	-->
+<div layout:fragment="script">
+	<!-- js -->
+</div>
+
+<!-- E : Javascript functions	-->
+<div layout:fragment="content" class="sub_box">
+	<div class="top_tit">
+		<div class="star"> 
+			<img src="/pon/common/image/bell_color.svg" alt="배경아이콘_종">
+		</div>
+		<h3 th:text="${currentMenu != null && currentMenu.menuNm!= null } ? ${currentMenu.menuNm} : '게시판' " >메뉴명</h3>
+		<span th:text="${currentMenu != null && currentMenu.menuNm!= null } ? ${currentMenu.menuDc} : '피오니키즈의 공지사항을 확인하세요.' " >메뉴설명</span>
+		<img class="bg_ico1" src="/pon/common/image/star_3d_color.png" alt="배경아이콘_별_3D">
+		<img class="bg_ico2" src="/pon/common/image/atom2.png" alt="배경아이콘_원자">
+	</div>
+	<div class="class_1dep">
+		<div class="notice_article">
+			<div class="article_detail_box">
+<!--				<div class="article_title">-->
+<!--					<h2 th:text="${targetDto.nttNm}">게시물 제목</h2>-->
+<!--					<div class="article_detail_date">-->
+<!--						<span th:text="${targetDto.updtDt}">게시물 최종수정일</span>-->
+<!--						<img src="/pon/common/image/share.svg" alt="공유아이콘">-->
+<!--					</div>-->
+<!--				</div>-->
+				<div class="article_detail_body" th:utext="${targetDto.nttCn}">
+				</div>
+					<!-- TODO : 첨부 파일 , 댓글작업 -->
+<!--				<div class="detail_comment">-->
+<!--					<div class="file_dw">-->
+<!--						<span>첨부파일 : </span>-->
+<!--						<span>test.jpg(12Byte)</span>-->
+<!--					</div>-->
+<!--					<div class="detail_comment_top">-->
+<!--						<img src="/pon/common/image/comment.svg" alt="댓글수이미지">-->
+<!--						<span>전체 댓글 수 <strong>2</strong> </span>-->
+<!--					</div>-->
+<!--					<div class="detail_comment_item">-->
+<!--						<div>-->
+<!--							<span>지윤맘</span>-->
+<!--							<span>2023-09-12 17:53</span>-->
+<!--						</div>-->
+<!--						<div class="detail_comment_body">-->
+<!--							<p>우와 리뷰이벤트 당첨 축하드려요~ 다음번엔 저도 당첨될길! 아자아자!</p>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--					<div class="detail_comment_item">-->
+<!--						<div>-->
+<!--							<span>오늘도 화이팅</span>-->
+<!--							<span>2023-09-12 17:53</span>-->
+<!--						</div>-->
+<!--						<div class="detail_comment_body">-->
+<!--							<p>축하드려요!</p>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+					<!-- TODO : 이전글,다음글 처리 -->
+<!--				<div class="detail_order">-->
+<!--					<div class="detail_order_article">-->
+<!--						<div class="order_top">-->
+<!--							<span>이전글</span>-->
+<!--							<h4>2023년 6월 베스트 리뷰어 당첨자 발표</h4>-->
+<!--						</div>-->
+<!--						<div class="order_date">-->
+<!--							<span>2023-09-12 17:53</span>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--					<div class="detail_order_article">-->
+<!--						<div class="order_top">-->
+<!--							<span>다음글</span>-->
+<!--							<h4>2023년 6월 베스트 리뷰어 당첨자 발표</h4>-->
+<!--						</div>-->
+<!--						<div class="order_date">-->
+<!--							<span>2023-09-12 17:53</span>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+			</div>
+			<div class="bg_ico3">
+				<img src="/pon/common/image/space_one.png" alt="배경아이콘_우주항공사">
+			</div>
+		</div>
+		<div class="article_detail_footer">
+<!--			<div>-->
+<!--				<a th:href="@{/ntt/{mcd}/{bbsSn}/list ( mcd = ${mcd}, bbsSn = ${bbsSn} ) }">-->
+<!--					<img src="/pon/common/image/list_btn.svg" alt="이미지_목록보기">-->
+<!--					<span>목록</span>-->
+<!--				</a>-->
+<!--			</div>-->
+		</div>
+	</div>
+</div>
+
+</html>
