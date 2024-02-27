@@ -95,7 +95,7 @@ public class LoginoutController {
 	// 아이디 찾기
 	@ResponseBody
 	@PostMapping("/live/findUsernameAjax")
-	public Map<String, Object> findUsername( HttpServletRequest request,
+	public Map<String, Object> findUsernameAjax( HttpServletRequest request,
 											@ModelAttribute LoginDto loginDto,
 											HttpSession session,
 											Model model
@@ -137,7 +137,7 @@ public class LoginoutController {
 	/* S : 이메일 확인 및 인증번호 전송 */
 	@ResponseBody
 	@PostMapping("/live/findUseremailAjax")
-	public Map<String, Object> findUseremail( @ModelAttribute LoginDto loginDto) {
+	public Map<String, Object> findUseremailAjax( @ModelAttribute LoginDto loginDto) {
 
 		//메소드가 실행되고 나서 클라이언트에게 반환될 데이터를 담기 위한 자료구조를 생성하는 부분
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -174,7 +174,7 @@ public class LoginoutController {
 	/* S: 비밀번호 찾기 - 인증번호 검증 */
 	@ResponseBody
 	@PostMapping("/livefindUserpwAjax")
-	public Map<String,Object> findUserpw(@RequestParam String authNumber, HttpSession session){
+	public Map<String,Object> livefindUserpwAjax(@RequestParam String authNumber, HttpSession session){
 		Map<String, Object> result = new HashMap<>();
 
 
@@ -184,8 +184,6 @@ public class LoginoutController {
 
 		if (storedAuthCode != null && storedAuthCode.equals(authNumber) && startTime != null) {
 			// 인증번호 일치
-			result.put("flag", "S");
-			result.put("msg", "인증에 성공했습니다.");
 			// 검증 시간 체크
 			// 시작 시간 , 검증시간 비교하여 3분 이내인지 확인
 			long currentTime = System.currentTimeMillis();
@@ -197,8 +195,8 @@ public class LoginoutController {
 			// 인증 성공 후 필요한 작업 수행
 			} else {
 				// 3분 넘어가면 시간초과 메시지
-			result.put("flag", "E");
-			result.put("msg", "시간이 초과되었습니다.");
+				result.put("flag", "E");
+				result.put("msg", "시간이 초과되었습니다.");
 			}
 		} else {
 			// 인증번호 불일치
@@ -212,13 +210,14 @@ public class LoginoutController {
 
 	/* S : 비밀번호 변경 */
 	@PostMapping("/live/changePasswordAjax")
-	public ResponseEntity<String> changePassword(@RequestParam String newPassword,@RequestParam String userId){
+	public ResponseEntity<String> changePasswordAjax(@RequestParam String newPassword,@RequestParam String userId){
 
 		// 비밀번호 변경 로직 수행
 		LoginDto loginDto = new LoginDto();
  		loginDto.setUserId(userId);	// loginDto 에 userId 주입
 
 		boolean success = loginService.changePassword(loginDto, newPassword);
+
 		if(success){
 			return ResponseEntity.ok("비밀번호 변경 되었습니다.");
 		}else{
@@ -233,7 +232,7 @@ public class LoginoutController {
 	// ============================ UTIL ======================
 
 	// 이메일 전송 메서드
-	private void sendEmail(String to, String authNumber , HttpSession session)throws MessagingException{
+	private void sendEmail(String to, String authNumber , HttpSession session) throws MessagingException{
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
 
