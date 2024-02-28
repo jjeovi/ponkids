@@ -166,8 +166,7 @@ public class ClassInqryAdmController {
 		saveDto.setStep("2");											// 답변 : 2로 setting 
 		
 		// - userSn setting
-		LoginDto loginDto = SessionUtils.getAuthentication();
-		saveDto.setUserSn( loginDto.getUserSn() );
+		saveDto.setUserSn( SessionUtils.getAuthUserSn() );
 		
 		// E : 필요한 객체 setting
 		

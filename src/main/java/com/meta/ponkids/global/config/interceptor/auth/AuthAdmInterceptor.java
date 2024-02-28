@@ -2,6 +2,7 @@ package com.meta.ponkids.global.config.interceptor.auth;
 
 
 import com.meta.ponkids.domain.system.login.dto.LoginDto;
+import com.meta.ponkids.global.util.common.CommonUtils;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -25,7 +26,7 @@ public class AuthAdmInterceptor implements HandlerInterceptor {
     public boolean preHandle( HttpServletRequest request, HttpServletResponse response, Object handler ) throws Exception {
         
         String requestUri = request.getRequestURI();
-        String fullUrl = getFullURL( request );
+        String fullUrl = CommonUtils.getFullURL( request );
         
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -44,7 +45,7 @@ public class AuthAdmInterceptor implements HandlerInterceptor {
                 // loginDto 가 없을 시
                 
                 // 로그인 페이지로 이동
-                goToLogin( fullUrl, request, response, "LGNEMCD006" );	// 
+            	CommonUtils.goToLogin( fullUrl, request, response, "LGNEMCD006" , "/admLogin?auth=" + AUTH );	// 
                 return false;
                 
             } else {
@@ -57,7 +58,7 @@ public class AuthAdmInterceptor implements HandlerInterceptor {
                 	if ( auth != null ) {
                 		new SecurityContextLogoutHandler().logout(request, response, auth);
                 	}
-                	goToLogin( fullUrl, request, response, "LGNEMCD007" );
+                	CommonUtils.goToLogin( fullUrl, request, response, "LGNEMCD007", "/admLogin?auth=" + AUTH );
                 	return false;
                 }
                 
@@ -66,7 +67,7 @@ public class AuthAdmInterceptor implements HandlerInterceptor {
                 		new SecurityContextLogoutHandler().logout(request, response, auth);
                 	}
                 	
-                	goToLogin( fullUrl, request, response, "LGNEMCD008" );
+                	CommonUtils.goToLogin( fullUrl, request, response, "LGNEMCD008" , "/admLogin?auth=" + AUTH );
                	 	return false;
                 } 
             }
@@ -78,23 +79,14 @@ public class AuthAdmInterceptor implements HandlerInterceptor {
         return HandlerInterceptor.super.preHandle( request, response, handler );
     }
     
-    void goToLogin( String fullUrl, HttpServletRequest request, HttpServletResponse response, String errCd ) throws Exception {
+    void goToLogin( String fullUrl, HttpServletRequest request, HttpServletResponse response, String errCd, String redirectUrl ) throws Exception {
         
         HttpSession session = request.getSession();
         session.setAttribute( "errCd", errCd );
         session.setAttribute( "returnUrlAfterLogin", fullUrl );
         
-        response.sendRedirect( "/admLogin?auth=" + AUTH ); // 인증이 성공한 후에는 root로 이동
+        response.sendRedirect( redirectUrl ); // 인증이 성공한 후에는 root로 이동
         
     }
     
-    String getFullURL( HttpServletRequest request ) {
-        StringBuffer requestURL = request.getRequestURL();
-        String queryString = request.getQueryString();
-        if ( queryString == null ) {
-            return requestURL.toString();
-        } else {
-            return requestURL.append( "?" ).append( queryString ).toString();
-        }
-    }
 }

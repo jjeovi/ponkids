@@ -70,11 +70,7 @@ public class ClassController {
 		// S : 필요한 객체 setting
 		
 		// 로그인 여부 파악 하여 userSn setting 함
-		LoginDto loginDto = SessionUtils.getAuthentication();
-		if ( loginDto != null && loginDto.getUserSn() != null ) {
-			// 메시지 출력 및 url 이동 처리
-			listDto.setUserSn( loginDto.getUserSn() );
-		}
+		listDto.setUserSn( SessionUtils.getAuthUserSn());
 		// 목록 조회
 		Page<ClassListDto> resultList = classService.getList( listDto, pageable );
 		model.addAttribute( "resultList", resultList );
@@ -109,14 +105,9 @@ public class ClassController {
 		// 1. 클래스 의 정보 : targetDto
 		
 		// 로그인 여부 파악 하여 userSn setting 함
-		Long userSn = null;
-		LoginDto loginDto = SessionUtils.getAuthentication();
-		if ( loginDto != null && loginDto.getUserSn() != null ) {
-			// 메시지 출력 및 url 이동 처리
-			userSn = loginDto.getUserSn();
-		}
+		Long userSn = SessionUtils.getAuthUserSn();
 		// target object 조회
-		ClassListDto targetDto = classService.getByClassSn( pk , userSn);
+		ClassListDto targetDto = classService.getByClassSn( pk , SessionUtils.getAuthUserSn());
 		
 		if( targetDto == null  || targetDto.getClass() == null ) {
 			
@@ -162,16 +153,14 @@ public class ClassController {
 		// 6. 클래스 가 속한 카테고리의 다른 클래스들의 정보 : otherClassList ( 본인 클래스는 제외해야함 ) 
 		model.addAttribute("otherClassList", classService.getListTop10OtherClassExceptMeByCtgrySn( targetDto ) );
 		
-		// 7. 계정정보 get 후 자녀 list 
-		if ( loginDto != null ) {
-			/// 자녀 정보 list get
-			// chldrn target object 조회
-			model.addAttribute( "targetChldrnDtoList", userChldrnRepository.getListByUserSn( loginDto.getUserSn() ) );
-			
-			// 8. 해당 클래스르 신청한 이력이 있는지 확인
-			// 이력이 있다면 '해당 클래스를 신청한 이력이 존재합니다. (마이페이지로 이동)  ' 할 수 있는 버튼을 구현 할지 
-			model.addAttribute( "reqstHistoryYn", classReqstRepository.existsByClassSnAndUserSn( targetDto.getClassSn(), loginDto.getUserSn() ) );
-		}
+		// 7. 계정정보 get 후 자녀 list
+		/// 자녀 정보 list get
+		// chldrn target object 조회
+		model.addAttribute( "targetChldrnDtoList", userChldrnRepository.getListByUserSn( userSn ) );
+		
+		// 8. 해당 클래스르 신청한 이력이 있는지 확인
+		// 이력이 있다면 '해당 클래스를 신청한 이력이 존재합니다. (마이페이지로 이동)  ' 할 수 있는 버튼을 구현 할지 
+		model.addAttribute( "reqstHistoryYn", classReqstRepository.existsByClassSnAndUserSn( targetDto.getClassSn(), userSn ) );
 		
 		// E : 필요한 객체 setting
 		

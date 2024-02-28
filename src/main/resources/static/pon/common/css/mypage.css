@@ -1,0 +1,117 @@
+/* S : mypage - common */
+.mypage_title {display: flex; justify-content: space-between; padding: 15px 20px; align-items: center; padding-bottom:5px;}
+
+.mypage_detail_box {
+	display: inline-block;
+    font-size: 14px;
+    text-align: center;
+    width: 100px;
+    border: 1px solid #d2d2d2;
+    height: 65px;
+    border-radius: 8px;
+    cursor: pointer;
+    }
+.mypage_detail_box img {    max-width: 20px;
+    cursor: pointer;
+    top: 6px;
+    position: relative;}
+
+.mp_list .active {color:#1CBCC9;  font-weight: bold; }
+.mp_list {margin-top:10px; background-color: #1cbcc9; display: flex; align-items: center; padding: 15px 20px; border-radius: 20px; color: #555; overflow-y: scroll; -ms-overflow-style: none; /* 인터넷 익스플로러 */ scrollbar-width: none; /* 파이어폭스 */ margin-right:10px; margin-left:10px;}
+.mp_list a{
+	color: #fff;
+    font-size: 14px;
+}
+.mp_list::-webkit-scrollbar {
+	display: none; /* 크롬, 사파리, 오페라, 엣지 */
+}
+
+
+.list_area ul{display: flex; gap: 25px;}
+.list_area ul li{padding:0 15px; display: flex; white-space: nowrap;}
+.list_area ul li img{margin-right: 5px;}
+
+
+.img-circle{
+	border-radius: 50%;
+	width: 60px;
+	height: 60px;
+}
+.profile_pic {
+	display: inline-block;
+}
+.profile_info {
+	display: inline-block;
+	position: relative;
+	top: -14px;
+}
+
+.profile_info button {
+	background-color: #157EB9;
+    color: #fff;
+    width: auto; 
+     outline: none; 
+    padding: 7px;
+    cursor: pointer;
+    border: 1px solid #e9e9e9;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-size: 12px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.profile_title{
+	display: block;
+}
+
+.profile_title em{
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.myInfo_detail_box {
+	border-top: 2px solid #1CBCC9;
+}
+
+.mypage_item .item_cnt {
+	padding-top: 15px; font-size: 12px;
+}
+
+.mypage_item {
+	padding-top : 5px;
+	
+}
+
+.mypage_contents {
+	padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+/* E : mypage - common */
+
+
+/* S : mypage - reqstList */
+
+/* E : mypage - reqstList */
+
+
+/* S : mypage - common */
+
+/* E : mypage - common */
+
+
+/* S : mypage - common */
+
+/* E : mypage - common */
+
+
+
+@media(max-width:768px){
+	
+	.mypage_detail_box{display: none;}
+	
+	.mp_list{overflow-x: scroll; padding: 10px 10px;}
+	
+	.list_area ul li a{font-size: 14px;}
+}

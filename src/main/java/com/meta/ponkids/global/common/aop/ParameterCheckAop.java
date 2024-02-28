@@ -20,9 +20,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.meta.ponkids.domain.system.login.dto.LoginDto;
-import com.meta.ponkids.domain.system.menu.dto.AdminMenuHierarchyDto;
 import com.meta.ponkids.domain.system.menu.dto.MenuHierarchyDto;
-import com.meta.ponkids.domain.system.menu.dto.UserMenuHierarchyDto;
 import com.meta.ponkids.domain.system.menu.repository.MenuRepository;
 import com.meta.ponkids.domain.system.menu.service.AdminMenuHierarchyService;
 import com.meta.ponkids.domain.system.menu.service.UserMenuHierarchyService;
@@ -32,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 @Aspect
 @Component
 @RequiredArgsConstructor
-public class ParameterAop {
+public class ParameterCheckAop {
     
     private final MenuRepository menuRepository;
     private final AdminMenuHierarchyService adminMenuHierarchyService;
@@ -134,7 +132,7 @@ public class ParameterAop {
                         
                         
                         // 권한 체크 (내 계정의 권한에 없는 url 일 경우 401 return)
-                        if ( !authCheckAop( fullUri.replaceAll( "\\\\", "" ) ) ) {
+                        if ( !menuAuthCheckAop( fullUri.replaceAll( "\\\\", "" ) ) ) {
                             // 권한 없음 페이지 이동
                             response.sendRedirect( "/error/admin/401" ); // 권한없음 ( 401 )
                         } else {
@@ -224,7 +222,7 @@ public class ParameterAop {
                     
                     
                     // 권한 체크 (내 계정의 권한에 없는 url 일 경우 401 return)
-                    if ( !authCheckAop( requestUri ) ) {
+                    if ( !menuAuthCheckAop( requestUri ) ) {
                         // 권한 없음 페이지 이동
                         response.sendRedirect( "/error/admin/401" ); // 권한없음 ( 401 )
                     } else {
@@ -256,7 +254,7 @@ public class ParameterAop {
         }
     }
     
-    public boolean authCheckAop( String requestUri ) throws Exception {
+    public boolean menuAuthCheckAop( String requestUri ) throws Exception {
         
         if ( requestUri.startsWith( "/admin/" ) ) {
             

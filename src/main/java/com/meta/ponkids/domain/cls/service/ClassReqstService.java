@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import com.meta.ponkids.domain.cls.dto.ClassListDto;
 import com.meta.ponkids.domain.cls.dto.ClassModDto;
+import com.meta.ponkids.domain.cls.dto.ClassReqstListDto;
 import com.meta.ponkids.domain.cls.dto.ClassReqstSaveDto;
 import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
 import com.meta.ponkids.domain.cls.entity.Class;
@@ -46,22 +47,11 @@ public class ClassReqstService {
         
     }
     
-//    
-//    public Page<ClassListDto> getList( ClassListDto listDto, Pageable pageable ) {
-//        return classRepository.getList( listDto, pageable );
-//    }
-//    
-//    
-//    public List<ClassListDto> getList( ClassListDto listDto ) {
-//        
-//        List<ClassListDto> listDtos = classRepository.getList( listDto );
-//        
-//        // 카테고리 값 뿌리기 위한  setting
-//        for( ClassListDto dto : listDtos) dto = createCategory(dto);
-//        
-//        return listDtos;
-//    }
-//    
+    
+    public Page<ClassReqstListDto> getList( ClassReqstListDto listDto, Pageable pageable ) {
+        return classReqstRepository.getList( listDto, pageable );
+    }
+    
 //    // 나의 클래스와 같은 카테고리의 다른 클래스 ( 내 클래스는 제외하고 검색 ) : 10건만 조회
 //    public List<ClassListDto> getListTop10OtherClassExceptMeByCtgrySn( ClassListDto targetDto ) {
 //    	

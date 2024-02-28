@@ -39,14 +39,8 @@ public class HomeController {
         // 국가 리스트 ( 회원가입 시 국가 '그 외 ' 선택시 표출되는 국가 )
         model.addAttribute( "resideAreaList", cmmnCdDetailService.getList( "RESIDE_AREA_CD" ) );
         
-        
         // 로그인 여부 파악 하여 userSn setting 함
-        Long userSn = null;
- 		LoginDto loginDto = SessionUtils.getAuthentication(); 
- 		if ( loginDto != null && loginDto.getUserSn() != null ) {
- 			// 메시지 출력 및 url 이동 처리
- 			userSn = loginDto.getUserSn();
- 		}
+        Long userSn = SessionUtils.getAuthUserSn();
         // 배너 메인 클래스 영역 리스트
         model.addAttribute( "bannerClassList", bannerService.getMainList( BANNER_MAIN_CLASS, userSn  ) );
         

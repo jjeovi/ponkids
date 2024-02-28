@@ -2,7 +2,9 @@ package com.meta.ponkids.global.util.common;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -265,6 +267,26 @@ public class CommonUtils {
 			}
 		}
 	}
+	
+	
+	public static String getFullURL( HttpServletRequest request ) {
+        StringBuffer requestURL = request.getRequestURL();
+        String queryString = request.getQueryString();
+        if ( queryString == null ) {
+            return requestURL.toString();
+        } else {
+            return requestURL.append( "?" ).append( queryString ).toString();
+        }
+    }
+	
+	public static void goToLogin( String fullUrl, HttpServletRequest request, HttpServletResponse response, String errCd, String redirectUrl ) throws Exception {
+        
+        HttpSession session = request.getSession();
+        session.setAttribute( "errCd", errCd );
+        session.setAttribute( "returnUrlAfterLogin", fullUrl );
+        
+        response.sendRedirect( redirectUrl ); // 인증이 성공한 후에는 root로 이동
+    }
 	
 
 }

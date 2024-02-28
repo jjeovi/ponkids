@@ -6,7 +6,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.meta.ponkids.global.config.interceptor.auth.AuthAdmInterceptor;
-import com.meta.ponkids.global.config.interceptor.auth.AuthInterceptor;
+import com.meta.ponkids.global.config.interceptor.auth.AuthPreInterceptor;
+import com.meta.ponkids.global.config.interceptor.auth.AuthPostInterceptor;
 import com.meta.ponkids.global.config.interceptor.menu.MenuAdmInterceptor;
 import com.meta.ponkids.global.config.interceptor.menu.MenuInterceptor;
 import com.meta.ponkids.global.config.interceptor.message.MessageInterceptor;
@@ -19,7 +20,8 @@ public class WebConfig implements WebMvcConfigurer {
     
 
     private final AuthAdmInterceptor	authAdmInterceptor;
-    private final AuthInterceptor		authInterceptor;
+    private final AuthPostInterceptor	authPostInterceptor;
+    private final AuthPreInterceptor	authPreInterceptor;
     private final MenuAdmInterceptor	menuAdmInterceptor;
     private final MenuInterceptor		menuInterceptor;
     private final MessageInterceptor	messageInterceptor;
@@ -77,7 +79,19 @@ public class WebConfig implements WebMvcConfigurer {
 	        
 	        // 권한 처리 및 세션 처리 Interceptor ( postHandle : 메서드 호출 이후 ) -> 사용자
 	        // -> 사용자. 로그인 세션 체크하여 request 추가
-	        registry.addInterceptor( authInterceptor )
+	        registry.addInterceptor( authPreInterceptor )
+	        .addPathPatterns( "/mypage/**" )             					// 1. 체크 하는 로직은 /하위 전체 
+	        .excludePathPatterns( 	"/**/*Ajax" )        			// 제외 목록 : Ajax 통신 
+	        .excludePathPatterns( 	"/**/*.js", 	"/**/*.css",
+	        		"/**/*.png",    "/**/*.jpg", 	"/**/*.map",
+	        		"/**/*.gif",    "/**/*.woff2",  "/**/*.svg",
+	        		"/**/*.ico")   									// 제외 목록 : 정적 컨텐츠
+	        .excludePathPatterns( 	"/admLogin" )        			// 제외 목록 : 로그인 페이지
+	        .excludePathPatterns( 	"/admin/**" )        			// 제외 목록 : 로그인 페이지
+	        .excludePathPatterns( 	"/getImage" );					// 제외 목록 : 첨부파일 조회시
+	        
+	        
+	        registry.addInterceptor( authPostInterceptor )
 	        .addPathPatterns( "/**" )             					// 1. 체크 하는 로직은 /하위 전체 
 	        .excludePathPatterns( 	"/**/*Ajax" )        			// 제외 목록 : Ajax 통신 
 	        .excludePathPatterns( 	"/**/*.js", 	"/**/*.css",

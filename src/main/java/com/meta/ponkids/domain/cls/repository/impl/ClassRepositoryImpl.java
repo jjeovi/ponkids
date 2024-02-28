@@ -16,7 +16,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import com.meta.ponkids.domain.cls.dto.ClassListDto;
-import com.meta.ponkids.domain.cls.dto.ClassModDto;
 import com.meta.ponkids.domain.cls.dto.QClassListDto;
 import com.meta.ponkids.domain.cls.repository.custom.ClassRepositoryCustom;
 import com.meta.ponkids.global.common.dto.CategoryDto;
