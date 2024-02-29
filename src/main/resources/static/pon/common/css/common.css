@@ -20,15 +20,15 @@
 .header .nav .search input {border: 1px solid #1CBCC9; outline: none; padding:10px 15px; min-width: 270px; border-radius: 50px;  box-sizing: border-box;}
 .header .nav .search input::placeholder{color: #1CBCC9;}
 .login_txt{margin:20px 0;}
-.mb_logo_box{background-color: #9FF0F6;padding-top:40px; position: relative;}
+.mb_logo_box{background-color: #F1E5FB;padding-top:40px; position: relative;}
 .nav_wrap  .mb_logo{padding:40px 20px;  text-align: center;}
 .mb_nav_list ul li a{padding: 20px; border-bottom: 1px solid #d9d9d9; font-size: 14px; width: 100%; box-sizing: border-box;}
-.mb_logo_box .m_header_btns button{background-color: #4DD3DD; border: none;outline: none;cursor: pointer; color: #fff;width: 100%; padding: 10px;}
+.mb_logo_box .m_header_btns button{background-color: #c59fe4; border: none;outline: none;cursor: pointer; color: #fff;width: 100%; padding: 10px;}
 .m_btns_top button:first-child{border-right: 0.5px solid #F0F0F0;}
 .m_btns_top button:last-child{border-left: 0.5px solid #F0F0F0;}
 .m_btns_bot{border-top: 1px solid #fff;}
 .m_btns_top{display: flex;}
-.mb_logo_box .close{position: absolute;right: -25px;background-color: #9ff0f6; width: 25px; height: 25px; padding: 5px; box-sizing: border-box; border-radius: 0 3px 3px 0; cursor: pointer;}
+.mb_logo_box .close{position: absolute;right: -25px;background-color: #c59fe4; width: 25px; height: 25px; padding: 5px; box-sizing: border-box; border-radius: 0 3px 3px 0; cursor: pointer;}
 .mb_search_form{position: fixed; left: -100%; top:17px ; z-index: 3; width: 60vw; transition: 0.3s;}
 .mb_search_form.active{left: 18px;}
 .mb_search_form input{padding:7px 15px; border: 1px solid #1CBCC9; outline: none; border-radius: 20px; width: 100%;box-sizing: border-box; color: #1CBCC9; position: relative;}
@@ -304,3 +304,4 @@
 }
 
 /* E : 문의 */
+

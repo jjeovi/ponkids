@@ -71,6 +71,7 @@ function goClassReview( classSn ){
 		
 		var result 			= ajaxResult.resultOne;
 		
+		$("#reviewClassSn").val( result.classSn );
 		$("#reviewImg").append(
 			$( "<img>" ).attr("src","/getImage?atchFileSn="+ result.thumbAtchFileSn).append()
 		);
@@ -80,19 +81,10 @@ function goClassReview( classSn ){
 	}
 	
 	
-	
-	function insertClassInqry(){
-			
-		// 1. 로그인 여부 check
-		if ( loginYn == 'N' ) {
-			alert("로그인 후 이용 가능합니다.");
-			showPopup('login');
-			return false;
-		}
+	function insertClassReview(){
 		
-		// 문의 insert 진행
-		// 수업 신청 진행
-		if ( confirm("문의를 등록하시겠습니까?") ) {
+		// 후기 insert 진행
+		if ( confirm("후기를 등록하시겠습니까?") ) {
 			
 			return true;
 		}
@@ -126,4 +118,4 @@ function goClassReview( classSn ){
 		
 	}
 	
-	/*  E : 문의 */
+	/*  E : 후기 작성하기 */

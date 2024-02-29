@@ -170,10 +170,13 @@
 .pon-contents .top_tit {display:flex;align-items: flex-end;padding-top: 40px;position: relative; align-items: center; border-top: 1px solid #E6E6E6;}
 .sub_box{max-width: 1280px; margin: 0 auto;}
 .card_list{    display: grid;grid-template-columns: repeat(4,1fr);gap: 25px; }
-.card_list.no-data{grid-template-columns:auto; place-items: center;}
-.card_list .no-data{font-size: 1.2rem;
+.card_list.no-data, .review_list.no-data {grid-template-columns:auto; place-items: center;}
+.card_list .no-data, .review_list .no-data{font-size: 1.2rem;
 font-family: 'yg-jalnan';
     color: #b26363;}
+.review_list.no-data {
+	margin-top: 100px;
+}
 .pon-contents .card_list .card_item{flex: 1;}
 .bg_ico2{position: absolute;left: -130px;top:0; max-width: 150px;}
 .bg_ico1{position: absolute;right: 0;top: 0;max-width: 100px; z-index: -1;}
@@ -210,7 +213,7 @@ font-family: 'yg-jalnan';
 .review_item .review_thumbnail img {object-fit: cover; height: 100%;border-radius: 20px 0 0 20px}
 .review_item .review_thumbnail span{position: absolute; top: 20px; left: 20px; background-color: rgba(255,255,255,0.5); font-size: 13px;  padding:5px 10px; border-radius: 10px;}
 .review_item .like_star img{max-width: 20px;}
-.review_item .review_content {padding: 20px;box-sizing: border-box;}
+.review_item .review_content {padding: 20px;box-sizing: border-box; width:100%;}
 .review_item .review_info .review_name{display: flex; align-items: center;}
 .review_item .review_info .review_name h5{margin-right: 15px; color: #333; font-size: 24px; font-weight: bold;}
 .review_item .review_info .review_name span{color: #1CBCC9; }

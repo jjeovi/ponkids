@@ -13,7 +13,7 @@
 	// [ 관리 ] 버튼 클릭
 	function manageClassInqry( classInqrySn ) {
 		
-		var url = basicPath + '/live/detailByIdAjax';
+		var url = basicPath + '/live/findByIdAjax';
 		$.ajax( {
             url: url,
             type: "GET",
@@ -23,7 +23,7 @@
             contentType: "application/json",
             success: function ( ajaxResult ) {
 				
-				if ( ajaxResult.target == null ) {
+				if ( ajaxResult.resultOne == null ) {
 					alert("문의번호가 존재하지 않습니다. 다시 시도해주세요.");
 					
 				} else {
@@ -31,7 +31,7 @@
 					eraseDetailModalData();
 					
 					// 모달 내용 setting
-					setDetailModalData( ajaxResult );
+					setDetailModalData( ajaxResult.resultOne );
 					
 					// 답변 달기 모달 show
 					$( "#targetDetailModal" ).modal( 'show' );
@@ -45,25 +45,18 @@
 		// detailData class 전부 초기화작업
 		$(".detailData").text("");
 		$(".detailData").val("");
-		
-		// replyData class 초기화 
-		$(".replyData").empty();
-		
 	}
 	
 	// 문의 상세 조회 모달창 내용 setting 작업
-	function setDetailModalData( ajaxResult ) {
-		
-		var target 			= ajaxResult.target;
-		var targetReplyList	= ajaxResult.targetReplyList
+	function setDetailModalData( result ) {
 		
 		// 객체 내부 키값들을 순회 ( 객체 생성자 Object 가 직접 가지고 있는 메서드 활용 Object.keys([list]) )
-		const keys = Object.keys(target)
+		const keys = Object.keys(result)
 		
 		// 순회한 키값 리스트를 재순회 
 		for ( let key of keys ) { 
 			// insertAnswerForm 폼안에 해당 key의 name이 존재하는치 체크
-			value =  target[key];
+			value =  result[key];
 			
 			// data column 수정 
 			if		( key == 'inqryCn'		)	key = 'parntsInqryCn'; // inqryCn 		-> parntsInqryCn 에 값 대입
@@ -89,23 +82,8 @@
 			$("[name='insertAnswerForm']").find("[name='depth2']").show();
 		}
 		
-		
-		// 답변 리스트 뿌리기
-		var i = 1 ; 
-		for ( let targetReply of targetReplyList ) {
-			$(".replyData").append(
-				$( "<div>" ).attr("class", "field item form-group manage").append(
-					$( "<label>" ).attr( "class", "col-form-label col-md-2 col-sm-3 label-align" ).append("답변 " + i++ ),
-					$( "<div>" ).attr("class", "col-form-label col-md-10 col-sm-6").append(
-						$( "<textarea>" ).attr("class", "detailData no-textarea").attr("rows","6").append(targetReply.inqryCn)
-					)
-				)
-			);
-		}
-		
 	}
-
-	// 문의 답변 등록
+	
 	function insertClassInqryAnswer() {
 		
 		// 유효성 체크
@@ -116,13 +94,13 @@
 			return false;
 		}
 		// 유효성 체크 종료
-
-		if ( confirm("답변을 등록하시겠습니까?") ) {
-			$("#insertAnswerForm").submit();
-		}
+		
 		// form submit
-
+		$("#insertAnswerForm").submit();
+		
 	}
+	
+	
 	
 
 </script>
@@ -225,12 +203,12 @@
 					<div class="col-md-11 col-sm-10 mb_10p">
 						<div class="btn-group float-right" role="group">
 							<select class="form-control" name="openYn">
-								<option value="">==공개여부 선택==</option>
+								<option value="">공개여부</option>
 								<option value="Y" th:selected=" ${searchDTO.openYn} == 'Y' ">공개</option>
 								<option value="N" th:selected=" ${searchDTO.openYn} == 'N' ">비공개</option>
 							</select>
 							<select class="form-control" name="replyYn">
-								<option value="">==답변여부 선택 ==</option>
+								<option value="">답변여부</option>
 								<option value="Y" th:selected=" ${searchDTO.replyYn} == 'Y' ">답변완료</option>
 								<option value="N" th:selected=" ${searchDTO.replyYn} == 'N' ">답변대기</option>
 							</select>
@@ -274,7 +252,7 @@
 							</thead>
 							<tbody>
 								<tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
-									<td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
+									<t the d th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
 									<td> [[${data.ctgryNm}]] <th:block th:if="${data.crseNm != null && data.crseNm != '' }"><br/>[ [[${data.crseNm}]] ] </th:block> </td>
 									<td th:text="${data.classSj}"></td>
 									<td th:text="${data.openYnNm}"></td>
@@ -343,7 +321,7 @@
 					<button type="button" class="close" data-dismiss="modal">
 						<span aria-hidden="true">×</span></button>
 				</div>
-				<div class="modal-body" th:replace="admin/classInqry/manageModal.html">
+				<div class="modal-body" th:insert="admin/classInqry/manageModal.html">
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-white"
