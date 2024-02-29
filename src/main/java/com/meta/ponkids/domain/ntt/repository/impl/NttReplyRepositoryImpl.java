@@ -37,7 +37,8 @@ public class NttReplyRepositoryImpl {
                 .where(
                         nttReply.nttSn.eq( nttSn )
                 )
-                .fetchOne();
+//                .fetchOne();
+        		.fetchFirst();
         
         number = number + 1;
         

@@ -1,0 +1,52 @@
+<div class="pop_wrap registClassReview" data-layer-wrap="registClassReview">
+	<form name="classReviewInsertForm" method="POST" th:action="@{ /classReview/insert }" class="form" onsubmit="return insertClassReview();" >
+	<div class="pop_top">
+		<button type="button" class="pop_close hide_pop" data-layer-id="registClassReview" >
+			<img src="/pon/common/image/chat_close.svg" alt="닫기_아이콘">
+		</button>
+	</div>
+	<div class="pop_header">
+		<img src="/pon/common/image/logo.svg" alt="피오니키즈 로고">
+		<h2 class="pop_title">후기 작성하기</h2>
+	</div>
+	<div class="pop_content overflowY_auto">
+		
+<!--		<input type="hidden" name="classSn" th:value="${targetDto.classSn}" />-->
+		<div class="class_info_wrap">
+			<div class="class_detail_box">
+				<div class="class_detail_left reviewData" id="reviewImg">
+<!--					<img th:src="@{/getImage(atchFileSn=${targetDto.thumbAtchFileSn})}" alt="" class="reviewData">-->
+				</div>
+				<div class="class_detail_right">
+					<p id="reviewClassSj" class="reviewData classSj">클래스제목</p>
+				</div>
+			</div>
+		</div>
+		<div class="star-rating">
+			<input type="radio" class="star" name="reviewGrade" value="1">
+			<input type="radio" class="star" name="reviewGrade" value="2">
+			<input type="radio" class="star" name="reviewGrade" value="3">
+			<input type="radio" class="star" name="reviewGrade" value="4">
+			<input type="radio" class="star" name="reviewGrade" value="5">
+		</div>
+		<div class="content_wrap">
+			<textarea class="textarea" name="reviewCn" placeholder="후기를 자유롭게 입력해주세요. ( 욕설이나 비방은 자제해주세요. )" rows="12"></textarea>
+		</div>
+		<!-- TODO : 첨부파일 (사진) 추가 -->
+		<div class="title_wrap">
+			<div class="btn-group radiobox">
+				<input type="radio" id="openYn1" name="openYn" value="Y" class="join-btn" required="">
+				<label for="openYn1" class="btn btnFirst" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">공개</label>
+				<input type="radio" id="openYn2" name="openYn" value="N" class="join-btn" required="">
+				<label for="openYn2" class="btn btnLast" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">비공개</label>
+			</div>
+		</div>
+	</div>
+	<div class="pop_footer">
+		<button type="submit" class="btn btn-purple">
+			등록
+		</button>
+		
+	</div>
+	</form>
+</div>

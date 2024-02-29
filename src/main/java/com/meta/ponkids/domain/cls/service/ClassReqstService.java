@@ -84,22 +84,13 @@ public class ClassReqstService {
 //    }
 //    
 //    
-//    public ClassModDto findById( Long pk ) {
-//        
-//        Class clas = classRepository.findById( pk ).orElse( null );
-//        
-//        if ( clas == null ) {
-//            
-//            return null;
-//            
-//        } else {
-//            ClassModDto modDto = new ClassModDto();
-//            modDto = modDto.toDto( clas );
-//            
-//            return modDto;
-//        }
-//        
-//    }
+    public ClassReqstListDto getByClassReqstSn( Long pk ) {
+    	
+    	
+    	return classReqstRepository.getByClassReqstSn(pk);
+        
+        
+    }
 //    
 //    
 //    // pk 로 조회 ( 고유 1건 조회 ) 

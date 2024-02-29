@@ -16,8 +16,12 @@
     top: 6px;
     position: relative;}
 
-.mp_list .active {color:#1CBCC9;  font-weight: bold; }
-.mp_list {margin-top:10px; background-color: #1cbcc9; display: flex; align-items: center; padding: 15px 20px; border-radius: 20px; color: #555; overflow-y: scroll; -ms-overflow-style: none; /* 인터넷 익스플로러 */ scrollbar-width: none; /* 파이어폭스 */ margin-right:10px; margin-left:10px;}
+.mp_list .active {
+	font-weight: bold;
+    background-color: #157eb9;
+    border-radius: 12px;
+}
+.mp_list {margin-top:10px; background-color: #1cbcc9; display: flex; align-items: center; padding: 7px 20px; border-radius: 20px; color: #555; overflow-y: scroll; -ms-overflow-style: none; /* 인터넷 익스플로러 */ scrollbar-width: none; /* 파이어폭스 */ margin-right:10px; margin-left:10px;}
 .mp_list a{
 	color: #fff;
     font-size: 14px;
@@ -27,8 +31,16 @@
 }
 
 
-.list_area ul{display: flex; gap: 25px;}
-.list_area ul li{padding:0 15px; display: flex; white-space: nowrap;}
+.list_area ul{display: flex; gap: 25px; height:30px;}
+.list_area ul li{
+	    padding: 0 15px;
+    display: flex;
+    white-space: nowrap;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+	
+}
 .list_area ul li img{margin-right: 5px;}
 
 
@@ -46,7 +58,7 @@
 	top: -14px;
 }
 
-.profile_info button {
+.profile_info button, .item_right button{
 	background-color: #157EB9;
     color: #fff;
     width: auto; 
@@ -88,10 +100,118 @@
     padding-left: 20px;
     padding-right: 20px;
 }
+
+.mp_list ul li a.active {
+	font-weight: bold;
+}
+
+
 /* E : mypage - common */
 
 
 /* S : mypage - reqstList */
+
+
+.mypage_list_box {
+	padding-top:20px;
+	padding-left : 40px;
+	padding-right : 40px;
+}
+
+.mypage_list_box .list{text-align: center; margin-top: 3px; border-top: 2px solid #1CBCC9;}
+.mypage_list_box .list > div{background-color: #1CBCC9;padding: 10px 30px; box-sizing: border-box; display: inline-block; border-radius: 5px; color: #fff; cursor: pointer;}
+.mypage_list_box .list .thumb_img{    width: 180px;
+    height: 180px;
+    border-radius: 10px;}
+
+.mypage_list_box .item{display: flex; width: 100%; border-bottom: 1px solid #E3E3E3; padding: 20px; box-sizing: border-box; padding-left:10px;}
+.mypage_list_box .item.no-data {
+	justify-content: center;
+	font-size: 1.2rem;
+	font-family: 'yg-jalnan';
+    color: #b26363;
+}
+
+.item_info .ctgryNm {
+	    color: #1CBCC9;
+    font-size: 14px;
+}
+
+.item_info .classSj {
+	margin: 10px 0 15px 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+.mypage_list_box .item > a{display: flex;width: 100%;}
+
+.item_body{
+	display: flex;
+    justify-content: left;
+    width: 100%;
+    text-align: left;
+    gap: 10px;
+}
+
+.item_info .sub_info {
+	margin-top: 100px;
+}
+
+.sub_info .totReqstAmt::after {
+    content: "";
+    margin-left: 0.5rem;
+    position: absolute;
+    top: 2px;
+    right: 0px;
+    width: 1px;
+    height: 1.2rem;
+    background: rgb(114, 114, 114);
+}
+
+.sub_info .reqstDt {
+	font-size : 14px;
+}
+
+.item_right {
+	margin-left : auto;
+	margin-top : auto;
+	min-width : 100px;
+}
+
+.item_thumb, .item_info {
+	cursor: pointer;
+}
+
+
+/* S : 후기 작성 별점 css */
+    .star-rating {
+      display: flex;
+      justify-content: center;
+    }
+
+    .star {
+      appearance: none;
+      padding: 1px;
+      cursor: pointer;
+    }
+
+    .star::after {
+	  font-family: 'yg-jalnan';
+      content: '☆';
+      color: hsl(54.96deg 99.21% 49.41%);
+      font-size: 3rem;
+    }
+
+    .star:checked::after,
+    .star:has(~ .star:checked)::after {
+	  font-family: 'yg-jalnan';
+      content: '★';
+      font-size: 3rem;
+    }
+
+    .pop_wrap input:read-only {
+		background-color: #fff;
+	}
+/* E : 후기 작성 별점 css */
 
 /* E : mypage - reqstList */
 
@@ -114,4 +234,10 @@
 	.mp_list{overflow-x: scroll; padding: 10px 10px;}
 	
 	.list_area ul li a{font-size: 14px;}
+	
+	
+	.mypage_list_box .list{margin-top: 10px;}
+	
+	.mypage_list_box .item{padding: 10px;}
+    .mypage_list_box .item > a{align-items: center;}
 }

@@ -1,6 +1,7 @@
 package com.meta.ponkids.domain.lctre.dto;
 
-import com.meta.ponkids.domain.lctre.entity.LctreReqst;
+import java.util.List;
+
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.annotations.QueryProjection;
 
@@ -22,39 +23,48 @@ public class LctreReqstListDto  {
     
     private Long    lctreSn;				// 수업 일련번호
     
-    private Long    chldrnSn;				// 자녀 일련번호
+    private Long 		lctreSeq;				// 수업 순번
+	
+	private String 		lctreSj;				// 수업 제목
+	
+	private String 		lctreDt;				// 수업 일시
+
+	private Long		lctreAmt;				// 수업 금액
+	
+	private String 		lctreDc;				// 수업 설명
+	
+	private String 		lctreApplcntGuidance;	// 수업 신청자 안내
     
-    private String 		registerId;      		// 등록자 ID
+    private Long	chldrnSn;				// 자녀 일련번호
     
-    private String 		regDt;					// 등록일자
+    private String		chldrnNm;				// 자녀명
     
-    private String 		schOption;   			// 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
+    private List<LctreReqstListDto> lctreReqsts;				// list
     
-    private String 		schCntn;     			// 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!
+    private List<LctreReqstDetailListDto> lctreReqstDetails;	// list
+    
+    private String 	schOption;   			// 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
+    
+    private String 	schCntn;     			// 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!
 	
 	private CategoryDto category;    			// 카테고리 검색 : 생성자에는 추가하지 않음!
     
     @Builder
     @QueryProjection
-	public LctreReqstListDto(Long lctreReqstSn, Long classReqstSn, Long lctreSn, Long chldrnSn, String registerId,
-			String regDt) {
-		this.lctreReqstSn = lctreReqstSn;
-		this.classReqstSn = classReqstSn;
-		this.lctreSn = lctreSn;
-		this.chldrnSn = chldrnSn;
-		this.registerId = registerId;
-		this.regDt = regDt;
+	public LctreReqstListDto(	Long 	lctreReqstSn, 			Long 	classReqstSn, 	Long	lctreSn,	Long	lctreSeq, 
+								String 	lctreSj, 				String 	lctreDt,		Long	lctreAmt, 	String	lctreDc, 
+								String 	lctreApplcntGuidance, 	Long 	chldrnSn,		String	chldrnNm ) {		this.lctreReqstSn 			= lctreReqstSn;
+		this.classReqstSn 			= classReqstSn;
+		this.lctreSn 				= lctreSn;
+		this.lctreSeq 				= lctreSeq;
+		this.lctreSj 				= lctreSj;
+		this.lctreDt 				= lctreDt;
+		this.lctreAmt 				= lctreAmt;
+		this.lctreDc 				= lctreDc;
+		this.lctreApplcntGuidance 	= lctreApplcntGuidance;
+		this.chldrnSn 				= chldrnSn;
+		this.chldrnNm 				= chldrnNm;
 	}
-    
-    // Entity to Dto 메소드는 DTO 내부에서 생성
-    public LctreReqstListDto toDto( LctreReqst lctreReqst ) {
-    	return LctreReqstListDto.builder()
-    			.lctreReqstSn( lctreReqst.getLctreReqstSn())
-    			.classReqstSn( lctreReqst.getClassReqstSn())
-    			.lctreSn( lctreReqst.getLctreSn())
-    			.chldrnSn( lctreReqst.getChldrnSn())
-    			.build();
-    }
     
 
     

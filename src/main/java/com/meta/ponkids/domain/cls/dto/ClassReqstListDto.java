@@ -1,5 +1,6 @@
 package com.meta.ponkids.domain.cls.dto;
 
+import com.meta.ponkids.domain.cls.entity.ClassReqst;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.annotations.QueryProjection;
 
@@ -76,5 +77,5 @@ public class ClassReqstListDto {
 		this.totReqstAmt	= totReqstAmt;
 		this.regDt			= regDt;
 	}
-
+    
 }

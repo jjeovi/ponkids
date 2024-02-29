@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{pon/layout/layout_mypage}">
+
+<head layout:fragment="head">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<!-- Meta, title, CSS, favicons, etc. -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="_csrf" th:content="${_csrf.token}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+	<title layout:fragment="title">피오니키즈</title>
+
+	<!-- css -->
+	<link rel="stylesheet" href="/pon/common/css/mypage.css">
+
+</head>
+<title layout:fragment="title">피오니키즈 - pioneerkids</title>
+<!-- S : Javascript functions	-->
+<div layout:fragment="script">
+	<!-- js -->
+</div>
+
+<!-- E : Javascript functions	-->
+<div layout:fragment="content" class="sub_box mypage_contents">
+	123213123212
+</div>
+
+</html>

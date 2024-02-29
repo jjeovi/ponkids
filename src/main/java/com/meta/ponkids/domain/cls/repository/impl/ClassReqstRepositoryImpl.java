@@ -109,6 +109,53 @@ public class ClassReqstRepositoryImpl implements ClassReqstRepositoryCustom {
         return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
         
     }
+    @Override
+    public ClassReqstListDto getByClassReqstSn( Long classReqstSn ) {
+    	
+    	return query
+    			.select(
+    					new QClassReqstListDto(
+    	                		classReqst.classReqstSn,
+    	                		classReqst.classSn,
+    	                		class$.thumbAtchFileSn,
+    	                        class$.ctgrySn,
+    	                        classCategoryCl01.clNm.as( "ctgryNm" ),
+    	                        class$.crseSn,
+    	                        classCategoryCl02.clNm.as( "crseNm" ),
+    	                        class$.classSj,
+    	                        classReqst.userSn,
+    	                        classReqst.totReqstCnt,
+    	                        classReqst.totReqstAmt,
+    	                        Expressions.stringTemplate( "to_char({0}, '{1s}')", classReqst.regDt, "YYYY-MM-DD" )
+    					))
+    			.from( classReqst )
+                // join 에는 delYn 조건 필수로 추가
+                .leftJoin( class$ )
+                .on( 	class$.classSn.eq( classReqst.classSn ),
+                		class$.delYn.eq( "N" )
+                )	
+                .leftJoin( classCategoryCl01 )
+                // join 에는 delYn 조건 필수로 추가
+                .on(    classCategoryCl01.clSn.eq( class$.ctgrySn ),
+                        classCategoryCl01.delYn.eq( "N" )
+                )
+                .leftJoin( classCategoryCl02 )
+                // join 에는 delYn 조건 필수로 추가
+                .on(    classCategoryCl02.clSn.eq( class$.crseSn ),
+                        classCategoryCl02.delYn.eq("N")
+                )
+                // where
+                .where( 
+                		eqClassReqstSn( classReqstSn )
+                		)
+                .orderBy( classReqst.classReqstSn.desc())
+                .fetchFirst();
+    			// QueryDsl을 사용하고 결과를 한 건만 조회해야 할 때, 결과가 명확하게 한 건만 조회됨이 보장되지 않는다면 fetchOne()은 NonUniqueResultException을 던질 가능성이 있다.
+    			// 결과를 한 건만 조회해야 할 때, 결과가 명확하게 한 건만 조회됨이 보장되지 않는다면 내부적으로 limit(1)을 수행하는 fetchFirst()를 사용하자. 
+    			// (출처) :https://hungseong.tistory.com/87
+        
+        
+    }
     
 	// -------------------------------- WHERE 검색 옵션 setting --------------------------------
     
@@ -145,6 +192,13 @@ public class ClassReqstRepositoryImpl implements ClassReqstRepositoryCustom {
     private BooleanExpression eqUserSn( Long userSn ) {
         return ( userSn == null ) ? ( classReqst.userSn.eq(userSn) ) : null;
     }
+    
+    
+    // pk 로 고유값 1건만 조회
+    private BooleanExpression eqClassReqstSn( Long classReqstSn ) {
+    	return ( classReqstSn != null ) ? classReqst.classReqstSn.eq( classReqstSn ) : null;
+    }
+    
     
     
     

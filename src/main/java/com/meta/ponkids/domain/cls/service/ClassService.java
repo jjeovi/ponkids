@@ -124,7 +124,13 @@ public class ClassService {
     
     // pk 로 조회 ( 고유 1건 조회 ) 
     public ClassListDto getByClassSn( Long pk, Long userSn ) {
-    	return classRepository.getByClassSn(pk, userSn);
+    	return classRepository.getByClassSn( pk, userSn );
+    }
+    
+    
+    // pk 로 조회 ( 고유 1건 조회 ) 
+    public ClassListDto getByClassSn( Long pk ) {
+    	return classRepository.getByClassSn( pk );
     }
     
     @Transactional

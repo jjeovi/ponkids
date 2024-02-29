@@ -96,7 +96,8 @@ public class NttRepositoryImpl implements NttRepositoryCustom {
                 .where(
                         ntt.nttSn.eq( nttSn )
                 )
-                .fetchOne();
+//                .fetchOne();
+                .fetchFirst();
         
         number = number + 1;
         
@@ -111,7 +112,8 @@ public class NttRepositoryImpl implements NttRepositoryCustom {
                 .where(
                         ntt.bbsSn.eq( bbsSn )
                 )
-                .fetchOne();
+//                .fetchOne();
+        		.fetchFirst();
         
         number = number + 1;
         
@@ -126,7 +128,8 @@ public class NttRepositoryImpl implements NttRepositoryCustom {
                 .where(
                         ntt.bbsSn.eq( bbsSn )
                 )
-                .fetchOne();
+//                .fetchOne();
+                .fetchFirst();
         
         return count;
     }

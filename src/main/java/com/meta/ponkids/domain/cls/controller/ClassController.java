@@ -1,14 +1,40 @@
 package com.meta.ponkids.domain.cls.controller;
 
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.meta.ponkids.domain.cls.dto.ClassInqryListDto;
 import com.meta.ponkids.domain.cls.dto.ClassListDto;
 import com.meta.ponkids.domain.cls.dto.ClassReqstSaveDto;
 import com.meta.ponkids.domain.cls.repository.ClassReqstRepository;
-import com.meta.ponkids.domain.cls.service.*;
+import com.meta.ponkids.domain.cls.service.ClassCategoryCl01Service;
+import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
+import com.meta.ponkids.domain.cls.service.ClassDetailService;
+import com.meta.ponkids.domain.cls.service.ClassInqryService;
+import com.meta.ponkids.domain.cls.service.ClassReqstService;
+import com.meta.ponkids.domain.cls.service.ClassService;
+import com.meta.ponkids.domain.cls.service.ClassWeekService;
 import com.meta.ponkids.domain.lctre.dto.LctreModDto;
 import com.meta.ponkids.domain.lctre.dto.LctreReqstSaveDto;
-import com.meta.ponkids.domain.lctre.entity.LctreReqst;
-import com.meta.ponkids.domain.lctre.entity.LctreReqstDetail;
 import com.meta.ponkids.domain.lctre.repository.LctreReqstRepository;
 import com.meta.ponkids.domain.lctre.service.LctreReqstService;
 import com.meta.ponkids.domain.lctre.service.LctreService;
@@ -16,23 +42,9 @@ import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
 import com.meta.ponkids.domain.system.file.service.AtchFileDetailService;
 import com.meta.ponkids.domain.system.login.dto.LoginDto;
 import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
-import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 
 @Controller
@@ -289,5 +301,20 @@ public class ClassController {
 		
 		return "common/alert";
 	}
+	
+
+    // 클래스 검색 ( 커리큘럼 일련번호로 검색 ) (Ajax)
+    @ResponseBody
+    @GetMapping( BASIC_PATH + "/live/getClassByIdAjax" )
+    public Map<String, Object> getClassByIdAjax( @RequestParam( "pk" ) Long pk
+    ) {
+        
+        Map<String, Object> result = new HashMap<String, Object>();
+        
+        result.put( "resultOne", classService.getByClassSn( pk ) );   // 커리큘럼 일련번호로 검색
+        
+        return result;
+    }
+    
 
 }

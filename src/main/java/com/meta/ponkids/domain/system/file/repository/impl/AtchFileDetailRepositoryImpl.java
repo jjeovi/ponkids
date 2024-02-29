@@ -26,7 +26,8 @@ public class AtchFileDetailRepositoryImpl implements AtchFileDetailRepositoryCus
         return query.selectFrom( atchFileDetail )
                 .where( atchFileDetail.atchFileDetailPk.atchFileSn.eq( atchFileSn ),
                         atchFileDetail.atchFileDetailPk.fileSeq.eq( fileSeq ) )
-                .fetchOne();
+//                .fetchOne();
+                .fetchFirst();
     }
     
     /**
@@ -48,7 +49,8 @@ public class AtchFileDetailRepositoryImpl implements AtchFileDetailRepositoryCus
                 .from( atchFileDetail )
                 .where(
                         atchFileDetail.atchFileDetailPk.atchFileSn.eq( atchFileSn ) )
-                .fetchOne();
+//                .fetchOne();
+                .fetchFirst();
         
         fileSeq = fileSeq + 1;
         

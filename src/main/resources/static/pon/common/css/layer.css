@@ -1733,19 +1733,19 @@ input[type="radio"][disabled]:checked+label{
     padding-right: 0px;
 }
 
-.registClassInqry .class_info_wrap, .detailClassInqry .class_info_wrap {
+.registClassInqry .class_info_wrap, .detailClassInqry .class_info_wrap, .registClassReview .class_info_wrap {
 	height: 150px;
     padding: 10px;
     border: 1px dashed rgb(221 215 223);
     border-radius: 3px;
 }
 
-.registClassInqry .class_detail_box, .detailClassInqry .class_detail_box {
+.registClassInqry .class_detail_box, .detailClassInqry .class_detail_box, .registClassReview .class_detail_box {
 	height: 100%;
 	gap: 20px;
 }
 
-.registClassInqry .class_detail_left, .detailClassInqry .class_detail_left {
+.registClassInqry .class_detail_left, .detailClassInqry .class_detail_left, .registClassReview .class_detail_left {
 	height: auto;
     min-width: 150px;
     width: 24%;
@@ -1760,7 +1760,7 @@ input[type="radio"][disabled]:checked+label{
     border-radius: 10px;
 }
 
-.registClassInqry .title_wrap, .classInqry .content_wrap {
+.registClassInqry .title_wrap, .classInqry .content_wrap, .registClassReview .title_wrap {
 	padding: 10px 0px;
     display: flex;
     gap: 20px;
@@ -1776,15 +1776,15 @@ input[type="radio"][disabled]:checked+label{
     width: 100%;
 }
 
-.registClassInqry .title_wrap .title_name {
+.registClassInqry .title_wrap .title_name, .registClassReview .title_wrap .title_name {
 	margin: auto 0;
 }
 
-.registClassInqry .title_wrap .radiobox {
+.registClassInqry .title_wrap .radiobox, .registClassReview .title_wrap .radiobox {
 	width: 100%;
 }
 
-.registClassInqry .title_wrap .radiobox .btn {
+.registClassInqry .title_wrap .radiobox .btn, .registClassReview .title_wrap .radiobox .btn {
 	height: 1.7rem;
     border-style: solid;
     border-width: 1px;
@@ -1797,9 +1797,21 @@ input[type="radio"][disabled]:checked+label{
 }
 
 .content_wrap .textarea {
-	width: 100%;
+	width: 95%;
 	border: 1px solid #c6c3c3;
 	border-radius: 3px;
 	padding: 10px;
+    resize: none;
+}
+
+.class_detail_right p {
+	    font-size: 16px;
+    font-weight: bold;
+    line-height: 21px;
 }
 /* S : 클래스 문의 classInqry */
+
+
+.overflowY_auto {
+	overflow-y: auto !important;
+}

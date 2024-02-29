@@ -9,4 +9,6 @@ public interface ClassReqstRepositoryCustom {
     
     Page<ClassReqstListDto> getList( ClassReqstListDto listDto, Pageable pageable );
     
+    ClassReqstListDto getByClassReqstSn( Long classReqstSn );
+    
 }

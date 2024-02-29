@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{pon/layout/layout_mypage}">
+
+<head layout:fragment="head">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<!-- Meta, title, CSS, favicons, etc. -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="_csrf" th:content="${_csrf.token}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+	<title layout:fragment="title">피오니키즈</title>
+
+</head>
+<title layout:fragment="title">피오니키즈 - pioneerkids</title>
+<!-- S : Javascript functions	-->
+<div layout:fragment="script">
+	<!-- js -->
+</div>
+
+<!-- E : Javascript functions	-->
+<div layout:fragment="content" class="sub_box mypage_contents">
+	<div class="mypage_list_box" >
+		<ol class="list" >
+			<li class="item" th:if = "${!classReqstList.isEmpty()}" th:each="data : ${classReqstList}">
+				<div class="item_body" >
+					<div class="item_thumb" th:onclick="|detailHistory(${data.classReqstSn});|" >
+						<img class="thumb_img" th:src="@{/getImage(atchFileSn=${data.thumbAtchFileSn})}" alt="클래스이미지">
+					</div>
+					<div class="item_info" th:onclick="|detailHistory(${data.classReqstSn});|" >
+						<span class="ctgryNm" th:text="${data.ctgryNm}">카테고리명</span>
+						<p class="classSj" th:text="${data.classSj}">클래스명</p>
+						<span class="sub_info">
+							<b class="totReqstAmt" th:text="|${#numbers.formatInteger(data.totReqstAmt, 3, 'COMMA')} 원|" >[] 원</b>
+							<span class="reqstDt" th:text="${data.regDt}" >2024-00-00</span>
+						</span>
+					</div>
+					<div class="item_right">
+						<button type="button" th:onclick="|goClassReview( ${data.classSn} );|" >후기 작성하기</button>
+					</div>
+				</div>
+			</li>
+		</ol>
+	</div>
+	<div class="paging_box" th:insert="~{pon/layout/tiles/paging :: paging('listForm', ${classReqstList})}" >
+	</div>
+	
+	<!-- 문의등록 layer -->	
+	<div class="layer_registClassReview"	style="display: none;"	th:insert="pon/layer/layer_registClassReview.html" />
+</div>
+
+</html>

@@ -137,7 +137,8 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom {
         String replySetYn = query.select( bbs.replySetYn )
                 .from( bbs )
                 .where( bbs.bbsSn.eq( bbsSn ) )
-                .fetchOne();
+//                .fetchOne();
+        		.fetchFirst();
         
         return replySetYn;
         
@@ -149,7 +150,8 @@ public class BbsRepositoryImpl implements BbsRepositoryCustom {
         String bbsSeCd = query.select( bbs.bbsSeCd )
                 .from( bbs )
                 .where( bbs.bbsSn.eq( bbsSn ) )
-                .fetchOne();
+//                .fetchOne();
+                .fetchFirst();
         
         return bbsSeCd;
         
