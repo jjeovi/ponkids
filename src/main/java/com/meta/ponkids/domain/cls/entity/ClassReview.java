@@ -57,6 +57,8 @@ public class ClassReview extends BaseTimeEntity {
 	
 	private Long atchFileSn;
 	
+	private String openYn;
+	
 	@Column(updatable = false)
 	private String registerId;          // 등록자 ID
 	

@@ -76,7 +76,7 @@
 		<ol>
 			<th:block sec:authorize="isAnonymous()">
 				<li>
-					<a href="javascript:" class="show_pop" data-layer-id="login"	>로그인</a>
+					<a href="javascript:" class="show_layer" data-layer-id="login"	>로그인</a>
 				</li>
 			</th:block>
 			<th:block sec:authorize="isAuthenticated()">
@@ -290,7 +290,7 @@
 
 <!-- S : 문의 챗콘 -->
 <!-- TODO -->
-<div class="icon_inquiry show_pop" data-layer-id="inquiry">
+<div class="icon_inquiry show_layer" data-layer-id="inquiry">
 	<img src="/pon/common/image/inquiry.svg" alt="">
 </div>
 <!-- E : 문의 챗콘 -->

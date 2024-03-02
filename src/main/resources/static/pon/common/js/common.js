@@ -4,28 +4,28 @@ $( function () {
 	
 	 
 	 // 팝업 show
-	$(".show_pop").on("click", function(e) {
+	$(".show_layer").on("click", function(e) {
 		var layerId = $(this).data("layerId")	;	// 클릭한 레이어 팝업의 id 값 setting 
-		showPopup(layerId);
+		showLayer(layerId);
 	});
 	 
 	 // 팝업 show : 다른 팝업들 켜져있다면 유지하고 해당 팝업만 show ( close 할때도 해당 팝업만 close 하도록 구현 ) 
-	$(".show_pop_lv2").on("click", function(e) {
+	$(".show_layer_lv2").on("click", function(e) {
 		var layerId = $(this).data("layerId")	;	// 클릭한 레이어 팝업의 id 값 setting 
-		showPopupLv2(layerId);
+		showLayerLv2(layerId);
 	});
 
 	 
 	// 팝업 hide
-	$(".hide_pop").on("click", function(e) {
+	$(".hide_layer").on("click", function(e) {
 		var layerId = $(this).data("layerId")	;	// 클릭한 레이어 팝업의 id 값 setting 
-		hidePopup(layerId);
+		hideLayer(layerId);
 	});
 	 
 	// 팝업 hide : 다른 팝업들 켜져있다면 유지하고 해당 팝업만 hide 
-	$(".hide_pop_lv2").on("click", function(e) {
+	$(".hide_layer_lv2").on("click", function(e) {
 		var layerId = $(this).data("layerId")	;	// 클릭한 레이어 팝업의 id 값 setting 
-		hidePopupLv2(layerId);
+		hideLayerLv2(layerId);
 	});
 
 
@@ -159,7 +159,7 @@ function detailClass( classSn ) {
 }
 
 // 팝업창 실행 event 
-function showPopup( layerId ) {
+function showLayer( layerId ) {
 	
 	$("[class^='layer_']").hide();
 	$(".layer_" + layerId ).show();
@@ -168,7 +168,7 @@ function showPopup( layerId ) {
 
 
 // 팝업창 실행 event 
-function showPopupLv2( layerId ) {
+function showLayerLv2( layerId ) {
 	
 	$(".layer_" + layerId ).show();
 	$("#pop_dim_lv2").fadeIn();
@@ -176,7 +176,7 @@ function showPopupLv2( layerId ) {
 
 
 // 팝업창 숨김 
-function hidePopup( layerId ) {
+function hideLayer( layerId ) {
 	
 	$(".layer_" + layerId ).hide();
 	$("#pop_dim").fadeOut();
@@ -188,7 +188,7 @@ function hidePopup( layerId ) {
 
 
 // 팝업창 숨김 
-function hidePopupLv2( layerId ) {
+function hideLayerLv2( layerId ) {
 	
 	$(".layer_" + layerId ).hide();
 	$("#pop_dim_lv2").fadeOut();
@@ -252,7 +252,7 @@ function likeClass( classSn, e ){
 			if ( !ajaxResult ) {
 				// 로그인 layer 표출
 				hideAllPopup();
-				showPopup( 'login' );
+				showLayer( 'login' );
 				
 			} else {
 				// 좋아요 insert ( classSn / userSn )

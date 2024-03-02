@@ -1,6 +1,7 @@
 package com.meta.ponkids.domain.cls.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -36,12 +37,22 @@ public class ClassReviewService {
 		ClassReview newClassReview = classReviewRepository.save( saveDto.toEntity() );			// ** save -> save된 정보 newXxx 로 저장
 		
 		return saveDto;
-		
 	}
 	
 
     public Page<ClassReviewListDto> getList( ClassReviewListDto listDto, Pageable pageable ) {
         return classReviewRepository.getList( listDto, pageable );
+    }
+    
+    
+    public ClassReviewListDto getByClassReviewSn( Long pk ) {
+        return classReviewRepository.getByClassReviewSn( pk );
+    }
+    
+    
+    public List<ClassReviewListDto> getListByStepAndParntsReviewSn( String step, Long pk ) {
+        
+        return classReviewRepository.getListByStepAndParntsReviewSn( step, pk );
     }
     
     

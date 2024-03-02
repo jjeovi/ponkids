@@ -21,6 +21,7 @@ function detailHistory( pk ) {
 
 /*  S : 후기 작성하기 */
 // ======================================================================================
+
 // 후기 작성하기 버튼 클릭 event
 function goClassReview( classSn ){
 	
@@ -46,13 +47,10 @@ function goClassReview( classSn ){
 				setReviewLayerData( ajaxResult );	
 				
 				// 3. 문의 등록 layer 표출
-				showPopup('registClassReview');
+				showLayer('registClassReview');
 			}
 		}
 	} );
-	
-
-	
 }
 	
 	
@@ -92,10 +90,10 @@ function goClassReview( classSn ){
 		return false;
 	}
 	
-	function detailInqryPopup( classInqrySn ) {
+	function detailInqryLayer( classInqrySn ) {
 		
 		// 문의 상세 조회 layer 표출
-		showPopup('detailClassInqry');
+		showLayer('detailClassInqry');
 		
 		// 문의 상세 조회 layer 내용 setting
 		// 특정 클래스의 특정 요일 의 수업 리스트 조회

@@ -1,0 +1,59 @@
+<div class="pop_wrap detailClassReview classReview" data-layer-wrap="detailClassReview">
+	<div class="pop_top">
+		<button type="button" class="pop_close hide_layer" data-layer-id="detailClassReview" >
+			<img src="/pon/common/image/chat_close.svg" alt="닫기_아이콘">
+		</button>
+	</div>
+	<div class="pop_header">
+		<img src="/pon/common/image/logo.svg" alt="피오니키즈 로고">
+		<h2 class="pop_title">후기 상세조회</h2>
+	</div>
+	<div class="pop_content overflowY_auto">
+		<input type="hidden" name="classSn" class="reviewData" id="reviewClassSn" />
+		<!--		<input type="hidden" name="step" value="1"/>-->
+		<div class="class_info_wrap">
+			<div class="class_detail_box">
+				<div class="class_detail_left reviewData" id="reviewImg">
+					<!--					<img th:src="@{/getImage(atchFileSn=${targetDto.thumbAtchFileSn})}" alt="" class="reviewData">-->
+				</div>
+				<div class="class_detail_right">
+					<p id="reviewClassSj" class="reviewData classSj">클래스제목</p>
+				</div>
+			</div>
+		</div>
+		<!-- 후기 정보 : 별점, 등록일, 등록자, 후기내용, +사진(TODO) , +답글! -->
+		<div class="detail_review_box">
+			<div class="info_top">
+				<span id="detailReviewUserNm" class="review_userNm reviewData">홍길동</span>
+				<div id="detailReviewGrade" class="like_star reviewData">
+	<!--				<img src="/pon/common/image/star_like.svg" th:each="num : ${#numbers.sequence(1,gradeIndex)}" alt="후기별점" >-->
+				</div>
+				<span id="detailReviewRegDt" class="regDt reviewData">
+					2024-02-20
+				</span>
+			</div>
+			<div id="detailReviewCn" class="info_content reviewData">
+				후기 내용 입력
+			</div>
+		</div>
+		<!-- 후기 답변 -->
+		<ul class="replyData" >
+			<li>
+				<div class="detail_review_box reply">
+					<div class="info_top">
+						<span class="review_userNm">관리자</span>
+						<div class="regDt">
+							2024-02-20
+						</div>
+					</div>
+					<div class="info_content">
+						답변 내용
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div class="pop_footer">
+
+	</div>
+</div>

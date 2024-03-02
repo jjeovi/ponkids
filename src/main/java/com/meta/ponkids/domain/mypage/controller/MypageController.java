@@ -42,7 +42,6 @@ public class MypageController {
     	
     	return "forward:/mypage/reqstHistory/list";   
 	}
-    
 	
 	@GetMapping( "/reqstHistory/list" )
 	public String reqstHistoryList( 	@ModelAttribute ClassReqstListDto listDto,
@@ -64,7 +63,6 @@ public class MypageController {
 		model.addAttribute( "basicPath", BASIC_PATH );
 		return USER_VIEW_PATH + BASIC_PATH + "/reqstHistory/list";
 	}
-	
 	
 	@GetMapping( "/reqstHistory/detail" )
 	public String reqstHistoryDetail( @RequestParam( required = true ) Long pk,    // 타입 체크
@@ -91,11 +89,11 @@ public class MypageController {
 //		List<LctreReqstListDto> targetLctreReqsts = lctreReqstService.getListByClassReqstSn(pk);
 		model.addAttribute( "targetLctreReqsts", lctreReqstService.getListByClassReqstSn(pk) );
 		
+		
 		// 기본 경로 setting
 		model.addAttribute( "basicPath", BASIC_PATH );
 		return USER_VIEW_PATH + BASIC_PATH + "/reqstHistory/detail";
 	}
-	
 	
 	
 	@GetMapping( BASIC_PATH + "/reviewList" )
@@ -110,7 +108,6 @@ public class MypageController {
 		model.addAttribute( "basicPath", BASIC_PATH );
 		return USER_VIEW_PATH + BASIC_PATH + "/reviewList";
 	}
-	
 	
 	@GetMapping( BASIC_PATH + "/myInfoModify" )
 	public String myInfoModify( Model model ) {
@@ -138,7 +135,6 @@ public class MypageController {
 		return USER_VIEW_PATH + BASIC_PATH + "/childInfoModify";
 	}
 	
-	
 	@GetMapping( BASIC_PATH + "/inqryList" )
 	public String inqryList( Model model ) {
 		
@@ -165,7 +161,6 @@ public class MypageController {
 		model.addAttribute( "basicPath", BASIC_PATH );
 		return USER_VIEW_PATH + BASIC_PATH + "/questionList";
 	}
-
 	
 	
 }

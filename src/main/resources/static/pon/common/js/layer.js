@@ -13,7 +13,7 @@ $( function () {
     }
 
     if ( lgStatus == 'login' || lgStatus == 'userIntegrated' || lgStatus == 'joinForSns' ) {
-        showPopup( lgStatus );
+        showLayer( lgStatus );
 
         // message 출력
         if ( errMsg != null && errMsg != '' ) {
@@ -170,7 +170,7 @@ function addChldrn() {
     $( "#addChldrnModalBody" ).append( $newChldrnForm );
 
 
-    hidePopupLv2( 'addChldrn' );
+    hideLayerLv2( 'addChldrn' );
     // 모달창 닫기
 //	$( "#addChldrnModal" ).modal( 'hide' );
     return true;
@@ -344,7 +344,7 @@ function setModalBtn( mode ) {
         $( "[name='chldrnModDiv']" ).hide();
 
         // 자녀 추가 팝업 레이어 효출
-        showPopupLv2( 'addChldrn' );
+        showLayerLv2( 'addChldrn' );
 
     } else if ( mode == "U" ) {
 
@@ -442,7 +442,7 @@ function userInsert() {
 
                     // 로그인 하러 가기 layer 표출
                     hideAllPopup();
-                    showPopup( 'completeJoin' );
+                    showLayer( 'completeJoin' );
 
                 }
 
@@ -956,7 +956,7 @@ function showSuccessScreen(userId) {
     $('.user_find').hide(); // 기존 화면 감춤
     //+63
     $('#userId').text(userId); // 찾은 아이디를 성공 화면에 출력
-    showPopupLv2( 'findUserInfo' );   // 아이디 찾기 결과 팝업 호출
+    showLayerLv2( 'findUserInfo' );   // 아이디 찾기 결과 팝업 호출
 
 }
 /* E : 아이디 찾기 */
@@ -1080,7 +1080,7 @@ function startTimer(duration) {
 function showPwSuccessScreen(userId) {
     // 비밀번호 재설정 화면을 보이도록 설정
     $('.user_find').hide(); // 기존 화면 감춤
-    showPopupLv2( 'findUserPw' );   // 비밀번호 재설정 팝업 호출
+    showLayerLv2( 'findUserPw' );   // 비밀번호 재설정 팝업 호출
 
 }
 /* E : 성환: 비밀번호 찾기 - 인증번호 확인 */

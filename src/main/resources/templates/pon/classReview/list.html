@@ -24,6 +24,87 @@
 <!-- S : Javascript functions	-->
 <div layout:fragment="script">
 	<!-- js -->
+	<script>
+		function reviewOrderby(){
+			$("#listForm").submit();
+		}
+
+
+		// 후기 조회
+		function detailReviewLayer( classReviewSn ){
+
+
+			var url = '/classReview/live/getByClassReviewSnAjax';
+			$.ajax( {
+				url: url,
+				type: "GET",
+				dataType: "json",
+				async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+				data: {pk : classReviewSn}, // 검색할 값 setting
+				contentType: "application/json",
+				success: function ( ajaxResult ) {
+
+					if ( ajaxResult.resultOne == null ) {
+						alert("후기 정보가 없습니다. 다시 시도해 주세요.");
+
+					} else {
+						// 1. 후기 조회 layer 초기화
+						eraseReviewLayerData();
+
+						// 2. 후기 조회 layer data setting
+						setReviewLayerData( ajaxResult );
+
+						// 3. 문의 등록 layer 표출
+						showLayer('detailClassReview');
+					}
+				}
+			} );
+		}
+
+
+
+		// 후기 작성하기 모달창 ( 관리 클릭시 ) 내용 초기화 작업
+		function eraseReviewLayerData() {
+
+			// reviewData class 초기화
+			$(".reviewData").empty();
+
+			// replyData ( 답변 초기화 )
+			$(".replyData").empty();
+
+		}
+
+
+		// 후기 상세 조회 모달창 내용 setting 작업
+		function setReviewLayerData( ajaxResult ) {
+
+			var result = ajaxResult.resultOne;
+
+			$("#reviewImg").append(
+					$( "<img>" ).attr("src","/getImage?atchFileSn="+ result.thumbAtchFileSn).append()
+			);
+
+			$("#reviewClassSj").append( result.classSj );
+
+			// S: 작성자(마스킹), 별점, 등록일, 후기내용 setting
+			$("#detailReviewUserNm").text( result.userNm.substring(0,1) + "**" );
+
+			// 별점 setting
+			var strStar = "";
+
+			// n번만큼 반복하여 별점 생성
+			for(let i = 0; i < result.reviewGradeLong ; i++ ) {
+				strStar += "<img src='/pon/common/image/star_like.svg' alt='후기별점'>";
+			}
+
+			$("#detailReviewGrade").append( strStar );
+			$("#detailReviewRegDt").text( result.regDt );
+			$("#detailReviewCn").text( result.reviewCn );
+			// E : 작성자(마스킹), 별점, 등록일, 후기내용 setting
+
+		}
+
+	</script>
 </div>
 
 <!-- E : Javascript functions	-->
@@ -42,36 +123,32 @@
 			</div>
 			<div class="article_top">
                 <span>총 게시물 <strong th:utext="${resultList.totalElements}"> 129</strong></span>
-                <select name="" id="">
-                    <option value="" selected="">최신등록순</option>
-                    <option value="">별점높은순</option>
-                    <option value="">별점낮은순</option>
+                <select name="schOption" onchange="reviewOrderby();" >
+                    <option value="A" th:selected=" ${searchDTO.schOption} == 'A'" >최신등록순</option>
+                    <option value="B" th:selected=" ${searchDTO.schOption} == 'B'" >별점높은순</option>
+                    <option value="C" th:selected=" ${searchDTO.schOption} == 'C'" >별점낮은순</option>
                 </select>
             </div>
 			<div class="review_list" th:classappend="${ (resultList.isEmpty())} ? 'no-data'">
-                <div class="review_item" th:if = "${!resultList.isEmpty()}" th:each="data : ${resultList}">
+                <div class="review_item" th:if = "${!resultList.isEmpty()}" th:each="data : ${resultList}" th:onclick="|detailReviewLayer('${data.classReviewSn}')|" >
                     <div class="review_thumbnail">
-                        <img th:src="@{/getImage(atchFileSn=${data.atchFileSn})}" alt="클래스이미지">
+                        <img th:src="@{/getImage(atchFileSn=${data.thumbAtchFileSn})}" alt="클래스수업후기이미지">
                     </div>
                     <div class="review_content">
                         <div class="review_info">
                             <div class="review_name">
                                 <h5 th:text="|${#strings.substring(data.userNm, 0, 1)}**|" >김**</h5>
                             </div>
-                            <div class="like_star">
-                                <img src="/pon/common/image/star_like.svg" th:alt="${data.step}">
-                                <img src="/pon/common/image/star_like.svg" th:alt="${data.step}">
-                                <img src="/pon/common/image/star_like.svg" th:alt="${data.step}">
-                                <img src="/pon/common/image/star_like.svg" th:alt="${data.step}">
-                                <img src="/pon/common/image/star_like.svg" th:alt="${data.step}">
+                            <div class="like_star" >
+                                <img src="/pon/common/image/star_like.svg" th:each="num : ${#numbers.sequence(1,data.reviewGradeLong)}" alt="후기별점" >
                             </div>
                         </div>
                         <p class="riview_tit" th:text="${data.classSj}" >한국근현대미술전! 엄마 우리나라에서 제일 비싼 그림은 누가 그렸어요?</p>
-                        <p class="riview_disc" th:text="${data.reviewCn}">수업이 재밌대요. 수업중 밖에서 들어보면 우렁차게 잘 대답 하더라구요. 수업 마치면 Homework가 있다고 끝나자마자 아주 오리고 붙이고 바쁘네요 일단 어른이 봐도 수업자료가 아주 재밌어보여요 저희 아이는 숙제가 끝난 후에도 자료를 가지고 게임하듯이 놀더라구요.</p>
+                        <p class="riview_disc" th:text="${#strings.abbreviate(data.reviewCn,80)}">수업이 재밌대요. 수업중 밖에서 들어보면 우렁차게 잘 대답 하더라구요. 수업 마치면 Homework가 있다고 끝나자마자 아주 오리고 붙이고 바쁘네요 일단 어른이 봐도 수업자료가 아주 재밌어보여요 저희 아이는 숙제가 끝난 후에도 자료를 가지고 게임하듯이 놀더라구요.</p>
                     </div>
-                 </div>
+				</div>
                  <div th:unless = "${!resultList.isEmpty()}" class="no-data">
-					데이터가 존재하지 않습니다. 
+					데이터가 존재하지 않습니다.
 				</div>
                 <div class="bg_ico3">
 					<img src="/pon/common/image/space_one.png" alt="">
@@ -81,6 +158,9 @@
 			</div>
 		</div>
 	</form>
+
+	<!-- 수업후기 상세 조회 ( detail )  layer -->
+	<div class="layer_detailClassReview"	style="display: none;"	th:insert="pon/layer/layer_detailClassReview.html" />
 </div>
 
 </html>

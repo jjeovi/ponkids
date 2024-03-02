@@ -1,7 +1,6 @@
 package com.meta.ponkids.domain.cls.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +14,8 @@ public class ClassReviewListDto {
 	
 	private String classSj;
 	
+	private Long 		thumbAtchFileSn;
+	
 	private Long userSn;
 	
 	private String userNm;
@@ -27,7 +28,11 @@ public class ClassReviewListDto {
 	
 	private String reviewGrade;
 	
+	private Long 	reviewGradeLong;
+	
 	private Long atchFileSn;
+	
+	private String openYn;
 	
     private String registerId;      // 등록자 ID
     
@@ -37,26 +42,25 @@ public class ClassReviewListDto {
     
     private String schCntn;     	// 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!
 
-
 	@QueryProjection
-	public ClassReviewListDto(Long classReviewSn, Long classSn, String classSj, Long userSn, String userNm, String step, Long parntsReviewSn,
-			String reviewCn, String reviewGrade, Long atchFileSn, String registerId, String regDt) {
+	public ClassReviewListDto(Long classReviewSn, Long classSn, String classSj, Long thumbAtchFileSn, Long userSn, String userNm, String step, Long parntsReviewSn,
+			String reviewCn, String reviewGrade, Long reviewGradeLong, Long atchFileSn, String openYn, String registerId, String regDt) {
 		this.classReviewSn = classReviewSn;
 		this.classSn = classSn;
 		this.classSj = classSj;
+		this.thumbAtchFileSn = thumbAtchFileSn;
 		this.userSn = userSn;
 		this.userNm = userNm;
 		this.step = step;
 		this.parntsReviewSn = parntsReviewSn;
 		this.reviewCn = reviewCn;
 		this.reviewGrade = reviewGrade;
+		this.reviewGradeLong = reviewGradeLong;
 		this.atchFileSn = atchFileSn;
+		this.openYn = openYn;
 		this.registerId = registerId;
 		this.regDt = regDt;
 	}
-	
-	
-	
 	
 
 }

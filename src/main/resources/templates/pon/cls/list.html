@@ -98,8 +98,8 @@
 					<div class="item_info" th:onclick="|detailClass(${data.classSn});|" >
 						<span th:text="${data.ctgryNm}" class="item_txt">카테고리명</span>
 						<p th:text="${data.classSj}" >클래스제목</p>
-						<span th:if="${data.classDscntBfeAmt ne null && data.classDscntBfeAmt ne '' }" th:text="|${data.classDscntBfeAmt} 원|" class="item_sale"/>
-						<span th:text="|${data.classAmt} 원|" 			class="item_price" >금액</span>
+						<span th:if="${data.classDscntBfeAmt ne null && data.classDscntBfeAmt ne '' }" th:text="|${#numbers.formatInteger(data.classDscntBfeAmt, 3, 'COMMA')} 원|" class="item_sale"/>
+						<span th:text="|${#numbers.formatInteger(data.classAmt, 3, 'COMMA')} 원|" 			class="item_price" >금액</span>
 					</div>
 				</div>
 				<div th:unless = "${!resultList.isEmpty()}" class="no-data">

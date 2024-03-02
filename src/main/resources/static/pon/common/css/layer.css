@@ -124,7 +124,7 @@
     z-index: 101;
 }
 
-.show_pop , .hide_pop, .show_pop_lv2, .hide_pop_lv2 {
+.show_layer , .hide_layer, .show_layer_lv2, .hide_layer_lv2 {
     cursor: pointer;
 }
 
@@ -1733,19 +1733,19 @@ input[type="radio"][disabled]:checked+label{
     padding-right: 0px;
 }
 
-.registClassInqry .class_info_wrap, .detailClassInqry .class_info_wrap, .registClassReview .class_info_wrap {
+.registClassInqry .class_info_wrap, .detailClassInqry .class_info_wrap, .classReview .class_info_wrap {
 	height: 150px;
     padding: 10px;
     border: 1px dashed rgb(221 215 223);
     border-radius: 3px;
 }
 
-.registClassInqry .class_detail_box, .detailClassInqry .class_detail_box, .registClassReview .class_detail_box {
+.registClassInqry .class_detail_box, .detailClassInqry .class_detail_box, .classReview .class_detail_box {
 	height: 100%;
 	gap: 20px;
 }
 
-.registClassInqry .class_detail_left, .detailClassInqry .class_detail_left, .registClassReview .class_detail_left {
+.registClassInqry .class_detail_left, .detailClassInqry .class_detail_left, .classReview .class_detail_left {
 	height: auto;
     min-width: 150px;
     width: 24%;
@@ -1760,7 +1760,7 @@ input[type="radio"][disabled]:checked+label{
     border-radius: 10px;
 }
 
-.registClassInqry .title_wrap, .classInqry .content_wrap, .registClassReview .title_wrap {
+.registClassInqry .title_wrap, .classInqry .content_wrap, .classReview .title_wrap {
 	padding: 10px 0px;
     display: flex;
     gap: 20px;
@@ -1776,15 +1776,15 @@ input[type="radio"][disabled]:checked+label{
     width: 100%;
 }
 
-.registClassInqry .title_wrap .title_name, .registClassReview .title_wrap .title_name {
+.registClassInqry .title_wrap .title_name, .classReview .title_wrap .title_name {
 	margin: auto 0;
 }
 
-.registClassInqry .title_wrap .radiobox, .registClassReview .title_wrap .radiobox {
+.registClassInqry .title_wrap .radiobox, .classReview .title_wrap .radiobox {
 	width: 100%;
 }
 
-.registClassInqry .title_wrap .radiobox .btn, .registClassReview .title_wrap .radiobox .btn {
+.registClassInqry .title_wrap .radiobox .btn, .classReview .title_wrap .radiobox .btn {
 	height: 1.7rem;
     border-style: solid;
     border-width: 1px;
@@ -1815,3 +1815,46 @@ input[type="radio"][disabled]:checked+label{
 .overflowY_auto {
 	overflow-y: auto !important;
 }
+
+/* S : 클래스 리뷰 (상세 조회 ) */
+
+.detail_review_box {
+    padding: 5px 5px;
+    border-top: 1px solid #c3c3c3;
+    margin-top: 10px;
+}
+.detail_review_box .info_top {
+    padding-top:7px;
+    padding-bottom : 15px;
+}
+
+.detail_review_box .review_userNm, .detail_review_box .info_top .regDt{
+    letter-spacing: 2px;
+    font-size: 14px;
+    color: #939393;
+}
+.detail_review_box .info_top .regDt{
+    float : right;
+    position : relative;
+    top : 5px;
+
+}
+
+.detail_review_box .info_top .like_star{
+    display: inline-block;
+    position: relative;
+    top: 3px;
+    padding-left: 10px;
+}
+
+.detail_review_box .info_content {
+    padding: 0px 2px;
+    letter-spacing: 2px;
+    line-height: 1.2rem;
+    color: #3a3a3a;
+}
+
+
+.detail_review_box .like_star img{ max-width: 17px; }
+
+/* E : 클래스 리뷰 (상세 조회 ) */

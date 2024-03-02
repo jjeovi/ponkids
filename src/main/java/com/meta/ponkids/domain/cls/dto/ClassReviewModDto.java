@@ -28,6 +28,8 @@ public class ClassReviewModDto {
 	
 	private Long atchFileSn;
 	
+	private String openYn;
+	
     private String updusrId;      	// 수정자 ID
     
     private String updusrIp;      	// 수정자 IP
@@ -35,7 +37,7 @@ public class ClassReviewModDto {
 	//builder 생성
 	@Builder
 	public ClassReviewModDto(Long classReviewSn, Long classSn, Long userSn, String step, Long parntsReviewSn,
-			String reviewCn, String reviewGrade, Long atchFileSn, String updusrId, String updusrIp) {
+			String reviewCn, String reviewGrade, Long atchFileSn, String openYn, String updusrId, String updusrIp) {
 		this.classReviewSn = classReviewSn;
 		this.classSn = classSn;
 		this.userSn = userSn;
@@ -44,6 +46,7 @@ public class ClassReviewModDto {
 		this.reviewCn = reviewCn;
 		this.reviewGrade = reviewGrade;
 		this.atchFileSn = atchFileSn;
+		this.openYn = openYn;
 		this.updusrId = updusrId;
 		this.updusrIp = updusrIp;
 	}
@@ -60,6 +63,7 @@ public class ClassReviewModDto {
 				.reviewCn(reviewCn)
 				.reviewGrade(reviewGrade)
 				.atchFileSn(atchFileSn)
+				.openYn(openYn)
 				.updusrId(updusrId)
 				.updusrIp(updusrIp)
 				.build();
@@ -77,6 +81,7 @@ public class ClassReviewModDto {
 				.reviewCn(classReview.getReviewCn())
 				.reviewGrade(classReview.getReviewGrade())
 				.atchFileSn(classReview.getAtchFileSn())
+				.openYn(classReview.getOpenYn())
 				.updusrId(classReview.getUpdusrId())
 				.updusrIp(classReview.getUpdusrIp())
 				.build();
