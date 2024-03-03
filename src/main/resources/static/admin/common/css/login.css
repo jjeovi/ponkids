@@ -1,0 +1,60 @@
+.login_content .submit {
+  background-color: #60339e;
+  color: #fff;
+  width: 100%;
+  border-radius: 7px;
+}
+
+.login_content .login_title {
+  font-size : 20px;
+}
+
+.to_register {
+  display: inline-block;
+  width: 40%;
+}
+
+.logo_main{
+  width: 100%;
+  height: 220px;
+}
+
+.login_tab {
+  font-family: 'yg-jalnan';
+  display: inline-block;
+  width: 50%;
+  margin: 0;
+  font-size: 12px;
+  border-radius: 0;
+  background-color: #f7f7f7;
+  color: #000;
+  border-bottom: none;
+  margin: 0 !important;
+  padding: 6px 0px;
+}
+
+.login_tab.active {
+  background-color: #60339e;
+  color: #fff;
+  font-weight: 600;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border: 2px solid #60339e;
+  border-bottom: none;
+
+}
+.login_sub_title {
+  margin-bottom: 5px;
+}
+
+.sub_tab {
+  margin-bottom: 20px;
+  margin-top: 17px;
+  border-bottom: 2px solid #5a2f94;
+  display: flex;
+}
+
+.separator {
+  padding-top : 3px;
+
+}
