@@ -38,11 +38,13 @@
 		<img class="bg_ico2" src="/pon/common/image/atom2.png" alt="배경아이콘_원자">
 	</div>
 	<div class="class_1dep">
+		<form id="listForm" name="listForm" method="get"   th:action="@{ {basicPath}/{mcd}/{bbsSn}/list ( basicPath = ${basicPath}, mcd = ${mcd}, bbsSn = ${bbsSn}) }" class="form">
 		<div class="notice_article">
 			<div class="search_article">
 				<div class="search_input no-bd-top">
-					<input type="text" placeholder="검색어를 입력하세요">
-					<span>검색</span>
+					<input type="hidden"	name="schOption" value="A" >
+					<input type="text" 		name="schCntn"	placeholder="검색어를 입력하세요" th:value="${searchDTO.schCntn}">
+					<button type="submit" class="submit cursor" >검색</button>
 				</div>
 			</div>
 			<div class="article_list_box">
@@ -98,6 +100,7 @@
 		</div>
 		<div class="paging_box" th:insert="~{pon/layout/tiles/paging :: paging('listForm', ${resultList})}">
 		</div>
+		</form>
 	</div>
 </div>
 

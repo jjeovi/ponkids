@@ -30,8 +30,8 @@
 <div layout:fragment="content">
 	<form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="form">
 		<input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
-		<input type="hidden" name="category.lv1Sn" id="cate01"  th:value="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null ) } ? ${searchDTO.category.lv1Sn} " />
-		<input type="hidden" name="category.lv2Sn" id="cate02"  th:value="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn != null ) } ? ${searchDTO.category.lv2Sn} " />
+		<input type="hidden" name="category.lv1Sn" id="cate01"  th:value="${ ( mainSearchDTO.category != null ) && ( mainSearchDTO.category.lv1Sn != null ) } ? ${mainSearchDTO.category.lv1Sn} " />
+		<input type="hidden" name="category.lv2Sn" id="cate02"  th:value="${ ( mainSearchDTO.category != null ) && ( mainSearchDTO.category.lv2Sn != null ) } ? ${mainSearchDTO.category.lv2Sn} " />
 		<div class="sub_box">
 			<div class="top_tit">
 				<div class="star">
@@ -45,21 +45,21 @@
 			<div class="class_1dep">
 				<ul class="tabnav">
 					<li>
-						<a href="#tab0" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'active'">전체</a> 	
+						<a href="#tab0" th:classappend="${ ( mainSearchDTO.category != null ) && ( mainSearchDTO.category.lv1Sn == 0 ) } ? 'active'">전체</a> 	
 					</li>					
 					<li th:each="data : ${cateLv1List}" >
-						<a th:href="|#tab${data.clSn}|" th:text="${data.clNm}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) } ? 'active'" /> 	
+						<a th:href="|#tab${data.clSn}|" th:text="${data.clNm}" th:classappend="${ ( mainSearchDTO.category != null ) && ( mainSearchDTO.category.lv1Sn == data.clSn ) } ? 'active'" /> 	
 					</li>
 				</ul>
 			</div>
 			<div class="class_2dep">
-				<div th:id="tab0"  th:style="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) ? '' : 'display:none'}" > <!-- 1depth > 전체 클릭 시 -->
+				<div th:id="tab0"  th:style="${ ( mainSearchDTO.category != null ) && ( mainSearchDTO.category.lv1Sn == 0 ) ? '' : 'display:none'}" > <!-- 1depth > 전체 클릭 시 -->
 					<div class="tab1_category">
 						<ul class="tabnav_2dep">
 							<li>
-								<img src="/pon/common/image/check_ico.svg" alt="" th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) && ( searchDTO.category.lv2Sn == 0 ) }">
+								<img src="/pon/common/image/check_ico.svg" alt="" th:if="${ ( mainSearchDTO.category != null ) && ( mainSearchDTO.category.lv1Sn == 0 ) && ( mainSearchDTO.category.lv2Sn == 0 ) }">
 								<a href="javascript:" onclick="searchClassList( this )" th:data-parnts-cl-sn="0" data-cl-sn="0"
-								   th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) && ( searchDTO.category.lv2Sn == 0 ) } ? 'active'" th:text="전체" />
+								   th:classappend="${ ( mainSearchDTO.category != null ) && ( mainSearchDTO.category.lv1Sn == 0 ) && ( mainSearchDTO.category.lv2Sn == 0 ) } ? 'active'" th:text="전체" />
 							</li>
 							<li th:each=" item : ${ cateLv2List } ">
 								<a href="javascript:" onclick="searchClassList( this )" th:data-parnts-cl-sn="${item.parntsClSn}" th:data-cl-sn="${item.clSn}" th:text="${item.clNm}" />
@@ -68,20 +68,20 @@
 					</div>
 				</div>
 				<div 	th:each="data : ${cateLv1List}" th:id="|tab${data.clSn}|" 
-						th:style="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != 0 ) && (searchDTO.category.lv1Sn == data.clSn) ? '' : 'display:none'}" >
+						th:style="${ ( mainSearchDTO.category != null ) && ( mainSearchDTO.category.lv1Sn != 0 ) && (mainSearchDTO.category.lv1Sn == data.clSn) ? '' : 'display:none'}" >
 					<div class="tab1_category">
 						<ul class="tabnav_2dep">
 							<li>
 								<img 	src="/pon/common/image/check_ico.svg" alt=""
-										th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) && ( searchDTO.category.lv2Sn == 0 ) }">
+										th:if="${ ( mainSearchDTO.category != null ) && ( mainSearchDTO.category.lv1Sn == data.clSn ) && ( mainSearchDTO.category.lv2Sn == 0 ) }">
 								<a href="javascript:" onclick="searchClassList( this )" th:data-parnts-cl-sn="${data.clSn}" data-cl-sn="0" th:text="전체"
-								   th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) && ( searchDTO.category.lv2Sn == 0 ) } ? 'active'" />
+								   th:classappend="${ ( mainSearchDTO.category != null ) && ( mainSearchDTO.category.lv1Sn == data.clSn ) && ( mainSearchDTO.category.lv2Sn == 0 ) } ? 'active'" />
 							</li>
 							<li th:each=" item : ${ cateLv2List } " th:if=" ${ data.clSn == item.parntsClSn }" >
 								<img 	src="/pon/common/image/check_ico.svg" alt=""
-										th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) && ( searchDTO.category.lv2Sn == item.clSn ) }">
+										th:if="${ ( mainSearchDTO.category != null ) && ( mainSearchDTO.category.lv1Sn == data.clSn ) && ( mainSearchDTO.category.lv2Sn == item.clSn ) }">
 								<a href="javascript:" onclick="searchClassList( this )" th:data-parnts-cl-sn="${data.clSn}" th:data-cl-sn="${item.clSn}" th:text="${item.clNm}"
-								   th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.clSn ) && ( searchDTO.category.lv2Sn == item.clSn ) } ? 'active'" />
+								   th:classappend="${ ( mainSearchDTO.category != null ) && ( mainSearchDTO.category.lv1Sn == data.clSn ) && ( mainSearchDTO.category.lv2Sn == item.clSn ) } ? 'active'" />
 							</li>
 						</ul>
 					</div>

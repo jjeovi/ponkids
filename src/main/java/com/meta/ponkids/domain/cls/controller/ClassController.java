@@ -25,12 +25,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.meta.ponkids.domain.cls.dto.ClassInqryListDto;
 import com.meta.ponkids.domain.cls.dto.ClassListDto;
 import com.meta.ponkids.domain.cls.dto.ClassReqstSaveDto;
+import com.meta.ponkids.domain.cls.dto.ClassReviewListDto;
 import com.meta.ponkids.domain.cls.repository.ClassReqstRepository;
 import com.meta.ponkids.domain.cls.service.ClassCategoryCl01Service;
 import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
 import com.meta.ponkids.domain.cls.service.ClassDetailService;
 import com.meta.ponkids.domain.cls.service.ClassInqryService;
 import com.meta.ponkids.domain.cls.service.ClassReqstService;
+import com.meta.ponkids.domain.cls.service.ClassReviewService;
 import com.meta.ponkids.domain.cls.service.ClassService;
 import com.meta.ponkids.domain.cls.service.ClassWeekService;
 import com.meta.ponkids.domain.lctre.dto.LctreModDto;
@@ -63,6 +65,7 @@ public class ClassController {
 	private final ClassReqstService classReqstService;
 	private final ClassReqstRepository classReqstRepository;
 	private final ClassInqryService classInqryService;
+	private final ClassReviewService classReviewService;
 	
 	private final LctreService lctreService;
 	
@@ -88,7 +91,7 @@ public class ClassController {
 		model.addAttribute( "resultList", resultList );
 		
 		// 검색 dto setting
-		model.addAttribute( "searchDTO", listDto );
+		model.addAttribute( "mainSearchDTO", listDto );
 		
 		// 카테고리 리스트 ( lv1 )
 		// 클래스 카테고리 분류1 list setting
@@ -152,6 +155,11 @@ public class ClassController {
 //		model.addAttribute( "day7List", cmmnCdDetailService.getList( "DAY_7_CD" ) );	// 요일리스트
 		
 		// 4. 클래스 의 후기 : classReviewList > ByClassSn
+		Pageable customPageable = PageRequest.of(0, 5);	// 첫번째페이지 (0페이지) , 5개식 조회
+		
+		ClassReviewListDto classReviewListDto = new ClassReviewListDto();
+		classReviewListDto.setClassSn( targetDto.getClassSn() );
+		model.addAttribute("classReviewList", classReviewService.getList( classReviewListDto, customPageable ) );	// 클래스 후기 classSn으로 검색
 		// TODO
 		// 클래스의 후기
 		
@@ -159,7 +167,6 @@ public class ClassController {
 		// - 총 건수 : classInqryList.totalElements 로 구함.
 		ClassInqryListDto classInqryListDto = new ClassInqryListDto();
 		classInqryListDto.setClassSn( targetDto.getClassSn() );
-		Pageable customPageable = PageRequest.of(0, 5);	// 첫번째페이지 (0페이지) , 5개식 조회
 		model.addAttribute("classInqryList", classInqryService.getList( classInqryListDto, customPageable ) );	// 클래스 후기 classSn으로 검색
 		
 		// 6. 클래스 가 속한 카테고리의 다른 클래스들의 정보 : otherClassList ( 본인 클래스는 제외해야함 ) 

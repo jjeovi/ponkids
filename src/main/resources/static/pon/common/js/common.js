@@ -309,3 +309,164 @@ function amtSetComma( val ){
 	
 	
 }
+
+/*  S : 문의 */
+	// ======================================================================================
+	// 문의하기 버튼 클릭 event
+	function goClassInqry(){
+			
+		// 1. 로그인 여부 check
+		if ( loginYn == 'N' ) {
+			alert("로그인 후 이용 가능합니다.");
+			showLayer('login');
+			return false;
+		}
+		
+		// 문의 등록 layer 표출
+		showLayer('registClassInqry');
+		
+	}
+	
+	function insertClassInqry(){
+			
+		// 1. 로그인 여부 check
+		if ( loginYn == 'N' ) {
+			alert("로그인 후 이용 가능합니다.");
+			showLayer('login');
+			return false;
+		}
+		
+		// 문의 insert 진행
+		// 수업 신청 진행
+		if ( confirm("문의를 등록하시겠습니까?") ) {
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	function detailInqryLayer( classInqrySn ) {
+		
+		// 문의 상세 조회 layer 표출
+		showLayer('detailClassInqry');
+		
+		// 문의 상세 조회 layer 내용 setting
+		// 특정 클래스의 특정 요일 의 수업 리스트 조회
+		var url = "/classInqry/live/detailClassInqryAjax";
+		$.ajax( {
+			url: url,
+			type: "GET",
+			dataType: "json",
+			async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+			data: {classInqrySn : classInqrySn}, // 검색할 값
+			contentType: "application/json",
+			success: function ( ajaxResult ) {
+				
+				// 1. 문의 조회 layer 초기화
+				eraseLayerData( ['changeData'] );
+
+				// 2. 문의 조회 layer data setting
+				setInqryLayerData( ajaxResult );
+
+				// 3. 문의 등록 layer 표출
+				showLayer('detailClassInqry');
+				
+			}
+		});
+		
+	}
+	
+	
+	function eraseLayerData( classNameArray ) {
+		
+		for( let className of classNameArray ){
+			
+			$( "." + className).empty();
+		}
+		
+	}
+	
+	// 후기 상세 조회 모달창 내용 setting 작업
+	function setInqryLayerData( ajaxResult ) {
+
+		var result = ajaxResult.resultOne;
+
+		$("#thumbImg").append(
+				$( "<img>" ).attr("src","/getImage?atchFileSn="+ result.thumbAtchFileSn).append()
+		);
+
+		$("#inqryClassSj").append( result.classSj );
+
+		// S: 작성자(마스킹), 별점, 등록일, 후기내용 setting
+		$("#detailInqryUserNm").text( result.userNm.substring(0,1) + "**" );
+		$("#detailInqryRegDt").text( result.regDt );
+		$("#detailInqryCn").text( result.inqryCn );
+		// E : 작성자(마스킹), 별점, 등록일, 후기내용 setting
+	}
+	
+	
+	/*  E : 문의 */
+
+	/* S : 리뷰 ( 후기 ) */
+
+	// 후기 조회
+	function detailReviewLayer( classReviewSn ){
+
+		var url = '/classReview/live/getByClassReviewSnAjax';
+		$.ajax( {
+			url: url,
+			type: "GET",
+			dataType: "json",
+			async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+			data: {pk : classReviewSn}, // 검색할 값 setting
+			contentType: "application/json",
+			success: function ( ajaxResult ) {
+
+				if ( ajaxResult.resultOne == null ) {
+					alert("후기 정보가 없습니다. 다시 시도해 주세요.");
+
+				} else {
+					
+					// 1. 문의 조회 layer 초기화
+					eraseLayerData( ['changeData'] ); 
+					
+					// 2. 후기 조회 layer data setting
+					setReviewLayerData( ajaxResult );
+
+					// 3. 문의 등록 layer 표출
+					showLayer('detailClassReview');
+				}
+			}
+		} );
+	}
+
+	// 후기 상세 조회 모달창 내용 setting 작업
+	function setReviewLayerData( ajaxResult ) {
+
+		var result = ajaxResult.resultOne;
+
+		$("#reviewImg").append(
+				$( "<img>" ).attr("src","/getImage?atchFileSn="+ result.thumbAtchFileSn).append()
+		);
+
+		$("#reviewClassSj").append( result.classSj );
+
+		// S: 작성자(마스킹), 별점, 등록일, 후기내용 setting
+		$("#detailReviewUserNm").text( result.userNm.substring(0,1) + "**" );
+
+		// 별점 setting
+		var strStar = "";
+
+		// n번만큼 반복하여 별점 생성
+		for(let i = 0; i < result.reviewGradeLong ; i++ ) {
+			strStar += "<img src='/pon/common/image/star_like.svg' alt='후기별점'>";
+		}
+
+		$("#detailReviewGrade").append( strStar );
+		$("#detailReviewRegDt").text( result.regDt );
+		$("#detailReviewCn").text( result.reviewCn );
+		// E : 작성자(마스킹), 별점, 등록일, 후기내용 setting
+	}
+
+/* E : 리뷰 ( 후기 ) */

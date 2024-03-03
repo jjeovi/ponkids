@@ -30,7 +30,7 @@ public class LctreAjaxDto {
 	
 	private String 		classSj;				// 클래스 제목
 	
-	private Long 		classDaySn;				// 클래스 요일 코드
+	private Long 		classDaySn;				// 클래스 요일 일련번호
 	
 	private String 		classDayCd;				// 클래스 요일 코드
 	

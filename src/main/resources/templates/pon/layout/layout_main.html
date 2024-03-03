@@ -127,7 +127,10 @@
 		</ul>
 		<div class="search_form">
 			<div class="search">
-				<input type="text" placeholder="검색어를 입력해주세요">
+				<form action="/class/mcdClass/list" method="get">
+					<input type="hidden"	name="schOption" value="A" >
+					<input type="text"		name="schCntn" placeholder="클래스명을 검색해주세요" th:value="${mainSearchDTO != null} ? ${mainSearchDTO.schCntn}">
+				</form>
 			</div>
 		</div>
 	</nav>

@@ -9,35 +9,35 @@
 		<h2 class="pop_title">후기 상세조회</h2>
 	</div>
 	<div class="pop_content overflowY_auto">
-		<input type="hidden" name="classSn" class="reviewData" id="reviewClassSn" />
+		<input type="hidden" name="classSn" class="changeData" id="reviewClassSn" />
 		<!--		<input type="hidden" name="step" value="1"/>-->
 		<div class="class_info_wrap">
 			<div class="class_detail_box">
-				<div class="class_detail_left reviewData" id="reviewImg">
-					<!--					<img th:src="@{/getImage(atchFileSn=${targetDto.thumbAtchFileSn})}" alt="" class="reviewData">-->
+				<div class="class_detail_left changeData" id="reviewImg">
+					<!--					<img th:src="@{/getImage(atchFileSn=${targetDto.thumbAtchFileSn})}" alt="" class="changeData">-->
 				</div>
 				<div class="class_detail_right">
-					<p id="reviewClassSj" class="reviewData classSj">클래스제목</p>
+					<p id="reviewClassSj" class="changeData classSj">클래스제목</p>
 				</div>
 			</div>
 		</div>
 		<!-- 후기 정보 : 별점, 등록일, 등록자, 후기내용, +사진(TODO) , +답글! -->
 		<div class="detail_review_box">
 			<div class="info_top">
-				<span id="detailReviewUserNm" class="review_userNm reviewData">홍길동</span>
-				<div id="detailReviewGrade" class="like_star reviewData">
+				<span id="detailReviewUserNm" class="review_userNm changeData">홍길동</span>
+				<div id="detailReviewGrade" class="like_star changeData">
 	<!--				<img src="/pon/common/image/star_like.svg" th:each="num : ${#numbers.sequence(1,gradeIndex)}" alt="후기별점" >-->
 				</div>
-				<span id="detailReviewRegDt" class="regDt reviewData">
+				<span id="detailReviewRegDt" class="regDt changeData">
 					2024-02-20
 				</span>
 			</div>
-			<div id="detailReviewCn" class="info_content reviewData">
+			<div id="detailReviewCn" class="info_content changeData">
 				후기 내용 입력
 			</div>
 		</div>
 		<!-- 후기 답변 -->
-		<ul class="replyData" >
+		<ul class="changeData" >
 			<li>
 				<div class="detail_review_box reply">
 					<div class="info_top">

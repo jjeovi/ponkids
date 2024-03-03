@@ -46,9 +46,11 @@
 
 .img-circle{
 	border-radius: 50%;
-	width: 60px;
-	height: 60px;
+	width: 60px !important;
+	height: 60px !important;
 }
+
+
 .profile_pic {
 	display: inline-block;
 }
@@ -213,6 +215,100 @@
 	}
 /* E : 후기 작성 별점 css */
 
+
+ .detail_reqst_info_wrap {
+	padding: 20px;
+    background-color: #f6f6f6;
+    border-radius: 7px;
+    margin-bottom: 15px;
+ }
+ 
+ .detail_reqst_info_wrap .detail_top {
+	padding-bottom: 11px;
+    border-bottom: 2px solid #fff;
+    padding-left: 5px;
+    font-family: 'yg-jalnan';
+    font-size: 20px;
+    color: #6a6a6a;
+ }
+ 
+ .detail_content {
+	display: flex;
+    justify-content: left;
+    padding: 15px 20px;
+    gap : 20px;
+    padding-bottom: 5px;
+ }
+ 
+ .detail_content .item_thumb {
+	 width: auto;
+ }
+ 
+ .detail_content .item_thumb img {
+	 width:150px;
+	 height:150px;
+	 border-radius: 10px ;
+ }
+ 
+ .lctre_reqst_item li {
+	min-height: 30px;
+    line-height: 19px;
+    position: relative;
+    padding-left: 130px;;
+ }
+ 
+ .lctre_reqst_item li strong {
+	 position:absolute;
+	 left: 0;
+	 top : 0;
+	 overflow: hidden;
+	 width: 130px;
+	 margin-left : 0px;
+	 white-space: nowrap;
+	 text-overflow: ellipsis;
+	 color: #8f8f8f;
+	 
+ }
+ 
+ .lctre_reqst_item .class_detail_item {
+    padding: 0px;
+    padding-bottom: 5px;
+ }
+ 
+ .lctre_reqst_item .detailAnswer{
+	padding: 15px;
+    padding-left: 25px;
+ }
+ 
+ .lctre_reqst_item .lctreGuide{
+	font-size: 19px;
+    font-weight: bold;
+ }
+ 
+ 
+ .lctre_reqst_item .detailAnswer:before{
+	 display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin: 5px 2px 0 0;
+    border: 2px solid #8f8f8f;
+    border-width: 0 0 2px 2px;
+    vertical-align: top;
+    content: '';
+ }
+ 
+ 
+ 
+ .lctre_reqst_item {
+	border: 1px dashed #1cbcc9;
+    margin: 10px 0px;
+    padding-bottom: 17px;
+    border-radius: 10px;
+    background-color: #ececec;
+ }
+ 
+ 
+
 /* E : mypage - reqstList */
 
 
@@ -241,3 +337,11 @@
 	.mypage_list_box .item{padding: 10px;}
     .mypage_list_box .item > a{align-items: center;}
 }
+
+
+
+
+
+
+
+

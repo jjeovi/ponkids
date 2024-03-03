@@ -55,7 +55,6 @@ public class ClassReviewService {
         return classReviewRepository.getListByStepAndParntsReviewSn( step, pk );
     }
     
-    
     public ClassReviewModDto findById( Long pk ) {	// TODO 타입 체크 필요
         
         ClassReview classReview = classReviewRepository.findById( pk ).orElse(null);

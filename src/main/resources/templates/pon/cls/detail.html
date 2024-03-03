@@ -362,70 +362,6 @@
 	}
 	
 	
-	/*  S : 문의 */
-	// ======================================================================================
-	// 문의하기 버튼 클릭 event
-	function goClassInqry(){
-			
-		// 1. 로그인 여부 check
-		if ( loginYn == 'N' ) {
-			alert("로그인 후 이용 가능합니다.");
-			showLayer('login');
-			return false;
-		}
-		
-		// 문의 등록 layer 표출
-		showLayer('registClassInqry');
-		
-	}
-	
-	function insertClassInqry(){
-			
-		// 1. 로그인 여부 check
-		if ( loginYn == 'N' ) {
-			alert("로그인 후 이용 가능합니다.");
-			showLayer('login');
-			return false;
-		}
-		
-		// 문의 insert 진행
-		// 수업 신청 진행
-		if ( confirm("문의를 등록하시겠습니까?") ) {
-			
-			return true;
-		}
-		
-		return false;
-	}
-	
-	function detailInqryLayer( classInqrySn ) {
-		
-		// 문의 상세 조회 layer 표출
-		showLayer('detailClassInqry');
-		
-		// 문의 상세 조회 layer 내용 setting
-		// 특정 클래스의 특정 요일 의 수업 리스트 조회
-		var url = "/classInqry/live/detailClassInqryAjax";
-		$.ajax( {
-			url: url,
-			type: "GET",
-			dataType: "json",
-			async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-			data: {classInqrySn : classInqrySn}, // 검색할 값
-			contentType: "application/json",
-			success: function ( result ) {
-				
-				// return type : Map<String, Object>
-				var resultOne = result.resultOne;
-				
-				console.log( resultOne );
-			}
-		});
-		
-	}
-	
-	/*  E : 문의 */
-		
 	</script>
 </div>
 
@@ -580,7 +516,7 @@
 		<div class="detail_tab_nav">
 			<ul>
 				<li><a href="#detail_tab01" data-tab-id="detail_tab01" class="active">클래스소개</a></li>
-				<li><a href="#detail_tab02" data-tab-id="detail_tab02" >후기<small>0<!-- TODO : cnt 설정 --></small> </a></li>
+				<li><a href="#detail_tab02" data-tab-id="detail_tab02" >후기<small th:utext="${classReviewList.totalElements}"></small> </a></li>
 				<li><a href="#detail_tab03" data-tab-id="detail_tab03" >Q&A<small th:utext="${classInqryList.totalElements}"></small> </a></li>
 			</ul>
 		</div>
@@ -593,14 +529,34 @@
 			<!-- 상세설명 종료 -->
 			
 			<!-- 후기 시작 -->
-			<div id="detail_tab02" style="display:none;">
+			<div id="detail_tab02" class="detail_tab" style="display:none;">
 				<div class="detail_tab_reivew">
 					<h5>수업후기</h5>
 					<span>즐거운 수업되셨나요? 구매평 잘 부탁드려요^^ 그리고 오늘 하루 행운이 가득하시길 바랄게요^^</span>
 				</div>
-				<!-- TODO : 클래스 후기 리스트 뿌리기 -->
-				<h5>수업후기 목록이 없습니다.</h5>
+				<th:block 	th:if = "${!classReviewList.isEmpty() && #lists.size(classReviewList) > 0 }" >
+					<div class="article_list_box">
+						<ol class="article_list">
+							<li class="article_item" th:each="data : ${classReviewList}" th:onclick="|detailReviewLayer('${data.classReviewSn}')|" >
+								<div class="article_num" th:text="${classReviewList.totalElements - ( classReviewList.pageable.pageSize * classReviewList.pageable.pageNumber + dataStat.index ) }">
+								</div>
+								<div class="article_body">
+									<div class="article_tit" th:text="${#strings.abbreviate(data.reviewCn,80)}">후기 제목</div>
+									<div class="article_info">
+										<div class="article_date" th:text="${data.regDt}">2023-09-12 17:53</div>
+									</div>
+								</div>
+							</li>
+						</ol>
+					</div>
+				</th:block>
+				<th:block th:unless = "${!classInqryList.isEmpty() && #lists.size(classInqryList) > 0 }"> <!-- Q&A 없을 시 -->
+					<h5>수업 후기 목록이 없습니다.</h5>
+				</th:block>
 			</div>
+			
+			<!-- 후기상세조회 layer -->	
+			<div class="layer_detailClassReview"	style="display: none;"	th:insert="pon/layer/layer_detailClassReview.html" />
 			<!-- 후기 종료 -->
 			
 			<!-- Q&A 시작 -->
@@ -609,7 +565,6 @@
 					<h5>Q&A</h5>
 					<span>신청하시려는 수업에 대해 궁금한점이 있으신 경우 문의주세요.</span>
 				</div>
-				<!-- TODO : 클래스 Q&A 리스트 뿌리기 -->
 				<th:block 	th:if = "${!classInqryList.isEmpty() && #lists.size(classInqryList) > 0 }" >
 					<div class="article_list_box">
 						<ol class="article_list">
@@ -626,7 +581,7 @@
 						</ol>
 					</div>
 				</th:block>
-				<th:block th:unless = "${!classInqryList.isEmpty() && #lists.size(classInqryList) > 0 }"> <!-- 인증계정 있고, 자녀 존재시  -->
+				<th:block th:unless = "${!classInqryList.isEmpty() && #lists.size(classInqryList) > 0 }"> <!-- Q&A 없을 시 -->
 					<h5>Q&A 목록이 없습니다.</h5>
 				</th:block>
 				<div class="button_added_area" >

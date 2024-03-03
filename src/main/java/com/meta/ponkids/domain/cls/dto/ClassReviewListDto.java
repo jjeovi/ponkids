@@ -37,6 +37,8 @@ public class ClassReviewListDto {
     private String registerId;      // 등록자 ID
     
     private String regDt;	// 등록일자
+    
+    private String regFullDt;	// 등록일자
 	
 	private String schOption;   	// 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
     
@@ -44,7 +46,7 @@ public class ClassReviewListDto {
 
 	@QueryProjection
 	public ClassReviewListDto(Long classReviewSn, Long classSn, String classSj, Long thumbAtchFileSn, Long userSn, String userNm, String step, Long parntsReviewSn,
-			String reviewCn, String reviewGrade, Long reviewGradeLong, Long atchFileSn, String openYn, String registerId, String regDt) {
+			String reviewCn, String reviewGrade, Long reviewGradeLong, Long atchFileSn, String openYn, String registerId, String regDt, String regFullDt) {
 		this.classReviewSn = classReviewSn;
 		this.classSn = classSn;
 		this.classSj = classSj;
@@ -60,6 +62,7 @@ public class ClassReviewListDto {
 		this.openYn = openYn;
 		this.registerId = registerId;
 		this.regDt = regDt;
+		this.regFullDt = regFullDt;
 	}
 	
 

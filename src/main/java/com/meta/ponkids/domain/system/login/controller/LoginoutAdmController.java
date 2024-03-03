@@ -43,7 +43,7 @@ public class LoginoutAdmController {
                             Model model ) throws FileNotFoundException {
         
         // admin 접근시 경로 : /admin/login?auth=pon
-        if ( !StringUtils.hasText( auth ) ) {
+        if ( !StringUtils.hasText( auth ) || !auth.equals(AUTH) ) {
             // 권한체크 실패
             return "error/401";
         }

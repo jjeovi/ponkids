@@ -34,6 +34,10 @@ public class LctreReqstListDto  {
 	private String 		lctreDc;				// 수업 설명
 	
 	private String 		lctreApplcntGuidance;	// 수업 신청자 안내
+	
+	private String 		classDayCd;				// 클래스 요일 코드
+	
+	private String 			classDayNm;			// 클래스 요일 명
     
     private Long	chldrnSn;				// 자녀 일련번호
     
@@ -53,7 +57,9 @@ public class LctreReqstListDto  {
     @QueryProjection
 	public LctreReqstListDto(	Long 	lctreReqstSn, 			Long 	classReqstSn, 	Long	lctreSn,	Long	lctreSeq, 
 								String 	lctreSj, 				String 	lctreDt,		Long	lctreAmt, 	String	lctreDc, 
-								String 	lctreApplcntGuidance, 	Long 	chldrnSn,		String	chldrnNm ) {		this.lctreReqstSn 			= lctreReqstSn;
+								String 	lctreApplcntGuidance, 	String 	classDayCd,		String 	classDayNm,	Long 	chldrnSn,
+								String	chldrnNm ) {
+    	this.lctreReqstSn 			= lctreReqstSn;
 		this.classReqstSn 			= classReqstSn;
 		this.lctreSn 				= lctreSn;
 		this.lctreSeq 				= lctreSeq;
@@ -62,6 +68,8 @@ public class LctreReqstListDto  {
 		this.lctreAmt 				= lctreAmt;
 		this.lctreDc 				= lctreDc;
 		this.lctreApplcntGuidance 	= lctreApplcntGuidance;
+		this.classDayCd 			= classDayCd;
+		this.classDayNm 			= classDayNm;
 		this.chldrnSn 				= chldrnSn;
 		this.chldrnNm 				= chldrnNm;
 	}

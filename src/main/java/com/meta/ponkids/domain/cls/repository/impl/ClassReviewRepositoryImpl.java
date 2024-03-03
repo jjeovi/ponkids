@@ -4,8 +4,13 @@ package com.meta.ponkids.domain.cls.repository.impl;
 import com.meta.ponkids.domain.cls.dto.ClassReviewListDto;
 import com.meta.ponkids.domain.cls.dto.QClassReviewListDto;
 import com.meta.ponkids.domain.cls.repository.custom.ClassReviewRepositoryCustom;
+import com.meta.ponkids.global.common.dto.CategoryDto;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +23,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 import static com.meta.ponkids.domain.cls.entity.QClass.class$;
+import static com.meta.ponkids.domain.cls.entity.QClassInqry.classInqry;
 import static com.meta.ponkids.domain.cls.entity.QClassReview.classReview;
 import static com.meta.ponkids.domain.user.entity.QUser.user;
 
@@ -50,7 +56,8 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
                 		classReview.atchFileSn,
                 		classReview.openYn,
                 		classReview.registerId,
-                		Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD HH:MM:SS")
+                		Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD"),
+                		Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD HH:MM:SS").as("regFullDt")
                 		) )					
                 .from( classReview )
                 //leftJoin
@@ -65,11 +72,12 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
                 		class$.delYn.eq( "N" )
                 )
                 // where
-//                .where(
+                .where(
+                		eqClassSn( listDto.getClassSn() )
 //                		eqOption( listDto.getSchOption(), listDto.getSchCntn() )
-//				)
+				)
                 .orderBy(
-						eqOption( listDto.getSchOption(), listDto.getSchCntn() ),
+						orderByOption( listDto.getSchOption(), listDto.getSchCntn() ),
 //						null
 						classReview.classReviewSn.desc()
 				)
@@ -105,7 +113,8 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
 								classReview.atchFileSn,
 								classReview.openYn,
 								classReview.registerId,
-								Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD")
+								Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD"),
+								Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD HH:MM:SS").as("regFullDt")
 						)
 				)
 				.from(
@@ -152,7 +161,8 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
 								classReview.atchFileSn,
 								classReview.openYn,
 								classReview.registerId,
-								Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD")
+								Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD"),
+								Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD HH:MM:SS").as("regFullDt")
 						)
 				)
 				.from(
@@ -178,7 +188,33 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
 				.fetch();
 	}
 	
-    private OrderSpecifier eqOption( String schOption, String schCntn ) {
+	
+	// -------------------------------- WHERE 검색 옵션 setting --------------------------------
+	
+	    
+	    private BooleanExpression eqOption( String schOption, String schCntn ) {
+	        // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨
+	        if ( StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn ) ) {
+	            if ( schOption.equals( "A" ) )
+	                return classInqry.inqrySj.contains( schCntn ); //  LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+	            else if ( schOption.equals( "B" ) )
+	                return user.userNm.contains( schCntn ); //  LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+	            else if ( schOption.equals( "C" ) )
+	                return user.userId.contains( schCntn ); //  LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+	            else return null;
+//	        	return null;			//  (build한 이후에 해주세요. 안그럼 에러발생)  실제 구현시에는 해당부분지워주고 위에부분주석풀기
+	        } else {
+	            return null;
+	        }
+	    }
+	    
+	    private BooleanExpression eqClassSn( Long pk ) {
+	    	return pk != null ? classReview.classSn.eq(pk) : null;
+	    }
+		
+	
+	
+    private OrderSpecifier orderByOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨
         if ( StringUtils.hasText( schOption ) ) {
             if ( schOption.equals( "A" ) )
@@ -192,5 +228,6 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
             return classReview.classReviewSn.desc();
         }
     }
+    
 
 }

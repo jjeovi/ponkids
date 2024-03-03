@@ -18,6 +18,8 @@ public class ClassInqryListDto {
 	
 	private String	classSj;			// 클래스 제목
 	
+	private Long 		thumbAtchFileSn;
+	
 	private String	ctgryNm;			// 카테고리 명
 	
 	private String	crseNm;				// 커리큘럼 명
@@ -60,11 +62,12 @@ public class ClassInqryListDto {
 	
 	@Builder
 	@QueryProjection
-	public ClassInqryListDto(Long classInqrySn, Long classSn, String classSj, String ctgryNm, String crseNm, String step, String replyYn, String replyYnNm, Long replyCnt, Long parntsInqrySn, Long userSn, String userNm, String userId,
+	public ClassInqryListDto(Long classInqrySn, Long classSn, String classSj, Long thumbAtchFileSn, String ctgryNm, String crseNm, String step, String replyYn, String replyYnNm, Long replyCnt, Long parntsInqrySn, Long userSn, String userNm, String userId,
 			String inqrySj, String inqryCn, String openYn, String openYnNm, String registerId, String regDt, String regFullDt) {
 		this.classInqrySn = classInqrySn;
 		this.classSn = classSn;
 		this.classSj = classSj;
+		this.thumbAtchFileSn = thumbAtchFileSn;
 		this.ctgryNm = ctgryNm;
 		this.crseNm = crseNm;
 		this.step = step;

@@ -15,17 +15,96 @@
 
 	<!-- css -->
 	<link rel="stylesheet" href="/pon/common/css/mypage.css">
-
 </head>
 <title layout:fragment="title">피오니키즈 - pioneerkids</title>
 <!-- S : Javascript functions	-->
 <div layout:fragment="script">
 	<!-- js -->
 </div>
-
 <!-- E : Javascript functions	-->
+
+
 <div layout:fragment="content" class="sub_box mypage_contents">
-	123213123212
+	
+	<!-- 신청 수업 정보 -->
+	<div class="detail_reqst_info_wrap">
+		<div class="detail_top">
+			신청 클래스 정보
+		</div>
+		<div class="detail_content">
+			<div class="item_thumb" >
+				<img class="thumb_img" th:src="@{/getImage(atchFileSn=${targetDto.thumbAtchFileSn})}" alt="클래스이미지">
+			</div>
+			<div class="item_info" >
+				<span class="ctgryNm" th:text="${targetDto.ctgryNm}">카테고리명</span>
+				<p class="classSj" th:text="${targetDto.classSj}">클래스명</p>
+			</div>
+		</div>
+	</div>
+	<!-- 신청 정보 -->
+	<div class="detail_reqst_info_wrap">
+		<div class="detail_top">
+			신청 수업 상세 정보
+		</div>
+		<div class="detail_content lctre_reqst_item" th:each="data : ${targetLctreReqsts}">
+			<ul>
+				<li>
+					<strong>자녀</strong>
+					<span th:text="${data.chldrnNm}"></span>
+				</li>
+				<li>
+					<strong>수업일시</strong>
+					<span>[[${data.lctreDt}]] [[${data.classDayNm}]]</span>
+				</li>
+				<li>
+					<strong>금액</strong>
+					<span th:text="|${#numbers.formatInteger(data.lctreAmt, 3, 'COMMA')}원|"></span>
+				</li>
+				<li>
+					<strong>신청입력사항</strong>
+					<div class="class_detail_item" th:each="detail : ${data.lctreReqstDetails}">
+						<span class="detailCn" 		th:text="${detail.classDetailItemCn}"></span>
+						<div class="detailAnswer" 	th:text="${detail.classDetailAnswer}"></div>
+					</div>
+				</li>
+				<li>
+					<strong>수업안내사항</strong>
+					<div class="lctreGuide" th:utext="${data.lctreApplcntGuidance}">
+					</div>
+				</li>
+			</ul>
+<!--			<div class="detail_reqst_wrap" >-->
+<!--				<p>자녀 : <span th:text="${data.chldrnNm}"></span></p>-->
+<!--				<p>수업일시 : <span th:text="${data.lctreDt}"></span> <span th:text="${data.classDayNm}"></span></p>-->
+<!--				<p>금액 : <span th:text="|${#numbers.formatInteger(data.lctreAmt, 3, 'COMMA')}원|"></span></p>-->
+<!--				<p>신청시 입력 사항  : </p>-->
+<!--			</div>-->
+		</div>
+	</div>
+<!--	 수업 안내사항 -->
+<!--	<div class="detail_reqst_info_wrap">-->
+<!--		<div class="detail_top">-->
+<!--			수업 안내사항-->
+<!--		</div>-->
+<!--		<div class="detail_content">-->
+<!--			<div class="item_info" >-->
+<!--				<span class="ctgryNm" th:text="${targetDto.ctgryNm}">카테고리명</span>-->
+<!--				<p class="classSj" th:text="${targetDto.classSj}">클래스명</p>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--	</div>-->
+	<!-- footer -->
+	<div class="article_detail_footer">
+		<div>
+			<a href="/mypage/reqstHistory/list">
+				<img src="/pon/common/image/list_btn.svg" alt="이미지_목록보기">
+				<span>목록</span>
+			</a>
+		</div>
+	</div>
+	
 </div>
+
+
 
 </html>

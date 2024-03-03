@@ -41,6 +41,8 @@ public class LctreReqstRepositoryImpl implements LctreReqstRepositoryCustom {
 												lctre.lctreAmt,
 												lctre.lctreDc,
 												lctre.lctreApplcntGuidance,
+												lctre.classDayCd,
+												cmmnCdDetail.cdDetailNm,
 												lctreReqst.chldrnSn,
 												userChldrn.chldrnNm
 						)
@@ -55,6 +57,12 @@ public class LctreReqstRepositoryImpl implements LctreReqstRepositoryCustom {
 				// join 에는 delYn 조건 필수로 추가
 				.on( 	userChldrn.chldrnSn.eq( lctreReqst.chldrnSn ),
 						userChldrn.delYn.eq( "N" )
+						)
+				.leftJoin( cmmnCdDetail )
+				.on(	cmmnCdDetail.cdNm.eq("DAY_7_CD"),
+						cmmnCdDetail.cdDetailVal1.eq( lctre.classDayCd ),
+						cmmnCdDetail.useYn.eq("Y"),
+						cmmnCdDetail.delYn.eq("N")
 						)
 				.where(
 						lctreReqst.classReqstSn.eq( classReqstSn )
