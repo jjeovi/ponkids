@@ -3,6 +3,8 @@ const telNoRegexp = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
 var cateSchData = {};   // 전역변수 설정 (검색값을 계속 기억)
 var categoryLiMaxWidth = 280;
 
+var _qestnarQestnItemTyCd;
+// 설문조사 유형 별로 입력사항 세팅
 
 // ------------- function () 함수 실행  호출시점 : DOM Tree 생성 완료 후 -----------------
 $( function () {
@@ -80,6 +82,63 @@ $( function () {
 			$(this).addClass("flow-text");
 		}
     } );
+    
+    
+    // select 변경을 취소할 시 이전값으로 돌리기
+    $(".selectQestnarQestnItemTyCd").focus(function(){
+		_qestnarQestnItemTyCd = $(this).val();
+	}).change( function(){
+		
+		// 추가한 선택지가 존재하는 경우
+		// ~.length
+		var changeYn = false;
+		
+		if( false ) {
+			changeYn = true;
+		} else {
+			if ( confirm("추가한 선택지가 모두 사라집니다. 변경하시겠습니까?")) {
+				changeYn = true;
+			} 
+		}
+		
+		
+		
+		
+		if( changeYn ) {
+			// 변경
+			
+			var value = $(this).val();
+			// 설문조사 유형 값 : value
+		
+			// - 주관식 일 경우 : ANSWER
+			// - 선택형(단일선택) 일 경우 : SELECTVIE_ONE
+			// - 선택형(다중선택 가능) 일 경우 : SELECTIVE_MULTI
+			// - 첨부파일 일 경우 : FILE <-- 추후 작업 예정
+			
+			switch( value ) {
+				case "ANSWER" :
+					$(".addOptionArea").hide(); 
+					break;
+				case "SELECTIVE_ONE" :
+					$(".addOptionArea").show(); 
+					break;
+				case "SELECTIVE_MULTI" :
+					$(".addOptionArea").show();
+					break;
+			}
+			
+			
+		} else {
+			// 변경 취소
+			
+			
+			$(this).val( _qestnarQestnItemTyCd );
+			return false;
+			
+		}
+		
+	
+	})
 
 } );
 // ------------- function () 함수 종료 -----------------
@@ -1059,3 +1118,16 @@ function amtSetComma( val ){
 		return val.replace(/\,/g, '').replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,')
 	}
 }
+
+
+
+/* S : 설문조사 */ 
+
+function addQestnarQestnDetailOption( e ) {
+	alert( $(e).siblings("[name='qestnarQestnDetailCn']").val() );
+}
+
+//  onchange="checkQestnarQestnItemTyCd( this.value ) ;"
+
+
+/* E : 설문조사 */ 

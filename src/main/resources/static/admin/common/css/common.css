@@ -5811,3 +5811,18 @@ input[type="checkbox"][disabled] + label{
 .alignLeft {
 text-align: left;	
 }
+
+
+
+.inputOption .liveAddInput {
+	display: inline-block;
+	width: calc(100% - 70px);
+}
+
+
+.optionList .noData{
+	height : 100px;
+    border-top: 1px dashed #b8b8b8;
+    border-bottom: 1px dashed #b8b8b8;
+    margin-top: 10px;
+}
