@@ -17,7 +17,7 @@ public class ClassDto {
 	
 	private Long classSn;                   // 클래스일련번호
     
-	private List<String> 					classWeek;          // 요일
+	private List<String> 					classWeek;			// 요일
     
     private List<ClassDetailSaveDto>		classDetails;		// 입력 항목
     

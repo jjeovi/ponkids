@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{admin/layout/layout}">
+<!-- S : Javascript functions	-->
+
+<script layout:fragment="script">
+
+	$( function () {
+		
+		// 입력 항목 추가 모달 창에서 newForm 의 입력유형 list 초기화 후 setting 작업
+		// 입력 항목 유형 코드 리스트가 0개 이상일 경우에만 실행 
+		if ( qestnarQestnItemTyCdList.length > 0 ) {
+			
+			$("#addQestnarQestnModalBody .newForm").find("[name='qestnarQestnItemTyCd']").empty();
+			
+			// default option 추가
+			$("#addQestnarQestnModalBody .newForm").find("[name='qestnarQestnItemTyCd']").append(
+				$("<option>").attr("value","").append("입력 유형 선택")
+			)
+			// for 문 돌려서 공통코드에 있는 설문조사 입력 항목 유형 코드 list 순회하여 1개씩 option 으로 추가
+			for ( let item of qestnarQestnItemTyCdList ) {
+				$("#addQestnarQestnModalBody .newForm").find("[name='qestnarQestnItemTyCd']").append(
+					$("<option>").attr("value", item.cdDetailVal1 ).append( item.cdDetailNm )	
+				)
+			}
+			
+		}
+
+	});
+	// $( function () {}); end
+
+	// form submit 시 유효성 검사
+	function submitValidCheck() {
+
+	 	// ==================== 유효성 모두 통과 후 dataset 정리 ==================================
+		// ==================== 유효성 모두 통과 후 dataset 정리 ==================================
+			
+		// 입력항목 정보 배열 처리 :
+		// 입력항목 정보들 각각 값들을 배열화시켜 submit
+		// div name : qestnarQestnAddDiv 중 newForm 이 아닌 div 를 배열로 정리
+		$( "[name='qestnarQestnAddDiv']" ).not( '.newForm' ).each( function ( index ) {
+				// 입력 유형, 입력 항목, 필수 여부
+				$( this ).find( "[name=qestnarQestnItemTyCd]" ).attr( "name", "qestnarQestns[" + index + "].qestnarQestnItemTyCd" );	// 입력 유형
+				$( this ).find( "[name=qestnarQestnItemCn]" ).attr( "name", "qestnarQestns[" + index + "].qestnarQestnItemCn" );		// 입력 항목
+				$( this ).find( "[name=qestnarQestnEssntlYn]" ).attr( "name", "qestnarQestns[" + index + "].qestnarQestnEssntlYn" );	// 필수 여부
+		});
+			
+		return true;
+
+	}
+
+
+	// 입력항목 추가 > 저장 버튼 클릭 event
+	function addQestnarQestn() {
+		// target 신청입력항목 div
+		var $targetDiv = $( "[name='qestnarQestnAddDiv'].newForm" );
+
+		// 유효성 검사
+		if ( !qestnarQestnValidCheck( $targetDiv ) ) return false;
+
+		// radio setting
+		// 필수 여부 (라디오) 값 hidden 태그에 저장
+		$targetDiv.find( "[name='qestnarQestnEssntlYn']" ).val( $targetDiv.find( "[name='qestnarQestnEssntlYnRadio']:checked" ).val() );
+
+		// 입력항목을 qestnarQestnTable 테이블에 표시 한 뒤  새로운 qestnarQestnAddDiv 생성
+		addQestnarQestnRow( $targetDiv );	// 신청 입력 항목 테이블에추가
+
+		// 모든 qestnarQestnAddDiv newForm 제거
+		$( "[name='qestnarQestnAddDiv']" ).removeClass( "newForm" );
+		// 모든 qestnarQestnAddDiv 숨기기
+		$( "[name='qestnarQestnAddDiv']" ).hide();
+
+		// 새로운 폼 추가
+		var $newQestnarQestnForm = $( "<div name='qestnarQestnAddDiv' class='newForm'>" ).load( "/admin/qestnarGroup/addQestnarQestnFormModal.html" );
+		$( "#addQestnarQestnModalBody" ).append( $newQestnarQestnForm )
+		
+		setTimeout( function () {
+			// append 실행 이후 에 해당 부분이 실행 되어야 하므로 100ms 의 시간을 준 뒤 그 이후에 실행한다.
+			// 그렇지 않으면 $("#addQestnarQestnModalBody .newForm") 를 찾지 못한다.
+			
+			// 입력 항목 추가 모달 창에서 newForm 의 입력유형 list 초기화 후 setting 작업
+			// 입력 항목 유형 코드 리스트가 0개 이상일 경우에만 실행 
+			if ( qestnarQestnItemTyCdList.length > 0 ) {
+				
+				$("#addQestnarQestnModalBody .newForm").find("[name='qestnarQestnItemTyCd']").empty();
+				
+				// default option 추가
+				$("#addQestnarQestnModalBody .newForm").find("[name='qestnarQestnItemTyCd']").append(
+					$("<option>").attr("value","").append("입력 유형 선택")
+				)
+				// for 문 돌려서 공통코드에 있는 설문조사 입력 항목 유형 코드 list 순회하여 1개씩 option 으로 추가
+				for ( let item of qestnarQestnItemTyCdList ) {
+					$("#addQestnarQestnModalBody .newForm").find("[name='qestnarQestnItemTyCd']").append(
+						$("<option>").attr("value", item.cdDetailVal1 ).append( item.cdDetailNm )	
+					)
+				}
+				
+			}
+		}, 100 );
+		
+		
+
+		// 모달창 닫기
+		$( "#addQestnarQestnModal" ).modal( 'hide' );
+		return true;
+	}
+
+
+	// 신청입력항목 수정 버튼 클릭 > 수정정보 tr에 현행화
+	function updateQestnarQestn() {
+
+		// target 신청입력항목 div setting
+		var $targetDiv = $( "[name='qestnarQestnModDiv']" );
+
+		// 유효성 검사
+		if ( !qestnarQestnValidCheck( $targetDiv ) ) return false;
+
+		// 필수여부 (라디오) 값 hidden 태그에 저장
+		$targetDiv.find( "[name='qestnarQestnEssntlYn']" ).val( $targetDiv.find( "[name='qestnarQestnEssntlYnRadio']:checked" ).val() );
+	
+
+		// S : trNum 번째 찾기
+		var $trNumDiv = $( "[name='qestnarQestnAddDiv'].modifyForm" );
+		var trNum = $trNumDiv.prevAll().length - 1;
+		// E : trNum 번째 찾기
+
+		// 신청입력항목정보 테이블의 trNum 번째 신청입력항목에 수정한 값을 매핑하여표시하기
+		modifyQestnarQestnRow( $targetDiv, trNum );	// 신청입력항목정보테이블에추가
+
+		// modifyForm 내용을 targetDiv 내용으로 교체
+		var $cloneDiv = $targetDiv.clone();
+		$cloneDiv = $cloneDiv.contents().unwrap();
+		$trNumDiv.empty();
+		$cloneDiv.appendTo( $trNumDiv );
+
+		// targetDiv 안의 내용 지우기
+		$targetDiv.empty();
+
+		// 모든 qestnarQestnAddDiv modifyForm 제거
+		$( "[name='qestnarQestnAddDiv']" ).removeClass( "modifyForm" );
+
+		// 모달창 닫기
+		$( "#addQestnarQestnModal" ).modal( 'hide' );
+
+		return true;
+
+	}
+
+
+	// 입력항목 모달 저장시 유효성 검사
+	function qestnarQestnValidCheck( $targetDiv ) {
+
+		var qestnarQestnItemTyCd =   $targetDiv.find( "[name='qestnarQestnItemTyCd'] :selected" ).val();		  // 입력 유형
+		var qestnarQestnItemCn =	 $targetDiv.find( "[name='qestnarQestnItemCn']" ).val();					  // 입력 내용
+		var qestnarQestnEssntlYnRadio =   $targetDiv.find( "[name='qestnarQestnEssntlYnRadio']:checked" ).val();			// 필수 여부
+
+		if ( qestnarQestnItemTyCd == null || qestnarQestnItemTyCd == ''  ) {
+			alert( "입력 유형을 선택해주세요." );
+			return false;
+		} else if ( qestnarQestnItemCn == null || qestnarQestnItemCn == '' ) {
+			alert( "입력 항목을 입력하세요." );
+			return false;
+		} else if ( qestnarQestnEssntlYnRadio == null || qestnarQestnEssntlYnRadio == '' ) {
+			alert( "필수 여부를 선택해주세요." );
+			return false;
+		}
+
+		return true;
+	}
+
+	// 모달로 추가한 입력항목을 화면에 표출
+	function addQestnarQestnRow( $targetDiv ) {
+
+		// 추가
+		$( "#qestnarQestnTableBody" ).append (
+			$( "<tr>" ).append(
+				$( "<td>" ).attr( "name", "trNum" ).append( $( "#qestnarQestnTableBody tr" ).length + 1 ),																	// 순번
+				$( "<td>" ).attr( "name", "qestnarQestnItemTyNm" ).append( $targetDiv.find( "[name='qestnarQestnItemTyCd'] :selected" ).text() ),						 // 유형
+				$( "<td>" ).attr( "name", "qestnarQestnItemTyCd" ).attr( "class", "hide").append( $targetDiv.find( "[name='qestnarQestnItemTyCd'] :selected" ).val() ),						 // 유형
+				$( "<td>" ).attr( "name", "qestnarQestnItemCn" ).append( $targetDiv.find( "[name='qestnarQestnItemCn']" ).val()  ),									   // 입력 항목
+				$( "<td>" ).attr( "name", "qestnarQestnEssntlYnRadio" ).append( $targetDiv.find( "[name='qestnarQestnEssntlYnRadio']:checked" ).val() == "Y" ? "필수" : "선택" ),	 // 필수 여부
+				$( "<td>" ).append(														 // 관리
+					$( "<button>" ).attr( "onclick", "modifyQestnarQestn(this)" ).attr( "type", "button" ).addClass( "btn btn-success btn-sm table-btn" ).append( "수정" ),
+					$( "<button>" ).attr( "onclick", "deleteQestnarQestn(this)" ).attr( "type", "button" ).addClass( "btn btn-danger btn-sm table-btn" ).append( "삭제" )
+				)
+			)
+		);
+	}
+
+
+	// 입력항목 정보 테이블에 변경사항 수정
+	function modifyQestnarQestnRow( $targetDiv, trNum ) {
+
+		$modifyTr = $( "#qestnarQestnTableBody tr" ).eq( trNum );
+
+		$modifyTr.find( "[name='qestnarQestnItemTyNm']" ).text( $targetDiv.find( "[name='qestnarQestnItemTyCd'] :selected" ).text() );
+		$modifyTr.find( "[name='qestnarQestnItemTyCd']" ).text( $targetDiv.find( "[name='qestnarQestnItemTyCd'] :selected" ).val() );
+		$modifyTr.find( "[name='qestnarQestnItemCn']" ).text( $targetDiv.find( "[name='qestnarQestnItemCn']" ).val() );
+		$modifyTr.find( "[name='qestnarQestnEssntlYnRadio']" ).text( $targetDiv.find( "[name='qestnarQestnEssntlYnRadio']:checked" ).val() == "Y" ? "필수" : "선택" );
+
+	}
+
+
+	// 신청입력항목 (등록된 항목에서) 수정 버튼 > modal 출력
+	function modifyQestnarQestn( e ) {
+		// 모달 하단의 버튼 설정
+		setModalBtn( "U" );
+
+		// 햔재 선택된 신청입력항목의 number 체크 후(trNum)
+		// trNum 번째 찾기 setting
+		var trNum = $( e ).closest( 'tr' ).prevAll().length;
+
+		// [name='qestnarQestnModDiv'] div empty
+		$( "[name='qestnarQestnModDiv']" ).empty();
+
+		// contents().unwrap() : 하위항목들만 남기고 최상위태그 제거 ( 자식 요소를 그대로 둔 채 현재 태그를 제거 )
+		// $( "[name='qestnarQestnAddDiv']" ).eq( trNum ).contents().unwrap().clone().appendTo("[name='qestnarQestnModDiv']");
+		var $cloneDiv = $( "[name='qestnarQestnAddDiv']" ).eq( trNum ).clone();
+		$cloneDiv = $cloneDiv.contents().unwrap();
+
+		$cloneDiv.appendTo( "[name='qestnarQestnModDiv']" );
+		// 모든 qestnarQestnAddDiv 숨기기
+		$( "[name='qestnarQestnAddDiv']" ).hide();
+		// qestnarQestnModDiv show
+		$( "[name='qestnarQestnModDiv']" ).show();
+
+		// 모든 qestnarQestnAddDiv 에 modifyForm class 제거 후, trNum 번째에만 modifyForm class 추가
+		$( "[name='qestnarQestnAddDiv']" ).removeClass( "modifyForm" );
+		$( "[name='qestnarQestnAddDiv']" ).eq( trNum ).addClass( "modifyForm" );
+
+		// 현재 선택한 라디오버튼 강제로 값 checked 처리 (안해주면 checked 처리가 풀려있음).
+		// 필수 = Y , 선택 = N
+		var qestnarQestnEssntlYnRadioVal = $( e ).parent().siblings( "[name='qestnarQestnEssntlYnRadio']" ).text() == "필수" ? "Y" : "N";
+		if ( qestnarQestnEssntlYnRadioVal == "Y" ) {
+			$( "[name='qestnarQestnModDiv']" ).find( "[name='qestnarQestnEssntlYnRadio'][value='Y']" ).prop( "checked", true );
+		} else if ( qestnarQestnEssntlYnRadioVal == "N" ) {
+			$( "[name='qestnarQestnModDiv']" ).find( "[name='qestnarQestnEssntlYnRadio'][value='N']" ).prop( "checked", true );
+		}
+
+		// 현재 선택한 입력 유형 강제 선택 처리
+		var qestnarQestnItemTyCdVal = $( e ).parent().siblings( "[name='qestnarQestnItemTyCd']" ).text();
+		$( "[name='qestnarQestnModDiv']" ).find( "[name='qestnarQestnItemTyCd']" ).val(qestnarQestnItemTyCdVal).prop( "selected", true );
+
+		$( "#addQestnarQestnModal" ).modal( 'show' );
+
+	}
+
+	// 신청입력항목 (등록된 항목에서) 삭제 버튼
+	function deleteQestnarQestn( e ) {
+		if ( confirm( "해당 신청입력항목를 삭제합니다." ) ) {
+			// 몇번째 테이블인지 체크
+			var trNum = $( e ).closest( 'tr' ).prevAll().length;
+
+			// 테이블의 tr 과 모달의 trNum 번째 div 2가지를 remove 한다.
+			// - 테이블 tr remove
+			$( e ).parent().parent().remove();
+			// - 모달의 trNum 번째 div remove
+			$( "[name='qestnarQestnAddDiv']" ).eq( trNum ).remove();
+
+			$( '#qestnarQestnTable tr' ).each( function () {
+				$( this ).find( "[name='trNum']" ).text( ( $( this ).prevAll().length ) + 1 );
+			} );
+		}
+
+	}
+
+	// 모달 버튼 setting
+	function setModalBtn( mode ) {
+
+		// mode : C, U
+		// C : 등록 (create)
+		// U : 수정 (update)
+
+		if ( mode == "C" ) {
+			// 모달창의 수정 버튼 숨기고 저장 버튼을 표시
+			$( "#addQestnarQestnBtn" ).show();
+			$( "#updateQestnarQestnBtn" ).hide();
+
+			// qestnarQestnAddDiv newForm show
+			$( "[name='qestnarQestnAddDiv'].newForm" ).show();
+			// qestnarQestnModDiv hide
+			$( "[name='qestnarQestnModDiv']" ).hide();
+
+		} else if ( mode == "U" ) {
+			// 모달창의 저장 버튼 숨기고 수정 버튼을 표시
+			$( "#addQestnarQestnBtn" ).hide();
+			$( "#updateQestnarQestnBtn" ).show();
+
+			// qestnarQestnModDiv show
+			$( "[name='qestnarQestnModDiv']" ).show();
+			// qestnarQestnAddDiv newForm hide
+			$( "[name='qestnarQestnAddDiv'].newForm" ).hide();
+		}
+	}
+
+</script>
+<!-- E : Javascript functions	-->
+<th:block layout:fragment="content">
+	<!-- S: content -->
+	<div class="row">
+		<div class="col-md-12 col-sm-12 ">
+			<div class="x_panel">
+				<div class="x_content">
+					<form id="insertForm" name="insertForm" method="post" th:action="@{ {basicPath}/{mcd}/insert ( basicPath = ${basicPath}, mcd = ${mcd} ) }" enctype="multipart/form-data" th:onsubmit="return submitValidCheck();">
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">설문조사 그룹 제목<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<input class="form-control"name="qestnarGroupNm" required="required" placeholder="설문조사 그룹 제목을 입력해주세요."/>
+								<small class="font-gray-dark">
+									'제휴문의', '강사지원', '학부모 상담요청' 등 설문조사 그룹 명을 입력해주세요. 
+								</small>
+							</div>
+						</div>
+						<div class="field item form-group" id="QestnarQestnAddDiv">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">입력 항목</label>
+							<div class="div_menu_detail row col-md-10">
+								<div class="col-md-12 col-sm-12 ">
+									<div class="x_panel mb-0" style="height:auto;overflow: scroll; max-height:350px;">
+										<div class="x_content mt_5p">
+											<button type="button" class="btn btn-purple mb_15p" data-toggle="modal" data-target=".bs-example-modal-lg" onclick="setModalBtn('C')">
+												입력 항목 추가
+											</button>
+											<!-- 입력 항목 등록 모달 -->
+											<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="addQestnarQestnModal" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+												<div class="modal-dialog modal-dialog-centered modal-lg modal-xlg">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h4 class="modal-title">입력 항목 추가</h4>
+															<button type="button" class="close" data-dismiss="modal">
+																<span aria-hidden="true">×</span> <!-- 닫기 버튼 -->
+															</button>
+														</div>
+														<div class="modal-body" id="addQestnarQestnModalBody">
+															<div name="qestnarQestnModDiv" class="modForm" style="display: none;">
+																<!-- 설문조사 항목 수정시 여기서 수정 작업 -->
+															</div>
+															<div name="qestnarQestnAddDiv" class="newForm" th:insert="admin/qestnarGroup/addQestnarQestnFormModal.html">
+																<!-- 설문조사 항목 추가 모달 (/admin/qestnarGroup/addQestnarQestnFormModal.html) -->
+															</div>
+														</div>
+														<div class="modal-footer">
+															<button type="button" class="btn btn-white" data-dismiss="modal">
+																닫기
+															</button>
+															<button type="button" class="btn btn-purple" id="addQestnarQestnBtn" onclick="addQestnarQestn()">
+																저장
+															</button>
+															<button type="button" class="btn btn-success" id="updateQestnarQestnBtn" onclick="updateQestnarQestn()" style="display:none;">
+																수정
+															</button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- 입력항목 표시 영역 -->
+											<table class="table table-bordered text-center" id="qestnarQestnTable">
+												<thead>
+												<tr>
+													<th>순번</th>
+													<th>유형</th>
+													<th class="hide">유형(값)</th>
+													<th>입력 항목</th>
+													<th>필수여부</th>
+													<th>관리</th>
+												</tr>
+												</thead>
+												<tbody id="qestnarQestnTableBody">
+												<!-- 신청 입력 항목 추가 테이블 -->
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">설문조사 그룹 설명</label>
+							<div class="col-md-6 col-sm-6">
+								<textarea id="qestnarGroupDc" name="qestnarGroupDc"  class="form-control" rows="10"></textarea>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">프라이버시 여부</label> 
+							<div class="col-md-2 col-sm-4">
+								<div class="btn-group radiobox">
+									<input type="radio" id="privcyYn1" name="privcyYn" value="Y" class="join-btn" required="required">
+									<label for="privcyYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">공개</label>
+									<input type="radio" id="privcyYn2" name="privcyYn" value="N" class="join-btn" required="required">
+									<label for="privcyYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">미공개</label>
+								</div>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">사용 여부</label> 
+							<div class="col-md-2 col-sm-4">
+								<div class="btn-group radiobox">
+									<input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn" required="required">
+									<label for="useYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">사용</label>
+									<input type="radio" id="useYn2" name="useYn" value="N" class="join-btn" required="required">
+									<label for="useYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">미사용</label>
+								</div>
+							</div>
+						</div>
+						<div class="ln_solid"></div>
+						<!-- 저장버튼 -->
+						<div class="col-md-12 bottom-btn-group">
+							<!-- bottom left area -->
+							<div class="col-md-2 col-sm-3 text-left">
+								<a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >목록</a>
+							</div>
+							<!-- bottom c	enter area -->
+							<div class="col-md-8 col-sm-6 text-center">
+								<a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >취소</a>
+								<button type="submit" class="btn btn-purple w120p">저장</button>
+							</div>
+							<!-- bottom right area -->
+							<div class="col-md-2 col-sm-3 text-right">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- E : content -->
+</th:block>
+</html>

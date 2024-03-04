@@ -1,0 +1,45 @@
+<input type="hidden" name="qestnarQestnEssntlYn" />
+<div class="field item form-group">
+	<label class="col-form-label col-md-2 col-sm-3 label-align">입력 유형<span class="required">*</span></label>
+	<div class="col-md-2 col-sm-6">
+		<select class="form-control" name="qestnarQestnItemTyCd" >
+			<option value="">입력 유형 선택</option>
+			<option value="ANSWER">주관식</option>
+		</select>
+	</div>
+</div>
+<div class="field item form-group">
+	<label class="col-form-label col-md-2 col-sm-3 label-align">입력 항목<span class="required">*</span></label>
+	<div class="col-md-8 col-sm-9">
+		<input class="form-control" name="qestnarQestnItemCn" placeholder="설문조사 입력 항목 내용 입력"/>
+		<small class="font-gray-dark">
+			설문조사 입력 받을 항목을 입력해주세요. ex ) 연락 가능하신 이메일을 입력해주세요 !
+		</small>
+	</div>
+</div>
+<div class="field item form-group">
+	<label class="col-form-label col-md-2 col-sm-3 label-align">선택지 추가<span class="required">*</span></label>
+	<div class="col-md-8 col-sm-9">
+		<input class="form-control" name="qestnarQestnDetailCn" placeholder="설문조사 입력 항목 내용 입력"/>
+		<small class="font-gray-dark">
+			설문조사 입력 받을 항목을 입력해주세요. ex ) 연락 가능하신 이메일을 입력해주세요 !
+		</small>
+	</div>
+</div>
+<div class="field item form-group">
+	<label class="col-form-label col-md-2 col-sm-3 label-align">필수 여부<span class="required">*</span></label>
+	<div class="col-md-2 col-sm-4">
+		<div class="btn-group radiobox">
+			<label class="btn btn-outline-purple w100p"
+				   data-toggle-class="btn-primary"
+				   data-toggle-passive-class="btn-default">
+				<input type="radio" name="qestnarQestnEssntlYnRadio" value="Y" class="join-btn" onclick="clickRadioEvent(this)">필수
+			</label>
+			<label class="btn btn-outline-purple w100p"
+				   data-toggle-class="btn-primary"
+				   data-toggle-passive-class="btn-default">
+				<input type="radio" name="qestnarQestnEssntlYnRadio" value="N" class="join-btn" onclick="clickRadioEvent(this)">선택
+			</label>
+		</div>
+	</div>
+</div>
