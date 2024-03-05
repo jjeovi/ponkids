@@ -121,7 +121,7 @@
 	}
 
 
-	// 신청입력항목 수정 버튼 클릭 > 수정정보 tr에 현행화
+	// 신청입력항목 수정 버튼 클릭 > 수정정보 tr에 현행화 123
 	function updateQestnarQestn() {
 
 		// target 신청입력항목 div setting
@@ -132,6 +132,10 @@
 
 		// 필수여부 (라디오) 값 hidden 태그에 저장
 		$targetDiv.find( "[name='qestnarQestnEssntlYn']" ).val( $targetDiv.find( "[name='qestnarQestnEssntlYnRadio']:checked" ).val() );
+		
+		// S : + 수정시 select 박스 값 저장 안되고 있어서 수동으로 selectbox 강제 저장
+		var selectedQestnarQestnItemTyCd = $targetDiv.find( "[name='qestnarQestnItemTyCd']" ).val();
+		// E : + 수정시 select 박스 값 저장 안되고 있어서 수동으로 selectbox 강제 저장 
 
 		// S : trNum 번째 찾기
 		var $trNumDiv = $( "[name='qestnarQestnAddDiv'].modifyForm" );
@@ -145,6 +149,8 @@
 		var $cloneDiv = $targetDiv.clone();
 		$cloneDiv = $cloneDiv.contents().unwrap();
 		$trNumDiv.empty();
+		
+		$cloneDiv.find( "[name='qestnarQestnItemTyCd']" ).val(selectedQestnarQestnItemTyCd);	// + 수정시 select 박스 값 저장 안되고 있어서 수동으로 selectbox 강제 저장
 		$cloneDiv.appendTo( $trNumDiv );
 
 		// targetDiv 안의 내용 지우기
