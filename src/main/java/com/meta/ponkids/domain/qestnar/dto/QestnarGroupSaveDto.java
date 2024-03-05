@@ -2,15 +2,18 @@ package com.meta.ponkids.domain.qestnar.dto;
 
 import java.util.List;
 
+import com.meta.ponkids.domain.cls.dto.ClassSaveDto;
 import com.meta.ponkids.domain.qestnar.entity.QestnarGroup;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class QestnarGroupSaveDto {
+@EqualsAndHashCode( callSuper = false )
+public class QestnarGroupSaveDto  extends QestnarGroupDto {
 	
 	private Long qestnarGroupSn;
 
@@ -24,8 +27,6 @@ public class QestnarGroupSaveDto {
 	
 	private List<QestnarQestnSaveDto>		qestnarQestns;		// 입력 항목
     
-//    private List<QstnarQestnDetailSaveDto>	qestnarQestnDetails;	// 입력 항목 ( 선택형시 : 추후 개발 예정)
-	
 	private String registerId;      // 등록자 id
 	
 	private String registerIp;      // 등록자 ip

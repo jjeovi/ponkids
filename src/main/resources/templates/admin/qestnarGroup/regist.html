@@ -11,19 +11,20 @@
 		// 입력 항목 유형 코드 리스트가 0개 이상일 경우에만 실행 
 		if ( qestnarQestnItemTyCdList.length > 0 ) {
 			
+			// 
 			$("#addQestnarQestnModalBody .newForm").find("[name='qestnarQestnItemTyCd']").empty();
 			
 			// default option 추가
 			$("#addQestnarQestnModalBody .newForm").find("[name='qestnarQestnItemTyCd']").append(
 				$("<option>").attr("value","").append("입력 유형 선택")
 			)
+			
 			// for 문 돌려서 공통코드에 있는 설문조사 입력 항목 유형 코드 list 순회하여 1개씩 option 으로 추가
 			for ( let item of qestnarQestnItemTyCdList ) {
 				$("#addQestnarQestnModalBody .newForm").find("[name='qestnarQestnItemTyCd']").append(
 					$("<option>").attr("value", item.cdDetailVal1 ).append( item.cdDetailNm )	
 				)
 			}
-			
 		}
 
 	});
@@ -42,6 +43,16 @@
 				// 입력 유형, 입력 항목, 필수 여부
 				$( this ).find( "[name=qestnarQestnItemTyCd]" ).attr( "name", "qestnarQestns[" + index + "].qestnarQestnItemTyCd" );	// 입력 유형
 				$( this ).find( "[name=qestnarQestnItemCn]" ).attr( "name", "qestnarQestns[" + index + "].qestnarQestnItemCn" );		// 입력 항목
+				
+				// qestnarQestnDetail 항목 ( optionList ) setting 하기
+				if( $( this ).find(".optionList .option_item").length > 0 ) {
+					
+					$( this ).find(".optionList .option_item").each( function( j ) {
+						$(this).find("[name='qestnarQestnDetailCn']").attr("name", "qestnarQestns[" + index + "].qestnarQestnDetails["+ j + "].qestnarQestnDetailCn");
+					})
+					
+				}
+				
 				$( this ).find( "[name=qestnarQestnEssntlYn]" ).attr( "name", "qestnarQestns[" + index + "].qestnarQestnEssntlYn" );	// 필수 여부
 		});
 			
@@ -164,12 +175,43 @@
 			alert( "필수 여부를 선택해주세요." );
 			return false;
 		}
+		
+		// 입력 유형이 선택형일 경우
+		// - 선택지가 1개 이상인지 체크
+		var qestnarQestnItemTyCd =  $targetDiv.find("[name='qestnarQestnItemTyCd']").val(); 
+		
+		if ( qestnarQestnItemTyCd.startsWith("SELECTIVE")){
+			if ( $targetDiv.find(".optionList .option_item").length < 1 ) {
+				alert("선택지는 적어도 1개 이상 추가해주세요.");
+				return false;
+			}
+		}
+		
+		
+		 
 
 		return true;
 	}
 
 	// 모달로 추가한 입력항목을 화면에 표출
 	function addQestnarQestnRow( $targetDiv ) {
+		
+		// 입력 유형 체크 하여 선택형일시 optionList 복사하여 붙여넣기 과정 추가
+		// 입력 유형 체크
+		var qestnarQestnItemTyCd = $targetDiv.find( "[name='qestnarQestnItemTyCd'] :selected" ).val();
+		
+		var $optionList = '<div class="optionList"></div>';
+		if (typeof qestnarQestnItemTyCd != "undefined" && qestnarQestnItemTyCd !='' && qestnarQestnItemTyCd.startsWith("SELECTIVE") ) {
+			$optionList = $targetDiv.find(".optionList").clone();
+			
+			$optionList.find(".item_manage").remove();
+			
+			$optionList.find("input[type='radio'], input[type='checkbox']").each ( function(index){
+				$(this).prop("checked",false);
+				$(this).attr("onclick","return false;")
+			});
+		}
+		
 
 		// 추가
 		$( "#qestnarQestnTableBody" ).append (
@@ -177,7 +219,13 @@
 				$( "<td>" ).attr( "name", "trNum" ).append( $( "#qestnarQestnTableBody tr" ).length + 1 ),																	// 순번
 				$( "<td>" ).attr( "name", "qestnarQestnItemTyNm" ).append( $targetDiv.find( "[name='qestnarQestnItemTyCd'] :selected" ).text() ),						 // 유형
 				$( "<td>" ).attr( "name", "qestnarQestnItemTyCd" ).attr( "class", "hide").append( $targetDiv.find( "[name='qestnarQestnItemTyCd'] :selected" ).val() ),						 // 유형
-				$( "<td>" ).attr( "name", "qestnarQestnItemCn" ).append( $targetDiv.find( "[name='qestnarQestnItemCn']" ).val()  ),									   // 입력 항목
+				$( "<td>" ).attr("class", "qestnarQestnItemTyCnTd").append(
+					$(" <span> ").attr("class", "Qspan").append("Q."), 
+					$("<p>").attr( "name", "qestnarQestnItemCn" ).attr("class","mb_0p i-b").append(
+						$targetDiv.find( "[name='qestnarQestnItemCn']" ).val() 
+					),									   // 입력 항목
+					$optionList
+				),
 				$( "<td>" ).attr( "name", "qestnarQestnEssntlYnRadio" ).append( $targetDiv.find( "[name='qestnarQestnEssntlYnRadio']:checked" ).val() == "Y" ? "필수" : "선택" ),	 // 필수 여부
 				$( "<td>" ).append(														 // 관리
 					$( "<button>" ).attr( "onclick", "modifyQestnarQestn(this)" ).attr( "type", "button" ).addClass( "btn btn-success btn-sm table-btn" ).append( "수정" ),
@@ -196,6 +244,30 @@
 		$modifyTr.find( "[name='qestnarQestnItemTyNm']" ).text( $targetDiv.find( "[name='qestnarQestnItemTyCd'] :selected" ).text() );
 		$modifyTr.find( "[name='qestnarQestnItemTyCd']" ).text( $targetDiv.find( "[name='qestnarQestnItemTyCd'] :selected" ).val() );
 		$modifyTr.find( "[name='qestnarQestnItemCn']" ).text( $targetDiv.find( "[name='qestnarQestnItemCn']" ).val() );
+		
+		// optionList 삭제 후 추가
+		$modifyTr.find(".optionList").remove();
+		
+		// 입력 유형 체크 하여 선택형일시 optionList 복사하여 붙여넣기 과정 추가
+		// 입력 유형 체크
+		var qestnarQestnItemTyCd = $targetDiv.find( "[name='qestnarQestnItemTyCd'] :selected" ).val();
+		
+		var $optionList = '';
+		if (typeof qestnarQestnItemTyCd != "undefined" && qestnarQestnItemTyCd !='' && qestnarQestnItemTyCd.startsWith("SELECTIVE") ) {
+			$optionList = $targetDiv.find(".optionList").clone();
+			
+			$optionList.find( ".item_manage" ).remove();
+			
+			$optionList.find( "input[type='radio']" ).each ( function(index){
+				$(this).prop( "checked", false );
+				$(this).attr( "onclick", "return false;" );
+			} )
+		}
+		
+		$modifyTr.find(".qestnarQestnItemTyCnTd").append($optionList);
+		
+		
+		
 		$modifyTr.find( "[name='qestnarQestnEssntlYnRadio']" ).text( $targetDiv.find( "[name='qestnarQestnEssntlYnRadio']:checked" ).val() == "Y" ? "필수" : "선택" );
 
 	}
@@ -261,7 +333,6 @@
 				$( this ).find( "[name='trNum']" ).text( ( $( this ).prevAll().length ) + 1 );
 			} );
 		}
-
 	}
 
 	// 모달 버튼 setting
@@ -315,7 +386,7 @@
 							<label class="col-form-label col-md-2 col-sm-3 label-align">입력 항목</label>
 							<div class="div_menu_detail row col-md-10">
 								<div class="col-md-12 col-sm-12 ">
-									<div class="x_panel mb-0" style="height:auto;overflow: scroll; max-height:350px;">
+									<div class="x_panel mb-0" style="height:auto;overflow: scroll; max-height:1000px;">
 										<div class="x_content mt_5p">
 											<button type="button" class="btn btn-purple mb_15p" data-toggle="modal" data-target=".bs-example-modal-lg" onclick="setModalBtn('C')">
 												입력 항목 추가
@@ -354,6 +425,13 @@
 											</div>
 											<!-- 입력항목 표시 영역 -->
 											<table class="table table-bordered text-center" id="qestnarQestnTable">
+												<colgroup>
+													<col width="60px;">
+													<col width="200px;">
+													<col width="auto;">
+													<col width="130px;">
+													<col width="150px;">
+												</colgroup>
 												<thead>
 												<tr>
 													<th>순번</th>

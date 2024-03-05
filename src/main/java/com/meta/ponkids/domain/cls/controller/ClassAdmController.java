@@ -311,9 +311,10 @@ public class ClassAdmController {
             classWeekService.save( modDto, request );
         }
         
+        classDetailService.deleteAllByClassSn( modDto.getClassSn() );
+        
         // 입력항목 update (입력항목 존재시) : 입력항목 전부 삭제 후 새로 save
         if ( modDto != null && modDto.getClassDetails() != null && modDto.getClassDetails().size() != 0 ) {
-            classDetailService.deleteAllByClassSn( modDto.getClassSn() );
             classDetailService.save( modDto, request );
         }
         

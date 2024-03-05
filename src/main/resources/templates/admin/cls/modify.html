@@ -290,10 +290,10 @@
 		var classDetailEssntlYnRadioVal = $( e ).parent().siblings( "[name='classDetailEssntlYnRadio']" ).text() == "필수" ? "Y" : "N";
 		if ( classDetailEssntlYnRadioVal == "Y" ) {
 			$( "[name='clsDtlModDiv']" ).find( "[name='classDetailEssntlYnRadio'][value='Y']" ).prop( "checked", true );
-			$( "[name='clsDtlModDiv']" ).find( "[name='classDetailEssntlYnRadio'][value='Y']" ).trigger("click");	// 클릭 트리거 실행해야 체크한것 처럼 표시됨.
+			$( "[name='clsDtlModDiv']" ).find( "[name='classDetailEssntlYnRadio'][value='Y']" ).trigger("click");	// 클릭 트리거 실행해야 체크한것 처럼 표시됨. > addClass('actrive')  
 		} else if ( classDetailEssntlYnRadioVal == "N" ) {
 			$( "[name='clsDtlModDiv']" ).find( "[name='classDetailEssntlYnRadio'][value='N']" ).prop( "checked", true );
-			$( "[name='clsDtlModDiv']" ).find( "[name='classDetailEssntlYnRadio'][value='N']" ).trigger("click");	// 클릭 트리거 실행해야 체크한것 처럼 표시됨.
+			$( "[name='clsDtlModDiv']" ).find( "[name='classDetailEssntlYnRadio'][value='N']" ).trigger("click");	// 클릭 트리거 실행해야 체크한것 처럼 표시됨. > addClass('actrive')  
 		}
 
 		// 현재 선택한 입력 유형 강제 선택 처리
@@ -487,6 +487,13 @@
 											</div>
 											<!-- 입력항목 표시 영역 -->
 											<table class="table table-bordered text-center" id="clsDtlTable">
+												<colgroup>
+													<col width="60px;">
+													<col width="200px;">
+													<col width="auto;">
+													<col width="130px;">
+													<col width="150px;">
+												</colgroup>
 												<thead>
 												<tr>
 													<th>순번</th>

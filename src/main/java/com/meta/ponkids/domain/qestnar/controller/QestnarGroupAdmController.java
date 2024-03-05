@@ -21,6 +21,7 @@ import com.meta.ponkids.domain.qestnar.dto.QestnarGroupListDto;
 import com.meta.ponkids.domain.qestnar.dto.QestnarGroupModDto;
 import com.meta.ponkids.domain.qestnar.dto.QestnarGroupSaveDto;
 import com.meta.ponkids.domain.qestnar.service.QestnarGroupService;
+import com.meta.ponkids.domain.qestnar.service.QestnarQestnDetailService;
 import com.meta.ponkids.domain.qestnar.service.QestnarQestnService;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 
@@ -32,6 +33,7 @@ public class QestnarGroupAdmController {
 	
 	private final QestnarGroupService qestnarGroupService;
 	private final QestnarQestnService qestnarQestnService;
+	private final QestnarQestnDetailService qestnarQestnDetailService;
 	
 	private final CmmnCdDetailService cmmnCdDetailService;
 	
@@ -132,12 +134,20 @@ public class QestnarGroupAdmController {
     	
     	// S : 필요한 객체 setting
     	
-    	// target object 조회
-    	model.addAttribute( "targetDto", qestnarGroupService.findById( pk ) );
+    	// target object 조회\
+    	QestnarGroupModDto targetDto = qestnarGroupService.findById( pk );
+    	model.addAttribute( "targetDto", targetDto );
     	
+        // 설문조사 질문 list
+    	model.addAttribute("targetQestnarQestnList", qestnarQestnService.findByQestnarGroupSn( targetDto.getQestnarGroupSn() ));
+    	
+    	// 설문조사 질문 상세 list
+    	model.addAttribute("targetQestnarQestnDetailList", qestnarQestnDetailService.getListByQestnarGroupSnOrderByQestnarQestnSnAsc( targetDto.getQestnarGroupSn() ));
+    	
+        // 설문조사 질문 항목 유형 코드 리스트 
+        model.addAttribute( "qestnarQestnItemTyCdList", cmmnCdDetailService.getList( "QESTNAR_QESTN_ITEM_TY_CD" ) );   // 클래 상세 항목 유형 코드 리스트
+        
     	// E : 필요한 객체 setting
-        
-        
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         
@@ -152,9 +162,7 @@ public class QestnarGroupAdmController {
     @Transactional
     @PostMapping( BASIC_PATH + "/{mcd}/update" )
     public String update(
-            @RequestParam("file") MultipartFile files,		// 첨부파일 필요시
             @ModelAttribute QestnarGroupModDto modDto,
-//            @ModelAttribute QestnarGroupRoleModDto qestnarGroupRoleModDto,  // required false
             @PathVariable String mcd,
             HttpServletRequest request,
             Model model ) throws IOException {
@@ -165,8 +173,26 @@ public class QestnarGroupAdmController {
         
         
         // update 구현
-    	qestnarGroupService.update( modDto, request );
-//        qestnarGroupService.update( modDto, qestnarGroupRoleModDto, request );
+    	try {
+            // update 구현
+    		qestnarGroupService.update( modDto, request );
+        } catch ( Exception e ) {
+            // 메시지 출력 및 url 이동 처리
+            model.addAttribute( "resultMsg", "수정 중 오류가 발생했습니다. " + e.getMessage() + "\n다시 시도해주세요." );
+            model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+            
+            return "common/alert";
+        }
+    	
+    	
+    	 // 입력항목 update (입력항목 존재시) : 입력항목 전부 삭제 후 새로 save
+    	qestnarQestnService.deleteAllByQestnarGroupSn( modDto.getQestnarGroupSn() );
+    	
+        if ( modDto != null && modDto.getQestnarQestns() != null && modDto.getQestnarQestns().size() != 0 ) {
+            qestnarQestnService.save( modDto, request );
+        }
+        
+    	
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );

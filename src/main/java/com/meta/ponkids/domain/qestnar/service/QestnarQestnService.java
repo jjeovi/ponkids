@@ -11,13 +11,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.meta.ponkids.domain.qestnar.dto.QestnarQestnModDto;
-import com.meta.ponkids.domain.cls.dto.ClassDetailSaveDto;
-import com.meta.ponkids.domain.cls.entity.ClassDetail;
+import com.meta.ponkids.domain.qestnar.dto.QestnarGroupDto;
 import com.meta.ponkids.domain.qestnar.dto.QestnarGroupSaveDto;
+import com.meta.ponkids.domain.qestnar.dto.QestnarQestnDetailSaveDto;
 import com.meta.ponkids.domain.qestnar.dto.QestnarQestnListDto;
+import com.meta.ponkids.domain.qestnar.dto.QestnarQestnModDto;
 import com.meta.ponkids.domain.qestnar.dto.QestnarQestnSaveDto;
 import com.meta.ponkids.domain.qestnar.entity.QestnarQestn;
+import com.meta.ponkids.domain.qestnar.entity.QestnarQestnDetail;
+import com.meta.ponkids.domain.qestnar.repository.QestnarQestnDetailRepository;
 import com.meta.ponkids.domain.qestnar.repository.QestnarQestnRepository;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
@@ -27,14 +29,16 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class QestnarQestnService {
+	
 	private final QestnarQestnRepository qestnarQestnRepository;	// repository setting
+	private final QestnarQestnDetailRepository qestnarQestnDetailRepository;	// repository setting
 	
 	@Transactional
-	public void save( QestnarGroupSaveDto saveDto, HttpServletRequest request ) throws IOException {
-//    public QestnarQestnSaveDto save( QestnarQestnSaveDto saveDto, QestnarQestnRoleSaveDto qestnarQestnRoleSaveDto, HttpServletRequest request ) throws IOException {
+		public void save( QestnarGroupDto saveDto, HttpServletRequest request ) throws IOException {
 		
 		
 		List<QestnarQestn> qestnarQestnList = new ArrayList<>();
+		List<QestnarQestnDetail> qestnarQestnDetailList = new ArrayList<>();
 		
 		int i = 1;
 		for ( QestnarQestnSaveDto qestnarQestn : saveDto.getQestnarQestns() ) {
@@ -51,7 +55,42 @@ public class QestnarQestnService {
 			qestnarQestnList.add( qestnarQestn.toEntity() );
 		}
 		
-		qestnarQestnRepository.saveAll( qestnarQestnList );
+		qestnarQestnList = qestnarQestnRepository.saveAll( qestnarQestnList );
+		
+		
+		// tb_qestnar_qestn_detail ( 설문조사 질문 상세 insert )
+		// ===========================================
+		i = 0;
+		for ( QestnarQestnSaveDto qestnarQestn : saveDto.getQestnarQestns() ) {
+			
+			List<QestnarQestnDetailSaveDto> qestnarQestnDetails = qestnarQestn.getQestnarQestnDetails();
+			
+			if ( qestnarQestnDetails != null && qestnarQestnDetails.size() > 0 ) {
+				
+				int j=1;
+				
+				for (QestnarQestnDetailSaveDto qestnarQestnDetail : qestnarQestnDetails) {
+					
+					qestnarQestnDetail.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
+					qestnarQestnDetail.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
+					qestnarQestnDetail.setUpdusrId( SessionUtils.getClientId() );				// Id set : update
+					qestnarQestnDetail.setUpdusrIp( IpUtils.getClientIP( request ) );			// Ip set : update
+					
+					qestnarQestnDetail.setQestnarQestnSn( qestnarQestnList.get(i).getQestnarQestnSn() );
+					qestnarQestnDetail.setQestnarQestnDetailSeq( (long)j++ );	// seq : 1부터 시작
+					
+					qestnarQestnDetailList.add( qestnarQestnDetail.toEntity() );
+					
+				}
+				
+				qestnarQestnDetailList = qestnarQestnDetailRepository.saveAll( qestnarQestnDetailList );
+				
+			}
+			
+			i++;
+			
+			
+		}
 		
 		
 	}
@@ -59,6 +98,11 @@ public class QestnarQestnService {
 
     public Page<QestnarQestnListDto> getList( QestnarQestnListDto listDto, Pageable pageable ) {
         return qestnarQestnRepository.getList( listDto, pageable );
+    }
+    
+    
+    public List<QestnarQestnListDto> findByQestnarGroupSn( Long qestnarGroupSn ) {
+    	return qestnarQestnRepository.findByQestnarGroupSn( qestnarGroupSn );
     }
     
     
@@ -120,6 +164,14 @@ public class QestnarQestnService {
         // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
         qestnarQestnRepository.deleteById( pk );    // Entity 의 @SQLDelete 를 수행
         
+    }
+    
+    @Transactional
+    public void deleteAllByQestnarGroupSn( Long pk ) {
+    	
+    	// delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
+    	qestnarQestnRepository.deleteAllByQestnarGroupSn( pk );    // Entity 의 @SQLDelete 를 수행
+    	
     }
 	
 

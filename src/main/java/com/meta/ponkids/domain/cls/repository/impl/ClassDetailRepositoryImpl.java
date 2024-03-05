@@ -116,6 +116,7 @@ public class ClassDetailRepositoryImpl implements ClassDetailRepositoryCustom {
 	}
 	
 	// -------------------------------- WHERE 검색 옵션 setting --------------------------------
+	// -------------------------------- WHERE 검색 옵션 setting --------------------------------
 	  
     private BooleanExpression eqClassSn( Long pk ) {
         return pk != null ? classDetail.classSn.eq(pk) : null;

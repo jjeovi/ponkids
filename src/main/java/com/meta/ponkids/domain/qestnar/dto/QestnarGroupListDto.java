@@ -2,7 +2,6 @@ package com.meta.ponkids.domain.qestnar.dto;
 
 import java.util.List;
 
-//import com.meta.ponkids.domain.qestnar.entity.QstnarQestnDetailSaveDto;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.annotations.QueryProjection;
 
@@ -33,8 +32,6 @@ public class QestnarGroupListDto {
 	
 	private List<QestnarQestnSaveDto>		qestnarQestns;		// 입력 항목
     
-//    private List<QstnarQestnDetailSaveDto>	qestnarQestnDetails;	// 입력 항목 ( 선택형시 : 추후 개발 예정)
-	
 	private String schOption;   	// 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
 
 	private String schCntn;     	// 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!

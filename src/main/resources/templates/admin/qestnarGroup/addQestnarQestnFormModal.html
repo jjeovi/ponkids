@@ -2,7 +2,7 @@
 <div class="field item form-group">
 	<label class="col-form-label col-md-2 col-sm-3 label-align">입력 유형<span class="required">*</span></label>
 	<div class="col-md-2 col-sm-6">
-		<select class="form-control selectQestnarQestnItemTyCd" name="qestnarQestnItemTyCd" onchange="checkQestnarQestnItemTyCd( this.value ) ;">
+		<select class="form-control selectQestnarQestnItemTyCd" name="qestnarQestnItemTyCd" onkeypress="setNowQestnarQestnItemTyCd( this.value );" onclick="setNowQestnarQestnItemTyCd( this.value ); " ondrop="setNowQestnarQestnItemTyCd( this.value );" onfocus="setNowQestnarQestnItemTyCd( this.value );" onchange="onchangeQestnarQestnItemTyCd( this ) ;">
 			<option value="">입력 유형 선택</option>
 			<option value="ANSWER">주관식</option>
 		</select>
@@ -21,7 +21,7 @@
 	<label class="col-form-label col-md-2 col-sm-3 label-align">선택지 추가<span class="required">*</span></label>
 	<div class="col-md-8 col-sm-9">
 		<div class="inputOption">
-			<input class="form-control liveAddInput" name="qestnarQestnDetailCn" placeholder="설문조사 선택지 추가"/>
+			<input class="form-control liveAddInput" name="qestnarQestnDetailCnAdd" placeholder="설문조사 선택지 추가"/>
 			<button type="button" class="btn btn-purple" onclick="addQestnarQestnDetailOption( this );" >추가</button>
 		</div>
 		<div class="optionList">

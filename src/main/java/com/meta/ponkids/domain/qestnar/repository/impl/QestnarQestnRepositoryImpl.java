@@ -1,7 +1,8 @@
 package com.meta.ponkids.domain.qestnar.repository.impl;
 
 
-import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategoryCl02;
+import static com.meta.ponkids.domain.qestnar.entity.QQestnarQestn.qestnarQestn;
+import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
 
 import java.util.List;
 
@@ -14,14 +15,15 @@ import org.springframework.util.StringUtils;
 import com.meta.ponkids.domain.qestnar.dto.QQestnarQestnListDto;
 import com.meta.ponkids.domain.qestnar.dto.QestnarQestnListDto;
 import com.meta.ponkids.domain.qestnar.repository.custom.QestnarQestnRepositoryCustom;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
-
-import static com.meta.ponkids.domain.qestnar.entity.QQestnarQestn.qestnarQestn;
 
 @Repository
 @RequiredArgsConstructor
@@ -42,22 +44,29 @@ public class QestnarQestnRepositoryImpl implements QestnarQestnRepositoryCustom 
                 		qestnarQestn.qestnarGroupSn,
                 		qestnarQestn.qestnarQestnSeq,
                 		qestnarQestn.qestnarQestnItemTyCd,
+                		ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
+                                .from( cmmnCdDetail )
+                                .where( 
+                                		cmmnCdDetail.cdNm.eq("QESTNAR_QESTN_ITEM_TY_CD"),
+                                		cmmnCdDetail.cdDetailVal1.eq( qestnarQestn.qestnarQestnItemTyCd ),
+                                		cmmnCdDetail.useYn.eq( "Y" ),
+                                		cmmnCdDetail.delYn.eq( "N" ) ), "qestnarQestnItemTyNm" ),
                 		qestnarQestn.qestnarQestnItemCn,
                 		qestnarQestn.qestnarQestnEssntlYn,
+                		new CaseBuilder()
+			                        .when( qestnarQestn.qestnarQestnEssntlYn.eq( "Y" ) ).then( "필수" )
+			                        .when( qestnarQestn.qestnarQestnEssntlYn.eq( "N" ) ).then( "선택" )
+			                        .otherwise( "" )
+			                        .as( "qestnarQestnEssntlYnNm" ),
                 		qestnarQestn.atchFileSn,
                 		qestnarQestn.registerId,
                 		Expressions.stringTemplate("to_char({0}, '{1s}')", qestnarQestn.regDt, "YYYY-MM-DD HH:MM:SS")
-//                		new CaseBuilder()
-//                		.when( user.gender.eq("M")).then("남자")
-//                		.when( user.gender.eq("F")).then("여자")
-//                		.otherwise("")
-//                		.as("gender"),
                 		) )					
                 .from( qestnarQestn )
                 // where
                 .where(
-		eqOption( listDto.getSchOption(), listDto.getSchCntn() )
-		)
+                		eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+				)
 //                .orderBy( qestnarQestn.qestnarQestnSn.desc())
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )
@@ -76,6 +85,53 @@ public class QestnarQestnRepositoryImpl implements QestnarQestnRepositoryCustom 
 		return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
 		
 	}
+	
+	@Override
+	public List<QestnarQestnListDto> findByQestnarGroupSn( Long qestnarGroupSn ) {
+		return query
+			.select(
+					 new QQestnarQestnListDto(
+		                		qestnarQestn.qestnarQestnSn,
+		                		qestnarQestn.qestnarGroupSn,
+		                		qestnarQestn.qestnarQestnSeq,
+		                		qestnarQestn.qestnarQestnItemTyCd,
+		                		ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
+		                                .from( cmmnCdDetail )
+		                                .where( 
+		                                		cmmnCdDetail.cdNm.eq("QESTNAR_QESTN_ITEM_TY_CD"),
+		                                		cmmnCdDetail.cdDetailVal1.eq( qestnarQestn.qestnarQestnItemTyCd ),
+		                                		cmmnCdDetail.useYn.eq( "Y" ),
+		                                		cmmnCdDetail.delYn.eq( "N" ) ), "qestnarQestnItemTyNm" ),
+		                		qestnarQestn.qestnarQestnItemCn,
+		                		qestnarQestn.qestnarQestnEssntlYn,
+		                		new CaseBuilder()
+						                        .when( qestnarQestn.qestnarQestnEssntlYn.eq( "Y" ) ).then( "필수" )
+						                        .when( qestnarQestn.qestnarQestnEssntlYn.eq( "N" ) ).then( "선택" )
+						                        .otherwise( "" )
+						                        .as( "qestnarQestnEssntlYnNm" ),
+		                		qestnarQestn.atchFileSn,
+		                		qestnarQestn.registerId,
+		                		Expressions.stringTemplate("to_char({0}, '{1s}')", qestnarQestn.regDt, "YYYY-MM-DD HH:MM:SS")
+		                		)
+					
+			)
+			.from( qestnarQestn )
+			.where(
+					eqQestnarGroupSn( qestnarGroupSn )
+			)
+			.orderBy( qestnarQestn.qestnarQestnSeq.asc() )
+			.fetch();
+			
+	}
+	
+	
+	// -------------------------------- WHERE 검색 옵션 setting --------------------------------
+	// -------------------------------- WHERE 검색 옵션 setting --------------------------------
+	
+	  
+    private BooleanExpression eqQestnarGroupSn( Long qestnarGroupSn ) {
+        return qestnarGroupSn != null ? qestnarQestn.qestnarGroupSn.eq( qestnarGroupSn ) : null;
+    }
 	
 	
     private BooleanExpression eqOption( String schOption, String schCntn ) {

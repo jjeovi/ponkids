@@ -1,7 +1,7 @@
 package com.meta.ponkids.domain.qestnar.repository.impl;
 
 
-import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategoryCl02;
+import static com.meta.ponkids.domain.qestnar.entity.QQestnarGroup.qestnarGroup;
 
 import java.util.List;
 
@@ -21,8 +21,6 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
-
-import static com.meta.ponkids.domain.qestnar.entity.QQestnarGroup.qestnarGroup;
 
 @Repository
 @RequiredArgsConstructor

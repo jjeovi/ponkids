@@ -1,5 +1,7 @@
 package com.meta.ponkids.domain.qestnar.dto;
 
+import java.util.List;
+
 import com.meta.ponkids.domain.qestnar.entity.QestnarQestn;
 
 import lombok.Builder;
@@ -31,6 +33,8 @@ public class QestnarQestnSaveDto {
 	private String updusrId;      	// 수정자 id
 	
 	private String updusrIp;      	// 수정자 ip
+	
+	private List<QestnarQestnDetailSaveDto>	qestnarQestnDetails;	// 입력 항목 ( 선택형시 : 추후 개발 예정)
 	
 	@Builder
 	public QestnarQestnSaveDto(Long qestnarQestnSn, Long qestnarGroupSn, Long qestnarQestnSeq,

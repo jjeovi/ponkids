@@ -23,5 +23,5 @@ public interface ClassDetailRepository extends JpaRepository<ClassDetail, Long>,
             +       "     , updt_dt  = now()"
             +       " WHERE class_sn = :classSn", nativeQuery = true )
     int deleteAllByClassSn( @Param("classSn") Long pk) ;
-    
+   
 }

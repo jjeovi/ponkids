@@ -4,13 +4,17 @@ import java.util.List;
 
 import com.meta.ponkids.domain.qestnar.entity.QestnarGroup;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class QestnarGroupModDto {
+@EqualsAndHashCode( callSuper = false )
+public class QestnarGroupModDto extends QestnarGroupDto {
 
 	private Long qestnarGroupSn;
 
@@ -28,8 +32,6 @@ public class QestnarGroupModDto {
 	
 	private List<QestnarQestnSaveDto>		qestnarQestns;		// 입력 항목
     
-//    private List<QstnarQestnDetailSaveDto>	qestnarQestnDetails;	// 입력 항목 ( 선택형시 : 추후 개발 예정)
-	
 	//builder 생성
 	@Builder
 	public QestnarGroupModDto(Long qestnarGroupSn, String qestnarGroupNm, String qestnarGroupDc,

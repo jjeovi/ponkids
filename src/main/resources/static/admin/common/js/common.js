@@ -3,8 +3,6 @@ const telNoRegexp = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
 var cateSchData = {};   // 전역변수 설정 (검색값을 계속 기억)
 var categoryLiMaxWidth = 280;
 
-var _qestnarQestnItemTyCd;
-// 설문조사 유형 별로 입력사항 세팅
 
 // ------------- function () 함수 실행  호출시점 : DOM Tree 생성 완료 후 -----------------
 $( function () {
@@ -83,62 +81,6 @@ $( function () {
 		}
     } );
     
-    
-    // select 변경을 취소할 시 이전값으로 돌리기
-    $(".selectQestnarQestnItemTyCd").focus(function(){
-		_qestnarQestnItemTyCd = $(this).val();
-	}).change( function(){
-		
-		// 추가한 선택지가 존재하는 경우
-		// ~.length
-		var changeYn = false;
-		
-		if( false ) {
-			changeYn = true;
-		} else {
-			if ( confirm("추가한 선택지가 모두 사라집니다. 변경하시겠습니까?")) {
-				changeYn = true;
-			} 
-		}
-		
-		
-		
-		
-		if( changeYn ) {
-			// 변경
-			
-			var value = $(this).val();
-			// 설문조사 유형 값 : value
-		
-			// - 주관식 일 경우 : ANSWER
-			// - 선택형(단일선택) 일 경우 : SELECTVIE_ONE
-			// - 선택형(다중선택 가능) 일 경우 : SELECTIVE_MULTI
-			// - 첨부파일 일 경우 : FILE <-- 추후 작업 예정
-			
-			switch( value ) {
-				case "ANSWER" :
-					$(".addOptionArea").hide(); 
-					break;
-				case "SELECTIVE_ONE" :
-					$(".addOptionArea").show(); 
-					break;
-				case "SELECTIVE_MULTI" :
-					$(".addOptionArea").show();
-					break;
-			}
-			
-			
-		} else {
-			// 변경 취소
-			
-			
-			$(this).val( _qestnarQestnItemTyCd );
-			return false;
-			
-		}
-		
-	
-	})
 
 } );
 // ------------- function () 함수 종료 -----------------
@@ -1123,11 +1065,213 @@ function amtSetComma( val ){
 
 /* S : 설문조사 */ 
 
+// 선택지 > 추가 버튼 클릭시
 function addQestnarQestnDetailOption( e ) {
-	alert( $(e).siblings("[name='qestnarQestnDetailCn']").val() );
+	var optionAddText = $(e).siblings("[name='qestnarQestnDetailCnAdd']").val();
+	
+	if ( optionAddText == '' ) {
+		alert( "선택지 항목을 입력해주세요." );
+		return false;
+	}
+	
+//	var qestnarQestnItemTyCd = $("#addQestnarQestnModalBody .newForm").find("[name='qestnarQestnItemTyCd']").val();
+	var $targetDiv = $(e).parent().parent().parent().parent();
+	var qestnarQestnItemTyCd = $targetDiv.find("[name='qestnarQestnItemTyCd']").val();
+	
+	// - 주관식 일 경우 : ANSWER
+	// - 선택형(단일선택) 일 경우 : SELECTVIE_ONE
+	// - 선택형(다중선택 가능) 일 경우 : SELECTIVE_MULTI
+	// - 첨부파일 일 경우 : FILE <-- 추후 작업 예정
+		
+	switch( qestnarQestnItemTyCd ) {
+		case "ANSWER" :
+			// -- noting to do  
+			break;
+		case "SELECTIVE_ONE" :		// - radio
+			// 선택지 리스트 항목에 선택지를 추가하여 표출 -> radio 로 표출
+			if ( $targetDiv.find(".optionList .option_item").length == 0 ){
+				$targetDiv.find(".optionList .noData").remove();
+			} 
+			
+			// listCnt 는 체크박스에서 label id값 연동 시킬때만 사용 (라디오 일때는 굳이 사용 안해도 될 듯 )
+//			var listCnt = $(".optionList .option_item").length + 1;
+			
+			$targetDiv.find( ".optionList" ).append(
+				$(" <div> ").attr( "class", "option_item").append(
+					$( "<div>" ).attr( "class", "item_content" ).append(
+						$( "<label>" ).attr( "class", "radioLabel" ).append(
+							$("<input>").attr("type", "radio").attr("name", "itemRadio" ).append()
+						),
+						$( "<input>" ).attr( "name", "qestnarQestnDetailCn" ).attr("type", "text").attr("value", optionAddText ).attr("onblur", "setReadonly(this)").attr("readonly","readonly").append()
+					),
+					$( "<div>" ).attr( "class", "item_manage" ).append(
+						$("<button>").attr("onclick", "modifyQestnarQestnDetailOption(this)").attr("type","button").attr("class","btn btn-success btn-sm table-btn").append("수정"),
+						$("<button>").attr("onclick", "deleteQestnarQestnDetailOption(this)").attr("type","button").attr("class","btn btn-danger btn-sm table-btn").append("삭제")
+					)
+				)
+			)
+			
+			break;
+		case "SELECTIVE_MULTI" :	// - checkbox
+			// 선택지 리스트 항목에 선택지를 추가하여 표출 -> checkbox 로 표출
+			if ( $targetDiv.find(".optionList .option_item").length == 0 ){
+				$targetDiv.find(".optionList .noData").remove();
+			} 
+			 
+			var listCnt = $targetDiv.find(".optionList .option_item").length + 1;
+			$targetDiv.find( ".optionList" ).append(
+				$(" <div> ").attr( "class", "option_item").append(
+					$( "<div>" ).attr( "class", "item_content" ).append(
+						$("<input>").attr("type", "checkbox").attr("id", "option" + listCnt ).append(),
+						$( "<label>" ).attr( "for", "option" + listCnt ).append(),
+						$( "<input>" ).attr( "name", "qestnarQestnDetailCn" ).attr("type", "text").attr("value", optionAddText ).attr("onblur", "setReadonly(this)").attr("readonly","readonly").append()
+					),
+					$( "<div>" ).attr( "class", "item_manage" ).append(
+						$("<button>").attr("onclick", "modifyQestnarQestnDetailOption(this)").attr("type","button").attr("class","btn btn-success btn-sm table-btn").append("수정"),
+						$("<button>").attr("onclick", "deleteQestnarQestnDetailOption(this)").attr("type","button").attr("class","btn btn-danger btn-sm table-btn").append("삭제")
+					)
+				)
+			)
+			
+			break;
+	}
+	
+	// 선택지 추가 값 초기화 후 focus
+	$(e).siblings("[name='qestnarQestnDetailCnAdd']").val('');
+	$(e).siblings("[name='qestnarQestnDetailCnAdd']").focus();
+	
+
+	
 }
 
-//  onchange="checkQestnarQestnItemTyCd( this.value ) ;"
+function modifyQestnarQestnDetailOption( e ) {
+	$target = $( e ).parent().siblings(".item_content").find("[name='qestnarQestnDetailCn']");
+	
+	
+	var targetReadonly = $target.attr("readonly");
+	
+	if(typeof targetReadonly == "undefined" || targetReadonly == null ) {
+		$target.attr("readonly","radonly");
+	} else {
+		$target.removeAttr("readonly");
+		$target.focus();
+	}
+}
+
+function deleteQestnarQestnDetailOption( e ) {
+	$targetDiv = $( e ).parent().parent().parent().parent();
+	
+	$( e ).parent().parent().remove();
+	
+	if ( $targetDiv.find(".optionList .option_item").length == 0 ){
+		$targetDiv.find(".optionList").append(
+			$( "<span>" ).attr( "class", "noData" ).append("선택지를 추가해주세요.")
+		)
+	} 
+}
+
+
+function setReadonly( e ) {
+	var targetReadonly = $( e ).attr("readonly");
+	if(typeof targetReadonly == "undefined" || targetReadonly == null ) {
+		$( e ).attr("readonly","radonly");
+	}
+}
+
+
+var _qestnarQestnItemTyCd;
+
+// focus, click 될 때 현재값 setting 
+function setNowQestnarQestnItemTyCd( value ) {
+	_qestnarQestnItemTyCd = value;
+}
+
+// onchange 될 때 
+function onchangeQestnarQestnItemTyCd( e ) {
+	
+	// 설문조사 유형 값 : value
+	var value = $(e).val();
+	$targetDiv = $(e).parent().parent().parent();
+	
+	// 추가한 선택지가 존재하는 경우
+	if (	_qestnarQestnItemTyCd != undefined && 
+			_qestnarQestnItemTyCd != '' && 
+			_qestnarQestnItemTyCd.startsWith("SELECTIVE") && 
+			!value.startsWith("SELECTIVE") && 
+			$targetDiv.find(".optionList .option_item").length > 0 ){
+		if ( !confirm("추가한 선택지가 모두 사라집니다. 변경하시겠습니까?")) {
+			$( e ).val( _qestnarQestnItemTyCd );
+			return false;
+		} 
+		
+	}
+
+
+	// - 주관식 일 경우 : ANSWER
+	// - 선택형(단일선택) 일 경우 : SELECTVIE_ONE
+	// - 선택형(다중선택 가능) 일 경우 : SELECTIVE_MULTI
+	// - 첨부파일 일 경우 : FILE <-- 추후 작업 예정
+	switch( value ) {
+		case "ANSWER" :
+			$targetDiv.find(".addOptionArea").hide(); 
+			break;
+		case "SELECTIVE_ONE" :
+			$targetDiv.find(".addOptionArea").show();
+			if ( _qestnarQestnItemTyCd == "SELECTIVE_MULTI") {
+				changeInputType( e );
+			} 
+			break;
+		case "SELECTIVE_MULTI" :
+			$targetDiv.find(".addOptionArea").show();
+			if ( _qestnarQestnItemTyCd == "SELECTIVE_ONE") {
+				changeInputType( e );
+			} 
+			break;
+	}
+	
+	_qestnarQestnItemTyCd = value;
+	
+}
+
+
+
+function changeInputType( e ) {
+	
+	var value = $(e).val();
+	
+	$targetDiv = $(e).parent().parent().parent();
+	
+	switch( value ){
+		case "SELECTIVE_MULTI" :	// 체크박스로 변경
+			$targetDiv.find(".optionList .option_item .item_content").each( function( index ) {
+				// 1. 라디오 제거
+				$( this ).find(".radioLabel").remove();
+				
+				// 2. 체크박스 추가
+				$( this ).prepend(
+					$( "<input>" ).attr("type", "checkbox" ).attr( "id", "option"+ index ).append(),
+					$( "<label>" ).attr("for", "option" + index ).append()
+				);
+			})
+			break;
+			
+		case "SELECTIVE_ONE" :		// 라디오로 변경
+			$targetDiv.find(".optionList .option_item .item_content").each( function( index ) {
+				// 1. 체크박스 제거
+				$( this ).find("input[type='checkbox']").remove();
+				$( this ).find("label").remove();
+				
+				// 2. 라디오 추가
+				$( this ).prepend(
+					$( "<label>" ).attr("class", "radioLabel" ).append(
+						$( "<input>" ).attr("type", "radio" ).attr( "name", "itemRadio" ).append()
+					)
+				);
+			})
+			break;
+	}
+	
+}
 
 
 /* E : 설문조사 */ 

@@ -17,9 +17,13 @@ public class QestnarQestnListDto {
 	
 	private String qestnarQestnItemTyCd;
 	
+	private String qestnarQestnItemTyNm;
+	
 	private String qestnarQestnItemCn;
 	
 	private String qestnarQestnEssntlYn;
+	
+	private String qestnarQestnEssntlYnNm;
 	
 	private Long atchFileSn;
 	
@@ -34,14 +38,17 @@ public class QestnarQestnListDto {
     
 	@QueryProjection
 	public QestnarQestnListDto(Long qestnarQestnSn, Long qestnarGroupSn, Long qestnarQestnSeq,
-			String qestnarQestnItemTyCd, String qestnarQestnItemCn, String qestnarQestnEssntlYn, Long atchFileSn, String registerId,
+			String qestnarQestnItemTyCd, String qestnarQestnItemTyNm, String qestnarQestnItemCn, 
+			String qestnarQestnEssntlYn, String qestnarQestnEssntlYnNm, Long atchFileSn, String registerId,
 			String regDt) {
 		this.qestnarQestnSn = qestnarQestnSn;
 		this.qestnarGroupSn = qestnarGroupSn;
 		this.qestnarQestnSeq = qestnarQestnSeq;
 		this.qestnarQestnItemTyCd = qestnarQestnItemTyCd;
+		this.qestnarQestnItemTyNm = qestnarQestnItemTyNm;
 		this.qestnarQestnItemCn = qestnarQestnItemCn;
 		this.qestnarQestnEssntlYn = qestnarQestnEssntlYn;
+		this.qestnarQestnEssntlYnNm = qestnarQestnEssntlYnNm;
 		this.atchFileSn = atchFileSn;
 		this.registerId = registerId;
 		this.regDt = regDt;

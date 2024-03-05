@@ -1,21 +1,53 @@
-<div name="clsDtlAddDiv" th:fragment = "clsDtlDiv(targetClsDtlList)" th:if = "${!targetClsDtlList.isEmpty()}"  th:each=" data : ${targetClsDtlList} " style="display:none;" class="existForm">
-	<input type="hidden" name="classDetailEssntlYn" th:value="${data.classDetailEssntlYn}" />
+<div name="qestnarQestnAddDiv" th:fragment = "qestnarQestnDiv(targetQestnarQestnList)" th:if = "${!targetQestnarQestnList.isEmpty()}"  th:each=" data : ${targetQestnarQestnList} " style="display:none;" class="existForm">
+	<input type="hidden" name="qestnarQestnEssntlYn" th:value="${data.qestnarQestnEssntlYn}" />
+	<input type="hidden" name="qestnarQestnItemTyCdOri" th:value="${data.qestnarQestnItemTyCd}" />
 	<div class="field item form-group">
 		<label class="col-form-label col-md-2 col-sm-3 label-align">입력 유형<span class="required">*</span></label>
 		<div class="col-md-2 col-sm-6">
-			<select class="form-control" name="classDetailItemTyCd" >
+			<select class="form-control selectQestnarQestnItemTyCd" name="qestnarQestnItemTyCd" onkeypress="setNowQestnarQestnItemTyCd( this.value );" onclick="setNowQestnarQestnItemTyCd( this.value ); " ondrop="setNowQestnarQestnItemTyCd( this.value );" onfocus="setNowQestnarQestnItemTyCd( this.value );" onchange="onchangeQestnarQestnItemTyCd( this ) ;">
 				<option value="">입력 유형 선택</option>
-				<option value="ANSWER" th:selected="${data.classDetailItemTyCd} == 'ANSWER'" >주관식</option>
+				<option value="ANSWER">주관식</option>
 			</select>
 		</div>
 	</div>
 	<div class="field item form-group">
 		<label class="col-form-label col-md-2 col-sm-3 label-align">입력 항목<span class="required">*</span></label>
 		<div class="col-md-8 col-sm-9">
-			<input class="form-control" name="classDetailItemCn" placeholder="클래스 입력 항목 내용 입력" th:value="${data.classDetailItemCn}" />
+			<input class="form-control" name="qestnarQestnItemCn" placeholder="설문조사 입력 항목 내용 입력" th:value="${data.qestnarQestnItemCn}"/>
 			<small class="font-gray-dark">
-				클래스 신청 시 입력 받을 항목을 입력해주세요. ex ) ⭐️ 미팅장소에 10분 전 도착해주시길 바랍니다. 지각 시 환불이 어렵습니다. ⭐ (예시답변 : 네 )
+				설문조사 입력 받을 항목을 입력해주세요. ex ) 연락 가능하신 이메일을 입력해주세요 !
 			</small>
+		</div>
+	</div>
+	<div class="field item form-group addOptionArea" style="display: none;" th:style="${data.qestnarQestnItemTyCd ne 'SELECTIVE_ONE' && data.qestnarQestnItemTyCd ne 'SELECTIVE_MULTI' } ? 'display:none;'">
+		<label class="col-form-label col-md-2 col-sm-3 label-align">선택지 추가<span class="required">*</span></label>
+		<div class="col-md-8 col-sm-9">
+			<div class="inputOption">
+				<input class="form-control liveAddInput" name="qestnarQestnDetailCnAdd" placeholder="설문조사 선택지 추가"/>
+				<button type="button" class="btn btn-purple" onclick="addQestnarQestnDetailOption( this );" >추가</button>
+			</div>
+			<div class="optionList">
+				<span class="noData" th:if="${data.qestnarQestnItemTyCd ne 'SELECTIVE_ONE' && data.qestnarQestnItemTyCd ne 'SELECTIVE_MULTI' }">선택지를 추가해주세요.</span>
+				<th:block th:each="detailData : ${targetQestnarQestnDetailList}" th:if="${detailData.qestnarQestnSn eq data.qestnarQestnSn}" >
+					<div class="option_item">
+						<div class="item_content">
+							<th:block th:if="${data.qestnarQestnItemTyCd eq 'SELECTIVE_ONE'}">
+								<label class="radioLabel">
+									<input type="radio" name="itemRadio" onclick="return false;">
+								</label>
+							</th:block>
+							<th:block th:if="${data.qestnarQestnItemTyCd eq 'SELECTIVE_MULTI'}">
+								<input type="checkbox" id="option1" onclick="return false;">
+								<label for="option1"></label>
+							</th:block>
+							<input name="qestnarQestnDetailCn" type="text" th:value="${detailData.qestnarQestnDetailCn}" onblur="setReadonly(this)" readonly="readonly">
+						</div>
+						<div class="item_manage">
+							<button onclick="modifyQestnarQestnDetailOption(this)" type="button" class="btn btn-success btn-sm table-btn">수정</button>
+							<button onclick="deleteQestnarQestnDetailOption(this)" type="button" class="btn btn-danger btn-sm table-btn">삭제</button></div>
+					</div>
+				</th:block>
+			</div>
 		</div>
 	</div>
 	<div class="field item form-group">
@@ -25,12 +57,12 @@
 				<label class="btn btn-outline-purple w100p"
 					   data-toggle-class="btn-primary"
 					   data-toggle-passive-class="btn-default">
-					<input type="radio" name="classDetailEssntlYnRadio" value="Y" class="join-btn" onclick="clickRadioEvent(this)" th:checked="${data.classDetailEssntlYn eq 'Y'}" >필수
+					<input type="radio" name="qestnarQestnEssntlYnRadio" value="Y" class="join-btn" onclick="clickRadioEvent(this)" th:checked="${data.qestnarQestnEssntlYn eq 'Y'}">필수
 				</label>
 				<label class="btn btn-outline-purple w100p"
 					   data-toggle-class="btn-primary"
 					   data-toggle-passive-class="btn-default">
-					<input type="radio" name="classDetailEssntlYnRadio" value="N" class="join-btn" onclick="clickRadioEvent(this)" th:checked="${data.classDetailEssntlYn eq 'N'}" >선택
+					<input type="radio" name="qestnarQestnEssntlYnRadio" value="N" class="join-btn" onclick="clickRadioEvent(this)" th:checked="${data.qestnarQestnEssntlYn eq 'N'}">선택
 				</label>
 			</div>
 		</div>

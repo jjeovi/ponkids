@@ -5814,6 +5814,9 @@ text-align: left;
 
 
 
+/* S : 설문조사 그룹 */
+
+
 .inputOption .liveAddInput {
 	display: inline-block;
 	width: calc(100% - 70px);
@@ -5822,7 +5825,123 @@ text-align: left;
 
 .optionList .noData{
 	height : 100px;
-    border-top: 1px dashed #b8b8b8;
-    border-bottom: 1px dashed #b8b8b8;
-    margin-top: 10px;
 }
+
+.optionList {
+	min-height: 100px;
+	height : auto;
+    border-top: 1px dashed #b8b8b8;
+    margin-top: 10px;
+    padding-top:10px;
+    padding-bottom: 10px;
+}
+
+.optionList .option_item {
+	margin-top: 8px;
+    border-bottom: 1px solid #b098f2;
+    height: 35px;
+}
+
+.option_item .item_content {
+	display: inline-block;
+	width: calc(100% - 115px );
+}
+
+.option_item .item_content input {
+    width: 90%;
+}
+.option_item .item_content input[type="text"]:read-only {
+    color: #73879C;
+    font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.471;
+    border: none;
+    width: 90%;
+}
+.option_item .item_content input[type="text"]{
+    border: 1px solid #979797;
+    border-radius: 4px;
+    padding: 3px;
+    padding-left: 7px;
+}
+
+.option_item .item_manage {
+	display: inline-block;
+    float: right;
+}
+
+
+input::placeholder {
+	color:#bfbfbf !important;
+	font-style: italic;
+}
+
+.item_content input[type="radio"],
+span {
+	vertical-align: middle;
+	appearance: none;
+}
+
+
+.item_content input[type="radio"]:checked {
+  	border: 2px solid #784ccd;
+  background-color: #9776f1;
+}
+
+.item_content input[type="radio"]:focus-visible {
+  outline: max(2px, 0.1em) dotted tomato;
+  outline-offset: max(2px, 0.1em);
+}
+
+.item_content input[type="radio"]:hover {
+  box-shadow: 0 0 0 max(4px, 0.2em) lightgray;
+  cursor: pointer;
+}
+
+.item_content input[type="radio"]:hover + span {
+  cursor: pointer;
+}
+
+.item_content input[type="radio"]:disabled {
+  background-color: lightgray;
+  box-shadow: none;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.item_content input[type="radio"]:disabled + span {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.item_content input[type="radio"] {
+  vertical-align: middle;
+  appearance: none;
+  border: max(2px, 0.1em) solid #9674f1;
+  border-radius: 50%;
+  width: 1.25em;
+  height: 1.25em;
+  transition: border 0.5s ease-in-out;
+}
+
+
+.Qspan {
+	font-weight: bold;
+    font-size: 18px;
+    padding-right: 10px;
+}
+
+.i-b {
+	display: inline-block;
+}
+
+.qestnarQestnItemTyCnTd {
+	text-align: left !important;
+}
+.qestnarQestnItemTyCnTd .optionList{
+	padding : 5px 10px;
+	min-height:0px;
+}
+
+/* E : 설문조사 그룹 */
