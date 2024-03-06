@@ -40,7 +40,7 @@ public class ClassDetailOptnRepositoryImpl implements ClassDetailOptnRepositoryC
                 		classDetailOptn.classDetailOptnSeq,
                 		classDetailOptn.classsDetailOptnCn,
                 		classDetailOptn.registerId,
-                		Expressions.stringTemplate("to_char({0}, '{1s}')", classDetailOptn.regDt, "YYYY-MM-DD HH:MM:SS")
+                		Expressions.stringTemplate("to_char({0}, '{1s}')", classDetailOptn.regDt, "YYYY-MM-DD HH24:MI:SS")
 //                		new CaseBuilder()
 //                		.when( user.gender.eq("M")).then("남자")
 //                		.when( user.gender.eq("F")).then("여자")

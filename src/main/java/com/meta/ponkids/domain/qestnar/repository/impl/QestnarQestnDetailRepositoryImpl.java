@@ -42,7 +42,7 @@ public class QestnarQestnDetailRepositoryImpl implements QestnarQestnDetailRepos
                 		qestnarQestnDetail.qestnarQestnDetailSeq,
                 		qestnarQestnDetail.qestnarQestnDetailCn,
                 		qestnarQestnDetail.registerId,
-                		Expressions.stringTemplate("to_char({0}, '{1s}')", qestnarQestnDetail.regDt, "YYYY-MM-DD HH:MM:SS")
+                		Expressions.stringTemplate("to_char({0}, '{1s}')", qestnarQestnDetail.regDt, "YYYY-MM-DD HH24:MI:SS")
                 		) )					
                 .from( qestnarQestnDetail )
                 // where
@@ -79,7 +79,7 @@ public class QestnarQestnDetailRepositoryImpl implements QestnarQestnDetailRepos
 	                		qestnarQestnDetail.qestnarQestnDetailSeq,
 	                		qestnarQestnDetail.qestnarQestnDetailCn,
 	                		qestnarQestnDetail.registerId,
-	                		Expressions.stringTemplate("to_char({0}, '{1s}')", qestnarQestnDetail.regDt, "YYYY-MM-DD HH:MM:SS")
+	                		Expressions.stringTemplate("to_char({0}, '{1s}')", qestnarQestnDetail.regDt, "YYYY-MM-DD HH24:MI:SS")
 	                		)
 			)
 			.from(qestnarQestnDetail)

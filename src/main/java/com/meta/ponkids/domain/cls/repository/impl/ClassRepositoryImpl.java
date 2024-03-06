@@ -97,7 +97,7 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                         			.otherwise("")
                         			.as("classExpsrPeriod"),
                         class$.registerId,
-                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH:MM:SS" ),
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH24:MI:SS" ),
                         classLike.userSn
                 ) )
                 .from( class$ )
@@ -184,7 +184,7 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                                 .otherwise("")
                                 .as("classExpsrPeriod"),
                         class$.registerId,
-                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH:MM:SS" ),
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH24:MI:SS" ),
                         classLike.userSn
                 ) )
                 .from( class$ )
@@ -258,7 +258,7 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                                 .otherwise("")
                                 .as("classExpsrPeriod"),
                         class$.registerId,
-                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH:MM:SS" ),
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH24:MI:SS" ),
                         classLike.userSn
                 ) )
                 .from( class$ )
@@ -330,7 +330,7 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
     					.otherwise("")
     					.as("classExpsrPeriod"),
     					class$.registerId,
-    					Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH:MM:SS" ),
+    					Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH24:MI:SS" ),
 //    					Expressions.as(Expressions.constant(pageNo), "pageNo")
     					class$.classSn		// userSn 임시 대체 (사용하지 않음 )
     					) )
@@ -398,7 +398,7 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                                 .otherwise("")
                                 .as("classExpsrPeriod"),
                         class$.registerId,
-                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH:MM:SS" ),
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH24:MI:SS" ),
                         classLike.userSn
                 ) )
                 .from( class$ )

@@ -60,7 +60,7 @@ public class ClassCategoryCl02RepositoryImpl implements ClassCategoryCl02Reposit
                         classCategoryCl02.clNm,
                         classCategoryCl02.clSeq,
                         classCategoryCl02.registerId,
-                        Expressions.stringTemplate( "to_char({0}, '{1s}')", classCategoryCl02.regDt, "YYYY-MM-DD HH:MM:SS" )
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", classCategoryCl02.regDt, "YYYY-MM-DD HH24:MI:SS" )
 //                		Expressions.stringTemplate("DATE_FORMAT({0}, '%Y-%m-%d')", classCategoryCl02.regDt)
 //                		Expressions.dateTemplate(Timestamp.class, "DATE_FORMAT({0}, '%Y-%m-%d')", classCategoryCl02.regDt)
                 ) )

@@ -77,16 +77,16 @@ public class LoginRepositoryImpl implements LoginRepositoryCustom {
                                 user.confmerIp,
                                 user.confmDt,
                                 user.snsKakaoCntnYn,
-                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.snsKakaoCntnDt, "YYYY-MM-DD HH:MM:SS" ),
+                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.snsKakaoCntnDt, "YYYY-MM-DD HH24:MI:SS" ),
                                 user.snsGoogleCntnYn,
-                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.snsGoogleCntnDt, "YYYY-MM-DD HH:MM:SS" ),
+                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.snsGoogleCntnDt, "YYYY-MM-DD HH24:MI:SS" ),
                                 user.snsNaverCntnYn,
-                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.snsNaverCntnDt, "YYYY-MM-DD HH:MM:SS" ),
+                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.snsNaverCntnDt, "YYYY-MM-DD HH24:MI:SS" ),
                                 user.snsFacebookCntnYn,
-                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.snsFacebookCntnDt, "YYYY-MM-DD HH:MM:SS" ),
+                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.snsFacebookCntnDt, "YYYY-MM-DD HH24:MI:SS" ),
                                 user.snsAppleCntnYn,
-                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.snsAppleCntnDt, "YYYY-MM-DD HH:MM:SS" ),
-                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.lastLoginDt, "YYYY-MM-DD HH:MM:SS" )
+                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.snsAppleCntnDt, "YYYY-MM-DD HH24:MI:SS" ),
+                                Expressions.stringTemplate( "to_char({0}, '{1s}')", user.lastLoginDt, "YYYY-MM-DD HH24:MI:SS" )
                         )
                 )
                 // from  ( ~left join .. )

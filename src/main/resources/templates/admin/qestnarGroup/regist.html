@@ -7,6 +7,26 @@
 
 	$( function () {
 		
+		
+		// 상단안내문 설정 여부 선택시 상단안내문 표출 처리 설정
+		$( "input:radio[name='upendGdccSetYn']" ).change( function () {
+			if ( $( this ).val() == 'Y' ) {
+				$( "#upendGdccDiv" ).show();
+			} else {
+				$( "#upendGdccDiv" ).hide();
+			}
+		});
+		
+		// 하단안내문 설정 여부 선택시 하단안내문 표출 처리 설정
+		$( "input:radio[name='lptGdccSetYn']" ).change( function () {
+			if ( $( this ).val() == 'Y' ) {
+				$( "#lptGdccDiv" ).show();
+			} else {
+				$( "#lptGdccDiv" ).hide();
+			}
+		});
+		
+		
 		// 입력 항목 추가 모달 창에서 newForm 의 입력유형 list 초기화 후 setting 작업
 		// 입력 항목 유형 코드 리스트가 0개 이상일 경우에만 실행 
 		if ( qestnarQestnItemTyCdList.length > 0 ) {
@@ -379,12 +399,44 @@
 				<div class="x_content">
 					<form id="insertForm" name="insertForm" method="post" th:action="@{ {basicPath}/{mcd}/insert ( basicPath = ${basicPath}, mcd = ${mcd} ) }" enctype="multipart/form-data" th:onsubmit="return submitValidCheck();">
 						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">설문조사 그룹 코드<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<input class="form-control"name="qestnarGroupCd" required="required" placeholder="설문조사 그룹 코드을 입력해주세요."/>
+								<small class="font-gray-dark">
+									설문조사를 구분하기 위한 코드로 10자 이내의 영문, 숫자로 등록해주세요. 사용자 연동시 코드를 기준으로 구분합니다. ex) QESTN001, ... 
+								</small>
+							</div>
+						</div>
+						<div class="field item form-group">
 							<label class="col-form-label col-md-2 col-sm-3 label-align">설문조사 그룹 제목<span class="required">*</span></label>
 							<div class="col-md-6 col-sm-6">
 								<input class="form-control"name="qestnarGroupNm" required="required" placeholder="설문조사 그룹 제목을 입력해주세요."/>
 								<small class="font-gray-dark">
 									'제휴문의', '강사지원', '학부모 상담요청' 등 설문조사 그룹 명을 입력해주세요. 
 								</small>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">설문조사 그룹 설명</label>
+							<div class="col-md-6 col-sm-6">
+								<textarea id="qestnarGroupDc" name="qestnarGroupDc"  class="form-control" rows="10"></textarea>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">상단안내문 설정 여부</label> 
+							<div class="col-md-2 col-sm-4">
+								<div class="btn-group radiobox">
+									<input type="radio" id="upendGdccSetYn1" name="upendGdccSetYn" value="Y" class="join-btn" required="required">
+									<label for="upendGdccSetYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">설정</label>
+									<input type="radio" id="upendGdccSetYn2" name="upendGdccSetYn" value="N" class="join-btn" required="required">
+									<label for="upendGdccSetYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">미설정</label>
+								</div>
+							</div>
+						</div>
+						<div class="field item form-group" id="upendGdccDiv" style="display:none;" >
+							<label class="col-form-label col-md-2 col-sm-3 label-align">상단안내문</label>
+							<div class="col-md-6 col-sm-6">
+								<textarea id="upendGdcc" name="upendGdcc"  class="form-control" rows="10"></textarea>
 							</div>
 						</div>
 						<div class="field item form-group" id="QestnarQestnAddDiv">
@@ -457,9 +509,20 @@
 							</div>
 						</div>
 						<div class="field item form-group">
-							<label class="col-form-label col-md-2 col-sm-3 label-align">설문조사 그룹 설명</label>
+							<label class="col-form-label col-md-2 col-sm-3 label-align">하단안내문 설정 여부</label> 
+							<div class="col-md-2 col-sm-4">
+								<div class="btn-group radiobox">
+									<input type="radio" id="lptGdccSetYn1" name="lptGdccSetYn" value="Y" class="join-btn" required="required">
+									<label for="lptGdccSetYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">설정</label>
+									<input type="radio" id="lptGdccSetYn2" name="lptGdccSetYn" value="N" class="join-btn" required="required">
+									<label for="lptGdccSetYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">미설정</label>
+								</div>
+							</div>
+						</div>
+						<div class="field item form-group" id="lptGdccDiv" style="display:none;">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">하단안내문</label>
 							<div class="col-md-6 col-sm-6">
-								<textarea id="qestnarGroupDc" name="qestnarGroupDc"  class="form-control" rows="10"></textarea>
+								<textarea id="lptGdcc" name="lptGdcc"  class="form-control" rows="10"></textarea>
 							</div>
 						</div>
 						<div class="field item form-group">

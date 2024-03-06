@@ -51,7 +51,7 @@ public class CmmnCdDetailRepositoryImpl implements CmmnCdDetailRepositoryCustom 
                         cmmnCdDetail.cdDetailVal4,
                         cmmnCdDetail.cdDetailVal5,
                         cmmnCdDetail.useYn,
-                        Expressions.stringTemplate( "to_char({0}, '{1s}')", cmmnCdDetail.regDt, "YYYY-MM-DD HH:MM:SS" )
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", cmmnCdDetail.regDt, "YYYY-MM-DD HH24:MI:SS" )
                 ) )
                 .from( cmmnCdDetail )
                 .leftJoin( cmmnCd )

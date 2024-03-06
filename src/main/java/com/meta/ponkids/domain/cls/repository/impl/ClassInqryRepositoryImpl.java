@@ -97,7 +97,7 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
                 			.as("openYnNm"),
                 		classInqry.registerId,
                 		Expressions.stringTemplate("to_char({0}, '{1s}')", classInqry.regDt, "YYYY-MM-DD").as("regDt"),
-                		Expressions.stringTemplate("to_char({0}, '{1s}')", classInqry.regDt, "YYYY-MM-DD HH:MM:SS").as("regFullDt")
+                		Expressions.stringTemplate("to_char({0}, '{1s}')", classInqry.regDt, "YYYY-MM-DD HH24:MI:SS").as("regFullDt")
 //                		new CaseBuilder()
 //                		.when( user.gender.eq("M")).then("남자")
 //                		.when( user.gender.eq("F")).then("여자")
@@ -205,7 +205,7 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
 	            			.as("openYnNm"),
 						classInqry.registerId,
 						Expressions.stringTemplate("to_char({0}, '{1s}')", classInqry.regDt, "YYYY-MM-DD").as("regDt"),
-                		Expressions.stringTemplate("to_char({0}, '{1s}')", classInqry.regDt, "YYYY-MM-DD HH:MM:SS").as("regFullDt")
+                		Expressions.stringTemplate("to_char({0}, '{1s}')", classInqry.regDt, "YYYY-MM-DD HH24:MI:SS").as("regFullDt")
 //                		new CaseBuilder()
 //                		.when( user.gender.eq("M")).then("남자")
 //                		.when( user.gender.eq("F")).then("여자")

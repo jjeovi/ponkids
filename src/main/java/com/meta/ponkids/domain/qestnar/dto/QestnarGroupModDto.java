@@ -18,9 +18,19 @@ public class QestnarGroupModDto extends QestnarGroupDto {
 
 	private Long qestnarGroupSn;
 
+	private String qestnarGroupCd;
+	
 	private String qestnarGroupNm;
 
 	private String qestnarGroupDc;
+	
+	private String upendGdccSetYn;	// 상단 안내문 설정 여부
+	
+	private String upendGdcc;		// 상단 안내문
+	
+	private String lptGdccSetYn;	// 상단 안내문 설정 여부
+	
+	private String lptGdcc;			// 하단 안내문
 
 	private String privcyYn;
 
@@ -34,11 +44,17 @@ public class QestnarGroupModDto extends QestnarGroupDto {
     
 	//builder 생성
 	@Builder
-	public QestnarGroupModDto(Long qestnarGroupSn, String qestnarGroupNm, String qestnarGroupDc,
+	public QestnarGroupModDto(Long qestnarGroupSn, String qestnarGroupCd,  String qestnarGroupNm, String qestnarGroupDc,
+			String upendGdccSetYn, String upendGdcc, String lptGdccSetYn, String lptGdcc,
 			String privcyYn, String useYn, String updusrId, String updusrIp) {
 		this.qestnarGroupSn = qestnarGroupSn;
+		this.qestnarGroupCd = qestnarGroupCd;
 		this.qestnarGroupNm = qestnarGroupNm;
 		this.qestnarGroupDc = qestnarGroupDc;
+		this.upendGdccSetYn = upendGdccSetYn;
+		this.upendGdcc = upendGdcc;
+		this.lptGdccSetYn = lptGdccSetYn;
+		this.lptGdcc = lptGdcc;
 		this.privcyYn = privcyYn;
 		this.useYn = useYn;
 		this.updusrId = updusrId;
@@ -49,8 +65,13 @@ public class QestnarGroupModDto extends QestnarGroupDto {
 	public QestnarGroup toEntity() {
 		return QestnarGroup.builder()
 				.qestnarGroupSn(qestnarGroupSn)
+				.qestnarGroupCd(qestnarGroupCd)
 				.qestnarGroupNm(qestnarGroupNm)
 				.qestnarGroupDc(qestnarGroupDc)
+				.upendGdccSetYn(upendGdccSetYn)
+				.upendGdcc(upendGdcc)
+				.lptGdccSetYn(lptGdccSetYn)
+				.lptGdcc(lptGdcc)
 				.privcyYn(privcyYn)
 				.useYn(useYn)
 				.updusrId(updusrId)
@@ -62,8 +83,13 @@ public class QestnarGroupModDto extends QestnarGroupDto {
 	public QestnarGroupModDto toDto(QestnarGroup qestnarGroup) {
 		return QestnarGroupModDto.builder()
 				.qestnarGroupSn(qestnarGroup.getQestnarGroupSn())
+				.qestnarGroupCd(qestnarGroup.getQestnarGroupCd())
 				.qestnarGroupNm(qestnarGroup.getQestnarGroupNm())
 				.qestnarGroupDc(qestnarGroup.getQestnarGroupDc())
+				.upendGdccSetYn(qestnarGroup.getUpendGdccSetYn())
+				.upendGdcc(qestnarGroup.getUpendGdcc())
+				.lptGdccSetYn(qestnarGroup.getLptGdccSetYn())
+				.lptGdcc(qestnarGroup.getLptGdcc())
 				.privcyYn(qestnarGroup.getPrivcyYn())
 				.useYn(qestnarGroup.getUseYn())
 				.updusrId(qestnarGroup.getUpdusrId())

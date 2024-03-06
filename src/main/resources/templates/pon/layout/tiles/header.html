@@ -1,0 +1,120 @@
+<!-- header 최상단 메뉴 4개 및 sns 버튼 -->
+<div class="header_top">
+	<ol>
+		<th:block sec:authorize="isAnonymous()">
+			<li>
+				<a href="javascript:" class="show_layer" data-layer-id="login"	>로그인</a>
+			</li>
+		</th:block>
+		<th:block sec:authorize="isAuthenticated()">
+			<li>
+				<a href="javascript:goLogout();" >로그아웃</a>
+			</li>
+			<li>
+				<a href="/mypage/" >마이페이지</a>
+			</li>
+		</th:block>
+		<li>
+			<a href="#">학부모 상담요청</a>
+		</li>
+		<li>
+			<a href="#">제휴문의</a>
+		</li>
+		<li>
+			<a href="#">강사지원</a>
+		</li>
+		<li>
+			<div class="sns_list">
+				<div class="sns_item">
+					<img src="/pon/common/image/kakao_ico.svg" alt="카카오 연동링크">
+				</div>
+				<div class="sns_item">
+					<img src="/pon/common/image/naver_ico.svg" alt="네이버 연동링크">
+				</div>
+				<div class="sns_item">
+					<img src="/pon/common/image/insta_svg.svg" alt="인스타 연동링크">
+				</div>
+			</div>
+		</li>
+	</ol>
+</div>
+<!-- header 최상단 메뉴 4개 및 sns 버튼 -->
+
+<!-- S : pon menu -->
+<!-- TODO : 버튼 1,2,3, 로그인, 메뉴 뿌리기 .. -->
+<nav class="nav">
+	<ul>
+		<li>
+			<a href="/"><img src="/pon/common/image/logo.svg" alt=""></a>
+		</li>
+	</ul>
+	<ul class="pon_menu pc">
+		<li th:each="data : ${menuList}" th:if="${data.level eq 1}">
+			<a 	th:href="${data.menuUrl}" th:text="${data.menuNm}"
+				th:classappend="${ #strings.containsIgnoreCase(currentPageUrl,data.menuUrl) || 
+								( mcd != null && #strings.prepend(data.menuCd,'mcd') == mcd )  } ? 'active'" />
+		</li>
+	</ul>
+	<div class="search_form">
+		<div class="search">
+			<form action="/class/mcdClass/list" method="get">
+				<input type="hidden"	name="schOption" value="A" >
+				<input type="text"		name="schCntn" placeholder="클래스명을 검색해주세요" th:value="${mainSearchDTO != null} ? ${mainSearchDTO.schCntn}">
+			</form>
+		</div>
+	</div>
+</nav>
+<!-- E : pon menu  -->
+
+<!-- S : mobile header -->
+<!-- TODO -->
+<nav class="mb_nav">
+	<div class="mb_logo">
+		<a href="/">
+			<img src="/pon/common/image/logo.svg" alt="">
+		</a>
+	</div>
+	<div class="mb_ico">
+		<div class="mb_search">
+			<img src="/pon/common/image/mb_search.svg" alt="">
+		</div>
+		<div class="mb_menu">
+			<img src="/pon/common/image/menu_ico.svg" alt="">
+		</div>
+	</div>
+</nav>
+<div class="nav_wrap">
+	<div class="mb_nav_list">
+		<div class="mb_logo_box ">
+			<div class="mb_logo">
+				<a href="/">
+					<img src="/pon/common/image/logo.svg" alt="">
+				</a>
+<!--				<p class="login_txt">로그인이 필요합니다</p>-->
+			</div>
+			<div class="m_header_btns">
+				<div class="m_btns_top">
+					<button>버튼1</button>
+					<button>버튼2</button>
+					<button>버튼3</button>
+				</div>
+				<div class="m_btns_bot">
+					<button>버튼4</button>
+				</div>
+			</div>
+			<div class="close">
+				<img src="/pon/common/image/close.svg" alt="">
+			</div>
+		</div>
+		<ul class="pon_menu mb">
+			<li th:each="data : ${menuList}" th:if="${data.level eq 1}" >
+				<a th:href="${data.menuUrl}" th:text="${data.menuNm}" />
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="mb_search_form">
+	<input type="text" placeholder="검색어를 입력해주세요">
+</div>
+<div class="dark_bg"></div>
+<!-- E : mobile header -->

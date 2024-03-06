@@ -31,10 +31,15 @@
 					</div>
 					<div class="col-md-11 col-sm-10 mb_10p">
 						<div class="btn-group float-right" role="group">
-							<select class="form-control" name="mngrConfmYn">
-								<option value="">표시여부</option>
-								<option value="Y" th:selected=" ${searchDTO.privcyYn} == 'Y' ">표시</option>
-								<option value="N" th:selected=" ${searchDTO.privcyYn} == 'N' ">미표시</option>
+							<select class="form-control" name="privcyYn">
+								<option value="">프라이버시여부</option>
+								<option value="Y" th:selected=" ${searchDTO.privcyYn} == 'Y' ">공개</option>
+								<option value="N" th:selected=" ${searchDTO.privcyYn} == 'N' ">비공개</option>
+							</select>
+							<select class="form-control" name="useYn">
+								<option value="">사용여부</option>
+								<option value="Y" th:selected=" ${searchDTO.useYn} == 'Y' ">사용</option>
+								<option value="N" th:selected=" ${searchDTO.useYn} == 'N' ">미사용</option>
 							</select>
 							<div class="vl ml_5p"></div>
 							<select class="form-control ml_5p w_55r" name="schOption">
@@ -53,6 +58,7 @@
 						<table id="listTable" class="table table-bordered text-center">
 							<colgroup>
 								<col width="60px;">
+								<col width="10%;">
 								<col width="auto;">
 								<col width="10%;">
 								<col width="10%;">
@@ -62,6 +68,7 @@
 							<thead>
 								<tr>
 									<th>순번</th>
+									<th>코드</th>
 									<th>설문조사그룹명</th>
 									<th>프라이버시여부</th>
 									<th>사용여부</th>
@@ -72,7 +79,8 @@
 							<tbody>
 								<tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
 									<td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
-ㄹ									<td>
+									<td th:text="${data.qestnarGroupCd}"></td>
+									<td>
 										<a class="b-link" th:text="${data.qestnarGroupNm}"></a>
 									</td>
 									<td th:text="${data.privcyYnNm}"></td>

@@ -40,8 +40,13 @@ public class QestnarGroupRepositoryImpl implements QestnarGroupRepositoryCustom 
 				// select
                 .select( new QQestnarGroupListDto(
                 		qestnarGroup.qestnarGroupSn,
+                		qestnarGroup.qestnarGroupCd,
                 		qestnarGroup.qestnarGroupNm,
                 		qestnarGroup.qestnarGroupDc,
+                		qestnarGroup.upendGdccSetYn,
+                		qestnarGroup.upendGdcc,
+                		qestnarGroup.lptGdccSetYn,
+                		qestnarGroup.lptGdcc,
                 		qestnarGroup.privcyYn,
                 		new CaseBuilder()
                 		.when( qestnarGroup.privcyYn.eq("Y")).then("공개")
@@ -55,12 +60,7 @@ public class QestnarGroupRepositoryImpl implements QestnarGroupRepositoryCustom 
                 		.otherwise("")
                 		.as("useYnNm"),
                 		qestnarGroup.registerId,
-                		Expressions.stringTemplate("to_char({0}, '{1s}')", qestnarGroup.regDt, "YYYY-MM-DD HH:MM:SS")
-//                		new CaseBuilder()
-//                		.when( user.gender.eq("M")).then("남자")
-//                		.when( user.gender.eq("F")).then("여자")
-//                		.otherwise("")
-//                		.as("gender"),
+                		Expressions.stringTemplate("to_char({0}, '{1s}')", qestnarGroup.regDt, "YYYY-MM-DD HH24:MI:SS")
                 		) )					
                 .from( qestnarGroup )
                 // where

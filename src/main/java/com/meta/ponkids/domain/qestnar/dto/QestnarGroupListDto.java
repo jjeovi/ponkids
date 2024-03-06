@@ -14,9 +14,19 @@ public class QestnarGroupListDto {
 	
 	private Long qestnarGroupSn;
 	
+	private String qestnarGroupCd;
+	
 	private String qestnarGroupNm;
 	
 	private String qestnarGroupDc;
+	
+	private String upendGdccSetYn;	// 상단 안내문 설정 여부
+	
+	private String upendGdcc;		// 상단 안내문
+	
+	private String lptGdccSetYn;	// 상단 안내문 설정 여부
+	
+	private String lptGdcc;			// 하단 안내문
 	
 	private String privcyYn;
 	
@@ -39,11 +49,17 @@ public class QestnarGroupListDto {
 	private CategoryDto category;    // 카테고리 검색 : 생성자에는 추가하지 않음!
 	
 	@QueryProjection
-	public QestnarGroupListDto(Long qestnarGroupSn, String qestnarGroupNm, String qestnarGroupDc,
+	public QestnarGroupListDto(Long qestnarGroupSn, String qestnarGroupCd, String qestnarGroupNm, String qestnarGroupDc,
+			String upendGdccSetYn, String upendGdcc, String lptGdccSetYn, String lptGdcc,
 			String privcyYn, String privcyYnNm, String useYn, String useYnNm, String registerId, String regDt) {
 		this.qestnarGroupSn = qestnarGroupSn;
+		this.qestnarGroupCd = qestnarGroupCd;
 		this.qestnarGroupNm = qestnarGroupNm;
 		this.qestnarGroupDc = qestnarGroupDc;
+		this.upendGdccSetYn = upendGdccSetYn;
+		this.upendGdcc = upendGdcc;
+		this.lptGdccSetYn = lptGdccSetYn;
+		this.lptGdcc = lptGdcc;
 		this.privcyYn = privcyYn;
 		this.privcyYnNm = privcyYnNm;
 		this.useYn = useYn;

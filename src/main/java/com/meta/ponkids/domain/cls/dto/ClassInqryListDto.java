@@ -52,7 +52,7 @@ public class ClassInqryListDto {
     
     private String	regDt;				// 등록일자 ( 포맷 : YYYY-MM-DD ) 
     
-    private String	regFullDt;			// 등록일자 ( 포맷 : YYYY-MM-DD HH:MM:SS ) 
+    private String	regFullDt;			// 등록일자 ( 포맷 : YYYY-MM-DD HH24:MI:SS ) 
 	
 	private String	schOption;			// 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
 

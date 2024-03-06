@@ -1179,60 +1179,59 @@ function setReadonly( e ) {
 }
 
 
-var _qestnarQestnItemTyCd;
+var _qestnarQestnItemTyCd;	// 입력 유형 현재값을 기억하는 변수 (전역)
 
 // focus, click 될 때 현재값 setting 
 function setNowQestnarQestnItemTyCd( value ) {
-//	_qestnarQestnItemTyCd = value;
+	_qestnarQestnItemTyCd = value;
 }
 
 // onchange 될 때 
 function onchangeQestnarQestnItemTyCd( e ) {
 	
-//	// 설문조사 유형 값 : value
-//	var value = $(e).val();
-//	$targetDiv = $(e).parent().parent().parent();
-//	
-//	// 추가한 선택지가 존재하는 경우
-//	if (	_qestnarQestnItemTyCd != undefined && 
-//			_qestnarQestnItemTyCd != '' && 
-//			_qestnarQestnItemTyCd.startsWith("SELECTIVE") && 
-//			!value.startsWith("SELECTIVE") && 
-//			$targetDiv.find(".optionList .option_item").length > 0 ){
-//		if ( !confirm("추가한 선택지가 모두 사라집니다. 변경하시겠습니까?")) {
-//			$( e ).val( _qestnarQestnItemTyCd );
-//			return false;
-//		} 
-//		
-//	}
-//
-//
-//	// - 주관식 일 경우 : ANSWER
-//	// - 선택형(단일선택) 일 경우 : SELECTVIE_ONE
-//	// - 선택형(다중선택 가능) 일 경우 : SELECTIVE_MULTI
-//	// - 첨부파일 일 경우 : FILE <-- 추후 작업 예정
-//	switch( value ) {
-//		case "ANSWER" :
-//			$targetDiv.find(".addOptionArea").hide(); 
-//			break;
-//		case "SELECTIVE_ONE" :
-//			$targetDiv.find(".addOptionArea").show();
-//			if ( _qestnarQestnItemTyCd == "SELECTIVE_MULTI") {
-//				changeInputType( e );
-//			} 
-//			break;
-//		case "SELECTIVE_MULTI" :
-//			$targetDiv.find(".addOptionArea").show();
-//			if ( _qestnarQestnItemTyCd == "SELECTIVE_ONE") {
-//				changeInputType( e );
-//			} 
-//			break;
-//	}
-//	
-//	_qestnarQestnItemTyCd = value;
+	// 설문조사 유형 값 : value
+	var value = $(e).val();
+	$targetDiv = $(e).parent().parent().parent();
+	
+	// 추가한 선택지가 존재하는 경우
+	if (	_qestnarQestnItemTyCd != undefined && 
+			_qestnarQestnItemTyCd != '' && 
+			_qestnarQestnItemTyCd.startsWith("SELECTIVE") && 
+			!value.startsWith("SELECTIVE") && 
+			$targetDiv.find(".optionList .option_item").length > 0 ){
+		if ( !confirm("추가한 선택지가 모두 사라집니다. 변경하시겠습니까?")) {
+			$( e ).val( _qestnarQestnItemTyCd );
+			return false;
+		} 
+		
+	}
+
+
+	// - 주관식 일 경우 : ANSWER
+	// - 선택형(단일선택) 일 경우 : SELECTVIE_ONE
+	// - 선택형(다중선택 가능) 일 경우 : SELECTIVE_MULTI
+	// - 첨부파일 일 경우 : FILE <-- 추후 작업 예정
+	switch( value ) {
+		case "ANSWER" :
+			$targetDiv.find(".addOptionArea").hide(); 
+			break;
+		case "SELECTIVE_ONE" :
+			$targetDiv.find(".addOptionArea").show();
+			if ( _qestnarQestnItemTyCd == "SELECTIVE_MULTI") {
+				changeInputType( e );
+			} 
+			break;
+		case "SELECTIVE_MULTI" :
+			$targetDiv.find(".addOptionArea").show();
+			if ( _qestnarQestnItemTyCd == "SELECTIVE_ONE") {
+				changeInputType( e );
+			} 
+			break;
+	}
+	
+	_qestnarQestnItemTyCd = value;
 	
 }
-
 
 
 function changeInputType( e ) {

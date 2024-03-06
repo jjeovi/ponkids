@@ -1,5 +1,7 @@
 package com.meta.ponkids.domain.system.menu.dto;
 
+import java.util.List;
+
 import com.meta.ponkids.domain.system.menu.entity.Menu;
 
 import lombok.AllArgsConstructor;
@@ -39,6 +41,8 @@ public class MenuSaveDto extends MenuDto {
     private String useYn;
     
     private String newWindowYn;
+    
+    private List<Long> roleSnList;        // 메뉴권한 (리스트)
     
     private String registerId;      // 등록자 ID
     

@@ -1,0 +1,29 @@
+<!-- jquery -->
+	<script src="/pon/jquery/3.7.1/jquery.min.js"></script>
+	<!-- swiper -->
+	<script src="/pon/npm/swiper11/js/swiper-bundle.min.js"></script>
+	
+	<!-- 상수 항목 정의 ( 재사용을위해 ) -->
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		let searchDTO;	// 카테고리DTO (searchDTO) 정의 
+		let basicPath;	// 기본경로 
+		let errMsg;		// error message setting
+		let infoMsg;	// info  message setting
+		let snsType;	// sns Type		 setting
+		let lgStatus;	// 로그인 status 	 setting
+		let loginYn;	// 로그인 dto 	 setting
+		
+		const urlParams = new URL(location.href).searchParams;
+		
+		$(function(){
+			searchDTO	=	/*[[${searchDTO}]]*/		 // 상수선언
+			basicPath	=	/*[[${basicPath}]]*/		 // 상수선언
+			errMsg		=	/*[[${errMsg}]]*/			 // error message
+			infoMsg		=	/*[[${infoMsg}]]*/			 // info message
+			snsType		=	/*[[${snsType}]]*/			 // sns Type
+			lgStatus	=	/*[[${lgStatus}]]*/			 // login Status setting
+			loginYn		=	/*[[${loginYn}]]*/			 // login Yn setting
+		});	// Expression expected. error don't care
+		/*]]>*/
+	</script>

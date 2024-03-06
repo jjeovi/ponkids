@@ -72,7 +72,7 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 								.as( "preparRcritNmprSetYnNm" ),
 						lctre.preparRcritNmprCo,
 						lctre.registerId,
-                		Expressions.stringTemplate("to_char({0}, '{1s}')", lctre.regDt, "YYYY-MM-DD HH:MM:SS")
+                		Expressions.stringTemplate("to_char({0}, '{1s}')", lctre.regDt, "YYYY-MM-DD HH24:MI:SS")
                 		) )
                 .from( lctre )
 				.leftJoin( class$ )
@@ -164,7 +164,7 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 								.as( "preparRcritNmprSetYnNm" ),
 						lctre.preparRcritNmprCo,
 						lctre.registerId,
-                		Expressions.stringTemplate("to_char({0}, '{1s}')", lctre.regDt, "YYYY-MM-DD HH:MM:SS")
+                		Expressions.stringTemplate("to_char({0}, '{1s}')", lctre.regDt, "YYYY-MM-DD HH24:MI:SS")
                 		) )
                 .from( lctre )
 				.leftJoin( class$ )

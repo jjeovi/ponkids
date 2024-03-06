@@ -57,7 +57,7 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
                 		classReview.openYn,
                 		classReview.registerId,
                 		Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD"),
-                		Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD HH:MM:SS").as("regFullDt")
+                		Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD HH24:MI:SS").as("regFullDt")
                 		) )					
                 .from( classReview )
                 //leftJoin
@@ -114,7 +114,7 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
 								classReview.openYn,
 								classReview.registerId,
 								Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD"),
-								Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD HH:MM:SS").as("regFullDt")
+								Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD HH24:MI:SS").as("regFullDt")
 						)
 				)
 				.from(
@@ -162,7 +162,7 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
 								classReview.openYn,
 								classReview.registerId,
 								Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD"),
-								Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD HH:MM:SS").as("regFullDt")
+								Expressions.stringTemplate("to_char({0}, '{1s}')", classReview.regDt, "YYYY-MM-DD HH24:MI:SS").as("regFullDt")
 						)
 				)
 				.from(

@@ -1,0 +1,74 @@
+<div class="footer_top">
+	<div class="footer_logo">
+		PIONEER KIDS
+	</div>
+	<ul class="footer_link">
+		<li>
+			<a href="#">회사소개</a>
+		</li>
+		<li>
+			<a href="#">1:1 문의</a>
+		</li>
+		<li>
+			<a href="#">이용약관</a>
+		</li>
+		<li>
+			<a href="#">개인정보처리방침</a>
+		</li>
+	</ul>
+</div>
+<div class="footer_info">
+	<div class="txt_wrap">
+		<span>PIONEER KIDS LLC  </span>
+		<span>주소 : 미국 버지니아 센터빌, 20121 </span>
+		<span>대표 : 노빈</span>
+	</div>
+	<div class="txt_wrap">
+		<span>사업자등록번호 : 92-1451459 </span>
+		<span>개인정보관리책임자 : 노빈  </span>
+		<span>전화 : 571-451-8210 </span>
+		<span>이메일 : admin@mypsel.com</span>
+	</div>
+	<div class="txt_wrap">
+		<span>PIONEER KIDS LLC ALL RIGHTS RESERVED.</span>
+	</div>
+</div>
+
+<!-- layer popup  -->
+<div class="pop_dim" 		id="pop_dim"		style="display: none;"></div>
+<div class="pop_dim_lv2" 	id="pop_dim_lv2"	style="display: none;"></div>
+<!-- popup id -->
+<!-- 아이디/비밀번호 찾기 -->			<div class="layer_findUser"					style="display: none;"	th:insert="pon/layer/layer_findUser.html"		/>
+<!-- 아이디 찾기 결과 findUserResult 가 더 어울릴듯 -->				<div class="layer_findUserInfo lv2"				style="display: none;"	th:insert="pon/layer/layer_findUserInfo.html"	/>
+<!-- 비밀번호 재설정 결과--> 		 	<div class="layer_findUserPw lv2"			style="display: none;"	th:insert="pon/layer/layer_findUserPw.html"	/>
+<form id="userInsertForm" name="userInsertForm" method="post" th:action="@{ / }"  enctype="multipart/form-data" onsubmit="return false;">
+<!-- 회원가입 -->						<div class="layer_join layer_joinForSns"	style="display: none;"	th:insert="pon/layer/layer_join.html"			/>
+<!-- 회원가입 - 자녀추가 -->			<div class="layer_addChldrn lv2"			style="display: none;"	th:insert="pon/layer/layer_addChldrn.html"		/>
+<!-- 회원가입완료 layer -->			<div class="layer_completeJoin"				style="display: none;"	th:insert="pon/layer/layer_completeJoin.html"			/>
+</form>
+<!-- 회원통합 layer (SNS로그인시) -->	<div class="layer_userIntegrated"			style="display: none;"	th:insert="pon/layer/layer_userIntegrated.html"			/>
+<!-- 로그인 -->						<div class="layer_login"					style="display: none;"	th:insert="pon/layer/layer_login.html"			/>
+<!-- 이용약관 -->						<div class="layer_termsOfUse lv2"			style="display: none;"	th:insert="pon/layer/layer_termsOfUse.html"	/>
+<!-- 개인정보처리방침 -->				<div class="layer_personalInfo lv2"			style="display: none;"	th:insert="pon/layer/layer_personalInfo.html"	/>
+<!-- 문의하기 -->						<div class="layer_inquiry"					style="display: none;"	th:insert="pon/layer/layer_inquiry.html"		/>
+
+<form id="logoutForm" name="logoutForm" th:action="@{ /pon/logout}" method="post">
+	<input type="hidden" name="returnUrl" >
+</form>
+
+
+<!--S : script -->
+
+<!--validator -->
+<script src="/common/bootstrap/vendors/validator/multifield.js"></script>
+<script src="/common/bootstrap/vendors/validator/validator.js"></script>
+	
+<!-- main -->
+<script src="/pon/common/js/common.js"></script>
+<!-- layer -->
+<script src="/pon/common/js/layer.js"></script>
+
+<div layout:fragment="script">
+	<!-- (필요시) 각 페이지별로 script 작성 -->
+</div>
+<!--E : script -->

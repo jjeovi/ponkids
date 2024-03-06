@@ -74,12 +74,16 @@ public class QestnarGroupService {
         QestnarGroupModDto targetDto = new QestnarGroupModDto();
         targetDto = targetDto.toDto( qestnarGroup );
         
-        // TODO target object 에 수정사항 set	
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
-        if ( StringUtils.hasText( modDto.getQestnarGroupNm() ) ) targetDto.setQestnarGroupNm( modDto.getQestnarGroupNm() );          	// 이름
-        if ( StringUtils.hasText( modDto.getQestnarGroupDc() ) ) targetDto.setQestnarGroupDc( modDto.getQestnarGroupDc() );          	// 이름
-        if ( StringUtils.hasText( modDto.getPrivcyYn() ) ) targetDto.setPrivcyYn( modDto.getPrivcyYn() );          	// 이름
-        if ( StringUtils.hasText( modDto.getUseYn() ) ) targetDto.setUseYn( modDto.getUseYn() );          	// 이름
+        if ( StringUtils.hasText( modDto.getQestnarGroupCd() ) ) targetDto.setQestnarGroupCd( modDto.getQestnarGroupCd() );          	// 설문조사그룹코드
+        if ( StringUtils.hasText( modDto.getQestnarGroupNm() ) ) targetDto.setQestnarGroupNm( modDto.getQestnarGroupNm() );          	// 설문조사그룹명
+        if ( StringUtils.hasText( modDto.getQestnarGroupDc() ) ) targetDto.setQestnarGroupDc( modDto.getQestnarGroupDc() );          	// 설문조사그룹설명
+        if ( StringUtils.hasText( modDto.getUpendGdccSetYn() ) ) targetDto.setUpendGdccSetYn( modDto.getUpendGdccSetYn() );          	// 상단안내문설정여부
+        if ( StringUtils.hasText( modDto.getUpendGdcc() ) ) targetDto.setUpendGdcc( modDto.getUpendGdcc() );                            // 상단안내문
+        if ( StringUtils.hasText( modDto.getLptGdccSetYn() ) ) targetDto.setLptGdccSetYn( modDto.getLptGdccSetYn() );          	        // 하단안내문설정여부
+        if ( StringUtils.hasText( modDto.getLptGdcc() ) ) targetDto.setLptGdcc( modDto.getLptGdcc() );          	                    // 하단안내문
+        if ( StringUtils.hasText( modDto.getPrivcyYn() ) ) targetDto.setPrivcyYn( modDto.getPrivcyYn() );          	                    // 프라이버시여부
+        if ( StringUtils.hasText( modDto.getUseYn() ) ) targetDto.setUseYn( modDto.getUseYn() );          	                            // 사용여부
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );

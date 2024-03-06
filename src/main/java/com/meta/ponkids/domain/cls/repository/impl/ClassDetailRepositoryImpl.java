@@ -58,7 +58,7 @@ public class ClassDetailRepositoryImpl implements ClassDetailRepositoryCustom {
 			                        .when( classDetail.classDetailEssntlYn.eq( "N" ) ).then( "선택" )
 			                        .otherwise( "" ).as( "classDetailEssntlYnNm" ),
                 		classDetail.registerId,
-                		Expressions.stringTemplate("to_char({0}, '{1s}')", classDetail.regDt, "YYYY-MM-DD HH:MM:SS")
+                		Expressions.stringTemplate("to_char({0}, '{1s}')", classDetail.regDt, "YYYY-MM-DD HH24:MI:SS")
                 		) )					
                 .from( classDetail )
                 .where(
@@ -104,7 +104,7 @@ public class ClassDetailRepositoryImpl implements ClassDetailRepositoryCustom {
 				                        .otherwise( "" )
 				                        .as( "classDetailEssntlYnNm" ),
 	                		classDetail.registerId,
-	                		Expressions.stringTemplate("to_char({0}, '{1s}')", classDetail.regDt, "YYYY-MM-DD HH:MM:SS")
+	                		Expressions.stringTemplate("to_char({0}, '{1s}')", classDetail.regDt, "YYYY-MM-DD HH24:MI:SS")
 	                		)
 				 )
 				 .from(classDetail)
