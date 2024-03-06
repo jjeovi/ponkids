@@ -7,7 +7,6 @@
 
 	$( function () {
 		
-		
 		// 상단안내문 설정 여부 선택시 상단안내문 표출 처리 설정
 		$( "input:radio[name='upendGdccSetYn']" ).change( function () {
 			if ( $( this ).val() == 'Y' ) {
@@ -26,7 +25,6 @@
 			}
 		});
 		
-		
 		// 상단안내문 설정에 따라 영역 표시 세팅
 		var upendGdccSetYn = $("[name='upendGdccSetYn']:checked").val();
 		if ( upendGdccSetYn == 'Y' ) {
@@ -42,7 +40,6 @@
 		} else {
 			$( "#lptGdccDiv" ).hide();
 		}
-		
 		
 		// 입력 항목 추가 모달 창에서 newForm 의 입력유형 list 초기화 후 setting 작업
 		// 입력 항목 유형 코드 리스트가 0개 이상일 경우에만 실행 
@@ -149,8 +146,6 @@
 				
 			}
 		}, 100 );
-		
-		
 
 		// 모달창 닫기
 		$( "#addQestnarQestnModal" ).modal( 'hide' );

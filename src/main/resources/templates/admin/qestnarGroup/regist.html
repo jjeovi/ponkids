@@ -7,7 +7,6 @@
 
 	$( function () {
 		
-		
 		// 상단안내문 설정 여부 선택시 상단안내문 표출 처리 설정
 		$( "input:radio[name='upendGdccSetYn']" ).change( function () {
 			if ( $( this ).val() == 'Y' ) {
@@ -25,7 +24,6 @@
 				$( "#lptGdccDiv" ).hide();
 			}
 		});
-		
 		
 		// 입력 항목 추가 모달 창에서 newForm 의 입력유형 list 초기화 후 setting 작업
 		// 입력 항목 유형 코드 리스트가 0개 이상일 경우에만 실행 
@@ -49,6 +47,7 @@
 
 	});
 	// $( function () {}); end
+	
 
 	// form submit 시 유효성 검사
 	function submitValidCheck() {
@@ -77,12 +76,12 @@
 		});
 			
 		return true;
-
 	}
 
 
 	// 입력항목 추가 > 저장 버튼 클릭 event
 	function addQestnarQestn() {
+		
 		// target 신청입력항목 div
 		var $targetDiv = $( "[name='qestnarQestnAddDiv'].newForm" );
 
@@ -105,6 +104,7 @@
 		var $newQestnarQestnForm = $( "<div name='qestnarQestnAddDiv' class='newForm'>" ).load( "/admin/qestnarGroup/addQestnarQestnFormModal.html" );
 		$( "#addQestnarQestnModalBody" ).append( $newQestnarQestnForm )
 		
+		
 		setTimeout( function () {
 			// append 실행 이후 에 해당 부분이 실행 되어야 하므로 100ms 의 시간을 준 뒤 그 이후에 실행한다.
 			// 그렇지 않으면 $("#addQestnarQestnModalBody .newForm") 를 찾지 못한다.
@@ -119,6 +119,7 @@
 				$("#addQestnarQestnModalBody .newForm").find("[name='qestnarQestnItemTyCd']").append(
 					$("<option>").attr("value","").append("입력 유형 선택")
 				)
+				
 				// for 문 돌려서 공통코드에 있는 설문조사 입력 항목 유형 코드 list 순회하여 1개씩 option 으로 추가
 				for ( let item of qestnarQestnItemTyCdList ) {
 					$("#addQestnarQestnModalBody .newForm").find("[name='qestnarQestnItemTyCd']").append(
@@ -129,8 +130,6 @@
 			}
 		}, 100 );
 		
-		
-
 		// 모달창 닫기
 		$( "#addQestnarQestnModal" ).modal( 'hide' );
 		return true;
@@ -182,7 +181,6 @@
 
 	}
 
-
 	// 입력항목 모달 저장시 유효성 검사
 	function qestnarQestnValidCheck( $targetDiv ) {
 
@@ -211,10 +209,7 @@
 				return false;
 			}
 		}
-		
-		
 		 
-
 		return true;
 	}
 
@@ -236,7 +231,6 @@
 				$(this).attr("onclick","return false;")
 			});
 		}
-		
 
 		// 추가
 		$( "#qestnarQestnTableBody" ).append (

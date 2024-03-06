@@ -1,0 +1,21 @@
+<div class="pop_wrap registClassInqry" data-layer-wrap="registClassInqry">
+	<form name="classInqryInsertForm" method="POST" th:action="@{ /classInqry/{mcd}/insert (  mcd = ${mcd} ) }" class="form" onsubmit="return insertClassInqry();" >
+	<div class="pop_top">
+		<button type="button" class="pop_close hide_layer" data-layer-id="registClassInqry" >
+			<img src="/pon/common/image/chat_close.svg" alt="닫기_아이콘">
+		</button>
+	</div>
+	<div class="pop_header">
+		<img src="/pon/common/image/logo.svg" alt="피오니키즈 로고">
+		<h2 class="pop_title"></h2>
+	</div>
+	<div class="pop_content">
+		
+	</div>
+	<div class="pop_footer">
+		<button type="submit" class="btn btn-purple">
+			등록
+		</button>
+	</div>
+	</form>
+</div>

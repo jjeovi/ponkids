@@ -3,7 +3,8 @@
 	  xmlns="http://www.w3.org/1999/xhtml"
 	  xmlns:th="http://www.thymeleaf.org"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
+	  
 	  
 <!-- S : head -->
 <head th:fragment="head" th:insert="pon/layout/tiles/head.html">
@@ -11,14 +12,15 @@
 </head>
 <!-- E : head -->
 
-<!--S : script -->
+<!-- S : script -->
 <div th:fragment="div-script" th:insert="pon/layout/tiles/div-script.html">
 	<!-- Please check the [ pon/layout/tiles/div-script.html.html ] -->
 </div>
-<!--E : script -->
+<!-- E : script -->
 
-<!--S: body-->
+<!-- S: body-->
 <body>
+	
 	<!-- S : header -->
 	<header class="header" th:insert="pon/layout/tiles/header.html" >
 		<!-- Please check the [ pon/layout/tiles/header.html.html ] -->
@@ -46,5 +48,6 @@
 	<!-- E : 문의 챗콘 -->
 	
 </body>
-<!--e: body-->
+<!-- E : body-->
+
 </html>

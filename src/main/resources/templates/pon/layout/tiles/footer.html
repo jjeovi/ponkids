@@ -52,6 +52,8 @@
 <!-- 개인정보처리방침 -->				<div class="layer_personalInfo lv2"			style="display: none;"	th:insert="pon/layer/layer_personalInfo.html"	/>
 <!-- 문의하기 -->						<div class="layer_inquiry"					style="display: none;"	th:insert="pon/layer/layer_inquiry.html"		/>
 
+<!-- 설문조사 layer -->				<div class="layer_qestnar"					style="display: none;"	th:insert="pon/layer/layer_qestnar.html"		/>
+
 <form id="logoutForm" name="logoutForm" th:action="@{ /pon/logout}" method="post">
 	<input type="hidden" name="returnUrl" >
 </form>

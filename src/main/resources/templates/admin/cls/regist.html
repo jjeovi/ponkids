@@ -5,6 +5,7 @@
 
 <script layout:fragment="script">
 
+
 	$( function () {
 
 		// summernote editor 설정
@@ -52,7 +53,6 @@
 			} );
 			// ajax END
 		});
-
 	});
 	// $( function () {}); end
 
@@ -89,10 +89,8 @@
 			return false;
 		}
 		
-		
 	 	// ==================== 유효성 모두 통과 후 dataset 정리 ==================================
 		// ==================== 유효성 모두 통과 후 dataset 정리 ==================================
-			
 	   
 		// 입력항목 정보 배열 처리 :
 		// 입력항목 정보들 각각 값들을 배열화시켜 submit
@@ -105,7 +103,6 @@
 		});
 			
 		return true;
-
 	}
 
 
@@ -138,7 +135,6 @@
 		return true;
 	}
 
-
 	// 신청입력항목 수정 버튼 클릭 > 수정정보 tr에 현행화
 	function updateClsDtl() {
 
@@ -151,7 +147,6 @@
 		// 필수여부 (라디오) 값 hidden 태그에 저장
 		$targetDiv.find( "[name='classDetailEssntlYn']" ).val( $targetDiv.find( "[name='classDetailEssntlYnRadio']:checked" ).val() );
 	
-
 		// S : trNum 번째 찾기
 		var $trNumDiv = $( "[name='clsDtlAddDiv'].modifyForm" );
 		var trNum = $trNumDiv.prevAll().length - 1;
@@ -176,9 +171,7 @@
 		$( "#addClsDtlModal" ).modal( 'hide' );
 
 		return true;
-
 	}
-
 
 	// 입력항목 모달 저장시 유효성 검사
 	function clsDtlValidCheck( $targetDiv ) {
@@ -220,7 +213,6 @@
 		);
 	}
 
-
 	// 입력항목 정보 테이블에 변경사항 수정
 	function modifyClsDtlRow( $targetDiv, trNum ) {
 
@@ -232,7 +224,6 @@
 		$modifyTr.find( "[name='classDetailEssntlYnRadio']" ).text( $targetDiv.find( "[name='classDetailEssntlYnRadio']:checked" ).val() == "Y" ? "필수" : "선택" );
 
 	}
-
 
 	// 신청입력항목 (등록된 항목에서) 수정 버튼 > modal 출력
 	function modifyClsDtl( e ) {
@@ -294,7 +285,6 @@
 				$( this ).find( "[name='trNum']" ).text( ( $( this ).prevAll().length ) + 1 );
 			} );
 		}
-
 	}
 
 	// 모달 버튼 setting

@@ -1583,6 +1583,7 @@ input[type="radio"][disabled]:checked+label{
 	z-index:1000;
 }
 
+
 .join .pop_footer {
 /*	border-top: 3px dashed #9674f1;*/
 }
@@ -1625,7 +1626,9 @@ input[type="radio"][disabled]:checked+label{
 
 .pop_wrap.termsOfUse .pop_content, .pop_wrap.personalInfo .pop_content {
 	overflow-y : auto;
+	color : #000;
 }
+
 
 .pop_wrap.termsOfUse, .pop_wrap.personalInfo {
 	min-width: 30rem;
@@ -1638,9 +1641,11 @@ input[type="radio"][disabled]:checked+label{
     min-height: 15rem;
 }
 
+
 .completeJoin .pop_header .pop_title {
 	margin-top: 38px;
 }
+
 
 
 .completeJoin_wrap .btn {
@@ -1662,8 +1667,6 @@ input[type="radio"][disabled]:checked+label{
 .pop_wrap input:read-only {
     background-color: #c9c6c6;
 }
-
-
 
 
 
