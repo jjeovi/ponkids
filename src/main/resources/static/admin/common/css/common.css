@@ -5936,6 +5936,11 @@ span {
 	display: inline-block;
 }
 
+.qTitle {
+	top: 2px;
+	position: relative;
+}
+
 .qestnarQestnItemTyCnTd {
 	text-align: left !important;
 }

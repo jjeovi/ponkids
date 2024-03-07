@@ -1,20 +1,36 @@
-<div class="pop_wrap registClassInqry" data-layer-wrap="registClassInqry">
+<div class="pop_wrap qestnar" data-layer-wrap="qestnar">
 	<form name="classInqryInsertForm" method="POST" th:action="@{ /classInqry/{mcd}/insert (  mcd = ${mcd} ) }" class="form" onsubmit="return insertClassInqry();" >
 	<div class="pop_top">
-		<button type="button" class="pop_close hide_layer" data-layer-id="registClassInqry" >
+		<button type="button" class="pop_close hide_layer" data-layer-id="qestnar" >
 			<img src="/pon/common/image/chat_close.svg" alt="닫기_아이콘">
 		</button>
 	</div>
 	<div class="pop_header">
 		<img src="/pon/common/image/logo.svg" alt="피오니키즈 로고">
-		<h2 class="pop_title"></h2>
+		<h2 class="pop_title qestnarGroupNm changeQestnarData"></h2>
 	</div>
-	<div class="pop_content">
+	<div class="pop_content overflowY_auto">
+		<div class="qestnar upendGdcc changeQestnarData" >	<!-- 상단안내문 -->
+			
+		</div>
+		<div class="qestnar qestnarList changeQestnarData"> <!-- 질문 리스트 -->
+			<div class="qBox">
+				<div class="qQestnWrap">
+					<p>반갑습니다! 성함을 알려주세요</p>
+				</div>
+				<div class="qAnswerWrap">
+					<input type="text" class="qAnswer">
+				</div>
+			</div>
 		
+		</div>
+		<div class="qestnar lptGdcc changeQestnarData"> <!-- 하단안내문 -->
+			
+		</div>
 	</div>
 	<div class="pop_footer">
 		<button type="submit" class="btn btn-purple">
-			등록
+			제출
 		</button>
 	</div>
 	</form>

@@ -364,7 +364,7 @@ function amtSetComma( val ){
 			success: function ( ajaxResult ) {
 				
 				// 1. 문의 조회 layer 초기화
-				eraseLayerData( ['changeData'] );
+				eraseLayerData( ['changeInqryData'] );
 
 				// 2. 문의 조회 layer data setting
 				setInqryLayerData( ajaxResult );
@@ -429,7 +429,7 @@ function amtSetComma( val ){
 				} else {
 					
 					// 1. 문의 조회 layer 초기화
-					eraseLayerData( ['changeData'] ); 
+					eraseLayerData( ['changeReviewData'] ); 
 					
 					// 2. 후기 조회 layer data setting
 					setReviewLayerData( ajaxResult );
@@ -470,3 +470,157 @@ function amtSetComma( val ){
 	}
 
 /* E : 리뷰 ( 후기 ) */
+
+
+
+/* S : 설문조사 set */
+
+// 설문지 setting 함수 ( 설문조사 그룹 코드로 조회 )
+function setQestnar( qestnarGroupCd ) {
+	
+	// 설문조사 그룹 조회 ( 질문과 선택지까지 모두 조회 )
+	var url = "/qestnarGroup/live/getByQestnarGroupCdAjax";
+	$.ajax( {
+		url: url,
+		type: "GET",
+		dataType: "json",
+		async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+		data: { qestnarGroupCd : qestnarGroupCd }, // 검색할 값
+		contentType: "application/json",
+		success: function ( ajaxResult ) {
+			
+			if ( ajaxResult.flag == "E" ) {
+				alert( ajaxResult.msg );
+				return ;
+			} else if ( ajaxResult.flag == "S" ) {
+				
+				// 0.설문조사 그룹코드별로 설문조사 setting
+				// - QESTN00X : 1:1문의 는 layer 를 --- 로 쓴다. 
+				// - 나머지 그룹코드는 layer_qestn으로 통일
+				var layerName = '';
+				
+				if ( qestnarGroupCd == '' ) {
+					
+				}  else {
+					layerName = 'qestnar';
+				}
+				
+				
+				// 1. 설문조사 layer 초기화
+				eraseLayerData( ['changeQestnarData'] );
+	
+				// 2. 문의 조회 layer data setting
+				setQestnarLayerData( ajaxResult );
+	
+				// 3. 문의 등록 layer 표출
+				showLayer( layerName );
+			}
+			
+		}
+	});
+	
+}
+
+// 설문조사 조회 layer 내용 setting 작업
+function setQestnarLayerData( ajaxResult ) {
+
+	var targetDto = ajaxResult.targetDto;												// 설문조사 그룹
+	var targetQestnarQestnList = ajaxResult.targetQestnarQestnList;					// 설문조사 질문
+	var targetQestnarQestnDetailList = ajaxResult.targetQestnarQestnDetailList;		// 설문조사 질문 상세 (선택지)
+	
+	// TODO 
+	
+	// title
+	$(".pop_header .qestnarGroupNm").text( targetDto.qestnarGroupNm );
+	
+	// upendGdcc
+	if ( targetDto.upendGdccSetYn == 'Y' ) {
+		$(".pop_content .upendGdcc").append( 
+			$( "<div>" ).attr( "class", "upendGdccArea qBox").append(
+				targetDto.upendGdcc
+			)
+		);
+	}
+	
+	// qestnarList
+	if ( targetQestnarQestnList != null && targetQestnarQestnList.length > 0 ) {
+		for(let qItem of targetQestnarQestnList) {
+			
+			$answerType = '';
+			switch( qItem.qestnarQestnItemTyCd ) {
+				
+				case "ANSWER" :
+					
+					$answerType = $( "<input>" ).attr("type", "text" ).attr("class", "qAnswer").attr("id", "A_"+qItem.qestnarQestnSn)
+					break;
+					
+				case "SELECTIVE_ONE" :
+					
+					$answerType += "<div class='optionList'>";
+					for ( let qOption of targetQestnarQestnDetailList ) {
+						
+						if( qItem.qestnarQestnSn == qOption.qestnarQestnSn) {
+							$answerType += "<div class='option_item'>";
+						    $answerType += "    <div class='item_content'>";
+						    $answerType += "        <label class='radioLabel'>";
+						    $answerType += "        <input type='radio' name='" + qOption.qestnarQestnSn + "' value='" + qOption.qestnarQestnDetailSn + "' >";
+						    $answerType += "        " + qOption.qestnarQestnDetailCn ;
+						    $answerType += "        </label>";
+						    $answerType += "    </div>";
+						    $answerType += "</div>";
+						}
+					}
+					$answerType += "</div>";
+					break;
+					
+				case "SELECTIVE_MULTI" :
+					
+					$answerType += "<div class='optionList'>";
+					for ( let qOption of targetQestnarQestnDetailList ) {
+						
+						if( qItem.qestnarQestnSn == qOption.qestnarQestnSn) {
+							$answerType += "<div class='option_item'>";
+						    $answerType += "    <div class='item_content'>";
+						    $answerType += "        <input type='checkbox' value='" + qOption.qestnarQestnDetailSn + "' id='" + qOption.qestnarQestnSn  + "_" + qOption.qestnarQestnDetailSeq  + "'>";
+						    $answerType += "        <label for='" + qOption.qestnarQestnSn  + "_" + qOption.qestnarQestnDetailSeq  + "'>" + qOption.qestnarQestnDetailCn + "</label>";
+						    $answerType += "    </div>";
+						    $answerType += "</div>";
+						}
+					}
+					$answerType += "</div>";
+					
+					break;
+			}
+			
+			$(".pop_content .qestnarList").append( 
+				$( "<div>" ).attr( "class", "qBox").append(
+					$( "<div>" ).attr( "class", "qQestnWrap").append(
+						$( "<p>" ).append( qItem.qestnarQestnItemCn )
+					),
+					$( "<div>" ).attr( "class", "qAnswerWrap").append(
+						$answerType
+					)
+				)
+			);
+//			qItem.
+			
+		}
+		
+	}
+	
+	// - 객관식 일 경우.. 
+	
+	// lptGdcc
+	if ( targetDto.lptGdccSetYn == 'Y' ) {
+		$(".pop_content .lptGdcc").append( 
+			$( "<div>" ).attr( "class", "lptGdccArea qBox").append(
+				targetDto.lptGdcc
+			)
+		);
+	}
+	
+}
+
+
+
+/* E : 설문조사 set */

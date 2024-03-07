@@ -13,28 +13,28 @@
 		<input type="hidden" name="classSn" th:value="${targetDto.classSn}" />
 		<div class="class_info_wrap">
 			<div class="class_detail_box">
-				<div class="class_detail_left changeData" id="thumbImg">
+				<div class="class_detail_left changeInqryData" id="thumbImg">
 					<img th:src="@{/getImage(atchFileSn=${targetDto.thumbAtchFileSn})}" alt="">
 				</div>
 				<div class="class_detail_right">
-					<p id="inqryClassSj" class="changeData classSj">클래스제목</p>
+					<p id="inqryClassSj" class="changeInqryData classSj">클래스제목</p>
 				</div>
 			</div>
 		</div>
 		<!-- 후기 정보 : 별점, 등록일, 등록자, 후기내용, +사진(TODO) , +답글! -->
 		<div class="detail_review_box">
 			<div class="info_top">
-				<span id="detailInqryUserNm" class="review_userNm changeData">홍길동</span>
-				<span id="detailInqryRegDt" class="regDt changeData">
+				<span id="detailInqryUserNm" class="review_userNm changeInqryData">홍길동</span>
+				<span id="detailInqryRegDt" class="regDt changeInqryData">
 					2024-02-20
 				</span>
 			</div>
-			<div id="detailInqryCn" class="info_content changeData">
+			<div id="detailInqryCn" class="info_content changeInqryData">
 				후기 내용 입력
 			</div>
 		</div>
 		<!-- 후기 답변 -->
-		<ul class="changeData" >
+		<ul class="changeInqryData" >
 			<li>
 				<div class="detail_review_box reply">
 					<div class="info_top">

@@ -1,6 +1,8 @@
 package com.meta.ponkids.domain.qestnar.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.meta.ponkids.domain.qestnar.dto.QestnarGroupListDto;
 import com.meta.ponkids.domain.qestnar.dto.QestnarGroupModDto;
@@ -192,8 +194,6 @@ public class QestnarGroupAdmController {
             qestnarQestnService.save( modDto, request );
         }
         
-    	
-        
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
         model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
@@ -218,6 +218,6 @@ public class QestnarGroupAdmController {
         
         return "common/alert";
     }
-	
+    
 
 }

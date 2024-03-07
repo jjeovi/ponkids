@@ -4,6 +4,7 @@ package com.meta.ponkids.domain.qestnar.repository.impl;
 import static com.meta.ponkids.domain.qestnar.entity.QQestnarGroup.qestnarGroup;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -65,27 +66,61 @@ public class QestnarGroupRepositoryImpl implements QestnarGroupRepositoryCustom 
                 .from( qestnarGroup )
                 // where
                 .where(
-		eqOption( listDto.getSchOption(), listDto.getSchCntn() )
-		)
-//                .orderBy( qestnarGroup.qestnarGroupSn.desc())
+                		eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+				)
+                .orderBy( qestnarGroup.qestnarGroupSn.desc())
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )
                 .fetch();
 		
 		
-		// TODO
 		// (2) count
         JPAQuery<Long> count = query.select( qestnarGroup.count() )
                 .from( qestnarGroup )									
                 .where(
                         eqOption( listDto.getSchOption(), listDto.getSchCntn() )
 		);
-                
 
 		return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
-		
 	}
 	
+	@Override
+	public QestnarGroupListDto findByQestnarGroupCd( String qestnarGroupCd ) {
+		
+		return query
+			.select( new QQestnarGroupListDto(
+            		qestnarGroup.qestnarGroupSn,
+            		qestnarGroup.qestnarGroupCd,
+            		qestnarGroup.qestnarGroupNm,
+            		qestnarGroup.qestnarGroupDc,
+            		qestnarGroup.upendGdccSetYn,
+            		qestnarGroup.upendGdcc,
+            		qestnarGroup.lptGdccSetYn,
+            		qestnarGroup.lptGdcc,
+            		qestnarGroup.privcyYn,
+            		new CaseBuilder()
+            		.when( qestnarGroup.privcyYn.eq("Y")).then("공개")
+            		.when( qestnarGroup.privcyYn.eq("N")).then("비공개")
+            		.otherwise("")
+            		.as("privcyYnNm"),
+            		qestnarGroup.useYn,
+            		new CaseBuilder()
+            		.when( qestnarGroup.useYn.eq("Y")).then("사용")
+            		.when( qestnarGroup.useYn.eq("N")).then("미사용")
+            		.otherwise("")
+            		.as("useYnNm"),
+            		qestnarGroup.registerId,
+            		Expressions.stringTemplate("to_char({0}, '{1s}')", qestnarGroup.regDt, "YYYY-MM-DD HH24:MI:SS")
+            		) )
+			.from( qestnarGroup )
+			.where(
+					qestnarGroup.qestnarGroupCd.eq( qestnarGroupCd )
+			)
+			.orderBy(
+					qestnarGroup.qestnarGroupSn.desc()	
+			)
+			.fetchFirst();
+	}
 	
     private BooleanExpression eqOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨

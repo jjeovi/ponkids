@@ -47,7 +47,7 @@ public class QestnarGroupService {
     }
     
     
-    public QestnarGroupModDto findById( Long pk ) {	// TODO 타입 체크 필요
+    public QestnarGroupModDto findById( Long pk ) {	
         
         QestnarGroup qestnarGroup = qestnarGroupRepository.findById( pk ).orElse(null);
         
@@ -61,6 +61,11 @@ public class QestnarGroupService {
 	        
 	        return modDto;
         }
+    }
+    
+    public QestnarGroupListDto findByQestnarGroupCd( String qestnarGroupCd ) {	
+    	
+    	return qestnarGroupRepository.findByQestnarGroupCd(qestnarGroupCd);
     }
     
     @Transactional

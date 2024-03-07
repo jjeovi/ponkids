@@ -1538,6 +1538,7 @@ input[type="radio"][disabled]:checked+label{
     border: 2px solid #b098f2;
     border-radius: 4px;
     vertical-align: middle;
+    margin-right:10px;
   }
   
 /* label:before에 체크 된 상태 CSS */  
@@ -1861,3 +1862,202 @@ input[type="radio"][disabled]:checked+label{
 .detail_review_box .like_star img{ max-width: 17px; }
 
 /* E : 클래스 리뷰 (상세 조회 ) */
+
+
+
+
+
+/* S :  설문조사 layer */
+.layer_qestnar .pop_wrap {
+	background-color : #ece5ff;
+}
+
+.layer_qestnar .pop_content {
+	width: 90%;
+	margin: 0 auto;
+}
+
+.layer_qestnar .pop_content .qBox {
+	min-height: 40px;
+    height: auto;
+    border: 1px solid #cdcdcd;
+    border-radius: 10px;
+    padding: 20px 15px;
+    background-color: #fff;
+}
+
+.layer_qestnar .pop_content .upendGdcc {
+    border-bottom: 2px solid #fff;
+}
+
+.layer_qestnar .pop_content .lptGdcc {
+    border-top: 2px solid #fff;
+}
+
+.layer_qestnar .pop_content .qestnarList {
+    margin: 10px 0px;
+}
+
+.layer_qestnar .pop_content .upendGdccArea {
+	margin-bottom: 20px;
+    border-top: 10px solid #9674f1;
+}
+
+.layer_qestnar .pop_content .lptGdccArea {
+	margin-top: 20px;
+    border-bottom: 3px solid #8f8f8f;
+}
+
+.layer_qestnar .qestnarList .qQestnWrap{
+	padding-top:10px;
+	padding-bottom : 10px;
+	padding-left:5px;
+}
+
+.layer_qestnar .qestnarList .qAnswerWrap{
+	padding-left:5px;
+}
+.layer_qestnar .qestnarList .qAnswerWrap input[type='text'] {
+	padding-left:5px;
+	width: 90%;
+    border: none;
+    border-bottom: 2px solid #e0e0e0;
+    margin-top : 10px;
+    height:35px;
+    font-size : 15px;
+}
+
+.layer_qestnar .qestnarList .qAnswerWrap input[type='text']:focus {
+	outline:none;
+	border-bottom: 2px solid #876dcb;
+}
+
+.qestnarList .qBox {
+	margin-bottom:10px;
+}
+
+.pop_wrap.qestnar .pop_footer .btn {
+	width: 20%;
+    padding: 0.5rem 0.5rem 0.1rem;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    float: right;
+    left: -4px;
+    position: relative;
+    border-radius: 6px;
+    margin-top: 30px;
+    height: 42px;
+}
+
+
+
+.optionList {
+	min-height: 100px;
+	height : auto;
+    border-top: 1px dashed #b8b8b8;
+    margin-top: 10px;
+    padding-top:10px;
+    padding-left:5px;
+}
+
+.optionList .option_item {
+	margin-top: 8px;
+    height: 35px;
+}
+
+.option_item .item_content {
+	display: inline-block;
+	width: calc(100% - 115px );
+}
+
+.option_item .item_content input {
+    width: 90%;
+}
+.option_item .item_content input[type="text"]:read-only {
+    color: #73879C;
+    font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.471;
+    border: none;
+    width: 90%;
+}
+.option_item .item_content input[type="text"]{
+    border: 1px solid #979797;
+    border-radius: 4px;
+    padding: 3px;
+    padding-left: 7px;
+}
+
+.option_item .item_manage {
+	display: inline-block;
+    float: right;
+}
+
+
+input::placeholder {
+	color:#bfbfbf !important;
+	font-style: italic;
+}
+
+.item_content input[type="radio"],
+span {
+	vertical-align: middle;
+	appearance: none;
+}
+
+.pop_wrap .radioLabel {
+	cursor:pointer;
+}
+
+.pop_wrap input[type="radio"]:read-only {
+	background-color: #fff;
+}
+
+.item_content input[type="radio"]:checked {
+  	border: 2px solid #784ccd;
+  background-color: #9776f1;
+}
+
+.item_content input[type="radio"]:focus-visible {
+  outline: max(2px, 0.1em) dotted tomato;
+  outline-offset: max(2px, 0.1em);
+}
+
+.item_content input[type="radio"]:hover {
+  box-shadow: 0 0 0 max(4px, 0.2em) lightgray;
+  cursor: pointer;
+}
+
+.item_content input[type="radio"]:hover + span {
+  cursor: pointer;
+}
+
+.item_content input[type="radio"]:disabled {
+  background-color: lightgray;
+  box-shadow: none;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.item_content input[type="radio"]:disabled + span {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.item_content input[type="radio"] {
+  vertical-align: middle;
+  appearance: none;
+  border: max(2px, 0.1em) solid #9674f1;
+  border-radius: 50%;
+  width: 1.25em;
+  height: 1.25em;
+  transition: border 0.5s ease-in-out;
+}
+
+.pop_wrap.qestnar {
+	max-height: 700px;
+}
+
+
+/* E :  설문조사 layer */
