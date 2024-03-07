@@ -28,24 +28,30 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @DynamicInsert // insert 구문 시 null 이 아닌 값들만 insert
 @DynamicUpdate // update 구문 시 null 이 아닌 값들만 update
-@SequenceGenerator(	
-        name = "SEQ_TB_qestnar_answer_SN",
-        sequenceName = "SEQ_TB_qestnar_answer_SN",
+@SequenceGenerator(
+        name = "SEQ_TB_qestnar_answer_detail_SN",
+        sequenceName = "SEQ_TB_qestnar_answer_detail_SN",
         initialValue = 1,
         allocationSize = 1
 )
 @Where( clause = "del_yn = 'N'") // DEFAULT 로 WHERE DEL_YN = 'N' 문을 추가하여 조회
-@SQLDelete(sql = "UPDATE {h-schema}tb_qestnar_answer SET del_yn ='Y', updt_dt = now() WHERE qestnar_answer_sn = ?") // delelte 시 실행 (ex ) ~Repository.deleteById)
-@Table( name = "TB_qestnar_answer" )
-public class QestnarAnswer extends BaseTimeEntity {
+@SQLDelete(sql = "UPDATE {h-schema}tb_qestnar_answer_detail SET del_yn ='Y', updt_dt = now() WHERE qestnar_answer_detail_sn = ?") // delelte 시 실행 (ex ) ~Repository.deleteById)
+@Table( name = "TB_qestnar_answer_detail" )
+public class QestnarAnswerDetail extends BaseTimeEntity {
 	
 	@Id
-	@GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_qestnar_answer_SN" )
-	private Long qestnarAnswerSn;
+	@GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_qestnar_answer_detail_SN" )
+	private Long 	qestnarAnswerDetailSn;
 	
-	private Long qestnarGroupSn;
+	private Long 	qestnarAnswerSn;
 	
-	private Long userSn;	// null 가능
+	private Long 	qestnarQestnSn;
+	
+	private String 	qestnarAnswer;				// 입력유형이 주관식일 경우
+	
+	private Long 	qestnarQestnDetailSn;		// 입력유형이 객관식일 경우
+	
+	private Long 	atchFileSn;					// 입력유형이 첨부파일일 경우
 	
 	@Column(updatable = false)
 	private String registerId;          // 등록자 ID

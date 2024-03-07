@@ -1,5 +1,6 @@
 <div class="pop_wrap qestnar" data-layer-wrap="qestnar">
-	<form name="classInqryInsertForm" method="POST" th:action="@{ /classInqry/{mcd}/insert (  mcd = ${mcd} ) }" class="form" onsubmit="return insertClassInqry();" >
+	<form name="qestnarInsertForm" method="POST" th:action="@{ /qestnarAnswer/insert }" class="form" onsubmit="return insertQestnarAnswer();" >
+	<input type="hidden" name="qestnarGroupSn changeQestnarData" />
 	<div class="pop_top">
 		<button type="button" class="pop_close hide_layer" data-layer-id="qestnar" >
 			<img src="/pon/common/image/chat_close.svg" alt="닫기_아이콘">

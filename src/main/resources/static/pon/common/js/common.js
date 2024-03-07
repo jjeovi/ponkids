@@ -521,49 +521,59 @@ function setQestnar( qestnarGroupCd ) {
 	
 }
 
+
+
+var _targetQestnarGroup;			// 설문조사 그룹 
+var _targetQestnarQestn;			// 설문조사 질문 list
+var _targetQestnarQestnDetail;		// 설문조사 질문 상세 list
 // 설문조사 조회 layer 내용 setting 작업
 function setQestnarLayerData( ajaxResult ) {
 
-	var targetDto = ajaxResult.targetDto;												// 설문조사 그룹
-	var targetQestnarQestnList = ajaxResult.targetQestnarQestnList;					// 설문조사 질문
-	var targetQestnarQestnDetailList = ajaxResult.targetQestnarQestnDetailList;		// 설문조사 질문 상세 (선택지)
+	var _targetQestnarGroup = ajaxResult.targetDto;									// 설문조사 그룹
+	var _targetQestnarQestn = ajaxResult.targetQestnarQestnList;					// 설문조사 질문
+	var _targetQestnarQestnDetail = ajaxResult.targetQestnarQestnDetailList;		// 설문조사 질문 상세 (선택지)
 	
 	// TODO 
-	
 	// title
-	$(".pop_header .qestnarGroupNm").text( targetDto.qestnarGroupNm );
+	$(".pop_header .qestnarGroupNm").text( _targetQestnarGroup.qestnarGroupNm );
 	
-	// upendGdcc
-	if ( targetDto.upendGdccSetYn == 'Y' ) {
+	// qestnarGroupSn
+	$("[name='qestnarInsertForm']").find("[name='qestnarGroupSn']").text( _targetQestnarGroup.qestnarGroupSn );
+	
+	
+	
+	
+	// upendGdcc : 상단 안내문
+	if ( _targetQestnarGroup.upendGdccSetYn == 'Y' ) {
 		$(".pop_content .upendGdcc").append( 
 			$( "<div>" ).attr( "class", "upendGdccArea qBox").append(
-				targetDto.upendGdcc
+				_targetQestnarGroup.upendGdcc
 			)
 		);
 	}
 	
 	// qestnarList
-	if ( targetQestnarQestnList != null && targetQestnarQestnList.length > 0 ) {
-		for(let qItem of targetQestnarQestnList) {
+	if ( _targetQestnarQestn != null && _targetQestnarQestn.length > 0 ) {
+		for(let qItem of _targetQestnarQestn) {
 			
 			$answerType = '';
 			switch( qItem.qestnarQestnItemTyCd ) {
 				
 				case "ANSWER" :
 					
-					$answerType = $( "<input>" ).attr("type", "text" ).attr("class", "qAnswer").attr("id", "A_"+qItem.qestnarQestnSn)
+					$answerType = $( "<input>" ).attr("type", "text" ).attr("class", "qAnswer").attr("name", "qestnarAnswer" ).attr("id", "A_" + qItem.qestnarQestnSn )
 					break;
 					
 				case "SELECTIVE_ONE" :
 					
 					$answerType += "<div class='optionList'>";
-					for ( let qOption of targetQestnarQestnDetailList ) {
+					for ( let qOption of _targetQestnarQestnDetail ) {
 						
 						if( qItem.qestnarQestnSn == qOption.qestnarQestnSn) {
 							$answerType += "<div class='option_item'>";
 						    $answerType += "    <div class='item_content'>";
 						    $answerType += "        <label class='radioLabel'>";
-						    $answerType += "        <input type='radio' name='" + qOption.qestnarQestnSn + "' value='" + qOption.qestnarQestnDetailSn + "' >";
+						    $answerType += "        <input type='radio' name='qestnarQestnDetailSn' value='" + qOption.qestnarQestnDetailSn + "' >";
 						    $answerType += "        " + qOption.qestnarQestnDetailCn ;
 						    $answerType += "        </label>";
 						    $answerType += "    </div>";
@@ -576,12 +586,12 @@ function setQestnarLayerData( ajaxResult ) {
 				case "SELECTIVE_MULTI" :
 					
 					$answerType += "<div class='optionList'>";
-					for ( let qOption of targetQestnarQestnDetailList ) {
+					for ( let qOption of _targetQestnarQestnDetail ) {
 						
 						if( qItem.qestnarQestnSn == qOption.qestnarQestnSn) {
 							$answerType += "<div class='option_item'>";
 						    $answerType += "    <div class='item_content'>";
-						    $answerType += "        <input type='checkbox' value='" + qOption.qestnarQestnDetailSn + "' id='" + qOption.qestnarQestnSn  + "_" + qOption.qestnarQestnDetailSeq  + "'>";
+						    $answerType += "        <input type='checkbox' name='qestnarQestnDetailSn' value='" + qOption.qestnarQestnDetailSn + "' id='" + qOption.qestnarQestnSn  + "_" + qOption.qestnarQestnDetailSeq  + "'>";
 						    $answerType += "        <label for='" + qOption.qestnarQestnSn  + "_" + qOption.qestnarQestnDetailSeq  + "'>" + qOption.qestnarQestnDetailCn + "</label>";
 						    $answerType += "    </div>";
 						    $answerType += "</div>";
@@ -592,8 +602,8 @@ function setQestnarLayerData( ajaxResult ) {
 					break;
 			}
 			
-			$(".pop_content .qestnarList").append( 
-				$( "<div>" ).attr( "class", "qBox").append(
+			$(".pop_content .qestnarList").append(
+				$( "<div>" ).attr( "class", "qBox").attr("id", "qestarItem_" +  + qItem.qestnarQestnSn ).append(
 					$( "<div>" ).attr( "class", "qQestnWrap").append(
 						$( "<p>" ).append( qItem.qestnarQestnItemCn )
 					),
@@ -602,22 +612,36 @@ function setQestnarLayerData( ajaxResult ) {
 					)
 				)
 			);
-//			qItem.
 			
 		}
 		
 	}
 	
-	// - 객관식 일 경우.. 
-	
-	// lptGdcc
-	if ( targetDto.lptGdccSetYn == 'Y' ) {
+	// lptGdcc : 하단 안내문
+	if ( _targetQestnarGroup.lptGdccSetYn == 'Y' ) {
 		$(".pop_content .lptGdcc").append( 
 			$( "<div>" ).attr( "class", "lptGdccArea qBox").append(
-				targetDto.lptGdcc
+				_targetQestnarGroup.lptGdcc
 			)
 		);
 	}
+	
+}
+
+// 설문조사 제출 버튼 클릭시 
+function insertQestnarAnswer(){
+	
+	// 필수 항목 유효성 검사.   
+	
+	// =========================== 유효성 검사 종료 이후 값 정형화 setting ================
+	// =========================== 유효성 검사 종료 이후 값 정형화 setting ================
+	// =========================== 유효성 검사 종료 이후 값 정형화 setting ================
+	
+	// - 주관식
+	// - 객관식 (단일) 
+	// - 객관식 (다중)
+	
+	return false;
 	
 }
 
