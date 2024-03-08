@@ -476,7 +476,8 @@ function amtSetComma( val ){
 /* S : 설문조사 set */
 
 // 설문지 setting 함수 ( 설문조사 그룹 코드로 조회 )
-function setQestnar( qestnarGroupCd ) {
+// - 문의 설문조사만 레이아웃디자인이 달라서 함수를 따로 구현 ( 설문조사 그룹 코드로 조회 )
+function setQestnar( qestnarGroupCd, layerName ) {
 	
 	// 설문조사 그룹 조회 ( 질문과 선택지까지 모두 조회 )
 	var url = "/qestnarGroup/live/getByQestnarGroupCdAjax";
@@ -497,22 +498,21 @@ function setQestnar( qestnarGroupCd ) {
 				// 0.설문조사 그룹코드별로 설문조사 setting
 				// - QESTN00X : 1:1문의 는 layer 를 --- 로 쓴다. 
 				// - 나머지 그룹코드는 layer_qestn으로 통일
-				var layerName = '';
 				
-				if ( qestnarGroupCd == '' ) {
-					
-				}  else {
-					layerName = 'qestnar';
-				}
-				
-				
-				// 1. 설문조사 layer 초기화
+				// 1. layer 초기화
 				eraseLayerData( ['changeQestnarData'] );
 	
-				// 2. 문의 조회 layer data setting
-				setQestnarLayerData( ajaxResult );
+				// layout 에 따라 디자인을 다르게 설정.
+				if ( layerName == 'qestnar' ) {
+					// 2. layer data setting
+					setQestnarLayerData( ajaxResult );
+				} else if ( layerName == 'inquiry' ) {
+					// 2. layer data setting
+					setQestnarForInquiryLayerData( ajaxResult );
+					
+				}
 	
-				// 3. 문의 등록 layer 표출
+				// 3. layer 표출
 				showLayer( layerName );
 			}
 			
@@ -524,28 +524,25 @@ function setQestnar( qestnarGroupCd ) {
 
 
 var _targetQestnarGroup;			// 설문조사 그룹 
-var _targetQestnarQestn;			// 설문조사 질문 list
-var _targetQestnarQestnDetail;		// 설문조사 질문 상세 list
+var _targetQestnarQestnList;			// 설문조사 질문 list
+var _targetQestnarQestnDetailList;		// 설문조사 질문 상세 list
+
 // 설문조사 조회 layer 내용 setting 작업
 function setQestnarLayerData( ajaxResult ) {
 
 	var _targetQestnarGroup = ajaxResult.targetDto;									// 설문조사 그룹
-	var _targetQestnarQestn = ajaxResult.targetQestnarQestnList;					// 설문조사 질문
-	var _targetQestnarQestnDetail = ajaxResult.targetQestnarQestnDetailList;		// 설문조사 질문 상세 (선택지)
+	var _targetQestnarQestnList = ajaxResult.targetQestnarQestnList;					// 설문조사 질문
+	var _targetQestnarQestnDetailList = ajaxResult.targetQestnarQestnDetailList;		// 설문조사 질문 상세 (선택지)
 	
-	// TODO 
 	// title
 	$(".pop_header .qestnarGroupNm").text( _targetQestnarGroup.qestnarGroupNm );
 	
 	// qestnarGroupSn
-	$("[name='qestnarInsertForm']").find("[name='qestnarGroupSn']").text( _targetQestnarGroup.qestnarGroupSn );
-	
-	
-	
+	$("[name='qestnarInsertForm']").find("[name='qestnarGroupSn']").val( _targetQestnarGroup.qestnarGroupSn );
 	
 	// upendGdcc : 상단 안내문
 	if ( _targetQestnarGroup.upendGdccSetYn == 'Y' ) {
-		$(".pop_content .upendGdcc").append( 
+		$("[name='qestnarInsertForm']").find(".pop_content .upendGdcc").append( 
 			$( "<div>" ).attr( "class", "upendGdccArea qBox").append(
 				_targetQestnarGroup.upendGdcc
 			)
@@ -553,27 +550,36 @@ function setQestnarLayerData( ajaxResult ) {
 	}
 	
 	// qestnarList
-	if ( _targetQestnarQestn != null && _targetQestnarQestn.length > 0 ) {
-		for(let qItem of _targetQestnarQestn) {
+	if ( _targetQestnarQestnList != null && _targetQestnarQestnList.length > 0 ) {
+		for(let qItem of _targetQestnarQestnList) {
 			
 			$answerType = '';
+			
+			// 필수여부 변수
+			var qestnarQestnEssntlYn = ( qItem.qestnarQestnEssntlYn == 'Y') ? ' required' : '' ;
+			
 			switch( qItem.qestnarQestnItemTyCd ) {
 				
 				case "ANSWER" :
 					
-					$answerType = $( "<input>" ).attr("type", "text" ).attr("class", "qAnswer").attr("name", "qestnarAnswer" ).attr("id", "A_" + qItem.qestnarQestnSn )
+					$answerType = $( "<input>" ).attr("type", "text" ).attr("class", "qAnswer" + qestnarQestnEssntlYn ).attr("name", "qestnarAnswer" )
+					break;
+				
+				case "ANSWER_LONG" :
+					
+					$answerType = $( "<textarea>" ).attr("class", "qAnswer" + qestnarQestnEssntlYn ).attr("name", "qestnarAnswer" ).attr("rows", "10").attr("cols", "30")
 					break;
 					
 				case "SELECTIVE_ONE" :
 					
 					$answerType += "<div class='optionList'>";
-					for ( let qOption of _targetQestnarQestnDetail ) {
+					for ( let qOption of _targetQestnarQestnDetailList ) {
 						
 						if( qItem.qestnarQestnSn == qOption.qestnarQestnSn) {
 							$answerType += "<div class='option_item'>";
 						    $answerType += "    <div class='item_content'>";
 						    $answerType += "        <label class='radioLabel'>";
-						    $answerType += "        <input type='radio' name='qestnarQestnDetailSn' value='" + qOption.qestnarQestnDetailSn + "' >";
+						    $answerType += "        <input type='radio' name='qestnarQestnDetailSn' value='" + qOption.qestnarQestnDetailSn + "' class='qAnswer" + qestnarQestnEssntlYn + "' >";
 						    $answerType += "        " + qOption.qestnarQestnDetailCn ;
 						    $answerType += "        </label>";
 						    $answerType += "    </div>";
@@ -586,12 +592,12 @@ function setQestnarLayerData( ajaxResult ) {
 				case "SELECTIVE_MULTI" :
 					
 					$answerType += "<div class='optionList'>";
-					for ( let qOption of _targetQestnarQestnDetail ) {
+					for ( let qOption of _targetQestnarQestnDetailList ) {
 						
 						if( qItem.qestnarQestnSn == qOption.qestnarQestnSn) {
 							$answerType += "<div class='option_item'>";
 						    $answerType += "    <div class='item_content'>";
-						    $answerType += "        <input type='checkbox' name='qestnarQestnDetailSn' value='" + qOption.qestnarQestnDetailSn + "' id='" + qOption.qestnarQestnSn  + "_" + qOption.qestnarQestnDetailSeq  + "'>";
+						    $answerType += "        <input type='checkbox' name='qestnarQestnDetailSnList' value='" + qOption.qestnarQestnDetailSn + "' class='qAnswer" + qestnarQestnEssntlYn + "' >";
 						    $answerType += "        <label for='" + qOption.qestnarQestnSn  + "_" + qOption.qestnarQestnDetailSeq  + "'>" + qOption.qestnarQestnDetailCn + "</label>";
 						    $answerType += "    </div>";
 						    $answerType += "</div>";
@@ -602,8 +608,11 @@ function setQestnarLayerData( ajaxResult ) {
 					break;
 			}
 			
-			$(".pop_content .qestnarList").append(
-				$( "<div>" ).attr( "class", "qBox").attr("id", "qestarItem_" +  + qItem.qestnarQestnSn ).append(
+			$("[name='qestnarInsertForm']").find(".pop_content .qestnarList").append(
+				$( "<div>" ).attr( "class", "qBox").append(
+					
+					$( "<input>" ).attr( "type", "hidden" ).attr( "name", "qestnarQestnSn" ).attr( "value", qItem.qestnarQestnSn ).append(),
+					$( "<input>" ).attr( "type", "hidden" ).attr( "name", "qestnarQestnItemTyCd" ).attr( "value", qItem.qestnarQestnItemTyCd ).append(),
 					$( "<div>" ).attr( "class", "qQestnWrap").append(
 						$( "<p>" ).append( qItem.qestnarQestnItemCn )
 					),
@@ -628,21 +637,179 @@ function setQestnarLayerData( ajaxResult ) {
 	
 }
 
-// 설문조사 제출 버튼 클릭시 
-function insertQestnarAnswer(){
+
+// 설문조사 조회 layer 내용 setting 작업 -> 1:1문의 용 layer set 
+function setQestnarForInquiryLayerData( ajaxResult ) {
+	var _targetQestnarGroup = ajaxResult.targetDto;									// 설문조사 그룹
+	var _targetQestnarQestnList = ajaxResult.targetQestnarQestnList;					// 설문조사 질문
+	var _targetQestnarQestnDetailList = ajaxResult.targetQestnarQestnDetailList;		// 설문조사 질문 상세 (선택지)
 	
-	// 필수 항목 유효성 검사.   
+	// qestnarGroupSn
+	$("[name='qestnarForInquiryInsertForm']").find("[name='qestnarGroupSn']").val( _targetQestnarGroup.qestnarGroupSn );
+	
+	// upendGdcc : 상단 안내문
+	if ( _targetQestnarGroup.upendGdccSetYn == 'Y' ) {
+		$("[name='qestnarForInquiryInsertForm']").find(".pop_content .upendGdcc").append( 
+			$( "<div>" ).attr( "class", "upendGdccArea qBox").append(
+				_targetQestnarGroup.upendGdcc
+			)
+		);
+	}
+	
+	// qestnarList
+	if ( _targetQestnarQestnList != null && _targetQestnarQestnList.length > 0 ) {
+		for(let qItem of _targetQestnarQestnList) {
+			
+			$answerType = '';
+			
+			var classNm = 'chat_tit_form';	// 기본 클래스 ( ANSWER_LONG 일때만 다른 class 사용.. )
+			
+			// 필수여부 변수
+			var qestnarQestnEssntlYn = ( qItem.qestnarQestnEssntlYn == 'Y') ? ' required' : '' ;
+			
+			
+			switch( qItem.qestnarQestnItemTyCd ) {
+				
+				case "ANSWER" :
+					
+					$answerType = $( "<input>" ).attr("type", "text" ).attr("class", "qAnswer" + qestnarQestnEssntlYn ).attr("name", "qestnarAnswer" ).attr("placeholder", qItem.qestnarQestnItemCn)
+					break;
+									
+				case "ANSWER_LONG" :
+					
+					classNm = 'chat_disc_form';
+					$answerType = $( "<textarea>" ).attr("class", "qAnswer" + qestnarQestnEssntlYn ).attr("name", "qestnarAnswer" ).attr("rows", "10").attr("cols", "30").attr("placeholder", qItem.qestnarQestnItemCn)
+					break;
+					
+				case "SELECTIVE_ONE" :
+					
+					$answerType += "<select name='qestnarQestnDetailSn' class='qAnswer" + qestnarQestnEssntlYn + "' >";
+					$answerType += "	<option value='' >" + qItem.qestnarQestnItemCn + " 선택</option>";
+					
+					for ( let qOption of _targetQestnarQestnDetailList ) {
+						
+						if( qItem.qestnarQestnSn == qOption.qestnarQestnSn) {
+							$answerType += "	<option value='" + qOption.qestnarQestnDetailSn + "' >" + qOption.qestnarQestnDetailCn + "</option>";
+						}
+					}
+					$answerType += "</select>";
+					break;
+					
+				case "SELECTIVE_MULTI" :
+					// TODO
+					
+//					$answerType += "<div class='optionList'>";
+//					for ( let qOption of _targetQestnarQestnDetailList ) {
+//						
+//						if( qItem.qestnarQestnSn == qOption.qestnarQestnSn) {
+//							$answerType += "<div class='option_item'>";
+//						    $answerType += "    <div class='item_content'>";
+//						    $answerType += "        <input type='checkbox' name='qestnarQestnDetailSnList' value='" + qOption.qestnarQestnDetailSn + "' id='" + qOption.qestnarQestnSn  + "_" + qOption.qestnarQestnDetailSeq  + "'>";
+//						    $answerType += "        <label for='" + qOption.qestnarQestnSn  + "_" + qOption.qestnarQestnDetailSeq  + "'>" + qOption.qestnarQestnDetailCn + "</label>";
+//						    $answerType += "    </div>";
+//						    $answerType += "</div>";
+//						}
+//					}
+//					$answerType += "</div>";
+					
+					break;
+			}
+			
+			$("[name='qestnarForInquiryInsertForm']").find(".qestnarList").append(
+				$( "<div>" ).attr( "class", classNm + " qBox").append(
+					
+					$( "<input>" ).attr( "type", "hidden" ).attr( "name", "qestnarQestnSn" ).attr( "value", qItem.qestnarQestnSn ).append(),
+					$( "<input>" ).attr( "type", "hidden" ).attr( "name", "qestnarQestnItemTyCd" ).attr( "value", qItem.qestnarQestnItemTyCd ).append(),
+					$( "<div>" ).attr( "class", "qAnswerWrap").append(
+						$answerType
+					)
+				)
+			);
+			
+		}
+		
+	}
+	
+	// lptGdcc : 하단 안내문
+	if ( _targetQestnarGroup.lptGdccSetYn == 'Y' ) {
+		$(".pop_content .lptGdcc").append( 
+			$( "<div>" ).attr( "class", "lptGdccArea qBox").append(
+				_targetQestnarGroup.lptGdcc
+			)
+		);
+	}
+	
+}
+
+// 설문조사 제출 버튼 클릭시 
+function insertQestnarAnswer( formName ){
+	
+	// S :  유효성 체크
+	$("[name='" + formName + "']").find( ".qestnarList" ).find(".qBox").each( function ( index ) {
+		var checkValid = false;
+		// input 
+		var qestnarQestnItemTyCd = $(this).find("[name='qestnarQestnItemTyCd']").val();
+		
+		switch( qestnarQestnItemTyCd ) {
+				
+			case "ANSWER" :
+				break;
+								
+			case "ANSWER_LONG" :
+				break;
+				
+			case "SELECTIVE_ONE" :
+				break;
+				
+			case "SELECTIVE_MULTI" :
+				break;
+		}
+		
+		
+		if ( checkValid ) {
+			alert("확인해주세요.");
+			return false;
+		}
+		
+	});
+	// E :  유효성 체크
 	
 	// =========================== 유효성 검사 종료 이후 값 정형화 setting ================
 	// =========================== 유효성 검사 종료 이후 값 정형화 setting ================
 	// =========================== 유효성 검사 종료 이후 값 정형화 setting ================
 	
 	// - 주관식
+	// - 주관식 장문형
 	// - 객관식 (단일) 
 	// - 객관식 (다중)
 	
-	return false;
+	// 입력항목 정보 배열 처리 :
+	// 입력항목 정보들 각각 값들을 배열화시켜 submit
+	// div name : qestnarQestnAddDiv 중 newForm 이 아닌 div 를 배열로 정리
+	$("[name='" + formName + "']").find( ".qestnarList" ).find(".qBox").each( function ( index ) {
+		
+			// list 를 수동으로 처리
+			// =========================
+			// qestnarQestnItemTyCd
+			// qestnarQestnSn
+			// qestnarAnswer
+			// qestnarQestnDetailSn
+			// qestnarQestnDetailSnList
+			// =========================
+			// 입력 유형, 입력 항목, 필수 여부
+			$( this ).find( "[name=qestnarQestnSn]" ).attr( "name", "qestnarAnswerDetails[" + index + "].qestnarQestnSn" );		// 입력 유형 항목 코드
+			$( this ).find( "[name=qestnarQestnItemTyCd]" ).attr( "name", "qestnarAnswerDetails[" + index + "].qestnarQestnItemTyCd" );		// 입력유형항목코드
+			$( this ).find( "[name=qestnarAnswer]" ).attr( "name", "qestnarAnswerDetails[" + index + "].qestnarAnswer" );		// 입력 유형 항목 코드
+			$( this ).find( "[name=qestnarQestnDetailSn]" ).attr( "name", "qestnarAnswerDetails[" + index + "].qestnarQestnDetailSn" );		// 입력 유형 항목 코드
+			$( this ).find( "[name=qestnarQestnDetailSnList]" ).attr( "name", "qestnarAnswerDetails[" + index + "].qestnarQestnDetailSnList" );		// 입력 유형 항목 코드
+	});
 	
+	// 필수 항목 유효성 검사.   
+	if(confirm("제출하시겠습니까?")) {
+		return true;
+	}
+	
+	return false;
 }
 
 

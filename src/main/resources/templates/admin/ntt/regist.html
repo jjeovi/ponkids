@@ -18,7 +18,7 @@ $(document).ready(function() {
 			<div class="x_panel">
 				<div class="x_content">
 					<form id="insertForm" name="insertForm" method="post"  th:action="@{ {basicPath}/mcd/insert ( basicPath = ${basicPath} ) }"
-						  th:object="${nttSaveReqDto}"  enctype="multipart/form-data">
+						  th:object="${nttSaveReqDto}"  enctype="multipart/form-data" >
 						<input type="hidden" name="bbsSn" th:value="${bbsSn}"/>
 						<!-- TODO 프로필 이미지 추가 작업 -->
 						<div class="field item form-group">

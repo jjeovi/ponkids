@@ -1,12 +1,11 @@
-<div class="layer_popup chatWrap show">
+<form name="qestnarForInquiryInsertForm" method="POST" th:action="@{ /qestnarAnswer/insert }" class="form" onsubmit="return insertQestnarAnswer( 'qestnarForInquiryInsertForm' );" >
+<input type="hidden" name="qestnarGroupSn" 			class="changeQestnarData"  />
+<div class="chatWrap" data-layer-wrap="inquiry">
 	<div class="chat_box">
 		<div class="chat_top">
 			<div class="chat_top_box">
 				<div class="chat_logo">
 					<img src="/pon/common/image/logo.svg" alt="">
-				</div>
-				<div class="chat_inquiry">
-					<button>문의하기</button>
 				</div>
 			</div>
 		</div>
@@ -14,14 +13,21 @@
 			<div class="tabcontent">
 				<div id="tab01" style="">
 					<div class="chat_form_box">
-						<div class="chat_tit_form">
-							<input type="text" placeholder="제목">
-						</div>
-						<div class="chat_disc_form">
-							<textarea name="" id="" cols="30" rows="10" placeholder="내용"></textarea>
+						<div class="qestnarList changeQestnarData">
+							<div class="chat_tit_form qBox">
+								<select name="">
+									<option value="">문의유형 선택</option>
+								</select>
+							</div>
+							<div class="chat_tit_form qBox">
+								<input type="text" placeholder="제목">
+							</div>
+							<div class="chat_disc_form qBox">
+								<textarea name="" id="" cols="30" rows="10" placeholder="내용"></textarea>
+							</div>
 						</div>
 						<div class="send_btn">
-							<button>보내기</button>
+							<button>제출하기</button>
 						</div>
 					</div>
 				</div>
@@ -67,4 +73,4 @@
 		<img src="/pon/common/image/chat_close.svg" alt="">
 	</div>
 </div>
-
+</form>

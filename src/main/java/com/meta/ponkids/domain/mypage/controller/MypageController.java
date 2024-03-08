@@ -37,6 +37,11 @@ public class MypageController {
     
     private final LctreReqstService lctreReqstService;
     
+    
+    // layout 관련 dataSet 처리는 
+    // - MypageAop.java 에서 처리 ( 관심개수.. 등 ) 
+    // - 로그인 체크 : AuthPreInterceptor.java 에서 처리 하여 return  
+    
     @GetMapping( "/" )
 	public String main( Model model ) {
     	

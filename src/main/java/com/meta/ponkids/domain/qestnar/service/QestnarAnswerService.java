@@ -1,6 +1,8 @@
 package com.meta.ponkids.domain.qestnar.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -8,11 +10,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import com.meta.ponkids.domain.qestnar.dto.QestnarAnswerModDto;
+import com.meta.ponkids.domain.qestnar.dto.QestnarAnswerDetailSaveDto;
 import com.meta.ponkids.domain.qestnar.dto.QestnarAnswerListDto;
+import com.meta.ponkids.domain.qestnar.dto.QestnarAnswerModDto;
 import com.meta.ponkids.domain.qestnar.dto.QestnarAnswerSaveDto;
 import com.meta.ponkids.domain.qestnar.entity.QestnarAnswer;
+import com.meta.ponkids.domain.qestnar.entity.QestnarAnswerDetail;
+import com.meta.ponkids.domain.qestnar.repository.QestnarAnswerDetailRepository;
 import com.meta.ponkids.domain.qestnar.repository.QestnarAnswerRepository;
 import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
@@ -23,10 +29,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class QestnarAnswerService {
 	private final QestnarAnswerRepository qestnarAnswerRepository;	// repository setting
+	private final QestnarAnswerDetailRepository qestnarAnswerDetailRepository;	// repository setting
 	
 	@Transactional
 	public QestnarAnswerSaveDto save( QestnarAnswerSaveDto saveDto, HttpServletRequest request ) throws IOException {
-//    public QestnarAnswerSaveDto save( QestnarAnswerSaveDto saveDto, QestnarAnswerRoleSaveDto qestnarAnswerRoleSaveDto, HttpServletRequest request ) throws IOException {
+		
+		// 1. 설문조사 답변 등록
+		// 2. 설문조사 답변 상세 (실제답변 :답안지라고생각하면 됨 ) 등록 
+		// ==============================================================================
+		
+		
+		// S : 1. 설문조사 답변 등록
 		
 		saveDto.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
 		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
@@ -34,6 +47,77 @@ public class QestnarAnswerService {
 		saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
 		
 		QestnarAnswer newQestnarAnswer = qestnarAnswerRepository.save( saveDto.toEntity() );			// ** save -> save된 정보 newXxx 로 저장
+		// E : 1. 설문조사 답변 등록
+		
+		// S : 2. 설문조사 답변 상세 (실제답변 :답안지라고생각하면 됨 ) 등록 
+		List<QestnarAnswerDetail> qestnarAnswerDetailList = new ArrayList<>();
+		
+		if ( saveDto.getQestnarAnswerDetails() != null && saveDto.getQestnarAnswerDetails().size() > 0 ) {
+
+			for(QestnarAnswerDetailSaveDto qestnarAnswerDetail : saveDto.getQestnarAnswerDetails() ) {
+				
+				qestnarAnswerDetail.setQestnarAnswerSn( newQestnarAnswer.getQestnarAnswerSn() );
+				
+				qestnarAnswerDetail.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
+				qestnarAnswerDetail.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
+				qestnarAnswerDetail.setUpdusrId( SessionUtils.getClientId() );					// Id set : update
+				qestnarAnswerDetail.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
+				
+				
+				switch( qestnarAnswerDetail.getQestnarQestnItemTyCd() ) {
+				
+					case "ANSWER" :
+					case "ANSWER_LONG" :
+						if ( StringUtils.hasText( qestnarAnswerDetail.getQestnarAnswer() ) ) {
+							
+							if ( qestnarAnswerDetail.getQestnarQestnDetailSn() != null )			qestnarAnswerDetail.setQestnarQestnDetailSn( null );
+							if ( qestnarAnswerDetail.getQestnarQestnDetailSnList() != null )		qestnarAnswerDetail.setQestnarQestnDetailSnList( null );
+							
+						}
+						
+						qestnarAnswerDetailList.add( qestnarAnswerDetail.toEntity() );
+						break;
+						
+					case "SELECTIVE_ONE" :
+						
+						if (qestnarAnswerDetail.getQestnarQestnDetailSn() != null ) {
+							if ( StringUtils.hasText( qestnarAnswerDetail.getQestnarAnswer() ) )	qestnarAnswerDetail.setQestnarAnswer( null );
+							if ( qestnarAnswerDetail.getQestnarQestnDetailSnList() != null )		qestnarAnswerDetail.setQestnarQestnDetailSnList( null );
+						}
+						
+						qestnarAnswerDetailList.add( qestnarAnswerDetail.toEntity() );
+						break;
+						
+					case "SELECTIVE_MULTI" :
+						
+						if ( qestnarAnswerDetail.getQestnarQestnDetailSnList() != null ) {
+							if ( StringUtils.hasText( qestnarAnswerDetail.getQestnarAnswer() ) )	qestnarAnswerDetail.setQestnarAnswer( null );
+							if ( qestnarAnswerDetail.getQestnarQestnDetailSn() != null )			qestnarAnswerDetail.setQestnarQestnDetailSn( null );
+						}
+						
+						for ( Long qestnarQestnDetailSn : qestnarAnswerDetail.getQestnarQestnDetailSnList()) {
+							QestnarAnswerDetailSaveDto qestnarAnswerDetailSaveDto = new QestnarAnswerDetailSaveDto();
+							
+							qestnarAnswerDetailSaveDto.setQestnarAnswerSn( newQestnarAnswer.getQestnarAnswerSn() );
+							qestnarAnswerDetailSaveDto.setQestnarQestnSn( qestnarAnswerDetail.getQestnarQestnSn() );
+							qestnarAnswerDetailSaveDto.setQestnarQestnDetailSn(qestnarQestnDetailSn);
+							qestnarAnswerDetailSaveDto.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
+							qestnarAnswerDetailSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
+							qestnarAnswerDetailSaveDto.setUpdusrId( SessionUtils.getClientId() );					// Id set : update
+							qestnarAnswerDetailSaveDto.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
+							
+							qestnarAnswerDetailList.add( qestnarAnswerDetailSaveDto.toEntity() );
+						}
+						
+						break;
+				}
+				
+			}
+			
+			qestnarAnswerDetailRepository.saveAll( qestnarAnswerDetailList );
+		}
+		// E : 2. 설문조사 답변 상세 (실제답변 :답안지라고생각하면 됨 ) 등록
+		
 		
 		return saveDto;
 		

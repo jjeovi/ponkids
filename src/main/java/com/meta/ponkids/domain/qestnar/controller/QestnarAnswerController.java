@@ -21,6 +21,7 @@ import com.meta.ponkids.domain.qestnar.dto.QestnarAnswerListDto;
 import com.meta.ponkids.domain.qestnar.dto.QestnarAnswerModDto;
 import com.meta.ponkids.domain.qestnar.dto.QestnarAnswerSaveDto;
 import com.meta.ponkids.domain.qestnar.service.QestnarAnswerService;
+import com.meta.ponkids.global.util.session.SessionUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +31,7 @@ public class QestnarAnswerController {
 	
 	private final QestnarAnswerService qestnarAnswerService;
 	
-    	private final static String BASIC_VIEW_PATH = "admin/qestnarAnswer";
+    	private final static String BASIC_VIEW_PATH = "qestnarAnswer";
     	private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
 	
 	
@@ -75,27 +76,41 @@ public class QestnarAnswerController {
     }
     
     @Transactional
-    @PostMapping( BASIC_PATH + "/{mcd}/insert" )
+    @PostMapping( BASIC_PATH + "/insert" )
     public String insert (
             @ModelAttribute QestnarAnswerSaveDto saveDto,
-//            @ModelAttribute QestnarAnswerRoleSaveDto qestnarAnswerRoleSaveDto,  // required false
-            @PathVariable String mcd,
             HttpServletRequest request,
             Model model ) throws IOException {
     	
     	// S : 필요한 객체 setting
     	
+    	// 저장 후 이동할 url setting
+    	String moveUrl = request.getHeader("referer");
+    	
+    	// userId setting
+    	saveDto.setUserSn( SessionUtils.getAuthUserSn() );
+    	
+    	// 유효성 체크
+    	if ( saveDto == null || saveDto.getQestnarGroupSn() == null ) {
+    		// 메시지 출력 및 url 이동 처리
+            model.addAttribute( "resultMsg", "설문 정보를 가져오는 동안 오류가 발생했습니다." );
+            model.addAttribute( "moveUrl", moveUrl );
+            
+            return "common/alert";
+    	}
+    	
     	// E : 필요한 객체 setting
-        
+
+    	
         // 등록 처리
-        
-        // save
+    	// save
+    	// - 1. TB_QESTNAR_ANSWER : 설문조사 답변 등록
+    	// - 2. TB_QESTNAR_ANSWER_DETAIL : 설문조사 답변 상세 (답안지) 등록
         qestnarAnswerService.save( saveDto, request );
-//        qestnarAnswerService.save( saveDto, qestnarAnswerRoleSaveDto, request );
         
         // 메시지 출력 및 url 이동 처리
-        model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+        model.addAttribute( "resultMsg", "정상적으로 제출되었습니다." );
+        model.addAttribute( "moveUrl", moveUrl );
         
         return "common/alert";
     }

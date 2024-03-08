@@ -54,10 +54,16 @@
 
 <!-- 설문조사 layer -->				<div class="layer_qestnar"					style="display: none;"	th:insert="pon/layer/layer_qestnar.html"		/>
 
+<!-- S : 문의 챗콘 -->
+<!-- TODO -->
+<div class="icon_inquiry" onclick="setQestnar('QESTN003', 'inquiry');">
+	<img src="/pon/common/image/inquiry.svg" alt="">
+</div>
+<!-- E : 문의 챗콘 -->
+
 <form id="logoutForm" name="logoutForm" th:action="@{ /pon/logout}" method="post">
 	<input type="hidden" name="returnUrl" >
 </form>
-
 
 <!--S : script -->
 
@@ -73,4 +79,5 @@
 <div layout:fragment="script">
 	<!-- (필요시) 각 페이지별로 script 작성 -->
 </div>
+
 <!--E : script -->

@@ -1,5 +1,7 @@
 package com.meta.ponkids.domain.qestnar.dto;
 
+import java.util.List;
+
 import com.meta.ponkids.domain.qestnar.entity.QestnarAnswer;
 
 import lombok.Builder;
@@ -23,6 +25,8 @@ public class QestnarAnswerSaveDto {
 	private String updusrId;      	// 수정자 id
 	
 	private String updusrIp;      	// 수정자 ip
+	
+	private List<QestnarAnswerDetailSaveDto> qestnarAnswerDetails;
 	
 	@Builder
 	public QestnarAnswerSaveDto(Long qestnarAnswerSn, Long qestnarGroupSn, Long userSn, String registerId, String registerIp, String updusrId, String updusrIp ) {

@@ -43,3 +43,20 @@ table {
 }
 a,span{text-decoration: none; color: inherit; display: inline-block;}
 img{width: 100%;}
+
+
+select {
+
+   -webkit-appearance:none; /* for chrome */
+
+   -moz-appearance:none; /*for firefox*/
+
+   appearance:none;
+
+}
+
+select::-ms-expand{
+
+   display:none;/*for IE10,11*/
+
+}
