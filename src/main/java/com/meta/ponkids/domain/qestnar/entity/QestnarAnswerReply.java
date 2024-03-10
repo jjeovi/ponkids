@@ -1,7 +1,5 @@
 package com.meta.ponkids.domain.qestnar.entity;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,8 +14,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import com.meta.ponkids.domain.cls.dto.ClassDetailOptnSaveDto;
-import com.meta.ponkids.domain.cls.dto.ClassDetailSaveDto;
 import com.meta.ponkids.global.common.BaseTimeEntity;
 
 import lombok.AllArgsConstructor;
@@ -32,42 +28,28 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @DynamicInsert // insert 구문 시 null 이 아닌 값들만 insert
 @DynamicUpdate // update 구문 시 null 이 아닌 값들만 update
-@SequenceGenerator(	
-        name = "SEQ_TB_qestnar_group_SN",
-        sequenceName = "SEQ_TB_qestnar_group_SN",
+@SequenceGenerator(
+        name = "SEQ_TB_qestnar_answer_reply_SN",
+        sequenceName = "SEQ_TB_qestnar_answer_reply_SN",
         initialValue = 1,
         allocationSize = 1
 )
 @Where( clause = "del_yn = 'N'") // DEFAULT 로 WHERE DEL_YN = 'N' 문을 추가하여 조회
-@SQLDelete(sql = "UPDATE {h-schema}tb_qestnar_group SET del_yn ='Y', updt_dt = now() WHERE qestnar_group_sn = ?") // delelte 시 실행 (ex ) ~Repository.deleteById)
-@Table( name = "TB_qestnar_group" )
-public class QestnarGroup extends BaseTimeEntity {
+@SQLDelete(sql = "UPDATE {h-schema}tb_qestnar_answer_reply SET del_yn ='Y', updt_dt = now() WHERE qestnar_answer_reply_sn = ?") // delelte 시 실행 (ex ) ~Repository.deleteById)
+@Table( name = "TB_qestnar_answer_reply" )
+public class QestnarAnswerReply extends BaseTimeEntity {
 	
 	@Id
-	@GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_qestnar_group_SN" )
-	private Long qestnarGroupSn;
+	@GeneratedValue( strategy = GenerationType.SEQUENCE, generator = "SEQ_TB_qestnar_answer_reply_SN" )
+	private Long qestnarAnswerReplySn;
 	
-	private String qestnarGroupCd;
+	private Long qestnarAnswerSn;
 	
-	private String qestnarGroupNm;
+	private Long userSn;
 	
-	private String qestnarGroupDc;
+	private String qestnarAnswerReplyCn;
 	
-	private String upendGdccSetYn;	// 상단 안내문 설정 여부
-	
-	private String upendGdcc;		// 상단 안내문
-	
-	private String lptGdccSetYn;	// 상단 안내문 설정 여부
-	
-	private String lptGdcc;			// 하단 안내문
-	
-	private String privcyYn;
-	
-	private String loginEssntlYn;	// 로그인 필수 여부
-	
-	private String replySetYn;		// 댓글 설정 여부
-	
-	private String useYn;
+	private Long atchFileSn;
 	
 	@Column(updatable = false)
 	private String registerId;          // 등록자 ID

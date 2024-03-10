@@ -50,7 +50,8 @@ public class QestnarGroupController {
     	QestnarGroupListDto targetDto = qestnarGroupService.findByQestnarGroupCd( qestnarGroupCd );
     	if ( targetDto == null ) {
     		result.put("flag", "E");
-    		result.put("msg", "설문 정보를 가져오는 동안 오류가 발생했습니다. 다시 시도해주세요.");
+    		result.put("msg", "설문 정보가 존재하지 않습니다. 다시 시도해주세요.");
+    		return result;
     	}
     	result.put( "targetDto", targetDto );
     	
@@ -61,7 +62,7 @@ public class QestnarGroupController {
     	result.put("targetQestnarQestnDetailList", qestnarQestnDetailService.getListByQestnarGroupSnOrderByQestnarQestnSnAsc( targetDto.getQestnarGroupSn() ));
     	
         // 설문조사 질문 항목 유형 코드 리스트 
-    	result.put( "qestnarQestnItemTyCdList", cmmnCdDetailService.getList( "QESTNAR_QESTN_ITEM_TY_CD" ) );   // 클래 상세 항목 유형 코드 리스트
+    	result.put( "qestnarQestnItemTyCdList", cmmnCdDetailService.getList( "QESTNAR_QESTN_ITEM_TY_CD" ) );   // 설문조사 질문 항목 유형 코드 리스트 
         
         
     	result.put("flag", "S");

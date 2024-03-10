@@ -1,4 +1,4 @@
-<form name="qestnarForInquiryInsertForm" method="POST" th:action="@{ /qestnarAnswer/insert }" class="form" onsubmit="return insertQestnarAnswer( 'qestnarForInquiryInsertForm' );" >
+<form name="qestnarForInquiryInsertForm" method="POST" th:action="@{ /qestnarAnswer/insert }" class="form" >
 <input type="hidden" name="qestnarGroupSn" 			class="changeQestnarData"  />
 <div class="chatWrap" data-layer-wrap="inquiry">
 	<div class="chat_box">
@@ -27,12 +27,59 @@
 							</div>
 						</div>
 						<div class="send_btn">
-							<button>제출하기</button>
+							<button type="button" onclick="insertQestnarAnswer( 'qestnarForInquiryInsertForm' );" >제출하기</button>
 						</div>
 					</div>
 				</div>
-				<div id="tab02" style="display: none;">area2</div>
-				<div id="tab03" style="display: none;">area3</div>
+				<div id="tab02" style="display: none;" class="tabDiv">
+					<ul class="tab myInquiryList">
+						<li>
+							<div class="li_leftDiv">
+								<span class="inquiry_ty">[문의유형]</span>
+								<p>문의합니다.</p>
+							</div>
+							<div class="li_rightDiv">
+								<span>2022-03-02</span>
+							</div>
+						</li>
+					</ul>
+					<div class="detailInquiry qestnarList" style="display:none;ayer">
+						<div class="send_btn pt_0p">
+							<button type="button" onclick="insertQestnarAnswer( 'qestnarForInquiryInsertForm' );">제출하기</button>
+						</div>
+						<div class="chat_tit_form qBox">
+							<input type="hidden" name="qestnarQestnSn" value="100105">
+							<input type="hidden" name="qestnarQestnItemTyCd" value="SELECTIVE_ONE">
+							<div class="qAnswerWrap">
+								<select name="qestnarQestnDetailSn" class="qAnswer required" title="문의유형">
+									<option value="">문의유형 선택</option>
+									<option value="100230">1</option>
+									<option value="100231">2</option>
+									<option value="100232">3</option>
+									<option value="100233">4</option>
+									<option value="100234">5</option>
+								</select>
+							</div>
+						</div>
+						<div class="chat_tit_form qBox">
+							<input type="hidden" name="qestnarQestnSn" value="100106">
+							<input type="hidden" name="qestnarQestnItemTyCd" value="ANSWER">
+							<div class="qAnswerWrap">
+								<input type="text" class="qAnswer required" name="qestnarAnswer" title="문의 제목" placeholder="문의 제목">
+							</div>
+						</div>
+						<div class="chat_disc_form qBox">
+							<input type="hidden" name="qestnarQestnSn" value="100107">
+							<input type="hidden" name="qestnarQestnItemTyCd" value="ANSWER_LONG">
+							<div class="qAnswerWrap">
+								<textarea class="qAnswer required" name="qestnarAnswer" rows="10" title="문의 내용" cols="30" placeholder="문의 내용">
+									
+								</textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="tab03" style="display:none;" >area3</div>
 			</div>
 		</div>
 		<div class="chat_nav">

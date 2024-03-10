@@ -33,7 +33,6 @@ import com.meta.ponkids.domain.cls.service.ClassInqryService;
 import com.meta.ponkids.domain.cls.service.ClassService;
 import com.meta.ponkids.domain.cls.service.ClassWeekService;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
-import com.meta.ponkids.domain.system.login.dto.LoginDto;
 import com.meta.ponkids.global.util.common.CommonUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
 
@@ -256,10 +255,10 @@ public class ClassInqryAdmController {
 	}
 	
 
-	// 상세 조회
+	// 상세 조회 Ajax
     @ResponseBody
     @GetMapping( BASIC_PATH + "/live/detailByIdAjax" )
-    public Map<String, Object> findByIdAjax( @ModelAttribute ClassInqryListDto listDto ) {
+    public Map<String, Object> detailByIdAjax( @ModelAttribute ClassInqryListDto listDto ) {
         // 해당 권한에 맞는 menuList 가져온 뒤 drawMenuTree 로 메뉴를 그린다.
         Map<String, Object> result = new HashMap<String, Object>();
         

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.meta.ponkids.domain.qestnar.dto.QestnarQestnDetailModDto;
 import com.meta.ponkids.domain.qestnar.dto.QestnarQestnDetailListDto;
+import com.meta.ponkids.domain.qestnar.dto.QestnarQestnDetailListForAnswerDto;
 import com.meta.ponkids.domain.qestnar.dto.QestnarQestnDetailSaveDto;
 import com.meta.ponkids.domain.qestnar.entity.QestnarQestnDetail;
 import com.meta.ponkids.domain.qestnar.repository.QestnarQestnDetailRepository;
@@ -48,6 +49,11 @@ public class QestnarQestnDetailService {
     
     public List<QestnarQestnDetailListDto> getListByQestnarGroupSnOrderByQestnarQestnSnAsc( Long qestnarGroupSn ) {
     	return qestnarQestnDetailRepository.getListByQestnarGroupSnOrderByQestnarQestnSnAsc( qestnarGroupSn );
+    }
+    
+    
+    public List<QestnarQestnDetailListForAnswerDto> getListForQestnarAnswerDetail( Long qestnarGroupSn, Long qestnarAnswerSn ) {
+    	return qestnarQestnDetailRepository.getListForQestnarAnswerDetail( qestnarGroupSn, qestnarAnswerSn );
     }
     
     

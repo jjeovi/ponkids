@@ -32,6 +32,10 @@ public class QestnarGroupSaveDto  extends QestnarGroupDto {
 	private String lptGdcc;			// 하단 안내문
 
 	private String privcyYn;
+	
+	private String loginEssntlYn;	// 로그인 필수 여부
+	
+	private String replySetYn;		// 댓글 설정 여부
 
 	private String useYn;
 	
@@ -48,7 +52,7 @@ public class QestnarGroupSaveDto  extends QestnarGroupDto {
 	@Builder
 	public QestnarGroupSaveDto(Long qestnarGroupSn, String qestnarGroupCd, String qestnarGroupNm, String qestnarGroupDc,
 			String upendGdccSetYn, String upendGdcc, String lptGdccSetYn, String lptGdcc,
-			String privcyYn, String useYn, String registerId, String registerIp, String updusrId, String updusrIp) {
+			String privcyYn, String loginEssntlYn, String replySetYn, String useYn, String registerId, String registerIp, String updusrId, String updusrIp) {
 		this.qestnarGroupSn = qestnarGroupSn;
 		this.qestnarGroupCd = qestnarGroupCd;
 		this.qestnarGroupNm = qestnarGroupNm;
@@ -58,6 +62,8 @@ public class QestnarGroupSaveDto  extends QestnarGroupDto {
 		this.lptGdccSetYn = lptGdccSetYn;
 		this.lptGdcc = lptGdcc;
 		this.privcyYn = privcyYn;
+		this.loginEssntlYn = loginEssntlYn;
+		this.replySetYn = replySetYn;
 		this.useYn = useYn;
 		this.registerId = registerId;
 		this.registerIp = registerIp;
@@ -77,6 +83,8 @@ public class QestnarGroupSaveDto  extends QestnarGroupDto {
 				.lptGdccSetYn(lptGdccSetYn)
 				.lptGdcc(lptGdcc)
 				.privcyYn(privcyYn)
+				.loginEssntlYn(loginEssntlYn)
+				.replySetYn(replySetYn)
 				.useYn(useYn)
 				.registerId(registerId)
 				.registerIp(registerIp)

@@ -93,20 +93,21 @@ public class QestnarAnswerService {
 						if ( qestnarAnswerDetail.getQestnarQestnDetailSnList() != null ) {
 							if ( StringUtils.hasText( qestnarAnswerDetail.getQestnarAnswer() ) )	qestnarAnswerDetail.setQestnarAnswer( null );
 							if ( qestnarAnswerDetail.getQestnarQestnDetailSn() != null )			qestnarAnswerDetail.setQestnarQestnDetailSn( null );
-						}
-						
-						for ( Long qestnarQestnDetailSn : qestnarAnswerDetail.getQestnarQestnDetailSnList()) {
-							QestnarAnswerDetailSaveDto qestnarAnswerDetailSaveDto = new QestnarAnswerDetailSaveDto();
 							
-							qestnarAnswerDetailSaveDto.setQestnarAnswerSn( newQestnarAnswer.getQestnarAnswerSn() );
-							qestnarAnswerDetailSaveDto.setQestnarQestnSn( qestnarAnswerDetail.getQestnarQestnSn() );
-							qestnarAnswerDetailSaveDto.setQestnarQestnDetailSn(qestnarQestnDetailSn);
-							qestnarAnswerDetailSaveDto.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
-							qestnarAnswerDetailSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
-							qestnarAnswerDetailSaveDto.setUpdusrId( SessionUtils.getClientId() );					// Id set : update
-							qestnarAnswerDetailSaveDto.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
+							for ( Long qestnarQestnDetailSn : qestnarAnswerDetail.getQestnarQestnDetailSnList() ) {
+								QestnarAnswerDetailSaveDto qestnarAnswerDetailSaveDto = new QestnarAnswerDetailSaveDto();
+								
+								qestnarAnswerDetailSaveDto.setQestnarAnswerSn( newQestnarAnswer.getQestnarAnswerSn() );
+								qestnarAnswerDetailSaveDto.setQestnarQestnSn( qestnarAnswerDetail.getQestnarQestnSn() );
+								qestnarAnswerDetailSaveDto.setQestnarQestnDetailSn(qestnarQestnDetailSn);
+								qestnarAnswerDetailSaveDto.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
+								qestnarAnswerDetailSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
+								qestnarAnswerDetailSaveDto.setUpdusrId( SessionUtils.getClientId() );					// Id set : update
+								qestnarAnswerDetailSaveDto.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
+								
+								qestnarAnswerDetailList.add( qestnarAnswerDetailSaveDto.toEntity() );
+							}
 							
-							qestnarAnswerDetailList.add( qestnarAnswerDetailSaveDto.toEntity() );
 						}
 						
 						break;
@@ -129,21 +130,23 @@ public class QestnarAnswerService {
     }
     
     
-    public QestnarAnswerModDto findById( Long pk ) {	// TODO 타입 체크 필요
-        
-        QestnarAnswer qestnarAnswer = qestnarAnswerRepository.findById( pk ).orElse(null);
-        
-        if (qestnarAnswer == null ) { 
-        	
-        	return null;
-        } else {
-        
-	        QestnarAnswerModDto modDto = new QestnarAnswerModDto();
-	        modDto = modDto.toDto( qestnarAnswer );
-	        
-	        return modDto;
-        }
+    public List<QestnarAnswerListDto> getListByUserSn( QestnarAnswerListDto listDto ) {
+    	return qestnarAnswerRepository.getListByUserSn( listDto );
     }
+    
+    
+    public QestnarAnswerListDto findById( Long pk ) {	// TODO 타입 체크 필요
+        
+        return qestnarAnswerRepository.getByClassInqrySn( pk );
+    }
+    
+    
+    public List<QestnarAnswerListDto> getList( QestnarAnswerListDto listDto ) {	// TODO 타입 체크 필요
+    	
+    	return qestnarAnswerRepository.getList( listDto );
+    }
+    
+    
     
     @Transactional
     public void update ( QestnarAnswerModDto modDto, HttpServletRequest request ) throws IOException {

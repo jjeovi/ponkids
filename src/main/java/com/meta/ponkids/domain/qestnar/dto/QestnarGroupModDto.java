@@ -33,6 +33,10 @@ public class QestnarGroupModDto extends QestnarGroupDto {
 	private String lptGdcc;			// 하단 안내문
 
 	private String privcyYn;
+	
+	private String loginEssntlYn;	// 로그인 필수 여부
+	
+	private String replySetYn;		// 댓글 설정 여부
 
 	private String useYn;
 
@@ -46,19 +50,21 @@ public class QestnarGroupModDto extends QestnarGroupDto {
 	@Builder
 	public QestnarGroupModDto(Long qestnarGroupSn, String qestnarGroupCd,  String qestnarGroupNm, String qestnarGroupDc,
 			String upendGdccSetYn, String upendGdcc, String lptGdccSetYn, String lptGdcc,
-			String privcyYn, String useYn, String updusrId, String updusrIp) {
+			String privcyYn, String loginEssntlYn, String replySetYn, String useYn, String updusrId, String updusrIp) {
 		this.qestnarGroupSn = qestnarGroupSn;
 		this.qestnarGroupCd = qestnarGroupCd;
 		this.qestnarGroupNm = qestnarGroupNm;
 		this.qestnarGroupDc = qestnarGroupDc;
 		this.upendGdccSetYn = upendGdccSetYn;
-		this.upendGdcc = upendGdcc;
-		this.lptGdccSetYn = lptGdccSetYn;
-		this.lptGdcc = lptGdcc;
-		this.privcyYn = privcyYn;
-		this.useYn = useYn;
-		this.updusrId = updusrId;
-		this.updusrIp = updusrIp;
+		this.upendGdcc 		= upendGdcc;
+		this.lptGdccSetYn 	= lptGdccSetYn;
+		this.lptGdcc 		= lptGdcc;
+		this.privcyYn 		= privcyYn;
+		this.loginEssntlYn 	= loginEssntlYn;
+		this.replySetYn 	= replySetYn;
+		this.useYn 			= useYn;
+		this.updusrId		= updusrId;
+		this.updusrIp 		= updusrIp;
 	}
 	
 	// Dto to Entity 메소드 생성
@@ -73,6 +79,8 @@ public class QestnarGroupModDto extends QestnarGroupDto {
 				.lptGdccSetYn(lptGdccSetYn)
 				.lptGdcc(lptGdcc)
 				.privcyYn(privcyYn)
+				.loginEssntlYn(loginEssntlYn)
+				.replySetYn(replySetYn)
 				.useYn(useYn)
 				.updusrId(updusrId)
 				.updusrIp(updusrIp)
@@ -91,6 +99,8 @@ public class QestnarGroupModDto extends QestnarGroupDto {
 				.lptGdccSetYn(qestnarGroup.getLptGdccSetYn())
 				.lptGdcc(qestnarGroup.getLptGdcc())
 				.privcyYn(qestnarGroup.getPrivcyYn())
+				.loginEssntlYn(qestnarGroup.getLoginEssntlYn())
+				.replySetYn(qestnarGroup.getReplySetYn())
 				.useYn(qestnarGroup.getUseYn())
 				.updusrId(qestnarGroup.getUpdusrId())
 				.updusrIp(qestnarGroup.getUpdusrIp())

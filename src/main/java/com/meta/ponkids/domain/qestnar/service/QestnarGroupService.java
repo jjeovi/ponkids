@@ -1,6 +1,7 @@
 package com.meta.ponkids.domain.qestnar.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -47,6 +48,11 @@ public class QestnarGroupService {
     }
     
     
+    public List<QestnarGroupListDto> getList( QestnarGroupListDto listDto ) {
+    	return qestnarGroupRepository.getList( listDto );
+    }
+    
+    
     public QestnarGroupModDto findById( Long pk ) {	
         
         QestnarGroup qestnarGroup = qestnarGroupRepository.findById( pk ).orElse(null);
@@ -65,7 +71,7 @@ public class QestnarGroupService {
     
     public QestnarGroupListDto findByQestnarGroupCd( String qestnarGroupCd ) {	
     	
-    	return qestnarGroupRepository.findByQestnarGroupCd(qestnarGroupCd);
+    	return qestnarGroupRepository.findByQestnarGroupCd( qestnarGroupCd );
     }
     
     @Transactional
@@ -88,6 +94,8 @@ public class QestnarGroupService {
         if ( StringUtils.hasText( modDto.getLptGdccSetYn() ) ) targetDto.setLptGdccSetYn( modDto.getLptGdccSetYn() );          	        // 하단안내문설정여부
         if ( StringUtils.hasText( modDto.getLptGdcc() ) ) targetDto.setLptGdcc( modDto.getLptGdcc() );          	                    // 하단안내문
         if ( StringUtils.hasText( modDto.getPrivcyYn() ) ) targetDto.setPrivcyYn( modDto.getPrivcyYn() );          	                    // 프라이버시여부
+        if ( StringUtils.hasText( modDto.getLoginEssntlYn() ) ) targetDto.setLoginEssntlYn( modDto.getLoginEssntlYn() );          	    // 로그인필수여부
+        if ( StringUtils.hasText( modDto.getReplySetYn() ) ) targetDto.setReplySetYn( modDto.getReplySetYn() );          	            // 댓글설정여부
         if ( StringUtils.hasText( modDto.getUseYn() ) ) targetDto.setUseYn( modDto.getUseYn() );          	                            // 사용여부
         
         // id,ip setting

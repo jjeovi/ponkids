@@ -71,7 +71,7 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                         class$.classAmt,
                         class$.classDscntBfeAmt,
                         class$.thumbAtchFileSn.as("classThumbAtchFileSn"),
-                        null,
+                        class$.classSn,	// userSn 대신 임시로 사용... 
                         banner.useYn,
                         banner.bannerPdSetYn,
                         new CaseBuilder()

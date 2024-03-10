@@ -77,7 +77,7 @@ public class QestnarGroupAdmController {
         
         
         // 설문조사 질문 항목 유형 코드 리스트 
-        model.addAttribute( "qestnarQestnItemTyCdList", cmmnCdDetailService.getList( "QESTNAR_QESTN_ITEM_TY_CD" ) );   // 클래 상세 항목 유형 코드 리스트
+        model.addAttribute( "qestnarQestnItemTyCdList", cmmnCdDetailService.getList( "QESTNAR_QESTN_ITEM_TY_CD" ) );   // 설문조사 질문 항목 유형 코드 리스트 
     	
     	// E : 필요한 객체 setting
         
@@ -147,7 +147,7 @@ public class QestnarGroupAdmController {
     	model.addAttribute("targetQestnarQestnDetailList", qestnarQestnDetailService.getListByQestnarGroupSnOrderByQestnarQestnSnAsc( targetDto.getQestnarGroupSn() ));
     	
         // 설문조사 질문 항목 유형 코드 리스트 
-        model.addAttribute( "qestnarQestnItemTyCdList", cmmnCdDetailService.getList( "QESTNAR_QESTN_ITEM_TY_CD" ) );   // 클래 상세 항목 유형 코드 리스트
+        model.addAttribute( "qestnarQestnItemTyCdList", cmmnCdDetailService.getList( "QESTNAR_QESTN_ITEM_TY_CD" ) );   // 설문조사 질문 항목 유형 코드 리스트 
         
     	// E : 필요한 객체 setting
         // 기본 경로 setting

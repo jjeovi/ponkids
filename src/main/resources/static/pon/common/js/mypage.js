@@ -58,7 +58,7 @@ function goClassReview( classSn ){
 	// 후기 작성하기 모달창 ( 관리 클릭시 ) 내용 초기화 작업
 	function eraseReviewLayerData() {
 		
-		// replyData class 초기화 
+		// reviewData class 초기화 
 		$(".reviewData").empty();
 		
 	}

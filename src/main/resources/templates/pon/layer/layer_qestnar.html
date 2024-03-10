@@ -1,5 +1,5 @@
 <div class="pop_wrap qestnar" data-layer-wrap="qestnar">
-	<form name="qestnarInsertForm" method="POST" th:action="@{ /qestnarAnswer/insert }" class="form" onsubmit="return insertQestnarAnswer( 'qestnarInsertForm' );" >
+	<form name="qestnarInsertForm" method="POST" th:action="@{ /qestnarAnswer/insert }" class="form">
 	<input type="hidden" name="qestnarGroupSn" 			class="changeQestnarData"  />
 	<div class="pop_top">
 		<button type="button" class="pop_close hide_layer" data-layer-id="qestnar" >
@@ -29,7 +29,7 @@
 		</div>
 	</div>
 	<div class="pop_footer">
-		<button type="submit" class="btn btn-purple">
+		<button type="button" class="btn btn-purple" onclick="insertQestnarAnswer( 'qestnarInsertForm' );">
 			제출
 		</button>
 	</div>

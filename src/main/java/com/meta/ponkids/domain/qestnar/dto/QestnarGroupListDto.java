@@ -32,6 +32,14 @@ public class QestnarGroupListDto {
 	
 	private String privcyYnNm;
 	
+	private String loginEssntlYn;	// 로그인 필수 여부
+	
+	private String loginEssntlYnNm;	// 로그인 필수 여부 명
+	
+	private String replySetYn;		// 댓글 설정 여부
+	
+	private String replySetYnNm;	// 댓글 설정 여부 명
+	
 	private String useYn;
 	
 	private String useYnNm;
@@ -51,7 +59,7 @@ public class QestnarGroupListDto {
 	@QueryProjection
 	public QestnarGroupListDto(Long qestnarGroupSn, String qestnarGroupCd, String qestnarGroupNm, String qestnarGroupDc,
 			String upendGdccSetYn, String upendGdcc, String lptGdccSetYn, String lptGdcc,
-			String privcyYn, String privcyYnNm, String useYn, String useYnNm, String registerId, String regDt) {
+			String privcyYn, String privcyYnNm, String loginEssntlYn, String loginEssntlYnNm, String replySetYn, String replySetYnNm,  String useYn, String useYnNm, String registerId, String regDt) {
 		this.qestnarGroupSn = qestnarGroupSn;
 		this.qestnarGroupCd = qestnarGroupCd;
 		this.qestnarGroupNm = qestnarGroupNm;
@@ -62,6 +70,10 @@ public class QestnarGroupListDto {
 		this.lptGdcc = lptGdcc;
 		this.privcyYn = privcyYn;
 		this.privcyYnNm = privcyYnNm;
+		this.loginEssntlYn = loginEssntlYn;
+		this.loginEssntlYnNm = loginEssntlYnNm;
+		this.replySetYn = replySetYn;
+		this.replySetYnNm = replySetYnNm;
 		this.useYn = useYn;
 		this.useYnNm = useYnNm;
 		this.registerId = registerId;

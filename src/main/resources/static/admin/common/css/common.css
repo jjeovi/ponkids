@@ -4149,6 +4149,10 @@ a.hiddenanchor {
 .alignleft {
   float: left;
   margin-right: 15px; }
+  
+.tAlignLeft{
+	text-align: left;
+}
 
 .alignright {
   float: right;
@@ -5285,6 +5289,7 @@ input[type="radio"][disabled]:checked+label{
 }
 /* E : 라디오 박스 custom */
 
+.mt_0p { margin-top : 0px !important;}
 .mt_5p { margin-top : 5px !important;}
 .mt_10p { margin-top : 10px !important;}
 .mt_15p { margin-top : 15px !important;}
@@ -5298,6 +5303,7 @@ input[type="radio"][disabled]:checked+label{
 
 
 
+.ml_0p { margin-left : 0px !important;}
 .ml_5p { margin-left : 5px !important;}
 .ml_10p { margin-left : 10px !important;}
 .ml_15p { margin-left : 15px !important;}
@@ -5310,6 +5316,7 @@ input[type="radio"][disabled]:checked+label{
 .ml_50p { margin-left : 50px !important;}
 
 
+.mr_0p { margin-right : 0px !important;}
 .mr_5p { margin-right : 5px !important;}
 .mr_10p { margin-right : 10px !important;}
 .mr_15p { margin-right : 15px !important;}
@@ -5334,6 +5341,8 @@ input[type="radio"][disabled]:checked+label{
 .mb_45p { margin-bottom : 45px !important;}
 .mb_50p { margin-bottom : 50px !important;}
 
+
+.pt_0p { padding-top : 0px !important;}
 .pt_5p { padding-top : 5px !important;}
 .pt_10p { padding-top : 10px !important;}
 .pt_15p { padding-top : 15px !important;}
@@ -5347,6 +5356,7 @@ input[type="radio"][disabled]:checked+label{
 
 
 
+.pl_0p { padding-left : 0px !important;}
 .pl_5p { padding-left : 5px !important;}
 .pl_10p { padding-left : 10px !important;}
 .pl_15p { padding-left : 15px !important;}
@@ -5359,6 +5369,7 @@ input[type="radio"][disabled]:checked+label{
 .pl_50p { padding-left : 50px !important;}
 
 
+.pr_0p { padding-right : 0px !important;}
 .pr_5p { padding-right : 5px !important;}
 .pr_10p { padding-right : 10px !important;}
 .pr_15p { padding-right : 15px !important;}
@@ -5370,6 +5381,8 @@ input[type="radio"][disabled]:checked+label{
 .pr_45p { padding-right : 45px !important;}
 .pr_50p { padding-right : 50px !important;}
 
+
+.pb_0p { padding-bottom: 0px !important;}
 .pb_5p { padding-bottom: 5px !important;}
 .pb_10p { padding-bottom : 10px !important;}
 .pb_15p { padding-bottom : 15px !important;}
@@ -5947,6 +5960,19 @@ span {
 .qestnarQestnItemTyCnTd .optionList{
 	padding : 5px 10px;
 	min-height:0px;
+}
+
+.sub-title {
+	font-size : 15pt;
+}
+.sub-header {
+	padding : 0.2rem 0rem;
+}
+
+.noLoginComment{
+	text-align: center;
+    font-weight: bold;
+    color: #b90505;
 }
 
 /* E : 설문조사 그룹 */

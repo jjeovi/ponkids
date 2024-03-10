@@ -16,32 +16,38 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.meta.ponkids.domain.qestnar.dto.QestnarAnswerDetailListDto;
 import com.meta.ponkids.domain.qestnar.dto.QestnarAnswerListDto;
 import com.meta.ponkids.domain.qestnar.dto.QestnarAnswerModDto;
-import com.meta.ponkids.domain.qestnar.dto.QestnarAnswerSaveDto;
+import com.meta.ponkids.domain.qestnar.dto.QestnarGroupListDto;
 import com.meta.ponkids.domain.qestnar.service.QestnarAnswerDetailService;
+import com.meta.ponkids.domain.qestnar.service.QestnarAnswerReplyService;
 import com.meta.ponkids.domain.qestnar.service.QestnarAnswerService;
-import com.meta.ponkids.global.util.session.SessionUtils;
+import com.meta.ponkids.domain.qestnar.service.QestnarGroupService;
+import com.meta.ponkids.domain.qestnar.service.QestnarQestnDetailService;
+import com.meta.ponkids.domain.qestnar.service.QestnarQestnService;
+import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 
 import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-public class QestnarAnswerController {
+public class QestnarAnswerAdmController {
 	
 	private final QestnarAnswerService qestnarAnswerService;
 	private final QestnarAnswerDetailService qestnarAnswerDetailService;
+	private final QestnarAnswerReplyService qestnarAnswerReplyService;
+	private final QestnarGroupService qestnarGroupService;
+	private final QestnarQestnService qestnarQestnService;
+	private final QestnarQestnDetailService qestnarQestnDetailService;
 	
-    	private final static String BASIC_VIEW_PATH = "qestnarAnswer";
-    	private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
+	private final CmmnCdDetailService cmmnCdDetailService;
 	
+	private final static String BASIC_VIEW_PATH = "admin/qestnarAnswer";
+	private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
 	
     @GetMapping( BASIC_PATH + "/{mcd}/list" )
     public String list( @ModelAttribute QestnarAnswerListDto listDto,
@@ -57,6 +63,10 @@ public class QestnarAnswerController {
         
         // 검색 dto setting
         model.addAttribute( "searchDTO", listDto );
+        
+        // 카테고리 리스트 ( lv1 )
+        // 클래스 카테고리 분류1 list setting
+        model.addAttribute( "cateLv1List", qestnarGroupService.getList( new QestnarGroupListDto() ) );
     	
     	// E : 필요한 객체 setting
         
@@ -67,61 +77,6 @@ public class QestnarAnswerController {
         return BASIC_VIEW_PATH + "/list";
     }
     
-    @GetMapping( BASIC_PATH + "/{mcd}/regist" )
-    public String regist( @PathVariable String mcd, Model model ) {
-        
-    	// S : 필요한 객체 setting
-    	
-        // 가입 object 생성
-        model.addAttribute( new QestnarAnswerSaveDto() );
-    	
-    	// E : 필요한 객체 setting
-        
-        // 기본 경로 setting
-        model.addAttribute( "basicPath", BASIC_PATH );
-        
-        return BASIC_VIEW_PATH + "/regist";
-    }
-    
-    @Transactional
-    @PostMapping( BASIC_PATH + "/insert" )
-    public String insert (
-            @ModelAttribute QestnarAnswerSaveDto saveDto,
-            HttpServletRequest request,
-            Model model ) throws IOException {
-    	
-    	// S : 필요한 객체 setting
-    	
-    	// 저장 후 이동할 url setting
-    	String moveUrl = request.getHeader("referer");
-    	
-    	// userId setting
-    	saveDto.setUserSn( SessionUtils.getAuthUserSn() );
-    	
-    	// 유효성 체크
-    	if ( saveDto == null || saveDto.getQestnarGroupSn() == null ) {
-    		// 메시지 출력 및 url 이동 처리
-            model.addAttribute( "resultMsg", "설문 정보를 가져오는 동안 오류가 발생했습니다." );
-            model.addAttribute( "moveUrl", moveUrl );
-            
-            return "common/alert";
-    	}
-    	
-    	// E : 필요한 객체 setting
-
-    	
-        // 등록 처리
-    	// save
-    	// - 1. TB_QESTNAR_ANSWER : 설문조사 답변 등록
-    	// - 2. TB_QESTNAR_ANSWER_DETAIL : 설문조사 답변 상세 (답안지) 등록
-        qestnarAnswerService.save( saveDto, request );
-        
-        // 메시지 출력 및 url 이동 처리
-        model.addAttribute( "resultMsg", "정상적으로 제출되었습니다." );
-        model.addAttribute( "moveUrl", moveUrl );
-        
-        return "common/alert";
-    }
     
     @GetMapping( value = { 
     		BASIC_PATH + "/{mcd}/detail",
@@ -176,37 +131,69 @@ public class QestnarAnswerController {
         
         return "common/alert";
     }
-
     
+    
+//    @Transactional
+//    @PostMapping( BASIC_PATH + "/{mcd}/delete" )
+//    public String delete(
+//            @RequestParam( required = true ) Long pk,
+//            @PathVariable String mcd,
+//            Model model ) {
+//        
+//        // 삭제 처리
+//        qestnarAnswerService.deleteAllById( pk );		// By 뒤에는 custom
+//        
+//        // 메시지 출력 및 url 이동 처리
+//        model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
+//        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+//        
+//        return "common/alert";
+//    }
+    
+
+	// 상세 조회 Ajax
     @ResponseBody
-    @RequestMapping( value = BASIC_PATH + "/live/getListByUserSnAjax", method = { RequestMethod.GET } )
-    public Map<String, Object> getListByUserSnAjax( 
-    		@ModelAttribute QestnarAnswerListDto listDto,
-    		@ModelAttribute QestnarAnswerDetailListDto listDetailDto,
-    		HttpServletRequest request,
-            Model model
-    		) {
-    	
-    	Map<String, Object> result = new HashMap<String, Object>();
-    	
-    	// userSn setting 처리
-        listDto.setUserSn( SessionUtils.getAuthUserSn() );
-        listDetailDto.setUserSn( SessionUtils.getAuthUserSn() );
+    @GetMapping( BASIC_PATH + "/live/detailByIdAjax" )
+    public Map<String, Object> detailByIdAjax( @ModelAttribute QestnarAnswerListDto listDto ) {
+        // 해당 권한에 맞는 menuList 가져온 뒤 drawMenuTree 로 메뉴를 그린다.
+        Map<String, Object> result = new HashMap<String, Object>();
         
-        if ( listDto.getUserSn() == null ) {
+        // 설문조사 그룹 조회
+        
+        // 설문조사 질문 목록 조회
+        // target object 조회\
+    	QestnarGroupListDto targetDto = qestnarGroupService.findByQestnarGroupCd( listDto.getQestnarGroupCd() );
+    	
+    	if ( targetDto == null ) {
     		result.put("flag", "E");
-    		result.put("msg", "로그인이 필요합니다.");
+    		result.put("msg", "설문 정보가 존재하지 않습니다. 다시 시도해주세요.");
     		return result;
-        }
+    	}
+    	
+    	result.put( "targetQestnarGroupDto", targetDto );
+    	
+        // 설문조사 질문 list
+    	result.put( "targetQestnarQestnList", qestnarQestnService.findByQestnarGroupSn( targetDto.getQestnarGroupSn() ));
+    	
+    	// 설문조사 질문 상세 list
+    	result.put( "targetQestnarQestnDetailList", qestnarQestnDetailService.getListForQestnarAnswerDetail( targetDto.getQestnarGroupSn(), listDto.getQestnarAnswerSn() ));
+    	
+        // 설문조사 질문 항목 유형 코드 리스트 
+    	result.put( "qestnarQestnItemTyCdList", cmmnCdDetailService.getList( "QESTNAR_QESTN_ITEM_TY_CD" ) );   // 설문조사 질문 항목 유형 코드 리스트 
+        
         
         // 설문조사 작성답안 조회 
-        result.put( "targetDto", qestnarAnswerService.getList( listDto ) );
-
-        // 설문조사 작성답안 상세 조회 ( 문의유형, 문의제목을 list에서 뿌리기 위함 )
-        result.put( "targetQestnarAnswerDetailList", qestnarAnswerDetailService.getList( listDetailDto ) );
+        result.put( "targetDto", qestnarAnswerService.findById( listDto.getQestnarAnswerSn() ) );
         
-        result.put( "flag", "S" );
+        // 설문조사 작성답안 상세 조회 : 주관식 답변만 가져옴.
+        result.put( "targetQestnarAnswerDetailList", qestnarAnswerDetailService.getListByQestnarAnswerSn( listDto.getQestnarAnswerSn() ) );
+        
+        // 설문조사 답변 (reply) 조회
+        result.put( "targetQestnarAnswerReplyList", qestnarAnswerReplyService.getListByQestnarAnswerSn( listDto.getQestnarAnswerSn() ) );
+        
+        result.put("flag", "S");
         return result;
     }
+	
 
 }

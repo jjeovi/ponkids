@@ -105,14 +105,10 @@ public class ClassInqryService {
     	
     }
     
-    // 부모 
+    
     public List<ClassInqryListDto> findReplyByStepAndParntsInqrySn( ClassInqryListDto listDto ) {
     	
-    	List<ClassInqry> classInqryList = classInqryRepository.findByStepAndParntsInqrySn(listDto.getStep(), listDto.getClassInqrySn());
-    	
-    	ClassInqryListDto classInqryListDto = new ClassInqryListDto();
-    	
-    	return classInqryList.stream().map( m -> classInqryListDto.toDto( m ) ).collect( Collectors.toList() );
+    	return classInqryRepository.findByStepAndParntsInqrySn(listDto.getStep(), listDto.getClassInqrySn());
     	
     }
 

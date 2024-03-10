@@ -1085,6 +1085,7 @@ function addQestnarQestnDetailOption( e ) {
 		
 	switch( qestnarQestnItemTyCd ) {
 		case "ANSWER" :
+		case "ANSWER_LONG" :
 			// -- noting to do  
 			break;
 		case "SELECTIVE_ONE" :		// - radio
@@ -1213,6 +1214,7 @@ function onchangeQestnarQestnItemTyCd( e ) {
 	// - 첨부파일 일 경우 : FILE <-- 추후 작업 예정
 	switch( value ) {
 		case "ANSWER" :
+		case "ANSWER_LONG" :
 			$targetDiv.find(".addOptionArea").hide(); 
 			break;
 		case "SELECTIVE_ONE" :

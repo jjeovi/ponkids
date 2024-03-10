@@ -13,7 +13,7 @@
 	// [ 관리 ] 버튼 클릭
 	function manageClassInqry( classInqrySn ) {
 		
-		var url = basicPath + '/live/findByIdAjax';
+		var url = basicPath + '/live/detailByIdAjax';
 		$.ajax( {
             url: url,
             type: "GET",
@@ -23,7 +23,7 @@
             contentType: "application/json",
             success: function ( ajaxResult ) {
 				
-				if ( ajaxResult.resultOne == null ) {
+				if ( ajaxResult.target == null ) {
 					alert("문의번호가 존재하지 않습니다. 다시 시도해주세요.");
 					
 				} else {
@@ -31,7 +31,7 @@
 					eraseDetailModalData();
 					
 					// 모달 내용 setting
-					setDetailModalData( ajaxResult.resultOne );
+					setDetailModalData( ajaxResult );
 					
 					// 답변 달기 모달 show
 					$( "#targetDetailModal" ).modal( 'show' );
@@ -45,18 +45,28 @@
 		// detailData class 전부 초기화작업
 		$(".detailData").text("");
 		$(".detailData").val("");
+		$(".detailData").empty();
+		
+		
+		// detailData class 전부 초기화작업
+		$(".replyData").text("");
+		$(".replyData").val("");
+		$(".replyData").empty();
+		
+		
 	}
 	
 	// 문의 상세 조회 모달창 내용 setting 작업
 	function setDetailModalData( result ) {
 		
 		// 객체 내부 키값들을 순회 ( 객체 생성자 Object 가 직접 가지고 있는 메서드 활용 Object.keys([list]) )
-		const keys = Object.keys(result)
+		const keys = Object.keys( result.target )
+		
 		
 		// 순회한 키값 리스트를 재순회 
 		for ( let key of keys ) { 
 			// insertAnswerForm 폼안에 해당 key의 name이 존재하는치 체크
-			value =  result[key];
+			value =  result.target[key];
 			
 			// data column 수정 
 			if		( key == 'inqryCn'		)	key = 'parntsInqryCn'; // inqryCn 		-> parntsInqryCn 에 값 대입
@@ -81,6 +91,26 @@
 		} else {
 			$("[name='insertAnswerForm']").find("[name='depth2']").show();
 		}
+		
+		
+		// targetReplyList
+		var targetReplyList = result.targetReplyList;
+		
+		// 순회한 키값 리스트를 재순회
+		var i = 1; 
+		for ( let item of targetReplyList ) { 
+			$("#insertAnswerForm").find(".replyList").append(
+				$(" <div> ").attr( "class", "field item form-group manage" ).append(
+					$( "<label>" ).attr( "class", "col-form-label col-md-3 col-sm-3 label-align" ).append("[" + i++ + "] . " + item.userNm + "<br>" + item.userId + "<br>" + item.regFullDt),
+					$( "<div>" ).attr( "class", "col-form-label col-md-9 col-sm-6" ).append(
+						$( "<textarea>" ).attr("class", "no-textarea" ).attr( "rows", "6" ).append(
+							item.inqryCn							
+						)
+					)
+				)
+			)
+		}
+		
 		
 	}
 	
@@ -252,7 +282,7 @@
 							</thead>
 							<tbody>
 								<tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
-									<t the d th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
+									<td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
 									<td> [[${data.ctgryNm}]] <th:block th:if="${data.crseNm != null && data.crseNm != '' }"><br/>[ [[${data.crseNm}]] ] </th:block> </td>
 									<td th:text="${data.classSj}"></td>
 									<td th:text="${data.openYnNm}"></td>

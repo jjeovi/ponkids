@@ -9,7 +9,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import com.meta.ponkids.domain.qestnar.dto.QQestnarQestnDetailListDto;
+import com.meta.ponkids.domain.qestnar.dto.QQestnarQestnDetailListForAnswerDto;
 import com.meta.ponkids.domain.qestnar.dto.QestnarQestnDetailListDto;
+import com.meta.ponkids.domain.qestnar.dto.QestnarQestnDetailListForAnswerDto;
 import com.meta.ponkids.domain.qestnar.repository.custom.QestnarQestnDetailRepositoryCustom;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -21,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import static com.meta.ponkids.domain.qestnar.entity.QQestnarQestnDetail.qestnarQestnDetail;
 import static com.meta.ponkids.domain.qestnar.entity.QQestnarQestn.qestnarQestn;
 import static com.meta.ponkids.domain.qestnar.entity.QQestnarGroup.qestnarGroup;
+import static com.meta.ponkids.domain.qestnar.entity.QQestnarAnswerDetail.qestnarAnswerDetail;
 
 @Repository
 @RequiredArgsConstructor
@@ -93,13 +96,51 @@ public class QestnarQestnDetailRepositoryImpl implements QestnarQestnDetailRepos
 			.on(
 					qestnarGroup.qestnarGroupSn.eq( qestnarQestn.qestnarGroupSn ),
 					qestnarGroup.delYn.eq( "N" )
-					
 			)
 			.where(
 					qestnarGroup.qestnarGroupSn.eq(qestnarGroupSn)
 			)
 			.orderBy(qestnarQestnDetail.qestnarQestnSn.asc())
 			.fetch();
+	}
+	
+	@Override
+	public List<QestnarQestnDetailListForAnswerDto> getListForQestnarAnswerDetail( Long qestnarGroupSn, Long qestnarAnswerSn ) {
+		return query
+				.select(
+						new QQestnarQestnDetailListForAnswerDto(
+								qestnarQestnDetail.qestnarQestnDetailSn,
+								qestnarQestnDetail.qestnarQestnSn,
+								qestnarQestnDetail.qestnarQestnDetailSeq,
+								qestnarQestnDetail.qestnarQestnDetailCn,
+								qestnarAnswerDetail.qestnarAnswerDetailSn,
+								qestnarQestnDetail.registerId,
+								Expressions.stringTemplate("to_char({0}, '{1s}')", qestnarQestnDetail.regDt, "YYYY-MM-DD HH24:MI:SS")
+								)
+						)
+				.from(qestnarQestnDetail)
+				.leftJoin(qestnarQestn)
+				.on(
+						qestnarQestn.qestnarQestnSn.eq( qestnarQestnDetail.qestnarQestnSn ),
+						qestnarQestn.delYn.eq( "N" )
+						
+						)
+				.leftJoin(qestnarGroup)
+				.on(
+						qestnarGroup.qestnarGroupSn.eq( qestnarQestn.qestnarGroupSn ),
+						qestnarGroup.delYn.eq( "N" )
+						)
+				.leftJoin(qestnarAnswerDetail)
+				.on(
+						qestnarAnswerDetail.qestnarQestnDetailSn.eq(qestnarQestnDetail.qestnarQestnDetailSn),
+						qestnarAnswerDetail.delYn.eq( "N" ),
+						qestnarAnswerDetail.qestnarAnswerSn.eq( qestnarAnswerSn )
+				)
+				.where(
+						qestnarGroup.qestnarGroupSn.eq(qestnarGroupSn)
+						)
+				.orderBy(qestnarQestnDetail.qestnarQestnSn.asc())
+				.fetch();
 	}
 	
 	

@@ -42,12 +42,16 @@ public class UserAdmController {
     
     private final static String BASIC_VIEW_PATH = "admin/user";
     private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
+    
     private final UserService userService;
     private final UserRoleService userRoleService;
     private final UserChldrnRepository userChldrnRepository;
     private final UserRepository userRepository;
+    
     private final RoleRepository roleRepository;
+    
     private final AtchFileService atchFileService;
+    
     private final CmmnCdDetailService cmmnCdDetailService;
     
     /**

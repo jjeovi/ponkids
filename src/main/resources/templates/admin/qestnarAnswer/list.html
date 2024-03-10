@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{admin/layout/layout}">
+<!-- S : Javascript functions	-->
+<script layout:fragment="script">
+
+	// DOM 준비 된 이후 실행
+	$( function () {
+		
+	});
+	
+	// [ 관리 ] 버튼 클릭
+	function manageQestnarAnswer( e ) {
+		
+		var qestnarAnswerSn = $(e).data("qestnarAnswerSn");
+		var qestnarGroupCd = $(e).data("qestnarGroupCd");
+		
+		var url = basicPath + '/live/detailByIdAjax';
+		$.ajax( {
+            url: url,
+            type: "GET",
+            dataType: "json",
+            async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+            data: { 
+					qestnarGroupCd : qestnarGroupCd, 
+            		qestnarAnswerSn : qestnarAnswerSn
+            		}, 
+            contentType: "application/json",
+            success: function ( ajaxResult ) {
+				
+				if ( ajaxResult.flag == "E" ) {
+					alert( ajaxResult.msg ) ;
+				} else {
+					// 모달 내용 초기화 작업
+					eraseDetailModalData();
+					
+					// 모달 내용 setting
+					setDetailModalData( ajaxResult );
+					
+					// 답변 달기 모달 show
+					$( "#targetDetailModal" ).modal( 'show' );
+				}
+			}
+		} );
+	}
+	
+	// 문의 상세 조회 모달창 ( 관리 클릭시 ) 내용 초기화 작업
+	function eraseDetailModalData() {
+		// detailData class 전부 초기화작업
+		$(".changeQestnarData").text("");
+		$(".changeQestnarData").val("");
+		$(".changeQestnarData").empty();
+		
+		
+		// replyData class 전부 초기화작업
+		$(".replyData").text("");
+		$(".replyData").val("");
+		$(".replyData").empty();
+		
+		
+	}
+	
+	// 문의 상세 조회 모달창 내용 setting 작업
+	function setDetailModalData( ajaxResult ) {
+		
+		
+		var _targetQestnarGroup = ajaxResult.targetQestnarGroupDto;									// 설문조사 그룹
+		var _targetQestnarQestnList = ajaxResult.targetQestnarQestnList;					// 설문조사 질문
+		var _targetQestnarQestnDetailList = ajaxResult.targetQestnarQestnDetailList;		// 설문조사 질문 상세 (객관식 : 작성자 답안까지 같이 있음)
+		
+		var targetQestnarAnswerDetailList = ajaxResult.targetQestnarAnswerDetailList;			// 설문조사 작성자 답안 (주관식만)
+		
+		// 답변등록 여부 체크 
+		if ( _targetQestnarGroup.replySetYn == 'Y' ) {
+			$(".replyArea").show();
+		} else {
+			$(".replyArea").hide();
+		}
+		
+		
+		// qestnarList
+		if ( _targetQestnarQestnList != null && _targetQestnarQestnList.length > 0 ) {
+			for(let qItem of _targetQestnarQestnList) {
+				
+				$answerType = '';
+				
+				// 필수여부 변수
+				var qestnarQestnEssntlYn = ( qItem.qestnarQestnEssntlYn == 'Y') ? ' required' : '' ;
+				
+				switch( qItem.qestnarQestnItemTyCd ) {
+					
+					case "ANSWER" :
+					case "ANSWER_LONG" :
+						for ( let answerItem of targetQestnarAnswerDetailList ) {
+							if ( answerItem.qestnarQestnSn == qItem.qestnarQestnSn ) {
+								$answerType = answerItem.qestnarAnswer;
+							}
+						}
+						break;
+						
+					case "SELECTIVE_ONE" :
+						
+						var checkedHtml = '';
+						
+						for ( let qOption of _targetQestnarQestnDetailList ) {
+							
+							checkedHtml = '';
+							if ( qOption.qestnarAnswerDetailSn != null ) checkedHtml = "checked='checked'";
+							
+							if( qItem.qestnarQestnSn == qOption.qestnarQestnSn) {
+								$answerType += "<div class='option_item'>";
+							    $answerType += "    <div class='item_content'>";
+							    $answerType += "        <label class='radioLabel'>";
+							    $answerType += "        <input type='radio' onclick='return false;' name='qestnarQestnDetailSn' value='" + qOption.qestnarQestnDetailSn + "' class='qAnswer" + qestnarQestnEssntlYn + "' title='" + qItem.qestnarQestnItemCn + "' " + checkedHtml + " >";
+							    $answerType += "        " + qOption.qestnarQestnDetailCn ;
+							    $answerType += "        </label>";
+							    $answerType += "    </div>";
+							    $answerType += "</div>";
+							}
+						}
+						break;
+						
+					case "SELECTIVE_MULTI" :
+					
+						var checkedHtml = '';
+						
+						for ( let qOption of _targetQestnarQestnDetailList ) {
+							
+							checkedHtml = '';
+							if ( qOption.qestnarAnswerDetailSn != null ) checkedHtml = "checked='checked'";
+							
+							if( qItem.qestnarQestnSn == qOption.qestnarQestnSn) {
+								$answerType += "<div class='option_item'>";
+							    $answerType += "    <div class='item_content'>";
+							    $answerType += "        <input type='checkbox' onclick='return false;' name='qestnarQestnDetailSnList' value='" + qOption.qestnarQestnDetailSn + "' id='" + qOption.qestnarQestnSn  + "_" + qOption.qestnarQestnDetailSeq  + "' class='qAnswer" + qestnarQestnEssntlYn + "' title='" + qItem.qestnarQestnItemCn + "' " + checkedHtml + " >";
+							    $answerType += "        <label for='" + qOption.qestnarQestnSn  + "_" + qOption.qestnarQestnDetailSeq  + "'>" + qOption.qestnarQestnDetailCn + "</label>";
+							    $answerType += "    </div>";
+							    $answerType += "</div>";
+							}
+						}
+						
+						break;
+				}
+				
+				
+				/*
+				<div class="field item form-group addOptionArea">
+					<label class="col-form-label col-md-1 col-sm-2 label-align"></label>
+					<div class="col-md-8 col-sm-9">
+						<div class="inputOption">
+							연령이 어떻게 되시나요
+						</div>
+						<div class="optionList">
+							<div class="option_item">
+								<div class="item_content">
+										<label class="radioLabel">
+											<input type="radio" name="itemRadio" onclick="return false;">
+										</label>
+									<input name="qestnarQestnDetailCn" type="text" value="20대" onblur="setReadonly(this)" readonly="readonly">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				*/
+				
+				$("[name='manageQestnarAnswerForm']").find(".qestnarList").append(
+					$( "<div>" ).attr( "class", "field item form-group addOptionArea").append(
+						$( "<label>" ).attr( "class", "col-form-label col-md-2 col-sm-2 label-align" ),
+						$( "<div>" ).attr( "class", "col-md-8 col-sm-9").append(
+							$( "<div>" ).attr( "class", "inputOption").append(
+								qItem.qestnarQestnItemCn
+							),
+							$( "<div>" ).attr( "class", "optionList").append(
+								$answerType
+							)
+						),
+						$( "<label>" ).attr( "class", "col-form-label col-md-2 col-sm-2 label-align" ),
+					)
+				);
+				
+			}
+			
+		}
+		
+		var targetDto = ajaxResult.targetDto;
+		
+		$("#manageQestnarAnswerForm").find("[name='qestnarAnswerSn']").val( targetDto.qestnarAnswerSn );
+		
+		if (targetDto.userSn == null ) {
+			$("#qestnarAnswer_noLoginArea").show();
+			$("#qestnarAnswer_loginArea").hide();
+		} else {
+			$("#qestnarAnswer_loginArea").show();
+			$("#qestnarAnswer_noLoginArea").hide();
+			
+			
+			$("#manageQestnarAnswerForm").find("[name='userId']").text( targetDto.userId );
+			$("#manageQestnarAnswerForm").find("[name='userNm']").text( targetDto.userNm );
+			$("#manageQestnarAnswerForm").find("[name='telNo']").text( targetDto.telNo );
+			
+		}
+		
+				
+		// targetReplyList
+		var targetReplyList = ajaxResult.targetQestnarAnswerReplyList;
+		
+		// 순회한 키값 리스트를 재순회
+		var i = 1; 
+		for ( let item of targetReplyList ) { 
+			$("#manageQestnarAnswerForm").find(".replyList").append(
+				$(" <div> ").attr( "class", "field item form-group manage" ).append(
+					$( "<label>" ).attr( "class", "col-form-label col-md-2 col-sm-3 label-align" ).append("[" + i++ + "] . " + item.userNm + "<br>" + item.userId + "<br>" + item.regDt),
+					$( "<div>" ).attr( "class", "col-form-label col-md-10 col-sm-6" ).append(
+						$( "<textarea>" ).attr("class", "no-textarea" ).attr( "rows", "6" ).append(
+							item.qestnarAnswerReplyCn							
+						)
+					)
+				)
+			)
+		}
+		
+		
+		
+	}
+	
+	// 설문조사 답변 등록
+	function insertQestnarAnswerReply() {
+		
+		// 유효성 체크
+		// 답변 내용 입력 길이 체크
+		var qestnarAnswerReplyCn =  $("[name='manageQestnarAnswerForm']").find("[name='qestnarAnswerReplyCn']").val();
+		if ( qestnarAnswerReplyCn.length < 10 ) {
+			alert("답변내용을 10자이상 입력해주세요.");
+			return false;
+		}
+		// 유효성 체크 종료
+		
+		if( confirm("답변을 등록하시겠습니까?")) {
+			// form submit
+			$("#manageQestnarAnswerForm").submit();
+		}
+	}
+	
+
+</script>
+<!-- E : Javascript functions	-->
+<th:block layout:fragment="content">
+
+	<!-- S : 분류 영역 -->
+	<div class="div_menu_detail row">
+		<div class="col-md-12 col-sm-12 ">
+			<div class="x_panel category-area">
+				<!-- 분류 영역 > 카테고리 그룹 영역 -->
+				<div class="col-md-10 category-list-area">
+					<div class="category-group-box">
+						<div class="data-group">
+							<span class="category-title">설문조사그룹</span>
+							<ul >
+								<!--  lv1 -->
+								<li onclick="getCateNextLvList('', this );"
+									th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == 0 ) } ? 'on'"
+									value="0">전체
+								</li>
+								<li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('', this );"
+									th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn == data.qestnarGroupSn ) } ? 'on'"
+									th:value="${data.qestnarGroupSn}" th:text="${data.qestnarGroupNm}" >
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- 분류 영역 > 우측영역 ( 선택한 카테고리 텍스트 표출, 카테고리검색 버튼) -->
+				<div class="col-md-2 col-sm-6 category-right">
+					<div class="picked-cate" id="picked-cate">
+						<div class="cateLv0 blink"></div>
+						<div class="cateLv1 blink"></div>
+						<div class="cateLv2 blink"></div>
+						<div class="cateLv3 blink"></div>
+						<div class="cateLv4 blink"></div>
+					</div>
+					<div class="btn-group float-right" role="group">
+						<button name="searchCateBtn" type="button" class="btn btn-purple w120p"
+								th:data-search-cate-url="|${basicPath}/${mcd}/list|"
+								th:onclick="searchCate( this.getAttribute('data-search-cate-url') )">보기
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- E : 분류 영역 -->
+
+	<!-- S: content -->
+	<div class="x_panel">
+		<div class="x_content">
+			<div class="row">
+				<form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd}) }" class="form">
+					<input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
+					<!-- S : 테이블 상단 검색 창 -->
+					<!-- totalCount -->
+					<div class="col-md-1 col-sm-2 mt_10p pl_15p">
+						총 <span th:utext="${resultList.totalElements}"></span>건
+					</div>
+					<div class="col-md-11 col-sm-10 mb_10p">
+						<div class="btn-group float-right" role="group">
+							<select class="form-control ml_5p w_55r" name="schOption">
+								<option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">제목</option>
+<!--								<option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">이름</option>-->
+							</select>
+							<input type="text" name="schCntn" th:value="${searchDTO.schCntn}"
+								   class="form-control input-sm" placeholder="검색어 입력"
+								   aria-controls="datatable-responsive">
+							<button type="submit" class="btn btn-purple w250p">검색</button>
+						</div>
+					</div>
+					<!-- E : 테이블 상단 검색 창 -->
+					<!-- S : 테이블 -->
+					<div class="col-md-12 col-sm-12 ">
+						<table id="listTable" class="table table-bordered text-center">
+							<colgroup>
+								<col width="60px;">
+								<col width="15%;">
+								<col width="auto;">
+								<col width="15%;">
+								<col width="130px;">
+							</colgroup>
+							<thead>
+								<tr>
+									<th>순번</th>
+									<th>설문조사그룹명</th>
+									<th>작성자정보</th>
+									<th>등록일</th>
+									<th>관리</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
+									<td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
+									<td>
+										<a th:text="${data.qestnarGroupNm}"></a>
+									</td>
+									<td class="tAlignLeft">
+										<th:block th:if="${data.replySetYn eq 'Y'}">[ [[${data.replyYnNm}]] <th:block th:if="${data.replyYn eq 'Y'}">([[${data.replyCnt}]])</th:block> ]</th:block>
+										
+										
+										<th:block th:if="${data.userSn == null }">
+											[ 비로그인 작성자 ]
+										</th:block>
+										<th:block th:unless="${data.userSn == null }">
+											[[${data.userNm}]] ( [[${data.userId}]] / [[${data.telNo}]] )
+										</th:block>
+									</td>
+									<td th:text="${data.regDt}"></td>
+									<td>
+										<button th:onclick="|manageQestnarAnswer( this );|" th:data-qestnar-answer-sn="${data.qestnarAnswerSn}" th:data-qestnar-group-cd="${data.qestnarGroupCd}" type="button" class="btn btn-primary btn-xs">
+											<i class="fa fa-pencil"></i>관리
+										</a>
+									</td>
+								</tr>
+								<tr th:unless = "${!resultList.isEmpty()}">
+									<td class="noDataTd" style="display: none;">
+										데이터가 없습니다.
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- E : 테이블 -->
+					<!-- S : 하단 목록 -->
+					<div class="col-md-12 col-sm-12">
+						<!-- bottom left area -->
+						<div class="col-md-2 col-sm-3 text-left">
+							<a th:href="@{ {basicPath}/mcd/regist ( basicPath = ${basicPath} ) }" class="btn btn-white w120p">등록</a>
+						</div>
+						<!-- S : 테이블 하단 페이징 -->
+						<div class="col-md-8 col-sm-6 text-center"
+							 th:insert="~{admin/layout/tiles/paging :: paging('listForm', ${resultList})}">
+							<!-- parameter : ( submit할 form 의 name값 ), ( ${resultList} 는 Page<T> 오브젝트 )  -->
+						</div>
+						<!-- E : 테이블 하단 페이징 -->
+						<!-- bottom right area -->
+						<div class="col-md-2 col-sm-3 text-right">
+							<select class="form-control" name="size" onchange="searchListSize('listForm',this.value);">
+								<option value="10" th:selected=" ${resultList.pageable.pageSize} == '10' ">10개씩 보기
+								</option>
+								<option value="30" th:selected=" ${resultList.pageable.pageSize} == '30' ">30개씩 보기
+								</option>
+								<option value="50" th:selected=" ${resultList.pageable.pageSize} == '50' ">50개씩 보기
+								</option>
+								<option value="100" th:selected=" ${resultList.pageable.pageSize} == '100' ">100개씩 보기
+								</option>
+							</select>
+						</div>
+					</div>
+				</form>
+				<form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/{mcd}/delete ( basicPath = ${basicPath}, mcd = ${mcd} ) }">
+					<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- S : 모달 ( 설문조사 목록 > 관리 : 설문조사 상세 조회 및 답변 작성 )  -->
+	<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+		 id="targetDetailModal" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">설문조사 상세 조회</h4>
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">×</span></button>
+				</div>
+				<div class="modal-body" th:insert="admin/qestnarAnswer/manageModal.html">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-white" data-dismiss="modal">
+						닫기
+					</button>
+					<button type="submit" class="btn btn-purple replyArea"  onclick="insertQestnarAnswerReply()">
+						답변등록
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- E : 모달 ( 설문조사 목록 > 관리 : 설문조사 상세 조회 및 답변 작성 )  -->
+	<!-- E : content -->
+</th:block>
+</html>

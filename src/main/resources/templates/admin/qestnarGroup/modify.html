@@ -588,6 +588,28 @@
 							</div>
 						</div>
 						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">로그인 필수 여부</label> 
+							<div class="col-md-2 col-sm-4">
+								<div class="btn-group radiobox">
+									<input type="radio" id="loginEssntlYn1" name="loginEssntlYn" value="Y" th:checked="${targetDto.loginEssntlYn eq 'Y'}"  class="join-btn" required="required">
+									<label for="loginEssntlYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">예</label>
+									<input type="radio" id="loginEssntlYn2" name="loginEssntlYn" value="N" th:checked="${targetDto.loginEssntlYn eq 'N'}"  class="join-btn" required="required">
+									<label for="loginEssntlYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">아니오</label>
+								</div>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">댓글 설정 여부</label> 
+							<div class="col-md-2 col-sm-4">
+								<div class="btn-group radiobox">
+									<input type="radio" id="replySetYn1" name="replySetYn" value="Y" th:checked="${targetDto.replySetYn eq 'Y'}"  class="join-btn" required="required">
+									<label for="replySetYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">사용</label>
+									<input type="radio" id="replySetYn2" name="replySetYn" value="N" th:checked="${targetDto.replySetYn eq 'N'}"  class="join-btn" required="required">
+									<label for="replySetYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">미사용</label>
+								</div>
+							</div>
+						</div>
+						<div class="field item form-group">
 							<label class="col-form-label col-md-2 col-sm-3 label-align">사용 여부</label> 
 							<div class="col-md-2 col-sm-4">
 								<div class="btn-group radiobox">

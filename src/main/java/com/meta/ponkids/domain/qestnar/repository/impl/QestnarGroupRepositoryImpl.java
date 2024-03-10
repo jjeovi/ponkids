@@ -4,7 +4,6 @@ package com.meta.ponkids.domain.qestnar.repository.impl;
 import static com.meta.ponkids.domain.qestnar.entity.QQestnarGroup.qestnarGroup;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,10 +31,8 @@ public class QestnarGroupRepositoryImpl implements QestnarGroupRepositoryCustom 
 	@Override
 	public Page<QestnarGroupListDto> getList( QestnarGroupListDto listDto, Pageable pageable ) {
 		
-		// TODO 구현
 		// (1) '결과list' 와 (2)'count' 를 2번에 걸쳐 조회
         
-		// TODO
         // (1) 결과list (results).
 		List<QestnarGroupListDto> results = query
 				// select
@@ -54,6 +51,18 @@ public class QestnarGroupRepositoryImpl implements QestnarGroupRepositoryCustom 
                 		.when( qestnarGroup.privcyYn.eq("N")).then("비공개")
                 		.otherwise("")
                 		.as("privcyYnNm"),
+                		qestnarGroup.loginEssntlYn,
+                		new CaseBuilder()
+                		.when( qestnarGroup.loginEssntlYn.eq("Y")).then("예")
+                		.when( qestnarGroup.loginEssntlYn.eq("N")).then("아니오")
+                		.otherwise("")
+                		.as("loginEssntlYnNm"),
+                		qestnarGroup.replySetYn,
+                		new CaseBuilder()
+                		.when( qestnarGroup.replySetYn.eq("Y")).then("설정")
+                		.when( qestnarGroup.replySetYn.eq("N")).then("미설정")
+                		.otherwise("")
+                		.as("replySetYnNm"),
                 		qestnarGroup.useYn,
                 		new CaseBuilder()
                 		.when( qestnarGroup.useYn.eq("Y")).then("사용")
@@ -84,6 +93,63 @@ public class QestnarGroupRepositoryImpl implements QestnarGroupRepositoryCustom 
 		return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
 	}
 	
+	
+	
+	@Override
+	public List<QestnarGroupListDto> getList( QestnarGroupListDto listDto ) {
+		
+		// (1) '결과list' 와 (2)'count' 를 2번에 걸쳐 조회
+		
+		// (1) 결과list (results).
+		return query
+				// select
+				.select( new QQestnarGroupListDto(
+						qestnarGroup.qestnarGroupSn,
+						qestnarGroup.qestnarGroupCd,
+						qestnarGroup.qestnarGroupNm,
+						qestnarGroup.qestnarGroupDc,
+						qestnarGroup.upendGdccSetYn,
+						qestnarGroup.upendGdcc,
+						qestnarGroup.lptGdccSetYn,
+						qestnarGroup.lptGdcc,
+						qestnarGroup.privcyYn,
+						new CaseBuilder()
+						.when( qestnarGroup.privcyYn.eq("Y")).then("공개")
+						.when( qestnarGroup.privcyYn.eq("N")).then("비공개")
+						.otherwise("")
+						.as("privcyYnNm"),
+						qestnarGroup.loginEssntlYn,
+						new CaseBuilder()
+						.when( qestnarGroup.loginEssntlYn.eq("Y")).then("예")
+						.when( qestnarGroup.loginEssntlYn.eq("N")).then("아니오")
+						.otherwise("")
+						.as("loginEssntlYnNm"),
+						qestnarGroup.replySetYn,
+						new CaseBuilder()
+						.when( qestnarGroup.replySetYn.eq("Y")).then("설정")
+						.when( qestnarGroup.replySetYn.eq("N")).then("미설정")
+						.otherwise("")
+						.as("replySetYnNm"),
+						qestnarGroup.useYn,
+						new CaseBuilder()
+						.when( qestnarGroup.useYn.eq("Y")).then("사용")
+						.when( qestnarGroup.useYn.eq("N")).then("미사용")
+						.otherwise("")
+						.as("useYnNm"),
+						qestnarGroup.registerId,
+						Expressions.stringTemplate("to_char({0}, '{1s}')", qestnarGroup.regDt, "YYYY-MM-DD HH24:MI:SS")
+						) )					
+				.from( qestnarGroup )
+				// where
+				.where(
+						eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+						)
+				.orderBy( qestnarGroup.qestnarGroupSn.desc())
+				.fetch();
+	}
+	
+	
+	
 	@Override
 	public QestnarGroupListDto findByQestnarGroupCd( String qestnarGroupCd ) {
 		
@@ -103,6 +169,18 @@ public class QestnarGroupRepositoryImpl implements QestnarGroupRepositoryCustom 
             		.when( qestnarGroup.privcyYn.eq("N")).then("비공개")
             		.otherwise("")
             		.as("privcyYnNm"),
+            		qestnarGroup.loginEssntlYn,
+            		new CaseBuilder()
+            		.when( qestnarGroup.loginEssntlYn.eq("Y")).then("예")
+            		.when( qestnarGroup.loginEssntlYn.eq("N")).then("아니오")
+            		.otherwise("")
+            		.as("loginEssntlYnNm"),
+            		qestnarGroup.replySetYn,
+            		new CaseBuilder()
+            		.when( qestnarGroup.replySetYn.eq("Y")).then("설정")
+            		.when( qestnarGroup.replySetYn.eq("N")).then("미설정")
+            		.otherwise("")
+            		.as("replySetYnNm"),
             		qestnarGroup.useYn,
             		new CaseBuilder()
             		.when( qestnarGroup.useYn.eq("Y")).then("사용")
@@ -130,7 +208,7 @@ public class QestnarGroupRepositoryImpl implements QestnarGroupRepositoryCustom 
 //            else if ( schOption.equals( "B" ) )
 //                return qestnarGroup.qestnarGroupNm.contains( schCntn ); // TODO LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
 //            else return null;
-        	return null;			// TODO (build한 이후에 해주세요. 안그럼 에러발생)  실제 구현시에는 해당부분지워주고 위에부분주석풀기
+        	return null;			
         } else {
             return null;
         }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class QestnarAnswerListDto {
+public class QestnarAnswerDetailDto {
 	
 	private Long 	qestnarAnswerSn;
 	
@@ -36,9 +36,7 @@ public class QestnarAnswerListDto {
 	
     private String 	registerId;      // 등록자 ID
     
-    private String 	regDt;			// 등록일자
-    
-    private String 	regFullDt;		// 등록일자
+    private String 	regDt;	// 등록일자
 	
 	private String 	schOption;   	// 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
     
@@ -47,7 +45,7 @@ public class QestnarAnswerListDto {
     private CategoryDto category;    // 카테고리 검색 : 생성자에는 추가하지 않음!
 	
 	@QueryProjection
-	public QestnarAnswerListDto ( Long qestnarAnswerSn, Long qestnarGroupSn, String qestnarGroupCd, String qestnarGroupNm, String replySetYn, String replyYn, String replyYnNm, Long replyCnt, Long userSn, String userId, String userNm, String telNo, String registerId, String regDt, String regFullDt ) {
+	public QestnarAnswerDetailDto ( Long qestnarAnswerSn, Long qestnarGroupSn, String qestnarGroupCd, String qestnarGroupNm, String replySetYn, String replyYn, String replyYnNm, Long replyCnt, Long userSn, String userId, String userNm, String telNo, String registerId, String regDt ) {
 		this.qestnarAnswerSn = qestnarAnswerSn;
 		this.qestnarGroupSn = qestnarGroupSn;
 		this.qestnarGroupCd = qestnarGroupCd;
@@ -62,7 +60,6 @@ public class QestnarAnswerListDto {
 		this.telNo = telNo;
 		this.registerId = registerId;
 		this.regDt 		= regDt;
-		this.regFullDt 	= regFullDt;
 	}
 
 }
