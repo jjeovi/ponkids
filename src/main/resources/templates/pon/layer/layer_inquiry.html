@@ -43,43 +43,82 @@
 							</div>
 						</li>
 					</ul>
-					<div class="detailInquiry qestnarList" style="display:none;ayer">
+					<div class="myInquiryDetail" style="display:none;">
 						<div class="send_btn pt_0p">
-							<button type="button" onclick="insertQestnarAnswer( 'qestnarForInquiryInsertForm' );">제출하기</button>
+							<button type="button" onclick="showLayerTabType( 'myInquiryList' );">목록</button>
 						</div>
 						<div class="chat_tit_form qBox">
-							<input type="hidden" name="qestnarQestnSn" value="100105">
-							<input type="hidden" name="qestnarQestnItemTyCd" value="SELECTIVE_ONE">
 							<div class="qAnswerWrap">
-								<select name="qestnarQestnDetailSn" class="qAnswer required" title="문의유형">
-									<option value="">문의유형 선택</option>
-									<option value="100230">1</option>
-									<option value="100231">2</option>
-									<option value="100232">3</option>
-									<option value="100233">4</option>
-									<option value="100234">5</option>
-								</select>
+								<span name="detailInquiryTy" class="detailInquiryTy detailInqruiyChangeData"></span>
 							</div>
 						</div>
 						<div class="chat_tit_form qBox">
-							<input type="hidden" name="qestnarQestnSn" value="100106">
-							<input type="hidden" name="qestnarQestnItemTyCd" value="ANSWER">
 							<div class="qAnswerWrap">
-								<input type="text" class="qAnswer required" name="qestnarAnswer" title="문의 제목" placeholder="문의 제목">
+								<input type="text" class="qAnswer detailInqruiyChangeData" name="detailInqruiySj" title="문의 제목" placeholder="문의 제목" readonly="readonly" >
 							</div>
 						</div>
 						<div class="chat_disc_form qBox">
-							<input type="hidden" name="qestnarQestnSn" value="100107">
-							<input type="hidden" name="qestnarQestnItemTyCd" value="ANSWER_LONG">
 							<div class="qAnswerWrap">
-								<textarea class="qAnswer required" name="qestnarAnswer" rows="10" title="문의 내용" cols="30" placeholder="문의 내용">
+								<textarea class="qAnswer required detailInqruiyChangeData" name="detailInqruiyCn" rows="10" title="문의 내용" cols="30" placeholder="문의 내용"  readonly="readonly" >
+									
+								</textarea>
+							</div>
+						</div>
+						<div class="myInquiryDetailReplyWrap detailInqruiyChangeData">
+							<div class="myInquiryDetailReplyList">
+								<div class="replyWrap">
+									<div class="chat_tit_form qBox">
+										<div class="qAnswerWrap">
+											<input type="text" class="qAnswer replyUserNm" readonly="readonly" value="관리자">
+											<input type="text" class="qAnswer replyRegDt" readonly="readonly" value="2024-03-10">
+										</div>
+									</div>
+									<div class="chat_disc_form qBox mt_3p" >
+										<div class="qAnswerWrap">
+											<textarea class="qAnswer" name="replyCn" rows="5" title="답변내용" cols="30" placeholder="답변내용" readonly="readonly" style="min-height: 80px;">									
+											</textarea>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="tab03" style="display:none;" class="tabDiv">
+					<ul class="tab faqNttList">
+						<li>
+							<div class="li_leftDiv">
+								<span class="inquiry_ty">[관리자]</span>
+								<p>FAQ제목</p>
+							</div>
+							<div class="li_rightDiv">
+								<span>2022-03-02</span>
+							</div>
+						</li>
+					</ul>
+					<div class="faqNttDetail" style="display:none;">
+						<div class="send_btn pt_0p">
+							<button type="button" onclick="showLayerTabType( 'faqNttList' );">목록</button>
+						</div>
+						<div class="chat_tit_form qBox">
+							<div class="qAnswerWrap">
+								<span name="detailFaqNttUserNm" class="detailInquiryTy detailFaqNttChangeData"></span>
+							</div>
+						</div>
+						<div class="chat_tit_form qBox">
+							<div class="qAnswerWrap">
+								<input type="text" class="qAnswer detailFaqNttChangeData" name="detailFaqNttNm" title="FAQ 게시글 제목 (상세)" placeholder="FAQ 게시글 제목 (상세)" readonly="readonly" >
+							</div>
+						</div>
+						<div class="chat_disc_form qBox">
+							<div class="qAnswerWrap">
+								<textarea class="qAnswer required detailFaqNttChangeData" name="detailFaqNttCn" rows="10" title="FAQ 게시글 내용 (상세)" cols="30" placeholder="FAQ 게시글 내용 (상세)"  readonly="readonly" >
 									
 								</textarea>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div id="tab03" style="display:none;" >area3</div>
 			</div>
 		</div>
 		<div class="chat_nav">
@@ -95,7 +134,7 @@
 						</a>
 					</li>
 					<li>
-						<a href="#tab02">
+						<a href="#tab02" onclick="showLayerTabType( 'myInquiryList' );">
 							<div class="chat_nav_ico ">
 								<img class="" src="/pon/common/image/chat_ico.svg" alt="">
 								<img class="" src="/pon/common/image/chat_ico_active.svg" alt="">
@@ -104,7 +143,7 @@
 						</a>
 					</li>
 					<li>
-						<a href="#tab03">
+						<a href="#tab03" onclick="showLayerTabType( 'faqNttList' );" >
 							<div class="chat_nav_ico ">
 								<img class="" src="/pon/common/image/gear_ico.svg" alt="">
 								<img class="" src="/pon/common/image/gear_ico_active.svg" alt="">

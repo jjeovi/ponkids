@@ -15,7 +15,7 @@
 		var qestnarAnswerSn = $(e).data("qestnarAnswerSn");
 		var qestnarGroupCd = $(e).data("qestnarGroupCd");
 		
-		var url = basicPath + '/live/detailByIdAjax';
+		var url = basicPath + '/live/detailAjax';
 		$.ajax( {
             url: url,
             type: "GET",
@@ -41,7 +41,7 @@
 					$( "#targetDetailModal" ).modal( 'show' );
 				}
 			}
-		} );
+		});
 	}
 	
 	// 문의 상세 조회 모달창 ( 관리 클릭시 ) 내용 초기화 작업
@@ -219,9 +219,6 @@
 				)
 			)
 		}
-		
-		
-		
 	}
 	
 	// 설문조사 답변 등록

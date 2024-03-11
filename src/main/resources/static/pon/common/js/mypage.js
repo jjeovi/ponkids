@@ -6,18 +6,14 @@ $( function () {
 //		alert("eee");
 //	})
 
-
 } );
 // ------------- function () 함수 종료 -----------------
-
 
 // 마이페이지 > 신청내역 > item 클릭
 function detailHistory( pk ) {
 	location.href = "/mypage/reqstHistory/detail?pk=" + pk;
 	
 }
-
-
 
 /*  S : 후기 작성하기 */
 // ======================================================================================

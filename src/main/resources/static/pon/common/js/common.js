@@ -536,15 +536,60 @@ function setInquiryData( qestnarGroupCd, layerName ){
 	
 	// 문의 버튼 클릭시 process
 	// ==========================
-	// - 1. FAO 리스트 조회
+	// - 1. FAQ 리스트 조회
 	// - 2. 내 문의 내역
 	// - 3. 문의하기
 	
-	// - 1. FAO 리스트 조회
+	// - 1. FAQ 리스트 조회
+	var url = "/ntt/live/getListByBbsNmAjax";
+		$.ajax({
+			url: url,
+			type: "GET",
+			dataType: "json",
+			async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+			data : { bbsNm : "FAQ" },
+			contentType: "application/json",
+			success: function ( ajaxResult ) {
+				
+				// 1. 문의 > FAQ 리스트 초기화
+				$(".tab.faqNttList").empty();
+				
+				// 2.문의 > FAQ 리스트 data setting
+				if ( ajaxResult.flag == "E" ) {
+					// 문의 내역이 없습니다.
+					$(".tab.faqNttList").append(
+						$( "<li>" ).attr("class","no-data").append(
+							"게시물이 존재하지 않습니다."
+						)
+					)
+				} else {
+					
+					// FAQ 개수만큼 순회하며 li 에 뿌림
+					for ( let item of ajaxResult.targetList ) {
+						
+						$(".tab.faqNttList").append(
+							$( "<li>" ).attr( "onclick", "detailFaqNtt( '" + item.nttSn + "' )" ).append(
+								$( "<div>" ).attr( "class", "subInfo" ).append(
+									$( "<span>" ).append( "[" + item.userNm + "]" ),
+									$( "<span>" ).attr( "class", "regDt" ).append( item.regDt )
+								),
+								$( "<div>" ).attr( "class", "titleInfo mt_15p" ).append(
+									$( "<p>" ).append( item.nttNm )
+								)
+							)
+						)
+					}
+				}
+				
+				
+				
+			}
+		});
+	
 	
 	// - 2. 내 문의 내역
 	// 특정 클래스의 특정 요일 의 수업 리스트 조회
-	// 1. 로그인 여부 check
+	// 로그인 여부 check
 	if ( loginYn == 'N' ) {
 		alert("로그인 후 이용 가능합니다.");
 		showLayer('login');
@@ -574,40 +619,41 @@ function setInquiryData( qestnarGroupCd, layerName ){
 					)
 				} else {
 					
+					// 내 문의 내역 개수만큼 순회하며 li 에 뿌림
 					for( let item of ajaxResult.targetDto ) {
 						
 						var type = '';
 						var title = '';
 						
-						
 						for( let itemInfo of ajaxResult.targetQestnarAnswerDetailList ) {
 							if ( item.qestnarAnswerSn == itemInfo.qestnarAnswerSn ) {
-								if ( item.qestnarQestnItemCn.includes("유형") ) {
-									type = item.qestnarQestnDetailCn;
-								} else if ( item.qestnarQestnItemCn.includes("제목") ) {
-									title = item.qestnarAnswer;
-								} 
-								
+								if ( itemInfo.qestnarQestnItemCn.includes("유형") ) {
+									type = itemInfo.qestnarQestnDetailCn;
+								} else if ( itemInfo.qestnarQestnItemCn.includes("제목") ) {
+									title = itemInfo.qestnarAnswer;
+								}
 							}
 						}
 						
+						// 답변 개수 존재한다면 표출 
+						var replyHtml = '';
+						if ( item.replyYn == 'Y' ) {
+							replyHtml = "<em class='replyCnt'> [" + item.replyCnt + "]</em>"
+						}
 						
 						$(".tab.myInquiryList").append(
-							$( "<li>" ).append(
-								$( "<div>" ).attr( "class", "li_leftDiv" ).append(
-									$( "<span>" ).attr( "class", "inquiry_ty" ).append( "[" + type + "]" ),
-									$( "<p>" ).append( title),
+							$( "<li>" ).attr( "onclick", "detailInquiry( '" + item.qestnarGroupCd + "', '" + item.qestnarAnswerSn + "' )" ).append(
+								$( "<div>" ).attr( "class", "subInfo" ).append(
+									$( "<span>" ).append( "[" + type + "]" ),
+									$( "<span>" ).attr( "class", "regDt" ).append( item.regDt )
 								),
-								$( "<div>" ).attr( "class", "li_rightDiv" ).append(
-									$( "<span>" ).append( item.regDt )
+								$( "<div>" ).attr( "class", "titleInfo mt_15p" ).append(
+									$( "<p>" ).append( title  + replyHtml )
 								)
 							)
 						)
 					}
 				}
-				
-				
-				setInqryLayerData( ajaxResult );
 				
 			}
 		});
@@ -971,15 +1017,160 @@ function insertQestnarAnswer( formName ){
 				$("[name='" + formName + "']").submit();
 			}
 		}
-		
 	});
-	
-	
-	// =========================== 유효성 검사 종료 이후 값 정형화 setting ================
-	// =========================== 유효성 검사 종료 이후 값 정형화 setting ================
-	// =========================== 유효성 검사 종료 이후 값 정형화 setting ================
 }
 
 
+function detailInquiry( qestnarGroupCd, qestnarAnswerSn ) {
+	
+	// detailInqruiyChangeData 초기화
+	$("[name='qestnarForInquiryInsertForm']").find(".detailInqruiyChangeData").val();
+	$("[name='qestnarForInquiryInsertForm']").find(".detailInqruiyChangeData").text();
+	$("[name='qestnarForInquiryInsertForm']").find(".detailInqruiyChangeData").empty();
+	
+	var url = "/qestnarAnswer/live/detailAjax";
+	$.ajax({
+		url: url,
+        type: "GET",
+        dataType: "json",
+        async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+        data: { 
+				qestnarGroupCd : qestnarGroupCd, 
+        		qestnarAnswerSn : qestnarAnswerSn
+        		}, 
+        contentType: "application/json",
+        success: function ( ajaxResult ) {
+			
+			// targetDto 존재 여부 확인
+			if ( ajaxResult.targetDto == null ) {
+				alert("문의 내역을 불러오는 중 오류가 발생했습니다. 다시 시도해주세요.");
+				return false;
+			} else {
+				
+				// 1. 문의 내용 setting
+				// 2. 답변 내용 setting (답변이 존재할때만)
+				
+				// 1. 문의 내용 setting
+				for ( let answer of ajaxResult.targetQestnarAnswerDetailList ){
+					
+					if ( answer.qestnarQestnItemCn.includes("유형") ) {
+						$("[name='qestnarForInquiryInsertForm']").find("[name='detailInquiryTy']").text( answer.qestnarQestnDetailCn);
+					} else if ( answer.qestnarQestnItemCn.includes("제목") ) {
+						$("[name='qestnarForInquiryInsertForm']").find("[name='detailInqruiySj']").val( answer.qestnarAnswer);
+					} else if ( answer.qestnarQestnItemCn.includes("내용") ) {
+						$("[name='qestnarForInquiryInsertForm']").find("[name='detailInqruiyCn']").val( answer.qestnarAnswer);
+					}
+					
+					// 목록 ( myInquiryList )  와 상세 ( myInquiryDetail ) 표출 swap\
+					showLayerTabType( 'myInquiryDetail' );
+				}
+				
+				// 2. 답변 내용 setting (답변이 존재할때만)
+				if ( ajaxResult.targetDto.replyYn == "Y" && ajaxResult.targetQestnarAnswerReplyList != null 
+						&& ajaxResult.targetQestnarAnswerReplyList.length > 0 ) {
+							
+					$(".myInquiryDetail .myInquiryDetailReplyWrap").append(
+						$("<div>").attr("class", "myInquiryDetailReplyList")
+					)
+					
+					for ( let answerReply of ajaxResult.targetQestnarAnswerReplyList ) {
+						// 답변 개수만큼 순회 
+						$(".myInquiryDetailReplyList").append(
+							$( "<div>" ).attr( "class", "replyWrap" ).append(
+								$( "<div>" ).attr( "class", "chat_tit_form qBox" ).append(
+									$( "<div>" ).attr( "class", "qAnswerWrap" ).append(
+										$( "<input>" ).attr("type", "text" ).attr("class", "qAnswer replyUserNm" ).attr("readonly", "readonly" ).attr( "value", answerReply.userNm ),
+										$( "<input>" ).attr("type", "text" ).attr("class", "qAnswer replyRegDt" ).attr("readonly", "readonly" ).attr( "value", answerReply.regDt ),
+									)
+								),	
+								$( "<div>" ).attr( "class", "chat_disc_form qBox mt_3p" ).append(
+									$( "<div>" ).attr( "class", "qAnswerWrap" ).append(
+										$( "<textarea>" ).attr("class", "qAnswer replyCn" ).attr( "rows", "3" ).attr( "cols", "30" ).attr( "readonly", "readonly" ).append( answerReply.qestnarAnswerReplyCn )
+									)
+								)	
+							)
+						);
+					}
+					
+				}
+				
+				
+			}
+			
+		}
+		
+	});
+	
+}
+
+
+function detailFaqNtt( nttSn ) {
+	
+	// detailFaqNttChangeData 초기화
+	$("[name='qestnarForInquiryInsertForm']").find(".detailFaqNttChangeData").val();
+	$("[name='qestnarForInquiryInsertForm']").find(".detailFaqNttChangeData").text();
+	$("[name='qestnarForInquiryInsertForm']").find(".detailFaqNttChangeData").empty();
+	
+	var url = "/ntt/live/detailAjax";
+	$.ajax({
+		url: url,
+        type: "GET",
+        dataType: "json",
+        async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+        data: { 
+				nttSn : nttSn 
+        		}, 
+        contentType: "application/json",
+        success: function ( ajaxResult ) {
+			
+			// targetDto 존재 여부 확인
+			if ( ajaxResult.flag == "E" ) {
+				alert("FAQ 게시글을 불러오는 중 오류가 발생했습니다. 다시 시도해주세요.");
+				return false;
+			} else {
+				
+				// 1. FAQ 상세 내용 setting
+				target = ajaxResult.target;
+				$("[name='qestnarForInquiryInsertForm']").find("[name='detailFaqNttUserNm']").text( target.userNm );
+				$("[name='qestnarForInquiryInsertForm']").find("[name='detailFaqNttNm']").val( target.nttNm );
+				$("[name='qestnarForInquiryInsertForm']").find("[name='detailFaqNttCn']").val( target.nttCn );
+				
+				showLayerTabType('faqNttDetail');
+				
+				
+			}
+			
+		}
+		
+	});
+	
+}
+
+
+
+// 내 문의내역 > 내역 상세보기 > '목록' 버튼 클릭 시
+function showLayerTabType( divName ){
+	
+	if ( divName == 'myInquiryList') {
+		
+		$("[name='qestnarForInquiryInsertForm']").find(".myInquiryList").show();
+		$("[name='qestnarForInquiryInsertForm']").find(".myInquiryDetail").hide();
+	} else if ( divName == 'myInquiryDetail' ) {
+		
+		$("[name='qestnarForInquiryInsertForm']").find(".myInquiryDetail").show();
+		$("[name='qestnarForInquiryInsertForm']").find(".myInquiryList").hide();
+		
+		
+	} else if ( divName == 'faqNttDetail' ) {
+		
+		$("[name='qestnarForInquiryInsertForm']").find(".faqNttDetail").show();
+		$("[name='qestnarForInquiryInsertForm']").find(".faqNttList").hide();
+		
+	} else if ( divName == 'faqNttList' ) {
+		
+		$("[name='qestnarForInquiryInsertForm']").find(".faqNttList").show();
+		$("[name='qestnarForInquiryInsertForm']").find(".faqNttDetail").hide();
+	}
+}
 
 /* E : 설문조사 set */

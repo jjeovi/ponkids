@@ -145,7 +145,7 @@ public class NttAdmController {
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list?bbsSn=" + bbsSn );
+        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/" + bbsSn + "/list" );
         
         return "common/alert";
     }
@@ -267,7 +267,7 @@ public class NttAdmController {
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list?bbsSn=" + bbsSn );
+        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/" + bbsSn + "/list" );
         
         return "common/alert";
     }
@@ -293,7 +293,7 @@ public class NttAdmController {
         
         // 메시지 출력 및 url 이동 처리
         model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list?bbsSn=" + bbsSn );
+        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/" + bbsSn + "/list" );
         
         return "common/alert";
     }

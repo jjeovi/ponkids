@@ -336,10 +336,12 @@
 .chat_tit_form input{background-color: rgba(0, 0, 0, 0.03); border: 1px solid #c5c5c5;}
 .chat_tit_form input:focus{border: 2px solid #bb8be3;}
 .chat_disc_form textarea{background-color: rgba(0, 0, 0, 0.03); border: none; min-height: 400px; border: 1px solid #c5c5c5;}
+
+.myInquiryDetail .chat_disc_form textarea, .faqNttDetail .chat_disc_form textarea{min-height:362px;}
 .chat_disc_form textarea:focus{border: 2px solid #bb8be3;}
 
 .chat_form_box{padding:10px 20px;}
-.chatWrap #tab02, .chatWrap #tab03{padding: 20px; overflow-y: auto; height:490px;}
+.chatWrap #tab02, .chatWrap #tab03{padding: 10px 20px;  overflow-y: auto; height:500px;}
 .chatWrap .chat_nav .tabnav li a .chat_nav_ico img:last-child{display: none;}
 .chatWrap .chat_nav .tabnav li a.active .chat_nav_ico img:last-child{display: block;}
 .chatWrap .chat_nav .tabnav li a.active .chat_nav_ico img:first-child{display: none;}
@@ -2110,6 +2112,10 @@ span {
     margin: 5px;
 }
 
+.tabcontent ul li:hover {
+	border: 2px solid #8e68f3;
+}
+
 .tabcontent .tabDiv ul li .li_leftDiv {
 	width: 60%;
     display: inline-block;
@@ -2133,5 +2139,62 @@ span {
     cursor: auto;
 }
 
+.tabcontent .detailInquiryTy{
+	outline: none;
+    border: 1px solid #c5c5c5;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #f7f7f7;
+    margin-bottom: 10px;
+}
+
+.tabcontent .replyCnt{
+	color:#ff2f74;
+	font-weight: bold;
+	
+}
+
+.tabcontent .myInquiryDetailReplyList {
+	border-top: 1px dashed #898989;
+    padding-top: 10px;
+    margin-top: 5px;
+}
+
+.myInquiryDetailReplyList .replyUserNm {
+	width: 95px;
+	font-size: 14px;
+	height: 30px;;
+}
+
+.myInquiryDetailReplyList .replyRegDt {
+	width: 95px;
+	float: right;
+	font-size: 14px;
+	height: 30px;
+}
+
+.myInquiryDetailReplyList .replyCn {
+	min-height: 60px !important;
+}
+
+.mt_3p {
+	margin-top: 3px;
+}
+
+.tabcontent ul li .subInfo {
+	font-size : 14px;
+	margin-bottom: 10px;
+}
+
+.tabcontent ul li .subInfo .regDt {
+	float:right;
+}
+
+.tabcontent ul li .titleInfo p {
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: break-all;
+}
 
 /* E : layer 문의  */

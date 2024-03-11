@@ -1,17 +1,12 @@
 package com.meta.ponkids.domain.ntt.controller;
 
-import com.meta.ponkids.domain.bbs.dto.BbsModDto;
-import com.meta.ponkids.domain.bbs.service.BbsService;
-import com.meta.ponkids.domain.ntt.dto.*;
-import com.meta.ponkids.domain.ntt.service.NttReplyService;
-import com.meta.ponkids.domain.ntt.service.NttService;
-import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailModDto;
-import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
-import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
-import com.meta.ponkids.domain.system.file.repository.AtchFileDetailRepository;
-import com.meta.ponkids.domain.system.file.service.AtchFileDetailService;
-import com.meta.ponkids.domain.system.file.service.AtchFileService;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,15 +14,25 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import com.meta.ponkids.domain.bbs.dto.BbsModDto;
+import com.meta.ponkids.domain.bbs.service.BbsService;
+import com.meta.ponkids.domain.ntt.dto.NttListDto;
+import com.meta.ponkids.domain.ntt.dto.NttModDto;
+import com.meta.ponkids.domain.ntt.dto.NttReplyListDto;
+import com.meta.ponkids.domain.ntt.service.NttReplyService;
+import com.meta.ponkids.domain.ntt.service.NttService;
+import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailModDto;
+import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
+import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
+import com.meta.ponkids.domain.system.file.service.AtchFileDetailService;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * className      : NttController
@@ -57,9 +62,7 @@ public class NttController {
     private final NttService nttService;
     private final BbsService bbsService;
     private final NttReplyService nttReplyService;
-    private final AtchFileService atchFileService;
     private final AtchFileDetailService atchFileDetailService;
-    private final AtchFileDetailRepository atchFileDetailRepository;
     
     private final CmmnCdDetailService cmmnCdDetailService;
     
@@ -186,5 +189,52 @@ public class NttController {
         return USER_VIEW_PATH + "/" + BASIC_DOMAIN + "/" + remainPath;
     }
     
+	
+	@ResponseBody
+	@GetMapping( BASIC_PATH + "/live/getListByBbsNmAjax" )
+	public Map<String, Object> getListByBbsNmAjax( 
+			@ModelAttribute NttListDto listDto,
+			HttpServletRequest request,
+		  Model model
+			) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		// 설문조사 작성답안 조회 
+		List<NttListDto> targetList = nttService.getList( listDto );
+		
+		if ( targetList == null || targetList.size() == 0 ) { 
+			result.put( "flag", "E" );
+			result.put("msg",  "게시물이 존재하지 않습니다." );
+			return result;
+		} 
+
+		
+		result.put( "targetList", targetList );
+		result.put( "flag", "S" );
+		return result;
+	}
+	
+
+	@ResponseBody
+	@GetMapping( BASIC_PATH + "/live/detailAjax" )
+	public Map<String, Object> detailAjax( 
+			@ModelAttribute NttListDto listDto
+			) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		// 설문조사 작성답안 조회 
+		NttListDto target = nttService.detailByNttSn( listDto.getNttSn());
+		
+		if ( target == null  ) { 
+			result.put( "flag", "E" );
+			result.put("msg",  "게시물이 존재하지 않습니다." );
+			return result;
+		} 
+		
+		result.put( "target", target );
+		result.put( "flag", "S" );
+		return result;
+	}
     
 }

@@ -73,6 +73,20 @@ public class NttService {
         
     }
     
+    // 게시물 목록 조회 (페이징 상관없이 전체리스트 조회 )
+    public List<NttListDto> getList( NttListDto nttListDto ) {
+    	return nttRepository.getList( nttListDto );
+    	
+    }
+    
+    
+    // 게시물 수정시
+    public NttListDto detailByNttSn( Long nttSn ) {
+    	
+    	return  nttRepository.detailByNttSn( nttSn );
+    	
+    }
+    
     
     // 게시물 수정시
     public NttModDto findByNttSn( Long nttSn ) {

@@ -21,7 +21,11 @@ public interface NttRepositoryCustom {
     
     Page<NttListDto> getList( NttListDto nttListDto, Pageable pageable );
     
+    List<NttListDto> getList( NttListDto nttListDto );
+    
     List<NttListDto> getNoticeList( Long bbsSn );
+    
+    NttListDto detailByNttSn( Long nttSn );
     
     int getExistsNtt( Long bbsSn );
     

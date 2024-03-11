@@ -1,6 +1,7 @@
 package com.meta.ponkids.domain.qestnar.repository.impl;
 
 
+import static com.meta.ponkids.domain.cls.entity.QClassReview.classReview;
 import static com.meta.ponkids.domain.qestnar.entity.QQestnarAnswerReply.qestnarAnswerReply;
 import static com.meta.ponkids.domain.user.entity.QUser.user;
 
@@ -75,7 +76,8 @@ public class QestnarAnswerReplyRepositoryImpl implements QestnarAnswerReplyRepos
                 		qestnarAnswerReply.qestnarAnswerReplyCn,
                 		qestnarAnswerReply.atchFileSn,
                 		qestnarAnswerReply.registerId,
-                		Expressions.stringTemplate("to_char({0}, '{1s}')", qestnarAnswerReply.regDt, "YYYY-MM-DD HH24:MI:SS")
+                		Expressions.stringTemplate("to_char({0}, '{1s}')", qestnarAnswerReply.regDt, "YYYY-MM-DD"),
+                		Expressions.stringTemplate("to_char({0}, '{1s}')", qestnarAnswerReply.regDt, "YYYY-MM-DD HH24:MI:SS").as("regFullDt")
                 		) )					
                 .from( qestnarAnswerReply )
                 // where
@@ -104,7 +106,8 @@ public class QestnarAnswerReplyRepositoryImpl implements QestnarAnswerReplyRepos
 						qestnarAnswerReply.qestnarAnswerReplyCn,
 						qestnarAnswerReply.atchFileSn,
 						qestnarAnswerReply.registerId,
-						Expressions.stringTemplate("to_char({0}, '{1s}')", qestnarAnswerReply.regDt, "YYYY-MM-DD HH24:MI:SS")
+						Expressions.stringTemplate("to_char({0}, '{1s}')", qestnarAnswerReply.regDt, "YYYY-MM-DD"),
+                		Expressions.stringTemplate("to_char({0}, '{1s}')", qestnarAnswerReply.regDt, "YYYY-MM-DD HH24:MI:SS").as("regFullDt")
 						) )					
 				.from( qestnarAnswerReply )
 				// where

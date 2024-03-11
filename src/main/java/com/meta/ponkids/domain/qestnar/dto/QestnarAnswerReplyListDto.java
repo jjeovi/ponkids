@@ -26,6 +26,8 @@ public class QestnarAnswerReplyListDto {
     private String registerId;      // 등록자 ID
     
     private String regDt;	// 등록일자
+    
+    private String regFullDt;	// 등록일자
 	
 	private String schOption;   	// 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
     
@@ -33,7 +35,7 @@ public class QestnarAnswerReplyListDto {
 
 	@QueryProjection
 	public QestnarAnswerReplyListDto( Long qestnarAnswerReplySn, Long qestnarAnswerSn, Long userSn, String userNm, String userId,
-			String qestnarAnswerReplyCn, Long atchFileSn, String registerId, String regDt ) {
+			String qestnarAnswerReplyCn, Long atchFileSn, String registerId, String regDt, String regFullDt ) {
 		this.qestnarAnswerReplySn = qestnarAnswerReplySn;
 		this.qestnarAnswerSn = qestnarAnswerSn;
 		this.userSn = userSn;
@@ -43,8 +45,8 @@ public class QestnarAnswerReplyListDto {
 		this.atchFileSn = atchFileSn;
 		this.registerId = registerId;
 		this.regDt = regDt;
+		this.regFullDt = regFullDt;
 	}
-	
 	
 
 }

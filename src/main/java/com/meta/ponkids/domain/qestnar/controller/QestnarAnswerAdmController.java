@@ -153,8 +153,8 @@ public class QestnarAnswerAdmController {
 
 	// 상세 조회 Ajax
     @ResponseBody
-    @GetMapping( BASIC_PATH + "/live/detailByIdAjax" )
-    public Map<String, Object> detailByIdAjax( @ModelAttribute QestnarAnswerListDto listDto ) {
+    @GetMapping( BASIC_PATH + "/live/detailAjax" )
+    public Map<String, Object> detailAjax( @ModelAttribute QestnarAnswerListDto listDto ) {
         // 해당 권한에 맞는 menuList 가져온 뒤 drawMenuTree 로 메뉴를 그린다.
         Map<String, Object> result = new HashMap<String, Object>();
         

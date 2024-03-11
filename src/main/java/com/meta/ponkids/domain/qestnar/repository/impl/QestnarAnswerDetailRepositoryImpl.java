@@ -171,6 +171,7 @@ public class QestnarAnswerDetailRepositoryImpl implements QestnarAnswerDetailRep
                 // where
                 .where(
                 		eqUserSn( listDto.getUserSn()),
+                		eqQestnarAnswerSn( listDto.getQestnarAnswerSn() ),
                 		eqQestnarGroupCd( listDto.getQestnarGroupCd())
 				)
                 // order by
@@ -197,6 +198,10 @@ public class QestnarAnswerDetailRepositoryImpl implements QestnarAnswerDetailRep
 
 	private BooleanExpression eqUserSn( Long userSn ) {
 		return ( userSn != null )  ? qestnarAnswer.userSn.eq( userSn ) : null;
+	}
+	
+	private BooleanExpression eqQestnarAnswerSn( Long qestnarAnswerSn ) {
+		return ( qestnarAnswerSn != null )  ? qestnarAnswerDetail.qestnarAnswerSn.eq( qestnarAnswerSn ) : null;
 	}
 	
 	private BooleanExpression eqQestnarGroupCd( String qestnarGroupCd ) {
