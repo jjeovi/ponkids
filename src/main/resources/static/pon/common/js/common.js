@@ -1133,7 +1133,7 @@ function detailFaqNtt( nttSn ) {
 				target = ajaxResult.target;
 				$("[name='qestnarForInquiryInsertForm']").find("[name='detailFaqNttUserNm']").text( target.userNm );
 				$("[name='qestnarForInquiryInsertForm']").find("[name='detailFaqNttNm']").val( target.nttNm );
-				$("[name='qestnarForInquiryInsertForm']").find("[name='detailFaqNttCn']").val( target.nttCn );
+				$("[name='qestnarForInquiryInsertForm']").find("[name='detailFaqNttCn']").html( target.nttCn );
 				
 				showLayerTabType('faqNttDetail');
 				

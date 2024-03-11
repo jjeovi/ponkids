@@ -2197,4 +2197,16 @@ span {
     word-break: break-all;
 }
 
+.faqNttDetail .detailFaqNttCn {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    outline: none;
+    resize: none;
+    background-color: rgba(0, 0, 0, 0.03);
+    border: 1px solid #c5c5c5;
+    min-height: 362px;
+}
+
 /* E : layer 문의  */
