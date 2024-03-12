@@ -689,7 +689,9 @@ function setQestnarLayerData( ajaxResult ) {
 	if ( _targetQestnarGroup.upendGdccSetYn == 'Y' ) {
 		$("[name='qestnarInsertForm']").find(".pop_content .upendGdcc").append( 
 			$( "<div>" ).attr( "class", "upendGdccArea qBox").append(
-				_targetQestnarGroup.upendGdcc
+				$("<pre>").attr("class", "preContent").append(
+					_targetQestnarGroup.upendGdcc
+				)
 			)
 		);
 	}
@@ -796,7 +798,9 @@ function setQestnarForInquiryLayerData( ajaxResult ) {
 	if ( _targetQestnarGroup.upendGdccSetYn == 'Y' ) {
 		$("[name='qestnarForInquiryInsertForm']").find(".pop_content .upendGdcc").append( 
 			$( "<div>" ).attr( "class", "upendGdccArea qBox").append(
-				_targetQestnarGroup.upendGdcc
+				$("<pre>").attr("class", "preContent").append(
+					_targetQestnarGroup.upendGdcc
+				)
 			)
 		);
 	}
