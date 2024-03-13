@@ -5778,8 +5778,9 @@ input[type="checkbox"][disabled] + label{
 
 /* 기간 물결 처리 */
 .period-wave {
-	padding-top: 6px;
-	content: "~";
+	padding-top : 6px;
+	content : "~";
+    text-align : center;
 }
 
 /* 모달 너비 xl 버전 설정 */

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{admin/layout/layout}">
+<!-- S : Javascript functions	-->
+
+<script layout:fragment="script">
+
+	$( function () {
+
+	});
+	// $( function () {}); end
+
+</script>
+<!-- E : Javascript functions	-->
+<th:block layout:fragment="content">
+	<!-- S: content -->
+	<div class="row">
+		<div class="col-md-12 col-sm-12 ">
+			<div class="x_panel">
+				<div class="x_content">
+					<form id="updateForm" name="updateForm" method="post" th:action="@{ {basicPath}/{mcd}/update ( basicPath = ${basicPath}, mcd = ${mcd} ) }" enctype="multipart/form-data" th:onsubmit="return submitValidCheck();">
+						<input type="hidden" name="popupSn" th:value="${targetDto.popupSn}" />
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">팝업 이미지<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<div class="filebox preview-image bn-img">
+									<div class="upload-display">
+										<div class="upload-thumb-wrap">
+											<img alt="배너 이미지" class="upload-thumb noimg" 		th:if 		= "${targetDto.atchFileSn == null}" >
+											<img alt="배너 이미지" class="upload-thumb" 			th:unless 	= "${targetDto.atchFileSn == null}" th:src="@{/getImage(atchFileSn=${targetDto.atchFileSn})}"  >
+										</div>
+									</div>
+									<div class="upload-file-name">
+										<input class="input-file-name" value="" disabled="disabled" >
+									</div>
+									<div class="upload-btn mt_10p">
+										<label class="btn btn-purple">업로드
+											<input type="file" name="atchFile" class="upload-hidden" accept=".gif, .jpg, .jpeg, .png" style="display: none;" th:value="${targetDto.atchFileSn}" onchange="fileChange(this)">
+										</label>
+									</div>
+									<input type="hidden" name="atchFileSn" 		th:value="${targetDto.atchFileSn}" />
+									<input type="hidden" name="atchFileSnOri" 	th:value="${targetDto.atchFileSn}" />
+									<input type="hidden" name="fileAtchActYn"  /> <!-- 파일 첨부 액션 여부 : 해당 액션으로 업로드 이벤트 실행 여부 체크 하여 유효성 확인시 활용 -->
+								</div>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">팝업 이름<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<input class="form-control"name="popupNm" required="required" placeholder="팝업 이름을 입력해주세요." th:value="${targetDto.popupNm}" />
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">팝업 설명</label>
+							<div class="col-md-6 col-sm-6">
+								<textarea id="popupCn" name="popupCn" class="form-control" rows="10" th:text="${targetDto.popupCn}" ></textarea>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">URL<span class="required">*</span></label>
+							<div class="col-md-6 col-sm-6">
+								<input class="form-control"name="url" required="required" placeholder="url을 입력해주세요." th:value="${targetDto.url}" />
+								<small class="font-gray-dark">
+									팝업 이미지 클릭시 이동할 링크입니다.
+								</small>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">표시기간</label>
+							<div class="col-md-6 col-sm-6">
+								<div class="col-md-5 col-sm-12 pl_0p">
+									<input class="form-control" type="text" name="popupBeginDt"	id="popupBeginDt"	data-pickr="dateTime"	placeholder="표시 시작일시 선택" th:value="${targetDto.popupBeginDt}"	 >
+								</div>
+								<div class="col-md-2 col-sm-12 period-wave">~</div>
+								<div class="col-md-5 col-sm-12 pr_0p">
+									<input class="form-control" type="text" name="popupEndDt"	id="popupEndDt"		data-pickr="dateTime"	placeholder="표시 종료일시 선택" th:value="${targetDto.popupEndDt}"	 >
+								</div>
+							</div>
+						</div>
+						<div class="field item form-group">
+							<label class="col-form-label col-md-2 col-sm-3 label-align">사용여부<span class="required">*</span></label>
+							<div class="col-md-2 col-sm-4">
+								<div class="btn-group radiobox">
+									<input type="radio" id="useYn1" name="useYn" value="Y" class="join-btn" required="required" th:checked="${targetDto.useYn eq 'Y'}" >
+									<label for="useYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">사용</label>
+									<input type="radio" id="useYn2" name="useYn" value="N" class="join-btn" required="required" th:checked="${targetDto.useYn eq 'N'}" >
+									<label for="useYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">미사용</label>
+								</div>
+							</div>
+						</div>
+						<div class="ln_solid"></div>
+						<!-- 저장버튼 -->
+						<div class="col-md-12 bottom-btn-group">
+							<!-- bottom left area -->
+							<div class="col-md-2 col-sm-3 text-left">
+								<a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >목록</a>
+							</div>
+							<!-- bottom c	enter area -->
+							<div class="col-md-8 col-sm-6 text-center">
+								<a th:href="@{ {basicPath}/mcd/list ( basicPath = ${basicPath} ) }" class="btn btn-white w120p" >취소</a>
+								<button type="submit" class="btn btn-purple w120p">저장</button>
+							</div>
+							<!-- bottom right area -->
+							<div class="col-md-2 col-sm-3 text-right">
+								<a th:href="'javascript:deleteItem(\'' + ${targetDto.popupSn} + '\');'" class="btn btn-danger btn-xs">
+									<i class="fa fa-trash-o"></i>삭제
+								</a>
+							</div>
+						</div>
+					</form>
+					<form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/{mcd}/delete ( basicPath = ${basicPath}, mcd = ${mcd} ) }">
+						<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- E : content -->
+</th:block>
+</html>
