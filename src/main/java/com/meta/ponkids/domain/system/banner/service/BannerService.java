@@ -45,8 +45,8 @@ public class BannerService {
     
     
     // 사용자 main 에 표출할 list
-    public List<BannerListDto> getMainList( String bannerClCd , Long userSn ) {
-        return bannerRepository.getMainList( bannerClCd , userSn );
+    public List<BannerListDto> getPonList( String bannerClCd , Long userSn ) {
+        return bannerRepository.getPonList( bannerClCd , userSn );
     }
     
     

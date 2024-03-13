@@ -10,6 +10,7 @@ public interface BannerRepositoryCustom {
     
     Page<BannerListDto> getList( BannerListDto listDto, Pageable pageable );
     
-    List<BannerListDto> getMainList( String bannerClCd , Long userSn );
+    // 사용자 화면에 표출할 list
+    List<BannerListDto> getPonList( String bannerClCd , Long userSn );
     
 }

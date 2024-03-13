@@ -91,7 +91,8 @@
     <logger name="jdbc.resultsettable" level="WARN" appender-ref="console-infolog" />
 
 	<!-- root 레벨 설정 -->
-	<root level="WARN">
+	<!--  쿼리 볼려면 'INFO'로  하여 기동 -->
+	<root level="INFO">
 		<appender-ref ref="CONSOLE"/>
 		<appender-ref ref="FILE"/>
 		<appender-ref ref="ERROR"/>

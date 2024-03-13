@@ -139,8 +139,10 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
         
     }
     
+    
+    // 사용자 화면에 표출할 list
     @Override
-    public List<BannerListDto> getMainList( String bannerClCd , Long userSn ) {
+    public List<BannerListDto> getPonList( String bannerClCd , Long userSn ) {
         // 메인 list
         
         // - 1. 사용여부 Y

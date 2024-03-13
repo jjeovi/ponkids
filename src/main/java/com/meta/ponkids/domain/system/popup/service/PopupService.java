@@ -1,6 +1,7 @@
 package com.meta.ponkids.domain.system.popup.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -43,6 +44,11 @@ public class PopupService {
 
     public Page<PopupListDto> getList( PopupListDto listDto, Pageable pageable ) {
         return popupRepository.getList( listDto, pageable );
+    }
+    
+    
+    public List<PopupListDto> getPonList() {
+    	return popupRepository.getPonList();
     }
     
     
