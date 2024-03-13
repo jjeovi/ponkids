@@ -10,9 +10,9 @@ function showPopup() {
 		// popupList에서 한개씩 꺼내 팝업 생성 하여 호출
 		for ( let item of popupList ) {
 			
-			var popCookie = getCookie('pop_' + item.popupSn );
+			var popCookie = getCookie( 'pop_' + item.popupSn );
 			
-			alert("popCookie : " + popCookie );
+			alert( "popCookie : " + popCookie );
 			
 //			 변수가 없을경우 팝업 출력		 
 			if (!popCookie ) {
@@ -25,7 +25,7 @@ function showPopup() {
 }
 
 // 쿠키 가져오기 
-function getCookie(name) {
+function getCookie( name ) {
 	var nameOfCookie = name + "=";
 	var x = 0; while (x <= document.cookie.length) {
 		var y = (x + nameOfCookie.length);
