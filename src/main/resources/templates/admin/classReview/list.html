@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{admin/layout/layout}">
+<!-- S : Javascript functions	-->
+<script layout:fragment="script">
+
+	// DOM 준비 된 이후 실행
+	$( function () {
+		
+
+	});
+	
+	// [ 관리 ] 버튼 클릭
+	function manageClassInqry( classInqrySn ) {
+		
+		var url = basicPath + '/live/detailByIdAjax';
+		$.ajax( {
+            url: url,
+            type: "GET",
+            dataType: "json",
+            async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
+            data: {classInqrySn : classInqrySn}, // 검색할 값 setting
+            contentType: "application/json",
+            success: function ( ajaxResult ) {
+				
+				if ( ajaxResult.target == null ) {
+					alert("문의번호가 존재하지 않습니다. 다시 시도해주세요.");
+					
+				} else {
+					// 모달 내용 초기화 작업
+					eraseDetailModalData();
+					
+					// 모달 내용 setting
+					setDetailModalData( ajaxResult );
+					
+					// 답변 달기 모달 show
+					$( "#targetDetailModal" ).modal( 'show' );
+				}
+			}
+		} );
+	}
+	
+	// 문의 상세 조회 모달창 ( 관리 클릭시 ) 내용 초기화 작업
+	function eraseDetailModalData() {
+		// detailData class 전부 초기화작업
+		$(".detailData").text("");
+		$(".detailData").val("");
+		$(".detailData").empty();
+		
+		
+		// detailData class 전부 초기화작업
+		$(".replyData").text("");
+		$(".replyData").val("");
+		$(".replyData").empty();
+		
+		
+	}
+	
+	// 문의 상세 조회 모달창 내용 setting 작업
+	function setDetailModalData( result ) {
+		
+		// 객체 내부 키값들을 순회 ( 객체 생성자 Object 가 직접 가지고 있는 메서드 활용 Object.keys([list]) )
+		const keys = Object.keys( result.target )
+		
+		
+		// 순회한 키값 리스트를 재순회 
+		for ( let key of keys ) { 
+			// insertAnswerForm 폼안에 해당 key의 name이 존재하는치 체크
+			value =  result.target[key];
+			
+			// data column 수정 
+			if		( key == 'inqryCn'		)	key = 'parntsInqryCn'; // inqryCn 		-> parntsInqryCn 에 값 대입
+			else if	( key == 'inqrySj'		)	key = 'parntsInqrySj'; // inqrySj 		-> parntsInqrySj 에 값 대입
+			else if	( key == 'classInqrySn' )	key = 'parntsInqrySn'; // classInqrySn 	-> parntsInqrySn 에 값 대입
+			
+			
+			if ( $("[name='insertAnswerForm']").find("[name='" + key + "']").length ) {
+				
+				// insertAnswerForm 폼안의 name이 key인 값을 해당 value 값으로 대입 
+				$("[name='insertAnswerForm']").find("[name='" + key + "']").val( value );
+				$("[name='insertAnswerForm']").find("[name='" + key + "']").text( value );
+				
+			}
+		}
+		
+		// crseNm (2차분류) 가 존재하지 않는다면 해당 부분 숨김처리 ( 중괄호 때문에 숨긴다. ) 
+		if (	$("[name='insertAnswerForm']").find("[name='crseNm']").text() == '' || 
+				$("[name='insertAnswerForm']").find("[name='crseNm']").text() == null )
+		{
+			$("[name='insertAnswerForm']").find("[name='depth2']").hide();
+		} else {
+			$("[name='insertAnswerForm']").find("[name='depth2']").show();
+		}
+		
+		
+		// targetReplyList
+		var targetReplyList = result.targetReplyList;
+		
+		// 순회한 키값 리스트를 재순회
+		var i = 1; 
+		for ( let item of targetReplyList ) { 
+			$("#insertAnswerForm").find(".replyList").append(
+				$(" <div> ").attr( "class", "field item form-group manage" ).append(
+					$( "<label>" ).attr( "class", "col-form-label col-md-3 col-sm-3 label-align" ).append("[" + i++ + "] . " + item.userNm + "<br>" + item.userId + "<br>" + item.regFullDt),
+					$( "<div>" ).attr( "class", "col-form-label col-md-9 col-sm-6" ).append(
+						$( "<textarea>" ).attr("class", "no-textarea" ).attr( "rows", "6" ).append(
+							item.inqryCn							
+						)
+					)
+				)
+			)
+		}
+		
+		
+	}
+	
+	function insertClassInqryAnswer() {
+		
+		// 유효성 체크
+		// 답변 내용 입력 길이 체크
+		var inqryCn =  $("[name='insertAnswerForm']").find("[name='inqryCn']").val();
+		if ( inqryCn.length < 10 ) {
+			alert("답변내용을 10자이상 입력해주세요.");
+			return false;
+		}
+		// 유효성 체크 종료
+		
+		// form submit
+		$("#insertAnswerForm").submit();
+		
+	}
+	
+	
+	
+
+</script>
+<!-- E : Javascript functions	-->
+<th:block layout:fragment="content">
+
+	<!-- S : 분류 영역 -->
+	<div class="div_menu_detail row">
+		<div class="col-md-12 col-sm-12 ">
+			<div class="x_panel category-area">
+				<!-- 분류 영역 > 카테고리 그룹 영역 -->
+				<div class="col-md-10 category-list-area">
+					<div class="category-group-box">
+						<!--
+							data-next-step-li-onclick-param-url : 다음 단계 ul > li 항목의 onlick url parameter 값 설정
+						 -->
+						<!--  lv1 -->
+						<div class="data-group">
+							<span class="category-title lv1">카테고리</span>
+							<ul data-next-step-all-yn="Y" data-next-step-li-onclick-param-url="/admin/class/live/getClassListAjax" >
+								<li onclick="getCateNextLvList('/admin/classCategoryCl02/live/getListByParntsClSnAjax', this );"
+									th:classappend="${ ( searchDTO.category != null && searchDTO.category.lv1Sn  == 0 ) } ? 'on'"
+									value="0" th:text="전체">
+								</li>
+								<li th:each="data : ${cateLv1List}" th:onclick="getCateNextLvList('/admin/classCategoryCl02/live/getListByParntsClSnAjax', this );"
+									th:classappend="${ ( searchDTO.category != null  &&  searchDTO.category.lv1Sn == data.clSn ) } ? 'on'"
+									th:value="${data.clSn}" th:text="${data.clNm}">
+								</li>
+							</ul>
+						</div>
+						<!--  lv2 -->
+						<div class="data-group">
+							<span class="category-title lv2">커리큘럼</span>
+							<ul data-next-step-all-yn="Y" data-next-step-li-onclick-param-url="/admin/class/live/getClassWeekListAjax"> <!--  data-next-step-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
+								<th:block th:if="${cateLv2List ne null}">
+									<li onclick="getCateNextLvList('/admin/class/live/getClassListAjax', this );"
+										th:classappend="${ ( searchDTO.category != null && searchDTO.category.lv2Sn == 0 ) } ? 'on'"
+										value="0" th:text="전체">
+									</li>
+									<li onclick="getCateNextLvList('/admin/class/live/getClassListAjax', this );"
+										th:each="data : ${cateLv2List}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv2Sn == data.clSn ) } ? 'on'"
+										th:value="${data.clSn}" th:text="${data.clNm}">
+									</li>
+								</th:block>
+							</ul>
+						</div>
+						<!--  lv3 -->
+						<div class="data-group">
+							<span class="category-title lv3">클래스</span>
+							<ul data-next-step-all-yn="Y" data-next-step-li-onclick-param-url=""> <!--  data-next-step-all-yn : 전체 여부 , data-next-step-li-onclick-param-url : 검색조회용 url (ajax0) -->
+								<th:block th:if="${cateLv3List ne null}">
+									<li onclick="getCateNextLvList('', this );"
+										th:classappend="${ searchDTO.category != null && searchDTO.category.lv3Sn == 0 } ? 'on'"
+										value="0" th:text="전체">
+									</li>
+									<li onclick="getCateNextLvList('', this );"
+										th:each="data : ${cateLv3List}" th:classappend="${ ( searchDTO.category != null ) && ( searchDTO.category.lv3Sn == data.classSn ) } ? 'on'"
+										th:value="${data.classSn}" th:text="${data.classSj}">
+									</li>
+								</th:block>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- 분류 영역 > 우측영역 ( 선택한 카테고리 텍스트 표출, 카테고리검색 버튼) -->
+				<div class="col-md-2 col-sm-6 category-right">
+					<div class="picked-cate" id="picked-cate">
+						<div class="cateLv0 blink"></div>
+						<div class="cateLv1 blink"></div>
+						<div class="cateLv2 blink"></div>
+						<div class="cateLv3 blink"></div>
+						<div class="cateLv4 blink"></div>
+					</div>
+					<div class="btn-group float-right" role="group">
+						<button name="searchCateBtn" type="button" class="btn btn-purple w120p"
+								th:data-search-cate-url="|${basicPath}/${mcd}/list|"
+								th:onclick="searchCate( this.getAttribute('data-search-cate-url') )">보기
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- E : 분류 영역 -->
+
+	<!-- S: content -->
+	<div class="x_panel">
+		<div class="x_content">
+			<div class="row">
+				<form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd}) }" class="form">
+					<h2 class="pl_15p" th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null ) }">
+						분류 : [[${searchDTO.category.categoryNm}]]
+					</h2>
+					<input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
+					<!-- S : 테이블 상단 검색 창 -->
+					<!-- totalCount -->
+					<div class="col-md-1 col-sm-2 mt_10p pl_15p">
+						총 <span th:utext="${resultList.totalElements}"></span>건
+					</div>
+					<div class="col-md-11 col-sm-10 mb_10p">
+						<div class="btn-group float-right" role="group">
+							<select class="form-control" name="openYn">
+								<option value="">공개여부</option>
+								<option value="Y" th:selected=" ${searchDTO.openYn} == 'Y' ">공개</option>
+								<option value="N" th:selected=" ${searchDTO.openYn} == 'N' ">비공개</option>
+							</select>
+							<select class="form-control" name="replyYn">
+								<option value="">답변여부</option>
+								<option value="Y" th:selected=" ${searchDTO.replyYn} == 'Y' ">답변완료</option>
+								<option value="N" th:selected=" ${searchDTO.replyYn} == 'N' ">답변대기</option>
+							</select>
+							<div class="vl ml_5p"></div>
+							<select class="form-control ml_5p w_55r" name="schOption">
+								<option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">문의 제목</option>
+								<option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">문의자명</option>
+								<option value="C" th:selected=" ${searchDTO.schOption} == 'C' ">문의자ID</option>
+							</select>
+							<input type="text" name="schCntn" th:value="${searchDTO.schCntn}"
+								   class="form-control input-sm" placeholder="검색어 입력"
+								   aria-controls="datatable-responsive">
+							<button type="submit" class="btn btn-purple w250p">검색</button>
+						</div>
+					</div>
+					<!-- E : 테이블 상단 검색 창 -->
+					<!-- S : 테이블 -->
+					<div class="col-md-12 col-sm-12 ">
+						<table id="listTable" class="table table-bordered text-center">
+							<colgroup>
+								<col width="60px;">
+								<col width="11%;">
+								<col width="10%;">
+								<col width="90px;">
+								<col width="auto;">
+								<col width="100px;">
+								<col width="200px;">
+								<col width="130px;">
+							</colgroup>
+							<thead>
+								<tr>
+									<th>순번</th>
+									<th>분류</th>
+									<th>클래스</th>
+									<th>공개여부</th>
+									<th>문의 제목</th>
+									<th>문의자</th>
+									<th>등록일시</th>
+									<th>관리</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:if = "${!resultList.isEmpty()}" th:each=" data : ${resultList} ">
+									<td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
+									<td> [[${data.ctgryNm}]] <th:block th:if="${data.crseNm != null && data.crseNm != '' }"><br/>[ [[${data.crseNm}]] ] </th:block> </td>
+									<td th:text="${data.classSj}"></td>
+									<td th:text="${data.openYnNm}"></td>
+									<td class="alignLeft">
+										[ [[${data.replyYnNm}]] <th:block th:if="${data.replyYn eq 'Y'}">([[${data.replyCnt}]])</th:block> ] [[${data.inqrySj}]]
+									</td>
+									<td>
+										[[${data.userId}]]<br />[[${data.userNm}]]
+									</td>
+									<td th:text="${data.regFullDt}"></td>
+									<td>
+										<button th:onclick="|manageClassInqry('${data.classInqrySn}');|" type="button" class="btn btn-primary btn-xs">
+											<i class="fa fa-pencil"></i> 관리
+										</button>
+									</td>
+								</tr>
+								<tr th:unless = "${!resultList.isEmpty()}">
+									<td class="noDataTd" style="display: none;">
+										데이터가 없습니다.
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- E : 테이블 -->
+					<!-- S : 하단 목록 -->
+					<div class="col-md-12 col-sm-12">
+						<!-- bottom left area -->
+						<div class="col-md-2 col-sm-3 text-left">
+							<a th:if="${ classSn != null && classSn != 0 }" th:href="@{ {basicPath}/{mcd}/{classSn}/regist ( basicPath = ${basicPath}, mcd = ${mcd}, classSn = ${classSn} ) }" class="btn btn-white w120p">등록</a>
+						</div>
+						<!-- S : 테이블 하단 페이징 -->
+						<div class="col-md-8 col-sm-6 text-center"
+							 th:insert="~{admin/layout/tiles/paging :: paging('listForm', ${resultList})}">
+							<!-- parameter : ( submit할 form 의 name값 ), ( ${resultList} 는 Page<T> 오브젝트 )  -->
+						</div>
+						<!-- E : 테이블 하단 페이징 -->
+						<!-- bottom right area -->
+						<div class="col-md-2 col-sm-3 text-right">
+							<select class="form-control" name="size" onchange="searchListSize('listForm',this.value);">
+								<option value="10" th:selected=" ${resultList.pageable.pageSize} == '10' ">10개씩 보기
+								</option>
+								<option value="30" th:selected=" ${resultList.pageable.pageSize} == '30' ">30개씩 보기
+								</option>
+								<option value="50" th:selected=" ${resultList.pageable.pageSize} == '50' ">50개씩 보기
+								</option>
+								<option value="100" th:selected=" ${resultList.pageable.pageSize} == '100' ">100개씩 보기
+								</option>
+							</select>
+						</div>
+					</div>
+				</form>
+				<form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/{mcd}/delete ( basicPath = ${basicPath}, mcd = ${mcd} ) }">
+					<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- S : 모달 (문의 관리 : 문의 상세 조회 및 답변 작성 )  -->
+	<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+		 id="targetDetailModal" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">문의 상세 조회</h4>
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">×</span></button>
+				</div>
+				<div class="modal-body" th:insert="admin/classInqry/manageModal.html">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-white"
+							data-dismiss="modal">닫기
+					</button>
+					<button type="submit" class="btn btn-purple"  onclick="insertClassInqryAnswer()">답변등록
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- E : 모달 (문의 관리 : 문의 상세 조회 및 답변 작성 )  -->
+	<!-- E : content -->
+</th:block>
+</html>

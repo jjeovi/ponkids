@@ -35,11 +35,11 @@ public class BannerController {
         Map<String, Object> result = new HashMap<String, Object>();
         
         // 배너 메인 상단 영역 리스트 조회
-        List<BannerListDto> bannerMainTopList = bannerService.getMainList( BANNER_MAIN_TOP, null );
+        List<BannerListDto> bannerMainTopList = bannerService.getPonList( BANNER_MAIN_TOP, null );
         result.put( "bannerMainTopList", bannerMainTopList );
         
         // 배너 메인 클래스 영역 리스트 조회
-        List<BannerListDto> bannerMainClassList = bannerService.getMainList( BANNER_MAIN_CLASS, null );
+        List<BannerListDto> bannerMainClassList = bannerService.getPonList( BANNER_MAIN_CLASS, null );
         result.put( "bannerMainClassList", bannerMainTopList );
         
         return result;

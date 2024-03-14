@@ -12,9 +12,7 @@ function showPopup() {
 			
 			var popCookie = getCookie( 'pop_' + item.popupSn );
 			
-			alert( "popCookie : " + popCookie );
-			
-//			 변수가 없을경우 팝업 출력		 
+//			 변수가 없을경우 팝업 출력
 			if (!popCookie ) {
 				window.open( '/popup/detail?pk=' + item.popupSn, '_blank', 'width=auto,height=auto,web-app' );
 			}

@@ -49,7 +49,8 @@ public class QestnarAnswerAdmController {
 	private final static String BASIC_VIEW_PATH = "admin/qestnarAnswer";
 	private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
 	
-    @GetMapping( BASIC_PATH + "/{mcd}/list" )
+    @GetMapping( value = { BASIC_PATH + "/{mcd}/list",
+            BASIC_PATH + "/{mcd}/{qestnarAnswerSn}/list" } )
     public String list( @ModelAttribute QestnarAnswerListDto listDto,
     					@PathVariable String mcd,
                         @PageableDefault( size = 10 ) Pageable pageable,
