@@ -1,6 +1,6 @@
 <form id="insertAnswerForm" name="insertAnswerForm" method="post" th:action="@{ {basicPath}/{mcd}/insertReply ( basicPath = ${basicPath}, mcd = ${mcd} ) }" >	
 <div class="modal-body">
-	<input type="hidden" class="detailData" name="parntsInqrySn"	/>
+	<input type="hidden" class="detailData" name="parntsReviewSn"	/>
 	<input type="hidden" class="detailData" name="openYn"			/>
 	<input type="hidden" class="detailData" name="classSn"			/>
 	<input type="hidden" name="step" value="2"/>
@@ -24,16 +24,16 @@
 	
 	<div class="field item form-group manage">
 		<label class="col-form-label col-md-2 col-sm-3 label-align">
-			문의제목 
+			리뷰제목 
 		</label>
 		<div class="col-form-label col-md-6 col-sm-6">
-			[<span class="detailData" name="openYnNm"></span>] <span class="detailData" name="parntsInqrySj" ></span>
+			[<span class="detailData" name="openYnNm"></span>] <span class="detailData" name="parntsReviewSj" ></span>
 		</div>
 	</div>
 	
 	<div class="field item form-group manage">
 		<label class="col-form-label col-md-2 col-sm-3 label-align">
-			문의자 
+			리뷰자 
 		</label>
 		<div class="col-form-label col-md-6 col-sm-6">
 			<span class="detailData" name="userNm" ></span> (<span class="detailData" name="userId"></span>)
@@ -51,10 +51,10 @@
 	
 	<div class="field item form-group manage">
 		<label class="col-form-label col-md-2 col-sm-3 label-align">
-			문의내용 
+			리뷰내용 
 		</label>
 		<div class="col-form-label col-md-10 col-sm-6">
-			<textarea class="detailData no-textarea" name="parntsInqryCn" rows="6" readonly="readonly"></textarea>
+			<textarea class="detailData no-textarea" name="parntsReviewCn" rows="6" readonly="readonly"></textarea>
 		</div>
 	</div>
 </div>
@@ -69,7 +69,7 @@
 				답변 
 			</label>
 			<div class="col-form-label col-md-10 col-sm-6">
-				<textarea class="detailData" name="inqryCn" rows="6"></textarea>
+				<textarea class="detailData" name="reviewCn" rows="6"></textarea>
 			</div>
 		</div>
 		<!-- 기존 답변 추가 -->
@@ -78,7 +78,7 @@
 				답변 
 			</label>
 			<div class="col-form-label col-md-10 col-sm-6">
-				<textarea class="detailData" name="inqryCn" rows="6"></textarea>
+				<textarea class="detailData" name="reviewCn" rows="6"></textarea>
 			</div>
 		</div>
 		<!-- 기존 답변 추가 -->
@@ -87,7 +87,7 @@
 				답변 
 			</label>
 			<div class="col-form-label col-md-10 col-sm-6">
-				<textarea class="detailData" name="inqryCn" rows="6"></textarea>
+				<textarea class="detailData" name="reviewCn" rows="6"></textarea>
 			</div>
 		</div>
 	</div>
@@ -98,7 +98,7 @@
 			답변 작성
 		</label>
 		<div class="col-form-label col-md-9 col-sm-6">
-			<textarea class="detailData" name="inqryCn" rows="6"></textarea>
+			<textarea class="detailData" name="reviewCn" rows="6"></textarea>
 		</div>
 	</div>
 	

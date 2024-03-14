@@ -26,11 +26,11 @@ public class ClassInqryListDto {
 	
 	private String	step;				// 계층
 	
-	private String	replyYn;			// 답변 여부
+	private String		replyYn;			// 답변 여부
 	
-	private String	replyYnNm;			// 답변 여부 명칭
+	private String		replyYnNm;			// 답변 여부 명칭
 	
-	private Long	replyCnt;			// 답변 개수
+	private Long		replyCnt;			// 답변 개수
 	
 	private Long	parntsInqrySn;		// 부모 문의 일련번호
 	
@@ -46,7 +46,7 @@ public class ClassInqryListDto {
 	
 	private String	openYn;				// 공개 여부 ( Y / N ) 
 	
-	private String	openYnNm;				// 공개 여부 ( Y / N ) 
+	private String		openYnNm;				// 공개 여부 ( Y / N ) 
 	
     private String	registerId;			// 등록자 ID
     

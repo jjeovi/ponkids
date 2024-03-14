@@ -11,7 +11,7 @@
 	});
 	
 	// [ 관리 ] 버튼 클릭
-	function manageClassInqry( classInqrySn ) {
+	function manageClassReview( classReviewSn ) {
 		
 		var url = basicPath + '/live/detailByIdAjax';
 		$.ajax( {
@@ -19,12 +19,12 @@
             type: "GET",
             dataType: "json",
             async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-            data: {classInqrySn : classInqrySn}, // 검색할 값 setting
+            data: {classReviewSn : classReviewSn}, // 검색할 값 setting
             contentType: "application/json",
             success: function ( ajaxResult ) {
 				
 				if ( ajaxResult.target == null ) {
-					alert("문의번호가 존재하지 않습니다. 다시 시도해주세요.");
+					alert("리뷰번호가 존재하지 않습니다. 다시 시도해주세요.");
 					
 				} else {
 					// 모달 내용 초기화 작업
@@ -40,7 +40,7 @@
 		} );
 	}
 	
-	// 문의 상세 조회 모달창 ( 관리 클릭시 ) 내용 초기화 작업
+	// 리뷰 상세 조회 모달창 ( 관리 클릭시 ) 내용 초기화 작업
 	function eraseDetailModalData() {
 		// detailData class 전부 초기화작업
 		$(".detailData").text("");
@@ -56,7 +56,7 @@
 		
 	}
 	
-	// 문의 상세 조회 모달창 내용 setting 작업
+	// 리뷰 상세 조회 모달창 내용 setting 작업
 	function setDetailModalData( result ) {
 		
 		// 객체 내부 키값들을 순회 ( 객체 생성자 Object 가 직접 가지고 있는 메서드 활용 Object.keys([list]) )
@@ -69,9 +69,9 @@
 			value =  result.target[key];
 			
 			// data column 수정 
-			if		( key == 'inqryCn'		)	key = 'parntsInqryCn'; // inqryCn 		-> parntsInqryCn 에 값 대입
-			else if	( key == 'inqrySj'		)	key = 'parntsInqrySj'; // inqrySj 		-> parntsInqrySj 에 값 대입
-			else if	( key == 'classInqrySn' )	key = 'parntsInqrySn'; // classInqrySn 	-> parntsInqrySn 에 값 대입
+			if		( key == 'reviewCn'		)	key = 'parntsReviewCn'; // reviewCn 		-> parntsReviewCn 에 값 대입
+			else if	( key == 'reviewSj'		)	key = 'parntsReviewSj'; // reviewSj 		-> parntsReviewSj 에 값 대입
+			else if	( key == 'classReviewSn' )	key = 'parntsReviewSn'; // classReviewSn 	-> parntsReviewSn 에 값 대입
 			
 			
 			if ( $("[name='insertAnswerForm']").find("[name='" + key + "']").length ) {
@@ -104,7 +104,7 @@
 					$( "<label>" ).attr( "class", "col-form-label col-md-3 col-sm-3 label-align" ).append("[" + i++ + "] . " + item.userNm + "<br>" + item.userId + "<br>" + item.regFullDt),
 					$( "<div>" ).attr( "class", "col-form-label col-md-9 col-sm-6" ).append(
 						$( "<textarea>" ).attr("class", "no-textarea" ).attr( "rows", "6" ).append(
-							item.inqryCn							
+							item.reviewCn							
 						)
 					)
 				)
@@ -114,12 +114,12 @@
 		
 	}
 	
-	function insertClassInqryAnswer() {
+	function insertClassReviewAnswer() {
 		
 		// 유효성 체크
 		// 답변 내용 입력 길이 체크
-		var inqryCn =  $("[name='insertAnswerForm']").find("[name='inqryCn']").val();
-		if ( inqryCn.length < 10 ) {
+		var reviewCn =  $("[name='insertAnswerForm']").find("[name='reviewCn']").val();
+		if ( reviewCn.length < 10 ) {
 			alert("답변내용을 10자이상 입력해주세요.");
 			return false;
 		}
@@ -244,9 +244,9 @@
 							</select>
 							<div class="vl ml_5p"></div>
 							<select class="form-control ml_5p w_55r" name="schOption">
-								<option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">문의 제목</option>
-								<option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">문의자명</option>
-								<option value="C" th:selected=" ${searchDTO.schOption} == 'C' ">문의자ID</option>
+								<option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">리뷰 제목</option>
+								<option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">리뷰자명</option>
+								<option value="C" th:selected=" ${searchDTO.schOption} == 'C' ">리뷰자ID</option>
 							</select>
 							<input type="text" name="schCntn" th:value="${searchDTO.schCntn}"
 								   class="form-control input-sm" placeholder="검색어 입력"
@@ -274,8 +274,8 @@
 									<th>분류</th>
 									<th>클래스</th>
 									<th>공개여부</th>
-									<th>문의 제목</th>
-									<th>문의자</th>
+									<th>리뷰 제목</th>
+									<th>리뷰자</th>
 									<th>등록일시</th>
 									<th>관리</th>
 								</tr>
@@ -287,14 +287,14 @@
 									<td th:text="${data.classSj}"></td>
 									<td th:text="${data.openYnNm}"></td>
 									<td class="alignLeft">
-										[ [[${data.replyYnNm}]] <th:block th:if="${data.replyYn eq 'Y'}">([[${data.replyCnt}]])</th:block> ] [[${data.inqrySj}]]
+										[ [[${data.replyYnNm}]] <th:block th:if="${data.replyYn eq 'Y'}">([[${data.replyCnt}]])</th:block> ] [[${data.reviewSj}]]
 									</td>
 									<td>
 										[[${data.userId}]]<br />[[${data.userNm}]]
 									</td>
 									<td th:text="${data.regFullDt}"></td>
 									<td>
-										<button th:onclick="|manageClassInqry('${data.classInqrySn}');|" type="button" class="btn btn-primary btn-xs">
+										<button th:onclick="|manageClassReview('${data.classReviewSn}');|" type="button" class="btn btn-primary btn-xs">
 											<i class="fa fa-pencil"></i> 관리
 										</button>
 									</td>
@@ -341,29 +341,29 @@
 			</div>
 		</div>
 	</div>
-	<!-- S : 모달 (문의 관리 : 문의 상세 조회 및 답변 작성 )  -->
+	<!-- S : 모달 (리뷰 관리 : 리뷰 상세 조회 및 답변 작성 )  -->
 	<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
 		 id="targetDetailModal" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
 		<div class="modal-dialog modal-dialog-centered modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title">문의 상세 조회</h4>
+					<h4 class="modal-title">리뷰 상세 조회</h4>
 					<button type="button" class="close" data-dismiss="modal">
 						<span aria-hidden="true">×</span></button>
 				</div>
-				<div class="modal-body" th:insert="admin/classInqry/manageModal.html">
+				<div class="modal-body" th:insert="admin/classReview/manageModal.html">
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-white"
 							data-dismiss="modal">닫기
 					</button>
-					<button type="submit" class="btn btn-purple"  onclick="insertClassInqryAnswer()">답변등록
+					<button type="submit" class="btn btn-purple"  onclick="insertClassReviewAnswer()">답변등록
 					</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- E : 모달 (문의 관리 : 문의 상세 조회 및 답변 작성 )  -->
+	<!-- E : 모달 (리뷰 관리 : 리뷰 상세 조회 및 답변 작성 )  -->
 	<!-- E : content -->
 </th:block>
 </html>
