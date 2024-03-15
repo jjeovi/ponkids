@@ -59,7 +59,7 @@ public class ClassReviewService {
         
         ClassReview classReview = classReviewRepository.findById( pk ).orElse(null);
         
-        if (classReview == null ) { 
+        if (classReview == null ) {
         	
         	return null;
         } else {

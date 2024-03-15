@@ -129,7 +129,6 @@ public class ClassReviewAdmController {
 	@PostMapping( BASIC_PATH + "/{mcd}/insertReply" )
 	public String insertReply (
 			@ModelAttribute ClassReviewSaveDto saveDto,
-//			@ModelAttribute ClassReviewRoleSaveDto classReviewRoleSaveDto,  // required false
 			@PathVariable String mcd,
 			HttpServletRequest request,
 			Model model ) throws IOException {
@@ -155,7 +154,6 @@ public class ClassReviewAdmController {
 		
 		// save
 		classReviewService.save( saveDto, request );
-//		classReviewService.save( saveDto, classReviewRoleSaveDto, request );
 		
 		// 메시지 출력 및 url 이동 처리
 		model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
@@ -246,16 +244,15 @@ public class ClassReviewAdmController {
         
         // 답변대상 (target)
 		// TODO
-//        result.put( "target", classReviewService.findById( listDto ) );
+        result.put( "target", classReviewService.getByClassReviewSn( listDto.getClassReviewSn() ) );
 //
 //        // 답변 댓글 리스트 ( targetReplyList )
 //        // step 2 / parntsReviewSn 로 검색
-//        listDto.setStep("2");
-//        result.put("targetReplyList", classReviewService.findReplyByStepAndParntsReviewSn( listDto ) );
+        listDto.setStep("2");
+        result.put("targetReplyList", classReviewService.getListByStepAndParntsReviewSn( listDto.getStep(), listDto.getClassReviewSn() ) );
         
         return result;
     }
-	
 	
 	// ========================= Util method =========================
 	// ========================= Util method =========================

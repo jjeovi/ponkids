@@ -11,19 +11,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ClassReviewListDto {
 	
-	private Long classReviewSn;
+	private Long 	classReviewSn;
 	
-	private Long classSn;
+	private Long 	classSn;
 	
-	private String classSj;
+	private String		ctgryNm;			// 카테고리 명
+	
+	private String		crseNm;				// 커리큘럼 명
+	
+	private String 	classSj;
 	
 	private Long 		thumbAtchFileSn;
 	
-	private Long userSn;
+	private Long 	userSn;
 	
-	private String userNm;
+	private String 		userNm;
 	
-	private String	userId;				// 사용자 ID
+	private String		userId;				// 사용자 ID
 	
 	private String step;
 	
@@ -33,40 +37,42 @@ public class ClassReviewListDto {
 	
 	private Long		replyCnt;			// 답변 개수
 	
-	private Long parntsReviewSn;
+	private Long 	parntsReviewSn;
 	
-	private String reviewCn;
+	private String 	reviewCn;
 	
-	private String reviewGrade;
+	private String 	reviewGrade;
 	
 	private Long 	reviewGradeLong;
 	
-	private Long atchFileSn;
+	private Long 	atchFileSn;
 	
-	private String openYn;
+	private String 	openYn;
 	
 	private String		openYnNm;				// 공개 여부 ( Y / N )
 	
-    private String registerId;      // 등록자 ID
+    private String 	registerId;      // 등록자 ID
     
-    private String regDt;	// 등록일자
+    private String 	regDt;	// 등록일자
     
-    private String regFullDt;	// 등록일자
+    private String 	regFullDt;	// 등록일자
 	
-	private String schOption;   	// 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
+	private String 	schOption;   	// 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
     
-    private String schCntn;     	// 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!
+    private String 	schCntn;     	// 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!
 	
 	private CategoryDto category;
 
 	@Builder
 	@QueryProjection
-	public ClassReviewListDto( Long classReviewSn, Long classSn, String classSj, Long thumbAtchFileSn, Long userSn,
+	public ClassReviewListDto( Long classReviewSn, Long classSn, String ctgryNm, String crseNm, String classSj, Long thumbAtchFileSn, Long userSn,
 			String userNm, String userId,  String step, String replyYn, String replyYnNm, Long replyCnt,
 			Long parntsReviewSn, String reviewCn, String reviewGrade, Long reviewGradeLong, Long atchFileSn,
 			String openYn, String openYnNm, String registerId, String regDt, String regFullDt ) {
 		this.classReviewSn = classReviewSn;
 		this.classSn = classSn;
+		this.ctgryNm = ctgryNm;
+		this.crseNm = crseNm;
 		this.classSj = classSj;
 		this.thumbAtchFileSn = thumbAtchFileSn;
 		this.userSn = userSn;

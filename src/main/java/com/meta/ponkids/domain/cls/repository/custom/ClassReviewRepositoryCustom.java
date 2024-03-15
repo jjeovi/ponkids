@@ -11,7 +11,6 @@ public interface ClassReviewRepositoryCustom {
 	
 	Page<ClassReviewListDto> getList( ClassReviewListDto listDto, Pageable pageable );
 	
-	
 	ClassReviewListDto getByClassReviewSn( Long classReviewSn );
 	
 	List<ClassReviewListDto> getListByStepAndParntsReviewSn( String step, Long parntsReviewSn);

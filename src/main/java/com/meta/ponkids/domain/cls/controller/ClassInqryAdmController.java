@@ -146,7 +146,6 @@ public class ClassInqryAdmController {
 	@PostMapping( BASIC_PATH + "/{mcd}/insertReply" )
 	public String insertReply (
 			@ModelAttribute ClassInqrySaveDto saveDto,
-//			@ModelAttribute ClassInqryRoleSaveDto classInqryRoleSaveDto,  // required false
 			@PathVariable String mcd,
 			HttpServletRequest request,
 			Model model ) throws IOException {

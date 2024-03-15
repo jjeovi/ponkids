@@ -261,10 +261,9 @@
 							<colgroup>
 								<col width="60px;">
 								<col width="11%;">
-								<col width="10%;">
-								<col width="90px;">
+								<col width="350px">
 								<col width="auto;">
-								<col width="100px;">
+								<col width="90px;">
 								<col width="200px;">
 								<col width="130px;">
 							</colgroup>
@@ -273,9 +272,8 @@
 									<th>순번</th>
 									<th>분류</th>
 									<th>클래스</th>
-									<th>공개여부</th>
-									<th>리뷰 제목</th>
 									<th>리뷰자</th>
+									<th>공개여부</th>
 									<th>등록일시</th>
 									<th>관리</th>
 								</tr>
@@ -285,13 +283,11 @@
 									<td th:text="${resultList.totalElements - ( resultList.pageable.pageSize * resultList.pageable.pageNumber + dataStat.index ) }"></td>
 									<td> [[${data.ctgryNm}]] <th:block th:if="${data.crseNm != null && data.crseNm != '' }"><br/>[ [[${data.crseNm}]] ] </th:block> </td>
 									<td th:text="${data.classSj}"></td>
-									<td th:text="${data.openYnNm}"></td>
-									<td class="alignLeft">
-										[ [[${data.replyYnNm}]] <th:block th:if="${data.replyYn eq 'Y'}">([[${data.replyCnt}]])</th:block> ] [[${data.reviewSj}]]
-									</td>
 									<td>
-										[[${data.userId}]]<br />[[${data.userNm}]]
+										[ [[${data.replyYnNm}]] <th:block th:if="${data.replyYn eq 'Y'}">([[${data.replyCnt}]])</th:block> ] [[${data.userId}]]<br />[[${data.userNm}]]
+
 									</td>
+									<td th:text="${data.openYnNm}"></td>
 									<td th:text="${data.regFullDt}"></td>
 									<td>
 										<button th:onclick="|manageClassReview('${data.classReviewSn}');|" type="button" class="btn btn-primary btn-xs">
