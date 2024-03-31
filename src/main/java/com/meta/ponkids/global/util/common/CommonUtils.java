@@ -1,15 +1,5 @@
 package com.meta.ponkids.global.util.common;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.springframework.ui.Model;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl01ModDto;
 import com.meta.ponkids.domain.cls.dto.ClassCategoryCl02ModDto;
 import com.meta.ponkids.domain.cls.dto.ClassModDto;
@@ -18,12 +8,19 @@ import com.meta.ponkids.domain.cls.service.ClassCategoryCl02Service;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailModDto;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 import com.meta.ponkids.global.common.dto.CategoryDto;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 // 공통 유틸
 public class CommonUtils {
 	
 	// 조회조건에 따라 url mapping 변경 작업
-	public static void schConditionCombineForResetUrl( CategoryDto schCategoryDto, Long classSn, String BASIC_PATH, String mcd, Model model ) {
+	public static void schConditionCombineForResetUrl( CategoryDto schCategoryDto, Long classSn, String BASIC_PATH, String mcd, HttpServletRequest request ) {
 		
 		
 		if ( schCategoryDto != null && schCategoryDto.getLv3Sn() != null ) {   // schCategoryDto.getLv3Sn() != null : 클래스 검색 값이 있을시,
@@ -41,14 +38,18 @@ public class CommonUtils {
 				
 				if ( classSn != null ) {
 					String makeUrlParam = "";
-					if ( schCategoryDto.getLv1Sn() != null )
-						makeUrlParam += "category.lv1Sn=" + schCategoryDto.getLv1Sn() + "&";
-					if ( schCategoryDto.getLv2Sn() != null )
-						makeUrlParam += "category.lv2Sn=" + schCategoryDto.getLv2Sn() + "&";
-					if ( schCategoryDto.getLv3Sn() != null )
-						makeUrlParam += "category.lv3Sn=" + schCategoryDto.getLv3Sn() + "&";
-					if ( schCategoryDto.getLv4Sn() != null )
-						makeUrlParam += "category.lv4Sn=" + schCategoryDto.getLv4Sn() + "&";
+					
+//					if ( schCategoryDto.getLv1Sn() != null )
+//						makeUrlParam += "category.lv1Sn=" + schCategoryDto.getLv1Sn() + "&";
+//					if ( schCategoryDto.getLv2Sn() != null )
+//						makeUrlParam += "category.lv2Sn=" + schCategoryDto.getLv2Sn() + "&";
+//					if ( schCategoryDto.getLv3Sn() != null )
+//						makeUrlParam += "category.lv3Sn=" + schCategoryDto.getLv3Sn() + "&";
+//					if ( schCategoryDto.getLv4Sn() != null )
+//						makeUrlParam += "category.lv4Sn=" + schCategoryDto.getLv4Sn() + "&";
+
+					makeUrlParam = request.getQueryString();
+					
 					try {
 						// response 선언
 						HttpServletResponse response = ( ( ServletRequestAttributes ) RequestContextHolder.currentRequestAttributes() ).getResponse();
@@ -72,11 +73,11 @@ public class CommonUtils {
 				try {
 					// response 선언
 					HttpServletResponse response = ( ( ServletRequestAttributes ) RequestContextHolder.currentRequestAttributes() ).getResponse();
-					if ( schCategoryDto.getLv4Sn() != null ) {
-						response.sendRedirect( BASIC_PATH + "/" + mcd + "/" + classSn + "/list?category.lv4Sn=" + schCategoryDto.getLv4Sn() );
-					} else {
-						response.sendRedirect( BASIC_PATH + "/" + mcd + "/" + classSn + "/list" );
-					}
+					
+					String makeUrlParam = "";
+					makeUrlParam = request.getQueryString();
+					
+					response.sendRedirect( BASIC_PATH + "/" + mcd + "/" + classSn + "/list?" + makeUrlParam );
 					
 				} catch ( IOException e ) {
 					throw new RuntimeException( e );
@@ -86,11 +87,13 @@ public class CommonUtils {
 				try {
 					// response 선언
 					HttpServletResponse response = ( ( ServletRequestAttributes ) RequestContextHolder.currentRequestAttributes() ).getResponse();
-					if ( schCategoryDto.getLv4Sn() != null ) {
-						response.sendRedirect( BASIC_PATH + "/" + mcd + "/" + schCategoryDto.getLv3Sn() + "/list?category.lv4Sn=" + schCategoryDto.getLv4Sn() );
-					} else {
-						response.sendRedirect( BASIC_PATH + "/" + mcd + "/" + schCategoryDto.getLv3Sn() + "/list" );
-					}
+					
+					String makeUrlParam = "";
+					
+					makeUrlParam = request.getQueryString();
+					
+					response.sendRedirect( BASIC_PATH + "/" + mcd + "/" + schCategoryDto.getLv3Sn() + "/list?" + makeUrlParam );
+					
 					
 				} catch ( IOException e ) {
 					throw new RuntimeException( e );
@@ -105,10 +108,13 @@ public class CommonUtils {
 			if ( classSn != null ) {
 				// redirect
 				String makeUrlParam = "";
-				if ( schCategoryDto.getLv1Sn() != null )
-					makeUrlParam += "category.lv1Sn=" + schCategoryDto.getLv1Sn() + "&";
-				if ( schCategoryDto.getLv2Sn() != null )
-					makeUrlParam += "category.lv2Sn=" + schCategoryDto.getLv2Sn() + "&";
+				
+//				if ( schCategoryDto.getLv1Sn() != null )
+//					makeUrlParam += "category.lv1Sn=" + schCategoryDto.getLv1Sn() + "&";
+//				if ( schCategoryDto.getLv2Sn() != null )
+//					makeUrlParam += "category.lv2Sn=" + schCategoryDto.getLv2Sn() + "&";
+				
+				makeUrlParam = request.getQueryString();
 				
 				try {
 					// response 선언

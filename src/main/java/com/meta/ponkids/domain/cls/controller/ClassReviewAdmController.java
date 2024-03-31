@@ -44,6 +44,7 @@ public class ClassReviewAdmController {
 						@PathVariable String mcd,
 						@PathVariable( required = false ) Long classSn,
 						@PageableDefault( size = 10 ) Pageable pageable,
+						HttpServletRequest request,
 						Model model ) {
 		
 		// S : 필요한 객체 setting
@@ -87,7 +88,7 @@ public class ClassReviewAdmController {
 		}
 		
 		
-		CommonUtils.schConditionCombineForResetUrl( listDto.getCategory(), classSn, BASIC_PATH, mcd, model );
+		CommonUtils.schConditionCombineForResetUrl( listDto.getCategory(), classSn, BASIC_PATH, mcd, request );
 		
 		// 카테고리 ( lv1, lv2, lv3, lv4 setting 후 model addattribute 까지 진행 method )
 		cateLvListSetAndModelAdd(listDto, model);

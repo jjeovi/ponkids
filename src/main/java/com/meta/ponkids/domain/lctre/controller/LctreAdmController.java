@@ -56,6 +56,7 @@ public class LctreAdmController {
 						@PathVariable String mcd,
 						@PathVariable( required = false ) Long classSn,
 						@PageableDefault( size = 10 ) Pageable pageable,
+						HttpServletRequest request,
 						Model model ) {
 		
 		// S : 필요한 객체 setting
@@ -101,7 +102,7 @@ public class LctreAdmController {
 		// 검색 분류 : [ 카테고리 / 커리큘럼 / 클래스 / 요일 ] 순서의 4단계:
 		// 1. 카테고리, 커리큘럼 까지만 검색 (~lv2) 했을시, mapping 조건 : BASIC_PATH + "/{mcd}/list"
 		// 2. 클래스 까지 검색했을 시 , : BASIC_PATH + "/{mcd}/{classSn}/list"
-		CommonUtils.schConditionCombineForResetUrl( listDto.getCategory(), classSn, BASIC_PATH, mcd, model );
+		CommonUtils.schConditionCombineForResetUrl( listDto.getCategory(), classSn, BASIC_PATH, mcd, request );
 //		schConditionCombineForResetUrl( listDto.getCategory(), classSn, mcd, model );
 		
 		// 카테고리 ( lv1, lv2, lv3, lv4 setting 후 model addattribute 까지 진행 method )

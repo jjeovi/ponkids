@@ -1,24 +1,22 @@
 package com.meta.ponkids.domain.lctre.repository.impl;
 
-import java.util.List;
-
 import com.meta.ponkids.domain.lctre.dto.LctreListDto;
+import com.meta.ponkids.domain.lctre.dto.QLctreListDto;
 import com.meta.ponkids.domain.lctre.repository.custom.LctreRepositoryCustom;
 import com.meta.ponkids.global.common.dto.CategoryDto;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import com.meta.ponkids.domain.lctre.dto.QLctreListDto;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 import static com.meta.ponkids.domain.cls.entity.QClass.class$;
 import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl01.classCategoryCl01;
@@ -102,6 +100,7 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 						eqCateLv2( listDto.getCategory() ),	// 분류 조회 : lv2Sn 값 존재시 검색
 						eqCateLv3( listDto.getCategory() ), // 분류 조회 : lv3Sn 값 존재시 검색
 						eqCateLv4( listDto.getCategory() ), // 분류 조회 : lv4Sn 값 존재시 검색
+						eqRcritNmprSetYn( listDto.getRcritNmprSetYn()),
 						eqClassSn( listDto.getClassSn() ),
 						eqOption( listDto.getSchOption(), listDto.getSchCntn() )
 				)
@@ -233,7 +232,11 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 		return ( pk != null && pk != 0 )? lctre.classSn.eq( pk ) : null;
 	}
 	
-    private BooleanExpression eqOption( String schOption, String schCntn ) {
+	private BooleanExpression eqRcritNmprSetYn( String rcritNmprSetYn ) {
+		return ( StringUtils.hasText( rcritNmprSetYn ) ) ? lctre.rcritNmprSetYn.eq(  rcritNmprSetYn ) : null ;
+	}
+	
+	private BooleanExpression eqOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨
         if ( StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn ) ) {
 //            if ( schOption.equals( "A" ) )

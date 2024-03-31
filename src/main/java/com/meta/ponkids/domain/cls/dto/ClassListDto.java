@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ClassListDto {
     
-    private Long 	classSn;                	// 클래스일련번호
+    private Long 	classSn;                // 클래스일련번호
     
-    private Long 	ctgrySn;              		// 카테고리코드
+    private Long 	ctgrySn;              	// 카테고리코드
     
     private String 	ctgryNm;              	// 카테고리명
     

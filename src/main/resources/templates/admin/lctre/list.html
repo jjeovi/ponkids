@@ -115,6 +115,12 @@
 		<div class="x_content">
 			<div class="row">
 				<form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd}) }" class="form">
+					<th:block th:if="${ ( searchDTO.category != null ) }" >
+						<input th:if="${ searchDTO.category.lv1Sn != null }" type="hidden" name="category.lv1Sn" th:value="${searchDTO.category.lv1Sn}"/>
+						<input th:if="${ searchDTO.category.lv2Sn != null }" type="hidden" name="category.lv2Sn" th:value="${searchDTO.category.lv2Sn}"/>
+						<input th:if="${ searchDTO.category.lv3Sn != null }" type="hidden" name="category.lv3Sn" th:value="${searchDTO.category.lv3Sn}"/>
+						<input th:if="${ searchDTO.category.lv4Sn != null }" type="hidden" name="category.lv4Sn" th:value="${searchDTO.category.lv4Sn}"/>
+					</th:block>
 					<h2 class="pl_15p" th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null ) }">
 						분류 : [[${searchDTO.category.categoryNm}]]
 					</h2>
@@ -126,7 +132,7 @@
 					</div>
 					<div class="col-md-11 col-sm-10 mb_10p">
 						<div class="btn-group float-right" role="group">
-							<select class="form-control" name="mngrConfmYn">
+							<select class="form-control" name="rcritNmprSetYn">
 								<option value="">모집인원설정여부</option>
 								<option value="Y" th:selected=" ${searchDTO.rcritNmprSetYn} == 'Y' ">설정</option>
 								<option value="N" th:selected=" ${searchDTO.rcritNmprSetYn} == 'N' ">미설정</option>

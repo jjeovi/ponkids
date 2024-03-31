@@ -5,6 +5,7 @@ import com.meta.ponkids.domain.cls.dto.ClassReviewListDto;
 import com.meta.ponkids.domain.cls.dto.QClassReviewListDto;
 import com.meta.ponkids.domain.cls.entity.QClassReview;
 import com.meta.ponkids.domain.cls.repository.custom.ClassReviewRepositoryCustom;
+import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -25,6 +26,7 @@ import java.util.List;
 import static com.meta.ponkids.domain.cls.entity.QClass.class$;
 import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl01.classCategoryCl01;
 import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategoryCl02;
+import static com.meta.ponkids.domain.cls.entity.QClassInqry.classInqry;
 import static com.meta.ponkids.domain.cls.entity.QClassReview.classReview;
 import static com.meta.ponkids.domain.user.entity.QUser.user;
 
@@ -124,6 +126,11 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
 				)
                 // where
                 .where(
+						eqCateLv1( listDto.getCategory() ),	// 분류 조회 : lv1Sn 값 존재시 검색
+						eqCateLv2( listDto.getCategory() ),	// 분류 조회 : lv2Sn 값 존재시 검색
+						eqCateLv3( listDto.getCategory() ), // 분류 조회 : lv3Sn 값 존재시 검색
+						eqOpenYn( listDto.getOpenYn() ),
+						eqReplyYn( listDto.getReplyYn() ),
                 		eqClassSn( listDto.getClassSn() ),
 						classReview.step.eq("1")
 				)
@@ -331,7 +338,48 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
 	
 	// -------------------------------- WHERE 검색 옵션 setting --------------------------------
 	
-	    
+	
+	// 카테고리 lv 1 검색 옵션
+	// lv1Sn == class$.ctgrySn
+	private BooleanExpression eqCateLv1( CategoryDto categoryDto ) {
+		return ( categoryDto != null && categoryDto.getLv1Sn() != null
+				&& categoryDto.getLv1Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? class$.ctgrySn.eq( categoryDto.getLv1Sn() ) : null;
+	}
+	
+	// 카테고리 lv 2 검색 옵션
+	// lv2Sn == class$.crseSn
+	private BooleanExpression eqCateLv2( CategoryDto categoryDto ) {
+		return ( categoryDto != null && categoryDto.getLv2Sn() != null
+				&& categoryDto.getLv2Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? class$.crseSn.eq( categoryDto.getLv2Sn() ) : null;
+	}
+	
+	// 카테고리 lv 3 검색 옵션
+	// lv3sn == class$.classSn
+	
+	private BooleanExpression eqCateLv3( CategoryDto categoryDto ) {
+		return ( categoryDto != null && categoryDto.getLv3Sn() != null
+				&& categoryDto.getLv3Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? class$.classSn.eq( categoryDto.getLv3Sn() ) : null;
+	}
+	
+	
+	private BooleanExpression eqOpenYn( String openYn ) {
+		return (StringUtils.hasText(openYn) )  ? classReview.openYn.eq(openYn) : null;
+	}
+	
+	private BooleanExpression eqReplyYn( String replyYn ) {
+		return ( StringUtils.hasText(replyYn) ) ? (
+				new CaseBuilder()
+						.when(ExpressionUtils.isNull( JPAExpressions
+								.select( classReview_Reply.classReviewSn.sum() )
+								.from( classReview_Reply )
+								.where( classReview_Reply.parntsReviewSn.eq( classReview.classReviewSn ))
+						)).then("N")
+						.otherwise("Y")
+						.equalsIgnoreCase(replyYn)
+		) : null ;
+	}
+	
+	
 	    private BooleanExpression eqOption( String schOption, String schCntn ) {
 	        // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨
 	        if ( StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn ) ) {
