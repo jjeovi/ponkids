@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.meta.ponkids.domain.cls.dto.ClassReqstListDto;
 import com.meta.ponkids.domain.cls.service.ClassReqstService;
 import com.meta.ponkids.domain.lctre.service.LctreReqstService;
+import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
 import com.meta.ponkids.global.util.session.SessionUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,8 @@ public class MypageController {
     private final ClassReqstService classReqstService;
     
     private final LctreReqstService lctreReqstService;
+    
+    private final UserChldrnRepository userChldrnRepository;
     
     
     // layout 관련 dataSet 처리는 
@@ -66,6 +69,8 @@ public class MypageController {
 		
 		// 기본 경로 setting
 		model.addAttribute( "basicPath", BASIC_PATH );
+		// mypage용 mcd 
+		model.addAttribute( "mypageMcd", "reqstHistory" );
 		return USER_VIEW_PATH + BASIC_PATH + "/reqstHistory/list";
 	}
 	
@@ -97,11 +102,13 @@ public class MypageController {
 		
 		// 기본 경로 setting
 		model.addAttribute( "basicPath", BASIC_PATH );
+		// mypage용 mcd 
+		model.addAttribute( "mypageMcd", "reqstHistory" );
 		return USER_VIEW_PATH + BASIC_PATH + "/reqstHistory/detail";
 	}
 	
 	
-	@GetMapping( BASIC_PATH + "/reviewList" )
+	@GetMapping( "/reviewList" )
 	public String reviewList( Model model ) {
 		
 		// S : 필요한 객체 setting
@@ -111,10 +118,12 @@ public class MypageController {
 		
 		// 기본 경로 setting
 		model.addAttribute( "basicPath", BASIC_PATH );
+		// mypage용 mcd 
+		model.addAttribute( "mypageMcd", "reviewList" );
 		return USER_VIEW_PATH + BASIC_PATH + "/reviewList";
 	}
 	
-	@GetMapping( BASIC_PATH + "/myInfoModify" )
+	@GetMapping( "/myInfoModify" )
 	public String myInfoModify( Model model ) {
 		
 		// S : 필요한 객체 setting
@@ -124,23 +133,34 @@ public class MypageController {
 		
 		// 기본 경로 setting
 		model.addAttribute( "basicPath", BASIC_PATH );
+		// mypage용 mcd 
+		model.addAttribute( "mypageMcd", "myInfoModify" );
 		return USER_VIEW_PATH + BASIC_PATH + "/myInfoModify";
 	}
 	
-	@GetMapping( BASIC_PATH + "/childInfoModify" )
+	@GetMapping( "/childInfoModify" )
 	public String childInfoModify( Model model ) {
 		
 		// S : 필요한 객체 setting
+		
+		// default : 첫번째 자녀 불러오기 
+		model.addAttribute( "targetDto", userChldrnRepository.getByUserSnAndUserChldrnSeq(SessionUtils.getAuthUserSn(), (long)1 ) );
+		
+		// default : 자식 list  
+		model.addAttribute( "userChldrnListDto", userChldrnRepository.getListByUserSn(SessionUtils.getAuthUserSn() ) );
 		
 		
 		// E : 필요한 객체 setting
 		
 		// 기본 경로 setting
 		model.addAttribute( "basicPath", BASIC_PATH );
+		// mypage용 mcd 
+		model.addAttribute( "mypageMcd", "childInfoModify" );
+		
 		return USER_VIEW_PATH + BASIC_PATH + "/childInfoModify";
 	}
 	
-	@GetMapping( BASIC_PATH + "/inqryList" )
+	@GetMapping( "/inqryList" )
 	public String inqryList( Model model ) {
 		
 		// S : 필요한 객체 setting
@@ -150,11 +170,13 @@ public class MypageController {
 		
 		// 기본 경로 setting
 		model.addAttribute( "basicPath", BASIC_PATH );
+		// mypage용 mcd 
+		model.addAttribute( "mypageMcd", "inqryList" );
 		return USER_VIEW_PATH + BASIC_PATH + "/inqryList";
 	}
 	
 	
-	@GetMapping( BASIC_PATH + "/questionList" )
+	@GetMapping( "/questionList" )
 	public String questionList( Model model ) {
 		
 		// S : 필요한 객체 setting
@@ -164,6 +186,8 @@ public class MypageController {
 		
 		// 기본 경로 setting
 		model.addAttribute( "basicPath", BASIC_PATH );
+		// mypage용 mcd 
+		model.addAttribute( "mypageMcd", "questionList" );
 		return USER_VIEW_PATH + BASIC_PATH + "/questionList";
 	}
 	

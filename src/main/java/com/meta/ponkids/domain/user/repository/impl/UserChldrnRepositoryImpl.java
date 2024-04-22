@@ -2,6 +2,7 @@ package com.meta.ponkids.domain.user.repository.impl;
 
 import com.meta.ponkids.domain.user.dto.QUserChldrnListDto;
 import com.meta.ponkids.domain.user.dto.UserChldrnListDto;
+import com.meta.ponkids.domain.user.dto.UserChldrnModDto;
 import com.meta.ponkids.domain.user.repository.custom.UserChldrnRepositoryCustom;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -62,10 +63,44 @@ public class UserChldrnRepositoryImpl implements UserChldrnRepositoryCustom {
         return results;
     }
     
+
+	@Override
+	public UserChldrnListDto getByUserSnAndUserChldrnSeq( Long userSn, Long userChldrnSeq ) {
+		
+		return query
+                .select( new QUserChldrnListDto(
+                				userChldrn.chldrnSn,
+                                userChldrn.userSn,
+                                userChldrn.userChldrnSeq,
+                                userChldrn.chldrnNm,
+                                new CaseBuilder()
+                                        .when( userChldrn.chldrnGender.eq( "M" ) ).then( "남자" )
+                                        .when( userChldrn.chldrnGender.eq( "F" ) ).then( "여자" )
+                                        .otherwise( "" ).as( "chldrnGender" ),
+                                userChldrn.chldrnBrdtDate,
+                                userChldrn.chldrnEmail,
+                                userChldrn.chldrnTelNo,
+                                userChldrn.atchFileSn,
+                                userChldrn.registerId,
+                                userChldrn.registerIp
+                        )
+                
+                )
+                .from( userChldrn )
+                .where(
+                        eqUserSn( userSn ),
+                        userChldrn.userChldrnSeq.eq( userChldrnSeq )
+                )
+                .orderBy( userChldrn.userChldrnSeq.asc() )
+                .fetchFirst();
+	}
+    
     
     private BooleanExpression eqUserSn( Long userSn ) {
         return userSn != null ? userChldrn.userSn.eq( userSn ) : null;
     }
+
+
     
     
 }

@@ -1,10 +1,19 @@
 
 // ------------- function () 함수 실행  호출시점 : DOM Tree 생성 완료 후 -----------------
 $( function () {
+	// mypage용 mcd setting
+	if ( mypageMcd != null || mypageMcd != '' ) {
+		// mypageMcd 가 존재한다면
+		// mypage의 mcd setting
+		$(".mp_list .list_area ul ." + mypageMcd ).addClass("active");
+		
+    }
 	
 //	$("input[name='reviewGrade']").on("click", function(){
 //		alert("eee");
 //	})
+
+	
 
 } );
 // ------------- function () 함수 종료 -----------------
