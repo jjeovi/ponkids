@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -138,26 +139,40 @@ public class MypageController {
 		return USER_VIEW_PATH + BASIC_PATH + "/myInfoModify";
 	}
 	
-	@GetMapping( "/childInfoModify" )
-	public String childInfoModify( Model model ) {
+	@GetMapping( "/myChildInfo" )
+	public String myChildInfo( @RequestParam( required = false ) Long userChldrnSeq,	// 자녀 순번  *기본값 1
+								@RequestParam( required = false ) String type,			// 타입 ( mod : 수정(기존자녀수정), add : 등록(신규자녀등록) ) *기본값 mod 
+									Model model ) {
 		
 		// S : 필요한 객체 setting
 		
-		// default : 첫번째 자녀 불러오기 
-		model.addAttribute( "targetDto", userChldrnRepository.getByUserSnAndUserChldrnSeq(SessionUtils.getAuthUserSn(), (long)1 ) );
+		// 자녀순번 없을시 기본값 1 로 setting
+		if( userChldrnSeq == null ) { 
+			userChldrnSeq = (long)1 ;
+		}
+		
+		// 페이지유형 없을시 기본값 "mod"
+		if ( !StringUtils.hasText( type ) ) {
+			type = "mod";
+		}
+		model.addAttribute( type );
+		
+		// default : 자녀 불러오기 ( userChldrnSeq 번째 자녀 ) 
+		model.addAttribute( "targetDto", userChldrnRepository.getByUserSnAndUserChldrnSeq( SessionUtils.getAuthUserSn(), userChldrnSeq ) );
 		
 		// default : 자식 list  
-		model.addAttribute( "userChldrnListDto", userChldrnRepository.getListByUserSn(SessionUtils.getAuthUserSn() ) );
+		model.addAttribute( "userChldrnListDto", userChldrnRepository.getListByUserSn( SessionUtils.getAuthUserSn() ) );
 		
 		
 		// E : 필요한 객체 setting
 		
 		// 기본 경로 setting
 		model.addAttribute( "basicPath", BASIC_PATH );
-		// mypage용 mcd 
-		model.addAttribute( "mypageMcd", "childInfoModify" );
 		
-		return USER_VIEW_PATH + BASIC_PATH + "/childInfoModify";
+		// mypage용 mcd 
+		model.addAttribute( "mypageMcd", "myChildInfo" );
+		
+		return USER_VIEW_PATH + BASIC_PATH + "/myChildInfo";
 	}
 	
 	@GetMapping( "/inqryList" )

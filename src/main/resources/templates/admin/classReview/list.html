@@ -221,10 +221,16 @@
 		<div class="x_content">
 			<div class="row">
 				<form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd}) }" class="form">
+					<th:block th:if="${ ( searchDTO.category != null ) }" >
+						<input type="hidden" name="category[lv1Sn]" th:value="${searchDTO.category.lv1Sn}"/>
+						<input type="hidden" name="category[lv2Sn]" th:value="${searchDTO.category.lv2Sn}"/>
+						<input type="hidden" name="category[lv3Sn]" th:value="${searchDTO.category.lv3Sn}"/>
+						<input type="hidden" name="category[lv4Sn]" th:value="${searchDTO.category.lv4Sn}"/>
+					</th:block>
+					<input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
 					<h2 class="pl_15p" th:if="${ ( searchDTO.category != null ) && ( searchDTO.category.lv1Sn != null ) }">
 						분류 : [[${searchDTO.category.categoryNm}]]
 					</h2>
-					<input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
 					<!-- S : 테이블 상단 검색 창 -->
 					<!-- totalCount -->
 					<div class="col-md-1 col-sm-2 mt_10p pl_15p">
@@ -261,7 +267,7 @@
 							<colgroup>
 								<col width="60px;">
 								<col width="11%;">
-								<col width="auto;">
+								<col width="350px">
 								<col width="auto;">
 								<col width="90px;">
 								<col width="200px;">

@@ -143,8 +143,8 @@
 										<a th:href="@{/admin/lctre/mcd332/{classSn}/list ( classSn = ${data.classSn} ) }" class="btn btn-primary btn-xs">
 											<i class="fa fa-pencil"></i>수업
 										</a>
-										<a th:href="'javascript:deleteItem(\'' + ${data.classSn} + '\');'" class="btn btn-warning btn-xs">
-											<i class="fa fa-trash-o"></i>후기
+										<a th:href="@{/admin/classReview/mcd/{classSn}/list ( classSn = ${data.classSn} ) }" class="btn btn-warning btn-xs">
+											<i class="fa fa-pencil"></i>후기
 										</a>
 										<a th:href="@{/admin/classInqry/mcd/{classSn}/list ( classSn = ${data.classSn} ) }" class="btn btn-success btn-xs">
 											<i class="fa fa-pencil"></i>문의
