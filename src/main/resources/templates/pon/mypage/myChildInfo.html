@@ -140,6 +140,15 @@
 	</div>
 	<!-- E: 자녀 수정 영역 -->
 	
+	
+	<!-- S : 하단 버튼 영역 -->
+	<div>
+		<button type="button" th:onclick="|deleteChild('${targetDto.chldrnSn}');|" >삭제</button>
+		<button type="button" onclick="updateChild();" >수정</button>
+		
+	</div>
+	<!-- E : 하단 버튼 영역 -->
+	
 	<!-- E: content -->
 </div>
 
