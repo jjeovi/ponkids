@@ -122,3 +122,13 @@ function goClassReview( classSn ){
 	}
 	
 	/*  E : 후기 작성하기 */
+	
+	
+	// delete function
+	function deleteItem( delPk ) {
+	    if ( confirm( "삭제하시겠습니까?" ) ) {
+	        $( "[name='deleteForm']" ).find( "#delPk" ).val( delPk );
+	        $( "[name='deleteForm']" ).submit();
+	
+	    }
+	}

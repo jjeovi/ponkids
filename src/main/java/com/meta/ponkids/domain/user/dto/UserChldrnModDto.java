@@ -1,5 +1,6 @@
 package com.meta.ponkids.domain.user.dto;
 
+import com.meta.ponkids.domain.user.entity.User;
 import com.meta.ponkids.domain.user.entity.UserChldrn;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 public class UserChldrnModDto {
     
+	private Long chldrnSn;
+	
     private Long userSn;
     
     private Long userChldrnSeq;
@@ -47,7 +50,8 @@ public class UserChldrnModDto {
     
     
     @Builder
-    public UserChldrnModDto( Long userSn, Long userChldrnSeq, String chldrnNm, String chldrnGender, String chldrnBrdtDate, String chldrnEmail, String chldrnTelNo, Long atchFileSn, String updusrId, String updusrIp ) {
+    public UserChldrnModDto( Long chldrnSn, Long userSn, Long userChldrnSeq, String chldrnNm, String chldrnGender, String chldrnBrdtDate, String chldrnEmail, String chldrnTelNo, Long atchFileSn, String updusrId, String updusrIp ) {
+    	this.chldrnSn = chldrnSn;
         this.userSn = userSn;
         this.userChldrnSeq = userChldrnSeq;
         this.chldrnNm = chldrnNm;
@@ -63,16 +67,35 @@ public class UserChldrnModDto {
     // DTO to Entity 메소드는 DTO 내부에서 생성.
     public UserChldrn toEntity() {
         return UserChldrn.builder()
+        		.chldrnSn( chldrnSn )
                 .userChldrnSeq( userChldrnSeq )
                 .userSn( userSn )
                 .chldrnNm( chldrnNm )
                 .chldrnGender( chldrnGender )
-                .chldrnBrdtDate( getChldrnBrdtDate() )
+                .chldrnBrdtDate( chldrnBrdtDate )
                 .chldrnEmail( chldrnEmail )
                 .chldrnTelNo( chldrnTelNo )
                 .atchFileSn( atchFileSn )
                 .updusrId( updusrId )
                 .updusrIp( updusrIp )
                 .build();
+    }
+    
+
+    // Entity to Dto 메소드는 DTO 내부에서 생성.
+    public UserChldrnModDto toDto( UserChldrn userChldrn ) {
+    	return UserChldrnModDto.builder()
+    			.chldrnSn( userChldrn.getChldrnSn() )
+                .userSn( userChldrn.getUserSn() )
+                .chldrnNm( userChldrn.getChldrnNm() )
+                .chldrnGender( userChldrn.getChldrnGender() )
+                .chldrnBrdtDate( userChldrn.getChldrnBrdtDate() )
+                .chldrnEmail( userChldrn.getChldrnEmail() )
+                .chldrnTelNo( userChldrn.getChldrnTelNo() )
+                .atchFileSn( userChldrn.getAtchFileSn() )
+                .updusrId( userChldrn.getUpdusrId() )
+                .updusrIp( userChldrn.getUpdusrIp() )
+                .build();
+    			
     }
 }

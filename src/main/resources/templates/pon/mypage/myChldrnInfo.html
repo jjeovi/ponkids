@@ -22,6 +22,14 @@
 		function addMyChldrn(){
 			/* TODO : 추가작업 */	
 		}
+		
+		function deleteChldrn( userChldrnSeq ) { 
+			
+		}
+		
+		function updateChldrn() {
+			
+		}
 
 	</script>
 </div>
@@ -33,13 +41,14 @@
 	<!-- S: 자녀 리스트 영역 -->
 	<div class="myChldrnList">
 		<ul>
-			<li th:onclick="|myChildInfo('${item.userChldrnSeq}')|" th:each="item : ${userChldrnListDto}" th:text="${item.chldrnNm}"></li>
+			<li th:onclick="|myChldrnInfo('${item.userChldrnSeq}')|" th:each="item : ${userChldrnListDto}" th:text="${item.chldrnNm}"></li>
 			<li onclick="addMyChldrn();">추가</li>
 		</ul>
 	</div>
 	<!-- E: 자녀 리스트 영역 -->
 	
 	<!-- S: 자녀 수정 영역 -->
+	<form id="listForm" name="listForm" method="get"   th:action="@{ {basicPath}/{mcd}/{bbsSn}/list ( basicPath = ${basicPath}, mcd = ${mcd}, bbsSn = ${bbsSn}) }" class="form">
 	<div name="chldrnModDiv" class="modForm" th:style=" ${type eq 'add'} ? 'display:none;' " >
 		<input type="hidden" name="chldrnGender" />
 		<div class="filebox preview-image">
@@ -89,9 +98,11 @@
 		<input type="tel"	name="chldrnTelNo"		placeholder="연락처"	data-validate-length-range="10,11"	maxlength="11"	>
 		<input type="text"	name="chldrnEmail"		placeholder="이메일" >
 	</div>
+	</form>
 	<!-- E: 자녀 수정 영역 -->
 	
 	<!-- S: 자녀 등록 영역 -->
+	<form id="listForm" name="listForm" method="get"   th:action="@{ {basicPath}/{mcd}/{bbsSn}/list ( basicPath = ${basicPath}, mcd = ${mcd}, bbsSn = ${bbsSn}) }" class="form">
 	<div name="chldrnAddDiv" class="newForm" th:style=" ${type eq 'mod' || type eq null } ? 'display:none;' " >
 		<input type="hidden" name="chldrnGender" />
 		<div class="filebox preview-image">
@@ -138,17 +149,20 @@
 			</label>
 		</div>
 	</div>
+	</form>
 	<!-- E: 자녀 수정 영역 -->
 	
 	
 	<!-- S : 하단 버튼 영역 -->
 	<div>
-		<button type="button" th:onclick="|deleteChild('${targetDto.chldrnSn}');|" >삭제</button>
-		<button type="button" onclick="updateChild();" >수정</button>
-		
+		<button type="button" th:onclick="'javascript:deleteItem(\'' + ${targetDto.chldrnSn} + '\');'" >삭제</button>
+		<button type="button" onclick="updateChldrn();" >수정</button>
 	</div>
 	<!-- E : 하단 버튼 영역 -->
 	
+	<form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/myChldrnInfo/deleteChldrn ( basicPath = ${basicPath} ) }">
+		<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+	</form>
 	<!-- E: content -->
 </div>
 

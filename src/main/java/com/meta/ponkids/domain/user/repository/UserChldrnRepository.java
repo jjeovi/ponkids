@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -25,6 +26,9 @@ public interface UserChldrnRepository extends JpaRepository<UserChldrn, Long>, U
     List<UserChldrn> findByUserSn( Long userSn );
     
     
+    Optional<UserChldrn> findByChldrnSnAndUserSn( Long chldrnSn, Long userSn );
+    
+    
     @Modifying( clearAutomatically = true )
     @Query( value = "UPDATE {h-schema}tb_user_chldrn "
             + "      SET del_yn = 'Y'"
@@ -32,5 +36,15 @@ public interface UserChldrnRepository extends JpaRepository<UserChldrn, Long>, U
             + "    WHERE user_sn = :userSn", nativeQuery = true )
         // nativeQuery true 없으면 error
     int deleteAllByUserSn( @Param( "userSn" ) Long userSn );
+    
+    
+    @Modifying( clearAutomatically = true )
+    @Query( value = "UPDATE {h-schema}tb_user_chldrn "
+    		+ "      SET del_yn    = 'Y'"
+    		+ "        , updt_dt   = now() "
+    		+ "    WHERE chldrn_sn = :chldrnSn"
+    		+ "      AND user_sn   = :userSn", nativeQuery = true )
+    // nativeQuery true 없으면 error
+    int deleteByChldrnSnAndUserSn( @Param( "chldrnSn" ) Long chldrnSn,  @Param( "userSn" ) Long userSn );
     
 }
