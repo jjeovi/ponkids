@@ -189,8 +189,8 @@ public class MypageController {
 	}
 	
 	
-	@PostMapping( "/myChldrnInfo/updateChldrn" )
-	public String updateChldrn(
+	@PostMapping( "/myChldrnInfo/update" )
+	public String myChldrnInfoUpdate(
 			@ModelAttribute UserChldrnModDto modDto,
 			@RequestParam( "file" ) MultipartFile files,
 			HttpServletRequest request,
@@ -200,10 +200,12 @@ public class MypageController {
 		Long userSn = SessionUtils.getAuthUserSn();
 		
 		if( userSn == null ) { 
-			model.addAttribute( "resultMsg",	"삭제 중 오류가 발생하였습니다. 세션을 확인해주세요." );
+			model.addAttribute( "resultMsg",	"수정 중 오류가 발생하였습니다. 세션을 확인해주세요." );
 			model.addAttribute( "moveUrl",		"/" );
 			return "common/alert";
 		}
+		
+		modDto.setUserSn( userSn );
 		
 		
 		// 첨부파일 존재시 파일 저장
@@ -228,7 +230,7 @@ public class MypageController {
 		userChldrnService.update( modDto, request ) ;
 		
 		// 메시지 출력 및 url 이동 처리
-		model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
+		model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
 		model.addAttribute( "moveUrl",	 BASIC_PATH + "/myChldrnInfo" );
 		
 		return "common/alert";

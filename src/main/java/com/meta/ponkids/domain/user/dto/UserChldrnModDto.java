@@ -86,6 +86,7 @@ public class UserChldrnModDto {
     public UserChldrnModDto toDto( UserChldrn userChldrn ) {
     	return UserChldrnModDto.builder()
     			.chldrnSn( userChldrn.getChldrnSn() )
+                .userChldrnSeq( userChldrn.getUserChldrnSeq() )
                 .userSn( userChldrn.getUserSn() )
                 .chldrnNm( userChldrn.getChldrnNm() )
                 .chldrnGender( userChldrn.getChldrnGender() )

@@ -56,10 +56,10 @@ public class UserChldrn extends BaseTimeEntity {
     
     private Long atchFileSn;          // 첨부 파일 일련번호
     
-    @NotNull
+    @Column( updatable = false )
     private String registerId;          // 등록자 ID
     
-    @NotNull
+    @Column( updatable = false )
     private String registerIp;          // 등록자 IP
     
     private String updusrId;            // 수정자 ID
@@ -67,6 +67,7 @@ public class UserChldrn extends BaseTimeEntity {
     private String updusrIp;            // 수정자 IP
     
     @ColumnDefault( "N" )
+    @Column( insertable = false, updatable = false )  // del_yn 컬럼에 공통으로 추가 (등록 시, 수정 시 해당컬럼 신경쓰지 않음.)
     private String delYn;               // 삭제 여부
     
 }

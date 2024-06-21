@@ -73,9 +73,7 @@ public class UserChldrnService {
 		if ( StringUtils.hasText( modDto.getChldrnTelNo() )		) targetDto.setChldrnTelNo( modDto.getChldrnTelNo() );				// 연락처
 		if ( StringUtils.hasText( modDto.getChldrnEmail() )		) targetDto.setChldrnEmail( modDto.getChldrnEmail() );				// 연락처
 		
-		
 		targetDto.setAtchFileSn( modDto.getAtchFileSn() );													// 첨부파일 (첨부파일은 Null이어도 변경)
-		
 		
 		// id,ip setting
 		targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
@@ -86,7 +84,6 @@ public class UserChldrnService {
 		
 		// 수정사항 적용
 		userChldrnRepository.save( userChldrn );
-		
 		
 	}
 	

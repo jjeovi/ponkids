@@ -20,15 +20,15 @@
 		<!-- js -->
 	<script>
 		function addMyChldrn(){
-			/* TODO : 추가작업 */	
+			/* TODO : 추가작업 */
 		}
-		
-		function deleteChldrn( userChldrnSeq ) { 
-			
+
+		function deleteChldrn( userChldrnSeq ) {
+
 		}
-		
-		function updateChldrn() {
-			
+
+		function updateMyChldrn() {
+			$("#updateForm").submit();
 		}
 
 	</script>
@@ -37,133 +37,157 @@
 <!-- E : Javascript functions	-->
 <div layout:fragment="content" class="sub_box mypage_contents">
 	<!-- S: content -->
-	
-	<!-- S: 자녀 리스트 영역 -->
-	<div class="myChldrnList">
-		<ul>
-			<li th:onclick="|myChldrnInfo('${item.userChldrnSeq}')|" th:each="item : ${userChldrnListDto}" th:text="${item.chldrnNm}"></li>
-			<li onclick="addMyChldrn();">추가</li>
-		</ul>
-	</div>
-	<!-- E: 자녀 리스트 영역 -->
-	
-	<!-- S: 자녀 수정 영역 -->
-	<form id="listForm" name="listForm" method="get"   th:action="@{ {basicPath}/{mcd}/{bbsSn}/list ( basicPath = ${basicPath}, mcd = ${mcd}, bbsSn = ${bbsSn}) }" class="form">
-	<div name="chldrnModDiv" class="modForm" th:style=" ${type eq 'add'} ? 'display:none;' " >
-		<input type="hidden" name="chldrnGender" />
-		<div class="filebox preview-image">
-			<div class="upload-display">
-				<div class="upload-thumb-wrap">
-					<img name="thumbSrc" alt="프로필 이미지" class="upload-thumb noimg">
+	<div class="mypage_list_box myChldrnInfo">
+
+		<!-- S: 자녀 리스트 영역 -->
+		<div class="myChldrnList">
+			<ul>
+				<li th:each="item : ${userChldrnListDto}" th:onclick="|myChldrnInfo('${item.userChldrnSeq}')|" th:text="${item.chldrnNm}" th:classappend="${item.chldrnSn eq targetDto.chldrnSn } ? 'active' " ></li>
+				<li onclick="addMyChldrn();" class="ml_10p purple">추가</li>
+			</ul>
+		</div>
+		<!-- E: 자녀 리스트 영역 -->
+
+		<div class="chldrnInfoWrap">
+			<!-- S: 자녀 수정 영역 -->
+			<form id="updateForm" name="updateForm" method="post"   th:action="@{ /mypage/myChldrnInfo/update }" class="form"  enctype="multipart/form-data" >
+			<div name="chldrnModDiv" class="modForm" th:style=" ${type eq 'add'} ? 'display:none;' " >
+				<input type="hidden" name="chldrnSn" th:value="${targetDto.chldrnSn}" />
+				<input type="hidden" name="userChldrnSeq" th:value="${targetDto.userChldrnSeq}" />
+				<div class="filebox preview-image">
+					<div class="upload-display">
+						<div class="upload-thumb-wrap">
+							<img alt="프로필 이미지" class="upload-thumb noimg" 		th:if = 	"${targetDto.atchFileSn == null}" >
+							<img alt="프로필 이미지" class="upload-thumb" 				th:unless = "${targetDto.atchFileSn == null}" th:src="@{/getImage(atchFileSn=${targetDto.atchFileSn})}"  >
+						</div>
+					</div>
+					<div class="upload-btn mt_10p" style="margin-bottom: 13px;">
+						<label class="btn btn-purple" >업로드
+							<input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .jpeg, .png" style="display: none;" onchange="fileChange(this)">
+						</label>
+						<div class="upload-file-name" style="display: inline-block;">
+							<input class="input-file-name" value="선택된 파일 없음(.gif, .jpg, .png)" disabled="disabled">
+						</div>
+					</div>
+					<input type="hidden" name="atchFileSn" 		th:value="${targetDto.atchFileSn}" />
+					<input type="hidden" name="atchFileSnOri" 	th:value="${targetDto.atchFileSn}" />
+				</div>
+				<div class="data-field" >
+					<span>이름</span>
+				</div>
+				<div class="data-field" >
+					<input type="text" name="chldrnNm" placeholder="이름" th:value="${targetDto.chldrnNm}" >
+				</div>
+				<div class="data-field" >
+					<span>성별</span>
+				</div>
+				<div class="data-field btn-group radiobox" >
+					<label	class="l4px btn btn-outline-purple w100p" th:classappend="${targetDto.chldrnGender eq '남자'} ? 'active'"
+							  data-toggle-class="btn-primary"
+							  data-toggle-passive-class="btn-default" th:checked="${targetDto.chldrnGender eq '남자'}" >
+						<input type="radio" name="chldrnGender" value="M" class="join-btn chldrnGender" onclick="clickRadioEvent(this)"> 남자
+					</label>
+					<label	class="r4px btn btn-outline-purple w100p" th:classappend="${targetDto.chldrnGender eq '여자'} ? 'active'"
+							  data-toggle-class="btn-primary"
+							  data-toggle-passive-class="btn-default" th:checked="${targetDto.chldrnGender eq '여자'}" >
+						<input type="radio" name="chldrnGender" value="F" class="join-btn chldrnGender" onclick="clickRadioEvent(this)">여자
+					</label>
+				</div>
+				<div class="data-field" >
+					<span>생년월일</span>
+				</div>
+				<div class="data-field" >
+					<input type="text" name="chldrnBrdtDate" placeholder="생년월일 ( YYYYMMDD ex)20130119 )" maxlength="8" th:value="${targetDto.chldrnBrdtDate}" >
+				</div>
+				<div class="data-field" >
+					<span>연락처</span>
+				</div>
+				<div class="data-field" >
+					<input type="text" name="chldrnTelNo" placeholder="연락처" data-validate-length-range="10,11"	maxlength="11" th:value="${targetDto.chldrnTelNo}" >
+				</div>
+				<div class="data-field" >
+					<span>이메일</span>
+				</div>
+				<div class="data-field" >
+					<input type="text" name="chldrnEmail" placeholder="이메일" th:value="${targetDto.chldrnEmail}" >
 				</div>
 			</div>
-			<div class="upload-btn mt_10p" style="margin-bottom: 13px;">
-				<label class="btn btn-purple" >업로드
-					<input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .jpeg, .png" style="display: none;" onchange="fileChange(this)">
-				</label>
-				<div class="upload-file-name" style="display: inline-block;">
-					<input class="input-file-name" value="선택된 파일 없음(.gif, .jpg, .png)" disabled="disabled">
+			</form>
+			<!-- E: 자녀 수정 영역 -->
+
+			<!-- S: 자녀 등록 영역(신규) -->
+			<form id="insertForm" name="insertForm" method="get"   th:action="@{ {basicPath}/{mcd}/{bbsSn}/list ( basicPath = ${basicPath}, mcd = ${mcd}, bbsSn = ${bbsSn}) }" class="form">
+			<div name="chldrnAddDiv" class="newForm" th:style=" ${type eq 'mod' || type eq null } ? 'display:none;' " >
+				<input type="hidden" name="chldrnGender" />
+				<div class="filebox preview-image">
+					<div class="upload-display">
+						<div class="upload-thumb-wrap">
+							<img name="thumbSrc" alt="프로필 이미지" class="upload-thumb noimg">
+						</div>
+					</div>
+					<div class="upload-btn mt_10p" style="margin-bottom: 13px;">
+						<label class="btn btn-purple" >업로드
+							<input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .jpeg, .png" style="display: none;" onchange="fileChange(this)">
+						</label>
+						<div class="upload-file-name" style="display: inline-block;">
+							<input class="input-file-name" value="선택된 파일 없음(.gif, .jpg, .png)" disabled="disabled">
+						</div>
+					</div>
+				</div>
+				<div class="data-field">
+					<span>이름</span>
+					<input type="text" name="chldrnNm" placeholder="이름">
+				</div>
+				<div class="data-field">
+					<span>생년월일</span>
+					<input type="text" name="chldrnNm" placeholder="이름">
+				</div>
+				<div class="data-field">
+					<span>연락처</span>
+					<input type="text" name="chldrnNm" placeholder="이름">
+				</div>
+				<div class="data-field">
+					<span>이메일</span>
+					<input type="text" name="chldrnNm" placeholder="이름">
+				</div>
+				<div class="btn-group radiobox">
+					<label	class="l4px btn btn-outline-purple w100p"
+							data-toggle-class="btn-primary"
+							data-toggle-passive-class="btn-default">
+					<input type="radio" name="chldrnGender" value="M" class="join-btn chldrnGenderRadio" onclick="clickRadioEvent(this)"> 남자
+					</label>
+					<label	class="r4px btn btn-outline-purple w100p"
+							data-toggle-class="btn-primary"
+							data-toggle-passive-class="btn-default">
+					<input type="radio" name="chldrnGender" value="F" class="join-btn chldrnGenderRadio" onclick="clickRadioEvent(this)">여자
+					</label>
 				</div>
 			</div>
+			</form>
+			<!-- E: 자녀 등록 영역(신규) -->
 		</div>
-		<div class="data-field">
-			<span>이름</span>
-			<input type="text" name="chldrnNm" placeholder="이름">
-		</div>
-		<div class="data-field">
-			<span>생년월일</span>
-			<input type="text" name="chldrnNm" placeholder="이름">
-		</div>
-		<div class="data-field">
-			<span>연락처</span>
-			<input type="text" name="chldrnNm" placeholder="이름">
-		</div>
-		<div class="data-field">
-			<span>이메일</span>
-			<input type="text" name="chldrnNm" placeholder="이름">
-		</div>
-		<div class="btn-group radiobox">
-			<label	class="l4px btn btn-outline-purple w100p"
-					data-toggle-class="btn-primary"
-					data-toggle-passive-class="btn-default">
-			<input type="radio" name="chldrnGenderRadio" value="M" class="join-btn chldrnGenderRadio" onclick="clickRadioEvent(this)"> 남자
-			</label>
-			<label	class="r4px btn btn-outline-purple w100p"
-					data-toggle-class="btn-primary"
-					data-toggle-passive-class="btn-default">
-			<input type="radio" name="chldrnGenderRadio" value="F" class="join-btn chldrnGenderRadio" onclick="clickRadioEvent(this)">여자
-			</label>
-		</div>
-		<input type="text"	name="chldrnBrdtDate"	placeholder="생년월일 ( YYYYMMDD ex)20130119" maxlength="8">
-		<input type="tel"	name="chldrnTelNo"		placeholder="연락처"	data-validate-length-range="10,11"	maxlength="11"	>
-		<input type="text"	name="chldrnEmail"		placeholder="이메일" >
-	</div>
-	</form>
-	<!-- E: 자녀 수정 영역 -->
-	
-	<!-- S: 자녀 등록 영역 -->
-	<form id="listForm" name="listForm" method="get"   th:action="@{ {basicPath}/{mcd}/{bbsSn}/list ( basicPath = ${basicPath}, mcd = ${mcd}, bbsSn = ${bbsSn}) }" class="form">
-	<div name="chldrnAddDiv" class="newForm" th:style=" ${type eq 'mod' || type eq null } ? 'display:none;' " >
-		<input type="hidden" name="chldrnGender" />
-		<div class="filebox preview-image">
-			<div class="upload-display">
-				<div class="upload-thumb-wrap">
-					<img name="thumbSrc" alt="프로필 이미지" class="upload-thumb noimg">
-				</div>
+
+		<!-- S : 하단 버튼 영역 -->
+		<div class="article_detail_footer">
+			<div class="whiteBtn">
+				<a href="/mypage/reqstHistory/list">
+					<span>삭제</span>
+				</a>
 			</div>
-			<div class="upload-btn mt_10p" style="margin-bottom: 13px;">
-				<label class="btn btn-purple" >업로드
-					<input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .jpeg, .png" style="display: none;" onchange="fileChange(this)">
-				</label>
-				<div class="upload-file-name" style="display: inline-block;">
-					<input class="input-file-name" value="선택된 파일 없음(.gif, .jpg, .png)" disabled="disabled">
-				</div>
+			<div class="ml_20p">
+				<a href="javascript:;" onclick="updateMyChldrn()" >
+					<span>수정</span>
+				</a>
 			</div>
 		</div>
-		<div class="data-field">
-			<span>이름</span>
-			<input type="text" name="chldrnNm" placeholder="이름">
-		</div>
-		<div class="data-field">
-			<span>생년월일</span>
-			<input type="text" name="chldrnNm" placeholder="이름">
-		</div>
-		<div class="data-field">
-			<span>연락처</span>
-			<input type="text" name="chldrnNm" placeholder="이름">
-		</div>
-		<div class="data-field">
-			<span>이메일</span>
-			<input type="text" name="chldrnNm" placeholder="이름">
-		</div>
-		<div class="btn-group radiobox">
-			<label	class="l4px btn btn-outline-purple w100p"
-					data-toggle-class="btn-primary"
-					data-toggle-passive-class="btn-default">
-			<input type="radio" name="chldrnGenderRadio" value="M" class="join-btn chldrnGenderRadio" onclick="clickRadioEvent(this)"> 남자
-			</label>
-			<label	class="r4px btn btn-outline-purple w100p"
-					data-toggle-class="btn-primary"
-					data-toggle-passive-class="btn-default">
-			<input type="radio" name="chldrnGenderRadio" value="F" class="join-btn chldrnGenderRadio" onclick="clickRadioEvent(this)">여자
-			</label>
-		</div>
+		<!-- E : 하단 버튼 영역 -->
+
+		<form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/myChldrnInfo/deleteChldrn ( basicPath = ${basicPath} ) }">
+			<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
+		</form>
+		<!-- E: content -->
+
 	</div>
-	</form>
-	<!-- E: 자녀 수정 영역 -->
-	
-	
-	<!-- S : 하단 버튼 영역 -->
-	<div>
-		<button type="button" th:onclick="'javascript:deleteItem(\'' + ${targetDto.chldrnSn} + '\');'" >삭제</button>
-		<button type="button" onclick="updateChldrn();" >수정</button>
-	</div>
-	<!-- E : 하단 버튼 영역 -->
-	
-	<form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/myChldrnInfo/deleteChldrn ( basicPath = ${basicPath} ) }">
-		<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
-	</form>
-	<!-- E: content -->
 </div>
 
 </html>

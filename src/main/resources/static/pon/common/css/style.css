@@ -561,6 +561,12 @@ font-family: 'yg-jalnan';
 }
 
 .article_detail_footer > div{background-color: #1CBCC9;padding: 10px 30px; box-sizing: border-box; display: inline-block; border-radius: 5px; color: #fff; cursor: pointer;}
+.article_detail_footer > div.whiteBtn {
+    background-color: #fff;
+    border: 1px solid;
+    border-color: #747474;
+    color: #000;
+}
 .article_detail_footer img{width: 13px;}
 
 

@@ -115,9 +115,13 @@
 
 
 .mypage_list_box {
-	padding-top:20px;
-	padding-left : 40px;
-	padding-right : 40px;
+    padding-top   : 20px;
+    padding-left  : 40px;
+    padding-right : 40px;
+}
+
+.mypage_list_box.myChldrnInfo {
+    padding-top : 0px;
 }
 
 .mypage_list_box .list{text-align: center; margin-top: 3px; border-top: 2px solid #1CBCC9;}
@@ -132,6 +136,17 @@
 	font-size: 1.2rem;
 	font-family: 'yg-jalnan';
     color: #b26363;
+}
+
+.chldrnInfoWrap {
+    display : flex;
+    padding : 2rem 2rem 3rem;
+    background-color : rgb(247 247 247);
+    border-radius : 1rem;
+    flex-direction : column;
+    gap : 1.5rem;
+    width : auto;
+    margin-top : 10px;
 }
 
 .item_info .ctgryNm {
@@ -285,7 +300,6 @@
     font-weight: bold;
  }
  
- 
  .lctre_reqst_item .detailAnswer:before{
 	 display: inline-block;
     width: 6px;
@@ -306,8 +320,6 @@
     border-radius: 10px;
     background-color: #ececec;
  }
- 
- 
 
 /* E : mypage - reqstList */
 
@@ -322,6 +334,144 @@
 /* E : mypage - common */
 
 
+/* S : mypage > myChldrnList  */
+
+.chldrnInfoWrap .btn-purple {
+    height: 30px;
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.275rem 0.65rem;
+    padding-bottom: 0.1rem;
+    font-size: 1rem;
+    line-height: 1.9;
+    border-radius: 0.25rem;
+}
+
+.myChldrnList{
+    margin-left: 15px;
+}
+
+.myChldrnList ul li {
+    background-color: #1cbcc9;
+    color: #fff;
+    width: auto;
+    outline: none;
+    padding: 7px;
+    cursor: pointer;
+    border: 1px solid #e9e9e9;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-size: 12px;
+    padding-right: 10px;
+    padding-left: 10px;
+    display: inline-block;
+}
+
+.myChldrnList ul li.active {
+    background-color: #157eb9;
+}
+
+.myChldrnList ul li.purple {
+    color: #fff !important;
+    background-color: #9674f1 !important;
+    border-color: #a08bd8 !important;
+}
+
+.chldrnInfoWrap .data-field {
+    text-align: center;
+}
+
+.chldrnInfoWrap .data-field span {
+    width: 240px;
+    text-align: left;
+    height: 1.5rem;
+}
+
+.chldrnInfoWrap .data-field input {
+    width: 232px;
+    height: 2.2rem;
+    border-color: #dedbdb;
+    border-style: solid;
+    border-width: 1px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    padding-left: 9px;
+    min-width: 150px;
+    border-radius: 8px;
+    margin-bottom : 10px;
+}
+
+.chldrnInfoWrap .radiobox .l4px {
+    position:relative;
+    left:4px;
+    color : #d8d4d4;
+}
+
+.chldrnInfoWrap .radiobox .r4px {
+    position:relative;
+    right:4px;
+    color : #d8d4d4;
+}
+
+
+.chldrnInfoWrap .btn-outline-purple:not(:disabled):not(.disabled).active, .chldrnInfoWrap .btn-outline-purple:not(:disabled):not(.disabled):active, .chldrnInfoWrap .show>.btn-outline-purple.dropdown-toggle {
+    color: #fff !important;
+    background-color: #9674f1 !important;
+    border-color: #a08bd8 !important;;
+}
+
+
+.chldrnInfoWrap .radiobox>.btn {
+    width: 100px;
+    color: #d8d4d4;
+    background-color: #ffffff;
+    height: 30px;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.275rem 0.65rem;
+    padding-bottom: 0.1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.chldrnInfoWrap .radiobox {
+    margin-bottom:10px;
+}
+
+
+
+.radiobox>.btn:nth-of-type(1) {
+    border-radius: 8px !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+.radiobox>.btn:nth-last-of-type(1) {
+    border-radius: 8px !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.radiobox input[type=radio]:checked+label {
+    color: #fff;
+    background-color: #b098f2;
+    border-color: #a08bd8;
+}
+
+/* E : mypage > myChldrnList  */
 
 @media(max-width:768px){
 	
@@ -330,18 +480,10 @@
 	.mp_list{overflow-x: scroll; padding: 10px 10px;}
 	
 	.list_area ul li a{font-size: 14px;}
-	
-	
+
 	.mypage_list_box .list{margin-top: 10px;}
-	
 	.mypage_list_box .item{padding: 10px;}
     .mypage_list_box .item > a{align-items: center;}
 }
-
-
-
-
-
-
 
 
