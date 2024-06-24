@@ -25,7 +25,6 @@ public class BannerService {
     
     @Transactional
     public BannerSaveDto save( BannerSaveDto saveDto, HttpServletRequest request ) throws IOException {
-//    public BannerSaveDto save( BannerSaveDto saveDto, BannerRoleSaveDto bannerRoleSaveDto, HttpServletRequest request ) throws IOException {
         
         saveDto.setRegisterId( SessionUtils.getClientId() );                // Id set : regist
         saveDto.setRegisterIp( IpUtils.getClientIP( request ) );            // Ip set : regist

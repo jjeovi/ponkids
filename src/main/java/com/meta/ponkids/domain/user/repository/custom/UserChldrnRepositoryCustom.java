@@ -21,4 +21,7 @@ public interface UserChldrnRepositoryCustom {
     
     UserChldrnListDto getByUserSnAndUserChldrnSeq( Long userSn, Long userChldrnSeq );
     
+    
+    Long findMaxUserChldrnSeq( Long userSn );
+    
 }

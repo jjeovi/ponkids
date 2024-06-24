@@ -41,6 +41,10 @@ public class UserChldrnSaveDto {
     
     private String registerIp;
     
+    private String  updusrId;               // 수정자 ID
+    
+    private String  updusrIp;                // 수정자 IP
+    
     private MultipartFile file;
     
     

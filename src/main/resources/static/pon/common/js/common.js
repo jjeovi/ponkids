@@ -5,7 +5,9 @@ $( function () {
 	 
 	 // 팝업 show
 	$(".show_layer").on("click", function(e) {
-		var layerId = $(this).data("layerId")	;	// 클릭한 레이어 팝업의 id 값 setting 
+		var layerId = $(this).data("layerId")	;	// 클릭한 레이어 팝업의 id 값 setting
+		$( '.nav_wrap' ).removeClass( 'active' );
+		$( '.dark_bg' ).removeClass( 'active' );
 		showLayer(layerId);
 	});
 	 
@@ -191,6 +193,11 @@ function hideLayer( layerId ) {
 function hideLayerLv2( layerId ) {
 	
 	$(".layer_" + layerId ).hide();
+
+	if ( $("#pop_dim_lv2").css("display") == 'none' ) {
+		$("#pop_dim").fadeOut();
+	}
+
 	$("#pop_dim_lv2").fadeOut();
 }
 

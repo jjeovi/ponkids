@@ -1,5 +1,7 @@
 package com.meta.ponkids.domain.user.service;
 
+import com.meta.ponkids.domain.system.banner.dto.BannerSaveDto;
+import com.meta.ponkids.domain.system.banner.entity.Banner;
 import com.meta.ponkids.domain.user.dto.MultiUserChldrnSaveDto;
 import com.meta.ponkids.domain.user.dto.UserChldrnModDto;
 import com.meta.ponkids.domain.user.dto.UserChldrnSaveDto;
@@ -38,19 +40,19 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 public class UserChldrnService {
 	private final UserChldrnRepository userChldrnRepository;
-
-//	
-//	public void deleteAllByUserId(String userId) {
-//		
-//		userChldrnRepository.deleteAllByUserId(userId);
-//		
-//		List<UserChldrn> userChldrnList = userChldrnRepository.findByUserId(userId); 
-//		
-//		System.out.println(userChldrnList);
-//		
-//	}
 	
-	
+	@Transactional
+	public UserChldrnSaveDto save( UserChldrnSaveDto saveDto, HttpServletRequest request ) throws IOException {
+		
+		saveDto.setRegisterId( SessionUtils.getClientId() );                // Id set : regist
+		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );            // Ip set : regist
+		saveDto.setUpdusrId( SessionUtils.getClientId() );                    // Id set : update
+		saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );                // Ip set : update
+		
+		UserChldrn newUserChldrn = userChldrnRepository.save( saveDto.toEntity() );            // ** save -> save된 정보 newXxx 로 저장
+		
+		return saveDto;
+	}
 
 	@Transactional
 	public void update( UserChldrnModDto modDto, HttpServletRequest request ) throws IOException {

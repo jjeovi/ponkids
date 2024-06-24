@@ -178,6 +178,10 @@
     max-height: 500px;
 }
 
+.pop_wrap.termsOfUse .pop_content {
+    max-height: 310px;
+}
+
 .pop_wrap .pop_header .pop_title {
     color: rgb(187 139 227);
     font-size: 1.3rem;
@@ -204,13 +208,13 @@
     color: rgb(60, 30, 30);
 }
 
-.login_wrap .naver {
-    background-color: rgb(27, 192, 2);
-    color: rgb(255, 255, 255);
-    background-image: url(../image/naver.png);
-    background-size: 1.2rem;
-    background-position: 15px 50%;
-    border: 0px;
+.login_wrap .google {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    background-image: url(../image/google.png);
+    background-size: 1.6rem;
+    background-position: 10px 50%;
+    border: 1px solid #c1c1c1;
     background-repeat: no-repeat;
 }
 
@@ -355,14 +359,6 @@
 .icon_inquiry{position: fixed; bottom: 90px; right: 24px; cursor: pointer;}
 
 
-@media(max-width:500px){
-    .chatWrap.show{width: 90%;}   
-    .chat_disc_form textarea{min-height: auto;}
-    .chatWrap{height: calc(100% - 200px);}
-    
-}
-
-
 
 
 
@@ -482,6 +478,18 @@
 }
 
 
+.join_wrap .google {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    background-image: url(../image/google.png);
+    background-size: 1.2rem;
+    background-position: 15px 50%;
+    border: 0px;
+    background-repeat: no-repeat;
+}
+
+
+
 .join_wrap .or_text {
     display: flex;
     position: relative;
@@ -590,14 +598,6 @@
 /* imaged preview */
 .filebox .upload-display {  /* 이미지가 표시될 지역 */
   margin-bottom: 5px;
-}
-
-@media(min-width: 768px) {
-  .filebox .upload-display {
-    display: inline-block;
-    margin-right: 0;
-    margin-bottom: 0;
-  }
 }
 
 .filebox .upload-thumb-wrap {  /* 추가될 이미지를 감싸는 요소 */
@@ -929,6 +929,16 @@ select.displaySnsType {
     background-repeat: no-repeat;
 }
 
+.addChldrn_wrap .google {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    background-image: url(../image/google.png);
+    background-size: 1.2rem;
+    background-position: 15px 50%;
+    border: 0px;
+    background-repeat: no-repeat;
+}
+
 
 .addChldrn_wrap .or_text {
     display: flex;
@@ -1037,14 +1047,6 @@ select.displaySnsType {
 /* imaged preview */
 .filebox .upload-display {  /* 이미지가 표시될 지역 */
   margin-bottom: 5px;
-}
-
-@media(min-width: 768px) {
-  .filebox .upload-display {
-    display: inline-block;
-    margin-right: 0;
-    margin-bottom: 0;
-  }
 }
 
 .addChldrn_wrap .filebox .upload-thumb-wrap {  /* 추가될 이미지를 감싸는 요소 */
@@ -2217,3 +2219,58 @@ span {
 }
 
 /* E : layer 문의  */
+
+
+
+@media(max-width:500px){
+    .chatWrap.show{width: 90%;}
+    .chat_disc_form textarea{min-height: auto;}
+    .chatWrap{height: calc(100% - 200px);}
+
+    .pop_wrap.termsOfUse, .pop_wrap.personalInfo {
+        min-width: 20rem;
+        width: 25rem;
+    }
+
+    .pop_wrap.login, .pop_wrap.join {
+        min-width: 12rem;
+    }
+
+    .pop_wrap.join .pop_content {
+        max-height: 34vh;
+    }
+
+    .pop_wrap.addChldrn {
+        min-width: 12rem;
+        width: 16rem;
+    }
+
+    .radiobox>.btn {
+        width: 71px;
+    }
+    .join_wrap input {
+        width: 174px;
+    }
+    .pop_wrap.termsOfUse .pop_content, .pop_wrap.personalInfo .pop_content {
+        height: 300px;
+    }
+    .addChldrn_wrap .radiobox>.btn{
+        width:85px;
+    }
+
+    .pop_wrap .cbTitle{
+        width: 70%;
+        font-size: 0.9rem;
+    }
+
+
+}
+
+
+@media(min-width: 768px) {
+    .filebox .upload-display {
+        display: inline-block;
+        margin-right: 0;
+        margin-bottom: 0;
+    }
+}

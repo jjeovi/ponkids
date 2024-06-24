@@ -96,12 +96,24 @@ public class UserChldrnRepositoryImpl implements UserChldrnRepositoryCustom {
 	}
     
     
+    @Override
+    public Long findMaxUserChldrnSeq( Long userSn ) {
+        
+        return query
+                .select(
+                        userChldrn.userChldrnSeq.max()
+                        )
+                .from( userChldrn )
+                .where(
+                        eqUserSn( userSn )
+                )
+                .fetchOne();
+    }
+    
     private BooleanExpression eqUserSn( Long userSn ) {
         return userSn != null ? userChldrn.userSn.eq( userSn ) : null;
     }
 
-
-    
     
 }
 

@@ -4,10 +4,12 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.meta.ponkids.domain.user.dto.UserChldrnSaveDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -154,7 +156,7 @@ public class MypageController {
 	
 	@GetMapping( "/myChldrnInfo" )
 	public String myChldrnInfo( @RequestParam( required = false ) Long userChldrnSeq,	// 자녀 순번  *기본값 1
-								@RequestParam( required = false ) String type,			// 타입 ( mod : 수정(기존자녀수정), add : 등록(신규자녀등록) ) *기본값 mod 
+								@RequestParam( required = false ) String pageType,			// 타입 ( mod : 수정(기존자녀수정), add : 등록(신규자녀등록) ) *기본값 mod
 									Model model ) {
 		
 		// S : 필요한 객체 setting
@@ -165,12 +167,13 @@ public class MypageController {
 		}
 		
 		// 페이지유형 없을시 기본값 "mod"
-		if ( !StringUtils.hasText( type ) ) {
-			type = "mod";
+		// type = "add" 일 경우, 자녀 등록 영역이 표시된다.
+		if ( !StringUtils.hasText( pageType ) ) {
+			pageType = "mod";
 		}
-		model.addAttribute( type );
+		model.addAttribute( "pageType", pageType );
 		
-		// default : 자녀 불러오기 ( userChldrnSeq 번째 자녀 ) 
+		// default : 자녀 불러오기 ( userChldrnSeq 번째 자녀 )
 		model.addAttribute( "targetDto", userChldrnRepository.getByUserSnAndUserChldrnSeq( SessionUtils.getAuthUserSn(), userChldrnSeq ) );
 		
 		// default : 자식 list  
@@ -189,6 +192,7 @@ public class MypageController {
 	}
 	
 	
+	@Transactional
 	@PostMapping( "/myChldrnInfo/update" )
 	public String myChldrnInfoUpdate(
 			@ModelAttribute UserChldrnModDto modDto,
@@ -199,7 +203,7 @@ public class MypageController {
 		
 		Long userSn = SessionUtils.getAuthUserSn();
 		
-		if( userSn == null ) { 
+		if( userSn == null ) {
 			model.addAttribute( "resultMsg",	"수정 중 오류가 발생하였습니다. 세션을 확인해주세요." );
 			model.addAttribute( "moveUrl",		"/" );
 			return "common/alert";
@@ -236,10 +240,52 @@ public class MypageController {
 		return "common/alert";
 	}
 	
+	@Transactional
+	@PostMapping( "/myChldrnInfo/insert" )
+	public String myChldrnInfoInsert(
+			@ModelAttribute UserChldrnSaveDto saveDto,
+			@RequestParam( "file" ) MultipartFile files,
+			HttpServletRequest request,
+			Model model ) throws IOException {
+		
+		
+		Long userSn = SessionUtils.getAuthUserSn();
+		
+		if( userSn == null ) {
+			model.addAttribute( "resultMsg",	"등록 중 오류가 발생하였습니다. 세션을 확인해주세요." );
+			model.addAttribute( "moveUrl",		"/" );
+			return "common/alert";
+		}
+		
+		saveDto.setUserSn( userSn );
+		
+		
+		// 첨부파일 존재시 파일 저장
+		// 썸네일 이미지 존재시 파일 저장
+		if ( !files.isEmpty() ) {
+			saveDto.setAtchFileSn( atchFileService.save( files ) );    // 파일 save (파일 개수 1개일 때 )
+		}
+		
+		// saveDto 저장 시 ,userChldrnSeq =  현재 자녀들의 userChldrnSeq 최대값 + 1 로 setting
+		saveDto.setUserChldrnSeq( (Long) ( userChldrnRepository.findMaxUserChldrnSeq( userSn ) + 1 ));
+		
+		
+		// 신규 자녀 등록 처리
+		userChldrnService.save( saveDto, request );
+		
+		// 메시지 출력 및 url 이동 처리
+		model.addAttribute( "resultMsg", "정상적으로 등록되었습니다." );
+		model.addAttribute( "moveUrl",	 BASIC_PATH + "/myChldrnInfo" );
+		
+		return "common/alert";
+	}
 	
-	@PostMapping( "/myChldrnInfo/deleteChldrn" )
+	
+	@Transactional
+	@PostMapping( "/myChldrnInfo/delete" )
 	public String deleteChldrn(
 			@RequestParam( required = true ) Long pk,
+			HttpServletRequest request,
 			Model model ) {
 		
 		

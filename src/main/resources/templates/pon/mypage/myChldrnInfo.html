@@ -19,8 +19,17 @@
 <div layout:fragment="script">
 		<!-- js -->
 	<script>
+
+		function myChldrnInfo( userChldrnSeq ) {
+			location.href = "?userChldrnSeq=" + userChldrnSeq;
+		}
+
+		function goPageType( type ){
+			location.href = "?pageType=" + type
+		}
+
 		function addMyChldrn(){
-			/* TODO : 추가작업 */
+			$("#insertForm").submit();
 		}
 
 		function deleteChldrn( userChldrnSeq ) {
@@ -42,8 +51,9 @@
 		<!-- S: 자녀 리스트 영역 -->
 		<div class="myChldrnList">
 			<ul>
-				<li th:each="item : ${userChldrnListDto}" th:onclick="|myChldrnInfo('${item.userChldrnSeq}')|" th:text="${item.chldrnNm}" th:classappend="${item.chldrnSn eq targetDto.chldrnSn } ? 'active' " ></li>
-				<li onclick="addMyChldrn();" class="ml_10p purple">추가</li>
+				<li th:each="item : ${userChldrnListDto}" th:onclick="|myChldrnInfo('${item.userChldrnSeq}')|"
+					th:text="${ item.chldrnNm }" th:classappend="${ item.chldrnSn eq targetDto.chldrnSn  && ( pageType eq 'mod' || pageType eq null ) } ? 'active' " ></li>
+				<li onclick="goPageType('add');" class="ml_10p purple">추가</li>
 			</ul>
 		</div>
 		<!-- E: 자녀 리스트 영역 -->
@@ -51,7 +61,7 @@
 		<div class="chldrnInfoWrap">
 			<!-- S: 자녀 수정 영역 -->
 			<form id="updateForm" name="updateForm" method="post"   th:action="@{ /mypage/myChldrnInfo/update }" class="form"  enctype="multipart/form-data" >
-			<div name="chldrnModDiv" class="modForm" th:style=" ${type eq 'add'} ? 'display:none;' " >
+			<div name="chldrnModDiv" class="modForm" th:style=" ${pageType eq 'add'} ? 'display:none;' " >
 				<input type="hidden" name="chldrnSn" th:value="${targetDto.chldrnSn}" />
 				<input type="hidden" name="userChldrnSeq" th:value="${targetDto.userChldrnSeq}" />
 				<div class="filebox preview-image">
@@ -116,13 +126,13 @@
 			<!-- E: 자녀 수정 영역 -->
 
 			<!-- S: 자녀 등록 영역(신규) -->
-			<form id="insertForm" name="insertForm" method="get"   th:action="@{ {basicPath}/{mcd}/{bbsSn}/list ( basicPath = ${basicPath}, mcd = ${mcd}, bbsSn = ${bbsSn}) }" class="form">
-			<div name="chldrnAddDiv" class="newForm" th:style=" ${type eq 'mod' || type eq null } ? 'display:none;' " >
-				<input type="hidden" name="chldrnGender" />
+			<form id="insertForm" name="insertForm" method="post"   th:action="@{ /mypage/myChldrnInfo/insert }" class="form"  enctype="multipart/form-data" >
+			<div name="chldrnAddDiv" class="newForm" th:style=" ${ pageType eq 'mod' || pageType eq null } ? 'display:none;' " >
 				<div class="filebox preview-image">
 					<div class="upload-display">
 						<div class="upload-thumb-wrap">
-							<img name="thumbSrc" alt="프로필 이미지" class="upload-thumb noimg">
+							<img alt="프로필 이미지" class="upload-thumb noimg" 		th:if = 	"${targetDto.atchFileSn == null}" >
+							<img alt="프로필 이미지" class="upload-thumb" 				th:unless = "${targetDto.atchFileSn == null}" th:src="@{/getImage(atchFileSn=${targetDto.atchFileSn})}"  >
 						</div>
 					</div>
 					<div class="upload-btn mt_10p" style="margin-bottom: 13px;">
@@ -133,34 +143,42 @@
 							<input class="input-file-name" value="선택된 파일 없음(.gif, .jpg, .png)" disabled="disabled">
 						</div>
 					</div>
+					<input type="hidden" name="atchFileSn" 		/>
 				</div>
-				<div class="data-field">
+				<div class="data-field" >
 					<span>이름</span>
-					<input type="text" name="chldrnNm" placeholder="이름">
 				</div>
-				<div class="data-field">
+				<div class="data-field" >
+					<input type="text" name="chldrnNm" placeholder="이름" >
+				</div>
+				<div class="data-field" >
+					<span>성별</span>
+				</div>
+				<div class="data-field btn-group radiobox" >
+					<label	class="l4px btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default" >
+						<input type="radio" name="chldrnGender" value="M" class="join-btn chldrnGender" onclick="clickRadioEvent(this)"> 남자
+					</label>
+					<label	class="r4px btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default" >
+						<input type="radio" name="chldrnGender" value="F" class="join-btn chldrnGender" onclick="clickRadioEvent(this)">여자
+					</label>
+				</div>
+				<div class="data-field" >
 					<span>생년월일</span>
-					<input type="text" name="chldrnNm" placeholder="이름">
 				</div>
-				<div class="data-field">
+				<div class="data-field" >
+					<input type="text" name="chldrnBrdtDate" placeholder="생년월일 ( YYYYMMDD ex)20130119 )" maxlength="8" >
+				</div>
+				<div class="data-field" >
 					<span>연락처</span>
-					<input type="text" name="chldrnNm" placeholder="이름">
 				</div>
-				<div class="data-field">
+				<div class="data-field" >
+					<input type="text" name="chldrnTelNo" placeholder="연락처" data-validate-length-range="10,11"	maxlength="11" >
+				</div>
+				<div class="data-field" >
 					<span>이메일</span>
-					<input type="text" name="chldrnNm" placeholder="이름">
 				</div>
-				<div class="btn-group radiobox">
-					<label	class="l4px btn btn-outline-purple w100p"
-							data-toggle-class="btn-primary"
-							data-toggle-passive-class="btn-default">
-					<input type="radio" name="chldrnGender" value="M" class="join-btn chldrnGenderRadio" onclick="clickRadioEvent(this)"> 남자
-					</label>
-					<label	class="r4px btn btn-outline-purple w100p"
-							data-toggle-class="btn-primary"
-							data-toggle-passive-class="btn-default">
-					<input type="radio" name="chldrnGender" value="F" class="join-btn chldrnGenderRadio" onclick="clickRadioEvent(this)">여자
-					</label>
+				<div class="data-field" >
+					<input type="text" name="chldrnEmail" placeholder="이메일" >
 				</div>
 			</div>
 			</form>
@@ -171,22 +189,27 @@
 		<div class="article_detail_footer">
 			<div class="whiteBtn">
 				<a href="/mypage/reqstHistory/list">
+				<a th:href="'javascript:deleteItem(\'' + ${targetDto.chldrnSn} + '\');'">
 					<span>삭제</span>
 				</a>
 			</div>
-			<div class="ml_20p">
+			<div class="ml_20p" th:if="${pageType eq 'mod'}">
 				<a href="javascript:;" onclick="updateMyChldrn()" >
 					<span>수정</span>
+				</a>
+			</div>
+			<div class="ml_20p" th:if="${pageType eq 'add'}">
+				<a href="javascript:;" onclick="addMyChldrn()" >
+					<span>등록</span>
 				</a>
 			</div>
 		</div>
 		<!-- E : 하단 버튼 영역 -->
 
-		<form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/myChldrnInfo/deleteChldrn ( basicPath = ${basicPath} ) }">
+		<form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/myChldrnInfo/delete ( basicPath = ${basicPath} ) }">
 			<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
 		</form>
 		<!-- E: content -->
-
 	</div>
 </div>
 
