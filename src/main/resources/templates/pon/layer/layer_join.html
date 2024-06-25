@@ -107,7 +107,7 @@
 				<option value=''>국가선택</option>
 				<option th:each="item : ${resideAreaList}" th:value="${item.cdDetailVal1}" th:text="${item.cdDetailNm}">
 			</select>
-			<input type="text" class="last" name="telNo" placeholder="연락처" >
+			<input type="text" class="last" name="telNo" placeholder="연락처(숫자로만 입력해주세요. ex) 01012345678" >
 			<input type="hidden" name="snsType" 	/>
 			<input type="hidden" name="snsKakaoCntnYn" 	title="sns_kakao"	/>
 			<input type="hidden" name="snsGoogleCntnYn"	title="sns_google" 	/>

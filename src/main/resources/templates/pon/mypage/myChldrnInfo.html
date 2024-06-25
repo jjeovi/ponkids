@@ -61,6 +61,7 @@
 		<div class="chldrnInfoWrap">
 			<!-- S: 자녀 수정 영역 -->
 			<form id="updateForm" name="updateForm" method="post"   th:action="@{ /mypage/myChldrnInfo/update }" class="form"  enctype="multipart/form-data" >
+			<th:block th:if="${targetDto ne null}">
 			<div name="chldrnModDiv" class="modForm" th:style=" ${pageType eq 'add'} ? 'display:none;' " >
 				<input type="hidden" name="chldrnSn" th:value="${targetDto.chldrnSn}" />
 				<input type="hidden" name="userChldrnSeq" th:value="${targetDto.userChldrnSeq}" />
@@ -122,6 +123,7 @@
 					<input type="text" name="chldrnEmail" placeholder="이메일" th:value="${targetDto.chldrnEmail}" >
 				</div>
 			</div>
+			</th:block>
 			</form>
 			<!-- E: 자녀 수정 영역 -->
 
@@ -131,8 +133,7 @@
 				<div class="filebox preview-image">
 					<div class="upload-display">
 						<div class="upload-thumb-wrap">
-							<img alt="프로필 이미지" class="upload-thumb noimg" 		th:if = 	"${targetDto.atchFileSn == null}" >
-							<img alt="프로필 이미지" class="upload-thumb" 				th:unless = "${targetDto.atchFileSn == null}" th:src="@{/getImage(atchFileSn=${targetDto.atchFileSn})}"  >
+							<img alt="프로필 이미지" class="upload-thumb noimg">
 						</div>
 					</div>
 					<div class="upload-btn mt_10p" style="margin-bottom: 13px;">
@@ -187,12 +188,14 @@
 
 		<!-- S : 하단 버튼 영역 -->
 		<div class="article_detail_footer">
+			<th:block th:if="${targetDto ne null}">
 			<div class="whiteBtn">
 				<a href="/mypage/reqstHistory/list">
 				<a th:href="'javascript:deleteItem(\'' + ${targetDto.chldrnSn} + '\');'">
 					<span>삭제</span>
 				</a>
 			</div>
+			</th:block>
 			<div class="ml_20p" th:if="${pageType eq 'mod'}">
 				<a href="javascript:;" onclick="updateMyChldrn()" >
 					<span>수정</span>
@@ -209,8 +212,8 @@
 		<form id="deleteForm" name="deleteForm" method="post" th:action="@{ {basicPath}/myChldrnInfo/delete ( basicPath = ${basicPath} ) }">
 			<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
 		</form>
-		<!-- E: content -->
 	</div>
+	<!-- E: content -->
 </div>
 
 </html>

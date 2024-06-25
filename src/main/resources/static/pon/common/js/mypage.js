@@ -132,3 +132,7 @@ function goClassReview( classSn ){
 	
 	    }
 	}
+
+	function goMyInfoPage() {
+		location.href="/mypage/myInfoModify"
+	}

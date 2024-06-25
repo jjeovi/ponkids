@@ -4,7 +4,10 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.meta.ponkids.domain.user.dto.UserChldrnListDto;
 import com.meta.ponkids.domain.user.dto.UserChldrnSaveDto;
+import com.meta.ponkids.domain.user.repository.UserRepository;
+import com.meta.ponkids.domain.user.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -53,6 +56,7 @@ public class MypageController {
 	
 	
 	private final UserChldrnRepository userChldrnRepository;
+	private final UserService userService;
 	
 	private final UserChldrnService userChldrnService;
 	private final AtchFileService atchFileService;
@@ -144,6 +148,8 @@ public class MypageController {
 		
 		// S : 필요한 객체 setting
 		
+		// default : 내 정보 setting
+		model.addAttribute( "targetDto", userService.findByUserSn( SessionUtils.getAuthUserSn() ) );
 		
 		// E : 필요한 객체 setting
 		
@@ -171,10 +177,16 @@ public class MypageController {
 		if ( !StringUtils.hasText( pageType ) ) {
 			pageType = "mod";
 		}
+		
+		UserChldrnListDto userChldrnListDto = userChldrnRepository.getByUserSnAndUserChldrnSeq( SessionUtils.getAuthUserSn(), userChldrnSeq );
+		
+		if ( userChldrnListDto == null ) {
+			pageType = "add";
+		}
 		model.addAttribute( "pageType", pageType );
 		
 		// default : 자녀 불러오기 ( userChldrnSeq 번째 자녀 )
-		model.addAttribute( "targetDto", userChldrnRepository.getByUserSnAndUserChldrnSeq( SessionUtils.getAuthUserSn(), userChldrnSeq ) );
+		model.addAttribute( "targetDto", userChldrnListDto );
 		
 		// default : 자식 list  
 		model.addAttribute( "userChldrnListDto", userChldrnRepository.getListByUserSn( SessionUtils.getAuthUserSn() ) );

@@ -2263,6 +2263,10 @@ span {
         font-size: 0.9rem;
     }
 
+    .pop_content select {
+        width: 190px;
+    }
+
 
 }
 

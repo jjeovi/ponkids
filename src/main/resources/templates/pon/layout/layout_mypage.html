@@ -20,7 +20,7 @@
 
 <!-- S : script -->
 <div th:fragment="div-script" th:insert="pon/layout/tiles/div-script.html">
-	<!-- Please check the [ pon/layout/tiles/div-script.html.html ] -->
+	<!-- Please check the [ pon/layout/tiles/div-script.html ] -->
 </div>
 <!-- E : script -->
 
@@ -58,7 +58,7 @@
 							<span class="profile_title">
 								<em sec:authentication="principal.userNm"></em> 님
 							</span>
-							<button type="button" onclick="">내 정보 관리</button>
+							<button type="button" onclick="goMyInfoPage()" >내 정보 관리</button>
 						</div>
 					</div>
 					<div class="mypage_detail_box">

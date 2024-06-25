@@ -22,28 +22,97 @@
 
 <!-- E : Javascript functions	-->
 <div layout:fragment="content" class="sub_box mypage_contents">
-	<div class="mypage_list_box" >
-		<ol class="list" >
-			<li class="item" th:if = "${!classReqstList.isEmpty()}" th:each="data : ${classReqstList}">
-				<div class="item_body" >
-					<div class="item_thumb" th:onclick="|detailHistory(${data.classReqstSn});|" >
-						<img class="thumb_img" th:src="@{/getImage(atchFileSn=${data.thumbAtchFileSn})}" alt="클래스이미지">
+	<!-- S: content -->
+	<div class="mypage_list_box myChldrnInfo">
+
+		<div class="chldrnInfoWrap">
+			<!-- S: 자녀 수정 영역 -->
+			<form id="updateForm" name="updateForm" method="post"   th:action="@{ /mypage/myInfoModify/update }" class="form"  enctype="multipart/form-data" >
+			<th:block th:if="${targetDto ne null}">
+			<div name="chldrnModDiv" class="modForm" th:style=" ${pageType eq 'add'} ? 'display:none;' " >
+				<div class="filebox preview-image">
+					<div class="upload-display">
+						<div class="upload-thumb-wrap">
+							<img alt="프로필 이미지" class="upload-thumb noimg" 		th:if = 	"${targetDto.atchFileSn == null}" >
+							<img alt="프로필 이미지" class="upload-thumb" 				th:unless = "${targetDto.atchFileSn == null}" th:src="@{/getImage(atchFileSn=${targetDto.atchFileSn})}"  >
+						</div>
 					</div>
-					<div class="item_info" th:onclick="|detailHistory(${data.classReqstSn});|" >
-						<span class="ctgryNm" th:text="${data.ctgryNm}">카테고리명</span>
-						<p class="classSj" th:text="${data.classSj}">클래스명</p>
-						<span class="sub_info">
-							<b class="totReqstAmt" th:text="|${#numbers.formatInteger(data.totReqstAmt, 3, 'COMMA')} 원|" >[] 원</b>
-							<span class="reqstDt" th:text="${data.regDt}" >2024-00-00</span>
-						</span>
+					<div class="upload-btn mt_10p" style="margin-bottom: 13px;">
+						<label class="btn btn-purple" >업로드
+							<input type="file" name="file" class="upload-hidden" accept=".gif, .jpg, .jpeg, .png" style="display: none;" onchange="fileChange(this)">
+						</label>
+						<div class="upload-file-name" style="display: inline-block;">
+							<input class="input-file-name" value="선택된 파일 없음(.gif, .jpg, .png)" disabled="disabled">
+						</div>
 					</div>
-					<div class="item_right">
-						<button type="button" th:onclick="|goClassReview( ${data.classSn} );|" >후기 작성하기</button>
-					</div>
+					<input type="hidden" name="atchFileSn" 		th:value="${targetDto.atchFileSn}" />
+					<input type="hidden" name="atchFileSnOri" 	th:value="${targetDto.atchFileSn}" />
 				</div>
-			</li>
-		</ol>
+				<div class="data-field" >
+					<span>이름</span>
+				</div>
+				<div class="data-field" >
+					<input type="text" name="userNm" placeholder="이름" th:value="${targetDto.userNm}" >
+				</div>
+				<div class="data-field" >
+					<span>성별</span>
+				</div>
+				<div class="data-field btn-group radiobox" >
+					<label	class="l4px btn btn-outline-purple w100p" th:classappend="${targetDto.gender eq '남자'} ? 'active'"
+							  data-toggle-class="btn-primary"
+							  data-toggle-passive-class="btn-default" th:checked="${targetDto.gender eq '남자'}" >
+						<input type="radio" name="gender" value="M" class="join-btn gender" onclick="clickRadioEvent(this)"> 남자
+					</label>
+					<label	class="r4px btn btn-outline-purple w100p" th:classappend="${targetDto.gender eq '여자'} ? 'active'"
+							  data-toggle-class="btn-primary"
+							  data-toggle-passive-class="btn-default" th:checked="${targetDto.gender eq '여자'}" >
+						<input type="radio" name="gender" value="F" class="join-btn gender" onclick="clickRadioEvent(this)">여자
+					</label>
+				</div>
+				<div class="data-field" >
+					<span>생년월일</span>
+				</div>
+				<div class="data-field" >
+					<input type="text" name="brdtDate" placeholder="생년월일 ( YYYYMMDD ex)20130119 )" maxlength="8" th:value="${targetDto.brdtDate}" >
+				</div>
+				<div class="data-field" >
+					<span>연락처</span>
+				</div>
+				<div class="data-field" >
+					<input type="text" name="telNo" placeholder="연락처" data-validate-length-range="10,11"	maxlength="11" th:value="${targetDto.telNo}" >
+				</div>
+				<div class="data-field" >
+					<span>이메일</span>
+				</div>
+				<div class="data-field" >
+					<input type="text" name="email" placeholder="이메일" th:value="${targetDto.email}" >
+				</div>
+			</div>
+			</th:block>
+			</form>
+			<!-- E: 자녀 수정 영역 -->
+		</div>
+
+
+		<!-- S : 하단 버튼 영역 -->
+		<div class="article_detail_footer">
+			<th:block th:if="${targetDto ne null}">
+			<div class="whiteBtn">
+				<a href="/mypage/reqstHistory/list">
+				<a th:href="'javascript:deleteItem(\'' + ${targetDto.userSn} + '\');'">
+					<span>삭제</span>
+				</a>
+			</div>
+			</th:block>
+			<div class="ml_20p" th:if="${pageType eq 'mod'}">
+				<a href="javascript:;" onclick="updateMyInfo()" >
+					<span>수정</span>
+				</a>
+			</div>
+		</div>
+		<!-- E : 하단 버튼 영역 -->
 	</div>
+	<!-- E: content -->
 	
 	<!-- 문의등록 layer -->	
 	<div class="layer_registClassReview"	style="display: none;"	th:insert="pon/layer/layer_registClassReview.html" />
