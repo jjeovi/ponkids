@@ -1,15 +1,13 @@
 package com.meta.ponkids.domain.cls.repository;
 
-import java.util.Optional;
-
 import com.meta.ponkids.domain.cls.entity.ClassDetail;
 import com.meta.ponkids.domain.cls.repository.custom.ClassDetailRepositoryCustom;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
 
 // PK(*ID) 체크
 public interface ClassDetailRepository extends JpaRepository<ClassDetail, Long>, ClassDetailRepositoryCustom {

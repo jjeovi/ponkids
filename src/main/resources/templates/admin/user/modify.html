@@ -376,7 +376,7 @@
 					<form id="updateForm" name="updateForm" method="post" th:action="@{ {basicPath}/{mcd}/update ( basicPath = ${basicPath}, mcd = ${mcd} ) }" enctype="multipart/form-data">
 						<!-- hidden type  -->
 						<input type="hidden" name="mngrConfmYn"	 th:value="${targetDto.mngrConfmYn}" />
-						<input type="hidden" name="userSn" 			th:value="${targetDto.userSn}" />
+						<input type="hidden" name="userSn" 		 th:value="${targetDto.userSn}" 	 />
 
 						<div class="field item form-group">
 							<label class="col-form-label col-md-2 col-sm-3 label-align">프로필 이미지</label>

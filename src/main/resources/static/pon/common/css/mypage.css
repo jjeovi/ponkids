@@ -388,11 +388,18 @@
 .chldrnInfoWrap .data-field {
     text-align: center;
 }
+.chldrnInfoWrap .data-field .email{
+    height: 2.5rem;
+}
 
 .chldrnInfoWrap .data-field span {
     width: 240px;
     text-align: left;
     height: 1.5rem;
+}
+
+.chldrnInfoWrap .data-field span.info {
+    font-size: 0.9rem;
 }
 
 .chldrnInfoWrap .data-field input {
@@ -469,6 +476,21 @@
     color: #fff;
     background-color: #b098f2;
     border-color: #a08bd8;
+}
+
+
+.chldrnInfoWrap select {
+    border-radius: 8px;
+    width: 248px;
+    height: 2.5rem;
+    padding: 5px;
+    border: 1px solid #dddbdb;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    -moz-appearance: none;
+    appearance: none;
+    padding-left: 9px;
+    color : #000;
 }
 
 /* E : mypage > myChldrnList  */

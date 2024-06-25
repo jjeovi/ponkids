@@ -29,7 +29,7 @@ $( function () {
             // 강제 focus 추가하여 ID 중복체크 실행
             $( "#userInsertForm" ).find( "[name='userId']" ).focus();
 
-            $( "#joinForSnsType" ).show();
+            $( "#joinForSnsTypeArea" ).show();
             $( "#joinForSnsType" ).attr( "disabled", true );
 
             if ( snsType != null && snsType != '' ) {

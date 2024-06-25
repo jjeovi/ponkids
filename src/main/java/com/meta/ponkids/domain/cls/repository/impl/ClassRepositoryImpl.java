@@ -33,12 +33,12 @@ import lombok.RequiredArgsConstructor;
 @Repository
 @RequiredArgsConstructor
 public class ClassRepositoryImpl implements ClassRepositoryCustom {
-    
+
     private final JPAQueryFactory query;
-    
+
     @Override
-    public Page<ClassListDto> getList( ClassListDto listDto, Pageable pageable ) {
-        
+    public Page< ClassListDto > getList( ClassListDto listDto, Pageable pageable ) {
+
         // (1) '결과list' 와 (2)'count' 를 2번에 걸쳐 조회
 
 
@@ -56,9 +56,9 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
 //		this. = thumbAtchFileSn;
 //		this. = atchFileSn;
 //		this. = classExpsrYn;
-        
+
         // (1) 결과list (results).
-        List<ClassListDto> results = query
+        List< ClassListDto > results = query
                 // select
                 .select( new QClassListDto(
                         class$.classSn,
@@ -74,115 +74,28 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                         class$.classTrgtCd,
                         ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
                                 .from( cmmnCdDetail )
-                                .where( 
-                                		cmmnCdDetail.cdNm.eq("CLASS_TRGT_CD"),
-                                		cmmnCdDetail.cdDetailVal1.eq( class$.classTrgtCd ),
-                                		cmmnCdDetail.useYn.eq( "Y" ),
-                                		cmmnCdDetail.delYn.eq( "N" ) ), "classTrgtNm" ),
+                                .where(
+                                        cmmnCdDetail.cdNm.eq( "CLASS_TRGT_CD" ),
+                                        cmmnCdDetail.cdDetailVal1.eq( class$.classTrgtCd ),
+                                        cmmnCdDetail.useYn.eq( "Y" ),
+                                        cmmnCdDetail.delYn.eq( "N" ) ), "classTrgtNm" ),
                         class$.classPdSetYn,
                         class$.classBeginDt,
                         class$.classEndDt,
                         class$.thumbAtchFileSn,
                         class$.atchFileSn,
                         new CaseBuilder()
-                        			.when( class$.classExpsrYn.eq("Y")).then("표시")
-                        			.when( class$.classExpsrYn.eq("N")).then("미표시")
-                        			.otherwise("")
-                        			.as("classExpsrYn"),
+                                .when( class$.classExpsrYn.eq( "Y" ) ).then( "표시" )
+                                .when( class$.classExpsrYn.eq( "N" ) ).then( "미표시" )
+                                .otherwise( "" )
+                                .as( "classExpsrYn" ),
                         new CaseBuilder()
-                        			.when( 	class$.classPdSetYn.eq("Y")).then(
-                        					class$.classBeginDt.concat(" ~ ").concat(class$.classEndDt)
-                        				)
-                        			.when( class$.classPdSetYn.eq("N")).then("상시")
-                        			.otherwise("")
-                        			.as("classExpsrPeriod"),
-                        class$.registerId,
-                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH24:MI:SS" ),
-                        classLike.userSn
-                ) )
-                .from( class$ )
-                .leftJoin( classCategoryCl01 )
-                // join 에는 delYn 조건 필수로 추가
-                .on(    class$.ctgrySn.eq( classCategoryCl01.clSn ),
-                        classCategoryCl01.delYn.eq( "N" )
-                )
-                .leftJoin( classCategoryCl02 )
-                // join 에는 delYn 조건 필수로 추가
-                .on(    class$.crseSn.eq( classCategoryCl02.clSn ),
-                        classCategoryCl02.delYn.eq("N")
-                )
-                .leftJoin( classLike )
-                .on (
-                        classLike.delYn.eq("N"),
-                        classLike.classSn.eq( class$.classSn),
-                        eqUserSn( listDto.getUserSn() )
-                )
-                // where
-                .where( 
-                		eqCateLv1( listDto.getCategory() ),
-                		eqCateLv2( listDto.getCategory() ),
-                		eqOption( listDto.getSchOption(), listDto.getSchCntn() ) 
-                		)
-                .orderBy( class$.classSn.desc())
-                .offset( pageable.getOffset() )
-                .limit( pageable.getPageSize() )
-                .fetch();
-        
-        // (2) count
-        JPAQuery<Long> count = query.select( class$.count() )
-                .from( class$ )
-                .where(
-                		eqCateLv1( listDto.getCategory() ),
-                		eqCateLv2( listDto.getCategory() ),
-                        eqOption( listDto.getSchOption(), listDto.getSchCntn() )
-                       );
-        
-        
-        return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
-        
-    }
-    
-    @Override
-    public List<ClassListDto> getList( ClassListDto listDto ) {
-        
-        return query
-                // select
-                .select( new QClassListDto(
-                        class$.classSn,
-                        class$.ctgrySn,
-                        classCategoryCl01.clNm.as( "ctgryNm" ),
-                        class$.crseSn,
-                        classCategoryCl02.clNm.as( "crseNm" ),
-                        class$.classSj,
-                        class$.classSumry,
-                        class$.classDc,
-                        class$.classAmt,
-                        class$.classDscntBfeAmt,
-                        class$.classTrgtCd,
-                        ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
-                                .from( cmmnCdDetail )
-                                .where( 
-                                		cmmnCdDetail.cdNm.eq("CLASS_TRGT_CD"),
-                                		cmmnCdDetail.cdDetailVal1.eq( class$.classTrgtCd ),
-                                		cmmnCdDetail.useYn.eq( "Y" ),
-                                		cmmnCdDetail.delYn.eq( "N" ) ), "classTrgtNm" ),
-                        class$.classPdSetYn,
-                        class$.classBeginDt,
-                        class$.classEndDt,
-                        class$.thumbAtchFileSn,
-                        class$.atchFileSn,
-                        new CaseBuilder()
-                                .when( class$.classExpsrYn.eq("Y")).then("표시")
-                                .when( class$.classExpsrYn.eq("N")).then("미표시")
-                                .otherwise("")
-                                .as("classExpsrYn"),
-                        new CaseBuilder()
-                                .when( 	class$.classPdSetYn.eq("Y")).then(
-                                        class$.classBeginDt.concat(" ~ ").concat(class$.classEndDt)
+                                .when( class$.classPdSetYn.eq( "Y" ) ).then(
+                                        class$.classBeginDt.concat( " ~ " ).concat( class$.classEndDt )
                                 )
-                                .when( class$.classPdSetYn.eq("N")).then("상시")
-                                .otherwise("")
-                                .as("classExpsrPeriod"),
+                                .when( class$.classPdSetYn.eq( "N" ) ).then( "상시" )
+                                .otherwise( "" )
+                                .as( "classExpsrPeriod" ),
                         class$.registerId,
                         Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH24:MI:SS" ),
                         classLike.userSn
@@ -190,18 +103,18 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 .from( class$ )
                 .leftJoin( classCategoryCl01 )
                 // join 에는 delYn 조건 필수로 추가
-                .on(    class$.ctgrySn.eq( classCategoryCl01.clSn ),
+                .on( class$.ctgrySn.eq( classCategoryCl01.clSn ),
                         classCategoryCl01.delYn.eq( "N" )
                 )
                 .leftJoin( classCategoryCl02 )
                 // join 에는 delYn 조건 필수로 추가
-                .on(    class$.crseSn.eq( classCategoryCl02.clSn ),
-                        classCategoryCl02.delYn.eq("N")
+                .on( class$.crseSn.eq( classCategoryCl02.clSn ),
+                        classCategoryCl02.delYn.eq( "N" )
                 )
                 .leftJoin( classLike )
-                .on (
-                        classLike.delYn.eq("N"),
-                        classLike.classSn.eq( class$.classSn),
+                .on(
+                        classLike.delYn.eq( "N" ),
+                        classLike.classSn.eq( class$.classSn ),
                         eqUserSn( listDto.getUserSn() )
                 )
                 // where
@@ -210,154 +123,27 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                         eqCateLv2( listDto.getCategory() ),
                         eqOption( listDto.getSchOption(), listDto.getSchCntn() )
                 )
-                .orderBy( class$.classSn.desc())
+                .orderBy( class$.classSn.desc() )
+                .offset( pageable.getOffset() )
+                .limit( pageable.getPageSize() )
                 .fetch();
-    }
-    
-    
-    
-    @Override
-    public ClassListDto getByClassSn( Long classSn, Long userSn ) {
-        
-        return query
-                // select
-                .select( new QClassListDto(
-                        class$.classSn,
-                        class$.ctgrySn,
-                        classCategoryCl01.clNm.as( "ctgryNm" ),
-                        class$.crseSn,
-                        classCategoryCl02.clNm.as( "crseNm" ),
-                        class$.classSj,
-                        class$.classSumry,
-                        class$.classDc,
-                        class$.classAmt,
-                        class$.classDscntBfeAmt,
-                        class$.classTrgtCd,
-                        ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
-                                .from( cmmnCdDetail )
-                                .where( 
-                                		cmmnCdDetail.cdNm.eq("CLASS_TRGT_CD"),
-                                		cmmnCdDetail.cdDetailVal1.eq( class$.classTrgtCd ),
-                                		cmmnCdDetail.useYn.eq( "Y" ),
-                                		cmmnCdDetail.delYn.eq( "N" ) ), "classTrgtNm" ),
-                        class$.classPdSetYn,
-                        class$.classBeginDt,
-                        class$.classEndDt,
-                        class$.thumbAtchFileSn,
-                        class$.atchFileSn,
-                        new CaseBuilder()
-                                .when( class$.classExpsrYn.eq("Y")).then("표시")
-                                .when( class$.classExpsrYn.eq("N")).then("미표시")
-                                .otherwise("")
-                                .as("classExpsrYn"),
-                        new CaseBuilder()
-                                .when( 	class$.classPdSetYn.eq("Y")).then(
-                                        class$.classBeginDt.concat(" ~ ").concat(class$.classEndDt)
-                                )
-                                .when( class$.classPdSetYn.eq("N")).then("상시")
-                                .otherwise("")
-                                .as("classExpsrPeriod"),
-                        class$.registerId,
-                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH24:MI:SS" ),
-                        classLike.userSn
-                ) )
+
+        // (2) count
+        JPAQuery< Long > count = query.select( class$.count() )
                 .from( class$ )
-                .leftJoin( classCategoryCl01 )
-                // join 에는 delYn 조건 필수로 추가
-                .on(    class$.ctgrySn.eq( classCategoryCl01.clSn ),
-                        classCategoryCl01.delYn.eq( "N" )
-                )
-                .leftJoin( classCategoryCl02 )
-                // join 에는 delYn 조건 필수로 추가
-                .on(    class$.crseSn.eq( classCategoryCl02.clSn ),
-                        classCategoryCl02.delYn.eq("N")
-                )
-                .leftJoin( classLike )
-                .on (
-                        classLike.delYn.eq("N"),
-                        classLike.classSn.eq( class$.classSn),
-                        eqUserSn( userSn )
-                )
-                // where
                 .where(
-                        eqClassSn( classSn )					// 고유한 1건만 조회 (pk 로 조회 ) 
-                )
-                .orderBy( class$.classSn.desc())
-                .fetchFirst();
+                        eqCateLv1( listDto.getCategory() ),
+                        eqCateLv2( listDto.getCategory() ),
+                        eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                );
+
+
+        return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
+
     }
-    
-    
-    
+
     @Override
-    public ClassListDto getByClassSn( Long classSn ) {
-    	
-    	return query
-    			// select
-    			.select( new QClassListDto(
-    					class$.classSn,
-    					class$.ctgrySn,
-    					classCategoryCl01.clNm.as( "ctgryNm" ),
-    					class$.crseSn,
-    					classCategoryCl02.clNm.as( "crseNm" ),
-    					class$.classSj,
-    					class$.classSumry,
-    					class$.classDc,
-    					class$.classAmt,
-    					class$.classDscntBfeAmt,
-    					class$.classTrgtCd,
-    					ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
-    							.from( cmmnCdDetail )
-    							.where( 
-    									cmmnCdDetail.cdNm.eq("CLASS_TRGT_CD"),
-    									cmmnCdDetail.cdDetailVal1.eq( class$.classTrgtCd ),
-    									cmmnCdDetail.useYn.eq( "Y" ),
-    									cmmnCdDetail.delYn.eq( "N" ) ), "classTrgtNm" ),
-    					class$.classPdSetYn,
-    					class$.classBeginDt,
-    					class$.classEndDt,
-    					class$.thumbAtchFileSn,
-    					class$.atchFileSn,
-    					new CaseBuilder()
-    					.when( class$.classExpsrYn.eq("Y")).then("표시")
-    					.when( class$.classExpsrYn.eq("N")).then("미표시")
-    					.otherwise("")
-    					.as("classExpsrYn"),
-    					new CaseBuilder()
-    					.when( 	class$.classPdSetYn.eq("Y")).then(
-    							class$.classBeginDt.concat(" ~ ").concat(class$.classEndDt)
-    							)
-    					.when( class$.classPdSetYn.eq("N")).then("상시")
-    					.otherwise("")
-    					.as("classExpsrPeriod"),
-    					class$.registerId,
-    					Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH24:MI:SS" ),
-//    					Expressions.as(Expressions.constant(pageNo), "pageNo")
-    					class$.classSn		// userSn 임시 대체 (사용하지 않음 )
-    					) )
-    			.from( class$ )
-    			.leftJoin( classCategoryCl01 )
-    			// join 에는 delYn 조건 필수로 추가
-    			.on(    class$.ctgrySn.eq( classCategoryCl01.clSn ),
-    					classCategoryCl01.delYn.eq( "N" )
-    					)
-    			.leftJoin( classCategoryCl02 )
-    			// join 에는 delYn 조건 필수로 추가
-    			.on(    class$.crseSn.eq( classCategoryCl02.clSn ),
-    					classCategoryCl02.delYn.eq("N")
-    					)
-    			// where
-    			.where(
-    					eqClassSn( classSn )					// 고유한 1건만 조회 (pk 로 조회 ) 
-    					)
-    			.orderBy( class$.classSn.desc())
-    			.fetchFirst();
-    }
-    
-    
-    @Override
-    public List<ClassListDto> getListTop10OtherClassExceptMeByCtgrySn( ClassListDto listDto ) {
-    	// 10건만 조회
-    	// 나의 클래스와 같은 카테고리의 다른 클래스 ( 내 클래스는 제외하고 검색 ) : 10건만 조회
+    public List< ClassListDto > getList( ClassListDto listDto ) {
 
         return query
                 // select
@@ -375,28 +161,28 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                         class$.classTrgtCd,
                         ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
                                 .from( cmmnCdDetail )
-                                .where( 
-                                		cmmnCdDetail.cdNm.eq("CLASS_TRGT_CD"),
-                                		cmmnCdDetail.cdDetailVal1.eq( class$.classTrgtCd ),
-                                		cmmnCdDetail.useYn.eq( "Y" ),
-                                		cmmnCdDetail.delYn.eq( "N" ) ), "classTrgtNm" ),
+                                .where(
+                                        cmmnCdDetail.cdNm.eq( "CLASS_TRGT_CD" ),
+                                        cmmnCdDetail.cdDetailVal1.eq( class$.classTrgtCd ),
+                                        cmmnCdDetail.useYn.eq( "Y" ),
+                                        cmmnCdDetail.delYn.eq( "N" ) ), "classTrgtNm" ),
                         class$.classPdSetYn,
                         class$.classBeginDt,
                         class$.classEndDt,
                         class$.thumbAtchFileSn,
                         class$.atchFileSn,
                         new CaseBuilder()
-                                .when( class$.classExpsrYn.eq("Y")).then("표시")
-                                .when( class$.classExpsrYn.eq("N")).then("미표시")
-                                .otherwise("")
-                                .as("classExpsrYn"),
+                                .when( class$.classExpsrYn.eq( "Y" ) ).then( "표시" )
+                                .when( class$.classExpsrYn.eq( "N" ) ).then( "미표시" )
+                                .otherwise( "" )
+                                .as( "classExpsrYn" ),
                         new CaseBuilder()
-                                .when( 	class$.classPdSetYn.eq("Y")).then(
-                                        class$.classBeginDt.concat(" ~ ").concat(class$.classEndDt)
+                                .when( class$.classPdSetYn.eq( "Y" ) ).then(
+                                        class$.classBeginDt.concat( " ~ " ).concat( class$.classEndDt )
                                 )
-                                .when( class$.classPdSetYn.eq("N")).then("상시")
-                                .otherwise("")
-                                .as("classExpsrPeriod"),
+                                .when( class$.classPdSetYn.eq( "N" ) ).then( "상시" )
+                                .otherwise( "" )
+                                .as( "classExpsrPeriod" ),
                         class$.registerId,
                         Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH24:MI:SS" ),
                         classLike.userSn
@@ -404,35 +190,246 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 .from( class$ )
                 .leftJoin( classCategoryCl01 )
                 // join 에는 delYn 조건 필수로 추가
-                .on(    class$.ctgrySn.eq( classCategoryCl01.clSn ),
+                .on( class$.ctgrySn.eq( classCategoryCl01.clSn ),
                         classCategoryCl01.delYn.eq( "N" )
                 )
                 .leftJoin( classCategoryCl02 )
                 // join 에는 delYn 조건 필수로 추가
-                .on(    class$.crseSn.eq( classCategoryCl02.clSn ),
-                        classCategoryCl02.delYn.eq("N")
+                .on( class$.crseSn.eq( classCategoryCl02.clSn ),
+                        classCategoryCl02.delYn.eq( "N" )
                 )
                 .leftJoin( classLike )
-                .on (
-                        classLike.delYn.eq("N"),
-                        classLike.classSn.eq( class$.classSn),
+                .on(
+                        classLike.delYn.eq( "N" ),
+                        classLike.classSn.eq( class$.classSn ),
                         eqUserSn( listDto.getUserSn() )
                 )
                 // where
                 .where(
-                		eqCtgrySn( listDto.getCtgrySn() ),
-                        neClassSn( listDto.getClassSn() )					// 고유한 1건만 조회 (pk 로 조회 ) 
+                        eqCateLv1( listDto.getCategory() ),
+                        eqCateLv2( listDto.getCategory() ),
+                        eqOption( listDto.getSchOption(), listDto.getSchCntn() )
                 )
-                .orderBy( class$.classSn.desc())
+                .orderBy( class$.classSn.desc() )
+                .fetch();
+    }
+
+
+    @Override
+    public ClassListDto getByClassSn( Long classSn, Long userSn ) {
+
+        return query
+                // select
+                .select( new QClassListDto(
+                        class$.classSn,
+                        class$.ctgrySn,
+                        classCategoryCl01.clNm.as( "ctgryNm" ),
+                        class$.crseSn,
+                        classCategoryCl02.clNm.as( "crseNm" ),
+                        class$.classSj,
+                        class$.classSumry,
+                        class$.classDc,
+                        class$.classAmt,
+                        class$.classDscntBfeAmt,
+                        class$.classTrgtCd,
+                        ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
+                                .from( cmmnCdDetail )
+                                .where(
+                                        cmmnCdDetail.cdNm.eq( "CLASS_TRGT_CD" ),
+                                        cmmnCdDetail.cdDetailVal1.eq( class$.classTrgtCd ),
+                                        cmmnCdDetail.useYn.eq( "Y" ),
+                                        cmmnCdDetail.delYn.eq( "N" ) ), "classTrgtNm" ),
+                        class$.classPdSetYn,
+                        class$.classBeginDt,
+                        class$.classEndDt,
+                        class$.thumbAtchFileSn,
+                        class$.atchFileSn,
+                        new CaseBuilder()
+                                .when( class$.classExpsrYn.eq( "Y" ) ).then( "표시" )
+                                .when( class$.classExpsrYn.eq( "N" ) ).then( "미표시" )
+                                .otherwise( "" )
+                                .as( "classExpsrYn" ),
+                        new CaseBuilder()
+                                .when( class$.classPdSetYn.eq( "Y" ) ).then(
+                                        class$.classBeginDt.concat( " ~ " ).concat( class$.classEndDt )
+                                )
+                                .when( class$.classPdSetYn.eq( "N" ) ).then( "상시" )
+                                .otherwise( "" )
+                                .as( "classExpsrPeriod" ),
+                        class$.registerId,
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH24:MI:SS" ),
+                        classLike.userSn
+                ) )
+                .from( class$ )
+                .leftJoin( classCategoryCl01 )
+                // join 에는 delYn 조건 필수로 추가
+                .on( class$.ctgrySn.eq( classCategoryCl01.clSn ),
+                        classCategoryCl01.delYn.eq( "N" )
+                )
+                .leftJoin( classCategoryCl02 )
+                // join 에는 delYn 조건 필수로 추가
+                .on( class$.crseSn.eq( classCategoryCl02.clSn ),
+                        classCategoryCl02.delYn.eq( "N" )
+                )
+                .leftJoin( classLike )
+                .on(
+                        classLike.delYn.eq( "N" ),
+                        classLike.classSn.eq( class$.classSn ),
+                        eqUserSn( userSn )
+                )
+                // where
+                .where(
+                        eqClassSn( classSn )                    // 고유한 1건만 조회 (pk 로 조회 )
+                )
+                .orderBy( class$.classSn.desc() )
+                .fetchFirst();
+    }
+
+
+    @Override
+    public ClassListDto getByClassSn( Long classSn ) {
+
+        return query
+                // select
+                .select( new QClassListDto(
+                        class$.classSn,
+                        class$.ctgrySn,
+                        classCategoryCl01.clNm.as( "ctgryNm" ),
+                        class$.crseSn,
+                        classCategoryCl02.clNm.as( "crseNm" ),
+                        class$.classSj,
+                        class$.classSumry,
+                        class$.classDc,
+                        class$.classAmt,
+                        class$.classDscntBfeAmt,
+                        class$.classTrgtCd,
+                        ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
+                                .from( cmmnCdDetail )
+                                .where(
+                                        cmmnCdDetail.cdNm.eq( "CLASS_TRGT_CD" ),
+                                        cmmnCdDetail.cdDetailVal1.eq( class$.classTrgtCd ),
+                                        cmmnCdDetail.useYn.eq( "Y" ),
+                                        cmmnCdDetail.delYn.eq( "N" ) ), "classTrgtNm" ),
+                        class$.classPdSetYn,
+                        class$.classBeginDt,
+                        class$.classEndDt,
+                        class$.thumbAtchFileSn,
+                        class$.atchFileSn,
+                        new CaseBuilder()
+                                .when( class$.classExpsrYn.eq( "Y" ) ).then( "표시" )
+                                .when( class$.classExpsrYn.eq( "N" ) ).then( "미표시" )
+                                .otherwise( "" )
+                                .as( "classExpsrYn" ),
+                        new CaseBuilder()
+                                .when( class$.classPdSetYn.eq( "Y" ) ).then(
+                                        class$.classBeginDt.concat( " ~ " ).concat( class$.classEndDt )
+                                )
+                                .when( class$.classPdSetYn.eq( "N" ) ).then( "상시" )
+                                .otherwise( "" )
+                                .as( "classExpsrPeriod" ),
+                        class$.registerId,
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH24:MI:SS" ),
+//    					Expressions.as(Expressions.constant(pageNo), "pageNo")
+                        class$.classSn        // userSn 임시 대체 (사용하지 않음 )
+                ) )
+                .from( class$ )
+                .leftJoin( classCategoryCl01 )
+                // join 에는 delYn 조건 필수로 추가
+                .on( class$.ctgrySn.eq( classCategoryCl01.clSn ),
+                        classCategoryCl01.delYn.eq( "N" )
+                )
+                .leftJoin( classCategoryCl02 )
+                // join 에는 delYn 조건 필수로 추가
+                .on( class$.crseSn.eq( classCategoryCl02.clSn ),
+                        classCategoryCl02.delYn.eq( "N" )
+                )
+                // where
+                .where(
+                        eqClassSn( classSn )                    // 고유한 1건만 조회 (pk 로 조회 )
+                )
+                .orderBy( class$.classSn.desc() )
+                .fetchFirst();
+    }
+
+
+    @Override
+    public List< ClassListDto > getListTop10OtherClassExceptMeByCtgrySn( ClassListDto listDto ) {
+        // 10건만 조회
+        // 나의 클래스와 같은 카테고리의 다른 클래스 ( 내 클래스는 제외하고 검색 ) : 10건만 조회
+
+        return query
+                // select
+                .select( new QClassListDto(
+                        class$.classSn,
+                        class$.ctgrySn,
+                        classCategoryCl01.clNm.as( "ctgryNm" ),
+                        class$.crseSn,
+                        classCategoryCl02.clNm.as( "crseNm" ),
+                        class$.classSj,
+                        class$.classSumry,
+                        class$.classDc,
+                        class$.classAmt,
+                        class$.classDscntBfeAmt,
+                        class$.classTrgtCd,
+                        ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.cdDetailNm )
+                                .from( cmmnCdDetail )
+                                .where(
+                                        cmmnCdDetail.cdNm.eq( "CLASS_TRGT_CD" ),
+                                        cmmnCdDetail.cdDetailVal1.eq( class$.classTrgtCd ),
+                                        cmmnCdDetail.useYn.eq( "Y" ),
+                                        cmmnCdDetail.delYn.eq( "N" ) ), "classTrgtNm" ),
+                        class$.classPdSetYn,
+                        class$.classBeginDt,
+                        class$.classEndDt,
+                        class$.thumbAtchFileSn,
+                        class$.atchFileSn,
+                        new CaseBuilder()
+                                .when( class$.classExpsrYn.eq( "Y" ) ).then( "표시" )
+                                .when( class$.classExpsrYn.eq( "N" ) ).then( "미표시" )
+                                .otherwise( "" )
+                                .as( "classExpsrYn" ),
+                        new CaseBuilder()
+                                .when( class$.classPdSetYn.eq( "Y" ) ).then(
+                                        class$.classBeginDt.concat( " ~ " ).concat( class$.classEndDt )
+                                )
+                                .when( class$.classPdSetYn.eq( "N" ) ).then( "상시" )
+                                .otherwise( "" )
+                                .as( "classExpsrPeriod" ),
+                        class$.registerId,
+                        Expressions.stringTemplate( "to_char({0}, '{1s}')", class$.regDt, "YYYY-MM-DD HH24:MI:SS" ),
+                        classLike.userSn
+                ) )
+                .from( class$ )
+                .leftJoin( classCategoryCl01 )
+                // join 에는 delYn 조건 필수로 추가
+                .on( class$.ctgrySn.eq( classCategoryCl01.clSn ),
+                        classCategoryCl01.delYn.eq( "N" )
+                )
+                .leftJoin( classCategoryCl02 )
+                // join 에는 delYn 조건 필수로 추가
+                .on( class$.crseSn.eq( classCategoryCl02.clSn ),
+                        classCategoryCl02.delYn.eq( "N" )
+                )
+                .leftJoin( classLike )
+                .on(
+                        classLike.delYn.eq( "N" ),
+                        classLike.classSn.eq( class$.classSn ),
+                        eqUserSn( listDto.getUserSn() )
+                )
+                // where
+                .where(
+                        eqCtgrySn( listDto.getCtgrySn() ),
+                        neClassSn( listDto.getClassSn() )                    // 고유한 1건만 조회 (pk 로 조회 )
+                )
+                .orderBy( class$.classSn.desc() )
                 .limit( 10 )
                 .fetch();
-    	
+
     }
-    
-    
-    
-	// -------------------------------- WHERE 검색 옵션 setting --------------------------------
-    
+
+
+    // -------------------------------- WHERE 검색 옵션 setting --------------------------------
+
     private BooleanExpression eqOption( String schOption, String schCntn ) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨
         if ( StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn ) ) {
@@ -453,35 +450,34 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
         return ( categoryDto != null && categoryDto.getLv1Sn() != null
                 && categoryDto.getLv1Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? class$.ctgrySn.eq( categoryDto.getLv1Sn() ) : null;
     }
-    
+
     // 카테고리 lv 2 검색 옵션 (커리큘럼)
     // class$.crseSn == lv2sn 
     private BooleanExpression eqCateLv2( CategoryDto categoryDto ) {
-    	return ( categoryDto != null && categoryDto.getLv2Sn() != null
-    			&& categoryDto.getLv2Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? class$.crseSn.eq( categoryDto.getLv2Sn() ) : null;
+        return ( categoryDto != null && categoryDto.getLv2Sn() != null
+                && categoryDto.getLv2Sn() != 0 /* 0이 아닌 것은  검색 제외 */ ) ? class$.crseSn.eq( categoryDto.getLv2Sn() ) : null;
     }
-    
+
     // pk 로 고유값 1건만 조회
     private BooleanExpression eqClassSn( Long classSn ) {
-    	return ( classSn != null ) ? class$.classSn.eq( classSn ) : null;
+        return ( classSn != null ) ? class$.classSn.eq( classSn ) : null;
     }
-    
+
 
     // ctgrySn 조회 
     private BooleanExpression eqCtgrySn( Long ctgrySn ) {
-    	return ( ctgrySn != null ) ? class$.ctgrySn.eq( ctgrySn ) : null;
+        return ( ctgrySn != null ) ? class$.ctgrySn.eq( ctgrySn ) : null;
     }
-    
+
     // pk 로 고유값 1건만 조회
     private BooleanExpression neClassSn( Long classSn ) {
-    	return ( classSn != null ) ? class$.classSn.ne( classSn ) : null;
+        return ( classSn != null ) ? class$.classSn.ne( classSn ) : null;
     }
-    
+
     // userSn으로 클래스 관심 조회
     private BooleanExpression eqUserSn( Long userSn ) {
-        return ( userSn == null ) ? ( classLike.userSn.isNull() ) : ( classLike.userSn.eq(userSn) );
+        return ( userSn == null ) ? ( classLike.userSn.isNull() ) : ( classLike.userSn.eq( userSn ) );
     }
-    
-    
-    
+
+
 }

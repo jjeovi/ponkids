@@ -869,6 +869,112 @@ select.displaySnsType {
 }
 
 
+.join_wrap .data-field {
+    text-align: center;
+}
+
+.join_wrap .data-field .email{
+    height: 2.5rem;
+}
+
+.join_wrap .data-field span {
+    width: 240px;
+    text-align: left;
+    height: 1.5rem;
+}
+.join_wrap .data-field span.info {
+    font-size: 0.9rem;
+}
+
+
+.join_wrap .data-field input {
+    width: 232px;
+    height: 2.2rem;
+    border-color: #dedbdb;
+    border-style: solid;
+    border-width: 1px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    padding-left: 9px;
+    min-width: 150px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.join_wrap .radiobox .l4px {
+    position:relative;
+    left:4px;
+    color : #d8d4d4;
+}
+
+.join_wrap .radiobox .r4px {
+    position:relative;
+    right:4px;
+    color : #d8d4d4;
+}
+
+
+.join_wrap .btn-outline-purple:not(:disabled):not(.disabled).active, .join_wrap .btn-outline-purple:not(:disabled):not(.disabled):active, .join_wrap .show>.btn-outline-purple.dropdown-toggle {
+    color: #fff !important;
+    background-color: #9674f1 !important;
+    border-color: #a08bd8 !important;;
+}
+
+
+.join_wrap .radiobox>.btn {
+    width: 100px;
+    color: #d8d4d4;
+    background-color: #ffffff;
+    height: 30px;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.275rem 0.65rem;
+    padding-bottom: 0.1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.join_wrap .radiobox {
+    margin-bottom:10px;
+}
+
+.join_wrap .radiobox>.btn:nth-of-type(1) {
+    border-radius: 8px !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+.join_wrap .radiobox>.btn:nth-last-of-type(1) {
+    border-radius: 8px !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.join_wrap .radiobox input[type=radio]:checked+label {
+    color: #fff;
+    background-color: #b098f2;
+    border-color: #a08bd8;
+}
+
+
+.join_wrap select {
+    border-radius: 8px;
+    width: 248px;
+    height: 2.5rem;
+    padding: 5px;
+    border: 1px solid #dddbdb;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    -moz-appearance: none;
+    appearance: none;
+    padding-left: 9px;
+    color : #000;
+}
 
 
 

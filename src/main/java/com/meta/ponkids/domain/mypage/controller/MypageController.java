@@ -4,8 +4,10 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 import com.meta.ponkids.domain.user.dto.UserChldrnListDto;
 import com.meta.ponkids.domain.user.dto.UserChldrnSaveDto;
+import com.meta.ponkids.domain.user.dto.UserModDto;
 import com.meta.ponkids.domain.user.repository.UserRepository;
 import com.meta.ponkids.domain.user.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,6 +62,8 @@ public class MypageController {
 	
 	private final UserChldrnService userChldrnService;
 	private final AtchFileService atchFileService;
+
+	private final CmmnCdDetailService cmmnCdDetailService;
 	
 	// layout 관련 dataSet 처리는 
 	// - MypageAop.java 에서 처리 ( 관심개수.. 등 ) 
@@ -142,24 +146,74 @@ public class MypageController {
 		model.addAttribute( "mypageMcd", "reviewList" );
 		return USER_VIEW_PATH + BASIC_PATH + "/reviewList";
 	}
-	
+
 	@GetMapping( "/myInfoModify" )
 	public String myInfoModify( Model model ) {
-		
+
 		// S : 필요한 객체 setting
-		
-		// default : 내 정보 setting
+
+		// 국가 리스트 ( 회원가입 시 국가 '그 외 ' 선택시 표출되는 국가 )
+		model.addAttribute( "resideAreaList", cmmnCdDetailService.getList( "RESIDE_AREA_CD" ) );
+
+		// 내 정보 targetDto setting
 		model.addAttribute( "targetDto", userService.findByUserSn( SessionUtils.getAuthUserSn() ) );
-		
+
 		// E : 필요한 객체 setting
-		
+
 		// 기본 경로 setting
 		model.addAttribute( "basicPath", BASIC_PATH );
 		// mypage용 mcd 
 		model.addAttribute( "mypageMcd", "myInfoModify" );
 		return USER_VIEW_PATH + BASIC_PATH + "/myInfoModify";
 	}
-	
+
+	@Transactional
+	@PostMapping( "/myInfoModify/update" )
+	public String myInfoModifyUpdate ( @ModelAttribute UserModDto modDto,
+									   @RequestParam( "file" ) MultipartFile files,
+									   HttpServletRequest request,
+									   Model model ) throws IOException {
+
+
+		Long userSn = SessionUtils.getAuthUserSn();
+
+		if( userSn == null || ! userSn.equals( modDto.getUserSn() ) ) {
+			model.addAttribute( "resultMsg",	"수정 중 오류가 발생하였습니다. 세션을 확인해주세요." );
+			model.addAttribute( "moveUrl",		"/" );
+			return "common/alert";
+		}
+
+		modDto.setUserSn( userSn );
+
+
+		// 첨부파일 존재시 파일 저장
+		if ( !files.isEmpty() ) {
+			// 기존에 첨부파일 있을시 삭제
+			if ( modDto.getAtchFileSnOri() != null ) {
+				atchFileService.delete( modDto.getAtchFileSnOri() );
+			}
+
+			// 첨부파일 저장
+			modDto.setAtchFileSn( atchFileService.save( files ) );	// 파일 save (파일 개수 1개일 때 )
+		} else {
+			// 첨부파일 존재하지않을 때
+			// 기존 첨부파일이 있었는데 삭제됬다면 삭제처리
+			if ( modDto.getAtchFileSnOri() != null && modDto.getAtchFileSn() == null ) {
+				atchFileService.delete( modDto.getAtchFileSnOri() );
+				modDto.setAtchFileSn( null );
+			}
+		}
+
+		// 수정 처리
+		userService.update( modDto, request ) ;
+
+		// 메시지 출력 및 url 이동 처리
+		model.addAttribute( "resultMsg", "정상적으로 수정되었습니다." );
+		model.addAttribute( "moveUrl",	 BASIC_PATH + "/myInfoModify" );
+
+		return "common/alert";
+	}
+
 	@GetMapping( "/myChldrnInfo" )
 	public String myChldrnInfo( @RequestParam( required = false ) Long userChldrnSeq,	// 자녀 순번  *기본값 1
 								@RequestParam( required = false ) String pageType,			// 타입 ( mod : 수정(기존자녀수정), add : 등록(신규자녀등록) ) *기본값 mod

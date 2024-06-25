@@ -18,6 +18,46 @@
 <!-- S : Javascript functions	-->
 <div layout:fragment="script">
 	<!-- js -->
+
+	<script>
+		$( function() {
+
+			$("#joinCountryList").change(function(){
+				var value = $(this).val();
+
+				if ( value == '' ) {
+					$("#joinCountryList").removeClass("choiced");
+
+				} else {
+					$("#joinCountryList").addClass("choiced");
+				}
+			});
+
+			// 거주지역 그 외만 선택 했을 시  return false;
+			var resideArea = $( "#updateForm input:radio[name='resideArea']:checked" ).val();
+			if ( resideArea != '대한민국' ) {
+				$( "#joinCountryList" ).show();
+			}
+
+			// 거주지역 변동시 셀렉트박스 표출 처리
+			$( "input:radio[name='resideArea']" ).change( function () {
+
+				// 그 외 거주지역 선택시 나라 선택하도록 setting
+				var country = $( this ).val();
+
+				if ( country != '대한민국' ) {
+					$( "#joinCountryList" ).show();
+				} else {
+					$( "#joinCountryList" ).hide();
+				}
+			} );
+		})
+
+		function updateMyInfo() {
+			$("#updateForm").submit();
+		}
+
+	</script>
 </div>
 
 <!-- E : Javascript functions	-->
@@ -28,13 +68,14 @@
 		<div class="chldrnInfoWrap">
 			<!-- S: 자녀 수정 영역 -->
 			<form id="updateForm" name="updateForm" method="post"   th:action="@{ /mypage/myInfoModify/update }" class="form"  enctype="multipart/form-data" >
+			<input type="hidden" name="userSn" 		th:value="${targetDto.userSn}" />
 			<th:block th:if="${targetDto ne null}">
 			<div name="chldrnModDiv" class="modForm" th:style=" ${pageType eq 'add'} ? 'display:none;' " >
 				<div class="filebox preview-image">
 					<div class="upload-display">
 						<div class="upload-thumb-wrap">
-							<img alt="프로필 이미지" class="upload-thumb noimg" 		th:if = 	"${targetDto.atchFileSn == null}" >
-							<img alt="프로필 이미지" class="upload-thumb" 				th:unless = "${targetDto.atchFileSn == null}" th:src="@{/getImage(atchFileSn=${targetDto.atchFileSn})}"  >
+							<img alt="프로필 이미지" class="upload-thumb noimg" 	th:if = 	"${targetDto.atchFileSn == null}" >
+							<img alt="프로필 이미지" class="upload-thumb" 		th:unless = "${targetDto.atchFileSn == null}" th:src="@{/getImage(atchFileSn=${targetDto.atchFileSn})}"  >
 						</div>
 					</div>
 					<div class="upload-btn mt_10p" style="margin-bottom: 13px;">
@@ -49,43 +90,64 @@
 					<input type="hidden" name="atchFileSnOri" 	th:value="${targetDto.atchFileSn}" />
 				</div>
 				<div class="data-field" >
-					<span>이름</span>
+					<span class="info" >이메일</span>
+				</div>
+				<div class="data-field" >
+					<span class="email" th:text="${targetDto.userId}" ></span>
+				</div>
+				<div class="data-field" >
+					<span class="info" >이름</span>
 				</div>
 				<div class="data-field" >
 					<input type="text" name="userNm" placeholder="이름" th:value="${targetDto.userNm}" >
 				</div>
 				<div class="data-field" >
-					<span>성별</span>
+					<span class="info" >성별</span>
 				</div>
 				<div class="data-field btn-group radiobox" >
-					<label	class="l4px btn btn-outline-purple w100p" th:classappend="${targetDto.gender eq '남자'} ? 'active'"
+					<label	class="l4px btn btn-outline-purple w100p" th:classappend="${targetDto.gender eq 'M'} ? 'active'"
 							  data-toggle-class="btn-primary"
-							  data-toggle-passive-class="btn-default" th:checked="${targetDto.gender eq '남자'}" >
-						<input type="radio" name="gender" value="M" class="join-btn gender" onclick="clickRadioEvent(this)"> 남자
+							  data-toggle-passive-class="btn-default">
+						<input type="radio" name="gender" value="M" class="join-btn gender" onclick="clickRadioEvent(this)" th:checked="${targetDto.gender eq 'M'}"> 남자
 					</label>
-					<label	class="r4px btn btn-outline-purple w100p" th:classappend="${targetDto.gender eq '여자'} ? 'active'"
+					<label	class="r4px btn btn-outline-purple w100p" th:classappend="${targetDto.gender eq 'F'} ? 'active'"
 							  data-toggle-class="btn-primary"
-							  data-toggle-passive-class="btn-default" th:checked="${targetDto.gender eq '여자'}" >
-						<input type="radio" name="gender" value="F" class="join-btn gender" onclick="clickRadioEvent(this)">여자
+							  data-toggle-passive-class="btn-default">
+						<input type="radio" name="gender" value="F" class="join-btn gender" onclick="clickRadioEvent(this)" th:checked="${targetDto.gender eq 'F'}">여자
 					</label>
 				</div>
 				<div class="data-field" >
-					<span>생년월일</span>
+					<span class="info" >생년월일</span>
 				</div>
 				<div class="data-field" >
-					<input type="text" name="brdtDate" placeholder="생년월일 ( YYYYMMDD ex)20130119 )" maxlength="8" th:value="${targetDto.brdtDate}" >
+					<input class="form-control Date8String" type="date" name="brdtDate" required="required" th:value="${targetDto.brdtDate}"  >
 				</div>
 				<div class="data-field" >
-					<span>연락처</span>
+					<span class="info" >연락처</span>
 				</div>
 				<div class="data-field" >
-					<input type="text" name="telNo" placeholder="연락처" data-validate-length-range="10,11"	maxlength="11" th:value="${targetDto.telNo}" >
+					<input type="text" name="telNo" placeholder="01000000000" data-validate-length-range="10,11"	maxlength="11" th:value="${targetDto.telNo}" >
 				</div>
 				<div class="data-field" >
-					<span>이메일</span>
+					<span class="info" >거주지역</span>
 				</div>
-				<div class="data-field" >
-					<input type="text" name="email" placeholder="이메일" th:value="${targetDto.email}" >
+				<div class="data-field btn-group radiobox mb_5p" >
+					<label	class="l4px btn btn-outline-purple w100p" th:classappend="${targetDto.resideArea eq '대한민국'} ? 'active'"
+							  data-toggle-class="btn-primary"
+							  data-toggle-passive-class="btn-default">
+						<input type="radio" name="resideArea" value="대한민국" class="join-btn" onclick="clickRadioEvent(this)"  th:checked="${targetDto.resideArea eq '대한민국'}" > 대한민국
+					</label>
+					<label	class="r4px btn btn-outline-purple w100p" th:classappend="${targetDto.resideArea ne '대한민국'} ? 'active'"
+							  data-toggle-class="btn-primary"
+							  data-toggle-passive-class="btn-default" >
+						<input type="radio" name="resideArea" value="other" class="join-btn" onclick="clickRadioEvent(this)" th:checked="${targetDto.resideArea ne '대한민국'}" >그 외
+					</label>
+				</div>
+				<div class="data-field" id="joinCountryList" style="display:none;" >
+					<select name="otherResideArea" class="selectbox" >
+						<option value=''>국가 선택</option>
+						<option th:each="item : ${resideAreaList}" th:value="${item.cdDetailVal1}" th:text="${item.cdDetailNm}" th:selected="${item.cdDetailVal1} == ${targetDto.resideArea}" >
+					</select>
 				</div>
 			</div>
 			</th:block>
@@ -93,22 +155,15 @@
 			<!-- E: 자녀 수정 영역 -->
 		</div>
 
-
 		<!-- S : 하단 버튼 영역 -->
 		<div class="article_detail_footer">
 			<th:block th:if="${targetDto ne null}">
-			<div class="whiteBtn">
-				<a href="/mypage/reqstHistory/list">
-				<a th:href="'javascript:deleteItem(\'' + ${targetDto.userSn} + '\');'">
-					<span>삭제</span>
-				</a>
-			</div>
-			</th:block>
-			<div class="ml_20p" th:if="${pageType eq 'mod'}">
+			<div class="ml_20p" >
 				<a href="javascript:;" onclick="updateMyInfo()" >
 					<span>수정</span>
 				</a>
 			</div>
+			</th:block>
 		</div>
 		<!-- E : 하단 버튼 영역 -->
 	</div>
