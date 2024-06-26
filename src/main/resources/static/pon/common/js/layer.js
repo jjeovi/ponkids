@@ -485,8 +485,8 @@ function idDupResult( dupCheckFlag, checkResult ) {
     else $( "#" + checkResult ).addClass( "text-danger" );
 
     // 사용 여부
-    if ( dupCheckFlag ) $( "#" + checkResult ).text( "가능" );
-    else $( "#" + checkResult ).text( "불가" );
+    if ( dupCheckFlag ) $( "#" + checkResult ).text( "사용가능한 아이디입니다." );
+    else $( "#" + checkResult ).text( "사용 불가능한 아이디입니다." );
 }
 
 
@@ -619,12 +619,12 @@ function checkPasswordMatching() {
 
         if ( password == passwordRe ) {
             $( "#passwordMatchingResult" ).addClass( "text-primary" );
-            $( "#passwordMatchingResult" ).text( "일치" );
+            $( "#passwordMatchingResult" ).text( "비밀번호가 일치합니다." );
             passwordMatchCheckFlag = true;
 
         } else {
             $( "#passwordMatchingResult" ).addClass( "text-danger" );
-            $( "#passwordMatchingResult" ).text( "불일치" );
+            $( "#passwordMatchingResult" ).text( "비밀번호가 불일치합니다." );
         }
 
     }

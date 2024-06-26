@@ -869,25 +869,27 @@ select.displaySnsType {
 }
 
 
-.join_wrap .data-field {
+.join_wrap .data-field, .layer_addChldrn .data-field  {
     text-align: center;
 }
 
-.join_wrap .data-field .email{
+.join_wrap .data-field .email, .layer_addChldrn .data-field .email{
     height: 2.5rem;
 }
 
-.join_wrap .data-field span {
+.join_wrap .data-field span, .layer_addChldrn .data-field span {
     width: 240px;
     text-align: left;
     height: 1.5rem;
+    top: 0px;
+    left: 0px;
 }
-.join_wrap .data-field span.info {
+.join_wrap .data-field span.info, .layer_addChldrn .data-field span.info {
     font-size: 0.9rem;
 }
 
 
-.join_wrap .data-field input {
+.join_wrap .data-field input, .layer_addChldrn .data-field input {
     width: 232px;
     height: 2.2rem;
     border-color: #dedbdb;
@@ -901,27 +903,28 @@ select.displaySnsType {
     margin-bottom: 10px;
 }
 
-.join_wrap .radiobox .l4px {
+.join_wrap .radiobox .l4px, .layer_addChldrn .radiobox .l4px {
     position:relative;
     left:4px;
     color : #d8d4d4;
 }
 
-.join_wrap .radiobox .r4px {
+.join_wrap .radiobox .r4px, .layer_addChldrn .radiobox .r4px {
     position:relative;
     right:4px;
     color : #d8d4d4;
 }
 
 
-.join_wrap .btn-outline-purple:not(:disabled):not(.disabled).active, .join_wrap .btn-outline-purple:not(:disabled):not(.disabled):active, .join_wrap .show>.btn-outline-purple.dropdown-toggle {
+.join_wrap .btn-outline-purple:not(:disabled):not(.disabled).active, .join_wrap .btn-outline-purple:not(:disabled):not(.disabled):active, .join_wrap .show>.btn-outline-purple.dropdown-toggle,
+.layer_addChldrn .btn-outline-purple:not(:disabled):not(.disabled).active, .layer_addChldrn .btn-outline-purple:not(:disabled):not(.disabled):active, .layer_addChldrn .show>.btn-outline-purple.dropdown-toggle {
     color: #fff !important;
     background-color: #9674f1 !important;
     border-color: #a08bd8 !important;;
 }
 
 
-.join_wrap .radiobox>.btn {
+.join_wrap .radiobox>.btn , .layer_addChldrn .radiobox>.btn{
     width: 100px;
     color: #d8d4d4;
     background-color: #ffffff;
@@ -940,29 +943,29 @@ select.displaySnsType {
     line-height: 1.5;
 }
 
-.join_wrap .radiobox {
+.join_wrap .radiobox, .layer_addChldrn .radiobox {
     margin-bottom:10px;
 }
 
-.join_wrap .radiobox>.btn:nth-of-type(1) {
+.join_wrap .radiobox>.btn:nth-of-type(1), .layer_addChldrn .radiobox>.btn:nth-of-type(1) {
     border-radius: 8px !important;
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
 }
-.join_wrap .radiobox>.btn:nth-last-of-type(1) {
+.join_wrap .radiobox>.btn:nth-last-of-type(1), .layer_addChldrn .radiobox>.btn:nth-last-of-type(1) {
     border-radius: 8px !important;
     border-top-left-radius: 0 !important;
     border-bottom-left-radius: 0 !important;
 }
 
-.join_wrap .radiobox input[type=radio]:checked+label {
+.join_wrap .radiobox input[type=radio]:checked+label, .layer_addChldrn .radiobox input[type=radio]:checked+label {
     color: #fff;
     background-color: #b098f2;
     border-color: #a08bd8;
 }
 
 
-.join_wrap select {
+.join_wrap select, .layer_addChldrn select {
     border-radius: 8px;
     width: 248px;
     height: 2.5rem;
@@ -1370,17 +1373,17 @@ input[type="radio"][disabled]:checked+label{
 /* S : selectbox 디자인 */
 
 .pop_content select {
-    border-radius: 0px;
-	width : 73.2%;
-	height : 2.5rem;
-	padding : 5px;
-	border : 1px solid #dddbdb;
-	border-left-width : 2px;
-	border-right-width : 2px;
-	-moz-appearance : none;
-	appearance : none;
-	padding-left : 9px;
-	color : #d8d4d4;
+    width: 247px;
+    height: 2.2rem;
+    border-color: #dedbdb;
+    border-style: solid;
+    border-width: 1px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    padding-left: 9px;
+    min-width: 150px;
+    border-radius: 8px;
+    margin-bottom: 10px;
 }
 
 .pop_content select.last{
@@ -1611,7 +1614,6 @@ input[type="radio"][disabled]:checked+label{
 }
 
 .input_comment {
-	position: absolute;
 	display: inline-block;
 }
 

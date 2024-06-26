@@ -120,139 +120,40 @@
 				<span class="info" >성별</span>
 			</div>
 			<div class="data-field btn-group radiobox" >
-				<label	class="l4px btn btn-outline-purple w100p" th:classappend="${targetDto.gender eq 'M'} ? 'active'"
-						  data-toggle-class="btn-primary"
-						  data-toggle-passive-class="btn-default">
-					<input type="radio" name="gender" value="M" class="join-btn gender" onclick="clickRadioEvent(this)" th:checked="${targetDto.gender eq 'M'}"> 남자
+				<label	class="l4px btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+					<input type="radio" name="gender" value="M" class="join-btn gender" onclick="clickRadioEvent(this)" > 남자
 				</label>
-				<label	class="r4px btn btn-outline-purple w100p" th:classappend="${targetDto.gender eq 'F'} ? 'active'"
-						  data-toggle-class="btn-primary"
-						  data-toggle-passive-class="btn-default">
-					<input type="radio" name="gender" value="F" class="join-btn gender" onclick="clickRadioEvent(this)" th:checked="${targetDto.gender eq 'F'}">여자
+				<label	class="r4px btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+					<input type="radio" name="gender" value="F" class="join-btn gender" onclick="clickRadioEvent(this)" >여자
 				</label>
-			</div>
-			<div class="data-field" >
-				<div class="btn-group radiobox">
-					<input type="radio" id="resideArea1" name="resideArea" value="대한민국" class="join-btn" required="">
-					<label for="resideArea1" class="btn btnFirst w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">대한민국</label>
-					<input type="radio" id="resideArea2" name="resideArea" value="other" class="join-btn" required="">
-					<label for="resideArea2" class="btn btnLast w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">그 외</label>
-				</div>
 			</div>
 			<div class="data-field" >
 				<span class="info" >연락처</span>
 			</div>
 			<div class="data-field" >
-				<input type="text" class="last" name="telNo" placeholder="연락처(숫자로만 입력해주세요. ex) 01012345678" >
+				<input type="text" class="last" name="telNo" placeholder="연락처(ex ) 01000000000 )" >
 			</div>
 			<div class="data-field" >
 				<span class="info" >생년월일</span>
 			</div>
 			<div class="data-field" >
-				<input type="text" name="brdtDate" placeholder="생년월일 (숫자8자리로 입력해주세요. YYYYMMDD ex)19930119 ">
+				<input type="text" name="brdtDate" placeholder="생년월일 ( ex)19930101 )">
 			</div>
 			<div class="data-field" >
 				<span class="info" >거주지역</span>
 			</div>
 			<div class="data-field btn-group radiobox mb_5p" >
-				<label	class="l4px btn btn-outline-purple w100p" th:classappend="${targetDto.resideArea eq '대한민국'} ? 'active'"
-						  data-toggle-class="btn-primary"
-						  data-toggle-passive-class="btn-default">
-					<input type="radio" name="resideArea" value="대한민국" class="join-btn" onclick="clickRadioEvent(this)"  th:checked="${targetDto.resideArea eq '대한민국'}" > 대한민국
+				<label	class="l4px btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+					<input type="radio" name="resideArea" value="대한민국" class="join-btn" onclick="clickRadioEvent(this)" > 대한민국
 				</label>
-				<label	class="r4px btn btn-outline-purple w100p" th:classappend="${targetDto.resideArea ne '대한민국'} ? 'active'"
-						  data-toggle-class="btn-primary"
-						  data-toggle-passive-class="btn-default" >
-					<input type="radio" name="resideArea" value="other" class="join-btn" onclick="clickRadioEvent(this)" th:checked="${targetDto.resideArea ne '대한민국'}" >그 외
+				<label	class="r4px btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default" >
+					<input type="radio" name="resideArea" value="other" class="join-btn" onclick="clickRadioEvent(this)" >그 외
 				</label>
-			</div>
-			<div class="data-field" >
-				<div class="btn-group radiobox">
-					<input type="radio" id="resideArea1" name="resideArea" value="대한민국" class="join-btn" required="">
-					<label for="resideArea1" class="btn btnFirst w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">대한민국</label>
-					<input type="radio" id="resideArea2" name="resideArea" value="other" class="join-btn" required="">
-					<label for="resideArea2" class="btn btnLast w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">그 외</label>
-				</div>
-			</div>
-			<div class="data-field" >
-				<span class="info" >testssss</span>
-			</div>
-			<div class="data-field" >
-				testssssss
-			</div>
-			<div class="data-field" >
-				<span class="info" >testssss</span>
-			</div>
-			<div class="data-field" >
-				testssssss
-			</div>
-			<div class="data-field" >
-				<span class="info" >testssss</span>
-			</div>
-			<div class="data-field" >
-				testssssss
-			</div>
-			<div class="data-field" >
-				<span class="info" >testssss</span>
-			</div>
-			<div class="data-field" >
-				testssssss
-			</div>
-			<div class="data-field" >
-				<span class="info" >testssss</span>
-			</div>
-			<div class="data-field" >
-				testssssss
-			</div>
-			<div class="data-field" >
-				<span class="info" >testssss</span>
-			</div>
-			<div class="data-field" >
-				testssssss
-			</div>
-			<div class="input_comment_wrap">
-				<input type="text" name="userId" class="form-control first" placeholder="ID (이메일 형태. 계정 찾기 시 이메일로 인증메일 발송)" required="required"
-					   th:readonly="${lgStatus != null && lgStatus == 'joinForSns'} ? 'readonly'" th:value="${snsUserId}" th:title="${lgStatus}">
-					<!--
-					<div class="input_comment">
-						<span id="checkResult"></span>
-					</div>
-					-->
-			</div>
-			<select name="joinForSnsType" class="selectbox displaySnsType" id="joinForSnsType" style="display:none;">
-				<option value=''>SNS연동 회원가입</option>
-				<option th:each="item : ${loginSnsTypeList}" th:value="${item.cdDetailVal1}" th:text="${item.cdDetailVal2}">
-			</select>
-			<input type="password" id="password1" name="password" class="form-control" placeholder="비밀번호 (영문, 숫자, 특수문자를 포함 최소8자리)" required="required" autocomplete="off" >
-			<div class="input_comment_wrap">
-				<input type="password" name="password2" class="form-control" data-validate-linked='password' required='required' placeholder="비밀번호 재입력" onchange="checkPasswordMatching();" autocomplete="off" >
-				<div class="input_comment">
-					<span id="passwordMatchingResult"></span>
-				</div>
-			</div>
-			
-			<input type="text" name="userNm" placeholder="이름">
-			<div class="btn-group radiobox">
-				<input type="radio" id="gender1" name="gender" value="M" class="join-btn" required="">
-				<label for="gender1" class="btn btnFirst w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">남자</label>
-				<input type="radio" id="gender2" name="gender" value="F" class="join-btn" required="">
-				<label for="gender2" class="btn btnLast w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">여자</label>
-			</div>
-			<input type="text" name="brdtDate" placeholder="생년월일 (숫자8자리로 입력해주세요. YYYYMMDD ex)19930119 ">
-			<div class="btn-group radiobox">
-				<input type="radio" id="resideArea1" name="resideArea" value="대한민국" class="join-btn" required="">
-				<label for="resideArea1" class="btn btnFirst w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">대한민국</label>
-				<input type="radio" id="resideArea2" name="resideArea" value="other" class="join-btn" required="">
-				<label for="resideArea2" class="btn btnLast w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">그 외</label>
 			</div>
 			<select name="otherResideArea" class="selectbox" id="join_countryList" style="display:none;">
 				<option value=''>국가선택</option>
 				<option th:each="item : ${resideAreaList}" th:value="${item.cdDetailVal1}" th:text="${item.cdDetailNm}">
 			</select>
-			<input type="text" class="last" name="telNo" placeholder="연락처(숫자로만 입력해주세요. ex) 01012345678" >
-			<input type="hidden" name="snsType" 	/>
-			<input type="hidden" name="snsKakaoCntnYn" 	title="sns_kakao"	/>
-			<input type="hidden" name="snsGoogleCntnYn"	title="sns_google" 	/>
 		</div>
 		<div class="join_chldrn_title_wrap" >
 			<div class="sub_title">자녀 정보</div>	
