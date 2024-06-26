@@ -1443,9 +1443,9 @@ input[type="radio"][disabled]:checked+label{
   pointer-events: none; 
   width: 92px !important;  
   }
-  
+
 .addChldrn_wrap .radiobox>.btn {
-	width: 142.1px;	
+    width: 99.1px;
 }
   
 
@@ -2363,7 +2363,7 @@ span {
         height: 300px;
     }
     .addChldrn_wrap .radiobox>.btn{
-        width:85px;
+        width:63px;
     }
 
     .pop_wrap .cbTitle{
@@ -2373,6 +2373,14 @@ span {
 
     .pop_content select {
         width: 190px;
+    }
+
+    .layer_addChldrn .data-field input {
+        width: 160px;
+    }
+
+    .layer_addChldrn .data-field span {
+        width : 170px;
     }
 
 
