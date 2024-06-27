@@ -333,7 +333,12 @@
 		var lctreBoxCnt = $(".added_lctre_area .lctre_box").not( '.no_item' ).length;
 		
 		if ( lctreBoxCnt < 1 ) {
-			alert("수업을 추가해주세요.");
+			// 수업 추가 할 수 있는 조건이 만족되면 자동으로 수업 추가 버튼 클릭
+			// putInBoxLctre();
+			putInBoxLctre()
+
+			// alert("수업을 추가해주세요.");
+
 			return false;
 		}
 		
@@ -359,6 +364,24 @@
 		}
 		
 		return false;
+	}
+
+	function setClipBoardUrl( classSn ) {
+		var t = document.createElement("textarea");
+
+		document.body.appendChild(t);
+
+		// 현재 도메인 var setting
+		var currentDomain = location.protocol + '//' + location.host;
+		var mcd = '[[${mcd}]]';
+
+		var copyUrl = currentDomain + '/class/' + mcd + '/detail?pk='  + classSn
+
+		t.value = copyUrl;
+		t.select();
+		document.execCommand('copy');
+		document.body.removeChild(t);
+		alert("클립보드에 복사되었습니다.");
 	}
 	
 	
@@ -398,7 +421,7 @@
 							<div th:onclick="|likeClass(${targetDto.classSn}, this);|" class="detailLike">
 								<img th:src="|${targetDto.userSn eq null ? '/pon/common/image/heart_color_bg.svg' : '/pon/common/image/heart-full.svg'}|" alt="좋아요_아이콘">
 							</div>
-							<div>
+							<div th:onclick="|setClipBoardUrl( '${targetDto.classSn}' );|">
 								<!-- TODO : 공유 -->
 								<img src="/pon/common/image/share_color.svg" alt="">
 							</div>
@@ -481,7 +504,7 @@
 						
 						<span class="reqst-history" th:if="${ reqstHistoryYn != null && reqstHistoryYn}">
 							이 클래스에 이미 신청한 이력이 존재해요!
-							<a href="/mypage/reqstHistory">신청이력 확인하기</a>
+							<a href="/mypage/reqstHistory/list">신청이력 확인하기</a>
 						</span>
 					</div>
 				</div>
@@ -492,7 +515,7 @@
 		<div class="class_detail_review"><div>…</div>
 			<h3>역사 과목 후기(136)</h3>
 			<div class="detail_review_item_box">
-				<div class="detail_review_item">
+				<div class="detail_reviewㅅ_item">
 					<div class="review_item_con">
 						<span class="star_five">
 							<img src="/pon/common/image/star_five.svg" alt="">

@@ -47,7 +47,7 @@
 				<img class="bg_ico2" src="/pon/common/image/atom2.png" alt="클래스배경이미지2">
 			</div>
 			<div class="article_top">
-                <span>총 게시물 <strong th:utext="${resultList.totalElements}"> 129</strong></span>
+                <span>총 게시물 <strong th:utext="${resultList.totalElements}"> </strong></span>
                 <select name="schOption" onchange="reviewOrderby();" >
                     <option value="A" th:selected=" ${searchDTO.schOption} == 'A'" >최신등록순</option>
                     <option value="B" th:selected=" ${searchDTO.schOption} == 'B'" >별점높은순</option>
@@ -72,7 +72,7 @@
                         <p class="riview_disc" th:text="${#strings.abbreviate(data.reviewCn,80)}">수업이 재밌대요. 수업중 밖에서 들어보면 우렁차게 잘 대답 하더라구요. 수업 마치면 Homework가 있다고 끝나자마자 아주 오리고 붙이고 바쁘네요 일단 어른이 봐도 수업자료가 아주 재밌어보여요 저희 아이는 숙제가 끝난 후에도 자료를 가지고 게임하듯이 놀더라구요.</p>
                     </div>
 				</div>
-                 <div th:unless = "${!resultList.isEmpty()}" class="no-data">
+				<div th:unless = "${!resultList.isEmpty()}" class="no-data">
 					데이터가 존재하지 않습니다.
 				</div>
                 <div class="bg_ico3">

@@ -132,6 +132,7 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
 						eqOpenYn( listDto.getOpenYn() ),
 						eqReplyYn( listDto.getReplyYn() ),
                 		eqClassSn( listDto.getClassSn() ),
+						eqUserSn( listDto.getUserSn() ),
 						classReview.step.eq("1")
 				)
                 .orderBy(
@@ -364,6 +365,10 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
 	
 	private BooleanExpression eqOpenYn( String openYn ) {
 		return (StringUtils.hasText(openYn) )  ? classReview.openYn.eq(openYn) : null;
+	}
+
+	private BooleanExpression eqUserSn( Long userSn ) {
+		return ( userSn != null ) ? classReview.userSn.eq(userSn) : null;
 	}
 	
 	private BooleanExpression eqReplyYn( String replyYn ) {

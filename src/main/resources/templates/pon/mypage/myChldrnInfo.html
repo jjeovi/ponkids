@@ -189,19 +189,19 @@
 		<!-- S : 하단 버튼 영역 -->
 		<div class="article_detail_footer">
 			<th:block th:if="${targetDto ne null}">
-			<div class="whiteBtn">
+			<div class="whiteBtn" th:if="${pageType eq 'mod'}" >
 				<a href="/mypage/reqstHistory/list">
 				<a th:href="'javascript:deleteItem(\'' + ${targetDto.chldrnSn} + '\');'">
 					<span>삭제</span>
 				</a>
 			</div>
 			</th:block>
-			<div class="ml_20p" th:if="${pageType eq 'mod'}">
+			<div class="ml_20p" th:if="${pageType eq 'mod'}" >
 				<a href="javascript:;" onclick="updateMyChldrn()" >
 					<span>수정</span>
 				</a>
 			</div>
-			<div class="ml_20p" th:if="${pageType eq 'add'}">
+			<div class="ml_20p" th:if="${pageType eq 'add'}" >
 				<a href="javascript:;" onclick="addMyChldrn()" >
 					<span>등록</span>
 				</a>

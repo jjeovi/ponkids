@@ -1,9 +1,12 @@
 package com.meta.ponkids.domain.mypage.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.meta.ponkids.domain.cls.dto.ClassReviewListDto;
+import com.meta.ponkids.domain.cls.service.ClassReviewService;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 import com.meta.ponkids.domain.user.dto.UserChldrnListDto;
 import com.meta.ponkids.domain.user.dto.UserChldrnSaveDto;
@@ -11,6 +14,7 @@ import com.meta.ponkids.domain.user.dto.UserModDto;
 import com.meta.ponkids.domain.user.repository.UserRepository;
 import com.meta.ponkids.domain.user.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -64,12 +68,15 @@ public class MypageController {
 	private final AtchFileService atchFileService;
 
 	private final CmmnCdDetailService cmmnCdDetailService;
+
+	private final ClassReviewService classReviewService;
 	
 	// layout 관련 dataSet 처리는 
 	// - MypageAop.java 에서 처리 ( 관심개수.. 등 ) 
 	// - 로그인 체크 : AuthPreInterceptor.java 에서 처리 하여 return  
 	
 	@GetMapping( "/" )
+	// 여러개 mapping
 	public String main( Model model ) {
 		
 		return "forward:/mypage/reqstHistory/list";   
@@ -133,10 +140,23 @@ public class MypageController {
 	
 	
 	@GetMapping( "/reviewList" )
-	public String reviewList( Model model ) {
+	public String reviewList( @ModelAttribute ClassReviewListDto listDto,
+							  @PageableDefault( size = 8 ) Pageable pageable,
+							  Model model ) {
 		
 		// S : 필요한 객체 setting
-		
+		// userSn setting
+		Long userSn = SessionUtils.getAuthUserSn();
+
+		// 목록 조회
+		Page<ClassReviewListDto> resultList = classReviewService.getList( listDto, pageable );
+		model.addAttribute( "resultList", resultList );
+
+		// 검색 dto setting
+		model.addAttribute( "searchDTO", listDto );
+
+
+		// 내 리뷰 리스트 setting
 		
 		// E : 필요한 객체 setting
 		
@@ -232,15 +252,25 @@ public class MypageController {
 			pageType = "mod";
 		}
 		
-		UserChldrnListDto userChldrnListDto = userChldrnRepository.getByUserSnAndUserChldrnSeq( SessionUtils.getAuthUserSn(), userChldrnSeq );
-		
-		if ( userChldrnListDto == null ) {
+
+		List<UserChldrnListDto> userChldrnListDto = userChldrnRepository.getListByUserSn( SessionUtils.getAuthUserSn() );
+		UserChldrnListDto userChldrnDto = userChldrnRepository.getByUserSnAndUserChldrnSeq( SessionUtils.getAuthUserSn(), userChldrnSeq );
+
+		if( userChldrnListDto.size() == 0 ) {
+			pageType = "add";
+		} else if ( userChldrnListDto.size() > 0 && userChldrnDto == null ) {
+			userChldrnSeq = userChldrnListDto.get(0).getUserChldrnSeq();
+		}
+
+		userChldrnDto = userChldrnRepository.getByUserSnAndUserChldrnSeq( SessionUtils.getAuthUserSn(), userChldrnSeq );
+
+		if ( userChldrnDto == null ) {
 			pageType = "add";
 		}
 		model.addAttribute( "pageType", pageType );
 		
 		// default : 자녀 불러오기 ( userChldrnSeq 번째 자녀 )
-		model.addAttribute( "targetDto", userChldrnListDto );
+		model.addAttribute( "targetDto", userChldrnDto );
 		
 		// default : 자식 list  
 		model.addAttribute( "userChldrnListDto", userChldrnRepository.getListByUserSn( SessionUtils.getAuthUserSn() ) );
@@ -332,10 +362,12 @@ public class MypageController {
 			saveDto.setAtchFileSn( atchFileService.save( files ) );    // 파일 save (파일 개수 1개일 때 )
 		}
 		
-		// saveDto 저장 시 ,userChldrnSeq =  현재 자녀들의 userChldrnSeq 최대값 + 1 로 setting
-		saveDto.setUserChldrnSeq( (Long) ( userChldrnRepository.findMaxUserChldrnSeq( userSn ) + 1 ));
-		
-		
+		// saveDto 에 userChldrnSeq =  현재 자녀들의 userChldrnSeq 최대값 + 1 로 setting . 단 최대값이 NULL일 경우를 체크해야함. NULL이라면 0으로 setting
+		Long nowUserChldrnSeq = userChldrnRepository.findMaxUserChldrnSeq( userSn );
+		nowUserChldrnSeq = nowUserChldrnSeq == null ? 0 : nowUserChldrnSeq;
+
+		saveDto.setUserChldrnSeq( ( Long ) ( nowUserChldrnSeq + 1 ) );
+
 		// 신규 자녀 등록 처리
 		userChldrnService.save( saveDto, request );
 		

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{pon/layout/layout_mypage}">
+
+<head layout:fragment="head">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<!-- Meta, title, CSS, favicons, etc. -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="_csrf" th:content="${_csrf.token}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+	<title layout:fragment="title">피오니키즈</title>
+
+</head>
+<title layout:fragment="title">피오니키즈 - pioneerkids</title>
+<!-- S : Javascript functions	-->
+<div layout:fragment="script">
+	<!-- js -->
+</div>
+
+<!-- E : Javascript functions	-->
+<div layout:fragment="content" class="sub_box mypage_contents">
+	<form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="form">
+	<div class="mypage_list_box" >
+		<div class="article_top">
+			<span>총 게시물 <strong th:utext="${resultList.totalElements}"> </strong></span>
+			<select name="schOption" onchange="reviewOrderby();" >
+				<option value="A" th:selected=" ${searchDTO.schOption} == 'A'" >최신등록순</option>
+				<option value="B" th:selected=" ${searchDTO.schOption} == 'B'" >별점높은순</option>
+				<option value="C" th:selected=" ${searchDTO.schOption} == 'C'" >별점낮은순</option>
+			</select>
+		</div>
+		<div class="review_list" th:classappend="${ (resultList.isEmpty())} ? 'no-data'">
+			<div class="review_item" th:if = "${!resultList.isEmpty()}" th:each="data : ${resultList}" th:onclick="|detailReviewLayer('${data.classReviewSn}')|" >
+				<div class="review_thumbnail">
+					<img th:src="@{/getImage(atchFileSn=${data.thumbAtchFileSn})}" alt="클래스수업후기이미지">
+				</div>
+				<div class="review_content">
+					<div class="review_info">
+						<div class="review_name">
+							<h5 th:text="|${#strings.substring(data.userNm, 0, 1)}**|" >김**</h5>
+						</div>
+						<div class="like_star" >
+							<img src="/pon/common/image/star_like.svg" th:each="num : ${#numbers.sequence(1,data.reviewGradeLong)}" alt="후기별점" >
+						</div>
+					</div>
+					<p class="riview_tit" th:text="${data.classSj}" ></p>
+					<p class="riview_disc" th:text="${#strings.abbreviate(data.reviewCn,80)}"></p>
+				</div>
+			</div>
+			<div th:unless = "${!resultList.isEmpty()}" class="no-data">
+				데이터가 존재하지 않습니다.
+			</div>
+			<div class="bg_ico3">
+				<img src="/pon/common/image/space_one.png" alt="">
+			</div>
+		</div>
+		<div class="paging_box" th:insert="~{pon/layout/tiles/paging :: paging('listForm', ${resultList})}">
+		</div>
+	</div>
+	</form>
+
+	<!-- 수업후기 상세 조회 ( detail )  layer -->
+	<div class="layer_detailClassReview"	style="display: none;"	th:insert="pon/layer/layer_detailClassReview.html" />
+</div>
+
+</html>

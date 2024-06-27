@@ -25,7 +25,7 @@ public class MypageAop {
 	@Value( "${key.menuCd.auth}" )
 	private String MCD;
 	
-	// 모든 controller mapping 조건이 기준 -> '/admin/' 으로 시작하는 url만 필터 (url필터는 소스로처리)
+	// Mypagecontroller mapping 조건이 기준
 	@Pointcut( "execution(* *..*MypageController..*(..))" )
 	public void paramSet() {
 	}
