@@ -53,6 +53,7 @@
 						<div class="profile_pic">
 							<img th:if="${#authentication.principal.atchFileSn == null }" src="/common/images/img.jpg" class="img-circle upload-thumb noimg" >
 							<img th:unless="${#authentication.principal.atchFileSn == null }" th:src="@{/getImage(atchFileSn=${#authentication.principal.atchFileSn})}" class="img-circle upload-thumb" >
+							<input type="hidden" th:value="${#authentication.principal.userSn}" name="test">
 						</div>
 						<div class="profile_info pl_20p">
 							<span class="profile_title">

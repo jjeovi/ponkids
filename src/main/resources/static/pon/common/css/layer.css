@@ -1988,6 +1988,24 @@ input[type="radio"][disabled]:checked+label{
 
 .detail_review_box .like_star img{ max-width: 17px; }
 
+.review_footer {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.review_footer > div.redBtn {
+    padding: 10px 30px;
+    box-sizing: border-box;
+    display: inline-block;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: rgb(255 90 90);
+    border: 1px solid;
+    border-color: rgb(255 90 90);
+    padding-top: 8px;
+    color: #fff;
+}
+
 /* E : 클래스 리뷰 (상세 조회 ) */
 
 
@@ -2394,3 +2412,6 @@ span {
         margin-bottom: 0;
     }
 }
+
+
+

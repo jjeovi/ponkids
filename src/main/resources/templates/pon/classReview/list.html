@@ -35,6 +35,7 @@
 <!-- E : Javascript functions	-->
 <div layout:fragment="content">
 	<form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="form">
+		<input th:if="${#authentication.principal ne 'anonymousUser' }" type="hidden" name="userSn" th:value="${#authentication.principal.userSn}" >
 		<input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
 		<div class="sub_box review">
 			<div class="top_tit">

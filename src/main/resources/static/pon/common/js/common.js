@@ -474,6 +474,16 @@ function amtSetComma( val ){
 		$("#detailReviewRegDt").text( result.regDt );
 		$("#detailReviewCn").text( result.reviewCn );
 		// E : 작성자(마스킹), 별점, 등록일, 후기내용 setting
+
+
+		// 로그인 되어 있을 시, 본인 여부 확인
+		// userSn 이 같을 시 , review_footer show
+		if ( $( "[name='listForm'] [name='userSn']" ).val() == result.userSn ) {
+			$( "#reviewDeleteA" ).data( "delPk", result.classReviewSn );
+			$( ".review_footer" ).show();
+		} else {
+			$( ".review_footer" ).hide();
+		}
 	}
 
 /* E : 리뷰 ( 후기 ) */

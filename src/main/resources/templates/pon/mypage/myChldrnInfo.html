@@ -189,8 +189,7 @@
 		<!-- S : 하단 버튼 영역 -->
 		<div class="article_detail_footer">
 			<th:block th:if="${targetDto ne null}">
-			<div class="whiteBtn" th:if="${pageType eq 'mod'}" >
-				<a href="/mypage/reqstHistory/list">
+			<div class="redBtn" th:if="${pageType eq 'mod'}" >
 				<a th:href="'javascript:deleteItem(\'' + ${targetDto.chldrnSn} + '\');'">
 					<span>삭제</span>
 				</a>

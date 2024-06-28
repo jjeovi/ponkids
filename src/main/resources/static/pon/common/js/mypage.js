@@ -49,7 +49,7 @@ function goClassReview( classSn ){
 				eraseReviewLayerData();
 				
 				// 2. 후기 작성하기 layer data setting 
-				setReviewLayerData( ajaxResult );	
+				setReviewLayerDataMyPage( ajaxResult );
 				
 				// 3. 문의 등록 layer 표출
 				showLayer('registClassReview');
@@ -70,7 +70,7 @@ function goClassReview( classSn ){
 	
 	
 	// 문의 상세 조회 모달창 내용 setting 작업
-	function setReviewLayerData( ajaxResult ) {
+	function setReviewLayerDataMyPage( ajaxResult ) {
 		
 		var result 			= ajaxResult.resultOne;
 		
@@ -129,7 +129,6 @@ function goClassReview( classSn ){
 	    if ( confirm( "삭제하시겠습니까?" ) ) {
 	        $( "[name='deleteForm']" ).find( "#delPk" ).val( delPk );
 	        $( "[name='deleteForm']" ).submit();
-	
 	    }
 	}
 

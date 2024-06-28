@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{pon/layout/layout_mypage}">
+	  layout:decorate="~{pon/layout/layout_mypage}"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head layout:fragment="head">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -23,6 +24,8 @@
 <!-- E : Javascript functions	-->
 <div layout:fragment="content" class="sub_box mypage_contents">
 	<form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="form">
+	<input th:if="${#authentication.principal ne 'anonymousUser' }" type="hidden" name="userSn" th:value="${#authentication.principal.userSn}" >
+
 	<div class="mypage_list_box" >
 		<div class="article_top">
 			<span>총 게시물 <strong th:utext="${resultList.totalElements}"> </strong></span>
@@ -32,7 +35,7 @@
 				<option value="C" th:selected=" ${searchDTO.schOption} == 'C'" >별점낮은순</option>
 			</select>
 		</div>
-		<div class="review_list" th:classappend="${ (resultList.isEmpty())} ? 'no-data'">
+		<div class="review review_list" th:classappend="${ (resultList.isEmpty())} ? 'no-data'">
 			<div class="review_item" th:if = "${!resultList.isEmpty()}" th:each="data : ${resultList}" th:onclick="|detailReviewLayer('${data.classReviewSn}')|" >
 				<div class="review_thumbnail">
 					<img th:src="@{/getImage(atchFileSn=${data.thumbAtchFileSn})}" alt="클래스수업후기이미지">

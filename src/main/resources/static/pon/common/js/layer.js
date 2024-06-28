@@ -1166,3 +1166,20 @@ function validCheckPw(password) {
 }
     /* E: 성환: 비빌번호 변경 */
 
+
+// formName, pk 로 deleteItem 함수 구현.
+// confirm 으로 삭제할건지 물어본 뒤
+// pk 값을 formName form의 pk 에 대입 후, submit
+
+
+
+// delete function
+function deleteItem( formName, e ) {
+
+    var delPk = $( e ).data( "delPk" );
+    if ( confirm( "삭제하시겠습니까?" ) ) {
+        $( "form[name='" + formName + "']" ).find( "#delPk" ).val( delPk );
+        $( "form[name='" + formName + "']" ).submit();
+
+    }
+}

@@ -7,12 +7,18 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.meta.ponkids.domain.cls.dto.ClassReviewListDto;
 import com.meta.ponkids.domain.cls.service.ClassReviewService;
+import com.meta.ponkids.domain.lctre.dto.LctreModDto;
+import com.meta.ponkids.domain.lctre.dto.LctreReqstListDto;
+import com.meta.ponkids.domain.lctre.repository.LctreReqstDetailRepository;
+import com.meta.ponkids.domain.lctre.service.LctreService;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 import com.meta.ponkids.domain.user.dto.UserChldrnListDto;
 import com.meta.ponkids.domain.user.dto.UserChldrnSaveDto;
 import com.meta.ponkids.domain.user.dto.UserModDto;
 import com.meta.ponkids.domain.user.repository.UserRepository;
 import com.meta.ponkids.domain.user.service.UserService;
+import com.meta.ponkids.global.util.date.DateConstants;
+import com.meta.ponkids.global.util.date.DateUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,7 +63,8 @@ public class MypageController {
 	
 	
 	private final ClassReqstService classReqstService;
-	
+
+	private final LctreService lctreService;
 	private final LctreReqstService lctreReqstService;
 	
 	
@@ -137,7 +144,96 @@ public class MypageController {
 		model.addAttribute( "mypageMcd", "reqstHistory" );
 		return USER_VIEW_PATH + BASIC_PATH + "/reqstHistory/detail";
 	}
-	
+
+
+	@Transactional
+	@PostMapping( "/reqstHistory/cancel" )
+	public String reqstHistoryCancel( @RequestParam( required = true ) Long pk,	// 타입 체크
+									  HttpServletRequest request,
+									  Model model ) {
+
+		// S : 필요한 객체 setting
+
+
+
+		// 삭제 process
+		// =================================================================================
+		// 0. 유효성 체크 작업
+		// 1. 클래스 신청 (TB_CLASS_REQST) 에서 삭제  (1 건)
+		// 2. 수업 신청 ( TB_LCTRE_REQST) 에서 삭제  ( 여러건 가능 )
+		// 3. 수업 신청 상세 ( TB_LCTRE_REQST_DETAIL ) 에서 삭제 ( 2번 count 에서 추가로 여러건 또 가능 )
+		// =================================================================================
+
+		// 저장 후 이동할 url setting
+		String moveUrl = BASIC_PATH + "/reqstHistory/list" ;
+
+		// 0-1. 로그인 세션 체크
+		// - auth pre interceptor 에서 이미 체크함.
+
+		// 0-2. 본인 신청건인지 체크
+		// - classReqstSn 으로 userSn 조회하여 본인 신청건인지 체크
+		ClassReqstListDto targetDto = classReqstService.getByClassReqstSn( pk );
+		if( targetDto == null ) {
+			model.addAttribute( "resultMsg", "신청 클래스 정보가 존재하지 않습니다." );
+			model.addAttribute( "moveUrl", moveUrl );
+
+			return "common/alert";
+		}
+		if ( !targetDto.getUserSn().equals( SessionUtils.getAuthUserSn() ) ) {
+			// 메시지 출력 및 url 이동 처리
+			model.addAttribute( "resultMsg", "로그인 정보를 확인해주세요." );
+			model.addAttribute( "moveUrl", moveUrl );
+
+			return "common/alert";
+		}
+
+
+		// 0-3. 수업 시작일자 지났다면 취소 불가능
+		// 수업 조회
+		List<LctreReqstListDto> lctreReqstListDto = lctreReqstService.getListByClassReqstSn( pk );
+
+		if( lctreReqstListDto == null ) {
+			model.addAttribute( "resultMsg", "신청 수업 정보가 존재하지 않습니다." );
+			model.addAttribute( "moveUrl", moveUrl );
+
+			return "common/alert";
+		}
+
+		Long lctreSn = lctreReqstListDto.get(0).getLctreSn();
+		LctreModDto targetLctreDto = lctreService.findById( lctreSn );
+		if( targetLctreDto == null ) {
+			model.addAttribute( "resultMsg", "신청 수업 정보가 존재하지 않습니다." );
+			model.addAttribute( "moveUrl", moveUrl );
+
+			return "common/alert";
+		}
+
+		// 수업 시작 일자와 오늘일자를 비교
+		// targetLctreDto.getLctreDt();		// 수업 시작일자
+		String dateTimeString = DateUtils.getCurrentDateString(DateUtils.DF_YYYYMMDDHHMMSS_DP);	// 오늘 날짜
+
+		if ( DateUtils.isBeforeDate( dateTimeString, targetLctreDto.getLctreDt() ) ) {
+			model.addAttribute( "resultMsg", "이미 시작한 수업이라 취소할 수 없습니다." );
+			model.addAttribute( "moveUrl", moveUrl );
+
+			return "common/alert";
+		}
+
+		// 1. 클래스 신청 (TB_CLASS_REQST) 에서 삭제  (1 건)
+		classReqstService.deleteById( pk ) ;
+
+		// 2. 수업 신청 ( TB_LCTRE_REQST) 에서 삭제  ( 여러건 가능 )
+		// 3. 수업 신청 상세 ( TB_LCTRE_REQST_DETAIL ) 에서 삭제 ( 2번 count 에서 추가로 여러건 또 가능 )
+
+		// 2,3 번 동시에 수행.
+		lctreReqstService.deleteByClassReqstSn( pk );
+
+		// 메시지 출력 및 url 이동 처리
+		model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
+		model.addAttribute( "moveUrl",	moveUrl );
+
+		return "common/alert";
+	}
 	
 	@GetMapping( "/reviewList" )
 	public String reviewList( @ModelAttribute ClassReviewListDto listDto,
@@ -146,7 +242,7 @@ public class MypageController {
 		
 		// S : 필요한 객체 setting
 		// userSn setting
-		Long userSn = SessionUtils.getAuthUserSn();
+		listDto.setUserSn( SessionUtils.getAuthUserSn() );
 
 		// 목록 조회
 		Page<ClassReviewListDto> resultList = classReviewService.getList( listDto, pageable );

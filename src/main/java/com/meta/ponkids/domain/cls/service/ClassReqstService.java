@@ -139,12 +139,12 @@ public class ClassReqstService {
 //        
 //    }
 //    
-//    @Transactional
-//    public void deleteAllById( Long pk ) {
-//        
-//        // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
-//        classRepository.deleteById( pk );    // Entity 의 @SQLDelete 를 수행
-//    }
+    @Transactional
+    public void deleteById( Long pk ) {
+
+        // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
+        classReqstRepository.deleteById( pk );    // Entity 의 @SQLDelete 를 수행
+    }
 //    
 //    
 //    

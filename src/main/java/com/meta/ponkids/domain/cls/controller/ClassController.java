@@ -299,7 +299,10 @@ public class ClassController {
 		// 2. TB_LCTRE_REQST insert
 		// 3. TB_LCTRE_REQST_DETAIL insert
 		// 2번 3번 2개 모두 lctreReqstService.save() 에서 수행
-		// ===========================================
+		// ====================
+		//
+		//
+		// =======================
 		lctreReqstService.save(lctreReqsts, request );
 		
 		// 메시지 출력 및 url 이동 처리

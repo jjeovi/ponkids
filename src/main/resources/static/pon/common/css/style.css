@@ -568,6 +568,13 @@ font-family: 'yg-jalnan';
     border-color: #747474;
     color: #000;
 }
+
+.article_detail_footer > div.redBtn {
+    background-color: rgb(255 90 90);
+    border: 1px solid;
+    border-color: rgb(255 90 90);
+    color: #fff;
+}
 .article_detail_footer img{width: 13px;}
 
 .cursor {cursor: pointer;}

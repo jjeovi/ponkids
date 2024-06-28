@@ -190,8 +190,9 @@ public class ClassReqstRepositoryImpl implements ClassReqstRepositoryCustom {
     
     // userSn where 절에 조회
     private BooleanExpression eqUserSn( Long userSn ) {
-        return ( userSn == null ) ? ( classReqst.userSn.eq(userSn) ) : null;
+        return ( userSn != null ) ? ( classReqst.userSn.eq( userSn ) ) : null;
     }
+
     
     
     // pk 로 고유값 1건만 조회

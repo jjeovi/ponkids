@@ -416,6 +416,19 @@ public class DateUtils implements DateConstants {
         int compare = currentDate.compareTo( compareDate );
         return compare > 0;
     }
+
+    /**
+     * 입력한 일자(A)가 오늘일자(B) 기준 이전일자인지 여부 (오늘일자 포함 안함) (A < B)
+     *
+     * @param date 일자
+     * @return 여부
+     */
+    public static boolean isBeforeDate( Date date , String format ) {
+        String currentDate = getCurrentDateString();
+        String compareDate = toDateString( date, format );
+        int compare = currentDate.compareTo( compareDate );
+        return compare > 0;
+    }
     
     /**
      * 입력한 일자(A)가 오늘일자(B) 기준 이전일자인지 여부 (오늘일자 포함 안함)(A < B)

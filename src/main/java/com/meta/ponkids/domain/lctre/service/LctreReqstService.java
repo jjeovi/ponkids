@@ -123,7 +123,16 @@ public class LctreReqstService {
 		m.setLctreReqstDetails( lctreReqstDetailRepository.getListByLctreReqstSn( m.getLctreReqstSn() ) );
 		return m;
 	}
-	
+
+	@Transactional
+	public void deleteByClassReqstSn( Long classReqstSn ) {
+
+		// 1. 수업 신청 delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
+		lctreReqstRepository.deleteByClassReqstSn( classReqstSn );
+		// 2. 수업 상세 신청 delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
+		lctreReqstDetailRepository.deleteByClassReqstSn( classReqstSn );
+	}
+
 
 
 }
