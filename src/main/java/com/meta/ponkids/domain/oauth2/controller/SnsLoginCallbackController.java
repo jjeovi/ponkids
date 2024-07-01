@@ -1,4 +1,4 @@
-package com.meta.ponkids.domain.oauth2.controller;
+ package com.meta.ponkids.domain.oauth2.controller;
 
 import java.io.IOException;
 import java.util.HashMap;

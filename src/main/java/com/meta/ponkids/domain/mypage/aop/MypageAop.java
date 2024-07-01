@@ -2,6 +2,8 @@ package com.meta.ponkids.domain.mypage.aop;
 
 import java.lang.reflect.Method;
 
+import com.meta.ponkids.domain.cls.repository.ClassLikeRepository;
+import com.meta.ponkids.global.util.session.SessionUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -22,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MypageAop {
 	
+	private final ClassLikeRepository classLikeRepository;
 	@Value( "${key.menuCd.auth}" )
 	private String MCD;
 	
@@ -37,7 +40,7 @@ public class MypageAop {
 		// 마이페이지 공통으로 메서드 실행 되기 전 
 		// 필수 요소 파라미터를 model 에 추가하여 보낸다.
 		// - 1.관심 개수 (좋아요 한 개수 )
-		
+		int classLikeCnt = classLikeRepository.countByUserSn( SessionUtils.getAuthUserSn() );
 		
 		// S : model declare
 		Model model = null;
@@ -54,7 +57,7 @@ public class MypageAop {
 		// E : model declare
 		
 		// - 1.관심 개수 (좋아요 한 개수 )
-		model.addAttribute( "testParam", "play" );
+		model.addAttribute( "classLikeCnt", classLikeCnt	);
 
 		
 	}

@@ -103,8 +103,8 @@
 <!--	</div>-->
 	<!-- footer -->
 	<div class="article_detail_footer">
-		<div class="redBtn" >
-			<a th:href="'javascript:classCancel(\'' + ${targetDto.classReqstSn} + '\');'">
+		<div class="redBtn" th:onclick="'classCancel(\'' + ${targetDto.classReqstSn} + '\');'">
+			<a th:href="'javascript:;'">
 				<span>취소</span>
 			</a>
 		</div>

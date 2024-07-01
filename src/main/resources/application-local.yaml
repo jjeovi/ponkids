@@ -46,6 +46,9 @@ key :
     cmmnCd:
         jsonFilePath : \file\cmmnCd\                                   # 사용자 메뉴 파일 생성 경로 ( window )
     divider: \                                                         # 파일 구분자 ( window )
+    summernote :
+        upload :
+            path : src/main/resources/summernote/uploads                              # summernote 파일 업로드 경로 ( window )
         
 ######################################################################################################################
 
