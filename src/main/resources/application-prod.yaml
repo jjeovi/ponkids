@@ -30,6 +30,9 @@ key :
     cmmnCd :
         jsonFilePath : /file/cmmnCd/
     divider : /
+    summernote :
+        upload :
+            path : /web/ponkids/summernote/uploads/                    # summernote 파일 업로드 경로 : 운영 서버
         
 ######################################################################################################################
 

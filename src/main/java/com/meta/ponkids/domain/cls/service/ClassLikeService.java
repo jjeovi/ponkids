@@ -51,5 +51,12 @@ public class ClassLikeService {
         
     }
 	
+	// like 개수 확인하는 로직 구현
+	@Transactional
+	public int findByUserSn( long userSn ) {
+		
+		return classLikeRepository.countByUserSn( userSn );
+		
+	}
 
 }

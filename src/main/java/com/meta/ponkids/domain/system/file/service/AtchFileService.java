@@ -65,7 +65,7 @@ public class AtchFileService {
         // ------------------------------------------------
 
 //		String contentType = file.getContentType();
-        AtchFile newAtchFile = atchFileRepository.save( new AtchFile() );    // 신규 파일 생성
+        AtchFile newAtchFile = atchFileRepository.saveAndFlush( new AtchFile() );    // 신규 파일 생성
         
         // atchFileDetailSaveDto 생성
         AtchFileDetailSaveDto atchFileDetailSaveDto = new AtchFileDetailSaveDto();
@@ -85,7 +85,7 @@ public class AtchFileService {
         AtchFileDetail atchFileDetail = atchFileDetailSaveDto.toEntity();
         
         // 파일 상세 save
-        atchFileDetailRepository.save( atchFileDetail );
+        atchFileDetailRepository.saveAndFlush( atchFileDetail );
         
         return newAtchFile.getAtchFileSn();
         

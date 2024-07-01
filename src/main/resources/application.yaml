@@ -60,7 +60,9 @@ key :
       userRootMenuSn  : 200                                           # 사용자 루트 메뉴sn
       directoryPath:
           user: pon                                                   # 사용자 디렉토리 경로 (path) default
-      
+      summernote :
+          upload :
+              path : /web/ponkids/summernote/uploads/                  # summernote 파일 업로드 경로
     admin : 
         auth : pon                                                    # 로그인(관리자) 인증용 key (admLogin?auth="pon" 부분.  일반로그인이랑 SNS는 해당되지 않음. )
     menuCd : 

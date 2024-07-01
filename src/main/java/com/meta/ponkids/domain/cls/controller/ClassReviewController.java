@@ -50,7 +50,9 @@ public class ClassReviewController {
                         Model model ) {
     	
     	// S : 필요한 객체 setting
-    	
+        
+        // openYn setting : Y 만 조회 ( default : Y )
+    	listDto.setOpenYn( "Y" );
     	// 목록 조회
         Page<ClassReviewListDto> resultList = classReviewService.getList( listDto, pageable );
         model.addAttribute( "resultList", resultList );

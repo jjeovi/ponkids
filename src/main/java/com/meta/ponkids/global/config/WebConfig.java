@@ -1,5 +1,6 @@
 package com.meta.ponkids.global.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -17,6 +18,10 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
+
+	
+	@Value("${key.summernote.upload.path}")
+	private String uploadDir;
     
 
     private final AuthAdmInterceptor	authAdmInterceptor;
@@ -132,7 +137,7 @@ public class WebConfig implements WebMvcConfigurer {
         // templates 도 classpath 로 설정 ( /static/~ , /templates/~ 를 모두 정적으로 read 할 수 있다.
         
         registry.addResourceHandler( "/summernoteImage/**" )
-                .addResourceLocations( "file:///C:/summernote_image/" );
+                .addResourceLocations( "file:" + uploadDir + "/" );
         
         registry.addResourceHandler( "/**" )
                 .addResourceLocations( "classpath:/templates/", "classpath:/static/" );

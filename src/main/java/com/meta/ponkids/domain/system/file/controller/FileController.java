@@ -8,6 +8,7 @@ import com.meta.ponkids.domain.system.file.entity.AtchFileDetail;
 import com.meta.ponkids.domain.system.file.service.AtchFileDetailService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,13 +29,19 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
 public class FileController {
     
+    @Value("${key.summernote.upload.path}")
+    private String uploadDir;
     
     private final AtchFileService atchFileService;
     private final AtchFileDetailService atchFileDetailService;
@@ -81,34 +89,56 @@ public class FileController {
      * date : 2023-11-20
      * description : 에디터 이미지 업로드
      */
-    @PostMapping( value = "/uploadSummernoteImageFile", produces = "application/json" )
-    @ResponseBody
-    public JsonObject uploadSummernoteImageFile( @RequestParam( "file" ) MultipartFile multipartFile ) {
+    @CrossOrigin(origins = "*") // 모든 도메인 허용
+    @PostMapping( value = "/uploadSummernoteImageFile" )
+//    @ResponseBody
+    public ResponseEntity<?>  uploadSummernoteImageFile( @RequestParam( "file" )  MultipartFile file, RedirectAttributes redirectAttributes ) {
         
-        JsonObject jsonObject = new JsonObject();
         
-        String fileRoot = "C:\\summernote_image\\"; // 저장될 외부 파일 경로
-        String originalFileName = multipartFile.getOriginalFilename(); // 오리지날 파일명
-        String extension = originalFileName.substring( originalFileName.lastIndexOf( "." ) ); // 파일 확장자
-        
-        String savedFileName = UUID.randomUUID() + extension; // 저장될 파일 명
-        
-        File targetFile = new File( fileRoot + savedFileName );
-        
-        try {
-            InputStream fileStream = multipartFile.getInputStream();
-            FileUtils.copyInputStreamToFile( fileStream, targetFile ); // 파일 저장
-            
-            jsonObject.addProperty( "url", "/summernoteImage/" + savedFileName );
-            jsonObject.addProperty( "responseCode", "success" );
-            
-        } catch ( IOException e ) {
-            FileUtils.deleteQuietly( targetFile ); // 저장된 파일 삭제
-            jsonObject.addProperty( "responseCode", "error" );
-            e.printStackTrace();
+        if (file.isEmpty()) {
+            return new ResponseEntity<>("Please select a file to upload.", HttpStatus.BAD_REQUEST);
         }
         
-        return jsonObject;
+        try {
+            // Generate a unique file name
+            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            Path path = Paths.get(uploadDir + File.separator + fileName);
+            Files.write(path, file.getBytes());
+            
+            // Return the file download url
+            Map<String, String> response = new HashMap<>();
+            response.put("url", "/summernoteImage/" + fileName);
+            return ResponseEntity.ok(response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
+//
+//        JsonObject jsonObject = new JsonObject();
+//
+//        String fileRoot = "C:\\summernote_image\\"; // 저장될 외부 파일 경로
+//        String originalFileName = multipartFile.getOriginalFilename(); // 오리지날 파일명
+//        String extension = originalFileName.substring( originalFileName.lastIndexOf( "." ) ); // 파일 확장자
+//
+//        String savedFileName = UUID.randomUUID() + extension; // 저장될 파일 명
+//
+//        File targetFile = new File( fileRoot + savedFileName );
+//
+//        try {
+//            InputStream fileStream = multipartFile.getInputStream();
+//            FileUtils.copyInputStreamToFile( fileStream, targetFile ); // 파일 저장
+//
+//            jsonObject.addProperty( "url", "/summernoteImage/" + savedFileName );
+//            jsonObject.addProperty( "responseCode", "success" );
+//
+//        } catch ( IOException e ) {
+//            FileUtils.deleteQuietly( targetFile ); // 저장된 파일 삭제
+//            jsonObject.addProperty( "responseCode", "error" );
+//            e.printStackTrace();
+//        }
+//
+//        return jsonObject;
     }
     
     /**
