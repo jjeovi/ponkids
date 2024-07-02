@@ -160,6 +160,18 @@ function detailClass( classSn ) {
 	location.href = "/class/mcdClass/detail?pk=" + classSn;
 }
 
+
+// 게시물 > 상세보기 event
+function detailNtt( e ) {
+
+	var nttSn =  $(e).data("nttSn");
+	var bbsSn =  $(e).data("bbsSn");
+	var mcd =  $(e).data("mcd");
+
+	location.href = "/ntt/" + mcd + "/" + bbsSn + "/detail?pk=" + nttSn;
+}
+
+
 // 팝업창 실행 event 
 function showLayer( layerId ) {
 	
@@ -1195,3 +1207,4 @@ function showLayerTabType( divName ){
 }
 
 /* E : 설문조사 set */
+

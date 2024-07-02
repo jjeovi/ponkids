@@ -24,6 +24,34 @@
 <!-- S : Javascript functions	-->
 <div layout:fragment="script">
 	<!-- js -->
+	<script>
+
+		$( function () {
+// 공유하기
+			$( '.shareContent' ).on( 'click', function () {
+				var bbsSn = $(this).data("bbs-sn");
+				var mcd = $(this).data("mcd");
+				var nttSn = $(this).data("ntt-sn");
+
+
+				var t = document.createElement("textarea");
+
+				document.body.appendChild(t);
+
+				// 현재 도메인 var setting
+				var currentDomain = location.protocol + '//' + location.host;
+
+				var copyUrl = currentDomain + '/ntt/' + mcd + '/' + bbsSn + '/detail?pk='  + nttSn
+
+				t.value = copyUrl;
+				t.select();
+				document.execCommand('copy');
+				document.body.removeChild(t);
+				alert("클립보드에 복사되었습니다.");
+			} );
+		});
+
+	</script>
 </div>
 
 <!-- E : Javascript functions	-->
@@ -44,7 +72,7 @@
 					<h2 th:text="${targetDto.nttNm}">게시물 제목</h2>
 					<div class="article_detail_date">
 						<span th:text="${targetDto.updtDt}">게시물 최종수정일</span>
-						<img src="/pon/common/image/share.svg" alt="공유아이콘">
+						<img class="shareContent" src="/pon/common/image/share.svg" alt="공유아이콘" th:data-bbs-sn="${bbsSn}" th:data-mcd="${mcd}" th:data-ntt-sn="${targetDto.nttSn}">
 					</div>
 				</div>
 				<div class="article_detail_body" th:utext="${targetDto.nttCn}">

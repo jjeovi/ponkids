@@ -50,9 +50,9 @@
 			<div class="card_list card_box" th:classappend="${ (resultList.isEmpty())} ? 'no-data'">
 				<div class="card_item" th:each=" data : ${resultList} ">
 					<div class="item_img">
-						<img th:src="@{/getImage(atchFileSn=${data.atchFileSn})}" alt="클래스이미지" th:onclick="|detailClass(${data.nttSn});|">
+						<img th:src="@{/getImage(atchFileSn=${data.atchFileSn})}" alt="클래스이미지" th:data-ntt-sn="${data.nttSn}" th:data-bbs-sn="${bbsSn}" th:data-mcd="${mcd}"  th:onclick="|detailNtt( this );|">
 					</div>
-					<div class="item_info" th:onclick="|detailClass(${data.nttSn});|" >
+					<div class="item_info"   th:data-ntt-sn="${data.nttSn}" th:data-bbs-sn="${bbsSn}" th:data-mcd="${mcd}" th:onclick="|detailNtt( this );|" >
 						<p th:text="${data.nttNm}">한국근현대미술전! 엄마 우리나라에서 제일 비싼 그림은 누가 그렸어요?</p>
 					</div>
 				</div>

@@ -476,8 +476,7 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
 
     // userSn으로 클래스 관심 조회
     private BooleanExpression eqUserSn( Long userSn ) {
-//        return ( userSn == null ) ? ( classLike.userSn.isNull() ) : ( classLike.userSn.eq( userSn ) );
-        return ( userSn != null ) ? ( classLike.userSn.eq( userSn ) ) : null;
+        return ( userSn == null ) ? ( classLike.userSn.isNull() ) : ( classLike.userSn.eq( userSn ) );
     }
 
 

@@ -6,9 +6,9 @@
 		<li>
 			<a href="/introduce">회사소개</a>
 		</li>
-		<li>
+		<!--<li>
 			<a href="javascript:" >1:1 문의</a>
-		</li>
+		</li>-->
 		<li>
 			<a href="javascript:" class="show_layer" data-layer-id="termsOfUse" >이용약관</a>
 		</li>
@@ -55,12 +55,12 @@
 <!-- 설문조사 layer -->				<div class="layer_qestnar"					style="display: none;"	th:insert="pon/layer/layer_qestnar.html"		/>
 
 <!-- S : 문의 챗콘 -->
-<!-- TODO -->
 <!--<div class="icon_inquiry" onclick="setQestnar('QESTN003', 'inquiry');">-->
 <!--<div class="icon_inquiry" onclick="setInquiryData('QESTN003', 'inquiry');">-->
-<div class="icon_inquiry">
+
+<!--<div class="icon_inquiry">
 	<img src="/pon/common/image/inquiry.svg" alt="">
-</div>
+</div>-->
 <!-- E : 문의 챗콘 -->
 
 <form id="logoutForm" name="logoutForm" th:action="@{ /pon/logout}" method="post">
