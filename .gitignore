@@ -151,3 +151,6 @@ fabric.properties
 
 # 폴더 ignore
 file/menu/json/
+
+# Ignore summernote uploads directory
+src/main/resources/summernote/uploads/
