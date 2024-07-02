@@ -64,7 +64,7 @@
 			</a>
 		</div>
 	</div>
-	<form id="deleteReviewForm" name="deleteReviewForm" method="post" th:action="@{ /classReview/{mypageMcd}/delete ( mypageMcd = ${mypageMcd} ) }">
+	<form id="deleteReviewForm" name="deleteReviewForm" method="post" th:action="@{ /classReview/{mcd}/delete ( mcd = ${mcd} ) }">
 		<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
 	</form>
 </div>

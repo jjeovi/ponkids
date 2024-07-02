@@ -232,6 +232,14 @@ public class ClassReviewController {
         
         result.put( "replyList", classReviewService.getListByStepAndParntsReviewSn( "2", pk ));
         
+        String myReviewYn = "N";
+        if ( SessionUtils.getAuthUserSn() != null ) {
+            if ( classReviewService.getByClassReviewSn( pk ).getUserSn().equals( SessionUtils.getAuthUserSn() ) ) {
+                myReviewYn = "Y";
+            }
+        }
+        result.put( "myReviewYn", myReviewYn );
+        
         return result;
     }
     

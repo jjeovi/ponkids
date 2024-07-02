@@ -35,7 +35,7 @@
 <!-- E : Javascript functions	-->
 <div layout:fragment="content">
 	<form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="form">
-		<input th:if="${#authentication.principal ne 'anonymousUser' }" type="hidden" name="userSn" th:value="${#authentication.principal.userSn}" >
+
 		<input type="hidden" name="page" th:value="${resultList.pageable.pageNumber}"/>
 		<div class="sub_box review">
 			<div class="top_tit">
@@ -70,7 +70,7 @@
                             </div>
                         </div>
                         <p class="riview_tit" th:text="${data.classSj}" >한국근현대미술전! 엄마 우리나라에서 제일 비싼 그림은 누가 그렸어요?</p>
-                        <p class="riview_disc" th:text="${#strings.abbreviate(data.reviewCn,80)}">수업이 재밌대요. 수업중 밖에서 들어보면 우렁차게 잘 대답 하더라구요. 수업 마치면 Homework가 있다고 끝나자마자 아주 오리고 붙이고 바쁘네요 일단 어른이 봐도 수업자료가 아주 재밌어보여요 저희 아이는 숙제가 끝난 후에도 자료를 가지고 게임하듯이 놀더라구요.</p>
+							<p class="riview_disc" th:text="${#strings.abbreviate(data.reviewCn,80)}">수업이 재밌대요. 수업중 밖에서 들어보면 우렁차게 잘 대답 하더라구요. 수업 마치면 Homework가 있다고 끝나자마자 아주 오리고 붙이고 바쁘네요 일단 어른이 봐도 수업자료가 아주 재밌어보여요 저희 아이는 숙제가 끝난 후에도 자료를 가지고 게임하듯이 놀더라구요.</p>
                     </div>
 				</div>
 				<div th:unless = "${!resultList.isEmpty()}" class="no-data">

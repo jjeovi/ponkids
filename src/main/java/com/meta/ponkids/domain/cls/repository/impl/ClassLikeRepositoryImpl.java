@@ -16,13 +16,13 @@ public class ClassLikeRepositoryImpl implements ClassLikeRepositoryCustom {
 	
 	@Override
 	public int countByUserSn( Long userSn ) {
-		return ( int ) query
+		return query
 				.select( classLike.count() )
 				.from( classLike )
 				.where(
 						classLike.userSn.eq( userSn )
 				)
-				.fetchCount();
+				.fetch().size();
 	}
 	
 	// -------------------------------- WHERE 검색 옵션 setting --------------------------------

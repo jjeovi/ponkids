@@ -15,6 +15,8 @@ public class ClassReviewListDto {
 	
 	private Long 	classSn;
 	
+	private Long    ctgrySn;			// 카테고리 코드
+	
 	private String		ctgryNm;			// 카테고리 명
 	
 	private String		crseNm;				// 커리큘럼 명
@@ -65,12 +67,13 @@ public class ClassReviewListDto {
 
 	@Builder
 	@QueryProjection
-	public ClassReviewListDto( Long classReviewSn, Long classSn, String ctgryNm, String crseNm, String classSj, Long thumbAtchFileSn, Long userSn,
+	public ClassReviewListDto( Long classReviewSn, Long classSn, Long ctgrySn, String ctgryNm, String crseNm, String classSj, Long thumbAtchFileSn, Long userSn,
 			String userNm, String userId,  String step, String replyYn, String replyYnNm, Long replyCnt,
 			Long parntsReviewSn, String reviewCn, String reviewGrade, Long reviewGradeLong, Long atchFileSn,
 			String openYn, String openYnNm, String registerId, String regDt, String regFullDt ) {
 		this.classReviewSn = classReviewSn;
 		this.classSn = classSn;
+		this.ctgrySn = ctgrySn;
 		this.ctgryNm = ctgryNm;
 		this.crseNm = crseNm;
 		this.classSj = classSj;

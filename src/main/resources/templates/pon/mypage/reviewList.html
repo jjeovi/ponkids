@@ -24,7 +24,6 @@
 <!-- E : Javascript functions	-->
 <div layout:fragment="content" class="sub_box mypage_contents">
 	<form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="form">
-	<input th:if="${#authentication.principal ne 'anonymousUser' }" type="hidden" name="userSn" th:value="${#authentication.principal.userSn}" >
 
 	<div class="mypage_list_box" >
 		<div class="article_top">

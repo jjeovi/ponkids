@@ -465,6 +465,8 @@ function amtSetComma( val ){
 
 		var result = ajaxResult.resultOne;
 
+		var myReviewYn = ajaxResult.myReviewYn;
+
 		$("#reviewImg").append(
 				$( "<img>" ).attr("src","/getImage?atchFileSn="+ result.thumbAtchFileSn).append()
 		);
@@ -490,7 +492,7 @@ function amtSetComma( val ){
 
 		// 로그인 되어 있을 시, 본인 여부 확인
 		// userSn 이 같을 시 , review_footer show
-		if ( $( "[name='listForm'] [name='userSn']" ).val() == result.userSn ) {
+		if ( myReviewYn == "Y" ) {
 			$( "#reviewDeleteA" ).data( "delPk", result.classReviewSn );
 			$( ".review_footer" ).show();
 		} else {

@@ -49,6 +49,7 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
                 .select( new QClassReviewListDto(
                 		classReview.classReviewSn,
                 		classReview.classSn,
+						class$.ctgrySn,
 						classCategoryCl01.clNm.as( "ctgryNm" ),
 						classCategoryCl02.clNm.as( "crseNm" ),
 						class$.classSj,
@@ -133,7 +134,9 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
 						eqReplyYn( listDto.getReplyYn() ),
                 		eqClassSn( listDto.getClassSn() ),
 						eqUserSn( listDto.getUserSn() ),
-						classReview.step.eq("1")
+						classReview.step.eq("1"),
+						eqCtgrySn( listDto.getCtgrySn() )
+						
 				)
                 .orderBy(
 						orderByOption( listDto.getSchOption(), listDto.getSchCntn() ),
@@ -146,7 +149,24 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
 		  
 		// (2) count
         JPAQuery<Long> count = query.select( classReview.count() )
-                .from( classReview );
+                .from( classReview )
+				.leftJoin( class$ )
+				.on(
+						class$.classSn.eq( classReview.classSn ),
+						class$.delYn.eq( "N" )
+				)
+				.where(
+						eqCateLv1( listDto.getCategory() ),	// 분류 조회 : lv1Sn 값 존재시 검색
+						eqCateLv2( listDto.getCategory() ),	// 분류 조회 : lv2Sn 값 존재시 검색
+						eqCateLv3( listDto.getCategory() ), // 분류 조회 : lv3Sn 값 존재시 검색
+						eqOpenYn( listDto.getOpenYn() ),
+						eqReplyYn( listDto.getReplyYn() ),
+						eqClassSn( listDto.getClassSn() ),
+						eqUserSn( listDto.getUserSn() ),
+						classReview.step.eq("1"),
+						eqCtgrySn( listDto.getCtgrySn() )
+				
+				);
 
 		return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
 	}
@@ -160,6 +180,7 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
 						new QClassReviewListDto(
 								classReview.classReviewSn,
 								classReview.classSn,
+								class$.ctgrySn,
 								classCategoryCl01.clNm.as( "ctgryNm" ),
 								classCategoryCl02.clNm.as( "crseNm" ),
 								class$.classSj,
@@ -252,6 +273,7 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
 						new QClassReviewListDto(
 								classReview.classReviewSn,
 								classReview.classSn,
+								class$.ctgrySn,
 								classCategoryCl01.clNm.as( "ctgryNm" ),
 								classCategoryCl02.clNm.as( "crseNm" ),
 								class$.classSj,
@@ -403,6 +425,9 @@ public class ClassReviewRepositoryImpl implements ClassReviewRepositoryCustom {
 	    
 	    private BooleanExpression eqClassSn( Long pk ) {
 	    	return pk != null ? classReview.classSn.eq(pk) : null;
+	    }
+	    private BooleanExpression eqCtgrySn( Long ctgrySn ) {
+			return ctgrySn != null ? class$.ctgrySn.eq( ctgrySn ) : null;
 	    }
 		
 	

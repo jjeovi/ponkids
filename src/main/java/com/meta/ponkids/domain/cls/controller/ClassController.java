@@ -135,7 +135,7 @@ public class ClassController {
 		
 		model.addAttribute( "targetDto", targetDto );
 		
-		// 1-1. 클래스의 정보 > 클래스 입력 항목 리스트 : targetClsDtlList  ( ex ⭐️ 미팅장소에 10분 전 도착해주시길 바랍니다. 지각 시 환불이 어렵습니다. ⭐ (예시답변 : 네 ) 등.. ) 
+		// 1-1. 클래스의 정보 > 클래스 입력 항목 리스트 : targetClsDtlList  ( ex ⭐️ 미팅장소에 10분 전 도착해주시길 바랍니다. 지각 시 환불이 어렵습니다. ⭐ (예시답변 : 네 ) 등.. )
 		model.addAttribute( "targetClsDtlList", classDetailService.findByClassSnOrderByClassDetailSeq( targetDto.getClassSn() ) );
 		
 		// 1-2. 클래스 의 정보 > 첨부파일 (여러건) : atchFileList
@@ -154,14 +154,22 @@ public class ClassController {
 //		// 요일 List add
 //		model.addAttribute( "day7List", cmmnCdDetailService.getList( "DAY_7_CD" ) );	// 요일리스트
 		
-		// 4. 클래스 의 후기 : classReviewList > ByClassSn
-		Pageable customPageable = PageRequest.of(0, 5);	// 첫번째페이지 (0페이지) , 5개식 조회
+		// 4-1.해당 클래스의 카테고리 후기 : classReviewList > ByClassSn
+		Pageable customPageable = PageRequest.of(0, 4);	// 첫번째페이지 (0페이지) , 4개식 조회
+		
+		ClassReviewListDto ctgryReviewListDto = new ClassReviewListDto();
+		ctgryReviewListDto.setCtgrySn( targetDto.getCtgrySn() );
+		ctgryReviewListDto.setOpenYn( "Y" );
+		model.addAttribute("ctgryReviewList", classReviewService.getList( ctgryReviewListDto, customPageable ) );	// 클래스 후기 classSn으로 검색
+		// 클래스의 후기
+		
+		// 4-2. 해당 클래스 후기 : classReviewList > ByClassSn
+		customPageable = PageRequest.of(0, 5);	// 첫번째페이지 (0페이지) , 5개식 조회
 		
 		ClassReviewListDto classReviewListDto = new ClassReviewListDto();
 		classReviewListDto.setClassSn( targetDto.getClassSn() );
+		classReviewListDto.setOpenYn( "Y" );
 		model.addAttribute("classReviewList", classReviewService.getList( classReviewListDto, customPageable ) );	// 클래스 후기 classSn으로 검색
-		// TODO
-		// 클래스의 후기
 		
 		// 5. 클래스 의 Q&A : classInqryList > ByClassSn
 		// - 총 건수 : classInqryList.totalElements 로 구함.

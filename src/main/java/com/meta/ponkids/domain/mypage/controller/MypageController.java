@@ -293,6 +293,7 @@ public class MypageController {
 		model.addAttribute( "basicPath", BASIC_PATH );
 		// mypage용 mcd 
 		model.addAttribute( "mypageMcd", "reviewList" );
+		model.addAttribute( "mcd", "myInfoModify" );		// review 삭제 할때 mcd값을 저장해야 해서, mcd값을 따로 저장
 		return USER_VIEW_PATH + BASIC_PATH + "/reviewList";
 	}
 

@@ -513,26 +513,31 @@
 			</div>
 			<!-- class detail box 종료 -->
 		</form>
-		<!-- 역사 과목 후기 시작 -->
+		<!-- 과목 후기 시작 -->
 		<div class="class_detail_review">
-			<h3>역사 과목 후기(136)</h3>
-			<div class="detail_review_item_box">
-				<div class="detail_reviewㅅ_item">
-					<div class="review_item_con">
-						<span class="star_five">
-							<img src="/pon/common/image/star_five.svg" alt="">
-						</span>
-						<div class="review_tit">[국립중앙박물관 조선시대관] 미취학 "Premuum" 역사탐험대!</div>
-						<div class="review_txt">
+			<h3>[[${targetDto.ctgryNm}]] 과목 후기(<span th:utext="${ctgryReviewList.totalElements}"></span>)</h3>
+			<th:block 	th:if = "${!ctgryReviewList.isEmpty() && #lists.size(ctgryReviewList) > 0 }" >
+				<div class="detail_review_item_box" >
+					<div class="detail_review_item" th:each="data : ${ctgryReviewList}" th:onclick="|detailReviewLayer( '${data.classReviewSn}' )|" >
+						<div class="review_item_con">
+							<span class="star_five">
+								<img src="/pon/common/image/star_like.svg" th:each="num : ${#numbers.sequence(1,data.reviewGradeLong)}" alt="후기별점" >
+							</span>
+							<div class="review_tit" th:text="${data.classSj}" >[국립중앙박물관 조선시대관] 미취학 "Premuum" 역사탐험대!</div>
+							<div class="review_txt" th:text="${#strings.abbreviate(data.reviewCn,80)}" >
+							</div>
+						</div>
+						<div class="review_item_img">
+							<img src="/pon/common/image/review_img.png" alt="">
 						</div>
 					</div>
-					<div class="review_item_img">
-						<img src="/pon/common/image/review_img.png" alt="">
-					</div>
 				</div>
-			</div>
+			</th:block>
+			<th:block th:unless = "${!ctgryReviewList.isEmpty() && #lists.size(ctgryReviewList) > 0 }"> <!-- Q&A 없을 시 -->
+				<h5>[[${targetDto.ctgryNm}]] 과목의 수업 후기 목록이 없습니다.</h5>
+			</th:block>
 		</div>
-		<!-- 역사 과목 후기 종료 -->
+		<!-- 과목 후기 종료 -->
   	</div>
   	<!-- 클래스 정보 영역 종료 -->
   	
