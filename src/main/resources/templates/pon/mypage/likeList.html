@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{pon/layout/layout_mypage}"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head layout:fragment="head">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<!-- Meta, title, CSS, favicons, etc. -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="_csrf" th:content="${_csrf.token}">
+	<meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+	<title layout:fragment="title">피오니키즈</title>
+
+</head>
+<title layout:fragment="title">피오니키즈 - pioneerkids</title>
+<!-- S : Javascript functions	-->
+<div layout:fragment="script">
+	<!-- js -->
+</div>
+
+<!-- E : Javascript functions	-->
+<div layout:fragment="content" class="sub_box mypage_contents">
+	<form id="listForm" name="listForm" method="get" th:action="@{ {basicPath}/{mcd}/list ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="form">
+	<input th:if="${#authentication.principal ne 'anonymousUser' }" type="hidden" name="userSn" th:value="${#authentication.principal.userSn}" >
+
+	<div class="mypage_list_box" >
+		<div class="article_top">
+			<span>총 게시물 <strong th:utext="${resultList.totalElements}"> </strong></span>
+		</div>
+		<div class="card_list card_box" th:classappend="${ (resultList.isEmpty())} ? 'no-data'">
+			<div th:if = "${!resultList.isEmpty()}" th:each="data : ${resultList}" class="card_item">
+				<div class="item_img">
+					<img th:src="@{/getImage(atchFileSn=${data.thumbAtchFileSn})}" alt="클래스이미지" th:onclick="|detailClass(${data.classSn});|" >
+					<div class="heart_ico" th:onclick="|likeClass(${data.classSn}, this);|" >
+						<img th:src="|${data.userSn eq null ? '/pon/common/image/heart.svg' : '/pon/common/image/heart-full.svg'}|" alt="좋아요_아이콘">
+					</div>
+				</div>
+				<div class="item_info" th:onclick="|detailClass(${data.classSn});|" >
+					<span th:text="${data.ctgryNm}" class="item_txt">카테고리명</span>
+					<p th:text="${data.classSj}" >클래스제목</p>
+					<span th:if="${data.classDscntBfeAmt ne null && data.classDscntBfeAmt ne '' }" th:text="|${#numbers.formatInteger(data.classDscntBfeAmt, 3, 'COMMA')} 원|" class="item_sale"/>
+					<span th:text="|${#numbers.formatInteger(data.classAmt, 3, 'COMMA')} 원|" 			class="item_price" >금액</span>
+				</div>
+			</div>
+			<div th:unless = "${!resultList.isEmpty()}" class="no-data">
+				클래스가 존재하지 않습니다.
+			</div>
+			<div class="bg_ico3">
+				<img src="/pon/common/image/space_one.png" alt="">
+			</div>
+		</div>
+		<div class="paging_box" th:insert="~{pon/layout/tiles/paging :: paging('listForm', ${resultList})}">
+		</div>
+	</div>
+	</form>
+
+	<!-- 수업후기 상세 조회 ( detail )  layer -->
+	<div class="layer_detailClassReview"	style="display: none;"	th:insert="pon/layer/layer_detailClassReview.html" />
+</div>
+
+</html>

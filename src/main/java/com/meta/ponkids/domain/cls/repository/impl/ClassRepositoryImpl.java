@@ -121,7 +121,7 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 .where(
                         eqCateLv1( listDto.getCategory() ),
                         eqCateLv2( listDto.getCategory() ),
-                        eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                        eqOption( listDto.getSchOption(), listDto.getSchCntn(), listDto.getUserSn() )
                 )
                 .orderBy( class$.classSn.desc() )
                 .offset( pageable.getOffset() )
@@ -134,7 +134,7 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 .where(
                         eqCateLv1( listDto.getCategory() ),
                         eqCateLv2( listDto.getCategory() ),
-                        eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                        eqOption( listDto.getSchOption(), listDto.getSchCntn(), listDto.getUserSn() )
                 );
 
 
@@ -208,7 +208,7 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 .where(
                         eqCateLv1( listDto.getCategory() ),
                         eqCateLv2( listDto.getCategory() ),
-                        eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+                        eqOption( listDto.getSchOption(), listDto.getSchCntn(), listDto.getUserSn() )
                 )
                 .orderBy( class$.classSn.desc() )
                 .fetch();
@@ -430,13 +430,13 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
 
     // -------------------------------- WHERE 검색 옵션 setting --------------------------------
 
-    private BooleanExpression eqOption( String schOption, String schCntn ) {
+    private BooleanExpression eqOption( String schOption, String schCntn, Long userSn) {
         // 검색 옵션  A : 아이디 , B : 이름 <- 예시 일뿐 이런식으로 커스텀하면 됨
         if ( StringUtils.hasText( schOption ) && StringUtils.hasText( schCntn ) ) {
             if ( schOption.equals( "A" ) )
                 return class$.classSj.contains( schCntn );
-//            else if ( schOption.equals( "B" ) )
-//                return clas.classNm.contains( schCntn ); // LIKE검색. contains.( schCntn ) == LIKE '%' || schCntn || '%'
+            else if ( schOption.equals( "M" ) )
+                return classLike.userSn.eq( userSn); // 내가 좋아요 한 클래스만 조회
 //            else return null;
             return null;            // (build한 이후에 해주세요. 안그럼 에러발생)  실제 구현시에는 해당부분지워주고 위에부분주석풀기
         } else {
@@ -476,7 +476,8 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
 
     // userSn으로 클래스 관심 조회
     private BooleanExpression eqUserSn( Long userSn ) {
-        return ( userSn == null ) ? ( classLike.userSn.isNull() ) : ( classLike.userSn.eq( userSn ) );
+//        return ( userSn == null ) ? ( classLike.userSn.isNull() ) : ( classLike.userSn.eq( userSn ) );
+        return ( userSn != null ) ? ( classLike.userSn.eq( userSn ) ) : null;
     }
 
 

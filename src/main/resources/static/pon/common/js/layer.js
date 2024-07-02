@@ -1172,9 +1172,8 @@ function validCheckPw(password) {
 // pk 값을 formName form의 pk 에 대입 후, submit
 
 
-
 // delete function
-function deleteItem( formName, e ) {
+function deleteReviewItem( formName, e ) {
 
     var delPk = $( e ).data( "delPk" );
     if ( confirm( "삭제하시겠습니까?" ) ) {

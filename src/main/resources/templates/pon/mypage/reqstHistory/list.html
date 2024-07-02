@@ -43,6 +43,9 @@
 				</div>
 			</li>
 		</ol>
+		<div th:unless = "${!classReqstList.isEmpty()}" class="item no-data">
+			데이터가 존재하지 않습니다.
+		</div>
 	</div>
 	<div class="paging_box" th:insert="~{pon/layout/tiles/paging :: paging('listForm', ${classReqstList})}" >
 	</div>

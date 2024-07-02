@@ -5,8 +5,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.meta.ponkids.domain.cls.dto.ClassListDto;
 import com.meta.ponkids.domain.cls.dto.ClassReviewListDto;
 import com.meta.ponkids.domain.cls.service.ClassReviewService;
+import com.meta.ponkids.domain.cls.service.ClassService;
 import com.meta.ponkids.domain.lctre.dto.LctreModDto;
 import com.meta.ponkids.domain.lctre.dto.LctreReqstListDto;
 import com.meta.ponkids.domain.lctre.repository.LctreReqstDetailRepository;
@@ -62,6 +64,8 @@ public class MypageController {
 	private final static String BASIC_PATH = "/" + BASIC_DOMAIN;	// USER_VIEW_PATH + "/" + BASIC_DOMAIN 는  앞의 "/" 를 제거해야 함.
 	
 	
+	private final ClassService classService;
+	
 	private final ClassReqstService classReqstService;
 
 	private final LctreService lctreService;
@@ -88,6 +92,35 @@ public class MypageController {
 		
 		return "forward:/mypage/reqstHistory/list";   
 	}
+	
+	@GetMapping( "/likeList" )
+	public String likeList( 	@ModelAttribute ClassListDto listDto,
+									   @PageableDefault( size = 8 ) Pageable pageable,
+									   Model model ) {
+		
+		// S : 필요한 객체 setting
+		
+		listDto.setUserSn( SessionUtils.getAuthUserSn() );
+		
+		listDto.setSchOption( "M" );	// M 으로 설정시 내가 좋아요 한 클래스만 조회
+		listDto.setSchCntn( "M" );
+		
+		
+		// 목록 조회
+		Page<ClassListDto> resultList = classService.getList( listDto, pageable );
+		model.addAttribute( "resultList", resultList );
+		
+		
+		// E : 필요한 객체 setting
+		
+		// 기본 경로 setting
+		model.addAttribute( "basicPath", BASIC_PATH );
+		// mypage용 mcd
+		model.addAttribute( "mypageMcd", "likeList" );
+		return USER_VIEW_PATH + BASIC_PATH + "/likeList";
+	}
+	
+	
 	
 	@GetMapping( "/reqstHistory/list" )
 	public String reqstHistoryList( 	@ModelAttribute ClassReqstListDto listDto,
