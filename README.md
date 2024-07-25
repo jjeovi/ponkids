@@ -82,6 +82,12 @@ DB phpPgAdmin : http://db.jjeovi.gabia.io/pgadmin/?_gl=1*15jm1ly*_ga*ODI1NTQ5MzY
 운영 에서 프로젝트 종료 하는 법 : ps -ef | grep java 후 , pid 확인하여, kill -9 [pid]
 
 
+SFTP : 211.47.75.55
+사용자 : jjeovi
+비밀번호 : ponkids2023!
+
+
+
 </details>
 
 
