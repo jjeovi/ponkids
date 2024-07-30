@@ -15,8 +15,8 @@ spring :
             ddl-auto : none
     profiles :
         active : prod
-        include : 
-          - sns
+       # include : 
+       #   - sns
     mvc :
         converters :
             preferred-json-mapper : gson

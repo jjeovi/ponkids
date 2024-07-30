@@ -19,6 +19,33 @@ spring :
             hibernate :
                 default_schema : ponkids
                 
+#########################################        sns-properties           #########################################                
+    security:
+      oauth2:
+        client:
+            registration:
+#                   구글 SNS 로그인
+                google: 
+                    client-id: 859381259712-tur84mgvvd2s1i7bkf3a1c9ok5f9v412.apps.googleusercontent.com
+                    client-secret: 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
+                    scope: profile,email
+#                    카카오 SNS 로그인
+                kakao:
+                    client-id: b0c2c83ed076dba404b439856be6385d
+                    client-secret: aNC3LQes7ltoQG0yPHj2cPJhMKH3X5fk
+                    scope: account_email
+                    client-name: kakao
+                    authorization-grant-type: authorization_code
+                    client-authentication-method: client_secret_post                    # 카카오는 필수 파라미터를 POST로 요청해야됌!
+                    redirect-uri: https://pioneerkids.us/login/oauth2/code/kakao        # 코드를 받는 uri( kakao 의 콜백 uri)
+                    # 카카오 참고 url : https://kim-jong-hyun.tistory.com/150
+            provider:
+                kakao:
+                    authorization-uri : https://kauth.kakao.com/oauth/authorize
+                    token-uri : https://kauth.kakao.com/oauth/token
+                    user-info-uri : https://kapi.kakao.com/v2/user/me
+                    user-name-attribute : id
+                
 
 #########################################        System Variables           #########################################
 
