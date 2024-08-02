@@ -50,7 +50,7 @@ decorator :
         p6spy :
             enable-logging : true
 developer :
-   motto : ==== Accept mistakes, doubt ease, avoid arrogance, and always consider Murphy’s Law. from jjeovi =====
+  motto : ==== Accept mistakes, doubt ease, avoid arrogance, and always consider Murphy’s Law. from jjeovi ===== #항상 실수할 수 있다, 의심하고, 오만하지 말아라. 머피의 법칙을 고려해라.
    
 key :
     default :
