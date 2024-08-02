@@ -135,7 +135,7 @@
     left: 50%;
     width: 40rem;
     min-width: 23rem;
-    min-height: 26rem;
+    min-height: 24rem;
     max-width: 95vw;
     max-height: 80vh;
     z-index: 10;
@@ -152,9 +152,16 @@
 
 
 
-.pop_wrap.login {
+.pop_wrap.login  {
     min-width: 22rem;
     width: 27rem;
+}
+
+.pop_wrap.find_user {
+    min-width: 20rem;
+    width: 23rem;
+    min-height: 24rem;
+    height: 24rem;
 }
 
 
@@ -190,7 +197,7 @@
     font-family: 'yg-jalnan';
 }
 
-.login_wrap {
+.login_wrap, .find_user_wrap {
 	display: flex;
     flex-direction: column;
     justify-content: center;
@@ -237,14 +244,14 @@
     border-bottom: 1px dashed rgb(221 215 223);
 }
 
-.login_wrap .input_wrap {
+.login_wrap .input_wrap, .find_user_wrap .input_wrap {
     display: flex;
     flex-flow: column wrap;
     gap: 0.4rem;
     width: 100%;
 }
 
-.login_wrap .login_btn {
+.login_wrap .login_btn, .find_user_wrap .btn {
     background-color: rgb(74 163 170);
     color: rgb(255, 255, 255);
     border: 0px;
@@ -260,7 +267,7 @@
     cursor: pointer;
 }
 
-.login_wrap button.btn_login_default {
+.login_wrap button.btn_login_default, .find_user_wrap button.btn_login_default {
 	padding: 1.9rem 0px;
     width: 100%;
     border-radius: 6px;
@@ -269,12 +276,59 @@
 }
 
 
+.find_user_wrap button.btn_login_default {
+    padding: 0.7rem 0px;
+}
+
+.find_user .tab_menu_btn {
+    display: flex;
+    margin: 1rem 0px;
+    gap: 0rem;
+    color: rgb(74 163 170);
+}
+
+
+
+.find_user .tab_menu_btn a{
+    padding: 0.8rem 0px 0.7rem;
+    width: 50%;
+    text-align: center;
+    border-radius: 4px 4px 0px 0px;
+    color: rgb(137, 137, 137);
+    box-sizing: border-box;
+    border-bottom: 1px solid #4aa3aa;
+}
+
+.find_user .tab_menu_btn a.active{
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(74 163 170) rgb(74 163 170) rgb(255, 255, 255);
+    border-image: initial;
+    color: rgb(74 163 170);
+}
+
+
+#findPw_auth_number {
+    width: 58%;
+}
+#findPw_send_auth_number {
+    background-color: rgb(74 163 170);
+    color: rgb(255, 255, 255);
+    border: 0px;
+    padding: 0rem 0.4rem;
+    border-radius: 6px;
+    height: 39px;
+    width: 35%;
+}
+
+
+
 .pop_footer .user_wrap {
     display: flex;
     justify-content: space-between;
     font-size: 0.9rem;
     width: 100%;
-    margin-top: 3.6rem;
+    margin-top: 1.6rem;
 }
 
 .pop_footer .user_wrap a {
@@ -381,7 +435,7 @@
     width: 160px;
 }
 
-.login_wrap .input_wrap input {
+.login_wrap .input_wrap input, .find_user_wrap .input_wrap input {
     height: 2.2rem;
     border-radius: 6px;
     border-color: #c6c3c3;

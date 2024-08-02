@@ -87,6 +87,21 @@ $( function () {
         checkPasswordMatching();
     } );
 
+
+    // 아이디 비밀번호 찾기 클릭시 핸들러 setting
+    $(".tab_menu .tab_menu_btn a").click(function(){
+
+        $(".tab_menu .tab_menu_btn a").removeClass("active");
+        $(this).addClass("active");
+
+        var tabName = $(this).attr("data-tab");
+
+        $(".find_user .pop_content").find("[data-tab-wrap^='tab']").hide();
+
+        $(".find_user .pop_content").find("[data-tab-wrap^='" + tabName + "']").show();
+
+    });
+
 } );
 
 // S : file upload (img) 관련
@@ -903,18 +918,22 @@ function getMakeUrlParamLgStatus( status ) {
 /* S : 아이디 찾기 */
 function findUsername(){
     //사용자 입력 값 가져오기
-    var username = $("#username").val();
-    var phone = $("#phone").val();
+    var userNm = $("#findUserIdForm").find("[name='userNm']").val();
+    var telNo = $("#findUserIdForm").find("[name='telNo']").val();
+
+    // 유효성 검사
+    if ( !validCheckName( userNm ) ) {
+        return false;
+    } else if ( !telNoRegexp.test( telNo ) ) {	// telNoRegexp = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
+        alert("연락처 형식에 맞게 입력해주세요. (숫자만 입력)");
+        return false;
+    }
 
     // 서버로 전송할 데이터 구성
-    var requestData = {
-        userNm: username,
-        telNo: phone
-    };
 
     data = new FormData();
-    data.append( "userNm", username );
-    data.append( "telNo", phone );
+    data.append( "userNm", userNm );
+    data.append( "telNo", telNo );
 
     var header = $("meta[name='_csrf_header']").attr('content');
     var token = $("meta[name='_csrf']").attr('content');
