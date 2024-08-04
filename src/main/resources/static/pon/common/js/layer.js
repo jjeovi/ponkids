@@ -6,6 +6,8 @@ var dupCheckFlag = false;	// 중복체크 변수 선언
 var passwordValidCheck = false;	// 비밀번호 유효성 체크 확인
 var passwordMatchCheckFlag = false;  	// 비밀번호 비교 일치 여부 확인
 
+var emailAuthNumTimer = 0;
+
 
 $( function () {
     if ( lgStatus == null || lgStatus == '' ) {
@@ -966,7 +968,7 @@ function findUsername(){
         error: function (){
             alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error)
         }
-    })
+    });
 }
 
 // 아이디 찾기 성공 후의 처리
@@ -987,8 +989,14 @@ function findUseremail(){
     var findpwname = $("#findPw_name").val();
     var findpwemail = $("#findPw_email").val();
 
-    // 서버로 전송할 데이터 구성
 
+    // 발송 타이머가 만료되지 않았다면 인증번호 재발송 불가
+    if ( emailAuthNumTimer > 0 ){
+        alert("인증번호가 아직 유효합니다. 재발송은 타이머 만료 후 가능합니다.");
+        return false;
+    }
+
+    // 서버로 전송할 데이터 구성
     data = new FormData();
     data.append( "userNm", findpwname );
     data.append( "userId", findpwemail );
@@ -1022,33 +1030,32 @@ function findUseremail(){
 
                 // 존재하는 계정정보일 경우 인증번호 발송되었다고 알림
                 alert(result.msg);
-
-
             }
         },
         error: function (){
-            alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error)
+            alert( "code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error)
         }
     })
 }
 
 // 타이머(3분)
-function startTimer(duration) {
-    var timer = duration, minutes, seconds;
+function startTimer( duration ) {
+    emailAuthNumTimer = duration;
+    var minutes, seconds;
     var intervalId = setInterval(function () {
-        minutes = parseInt(timer / 60, 10);
-        seconds = parseInt(timer % 60, 10);
+        minutes = parseInt(emailAuthNumTimer / 60, 10);
+        seconds = parseInt(emailAuthNumTimer % 60, 10);
 
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
 
         // 'timerDisplay'라는 ID를 가진 HTML 요소에 타이머 표시
-        $("#timerDisplay").text("재발송 (" + minutes + ":" + seconds + ")");
+        $("#findPw_send_auth_number").html( "재발송 (" + minutes + ":" + seconds + ")" );
 
-        if (--timer < 0) {
+        if ( --emailAuthNumTimer < 0 ) {
             clearInterval(intervalId);
             // 타이머가 0에 도달하면 버튼 텍스트를 초기 상태로 변경
-            $("#findPw_send_auth_number").text("인증번호 발송");
+            $("#findPw_send_auth_number").html( "인증번호 발송" );
             // 선택적으로 타이머가 0에 도달했을 때 추가 작업 수행 가능
         }
     }, 1000);
@@ -1059,11 +1066,11 @@ function startTimer(duration) {
 
 /* S : 비밀번호 찾기 - 버튼클릭시 - 인증번호 확인 */
     function findUserpw(){
-        var authNumber = $("#findPw_auth_number").val()  // 인증번호
+        var authNumber = $("#findPw_auth_number").val();  // 인증번호
         // 서버로 전송할 데이터 구성
         // data = new FormData();
         // data.append( "authNumber", authNumber );
-        var data = {authNumber: authNumber}
+        var data = { authNumber: authNumber }
 
         // CSRF 토큰 및 헤더 설정
         var csrfToken = $("meta[name='_csrf']").attr("content");
@@ -1071,6 +1078,13 @@ function startTimer(duration) {
         var headers = {};
         headers[csrfHeader] = csrfToken;
         // Ajax 를 사용한 서버로 인증번호 확인 요청
+
+
+        if ( emailAuthNumTimer == 0 ){
+            alert("인증번호가 만료되었습니다. 다시 인증번호를 발송해주세요.");
+            return false;
+        }
+
         $.ajax({
             url:"/findUserpw",
             type:"POST",
@@ -1083,7 +1097,7 @@ function startTimer(duration) {
                 if(result.flag ==="S"){
                     alert(result.msg);
                     // TODO 인증 성공시 원하는 동작 수행
-                    showPwSuccessScreen(result.userId);
+                    showPwSuccessScreen( $("#findPw_email").val() );
                 }else{
                     alert(result.msg);
                 }
@@ -1096,9 +1110,10 @@ function startTimer(duration) {
     }
 
 // 이메일 인증 성공 후의 처리
-function showPwSuccessScreen(userId) {
+function showPwSuccessScreen( userId ) {
     // 비밀번호 재설정 화면을 보이도록 설정
     $('.user_find').hide(); // 기존 화면 감춤
+    $("#findUserId").val( userId );
     showLayerLv2( 'findUserPw' );   // 비밀번호 재설정 팝업 호출
 
 }
@@ -1117,21 +1132,19 @@ function changePassword( ) {
     // 2-1. 두 값이 같은지 비교하기
     if (!checkSameValue(new_Pw, new_check_Pw)) {
         // 두 값이 같지 않을 때
-        alert("두 값이 같지 않습니다.. 확인해주세요...");
+        alert("비밀번호 변경 확인이 일치하지 않습니다. 다시 확인해주세요.");
         return false;
     }
 
     // 2-2. 유효성 체크..
-    // TODO 유효성 체크해주세요.
     if (!validCheckPw(new_Pw)) {
         // 유효성이 맞지 않을떄..
-            alert( "유효성 이 맞지 않습니다. [영문자, 숫자, 기호 혼합 8자 이상] 을 지켜주세요.");
-            return false;
-        }
+        alert( "유효성 이 맞지 않습니다. [영문자, 숫자, 기호 혼합 8자 이상] 을 지켜주세요.");
+        return false;
+    }
 
         // 3. 아이디와 비밀번호변경, 비밀번호변경확인을 ajax로 보내기
         // 보낼 변수 : 비밀번호, 아이디,  + ( csrf header 에 포함시켜 보내기.. )
-
         /* S : 보낼 데이터 setting */
         var data = {
             newPassword: new_Pw,
@@ -1148,15 +1161,14 @@ function changePassword( ) {
             url: "/changePassword",
             data: data,
             headers: headers,
-            success: function (response) {
+            success: function ( response ) {
                 //서버로부터 응답처리
-                alert("정상적으로 비밀번호가 변경되었습니다. 로그인 후 이용해주세요.")
+                alert("정상적으로 비밀번호가 변경되었습니다. 로그인 후 이용해주세요.");
                 // 비밀번호 변경 성공 시 홈 화면으로 리다이렉션
                 window.location.href = "/";
-            },
-            error: function (error) {
+            }, error: function ( error ) {
                 //오류처리
-                alert("비밀번호 변경 오류발생하였습니다.")
+                alert("비밀번호 변경 오류발생하였습니다.");
             }
         })
 

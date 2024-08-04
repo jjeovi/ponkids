@@ -15,6 +15,7 @@ spring :
             ddl-auto : none
     profiles :
         active : prod
+        inclue : oauth
        # include : 
        #   - sns
     mvc :

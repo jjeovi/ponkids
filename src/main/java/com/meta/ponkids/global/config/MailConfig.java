@@ -32,6 +32,7 @@ public class MailConfig {
         mailSender.setUsername(username);
         mailSender.setPassword(password);
         Properties properties = new Properties();
+        properties.put("mail.transport.protocol", "smtp");
         properties.put("mail.smtp.auth", true);
         properties.put("mail.smtp.starttls.enable", true);
 

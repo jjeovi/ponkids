@@ -164,6 +164,20 @@
     height: 24rem;
 }
 
+.pop_wrap.findUserInfo {
+    min-width : 20rem;
+    width: 20rem;
+    height: 16.3rem;
+    min-height: 16rem;
+}
+
+.pop_wrap.findUserPw {
+    min-width : 20rem;
+    width: 20rem;
+    height: 19.1rem;
+    min-height: 19rem;
+}
+
 
 .pop_wrap .pop_close {
     position: absolute;
@@ -204,6 +218,11 @@
     align-items: center;
     gap: 0.5rem;
 }
+
+.find_user_wrap .group {
+    max-height: 41px;
+}
+
 
 .login_wrap .kakao {
     background-color: rgb(254, 229, 0);
@@ -255,6 +274,23 @@
     background-color: rgb(74 163 170);
     color: rgb(255, 255, 255);
     border: 0px;
+}
+
+.find_user_wrap .match_text {
+    font-size: 1rem;
+    margin-top: 30px;
+}
+
+
+
+.fin_user_wrap .data_wrap {
+    display: flex;
+    flex-direction: column;
+    margin: 2rem 0px 1rem;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
 }
 
 .login_wrap button.btn_sns {
@@ -318,7 +354,7 @@
     padding: 0rem 0.4rem;
     border-radius: 6px;
     height: 39px;
-    width: 35%;
+    width: 36%;
 }
 
 

@@ -106,7 +106,7 @@ public class LoginoutController {
 		Map<String, Object> result = new HashMap<String, Object>();
 
 		// 여기에서 실제 아이디를 찾는 로직을 구현하고 결과를 반환합니다.
-		// TODO 1. 1. 이름/전화번호 / (관리자여부) 로 계정을 찾음
+		// 1. 1. 이름/전화번호 / (관리자여부) 로 계정을 찾음
 		// 아이디 찾기 기능에서 실제로 사용자 정보를 데이터베이스에서 조회하는 부분
 		LoginDto targetDto = loginService.findByUserNmAndTelNoAndMngrYn(loginDto);
 
@@ -116,7 +116,7 @@ public class LoginoutController {
 			result.put("flag", "S");
 			String userId  = targetDto.getUserId(); // DTO 로 받은 userid 데이터-> userId
 
-			// TODO masking 처리 @ 기준 왼쪽 4개 문자 마스킹 처리
+			// masking 처리 @ 기준 왼쪽 4개 문자 마스킹 처리
 			// 마스킹 처리 - '@' 문자를 기준으로 왼쪽 4개 문자를 마스킹
 			int atIndex = userId.indexOf('@');  // indexOf 메서드를 이용해서 '@' 문자가 처음으로 나타나는 위치의 인덱스를 반환 -> atIndex
 
@@ -193,21 +193,43 @@ public class LoginoutController {
 		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
 
 		helper.setTo(to);
-		helper.setSubject("이메일 인증번호");
-		helper.setText("인증번호: " + authNumber, true);
+		helper.setSubject("피오니키즈 이메일 인증번호" );
+		
+		String htmlContent = 	"<div style=\"padding:0;margin:0\"> \n" +
+								"	<div style=\"padding:10px;max-width:400px;\"> \n" +
+								"		<div style=\"width:100%;box-sizing:border-box;border-radius:20px;border:solid 2px #bb8be3;overflow:hidden\">\n" +
+								"			<span>\n" +
+								"				<h1 style=\"margin:0;padding:0;font-size:28px;font-weight:400\">\n" +
+								"					<span style=\"display:block;width:100%;padding:30px;background-color:#bb8be3;box-sizing:border-box\"></span>\n" +
+								"					<span style=\"margin-top:30px;padding:0 30px;display:block\">인증번호 안내입니다.</span> \n" +
+								"				</h1>\n" +
+								"    			<p style=\"font-size:16px;line-height:26px;margin-top:30px;padding:0 30px\"> 안녕하세요.<br>요청한 아래 <b>'인증번호'</b>를 피오니키즈에 인증하세요.<br> 감사합니다. </p> \n" +
+								"    		</span>\n" +
+								"			<p style=\"font-size:16px;margin:40px 0 0 0;padding:0 30px 30px 30px;line-height:28px\"> 인증번호" +
+								"				<span style=\"font-size:24px;margin-left:15px\">authNumber</span>\n" +		// authNumber 수정작업
+								"			</p>\n" +
+								"		</div>\n" +
+								"	</div>\n" +
+								"</div>";
+		// 인증번호 치환작업
+		htmlContent = htmlContent.replaceAll("authNumber",authNumber);
+		
+		helper.setText( htmlContent, true );
+		
+//		helper.setText("인증번호: " + authNumber, true);
 
 		javaMailSender.send(mimeMessage);
 
 		// 세션에 인증번호 저장
 		session.setAttribute("authCode", authNumber);
-		// TODO : 시작 시간 체크
+		// 시작 시간 체크
 		// 세션에 시작시간 저장
 		session.setAttribute("authStartTime", System.currentTimeMillis());
 	}
 
 	// 랜덤한 인증번호 생성 메서드
 	private String generateRandomAuthNumber(){
-		// TODO 여기에 랜덤 인증번호 생성 로직 추가 (조건 : 랜덤한 6자리 숫자)
+		// 여기에 랜덤 인증번호 생성 로직 추가 (조건 : 랜덤한 6자리 숫자)
 		// return "123456";
 		// 랜덤 인증번호 생성 (6자리 숫자)
 		Random random = new Random();
@@ -235,7 +257,7 @@ public class LoginoutController {
 			result.put("flag", "S");
 			result.put("msg", "인증에 성공했습니다.");
 			// 검증 시간 체크
-			// TODO : 시작 시간 , 검증시간 비교하여 3분 이내인지 확인
+			// 시작 시간 , 검증시간 비교하여 3분 이내인지 확인
 			long currentTime = System.currentTimeMillis();
 			long timeDifference = currentTime - startTime;
 			if (timeDifference <= 3 * 60 * 1000) { // 3분 (3 * 60 * 1000 밀리초)

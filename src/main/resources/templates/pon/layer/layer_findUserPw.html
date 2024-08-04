@@ -1,27 +1,21 @@
-<div class="pop_wrap login findUserPw" data-layer-wrap="findUserPw" style="display: block;">
-  <div class="pop_top">
-    <!-- S : 성환 : 팝업창 닫기 버튼-->
-    <button class="pop_close hide_layer_lv2" data-layer-id="findUserPw" >
-      <img src="/pon/common/image/chat_close.svg" alt="">
-    </button>
-    <!-- E : 성환 : 팝업창 닫기 버튼-->
-  </div>
-  <div class="pop_content">
-    <h2 class="pop_title">비밀번호 재설정</h2>
-    <div class="login_wrap">
-      <div class="tab_menu">
-        <div class="tab_cont current" data-tab-wrap="tab1">
-          <p> 입력하신 정보와 일치하는 계정을 발견했습니다. </p>
-          <div class="input_wrap">
-            <input id="new_Pw" class="cert_input" type="password" placeholder="새로운 비밀번호를 입력해주세요.">
-            <input id="new_check_Pw" class="cert_input" type="password" placeholder="비밀번호를 다시한번 입력해주세요.">
-          </div>
-          <!-- S : 성환: 비밀번호 변경 버튼-->
-          <button type="button" class="btn btn_login_default login_btn" onclick="changePassword()">비밀번호 변경</button>
-          <!-- E : 성환: 비밀번호 변경 버튼-->
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<div class="pop_wrap findUserPw" data-layer-wrap="findUserPw" >
+	<div class="pop_top">
+		<button class="pop_close hide_layer_lv2" data-layer-id="findUserPw" >
+			<img src="/pon/common/image/chat_close.svg" alt="">
+		</button>
+	</div>
+	<div class="pop_header">
+		<img src="/pon/common/image/logo.svg" alt="피오니키즈 로고">
+		<h2 class="pop_title">비밀번호 재설정</h2>
+	</div>
+	<div class="pop_content">
+		<div class="find_user_wrap">
+          	<div class="input_wrap">
+				<input id="findUserId" name="userNm" class="name_input" type="text" placeholder="ID" readonly="readonly" >
+				<input id="new_Pw" class="cert_input" type="password" placeholder="새로운 비밀번호를 입력해주세요.">
+				<input id="new_check_Pw" class="cert_input" type="password" placeholder="비밀번호를 다시한번 입력해주세요.">
+			</div>
+			<button type="button" class="btn btn_login_default btn mt_10p" onclick="changePassword()">비밀번호 변경</button>
+		</div>
+	</div>
 </div>

@@ -214,7 +214,7 @@ function hideLayerLv2( layerId ) {
 }
 
 // 모든 팝업창 숨김 
-function hideAllPopup( layerId ) {
+function hideAllPopup( ) {
 	
 	$("[class^='layer_']").hide();
 	$("#pop_dim").fadeOut();

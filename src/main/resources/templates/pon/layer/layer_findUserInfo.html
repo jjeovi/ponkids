@@ -1,26 +1,20 @@
-<div class="pop_wrap login findUserInfo" data-layer-wrap="findUserInfo" style="display: block;">
-  <div class="pop_top">
-    <!-- S : 성환 : 팝업창 닫기 버튼-->
-    <button class="pop_close hide_layer_lv2" data-layer-id="findUserInfo" >
-      <img src="/pon/common/image/chat_close.svg" alt="">
-    </button>
-    <!-- E : 성환 : 팝업창 닫기 버튼-->
-  </div>
-  <div class="pop_content">
-    <h2 class="pop_title">아이디 찾기</h2>
-    <div class="login_wrap">
-      <div class="tab_menu">
-          <div class="tab_cont current" data-tab-wrap="tab1">
-              <p> 입력하신 정보와 일치하는 계정이 있습니다. </p>
-            <div class="input_wrap">
-              <p> ID : <span id="userId"></span> </p>
-            </div>
-            <!-- S : 성환: 로그인 하러가기 버튼-->
-            <button type="button" class="btn btn_login_default login_btn" onclick="findUsername()">로그인 하러가기</button>
-            <!-- E : 성환: 로그인 하러가기 버튼-->
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="pop_wrap findUserInfo" data-layer-wrap="findUserInfo" >
+	<div class="pop_top">
+		<button class="pop_close hide_layer_lv2" data-layer-id="findUserInfo" >
+			<img src="/pon/common/image/chat_close.svg" alt="">
+		</button>
+	</div>
+	<div class="pop_header">
+		<img src="/pon/common/image/logo.svg" alt="피오니키즈 로고">
+		<h2 class="pop_title">아이디 찾기</h2>
+	</div>
+	<div class="pop_content">
+		<div class="find_user_wrap" >
+          	<p class="match_text"> 입력하신 정보와 일치하는 계정이 있습니다. </p>
+          	<div class="data_wrap">
+            	<p> ID : <span id="userId"></span> </p>
+		  	</div>
+			<button type="button" class="btn btn_login_default btn mt_20p" onclick="refreshAndShowLoginPop()" >로그인 하러가기</button>
+		</div>
+	</div>
 </div>

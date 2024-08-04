@@ -18,7 +18,7 @@
 			</div>
 		</div>
 		<div class="find_user_wrap" data-tab-wrap="tab1">
-			<form id="findUserIdForm" th:action = "@{/findUsername}" method = "post" onsubmit="return findUsername()" style="width:95%;">
+			<form id="findUserIdForm" th:action = "@{/findUsername}" method = "post"  style="width:95%;">
 			<div class="tab_cont current">
 				<div class="input_wrap">
 					<input name="userNm" class="name_input" type="text" placeholder="이름을 입력해주세요.">
@@ -31,15 +31,15 @@
 			</form>
 		</div>
 		<div class="find_user_wrap" data-tab-wrap="tab2" style="display:none;">
-			<form id="findUserPwForm" th:action = "@{/findUsername}" method = "post" onsubmit="return findUsername()" style="width:95%;">
+			<form id="findUserPwForm" th:action = "@{/findUseremail}" method = "post" style="width:95%;">
 				<div class="tab_cont current">
 					<div class="input_wrap">
-						<input name="userNm" class="name_input" type="text" placeholder="이름을 입력해주세요.">
-						<input name="userId" class="name_input" type="text" placeholder="이메일을 입력해주세요.">
+						<input id="findPw_name"  name="userNm" class="name_input" type="text" placeholder="이름을 입력해주세요.">
+						<input id="findPw_email" name="userId" class="name_input" type="text" placeholder="이메일을 입력해주세요.">
 						<div class="group">
 							<input id="findPw_auth_number" class="cert_input" type="number" placeholder="인증 번호를 입력해주세요.">
-							<button id="findPw_send_auth_number" class="cert_btn" onclick="findUseremail()">인증번호 발송 <!-- 재발송 (03:00) 발송시 텍스트 변경 --> </button>
-							<div id="timerDisplay" class="timer_display"></div>
+							<button type="button" id="findPw_send_auth_number" class="cert_btn" onclick="findUseremail()" >인증번호 발송 <!-- 재발송 (03:00) 발송시 텍스트 변경 --> </button>
+<!--							<div id="timerDisplay" class="timer_display"></div>-->
 						</div>
 					</div>
 				</div>
@@ -52,67 +52,3 @@
 		</div>
 	</div>
 </div>
-
-
-
-<!--<div class="pop_wrap login user_find" data-layer-wrap="user_find" style="display: block;">-->
-<!--	<div class="pop_top">-->
-<!--		&lt;!&ndash; 기존 코드-->
-<!--		<p></p>-->
-<!--		<button class="pop_close" id="popup_layer_find_account_close"><i class="fas fa-times"><span class="hidden">팝업닫기</span></i></button>&ndash;&gt;-->
-<!--		&lt;!&ndash; S : 성환 : 팝업창 닫기 버튼&ndash;&gt;-->
-<!--		<button class="pop_close hide_layer" data-layer-id="user_find" >-->
-<!--			<img src="/pon/common/image/chat_close.svg" alt="">-->
-<!--		</button>-->
-<!--		&lt;!&ndash; E : 성환 : 팝업창 닫기 버튼&ndash;&gt;-->
-<!--	</div>-->
-<!--	<div class="pop_content">-->
-<!--		<h2 class="pop_title">아이디 · 비밀번호 찾기</h2>-->
-<!--		<div class="login_wrap">-->
-<!--			<div class="tab_menu">-->
-<!--				<div class="tab_menu_btn">-->
-<!--					<a href="javascript:void(0);" data-tab="tab1" class="active">아이디 찾기</a>-->
-<!--					<a href="javascript:void(0);" data-tab="tab2">비밀번호 찾기</a>-->
-<!--				</div>-->
-
-
-<!--				<form th:action = "@{/findUsername}" method = "post" onsubmit="return findUsername()">-->
-<!--					<div class="tab_cont current" data-tab-wrap="tab1">-->
-<!--						<div class="input_wrap">-->
-<!--							<input id="username" name="username" class="name_input" type="text" placeholder="이름을 입력해주세요.">-->
-
-<!--							<input id="phone" name="phone" type="number"  placeholder="휴대폰 번호를 입력해주세요.">-->
-<!--						</div>-->
-<!--						&lt;!&ndash; S : 성환: 아이디 찾기 버튼&ndash;&gt;-->
-<!--						<button type="button" class="btn btn_login_default login_btn" onclick="findUsername()">아이디 찾기</button>-->
-<!--						&lt;!&ndash; E : 성환: 아이디 찾기 버튼&ndash;&gt;-->
-<!--						&lt;!&ndash; 기존코드 <button id="findId_find_btn" class="find_btn">아이디 찾기</button>&ndash;&gt;-->
-<!--					</div>-->
-<!--				</form>-->
-
-
-
-<!--				<div class="tab_cont" data-tab-wrap="tab2">-->
-<!--					<div class="input_wrap">-->
-<!--						<input id="findPw_name" class="name_input" type="text" placeholder="이름을 입력해주세요.">-->
-
-<!--						<input id="findPw_email" class="name_input" type="text" placeholder="이메일을 입력해주세요.">-->
-<!--						<div class="group">-->
-<!--							<input id="findPw_auth_number" class="cert_input" type="number" placeholder="인증 번호를 입력해주세요.">-->
-<!--							<button id="findPw_send_auth_number" class="cert_btn" onclick="findUseremail()">인증번호 발송&lt;!&ndash; 재발송 (03:00) 발송시 텍스트 변경 &ndash;&gt;</button>-->
-<!--							<div id="timerDisplay" class="timer_display"></div>-->
-<!--						</div>-->
-<!--					</div>-->
-
-<!--					&lt;!&ndash; S : 성환 : 비밀번호 찾기 버튼&ndash;&gt;-->
-<!--					<div class="login_btn_wrap">-->
-<!--						<button type="button" class="btn btn_login_default login_btn" onclick="findUserpw()">인증번호 확인</button>-->
-<!--					</div>-->
-<!--					&lt;!&ndash; E : 성환 : 비밀번호 찾기 버튼&ndash;&gt;-->
-
-<!--					&lt;!&ndash;기존코드 <button id="findPw_find_btn" class="find_btn">비밀번호 찾기</button>&ndash;&gt;-->
-<!--				</div>-->
-<!--			</div>-->
-<!--		</div>-->
-<!--	</div>-->
-<!--</div>-->
