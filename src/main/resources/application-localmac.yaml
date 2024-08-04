@@ -84,7 +84,7 @@ mail :
     smtp:
         host: smtp.gmail.com
         port: 587
-        username: jonna930119@gmail.com
-        password: tkauokqjcnvfteuz
+        username: pioneerkids.us@gmail.com
+        password: pbcsfudouqeaeopb
 
 ######################################################################################################################
