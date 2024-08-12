@@ -1020,7 +1020,7 @@ function findUseremail(){
 
             // 통신 이후 로직
             if ( result.flag == "E" ) {
-                alert( result.msg );
+                // alert( result.msg );
 
             } else if ( result.flag == "S" ) {
 
@@ -1029,13 +1029,15 @@ function findUseremail(){
                 startTimer(180);
 
                 // 존재하는 계정정보일 경우 인증번호 발송되었다고 알림
-                alert(result.msg);
+                // alert(result.msg);
             }
         },
         error: function (){
             alert( "code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error)
         }
-    })
+    });
+
+    alert( "인증번호가 발송되었습니다." );
 }
 
 // 타이머(3분)
