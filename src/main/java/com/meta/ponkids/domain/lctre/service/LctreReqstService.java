@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.meta.ponkids.domain.lctre.dto.LctreListDto;
+import com.meta.ponkids.domain.lctre.repository.LctreRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,19 +23,24 @@ import com.meta.ponkids.global.util.ip.IpUtils;
 import com.meta.ponkids.global.util.session.SessionUtils;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
 public class LctreReqstService {
-	
+
+
+	private final LctreRepository 				lctreRepository;			// 수업 repository setting
 	private final LctreReqstRepository 			lctreReqstRepository;		// 수업 신청 repository setting
+
 	private final LctreReqstDetailRepository 	lctreReqstDetailRepository;	// 수업 신청 상세 repository setting
 	
 	@Transactional
 	public LctreReqstSaveDto save( LctreReqstSaveDto saveDto, HttpServletRequest request ) throws IOException {
 		
 		if ( saveDto != null ) {
-			
+
+
 			// list initial
 			List<LctreReqstSaveDto> lctreReqsts = saveDto.getLctreReqsts();
 			
@@ -45,8 +52,44 @@ public class LctreReqstService {
 				
 				// 2. TB_LCTRE_REQST insert
 				// ===========================================
-				
+
 				for (LctreReqstSaveDto lctreReqst : lctreReqsts) {
+
+					// [START] 수업별로 유효성 체크 진행
+					LctreListDto targetDto = lctreRepository.getByLctreSn( lctreReqst.getLctreSn() );
+
+					//      - 모집인원설정여부, 예비모집인원 설졍여부 확인
+					String rcritNmprSetYn 		= targetDto.getRcritNmprSetYn();		// 모집 인원 설정 여부
+					String preparRcritNmprSetYn = targetDto.getPreparRcritNmprSetYn();	// 예비 모집 인원 설정 여부
+					Long rltmReqstNmprCo		= targetDto.getRltmReqstNmprCo();		// 실시간 신청 인원 수
+					Long rcritNmprCo			= targetDto.getRcritNmprCo();			// 모집 인원 수
+					Long rltmPreparReqstNmprCo	= targetDto.getRltmPreparReqstNmprCo();	// 실시간 예비 신청 인원 수
+					Long preparRcritNmprCo		= targetDto.getPreparRcritNmprCo();		// 예비 모집 인원 수
+
+					//      1. 모집인원설정여부 설정시 : 모집인원수, 실시간신청인원수 확인
+					//         (1) 모집인원수 >  실시간신청인원수 : 그대로 insert
+					//         (2) 모집인원수 <= 실시간신청인원수 :
+					//             (2-1) [예비모집인원설정 Y 인 경우] : 모집인원수 + 예비모집인원수 > 실시간신청인원수 : 예비인원설정 후 insert
+					//                                              모집인원수 + 예비모집인원수 = 실시간신청인원수 : 수강신청 실패 로직 (인원수초과 알림)
+					//             (2-2) [예비모집인원설정 N 인 경우] : 수강신청 실패 로직 (인원수초과 알림)
+
+					if ( StringUtils.hasText( rcritNmprSetYn ) && "Y".equals( rcritNmprSetYn ) ) {
+						if ( rcritNmprCo <= rltmReqstNmprCo ) {
+							if ( StringUtils.hasText( preparRcritNmprSetYn ) && "Y".equals( preparRcritNmprSetYn ) ) {
+								if ( rcritNmprCo + preparRcritNmprCo > rltmReqstNmprCo ) {
+									// 예비인원 설정
+									lctreReqst.setPreparNmprYn( "Y" );
+								} else {
+									// 수강신청 실패 로직 (인원수초과 알림)
+								}
+							} else {
+								// 수강신청 실패 로직 (인원수초과 알림)
+							}
+						}
+					}
+					// [END] 수업별로 유효성 체크 진행
+
+
 					lctreReqst.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
 					lctreReqst.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
 					lctreReqst.setUpdusrId( SessionUtils.getClientId() );				// Id set : update
@@ -132,7 +175,5 @@ public class LctreReqstService {
 		// 2. 수업 상세 신청 delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
 		lctreReqstDetailRepository.deleteByClassReqstSn( classReqstSn );
 	}
-
-
 
 }

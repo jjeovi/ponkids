@@ -55,7 +55,8 @@ public class CmmnCdRepositoryImpl implements CmmnCdRepositoryCustom {
                         cmmnCd.remark,
                         ExpressionUtils.as( JPAExpressions.select( cmmnCdDetail.count() )
                                 .from( cmmnCdDetail )
-                                .where( cmmnCdDetail.cdNm.eq( cmmnCd.cdNm ) ), "childCnt" ),
+                                .where( cmmnCdDetail.cdNm.eq( cmmnCd.cdNm ),
+                                        cmmnCdDetail.delYn.eq("N" ) ), "childCnt" ),
                         cmmnCd.registerId,
                 		Expressions.stringTemplate("to_char({0}, '{1s}')", cmmnCd.regDt, "YYYY-MM-DD HH24:MI:SS")
                 ) )

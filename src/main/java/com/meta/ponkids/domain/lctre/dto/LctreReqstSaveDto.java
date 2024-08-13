@@ -20,6 +20,8 @@ public class LctreReqstSaveDto  {
     private Long    lctreSn;				// 수업 일련번호
     
     private Long    chldrnSn;				// 자녀 일련번호
+
+    private String  preparNmprYn;		    // 예비 인원 여부
     
     private String  registerId;             // 등록자 id
     
@@ -34,12 +36,13 @@ public class LctreReqstSaveDto  {
     private List<LctreReqstDetailSaveDto> lctreReqstDetails;	// list
     
     @Builder
-    public LctreReqstSaveDto( Long lctreReqstSn, Long classReqstSn, Long lctreSn, Long chldrnSn, String registerId, String registerIp, String updusrId, String updusrIp ) {
+    public LctreReqstSaveDto( Long lctreReqstSn, Long classReqstSn, Long lctreSn, Long chldrnSn, String preparNmprYn, String registerId, String registerIp, String updusrId, String updusrIp ) {
         
         this.lctreReqstSn   = lctreReqstSn;
         this.classReqstSn   = classReqstSn;
         this.lctreSn        = lctreSn;
         this.chldrnSn       = chldrnSn;
+        this.preparNmprYn   = preparNmprYn;
         this.registerId     = registerId;
         this.registerIp     = registerIp;
         this.updusrId       = updusrId;
@@ -53,6 +56,7 @@ public class LctreReqstSaveDto  {
                 .classReqstSn( classReqstSn )
                 .lctreSn( lctreSn )
                 .chldrnSn( chldrnSn )
+                .preparNmprYn( preparNmprYn )
                 .registerId( registerId )
                 .registerIp( registerIp )
                 .updusrId( updusrId )

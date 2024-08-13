@@ -39,6 +39,8 @@ public class LctreReqst extends BaseTimeEntity {
 	private Long lctreSn;				// 수업 일련번호
 	
 	private Long chldrnSn;				// 자녀 일련번호
+
+	private String preparNmprYn;		// 예비 인원 여부
 	
 	@Column(updatable = false)
 	private String registerId;          // 등록자 ID

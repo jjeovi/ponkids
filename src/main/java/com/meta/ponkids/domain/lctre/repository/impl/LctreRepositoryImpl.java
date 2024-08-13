@@ -4,10 +4,14 @@ import static com.meta.ponkids.domain.cls.entity.QClass.class$;
 import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl01.classCategoryCl01;
 import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategoryCl02;
 import static com.meta.ponkids.domain.lctre.entity.QLctre.lctre;
+import static com.meta.ponkids.domain.lctre.entity.QLctreReqst.lctreReqst;
+import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCd.cmmnCd;
 import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
 
 import java.util.List;
 
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.jpa.JPAExpressions;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -63,6 +67,11 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 								.when( lctre.rcritNmprSetYn.eq( "N" ) ).then( "미설정" )
 								.otherwise( "" )
 								.as( "rcritNmprSetYnNm" ),
+						ExpressionUtils.as( JPAExpressions.select( lctreReqst.count() )
+															.from( lctreReqst )
+															.where( lctreReqst.lctreSn.eq( lctre.lctreSn ),
+																	lctreReqst.delYn.eq("N" ),
+																	lctreReqst.preparNmprYn.eq("N" ) ), "rltmReqstNmprCo" ),
 						lctre.rcritNmprCo,
 						lctre.preparRcritNmprSetYn,
 						new CaseBuilder()
@@ -70,6 +79,11 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 								.when( lctre.preparRcritNmprSetYn.eq( "N" ) ).then( "미설정" )
 								.otherwise( "" )
 								.as( "preparRcritNmprSetYnNm" ),
+						ExpressionUtils.as( JPAExpressions.select( lctreReqst.count() )
+															.from( lctreReqst )
+															.where( lctreReqst.lctreSn.eq( lctre.lctreSn ),
+																	lctreReqst.delYn.eq("N" ),
+																	lctreReqst.preparNmprYn.eq("Y" ) ), "rltmPreparReqstNmprCo" ),
 						lctre.preparRcritNmprCo,
 						lctre.registerId,
                 		Expressions.stringTemplate("to_char({0}, '{1s}')", lctre.regDt, "YYYY-MM-DD HH24:MI:SS")
@@ -177,6 +191,11 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 								.when( lctre.rcritNmprSetYn.eq( "N" ) ).then( "미설정" )
 								.otherwise( "" )
 								.as( "rcritNmprSetYnNm" ),
+						ExpressionUtils.as( JPAExpressions.select( lctreReqst.count() )
+															.from( lctreReqst )
+															.where( lctreReqst.lctreSn.eq( lctre.lctreSn ),
+																	lctreReqst.delYn.eq("N" ),
+																	lctreReqst.preparNmprYn.eq("N" ) ), "rltmReqstNmprCo" ),
 						lctre.rcritNmprCo,
 						lctre.preparRcritNmprSetYn,
 						new CaseBuilder()
@@ -184,6 +203,11 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 								.when( lctre.preparRcritNmprSetYn.eq( "N" ) ).then( "미설정" )
 								.otherwise( "" )
 								.as( "preparRcritNmprSetYnNm" ),
+						ExpressionUtils.as( JPAExpressions.select( lctreReqst.count() )
+															.from( lctreReqst )
+															.where( lctreReqst.lctreSn.eq( lctre.lctreSn ),
+																	lctreReqst.delYn.eq("N" ),
+																	lctreReqst.preparNmprYn.eq("Y" ) ), "rltmPreparReqstNmprCo" ),
 						lctre.preparRcritNmprCo,
 						lctre.registerId,
                 		Expressions.stringTemplate("to_char({0}, '{1s}')", lctre.regDt, "YYYY-MM-DD HH24:MI:SS")
@@ -217,6 +241,91 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
                 .orderBy( lctre.lctreSn.desc())
                 .fetchFirst();
 		
+		return results;
+	}
+
+
+
+	@Override
+	public LctreListDto getByLctreSn( Long lctreSn ) {
+
+
+		// (1) 결과list (results).
+		LctreListDto results = query
+				// select
+				.select( new QLctreListDto(
+						lctre.lctreSn,
+						class$.ctgrySn,
+						classCategoryCl01.clNm.as( "ctgryNm" ),
+						class$.crseSn,
+						classCategoryCl02.clNm.as( "crseNm" ),
+						lctre.classSn,
+						class$.classSj,
+						cmmnCdDetail.cdDetailSn,
+						lctre.classDayCd,
+						cmmnCdDetail.cdDetailNm,
+						lctre.lctreSeq,
+						lctre.lctreSj,
+						lctre.lctreDt,
+						lctre.lctreAmt,
+						lctre.lctreDc,
+						lctre.lctreApplcntGuidance,
+						lctre.rcritNmprSetYn,
+						new CaseBuilder()
+								.when( lctre.rcritNmprSetYn.eq( "Y" ) ).then( "설정" )
+								.when( lctre.rcritNmprSetYn.eq( "N" ) ).then( "미설정" )
+								.otherwise( "" )
+								.as( "rcritNmprSetYnNm" ),
+						ExpressionUtils.as( JPAExpressions.select( lctreReqst.count() )
+								.from( lctreReqst )
+								.where( lctreReqst.lctreSn.eq( lctre.lctreSn ),
+										lctreReqst.delYn.eq("N" ),
+										lctreReqst.preparNmprYn.eq("N" ) ), "rltmReqstNmprCo" ),
+						lctre.rcritNmprCo,
+						lctre.preparRcritNmprSetYn,
+						new CaseBuilder()
+								.when( lctre.preparRcritNmprSetYn.eq( "Y" ) ).then( "설정" )
+								.when( lctre.preparRcritNmprSetYn.eq( "N" ) ).then( "미설정" )
+								.otherwise( "" )
+								.as( "preparRcritNmprSetYnNm" ),
+						ExpressionUtils.as( JPAExpressions.select( lctreReqst.count() )
+								.from( lctreReqst )
+								.where( lctreReqst.lctreSn.eq( lctre.lctreSn ),
+										lctreReqst.delYn.eq("N" ),
+										lctreReqst.preparNmprYn.eq("Y" ) ), "rltmPreparReqstNmprCo" ),
+						lctre.preparRcritNmprCo,
+						lctre.registerId,
+						Expressions.stringTemplate("to_char({0}, '{1s}')", lctre.regDt, "YYYY-MM-DD HH24:MI:SS")
+				) )
+				.from( lctre )
+				.leftJoin( class$ )
+				// join 에는 delYn 조건 필수로 추가
+				.on(    class$.classSn.eq( lctre.classSn ),
+						class$.delYn.eq( "N" )
+				)
+				.leftJoin( classCategoryCl01 )
+				// join 에는 delYn 조건 필수로 추가
+				.on(    class$.ctgrySn.eq( classCategoryCl01.clSn ),
+						classCategoryCl01.delYn.eq( "N" )
+				)
+				.leftJoin( classCategoryCl02 )
+				// join 에는 delYn 조건 필수로 추가
+				.on(    class$.crseSn.eq( classCategoryCl02.clSn ),
+						classCategoryCl02.delYn.eq("N")
+				)
+				.leftJoin( cmmnCdDetail )
+				.on(	cmmnCdDetail.cdNm.eq("DAY_7_CD"),
+						cmmnCdDetail.cdDetailVal1.eq( lctre.classDayCd ),
+						cmmnCdDetail.useYn.eq("Y"),
+						cmmnCdDetail.delYn.eq("N")
+				)
+				// where
+				.where(
+						eqLctreSn( lctreSn )
+				)
+				.orderBy( lctre.lctreSn.desc())
+				.fetchFirst();
+
 		return results;
 	}
 	
@@ -259,6 +368,10 @@ public class LctreRepositoryImpl implements LctreRepositoryCustom {
 	
 	private BooleanExpression eqClassSn( Long pk ) {
 		return ( pk != null && pk != 0 )? lctre.classSn.eq( pk ) : null;
+	}
+
+	private BooleanExpression eqLctreSn( Long pk ) {
+		return ( pk != null && pk != 0 )? lctre.lctreSn.eq( pk ) : null;
 	}
 	
     private BooleanExpression eqOption( String schOption, String schCntn ) {

@@ -24,7 +24,7 @@
             success: function ( ajaxResult ) {
 				
 				if ( ajaxResult.target == null ) {
-					alert("리뷰번호가 존재하지 않습니다. 다시 시도해주세요.");
+					alert("후기번호가 존재하지 않습니다. 다시 시도해주세요.");
 					
 				} else {
 					// 모달 내용 초기화 작업
@@ -40,7 +40,7 @@
 		} );
 	}
 	
-	// 리뷰 상세 조회 모달창 ( 관리 클릭시 ) 내용 초기화 작업
+	// 후기 상세 조회 모달창 ( 관리 클릭시 ) 내용 초기화 작업
 	function eraseDetailModalData() {
 		// detailData class 전부 초기화작업
 		$(".detailData").text("");
@@ -56,7 +56,7 @@
 		
 	}
 	
-	// 리뷰 상세 조회 모달창 내용 setting 작업
+	// 후기 상세 조회 모달창 내용 setting 작업
 	function setDetailModalData( result ) {
 		
 		// 객체 내부 키값들을 순회 ( 객체 생성자 Object 가 직접 가지고 있는 메서드 활용 Object.keys([list]) )
@@ -250,9 +250,9 @@
 							</select>
 							<div class="vl ml_5p"></div>
 							<select class="form-control ml_5p w_55r" name="schOption">
-								<option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">리뷰 제목</option>
-								<option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">리뷰자명</option>
-								<option value="C" th:selected=" ${searchDTO.schOption} == 'C' ">리뷰자ID</option>
+								<option value="A" th:selected=" ${searchDTO.schOption} == 'A' ">후기제목</option>
+								<option value="B" th:selected=" ${searchDTO.schOption} == 'B' ">작성자명</option>
+								<option value="C" th:selected=" ${searchDTO.schOption} == 'C' ">작성ㄹ자ID</option>
 							</select>
 							<input type="text" name="schCntn" th:value="${searchDTO.schCntn}"
 								   class="form-control input-sm" placeholder="검색어 입력"
@@ -278,7 +278,7 @@
 									<th>순번</th>
 									<th>분류</th>
 									<th>클래스</th>
-									<th>리뷰자</th>
+									<th>작성자</th>
 									<th>공개여부</th>
 									<th>등록일시</th>
 									<th>관리</th>
@@ -343,13 +343,13 @@
 			</div>
 		</div>
 	</div>
-	<!-- S : 모달 (리뷰 관리 : 리뷰 상세 조회 및 답변 작성 )  -->
+	<!-- S : 모달 (후기 관리 : 후기 상세 조회 및 답변 작성 )  -->
 	<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
 		 id="targetDetailModal" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
 		<div class="modal-dialog modal-dialog-centered modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title">리뷰 상세 조회</h4>
+					<h4 class="modal-title">후기 상세 조회</h4>
 					<button type="button" class="close" data-dismiss="modal">
 						<span aria-hidden="true">×</span></button>
 				</div>
@@ -365,7 +365,7 @@
 			</div>
 		</div>
 	</div>
-	<!-- E : 모달 (리뷰 관리 : 리뷰 상세 조회 및 답변 작성 )  -->
+	<!-- E : 모달 (후기 관리 : 후기 상세 조회 및 답변 작성 )  -->
 	<!-- E : content -->
 </th:block>
 </html>

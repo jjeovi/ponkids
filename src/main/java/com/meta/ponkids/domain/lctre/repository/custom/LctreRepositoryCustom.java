@@ -10,4 +10,6 @@ public interface LctreRepositoryCustom {
 	
 	LctreListDto getListByClassSn( Long classSn );
 
+	LctreListDto getByLctreSn( Long lctreSn );
+
 }

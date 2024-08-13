@@ -61,10 +61,14 @@ public class LctreService {
 		
 		return listDtos;
 	}
-	
-	
+
+
 	public LctreListDto getListByClassSn( Long classSn ) {
 		return lctreRepository.getListByClassSn( classSn );
+	}
+
+	public LctreListDto getByLctreSn( Long lctreSn ) {
+		return lctreRepository.getByLctreSn( lctreSn );
 	}
 	
 	

@@ -46,14 +46,18 @@ public class LctreListDto extends LctreDto {
 	
 	private String 		rcritNmprSetYn;			// 모집 인원 설정 여부
 	
-	private String 		rcritNmprSetYnNm;		// 모집 인원 설정 여부
-	
+	private String 		rcritNmprSetYnNm;		// 모집 인원 설정 여부명
+
+	private Long 		rltmReqstNmprCo ;		// 실시간 신청 인원 수
+
 	private Long 		rcritNmprCo;			// 모집 인원 수
-	
+
 	private String 		preparRcritNmprSetYn;	// 예비 모집 인원 설정 여부
 	
 	private String 		preparRcritNmprSetYnNm;	// 예비 모집 인원 설정 여부
-	
+
+	private Long 		rltmPreparReqstNmprCo;	// 실시간 예비 신청 인원 수
+
 	private Long 		preparRcritNmprCo;		// 예비 모집 인원 수
 	
     private String 		registerId;      		// 등록자 ID
@@ -68,7 +72,7 @@ public class LctreListDto extends LctreDto {
 	
 	@Builder
 	@QueryProjection
-	public LctreListDto( Long lctreSn, Long ctgrySn, String ctgryNm, Long crseSn, String crseNm, Long classSn, String classSj, Long classDaySn, String classDayCd, String classDayNm, Long lctreSeq, String lctreSj, String lctreDt, Long lctreAmt, String lctreDc, String lctreApplcntGuidance, String rcritNmprSetYn, String rcritNmprSetYnNm, Long rcritNmprCo, String preparRcritNmprSetYn, String preparRcritNmprSetYnNm, Long preparRcritNmprCo, String registerId, String regDt ) {
+	public LctreListDto( Long lctreSn, Long ctgrySn, String ctgryNm, Long crseSn, String crseNm, Long classSn, String classSj, Long classDaySn, String classDayCd, String classDayNm, Long lctreSeq, String lctreSj, String lctreDt, Long lctreAmt, String lctreDc, String lctreApplcntGuidance, String rcritNmprSetYn, String rcritNmprSetYnNm, Long rltmReqstNmprCo, Long rcritNmprCo, String preparRcritNmprSetYn, String preparRcritNmprSetYnNm, Long rltmPreparReqstNmprCo, Long preparRcritNmprCo, String registerId, String regDt ) {
 		this.lctreSn = lctreSn;
 		this.ctgrySn = ctgrySn;
 		this.ctgryNm = ctgryNm;
@@ -87,9 +91,11 @@ public class LctreListDto extends LctreDto {
 		this.lctreApplcntGuidance = lctreApplcntGuidance;
 		this.rcritNmprSetYn = rcritNmprSetYn;
 		this.rcritNmprSetYnNm = rcritNmprSetYnNm;
+		this.rltmReqstNmprCo = rltmReqstNmprCo;
 		this.rcritNmprCo = rcritNmprCo;
 		this.preparRcritNmprSetYn = preparRcritNmprSetYn;
 		this.preparRcritNmprSetYnNm = preparRcritNmprSetYnNm;
+		this.rltmPreparReqstNmprCo = rltmPreparReqstNmprCo;
 		this.preparRcritNmprCo = preparRcritNmprCo;
 		this.registerId = registerId;
 		this.regDt = regDt;

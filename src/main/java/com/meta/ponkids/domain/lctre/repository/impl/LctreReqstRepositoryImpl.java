@@ -44,7 +44,8 @@ public class LctreReqstRepositoryImpl implements LctreReqstRepositoryCustom {
 												lctre.classDayCd,
 												cmmnCdDetail.cdDetailNm,
 												lctreReqst.chldrnSn,
-												userChldrn.chldrnNm
+												userChldrn.chldrnNm,
+												lctreReqst.preparNmprYn
 						)
 				)
 				.from( lctreReqst )

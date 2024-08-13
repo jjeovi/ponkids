@@ -17,11 +17,11 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode( callSuper = false )
 public class LctreReqstListDto  {
     
-    private Long    lctreReqstSn;			// 수업 신청 일련번호
+    private Long    	lctreReqstSn;			// 수업 신청 일련번호
     
-    private Long    classReqstSn;			// 클래스 신청 일련번호
+    private Long    	classReqstSn;			// 클래스 신청 일련번호
     
-    private Long    lctreSn;				// 수업 일련번호
+    private Long    	lctreSn;				// 수업 일련번호
     
     private Long 		lctreSeq;				// 수업 순번
 	
@@ -37,11 +37,13 @@ public class LctreReqstListDto  {
 	
 	private String 		classDayCd;				// 클래스 요일 코드
 	
-	private String 			classDayNm;			// 클래스 요일 명
+	private String 		classDayNm;				// 클래스 요일 명
     
-    private Long	chldrnSn;				// 자녀 일련번호
-    
-    private String		chldrnNm;				// 자녀명
+    private Long		chldrnSn;				// 자녀 일련번호
+
+	private String		chldrnNm;				// 자녀명
+
+	private String		preparNmprYn;			// 예비 인원 여부
     
     private List<LctreReqstListDto> lctreReqsts;				// list
     
@@ -58,7 +60,7 @@ public class LctreReqstListDto  {
 	public LctreReqstListDto(	Long 	lctreReqstSn, 			Long 	classReqstSn, 	Long	lctreSn,	Long	lctreSeq, 
 								String 	lctreSj, 				String 	lctreDt,		Long	lctreAmt, 	String	lctreDc, 
 								String 	lctreApplcntGuidance, 	String 	classDayCd,		String 	classDayNm,	Long 	chldrnSn,
-								String	chldrnNm ) {
+								String	chldrnNm,				String 	preparNmprYn ) {
     	this.lctreReqstSn 			= lctreReqstSn;
 		this.classReqstSn 			= classReqstSn;
 		this.lctreSn 				= lctreSn;
@@ -72,6 +74,7 @@ public class LctreReqstListDto  {
 		this.classDayNm 			= classDayNm;
 		this.chldrnSn 				= chldrnSn;
 		this.chldrnNm 				= chldrnNm;
+		this.preparNmprYn 			= preparNmprYn;
 	}
     
 

@@ -146,7 +146,7 @@ public class ClassController {
 		}
 		
 		// 2. 클래스 의 수업 정보 : classLctreList > ByClassSn
-		model.addAttribute("classLctreList", lctreService.getListByClassSn( targetDto.getClassSn() ) );		// 클래스 수업 : classSn 으로 검색
+//		model.addAttribute("classLctreList", lctreService.getListByClassSn( targetDto.getClassSn() ) );		// 클래스 수업 : classSn 으로 검색
 		
 		// 3. 클래스 의 요일 정보 : classWeekList > ByClassSn
 		model.addAttribute("classWeekList", classWeekService.getListByClassSn( targetDto.getClassSn() ) );	// 클래스 요일 classSn으로 검색
@@ -243,33 +243,49 @@ public class ClassController {
 			
 			return "common/alert";
 		}
-		
-		// 0-3. 이미 등록되어있는 자녀와 수업인지 체크
-		// 같은자녀와수업의 내용으로는 중복등록할 수 없음.
-		
-		if ( lctreReqstRepository.existsByLctreSnAndChldrnSn( lctreReqsts.getLctreSn(), lctreReqsts.getChldrnSn() ) ) {
-			// 메시지 출력 및 url 이동 처리
-			model.addAttribute( "resultMsg", "같은 자녀로 신청된 같은수업이 존재합니다. 마이페이지에서 확인해주세요." );
+
+		// 0-3. 신청한 수업 존재 체크
+		List<LctreReqstSaveDto> lctreReqstDtoList = lctreReqsts.getLctreReqsts();
+		if ( lctreReqstDtoList == null ) {
+			model.addAttribute( "resultMsg", "신청한 수업이 없습니다. 다시 확인해주세요" );
 			model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/detail?pk=" + saveDto.getClassSn());
-			
+
 			return "common/alert";
 		}
-		
+
+		// 0-4. 이미 등록되어있는 자녀와 수업인지 체크
+		// 같은자녀와수업의 내용으로는 중복등록할 수 없음.
+		for (LctreReqstSaveDto lctreReqst : lctreReqstDtoList) {
+			if ( lctreReqstRepository.existsByLctreSnAndChldrnSn( lctreReqst.getLctreSn(), lctreReqst.getChldrnSn() ) ) {
+				// 메시지 출력 및 url 이동 처리
+				model.addAttribute( "resultMsg", "같은 자녀로 신청된 같은수업이 존재합니다. 마이페이지에서 확인해주세요." );
+				model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/detail?pk=" + saveDto.getClassSn() );
+
+				return "common/alert";
+			}
+		}
+
+		// 0-4. 수업 수강모집인원 설정 확인 및 유효성 체크
+		// 수업별로 체크를 해야하기 때문에 수업신청 프로세스에서 해당 체크 진행
+
+		//      - 모집인원설정여부, 예비모집인원 설졍여부 확인
+		//      1. 모집인원설정여부 설정시 : 수강모집인원수, 현재수강인원수, 지금추가하는클래스의 총건수  확인
+		//         (1) 수강모집인원수 > 현재수강인원수 : 그대로 insert
+		//             (1-1) 수강모집인원수 - 현재수강인원수  > 지금 추가해야할
+		//         (2) 수강모집인원수 < 현재수강인원수 :
+        //             (2-1) [예비모집인원설정 Y 인 경우] : 수강모집인원수 + 예비모집인원수 > 현재수강인원수 : 예비인원설정 후 insert
+		//                                              수강모집인원수 + 예비모집인원수 < 현재수강인원수 : 수강신청 실패 로직 (인원수초과 알림)
+        //             (2-2) [예비모집인원설정 N 인 경우] : 수강신청 실패 로직 (인원수초과 알림)
+
+
 		// 로그인 세션의 userSn 값으로 set
 		saveDto.setUserSn( loginDto.getUserSn() );
 		
 		// 1. TB_CLASS_REQST insert
 		// ===========================================
-		
-		// 1-1. 총 신청 건수 ( 한 클래스 내에 몇개의 [수업&자녀] 의 조합으로 신청을 했는지 => 수업과 자녀가 여러개라면 2개이상이 가능함 ) 계산하여 setting
-		List<LctreReqstSaveDto> lctreReqstDtoList = lctreReqsts.getLctreReqsts();
-		if ( lctreReqstDtoList == null ) {
-			model.addAttribute( "resultMsg", "신청한 수업이 없습니다. 다시 확인해주세요" );
-			model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/detail?pk=" + saveDto.getClassSn());
-			
-			return "common/alert";
-		}
-		
+
+
+		// 총 신청 건수 ( 한 클래스 내에 몇개의 [수업&자녀] 의 조합으로 신청을 했는지 => 수업과 자녀가 여러개라면 2개이상이 가능함 ) 계산하여 setting
 		// 총 신청 건수 setting  (* 신청한 수업의 size : 개수 ) 
 		saveDto.setTotReqstCnt(  Long.valueOf( lctreReqstDtoList.size() ) );	
 
