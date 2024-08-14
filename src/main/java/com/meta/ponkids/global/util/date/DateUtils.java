@@ -444,6 +444,7 @@ public class DateUtils implements DateConstants {
     
     /**
      * 첫번째 입력한 일자(A)가 두번째 입력한 비교일자(B) 기준 이전 일자인지 여부(A <= B)
+     * ex ) DateUtils.isBeforeDate( '20230101', '20240101' )  = true
      *
      * @param date        일자
      * @param compareDate 비교일자

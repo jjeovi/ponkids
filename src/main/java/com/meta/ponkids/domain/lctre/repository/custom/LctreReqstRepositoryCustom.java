@@ -7,5 +7,7 @@ import com.meta.ponkids.domain.lctre.dto.LctreReqstListDto;
 public interface LctreReqstRepositoryCustom {
     
     List<LctreReqstListDto> getListByClassReqstSn( Long classReqstSn );
+
+    LctreReqstListDto getFrstPreparNmpr( LctreReqstListDto targetDto );
     
 }

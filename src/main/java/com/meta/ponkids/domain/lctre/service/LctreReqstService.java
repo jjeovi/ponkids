@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.meta.ponkids.domain.lctre.dto.LctreListDto;
 import com.meta.ponkids.domain.lctre.repository.LctreRepository;
+import com.meta.ponkids.global.exception.CustomException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +37,7 @@ public class LctreReqstService {
 	private final LctreReqstDetailRepository 	lctreReqstDetailRepository;	// 수업 신청 상세 repository setting
 	
 	@Transactional
-	public LctreReqstSaveDto save( LctreReqstSaveDto saveDto, HttpServletRequest request ) throws IOException {
+	public LctreReqstSaveDto save( LctreReqstSaveDto saveDto, HttpServletRequest request, String moveUrl ) throws IOException {
 		
 		if ( saveDto != null ) {
 
@@ -53,6 +54,9 @@ public class LctreReqstService {
 				// 2. TB_LCTRE_REQST insert
 				// ===========================================
 
+				// 새로운 list 선언 ( long 변수)
+				List<Long> rltmReqstList = new ArrayList<>();
+
 				for (LctreReqstSaveDto lctreReqst : lctreReqsts) {
 
 					// [START] 수업별로 유효성 체크 진행
@@ -65,27 +69,43 @@ public class LctreReqstService {
 					Long rcritNmprCo			= targetDto.getRcritNmprCo();			// 모집 인원 수
 					Long rltmPreparReqstNmprCo	= targetDto.getRltmPreparReqstNmprCo();	// 실시간 예비 신청 인원 수
 					Long preparRcritNmprCo		= targetDto.getPreparRcritNmprCo();		// 예비 모집 인원 수
+					long nowReqstSameLctreCo = rltmReqstList.stream()
+							.filter( value -> value.equals( targetDto.getLctreSn() ) )
+							.count();													// 현재신청중같은수업의신청 수 : 현재 신청건 중 같은 수업으로 신청한 수업의 수
+
 
 					//      1. 모집인원설정여부 설정시 : 모집인원수, 실시간신청인원수 확인
-					//         (1) 모집인원수 >  실시간신청인원수 : 그대로 insert
-					//         (2) 모집인원수 <= 실시간신청인원수 :
-					//             (2-1) [예비모집인원설정 Y 인 경우] : 모집인원수 + 예비모집인원수 > 실시간신청인원수 : 예비인원설정 후 insert
-					//                                              모집인원수 + 예비모집인원수 = 실시간신청인원수 : 수강신청 실패 로직 (인원수초과 알림)
+					//         (1) 모집인원수 >  ( 실시간신청인원수 +  현재신청중같은수업의신청 수 ) : 그대로 insert
+					//         (2) 모집인원수 <= ( 실시간신청인원수 +  현재신청중같은수업의신청 수 ) :
+					//             (2-1) [예비모집인원설정 Y 인 경우] : 모집인원수 + 예비모집인원수 > ( 실시간신청인원수 +  현재신청중같은수업의신청 수 ) : 예비인원설정 후 insert
+					//                                              모집인원수 + 예비모집인원수 = ( 실시간신청인원수 +  현재신청중같은수업의신청 수 ) : 수강신청 실패 로직 (인원수초과 알림)
 					//             (2-2) [예비모집인원설정 N 인 경우] : 수강신청 실패 로직 (인원수초과 알림)
 
-					if ( StringUtils.hasText( rcritNmprSetYn ) && "Y".equals( rcritNmprSetYn ) ) {
-						if ( rcritNmprCo <= rltmReqstNmprCo ) {
-							if ( StringUtils.hasText( preparRcritNmprSetYn ) && "Y".equals( preparRcritNmprSetYn ) ) {
-								if ( rcritNmprCo + preparRcritNmprCo > rltmReqstNmprCo ) {
+					if ( StringUtils.hasText( rcritNmprSetYn ) && "Y".equals( rcritNmprSetYn ) ) {						//      1. 모집인원설정여부 설정시 : 모집인원수, 실시간신청인원수 확인
+						if ( rcritNmprCo <= ( rltmReqstNmprCo + nowReqstSameLctreCo ) ) {															//         (2) 모집인원수 <= 실시간신청인원수 :
+							if ( StringUtils.hasText( preparRcritNmprSetYn ) && "Y".equals( preparRcritNmprSetYn ) ) {	//             (2-1) [예비모집인원설정 Y 인 경우] : 모집인원수 + 예비모집인원수 > 실시간신청인원수 : 예비인원설정 후 insert
+								if ( rcritNmprCo + preparRcritNmprCo > ( rltmReqstNmprCo + + nowReqstSameLctreCo + rltmPreparReqstNmprCo ) ) {
 									// 예비인원 설정
 									lctreReqst.setPreparNmprYn( "Y" );
+									saveDto.setPreparNmprYn( "Y" );
+
+									// rltmReqstList 리스트에 해당 lctreSn 값 추가
+									rltmReqstList.add( lctreReqst.getLctreSn() );
 								} else {
 									// 수강신청 실패 로직 (인원수초과 알림)
+									throw new CustomException( "[" +  targetDto.getLctreSj() +"] 수업의 모집인원 수를 초과하였습니다.", moveUrl );
 								}
 							} else {
 								// 수강신청 실패 로직 (인원수초과 알림)
+								throw new CustomException( "[" +  targetDto.getLctreSj() +"] 수업의 모집인원 수를 초과하였습니다.", moveUrl );
 							}
+						} else {
+							// rltmReqstList 리스트에 해당 lctreSn 값 추가
+							rltmReqstList.add( lctreReqst.getLctreSn() );
 						}
+					} else {
+						// rltmReqstList 리스트에 해당 lctreSn 값 추가
+						rltmReqstList.add( lctreReqst.getLctreSn() );
 					}
 					// [END] 수업별로 유효성 체크 진행
 
@@ -162,7 +182,7 @@ public class LctreReqstService {
 	
 	// 각 수업신청건에 대한 수업 신청 상세 init 작업 
 	private LctreReqstListDto initLctreReqstDetails( LctreReqstListDto m ) {
-		
+
 		m.setLctreReqstDetails( lctreReqstDetailRepository.getListByLctreReqstSn( m.getLctreReqstSn() ) );
 		return m;
 	}

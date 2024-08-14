@@ -9,18 +9,15 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import com.meta.ponkids.global.exception.CustomException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import com.meta.ponkids.domain.cls.dto.ClassInqryListDto;
 import com.meta.ponkids.domain.cls.dto.ClassListDto;
@@ -327,10 +324,21 @@ public class ClassController {
 		//
 		//
 		// =======================
-		lctreReqstService.save(lctreReqsts, request );
+		String moveUrl = BASIC_PATH + "/" + mcd + "/detail?pk=" + saveDto.getClassSn();
+		lctreReqsts = lctreReqstService.save(lctreReqsts, request, moveUrl );
+
+		String resultMsg = "";
+		// 예비인원 여부 존재시, 예비로 신청되었다는 메시지 안내
+		if ( StringUtils.hasText( lctreReqsts.getPreparNmprYn() ) && "Y".equals( lctreReqsts.getPreparNmprYn() ) ) {
+			resultMsg = "정상적으로 신청 되었습니다. \n" +
+						"신청 수업 중 예비인원으로 신청된 수업이 존재합니다.\n" +
+						"마이페이지에서 확인해주세요.";
+		} else {
+			resultMsg = "정상적으로 신청 되었습니다.";
+		}
 		
 		// 메시지 출력 및 url 이동 처리
-		model.addAttribute( "resultMsg", "정상적으로 신청 되었습니다." );
+		model.addAttribute( "resultMsg", resultMsg );
 		model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/detail?pk=" + saveDto.getClassSn());
 		
 		return "common/alert";
@@ -349,6 +357,17 @@ public class ClassController {
         
         return result;
     }
+
+
+	@ExceptionHandler( CustomException.class )
+	public String handleCustomException(CustomException ex, Model model) {
+		// 예외 발생 시 특정 URL로 리다이렉트하고, 모델 데이터 추가
+
+		model.addAttribute( "resultMsg", ex.getMessage() );
+		model.addAttribute( "moveUrl", ex.getRedirectUrl() );
+
+		return "common/alert";
+	}
     
 
 }

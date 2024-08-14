@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.meta.ponkids.domain.system.login.service.LoginService;
+import com.meta.ponkids.global.email.EmailService;
 import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,7 @@ public class LoginoutController {
 
 	private final LoginService loginService;
 	private final JavaMailSender javaMailSender; // SMTP 사용하여 메일 전송하기
+	private final EmailService emailService;
 
 	private final HttpSession session; // HttpSession을 멤버 변수로 선언
 
@@ -171,6 +173,8 @@ public class LoginoutController {
 			//이메일 전송
 			// sendEmail(targetDto.getUserId(),generateRandomAuthNumber());
 			try{
+				//
+//				emailService.sendAuthNumber(  );
 				sendEmail(targetDto.getUserId(),generateRandomAuthNumber(), session);
 			}catch(MessagingException e){
 				e.printStackTrace();

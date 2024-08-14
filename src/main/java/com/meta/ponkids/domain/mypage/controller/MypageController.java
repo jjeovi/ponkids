@@ -9,9 +9,11 @@ import com.meta.ponkids.domain.cls.dto.ClassListDto;
 import com.meta.ponkids.domain.cls.dto.ClassReviewListDto;
 import com.meta.ponkids.domain.cls.service.ClassReviewService;
 import com.meta.ponkids.domain.cls.service.ClassService;
+import com.meta.ponkids.domain.lctre.dto.LctreListDto;
 import com.meta.ponkids.domain.lctre.dto.LctreModDto;
 import com.meta.ponkids.domain.lctre.dto.LctreReqstListDto;
 import com.meta.ponkids.domain.lctre.repository.LctreReqstDetailRepository;
+import com.meta.ponkids.domain.lctre.repository.LctreReqstRepository;
 import com.meta.ponkids.domain.lctre.service.LctreService;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
 import com.meta.ponkids.domain.user.dto.UserChldrnListDto;
@@ -54,6 +56,8 @@ import lombok.RequiredArgsConstructor;
 public class MypageController {
 	
 	public static String USER_VIEW_PATH;
+	private final LctreReqstRepository lctreReqstRepository;
+
 	// path 경로 : pon
 	@Value( "${key.default.directoryPath.user}" )
 	public void setUserViewPath(String value) {
@@ -195,6 +199,12 @@ public class MypageController {
 		// 1. 클래스 신청 (TB_CLASS_REQST) 에서 삭제  (1 건)
 		// 2. 수업 신청 ( TB_LCTRE_REQST) 에서 삭제  ( 여러건 가능 )
 		// 3. 수업 신청 상세 ( TB_LCTRE_REQST_DETAIL ) 에서 삭제 ( 2번 count 에서 추가로 여러건 또 가능 )
+		// 4. 삭제 이후 프로세스 수행 : 삭제 한 신청건의 수업들( lctreReqsts ) 을 순회해 각 수업의 모집인원 여부와 예비모집인원여부를 체크
+		//    4-1. 모집인원여부, 모집인원여부 Y, 예비인원여부 N 일 경우 :
+		//         4-1-1. 실시간현황수와 모집인원이 같다면 ( 트랜잭션에 의해 삭제한 것들을 체크하지 않을거임 그래서 같을때만 체크하면 됨 )
+		//                - 예비인원 중 현재신청건이 아니면서 삭제되지않고, 가장 먼저 등록한 1명 선택
+		//                - 예비인원여부를 N으로 설정
+		//                - 수업대상자 선정 알림 메일 발송
 		// =================================================================================
 
 		// 저장 후 이동할 url setting
@@ -223,34 +233,42 @@ public class MypageController {
 
 		// 0-3. 수업 시작일자 지났다면 취소 불가능
 		// 수업 조회
-		List<LctreReqstListDto> lctreReqstListDto = lctreReqstService.getListByClassReqstSn( pk );
+		List<LctreReqstListDto> lctreReqsts = lctreReqstService.getListByClassReqstSn( pk );
 
-		if( lctreReqstListDto == null ) {
+		if( lctreReqsts == null ) {
 			model.addAttribute( "resultMsg", "신청 수업 정보가 존재하지 않습니다." );
 			model.addAttribute( "moveUrl", moveUrl );
 
 			return "common/alert";
 		}
 
-		Long lctreSn = lctreReqstListDto.get(0).getLctreSn();
-		LctreModDto targetLctreDto = lctreService.findById( lctreSn );
-		if( targetLctreDto == null ) {
-			model.addAttribute( "resultMsg", "신청 수업 정보가 존재하지 않습니다." );
-			model.addAttribute( "moveUrl", moveUrl );
 
-			return "common/alert";
+		for( LctreReqstListDto lctreReqst :  lctreReqsts ) {
+
+			Long lctreSn = lctreReqst.getLctreSn();
+
+			LctreModDto targetLctreDto = lctreService.findById( lctreSn );
+
+			if( targetLctreDto == null ) {
+				model.addAttribute( "resultMsg", "신청 수업 정보가 존재하지 않습니다." );
+				model.addAttribute( "moveUrl", moveUrl );
+
+				return "common/alert";
+			}
+
+			// 수업 시작 일자와 오늘일자를 비교
+			// targetLctreDto.getLctreDt();		// 수업 시작일자
+			String dateTimeString = DateUtils.getCurrentDateString( DateUtils.DF_YYYYMMDDHHMMSS_DP );	// 오늘 날짜
+
+			if ( DateUtils.isBeforeDate( targetLctreDto.getLctreDt(), dateTimeString ) ) {
+				model.addAttribute( "resultMsg", "이미 시작한 수업이라 취소할 수 없습니다." );
+				model.addAttribute( "moveUrl", moveUrl );
+
+				return "common/alert";
+			}
+
 		}
 
-		// 수업 시작 일자와 오늘일자를 비교
-		// targetLctreDto.getLctreDt();		// 수업 시작일자
-		String dateTimeString = DateUtils.getCurrentDateString(DateUtils.DF_YYYYMMDDHHMMSS_DP);	// 오늘 날짜
-
-		if ( DateUtils.isBeforeDate( dateTimeString, targetLctreDto.getLctreDt() ) ) {
-			model.addAttribute( "resultMsg", "이미 시작한 수업이라 취소할 수 없습니다." );
-			model.addAttribute( "moveUrl", moveUrl );
-
-			return "common/alert";
-		}
 
 		// 1. 클래스 신청 (TB_CLASS_REQST) 에서 삭제  (1 건)
 		classReqstService.deleteById( pk ) ;
@@ -260,6 +278,45 @@ public class MypageController {
 
 		// 2,3 번 동시에 수행.
 		lctreReqstService.deleteByClassReqstSn( pk );
+
+		// 삭제 처리 이후 프로세스
+		// 4. 삭제 이후 프로세스 수행 : 삭제 한 신청건의 수업들( lctreReqsts ) 을 순회해 각 수업의 모집인원 여부와 예비모집인원여부를 체크
+		//    4-1. 모집인원여부, 예비모집인원여부가 Y, (신청자기준)예비인원여부 N 일 경우 :
+		//         4-1-1. 실시간 신청 인원 수와 모집 인원 수가 같다면 ( 트랜잭션에 의해 삭제한 것들을 체크하지 않을거임 그래서 같을때만 체크하면 됨 ) : 예비인원 중 현재신청건이 아니면서 삭제되지않고, 가장 먼저 등록한 1명의 예비인원여부를 N으로 설정
+
+		for ( LctreReqstListDto lctreReqst :  lctreReqsts ) {														// 4. 삭제 이후 프로세스 수행 : 삭제 한 신청건의 수업들( lctreReqsts ) 을 순회해 각 수업의 모집인원 여부와 예비모집인원여부를 체크
+
+			LctreListDto targetLctre = lctreService.getByLctreSn( lctreReqst.getLctreSn() );
+
+			String rcritNmprSetYn = targetLctre.getRcritNmprSetYn();				// 모집인원여부		( 수업 )
+			String preparRcritNmprSetYn = targetLctre.getPreparRcritNmprSetYn();	// 예비모집인원여부	( 수업 )
+			String preparNmprYn = lctreReqst.getPreparNmprYn();						// 예비인원여부 		( 신청자 )
+			Long rltmReqstNmprCo = targetLctre.getRltmReqstNmprCo();				// 실시간 신청 인원 수	( 수업 )
+			Long rcritNmprCo = targetLctre.getRcritNmprCo();						// 모집 인원 수		( 수업 )
+
+			if ( "Y".equals( rcritNmprSetYn ) &&
+				 "Y".equals( preparRcritNmprSetYn ) &&
+				 "N".equals( preparNmprYn ) ) {																		//    4-1. 모집인원여부, 예비모집인원여부가 Y, (신청자기준)예비인원여부 N 일 경우 :
+
+				if ( rltmReqstNmprCo != null && rcritNmprCo != null &&  rltmReqstNmprCo.equals( rcritNmprCo ) ) {	//         4-1-1. 실시간 신청 인원 수와 모집 인원 수가 같다면 ( 트랜잭션에 의해 삭제한 것들을 체크하지 않을거임 그래서 같을때만 체크하면 됨 )
+					// 예비인원 중 현재신청건이 아니면서 삭제되지않고, 가장 먼저 등록한 1명 선택
+					// 예비인원여부를 N으로 설정
+					// 수업대상자 선정 알림 메일 발송
+
+					// 예비인원 중 현재신청건이 아니면서 삭제되지않고, 가장 먼저 등록한 1명 선택
+					LctreReqstListDto frstPreparNmprLctreReqst = lctreReqstRepository.getFrstPreparNmpr( lctreReqst );
+
+					// 예비인원여부를 N으로 설정
+					lctreReqstRepository.updatePreparNmprYn( frstPreparNmprLctreReqst.getLctreReqstSn() );
+
+					// 수업대상자 선정 알림 메일 발송
+
+				}
+			}
+		}
+
+
+
 
 		// 메시지 출력 및 url 이동 처리
 		model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );

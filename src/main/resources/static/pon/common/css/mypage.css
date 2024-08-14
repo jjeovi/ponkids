@@ -302,9 +302,18 @@
  }
  
  .lctre_reqst_item .lctreGuide{
-	font-size: 19px;
-    font-weight: bold;
+     font-size: 18px;
+     font-weight: bold;
+     line-height: 1.6rem;
  }
+
+
+.lctre_reqst_item .lctreGuide2{
+    font-size: 19px;
+    font-weight: bold;
+    line-height: 1.6rem;
+    color: #b80000;
+}
  
  .lctre_reqst_item .detailAnswer:before{
 	 display: inline-block;

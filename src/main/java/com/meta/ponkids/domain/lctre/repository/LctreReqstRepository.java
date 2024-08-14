@@ -18,4 +18,11 @@ public interface LctreReqstRepository extends JpaRepository<LctreReqst, Long>, L
 			+       "     , updt_dt  = now()"
 			+       " WHERE class_reqst_sn = :classReqstSn", nativeQuery = true )
 	int deleteByClassReqstSn( @Param("classReqstSn") Long classReqstSn) ;
+
+	@Modifying( clearAutomatically = true )
+	@Query( value = "UPDATE {h-schema}tb_lctre_reqst"
+			+       "   SET prepar_nmpr_yn   = 'N'"
+			+       "     , updt_dt  = now()"
+			+       " WHERE lctre_reqst_sn = :lctreReqstSn", nativeQuery = true )
+	int updatePreparNmprYn( @Param("lctreReqstSn") Long lctreReqstSn) ;
 }
