@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import com.meta.ponkids.global.email.EmailService;
 import com.meta.ponkids.global.exception.CustomException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -72,6 +73,8 @@ public class ClassController {
 	private final AtchFileDetailService atchFileDetailService;
 
 	private final UserChldrnRepository userChldrnRepository;
+	
+	private final EmailService emailService;
 
 	@GetMapping( BASIC_PATH + "/{mcd}/list" )
 	public String list( @ModelAttribute ClassListDto listDto,
@@ -336,6 +339,23 @@ public class ClassController {
 		} else {
 			resultMsg = "정상적으로 신청 되었습니다.";
 		}
+		
+		/* [START] 수업 신청 완료 안내 메일 발송 */
+		ClassListDto targetDto = classService.getByClassSn( saveDto.getClassSn() );
+		
+		String mailUserId = SessionUtils.getUserId();							// 이메일 주소
+		String mailSubject = "[피오니키즈] 수업 신청 완료 안내";						// 메일 제목 setting : 수업 신청 완료 안내 메일
+		String templateName = "email_lctreReqstNotiInfo";						// 템플릿 파일명 setting : 수업 신청 완료 안내 메일
+		
+		// 템플릿에 전달할 데이터 설정
+		Map<String, Object> variables = new HashMap<>();
+		variables.put( "classSj", targetDto.getClassSj() );						// 클래스 제목 설정
+		variables.put( "totReqstCnt", saveDto.getTotReqstCnt() );				// 신청 수업 전체 수 설정
+		variables.put( "totReqstAmt", totReqstAmt );							// 신청 수업 전체 금액 설정
+		
+		// 인증번호 전송 (이메일)
+		emailService.sendTemplateEmail( mailUserId, mailSubject, templateName, variables );
+		/* [END] 수업 신청 완료 안내 메일 발송 */
 		
 		// 메시지 출력 및 url 이동 처리
 		model.addAttribute( "resultMsg", resultMsg );

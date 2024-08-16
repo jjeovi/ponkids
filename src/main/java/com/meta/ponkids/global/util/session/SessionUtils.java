@@ -8,7 +8,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 
 public class SessionUtils {
     
-    public static String getClientId() {
+    public static String getUserId() {
     	
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if ( auth == null ) {

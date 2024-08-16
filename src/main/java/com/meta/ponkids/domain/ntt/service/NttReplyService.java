@@ -47,10 +47,10 @@ public class NttReplyService {
                 .nttReplyCn( nttReplySaveReqDto.getNttReplyCn() )
                 .nttReplySeq( nttReplySeq )
                 .openYn( "Y" )
-                .registerId( SessionUtils.getClientId() )
+                .registerId( SessionUtils.getUserId() )
                 .registerIp( IpUtils.getClientIP( request ) )
                 .regDt( LocalDateTime.now() )
-                .updusrId( SessionUtils.getClientId() )
+                .updusrId( SessionUtils.getUserId() )
                 .updusrIp( IpUtils.getClientIP( request ) )
                 .updtDt( LocalDateTime.now() )
                 .build();

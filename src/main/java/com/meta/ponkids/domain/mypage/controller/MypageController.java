@@ -1,28 +1,30 @@
 package com.meta.ponkids.domain.mypage.controller;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.meta.ponkids.domain.cls.dto.ClassListDto;
+import com.meta.ponkids.domain.cls.dto.ClassReqstListDto;
 import com.meta.ponkids.domain.cls.dto.ClassReviewListDto;
+import com.meta.ponkids.domain.cls.service.ClassReqstService;
 import com.meta.ponkids.domain.cls.service.ClassReviewService;
 import com.meta.ponkids.domain.cls.service.ClassService;
 import com.meta.ponkids.domain.lctre.dto.LctreListDto;
 import com.meta.ponkids.domain.lctre.dto.LctreModDto;
 import com.meta.ponkids.domain.lctre.dto.LctreReqstListDto;
-import com.meta.ponkids.domain.lctre.repository.LctreReqstDetailRepository;
 import com.meta.ponkids.domain.lctre.repository.LctreReqstRepository;
+import com.meta.ponkids.domain.lctre.service.LctreReqstService;
 import com.meta.ponkids.domain.lctre.service.LctreService;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
+import com.meta.ponkids.domain.system.file.service.AtchFileService;
 import com.meta.ponkids.domain.user.dto.UserChldrnListDto;
+import com.meta.ponkids.domain.user.dto.UserChldrnModDto;
 import com.meta.ponkids.domain.user.dto.UserChldrnSaveDto;
 import com.meta.ponkids.domain.user.dto.UserModDto;
-import com.meta.ponkids.domain.user.repository.UserRepository;
+import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
+import com.meta.ponkids.domain.user.service.UserChldrnService;
 import com.meta.ponkids.domain.user.service.UserService;
-import com.meta.ponkids.global.util.date.DateConstants;
+import com.meta.ponkids.global.email.EmailService;
 import com.meta.ponkids.global.util.date.DateUtils;
+import com.meta.ponkids.global.util.session.SessionUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,24 +33,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.meta.ponkids.domain.cls.dto.ClassReqstListDto;
-import com.meta.ponkids.domain.cls.service.ClassReqstService;
-import com.meta.ponkids.domain.lctre.service.LctreReqstService;
-import com.meta.ponkids.domain.system.file.service.AtchFileService;
-import com.meta.ponkids.domain.user.dto.UserChldrnModDto;
-import com.meta.ponkids.domain.user.repository.UserChldrnRepository;
-import com.meta.ponkids.domain.user.service.UserChldrnService;
-import com.meta.ponkids.global.util.session.SessionUtils;
-
-import lombok.RequiredArgsConstructor;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/mypage")
 @Controller
@@ -85,6 +78,8 @@ public class MypageController {
 	private final CmmnCdDetailService cmmnCdDetailService;
 
 	private final ClassReviewService classReviewService;
+	
+	private final EmailService emailService;
 	
 	// layout 관련 dataSet 처리는 
 	// - MypageAop.java 에서 처리 ( 관심개수.. 등 ) 
@@ -201,10 +196,10 @@ public class MypageController {
 		// 3. 수업 신청 상세 ( TB_LCTRE_REQST_DETAIL ) 에서 삭제 ( 2번 count 에서 추가로 여러건 또 가능 )
 		// 4. 삭제 이후 프로세스 수행 : 삭제 한 신청건의 수업들( lctreReqsts ) 을 순회해 각 수업의 모집인원 여부와 예비모집인원여부를 체크
 		//    4-1. 모집인원여부, 모집인원여부 Y, 예비인원여부 N 일 경우 :
-		//         4-1-1. 실시간현황수와 모집인원이 같다면 ( 트랜잭션에 의해 삭제한 것들을 체크하지 않을거임 그래서 같을때만 체크하면 됨 )
+		//         4-1-1. (실시간 신청 인원 수 + 해당수업의삭제한 예비인원N인 건 수) 와 모집 인원 수가 같다면
 		//                - 예비인원 중 현재신청건이 아니면서 삭제되지않고, 가장 먼저 등록한 1명 선택
 		//                - 예비인원여부를 N으로 설정
-		//                - 수업대상자 선정 알림 메일 발송
+		//                - 수업대상자 전환 안내 메일 발송
 		// =================================================================================
 
 		// 저장 후 이동할 url setting
@@ -242,7 +237,10 @@ public class MypageController {
 			return "common/alert";
 		}
 
-
+		// 새로운 list 선언 ( long 변수)
+		// 결국 rltmDelReqstList 에서는 해당 수업의 예비인원여부가N인 삭제자의 수를 찾기 위함
+		List<Long> rltmDelReqstList = new ArrayList<>();		// 현재삭제할수업건수중 수업의 sn 을 체크하기위한 list : 추후 예비인원에서 수강대상자 선정 시 계산에필요. 예비인원이 N 인 경우만 add 한다. Y인경우는 굳이 add할 필요없음
+		
 		for( LctreReqstListDto lctreReqst :  lctreReqsts ) {
 
 			Long lctreSn = lctreReqst.getLctreSn();
@@ -266,6 +264,24 @@ public class MypageController {
 
 				return "common/alert";
 			}
+			
+			
+			// rltmDelReqstList 에 하단 조건이 해당될경우 lctreSn 추가
+			// - 해당 수업의 모집인원여부    : Y
+			// - 해당 수업의 예비모집인원여부 : Y
+			// - (신청자기준)예비인원여부    : N
+			
+			LctreListDto targetLctre = lctreService.getByLctreSn( lctreReqst.getLctreSn() );
+			
+			String rcritNmprSetYn = targetLctre.getRcritNmprSetYn();				// 모집인원여부		( 수업 )
+			String preparRcritNmprSetYn = targetLctre.getPreparRcritNmprSetYn();	// 예비모집인원여부		( 수업 )
+			String preparNmprYn = lctreReqst.getPreparNmprYn();						// 예비인원여부 		( 신청자 )
+			
+			if ( "Y".equals( rcritNmprSetYn ) &&
+					"Y".equals( preparRcritNmprSetYn ) &&
+					"N".equals( preparNmprYn ) ) {                                                                        //    4-1. 모집인원여부, 예비모집인원여부가 Y, (신청자기준)예비인원여부 N 일 경우 :
+				rltmDelReqstList.add(targetLctre.getLctreSn() );
+			}
 
 		}
 
@@ -282,35 +298,68 @@ public class MypageController {
 		// 삭제 처리 이후 프로세스
 		// 4. 삭제 이후 프로세스 수행 : 삭제 한 신청건의 수업들( lctreReqsts ) 을 순회해 각 수업의 모집인원 여부와 예비모집인원여부를 체크
 		//    4-1. 모집인원여부, 예비모집인원여부가 Y, (신청자기준)예비인원여부 N 일 경우 :
-		//         4-1-1. 실시간 신청 인원 수와 모집 인원 수가 같다면 ( 트랜잭션에 의해 삭제한 것들을 체크하지 않을거임 그래서 같을때만 체크하면 됨 ) : 예비인원 중 현재신청건이 아니면서 삭제되지않고, 가장 먼저 등록한 1명의 예비인원여부를 N으로 설정
+		//         4-1-1. (실시간 신청 인원 수 + 해당수업의삭제한 예비인원N인 건 수) 와 모집 인원 수가 같다면 : 예비인원 중 현재신청건이 아니면서 삭제되지않고, 가장 먼저 등록한 1명의 예비인원여부를 N으로 설정
 
 		for ( LctreReqstListDto lctreReqst :  lctreReqsts ) {														// 4. 삭제 이후 프로세스 수행 : 삭제 한 신청건의 수업들( lctreReqsts ) 을 순회해 각 수업의 모집인원 여부와 예비모집인원여부를 체크
-
+			
 			LctreListDto targetLctre = lctreService.getByLctreSn( lctreReqst.getLctreSn() );
 
 			String rcritNmprSetYn = targetLctre.getRcritNmprSetYn();				// 모집인원여부		( 수업 )
-			String preparRcritNmprSetYn = targetLctre.getPreparRcritNmprSetYn();	// 예비모집인원여부	( 수업 )
+			String preparRcritNmprSetYn = targetLctre.getPreparRcritNmprSetYn();	// 예비모집인원여부		( 수업 )
 			String preparNmprYn = lctreReqst.getPreparNmprYn();						// 예비인원여부 		( 신청자 )
 			Long rltmReqstNmprCo = targetLctre.getRltmReqstNmprCo();				// 실시간 신청 인원 수	( 수업 )
 			Long rcritNmprCo = targetLctre.getRcritNmprCo();						// 모집 인원 수		( 수업 )
-
+			Long nowDelSameLctreCo = rltmDelReqstList.stream()
+					.filter( value -> value.equals( targetLctre.getLctreSn() ) )
+					.count();														// 현재 삭제중 같은 수업의 신청수 : 예비인원여부가 N인 대상자만 집계
+			
 			if ( "Y".equals( rcritNmprSetYn ) &&
 				 "Y".equals( preparRcritNmprSetYn ) &&
 				 "N".equals( preparNmprYn ) ) {																		//    4-1. 모집인원여부, 예비모집인원여부가 Y, (신청자기준)예비인원여부 N 일 경우 :
-
-				if ( rltmReqstNmprCo != null && rcritNmprCo != null &&  rltmReqstNmprCo.equals( rcritNmprCo ) ) {	//         4-1-1. 실시간 신청 인원 수와 모집 인원 수가 같다면 ( 트랜잭션에 의해 삭제한 것들을 체크하지 않을거임 그래서 같을때만 체크하면 됨 )
+				
+				if ( rltmReqstNmprCo != null && nowDelSameLctreCo != null && rcritNmprCo != null && rcritNmprCo.equals( ( rltmReqstNmprCo + nowDelSameLctreCo ) ) ) {    //         4-1-1. (실시간 신청 인원 수 + 해당수업의삭제한 예비인원N인 건 수) 와 모집 인원 수가 같다면
 					// 예비인원 중 현재신청건이 아니면서 삭제되지않고, 가장 먼저 등록한 1명 선택
 					// 예비인원여부를 N으로 설정
 					// 수업대상자 선정 알림 메일 발송
 
 					// 예비인원 중 현재신청건이 아니면서 삭제되지않고, 가장 먼저 등록한 1명 선택
 					LctreReqstListDto frstPreparNmprLctreReqst = lctreReqstRepository.getFrstPreparNmpr( lctreReqst );
+					
+					// 세션 유효성 체크 : 세션 정보가 수업신청 정보와 일치하지 않으면 에러처리
+					if ( frstPreparNmprLctreReqst != null && !frstPreparNmprLctreReqst.getUserId().equals( SessionUtils.getUserId() ) ) {
+						model.addAttribute( "resultMsg", "세션 정보가 수업신청 정보와 일치하지 않습니다. 재 로그인 후 이용해주세요." );
+						model.addAttribute( "moveUrl", moveUrl );
+						
+						return "common/alert";
+					}
+					
+					// null이 아닐 경우에만 실행
+					if ( frstPreparNmprLctreReqst != null ){
+						
+						// 예비인원여부를 N으로 설정
+						lctreReqstRepository.updatePreparNmprYn( frstPreparNmprLctreReqst.getLctreReqstSn() );
+						
+						/* [START] 수업대상자 선정 알림 메일 발송 */
+						String mailUserId = frstPreparNmprLctreReqst.getUserId();					// 이메일 주소
+						String mailSubject = "[피오니키즈] 수업대상자 전환 안내";							// 메일 제목 setting : 수업대상자 전환 안내 메일
+						String templateName = "email_lctreTrgterCnvrsInfo";							// 템플릿 파일명 setting : 수업대상자 전환 안내 메일
+						
+						// 템플릿에 전달할 데이터 설정
+						Map<String, Object> variables = new HashMap<>();
+						variables.put( "classSj", frstPreparNmprLctreReqst.getClassSj() );		// 클래스 제목 설정
+						variables.put( "lctreSj", frstPreparNmprLctreReqst.getLctreSj() );		// 수업 제목 설정
+						variables.put( "lctreDt", frstPreparNmprLctreReqst.getLctreDt() );		// 수업 일시 설정
+						variables.put( "lctreAmt", frstPreparNmprLctreReqst.getLctreAmt() );	// 수업 금액 설정
+						variables.put( "chldrnNm", frstPreparNmprLctreReqst.getChldrnNm() );	// 자녀 이름 설정
 
-					// 예비인원여부를 N으로 설정
-					lctreReqstRepository.updatePreparNmprYn( frstPreparNmprLctreReqst.getLctreReqstSn() );
-
-					// 수업대상자 선정 알림 메일 발송
-
+						// 인증번호 전송 (이메일)
+						emailService.sendTemplateEmail( mailUserId, mailSubject, templateName, variables );
+						/* [END] 수업대상자 선정 알림 메일 발송 */
+						
+						// rltmDelReqstList 에서 해당 lctreSn 값 1개를 제거,
+						rltmDelReqstList.remove( targetLctre.getLctreSn() );
+						
+					}
 				}
 			}
 		}

@@ -139,7 +139,7 @@ public class UserAdmController {
             if ( saveDto.getMngrConfmYn() != null && saveDto.getMngrConfmYn().equals( "Y" ) ) {
                 saveDto.setConfmDt( LocalDateTime.now() );
                 saveDto.setConfmerIp( IpUtils.getClientIP( request ) );
-                saveDto.setConfmerId( SessionUtils.getClientId() );
+                saveDto.setConfmerId( SessionUtils.getUserId() );
             }
             
             // save

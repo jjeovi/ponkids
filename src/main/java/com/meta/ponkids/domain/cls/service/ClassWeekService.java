@@ -39,9 +39,9 @@ public class ClassWeekService {
                 classWeekSaveDto.setClassDayCd( yoil );
                 
                 classWeekSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );                                       // 등록자 ip
-                classWeekSaveDto.setRegisterId( SessionUtils.getClientId() );                                           // 등록자 id
+                classWeekSaveDto.setRegisterId( SessionUtils.getUserId() );                                           // 등록자 id
                 classWeekSaveDto.setUpdusrIp( IpUtils.getClientIP( request ) );                                         // 수정자 ip
-                classWeekSaveDto.setUpdusrId( SessionUtils.getClientId() );                                             // 수정자 id
+                classWeekSaveDto.setUpdusrId( SessionUtils.getUserId() );                                             // 수정자 id
                 
                 classWeekList.add( classWeekSaveDto.toEntity() );
                 
@@ -108,7 +108,7 @@ public class ClassWeekService {
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
-        targetDto.setUpdusrId( SessionUtils.getClientId() );
+        targetDto.setUpdusrId( SessionUtils.getUserId() );
         
         // target object 전환 ( dto to entity )
         classWeek = targetDto.toEntity();

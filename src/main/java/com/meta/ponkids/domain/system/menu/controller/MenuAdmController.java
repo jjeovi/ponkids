@@ -292,7 +292,7 @@ public class MenuAdmController {
         // 메뉴 삭제 (ajax)
         
         // id, ip set
-        modDto.setUpdusrId( SessionUtils.getClientId() );
+        modDto.setUpdusrId( SessionUtils.getUserId() );
         modDto.setUpdusrIp( IpUtils.getClientIP( request ) );            // Ip set)
         
         // menu 삭제

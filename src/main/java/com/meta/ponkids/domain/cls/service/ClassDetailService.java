@@ -39,9 +39,9 @@ public class ClassDetailService {
 			classDetail.setClassSn( saveDto.getClassSn() );
 			classDetail.setClassDetailSeq((long)i++);
 			
-			classDetail.setRegisterId(SessionUtils.getClientId());
+			classDetail.setRegisterId(SessionUtils.getUserId());
 			classDetail.setRegisterIp( IpUtils.getClientIP(request));
-			classDetail.setUpdusrId(SessionUtils.getClientId());
+			classDetail.setUpdusrId(SessionUtils.getUserId());
 			classDetail.setUpdusrIp( IpUtils.getClientIP(request));
 			
 			classDetailList.add(classDetail.toEntity());
@@ -104,7 +104,7 @@ public class ClassDetailService {
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
-        targetDto.setUpdusrId( SessionUtils.getClientId() );
+        targetDto.setUpdusrId( SessionUtils.getUserId() );
         
         // target object 전환 ( dto to entity )
         classDetail = targetDto.toEntity();

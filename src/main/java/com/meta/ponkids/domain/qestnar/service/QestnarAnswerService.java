@@ -41,9 +41,9 @@ public class QestnarAnswerService {
 		
 		// S : 1. 설문조사 답변 등록
 		
-		saveDto.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
+		saveDto.setRegisterId( SessionUtils.getUserId() );				// Id set : regist
 		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
-		saveDto.setUpdusrId( SessionUtils.getClientId() );					// Id set : update
+		saveDto.setUpdusrId( SessionUtils.getUserId() );					// Id set : update
 		saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
 		
 		QestnarAnswer newQestnarAnswer = qestnarAnswerRepository.save( saveDto.toEntity() );			// ** save -> save된 정보 newXxx 로 저장
@@ -58,9 +58,9 @@ public class QestnarAnswerService {
 				
 				qestnarAnswerDetail.setQestnarAnswerSn( newQestnarAnswer.getQestnarAnswerSn() );
 				
-				qestnarAnswerDetail.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
+				qestnarAnswerDetail.setRegisterId( SessionUtils.getUserId() );				// Id set : regist
 				qestnarAnswerDetail.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
-				qestnarAnswerDetail.setUpdusrId( SessionUtils.getClientId() );					// Id set : update
+				qestnarAnswerDetail.setUpdusrId( SessionUtils.getUserId() );					// Id set : update
 				qestnarAnswerDetail.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
 				
 				
@@ -100,9 +100,9 @@ public class QestnarAnswerService {
 								qestnarAnswerDetailSaveDto.setQestnarAnswerSn( newQestnarAnswer.getQestnarAnswerSn() );
 								qestnarAnswerDetailSaveDto.setQestnarQestnSn( qestnarAnswerDetail.getQestnarQestnSn() );
 								qestnarAnswerDetailSaveDto.setQestnarQestnDetailSn(qestnarQestnDetailSn);
-								qestnarAnswerDetailSaveDto.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
+								qestnarAnswerDetailSaveDto.setRegisterId( SessionUtils.getUserId() );				// Id set : regist
 								qestnarAnswerDetailSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
-								qestnarAnswerDetailSaveDto.setUpdusrId( SessionUtils.getClientId() );					// Id set : update
+								qestnarAnswerDetailSaveDto.setUpdusrId( SessionUtils.getUserId() );					// Id set : update
 								qestnarAnswerDetailSaveDto.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
 								
 								qestnarAnswerDetailList.add( qestnarAnswerDetailSaveDto.toEntity() );
@@ -174,7 +174,7 @@ public class QestnarAnswerService {
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
-        targetDto.setUpdusrId( SessionUtils.getClientId() );
+        targetDto.setUpdusrId( SessionUtils.getUserId() );
         
         // target object 전환 ( dto to entity )
         qestnarAnswer = targetDto.toEntity();

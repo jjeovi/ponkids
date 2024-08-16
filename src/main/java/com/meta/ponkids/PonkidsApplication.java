@@ -8,7 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableAsync    // 비동기 기능 활성화 : 메일 발송시 비동기처리
 @EnableCaching
 @EnableJpaAuditing
 @SpringBootApplication( exclude = SecurityAutoConfiguration.class )

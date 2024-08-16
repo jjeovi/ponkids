@@ -5,6 +5,7 @@ import static com.meta.ponkids.domain.lctre.entity.QLctre.lctre;
 import static com.meta.ponkids.domain.lctre.entity.QLctreReqst.lctreReqst;
 import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
 import static com.meta.ponkids.domain.user.entity.QUserChldrn.userChldrn;
+import static com.meta.ponkids.domain.user.entity.QUser.user;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class LctreReqstRepositoryImpl implements LctreReqstRepositoryCustom {
 				.select( new QLctreReqstListDto(
 												lctreReqst.lctreReqstSn,
 												lctreReqst.classReqstSn,
+												class$.classSj,
 												lctreReqst.lctreSn,
 												lctre.lctreSeq,
 												lctre.lctreSj,
@@ -44,7 +46,8 @@ public class LctreReqstRepositoryImpl implements LctreReqstRepositoryCustom {
 												cmmnCdDetail.cdDetailNm,
 												lctreReqst.chldrnSn,
 												userChldrn.chldrnNm,
-												lctreReqst.preparNmprYn
+												lctreReqst.preparNmprYn,
+												user.userId
 						)
 				)
 				.from( lctreReqst )
@@ -53,11 +56,19 @@ public class LctreReqstRepositoryImpl implements LctreReqstRepositoryCustom {
 				.on( 	lctre.lctreSn.eq( lctreReqst.lctreSn ),
 						lctre.delYn.eq( "N" )
 				)
+				.leftJoin( class$ )
+				.on ( 	class$.classSn.eq( lctre.classSn ),
+						class$.delYn.eq( "N" )
+				)
 				.leftJoin( userChldrn )
 				// join 에는 delYn 조건 필수로 추가
 				.on( 	userChldrn.chldrnSn.eq( lctreReqst.chldrnSn ),
 						userChldrn.delYn.eq( "N" )
 						)
+				.leftJoin( user )
+				.on( 	user.userSn.eq( userChldrn.userSn ),
+						user.delYn.eq( "N" )
+				)
 				.leftJoin( cmmnCdDetail )
 				.on(	cmmnCdDetail.cdNm.eq("DAY_7_CD"),
 						cmmnCdDetail.cdDetailVal1.eq( lctre.classDayCd ),
@@ -82,6 +93,7 @@ public class LctreReqstRepositoryImpl implements LctreReqstRepositoryCustom {
 				.select( new QLctreReqstListDto(
 												lctreReqst.lctreReqstSn,
 												lctreReqst.classReqstSn,
+												class$.classSj,
 												lctreReqst.lctreSn,
 												lctre.lctreSeq,
 												lctre.lctreSj,
@@ -93,7 +105,8 @@ public class LctreReqstRepositoryImpl implements LctreReqstRepositoryCustom {
 												cmmnCdDetail.cdDetailNm,
 												lctreReqst.chldrnSn,
 												userChldrn.chldrnNm,
-												lctreReqst.preparNmprYn
+												lctreReqst.preparNmprYn,
+												user.userId
 						)
 				)
 				.from( lctreReqst )
@@ -102,10 +115,18 @@ public class LctreReqstRepositoryImpl implements LctreReqstRepositoryCustom {
 				.on( 	lctre.lctreSn.eq( lctreReqst.lctreSn ),
 						lctre.delYn.eq( "N" )
 				)
+				.leftJoin( class$ )
+				.on ( 	class$.classSn.eq( lctre.classSn ),
+						class$.delYn.eq( "N" )
+				)
 				.leftJoin( userChldrn )
 				// join 에는 delYn 조건 필수로 추가
 				.on( 	userChldrn.chldrnSn.eq( lctreReqst.chldrnSn ),
 						userChldrn.delYn.eq( "N" )
+						)
+				.leftJoin( user )
+				.on( 	user.userSn.eq( userChldrn.userSn ),
+						user.delYn.eq( "N" )
 						)
 				.leftJoin( cmmnCdDetail )
 				.on(	cmmnCdDetail.cdNm.eq("DAY_7_CD"),

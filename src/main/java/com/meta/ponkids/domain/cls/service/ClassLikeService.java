@@ -32,9 +32,9 @@ public class ClassLikeService {
 	@Transactional
 	public ClassLikeSaveDto save( ClassLikeSaveDto saveDto, HttpServletRequest request ) throws IOException {
 		
-		saveDto.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
+		saveDto.setRegisterId( SessionUtils.getUserId() );				// Id set : regist
 		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
-		saveDto.setUpdusrId( SessionUtils.getClientId() );					// Id set : update
+		saveDto.setUpdusrId( SessionUtils.getUserId() );					// Id set : update
 		saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
 		
 		ClassLike newClassLike = classLikeRepository.save( saveDto.toEntity() );			// ** save -> save된 정보 newXxx 로 저장

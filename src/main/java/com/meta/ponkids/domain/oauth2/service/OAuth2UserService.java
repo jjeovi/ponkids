@@ -62,7 +62,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
 		    -> 1-2-(1)(최초 1회)) 회원가입 진행 : 회원가입시 이메일은 disabled 처리하여 수정못하게 하고, 비밀번호와 나머지 입력은 기존 회원가입과 동일하게 수행.
 		           => "최초 로그인 시 회원 정보 등록이 필요합니다. 회원정보 등록 후 재로그인 해주세요. (추후 일반로그인으로도 로그인이 가능합니다.)"
 		    -> 1-2-(2) 최초 1회 로그인이 아닐시 : 1-1-(2) 로직으로 이동
-		String provider = userRequest.getClientRegistration().getClientId();
+		String provider = userRequest.getClientRegistration().getUserId();
 		String providerId = oAuth2User.getAttribute("sub");
 		String username = provider + "_" + providerId; //중복이 발생하지 않도록 provider와 providerId를 조합
 		1. sns의 email 을 추출하여 해당 이메일로 가입된 계정이 있는지를 조회

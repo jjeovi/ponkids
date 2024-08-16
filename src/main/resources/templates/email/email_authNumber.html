@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>이메일 제목</title>
+  <title>비밀번호 찾기 인증번호 발송 안내 메일</title>
 </head>
 <body>
 <div style="padding:0;margin:0">
@@ -17,7 +17,7 @@
                     <p style="font-size:16px;line-height:26px;margin-top:30px;padding:0 30px"> 안녕하세요.<br>요청한 아래 <b>'인증번호'</b>를 피오니키즈에 인증하세요.<br> 감사합니다. </p>
                 </span>
       <p style="font-size:16px;margin:40px 0 0 0;padding:0 30px 30px 30px;line-height:28px"> 인증번호
-        <span style="font-size:24px;margin-left:15px">${authNumber}</span>
+        <span style="font-size:24px;margin-left:15px" th:text="${authNumber}"></span>
       </p>
     </div>
   </div>

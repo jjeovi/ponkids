@@ -100,7 +100,7 @@ public class UserService {
         if ( userSaveDto.getMngrYn().equals( "Y" ) ) {
             userRoleSaveDto.setUserSn( newUser.getUserSn() );                               // 등록한 ID의 sn값 바로 호출 (newUser에서 값 호출)
             userRoleSaveDto.setRegisterIp( IpUtils.getClientIP( request ) );                // 관리자 IP 저장
-            userRoleSaveDto.setRegisterId( SessionUtils.getClientId() );                    // 등록자 ID setting
+            userRoleSaveDto.setRegisterId( SessionUtils.getUserId() );                    // 등록자 ID setting
             
             userRoleRepository.save( userRoleSaveDto.toEntity() );                            // * 권한 save
         }
@@ -115,7 +115,7 @@ public class UserService {
                 userChldrn.setUserChldrnSeq( ( long ) userChldrns.getUserChldrns().indexOf( userChldrn ) + 1 );    // userChldrnSeq Setting
                 
                 userChldrn.setRegisterIp( IpUtils.getClientIP( request ) );                                        // 관리자 IP 저장
-                userChldrn.setRegisterId( SessionUtils.getClientId() );                                                // TODO : 현재 세션의 userId값으로 수정
+                userChldrn.setRegisterId( SessionUtils.getUserId() );                                                // TODO : 현재 세션의 userId값으로 수정
                 if ( userChldrn.getRegisterId() == null ) {
                 	userChldrn.setRegisterId( userSaveDto.getUserId() );
                 }
@@ -205,7 +205,7 @@ public class UserService {
 
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
-        targetDto.setUpdusrId( SessionUtils.getClientId() );
+        targetDto.setUpdusrId( SessionUtils.getUserId() );
 
         // target object 전환 ( dto to entity )
         user = targetDto.toEntity();
@@ -255,7 +255,7 @@ public class UserService {
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
-        targetDto.setUpdusrId( SessionUtils.getClientId() );
+        targetDto.setUpdusrId( SessionUtils.getUserId() );
         
         // target object 전환 ( dto to entity )
         user = targetDto.toEntity();
@@ -286,7 +286,7 @@ public class UserService {
             
             // id,ip setting
             userRoleTargetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
-            userRoleTargetDto.setUpdusrId( SessionUtils.getClientId() );
+            userRoleTargetDto.setUpdusrId( SessionUtils.getUserId() );
             
             // target object 전환 ( dto to entity )
             userRole = userRoleTargetDto.toEntity();
@@ -315,7 +315,7 @@ public class UserService {
                 userChldrn.setUserChldrnSeq( ( long ) userChldrns.getUserChldrns().indexOf( userChldrn ) + 1 );    // userChldrnSeq Setting
                 
                 userChldrn.setRegisterIp( IpUtils.getClientIP( request ) );                                        // 관리자 IP 저장
-                userChldrn.setRegisterId( SessionUtils.getClientId() );                                                // TODO : 현재 세션의 userId값으로 수정
+                userChldrn.setRegisterId( SessionUtils.getUserId() );                                                // TODO : 현재 세션의 userId값으로 수정
                 
                 // 자녀 프로필 존재시 추가
                 if ( !userChldrn.getFile().isEmpty() ) {
@@ -373,7 +373,7 @@ public class UserService {
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
-        targetDto.setUpdusrId( SessionUtils.getClientId() );
+        targetDto.setUpdusrId( SessionUtils.getUserId() );
         
         // target object 전환 ( dto to entity )
         user = targetDto.toEntity();

@@ -20,6 +20,8 @@ public class LctreReqstListDto  {
     private Long    	lctreReqstSn;			// 수업 신청 일련번호
     
     private Long    	classReqstSn;			// 클래스 신청 일련번호
+	
+	private String    	classSj;				// 클래스 제목
     
     private Long    	lctreSn;				// 수업 일련번호
     
@@ -44,6 +46,8 @@ public class LctreReqstListDto  {
 	private String		chldrnNm;				// 자녀명
 
 	private String		preparNmprYn;			// 예비 인원 여부
+	
+	private String		userId;					// 사용자 ID : 메일 발송 시 ID 검증하기 위함
     
     private List<LctreReqstListDto> lctreReqsts;				// list
     
@@ -57,12 +61,13 @@ public class LctreReqstListDto  {
     
     @Builder
     @QueryProjection
-	public LctreReqstListDto(	Long 	lctreReqstSn, 			Long 	classReqstSn, 	Long	lctreSn,	Long	lctreSeq, 
-								String 	lctreSj, 				String 	lctreDt,		Long	lctreAmt, 	String	lctreDc, 
-								String 	lctreApplcntGuidance, 	String 	classDayCd,		String 	classDayNm,	Long 	chldrnSn,
-								String	chldrnNm,				String 	preparNmprYn ) {
+	public LctreReqstListDto(	Long 	lctreReqstSn, 			Long 	classReqstSn, 			String	classSj,		Long	lctreSn,
+								Long	lctreSeq,				String 	lctreSj, 				String 	lctreDt,		Long	lctreAmt,
+								String	lctreDc,				String 	lctreApplcntGuidance, 	String 	classDayCd,		String 	classDayNm,
+								 Long 	chldrnSn,				String	chldrnNm,				String 	preparNmprYn,	String userId ) {
     	this.lctreReqstSn 			= lctreReqstSn;
 		this.classReqstSn 			= classReqstSn;
+		this.classSj 				= classSj;
 		this.lctreSn 				= lctreSn;
 		this.lctreSeq 				= lctreSeq;
 		this.lctreSj 				= lctreSj;
@@ -75,6 +80,7 @@ public class LctreReqstListDto  {
 		this.chldrnSn 				= chldrnSn;
 		this.chldrnNm 				= chldrnNm;
 		this.preparNmprYn 			= preparNmprYn;
+		this.userId					= userId;
 	}
     
 

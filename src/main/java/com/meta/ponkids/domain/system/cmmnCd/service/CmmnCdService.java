@@ -31,9 +31,9 @@ public class CmmnCdService {
     public CmmnCdSaveDto save( CmmnCdSaveDto saveDto, HttpServletRequest request ) throws IOException {
 //    public CmmnCdSaveDto save( CmmnCdSaveDto saveDto, CmmnCdRoleSaveDto cmmnCdRoleSaveDto, HttpServletRequest request ) throws IOException {
         
-        saveDto.setRegisterId( SessionUtils.getClientId() );                // Id set : regist
+        saveDto.setRegisterId( SessionUtils.getUserId() );                // Id set : regist
         saveDto.setRegisterIp( IpUtils.getClientIP( request ) );            // Ip set : regist
-        saveDto.setUpdusrId( SessionUtils.getClientId() );                    // Id set : update
+        saveDto.setUpdusrId( SessionUtils.getUserId() );                    // Id set : update
         saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );                // Ip set : update
         
         cmmnCdRepository.save( saveDto.toEntity() );            // ** save -> save된 정보 newXxx 로 저장
@@ -114,7 +114,7 @@ public class CmmnCdService {
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
-        targetDto.setUpdusrId( SessionUtils.getClientId() );
+        targetDto.setUpdusrId( SessionUtils.getUserId() );
         
         // target object 전환 ( dto to entity )
         cmmnCd = targetDto.toEntity();

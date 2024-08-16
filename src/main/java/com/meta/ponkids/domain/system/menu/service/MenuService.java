@@ -65,9 +65,9 @@ public class MenuService {
     @Transactional
     public MenuSaveDto save( MenuSaveDto saveDto, HttpServletRequest request, String type ) throws IOException {
         
-        saveDto.setRegisterId( SessionUtils.getClientId() );        // Id set : regist
+        saveDto.setRegisterId( SessionUtils.getUserId() );        // Id set : regist
         saveDto.setRegisterIp( IpUtils.getClientIP( request ) );    // Ip set : regist
-        saveDto.setUpdusrId( SessionUtils.getClientId() );          // Id set : update
+        saveDto.setUpdusrId( SessionUtils.getUserId() );          // Id set : update
         saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );      // Ip set : update
         
         Menu newMenu = null;
@@ -225,7 +225,7 @@ public class MenuService {
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
-        targetDto.setUpdusrId( SessionUtils.getClientId() );
+        targetDto.setUpdusrId( SessionUtils.getUserId() );
         
         // target object 전환 ( dto to entity )
         menu = targetDto.toEntity();
@@ -260,7 +260,7 @@ public class MenuService {
                 MenuRoleSaveDto menuRole = new MenuRoleSaveDto();
                 
                 menuRole.setRegisterId( IpUtils.getClientIP( request ) );
-                menuRole.setRegisterIp( SessionUtils.getClientId() );
+                menuRole.setRegisterIp( SessionUtils.getUserId() );
                 
                 menuRole.setMenuSn( menuDto.getMenuSn() );
                 menuRole.setRoleSn( roleSn );
@@ -286,7 +286,7 @@ public class MenuService {
                 MenuRoleSaveDto menuRole = new MenuRoleSaveDto();
                 
                 menuRole.setRegisterId( IpUtils.getClientIP( request ) );
-                menuRole.setRegisterIp( SessionUtils.getClientId() );
+                menuRole.setRegisterIp( SessionUtils.getUserId() );
                 
                 menuRole.setMenuSn( menuDto.getMenuSn() );
                 menuRole.setRoleSn( roleSn );

@@ -47,10 +47,10 @@ public class BbsService {
                 .replySetYn( bbsSaveReqDto.getReplySetYn() )
                 .useYn( bbsSaveReqDto.getUseYn() )
                 .openYn( bbsSaveReqDto.getOpenYn() )
-                .registerId( SessionUtils.getClientId() )
+                .registerId( SessionUtils.getUserId() )
                 .registerIp( IpUtils.getClientIP( request ) )
                 .regDt( LocalDateTime.now() )
-                .updusrId( SessionUtils.getClientId() )
+                .updusrId( SessionUtils.getUserId() )
                 .updusrIp( IpUtils.getClientIP( request ) )
                 .updtDt( LocalDateTime.now() )
                 .build();

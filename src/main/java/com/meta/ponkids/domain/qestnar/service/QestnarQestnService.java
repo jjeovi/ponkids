@@ -47,9 +47,9 @@ public class QestnarQestnService {
 			
 			qestnarQestn.setQestnarQestnSeq((long)i++);
 			
-			qestnarQestn.setRegisterId(SessionUtils.getClientId());
+			qestnarQestn.setRegisterId(SessionUtils.getUserId());
 			qestnarQestn.setRegisterIp( IpUtils.getClientIP(request));
-			qestnarQestn.setUpdusrId(SessionUtils.getClientId());
+			qestnarQestn.setUpdusrId(SessionUtils.getUserId());
 			qestnarQestn.setUpdusrIp( IpUtils.getClientIP(request));
 			
 			qestnarQestnList.add( qestnarQestn.toEntity() );
@@ -71,9 +71,9 @@ public class QestnarQestnService {
 				
 				for (QestnarQestnDetailSaveDto qestnarQestnDetail : qestnarQestnDetails) {
 					
-					qestnarQestnDetail.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
+					qestnarQestnDetail.setRegisterId( SessionUtils.getUserId() );				// Id set : regist
 					qestnarQestnDetail.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
-					qestnarQestnDetail.setUpdusrId( SessionUtils.getClientId() );				// Id set : update
+					qestnarQestnDetail.setUpdusrId( SessionUtils.getUserId() );				// Id set : update
 					qestnarQestnDetail.setUpdusrIp( IpUtils.getClientIP( request ) );			// Ip set : update
 					
 					qestnarQestnDetail.setQestnarQestnSn( qestnarQestnList.get(i).getQestnarQestnSn() );
@@ -148,7 +148,7 @@ public class QestnarQestnService {
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
-        targetDto.setUpdusrId( SessionUtils.getClientId() );
+        targetDto.setUpdusrId( SessionUtils.getUserId() );
         
         // target object 전환 ( dto to entity )
         qestnarQestn = targetDto.toEntity();

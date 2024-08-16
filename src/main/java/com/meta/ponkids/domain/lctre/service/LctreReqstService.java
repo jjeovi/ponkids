@@ -55,7 +55,7 @@ public class LctreReqstService {
 				// ===========================================
 
 				// 새로운 list 선언 ( long 변수)
-				List<Long> rltmReqstList = new ArrayList<>();
+				List<Long> rltmReqstList = new ArrayList<>();		// 현재신청중같은수업의신청 수를 체크하기위한 list
 
 				for (LctreReqstSaveDto lctreReqst : lctreReqsts) {
 
@@ -110,9 +110,9 @@ public class LctreReqstService {
 					// [END] 수업별로 유효성 체크 진행
 
 
-					lctreReqst.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
+					lctreReqst.setRegisterId( SessionUtils.getUserId() );				// Id set : regist
 					lctreReqst.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
-					lctreReqst.setUpdusrId( SessionUtils.getClientId() );				// Id set : update
+					lctreReqst.setUpdusrId( SessionUtils.getUserId() );				// Id set : update
 					lctreReqst.setUpdusrIp( IpUtils.getClientIP( request ) );			// Ip set : update
 					
 					// 2-1. 클래스 신청 일련번호 (classReqstSn 값 set) set
@@ -135,9 +135,9 @@ public class LctreReqstService {
 					if ( lctreReqstDetails != null && lctreReqstDetails.size() > 0 ) {
 						
 						for (LctreReqstDetailSaveDto lctreReqstDetail : lctreReqstDetails) {
-							lctreReqstDetail.setRegisterId( SessionUtils.getClientId() );				// Id set : regist
+							lctreReqstDetail.setRegisterId( SessionUtils.getUserId() );				// Id set : regist
 							lctreReqstDetail.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
-							lctreReqstDetail.setUpdusrId( SessionUtils.getClientId() );				// Id set : update
+							lctreReqstDetail.setUpdusrId( SessionUtils.getUserId() );				// Id set : update
 							lctreReqstDetail.setUpdusrIp( IpUtils.getClientIP( request ) );			// Ip set : update
 							
 							// 2-1. 수업 신청 일련번호 (lctreReqstSn 값 set) set
