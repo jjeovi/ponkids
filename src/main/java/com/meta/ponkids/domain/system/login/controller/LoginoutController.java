@@ -1,67 +1,52 @@
 package com.meta.ponkids.domain.system.login.controller;
 
-import java.io.IOException;
-import java.lang.reflect.Member;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import com.meta.ponkids.domain.system.login.dto.LoginDto;
 import com.meta.ponkids.domain.system.login.service.LoginService;
 import com.meta.ponkids.global.email.EmailService;
-import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.meta.ponkids.domain.system.login.dto.LoginDto;
-
-/* S: smtp 이메일 보내기. javamail 라이브러리 사용*/
-import java.util.Properties;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
-import javax.mail.*;
-import javax.mail.internet.*;
-/* E: smtp 이메일 보내기. javamail 라이브러리 사용*/
-import lombok.RequiredArgsConstructor;
-
 
 
 @Controller
 @RequiredArgsConstructor
 public class LoginoutController {
 
-	private final LoginService loginService;
-	private final EmailService emailService;
+    private final LoginService loginService;
+    private final EmailService emailService;
 
-	private final HttpSession session; // HttpSession을 멤버 변수로 선언
+    private final HttpSession session; // HttpSession을 멤버 변수로 선언
 
     @Value( "${key.default.user}" )
     private String TYPE_USER;
 
     @ResponseBody
     @PostMapping( "/readyLoginAjax" )
-    public Map<String, Object> readyLogin( 	HttpServletRequest request,
-    						@ModelAttribute LoginDto loginDto,
-    						HttpSession session,
-                            Model model ) {
-    	Map<String, Object> result = new HashMap<String, Object>();
+    public Map< String, Object > readyLogin( HttpServletRequest request,
+                                             @ModelAttribute LoginDto loginDto,
+                                             HttpSession session,
+                                             Model model ) {
+        Map< String, Object > result = new HashMap< String, Object >();
 
-    	session.setAttribute("loginType", TYPE_USER );
-    	session.setAttribute("returnUrlAfterLogin", loginDto.getReturnUrlAfterLogin() );
-    	session.setAttribute("returnUrlAfterLoginFail", loginDto.getReturnUrlAfterLoginFail() );
-    	result.put("flag", "S");
+        session.setAttribute( "loginType", TYPE_USER );
+        session.setAttribute( "returnUrlAfterLogin", loginDto.getReturnUrlAfterLogin() );
+        session.setAttribute( "returnUrlAfterLoginFail", loginDto.getReturnUrlAfterLoginFail() );
+        result.put( "flag", "S" );
 //
 //    	// 비밀번호 암호화
 //    	loginDto.setPassword( passwordEncoder.encode( loginDto.getPassword() ) );
@@ -72,199 +57,199 @@ public class LoginoutController {
     }
 
     @RequestMapping( "/pon/logout" )
-    public String logout( 	HttpServletRequest request,
-							HttpServletResponse response,
-							HttpSession session,
-							Model model ) throws IOException {
+    public String logout( HttpServletRequest request,
+                          HttpServletResponse response,
+                          HttpSession session,
+                          Model model ) throws IOException {
 
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		String returnUrlAfterLogout = request.getParameter("returnUrl");
+        String returnUrlAfterLogout = request.getParameter( "returnUrl" );
 
 //		String returnUrlAfterLogout = ( String ) session.getAttribute( "returnUrlAfterLogout" );
 
-    	if ( auth != null ) {
-    		new SecurityContextLogoutHandler().logout( request, response, auth );
-    	}
+        if ( auth != null ) {
+            new SecurityContextLogoutHandler().logout( request, response, auth );
+        }
 
-    	if ( returnUrlAfterLogout == null || returnUrlAfterLogout.equals("") ) {
-    		return "redirect:/";
-    	} else {
-    		return "redirect:" + returnUrlAfterLogout;
-    	}
+        if ( returnUrlAfterLogout == null || returnUrlAfterLogout.equals( "" ) ) {
+            return "redirect:/";
+        } else {
+            return "redirect:" + returnUrlAfterLogout;
+        }
 
     }
 
-	// 아이디 찾기
-	@ResponseBody
-	@PostMapping("/findUsername")
-	public Map<String, Object> findUsername( HttpServletRequest request,
-											@ModelAttribute LoginDto loginDto,
-											HttpSession session,
-											Model model
-	) {
-		//메소드가 실행되고 나서 클라이언트에게 반환될 데이터를 담기 위한 자료구조를 생성하는 부분
-		Map<String, Object> result = new HashMap<String, Object>();
+    // 아이디 찾기
+    @ResponseBody
+    @PostMapping( "/findUsername" )
+    public Map< String, Object > findUsername( HttpServletRequest request,
+                                               @ModelAttribute LoginDto loginDto,
+                                               HttpSession session,
+                                               Model model
+    ) {
+        //메소드가 실행되고 나서 클라이언트에게 반환될 데이터를 담기 위한 자료구조를 생성하는 부분
+        Map< String, Object > result = new HashMap< String, Object >();
 
-		// 여기에서 실제 아이디를 찾는 로직을 구현하고 결과를 반환합니다.
-		// 1. 1. 이름/전화번호 / (관리자여부) 로 계정을 찾음
-		// 아이디 찾기 기능에서 실제로 사용자 정보를 데이터베이스에서 조회하는 부분
-		LoginDto targetDto = loginService.findByUserNmAndTelNoAndMngrYn(loginDto);
-
-
-		if ( targetDto != null ) {
-			// 1-1. 해당 입력값으로 찾은 계정이 있을 떄
-			result.put("flag", "S");
-			String userId  = targetDto.getUserId(); // DTO 로 받은 userid 데이터-> userId
-
-			// masking 처리 @ 기준 왼쪽 4개 문자 마스킹 처리
-			// 마스킹 처리 - '@' 문자를 기준으로 왼쪽 4개 문자를 마스킹
-			int atIndex = userId.indexOf('@');  // indexOf 메서드를 이용해서 '@' 문자가 처음으로 나타나는 위치의 인덱스를 반환 -> atIndex
-
-			if (atIndex != -1) { // '@' 문자가 존재하는 경우
-				userId = maskString(userId, Math.max(0, atIndex - 2), atIndex - 1, '*');
-				result.put("maskingUserId", userId );
-			}else{
-				result.put("msg","이메일정보가 올바르지 않습니다. 관리자에게 문의해주세요.");
-			}
-		} else if ( targetDto == null ) {
-			// 1-2. 해당 입력값으로 찾은 계정이 없을 때
-			result.put("flag", "E");
-			result.put("msg", "입력하신 정보와 일치하는 계정이 존재하지 않습니다. 다시 시도해주세요. ");
-		}
-
-		return result;
-	}
-	// 문자열 일부를 마스킹 처리하는 함수 -> maskString
-	private String maskString(String str, int start, int end, char maskChar) {
-		if (str == null || start < 0 || end >= str.length()) {
-			return str;
-		}
-
-		char[] chars = str.toCharArray();
-		for (int i = start; i <= end; i++) {
-			chars[i] = maskChar;
-		}
-
-		return new String(chars);
-	}
+        // 여기에서 실제 아이디를 찾는 로직을 구현하고 결과를 반환합니다.
+        // 1. 1. 이름/전화번호 / (관리자여부) 로 계정을 찾음
+        // 아이디 찾기 기능에서 실제로 사용자 정보를 데이터베이스에서 조회하는 부분
+        LoginDto targetDto = loginService.findByUserNmAndTelNoAndMngrYn( loginDto );
 
 
-	/* S : 이메일 확인 및 인증번호 전송 */
-	@ResponseBody
-	@PostMapping("/findUseremail")
-	public Map<String, Object> findUseremail( @ModelAttribute LoginDto loginDto) {
+        if ( targetDto != null ) {
+            // 1-1. 해당 입력값으로 찾은 계정이 있을 떄
+            result.put( "flag", "S" );
+            String userId = targetDto.getUserId(); // DTO 로 받은 userid 데이터-> userId
 
-		//메소드가 실행되고 나서 클라이언트에게 반환될 데이터를 담기 위한 자료구조를 생성하는 부분
-		Map<String, Object> result = new HashMap<String, Object>();
+            // masking 처리 @ 기준 왼쪽 4개 문자 마스킹 처리
+            // 마스킹 처리 - '@' 문자를 기준으로 왼쪽 4개 문자를 마스킹
+            int atIndex = userId.indexOf( '@' );  // indexOf 메서드를 이용해서 '@' 문자가 처음으로 나타나는 위치의 인덱스를 반환 -> atIndex
 
-		// 여기에서 실제 로직을 구현하고 결과를 반환합니다.
+            if ( atIndex != -1 ) { // '@' 문자가 존재하는 경우
+                userId = maskString( userId, Math.max( 0, atIndex - 2 ), atIndex - 1, '*' );
+                result.put( "maskingUserId", userId );
+            } else {
+                result.put( "msg", "이메일정보가 올바르지 않습니다. 관리자에게 문의해주세요." );
+            }
+        } else if ( targetDto == null ) {
+            // 1-2. 해당 입력값으로 찾은 계정이 없을 때
+            result.put( "flag", "E" );
+            result.put( "msg", "입력하신 정보와 일치하는 계정이 존재하지 않습니다. 다시 시도해주세요. " );
+        }
 
-		// 1. 이름/ 이메일 / (관리자여부) 로 계정을 찾음
-		// 비밀번호 찾기 기능에서 실제로 사용자 정보를 데이터베이스에서 조회하는 부분
-		LoginDto targetDto = loginService.findByUserNmAndUserIdAndMngrYn(loginDto);
+        return result;
+    }
 
-		if ( targetDto != null ) {
-			// 1-1. 해당 입력값으로 찾은 계정이 있을 떄
-			result.put("flag", "S");
-			result.put("msg", "인증번호가 발송되었습니다. ");
+    // 문자열 일부를 마스킹 처리하는 함수 -> maskString
+    private String maskString( String str, int start, int end, char maskChar ) {
+        if ( str == null || start < 0 || end >= str.length() ) {
+            return str;
+        }
 
-			// 인증번호 생성
-			String authNumber = generateRandomAuthNumber();
-			String mailSubject = "[피오니키즈] 비밀번호 찾기 인증번호 발송 안내";			// 메일 제목 setting : 비밀번호 찾기 인증번호 발송 안내 메일
-			String templateName = "email_authNumber";							// 템플릿 파일명 setting : 비밀번호 찾기 인증번호 발송 메일
-			
-			// 템플릿에 전달할 데이터 설정
-			Map<String, Object> variables = new HashMap<>();
-			variables.put( "authNumber", authNumber );		// 인증번호 설정
-			
-			session.setAttribute("authCode", authNumber);	// 세션에 인증번호 저장
-			session.setAttribute("authStartTime", System.currentTimeMillis());	// 세션에 시작시간 저장
-			
-			// 인증번호 전송 (이메일)
-			emailService.sendTemplateEmail( targetDto.getUserId(), mailSubject, templateName, variables );
+        char[] chars = str.toCharArray();
+        for ( int i = start; i <= end; i++ ) {
+            chars[ i ] = maskChar;
+        }
 
-		} else if ( targetDto == null ) {
-			// 1-2. 해당 입력값으로 찾은 계정이 없을 때
-			result.put("flag", "E");
-			result.put("msg", "입력하신 정보와 일치하는 계정이 존재하지 않습니다. 다시 시도해주세요. ");
-		}
-
-		return result;
-	}
-	
-	// 랜덤한 인증번호 생성 메서드
-	private String generateRandomAuthNumber(){
-		// 여기에 랜덤 인증번호 생성 로직 추가 (조건 : 랜덤한 6자리 숫자)
-		// return "123456";
-		// 랜덤 인증번호 생성 (6자리 숫자)
-		Random random = new Random();
-		int min = 100000;
-		int max = 999999;
-		int randomAuthNumber = random.nextInt((max - min) + 1) + min;
-
-		return String.valueOf(randomAuthNumber);
-	}
-	/* E : 이메일 확인 및 인증번호 전송 */
-
-	/* S: 비밀번호 찾기 - 인증번호 검증 */
-	@ResponseBody
-	@PostMapping("/findUserpw")
-	public Map<String,Object> findUserpw(@RequestParam String authNumber, HttpSession session){
-		Map<String, Object> result = new HashMap<>();
+        return new String( chars );
+    }
 
 
-		// 세션에서 저장된 [인증번호] 와  [시작 시간]  가져오기
-		String storedAuthCode = (String) session.getAttribute("authCode");
-		Long startTime = (Long) session.getAttribute("authStartTime");
+    /* S : 이메일 확인 및 인증번호 전송 */
+    @ResponseBody
+    @PostMapping( "/findUseremail" )
+    public Map< String, Object > findUseremail( @ModelAttribute LoginDto loginDto ) {
 
-		if (storedAuthCode != null && storedAuthCode.equals(authNumber) && startTime != null) {
-			// 인증번호 일치
-			result.put("flag", "S");
-			result.put("msg", "인증에 성공했습니다.");
-			// 검증 시간 체크
-			// 시작 시간 , 검증시간 비교하여 3분 이내인지 확인
-			long currentTime = System.currentTimeMillis();
-			long timeDifference = currentTime - startTime;
-			if (timeDifference <= 3 * 60 * 1000) { // 3분 (3 * 60 * 1000 밀리초)
-				// 3분 이내
-				result.put("flag", "S");
-				result.put("msg", "인증에 성공했습니다.");
-			// 인증 성공 후 필요한 작업 수행
-			} else {
-				// 3분 넘어가면..
-				// 시간초과 메시지..
-			result.put("flag", "E");
-			result.put("msg", "시간이 초과되었습니다.");
-			}
+        //메소드가 실행되고 나서 클라이언트에게 반환될 데이터를 담기 위한 자료구조를 생성하는 부분
+        Map< String, Object > result = new HashMap< String, Object >();
 
-		} else {
-			// 인증번호 불일치
-			result.put("flag", "E");
-			result.put("msg", "인증에 실패했습니다. 다시 시도해주세요.");
-		}
+        // 여기에서 실제 로직을 구현하고 결과를 반환합니다.
 
-		return result;
-	}
-	/* E: 비밀번호 찾기 - 인증번호 검증 */
+        // 1. 이름/ 이메일 / (관리자여부) 로 계정을 찾음
+        // 비밀번호 찾기 기능에서 실제로 사용자 정보를 데이터베이스에서 조회하는 부분
+        LoginDto targetDto = loginService.findByUserNmAndUserIdAndMngrYn( loginDto );
 
-	/* S : 비밀번호 변경 */
-	@PostMapping("/changePassword")
-	public ResponseEntity<String> changePassword(@RequestParam String newPassword,@RequestParam String userId){
+        if ( targetDto != null ) {
+            // 1-1. 해당 입력값으로 찾은 계정이 있을 떄
+            result.put( "flag", "S" );
+            result.put( "msg", "인증번호가 발송되었습니다. " );
 
-		// 비밀번호 변경 로직 수행
-		LoginDto loginDto = new LoginDto();	// loginDto 생성 -> loginDto { } 라는 객체가 생성.. -> 껍데기 : 현재는 아무런 value 가 setting 이 되어있지 않음.
- 		loginDto.setUserId(userId);	// loginDto 에 userId 주입
+            // 인증번호 생성
+            String authNumber = generateRandomAuthNumber();
+            String mailSubject = "[피오니키즈] 비밀번호 찾기 인증번호 발송 안내";            // 메일 제목 setting : 비밀번호 찾기 인증번호 발송 안내 메일
+            String templateName = "email_authNumber";                            // 템플릿 파일명 setting : 비밀번호 찾기 인증번호 발송 메일
 
-		boolean success = loginService.changePassword(loginDto, newPassword);
-		if(success){
-			return ResponseEntity.ok("비밀번호 변경 되었습니다.");
-		}else{
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to change password");
-		}
+            // 템플릿에 전달할 데이터 설정
+            Map< String, Object > variables = new HashMap<>();
+            variables.put( "authNumber", authNumber );        // 인증번호 설정
 
-	}
-	/* E : 비밀번호 변경 */
+            session.setAttribute( "authCode", authNumber );    // 세션에 인증번호 저장
+            session.setAttribute( "authStartTime", System.currentTimeMillis() );    // 세션에 시작시간 저장
 
+            // 인증번호 전송 (이메일)
+            emailService.sendTemplateEmail( targetDto.getUserId(), mailSubject, templateName, variables );
+
+        } else if ( targetDto == null ) {
+            // 1-2. 해당 입력값으로 찾은 계정이 없을 때
+            result.put( "flag", "E" );
+            result.put( "msg", "입력하신 정보와 일치하는 계정이 존재하지 않습니다. 다시 시도해주세요. " );
+        }
+
+        return result;
+    }
+
+    // 랜덤한 인증번호 생성 메서드
+    private String generateRandomAuthNumber( ) {
+        // 여기에 랜덤 인증번호 생성 로직 추가 (조건 : 랜덤한 6자리 숫자)
+        // return "123456";
+        // 랜덤 인증번호 생성 (6자리 숫자)
+        Random random = new Random();
+        int min = 100000;
+        int max = 999999;
+        int randomAuthNumber = random.nextInt( ( max - min ) + 1 ) + min;
+
+        return String.valueOf( randomAuthNumber );
+    }
+    /* E : 이메일 확인 및 인증번호 전송 */
+
+    /* S: 비밀번호 찾기 - 인증번호 검증 */
+    @ResponseBody
+    @PostMapping( "/findUserpw" )
+    public Map< String, Object > findUserpw( @RequestParam String authNumber, HttpSession session ) {
+        Map< String, Object > result = new HashMap<>();
+
+
+        // 세션에서 저장된 [인증번호] 와  [시작 시간]  가져오기
+        String storedAuthCode = ( String ) session.getAttribute( "authCode" );
+        Long startTime = ( Long ) session.getAttribute( "authStartTime" );
+
+        if ( storedAuthCode != null && storedAuthCode.equals( authNumber ) && startTime != null ) {
+            // 인증번호 일치
+            result.put( "flag", "S" );
+            result.put( "msg", "인증에 성공했습니다." );
+            // 검증 시간 체크
+            // 시작 시간 , 검증시간 비교하여 3분 이내인지 확인
+            long currentTime = System.currentTimeMillis();
+            long timeDifference = currentTime - startTime;
+            if ( timeDifference <= 3 * 60 * 1000 ) { // 3분 (3 * 60 * 1000 밀리초)
+                // 3분 이내
+                result.put( "flag", "S" );
+                result.put( "msg", "인증에 성공했습니다." );
+                // 인증 성공 후 필요한 작업 수행
+            } else {
+                // 3분 넘어가면..
+                // 시간초과 메시지..
+                result.put( "flag", "E" );
+                result.put( "msg", "시간이 초과되었습니다." );
+            }
+
+        } else {
+            // 인증번호 불일치
+            result.put( "flag", "E" );
+            result.put( "msg", "인증에 실패했습니다. 다시 시도해주세요." );
+        }
+
+        return result;
+    }
+    /* E: 비밀번호 찾기 - 인증번호 검증 */
+
+    /* S : 비밀번호 변경 */
+    @PostMapping( "/changePassword" )
+    public ResponseEntity< String > changePassword( @RequestParam String newPassword, @RequestParam String userId ) {
+
+        // 비밀번호 변경 로직 수행
+        LoginDto loginDto = new LoginDto();    // loginDto 생성 -> loginDto { } 라는 객체가 생성.. -> 껍데기 : 현재는 아무런 value 가 setting 이 되어있지 않음.
+        loginDto.setUserId( userId );    // loginDto 에 userId 주입
+
+        boolean success = loginService.changePassword( loginDto, newPassword );
+        if ( success ) {
+            return ResponseEntity.ok( "비밀번호 변경 되었습니다." );
+        } else {
+            return ResponseEntity.status( HttpStatus.INTERNAL_SERVER_ERROR ).body( "Failed to change password" );
+        }
+
+    }
+    /* E : 비밀번호 변경 */
 
 }
