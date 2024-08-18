@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{pon/layout/layout_mypage}">
+      layout:decorate="~{pon/layout/layout_mypage}">
 
 <head layout:fragment="head">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<!-- Meta, title, CSS, favicons, etc. -->
+    <!-- Meta, title, CSS, favicons, etc. -->
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,7 +13,7 @@
 
 	<title layout:fragment="title">피오니키즈</title>
 
-	<!-- css -->
+    <!-- css -->
 	<link rel="stylesheet" href="/pon/common/css/mypage.css">
 </head>
 <title layout:fragment="title">피오니키즈 - pioneerkids</title>
@@ -22,11 +22,11 @@
 	<!-- js -->
 	<script>
 		function classCancel( classReqstSn ) {
-			if ( confirm( '신청을 취소하시겠습니까?' ) ) {
-				$( "[name='cancelForm']" ).find( "#delPk" ).val( classReqstSn );
-				$( "[name='cancelForm']" ).submit();
-			}
-		}
+            if ( confirm( '신청을 취소하시겠습니까?' ) ) {
+                $( "[name='cancelForm']" ).find( "#delPk" ).val( classReqstSn );
+                $( "[name='cancelForm']" ).submit();
+            }
+        }
 	</script>
 </div>
 <!-- E : Javascript functions	-->
@@ -40,16 +40,16 @@
 			신청 클래스 정보
 		</div>
 		<div class="detail_content">
-			<div class="item_thumb" >
+			<div class="item_thumb">
 				<img class="thumb_img" th:src="@{/getImage(atchFileSn=${targetDto.thumbAtchFileSn})}" alt="클래스이미지">
 			</div>
-			<div class="item_info" >
+			<div class="item_info">
 				<span class="ctgryNm" th:text="${targetDto.ctgryNm}">카테고리명</span>
 				<p class="classSj" th:text="${targetDto.classSj}">클래스명</p>
 			</div>
 		</div>
 	</div>
-	<!-- 신청 정보 -->
+    <!-- 신청 정보 -->
 	<div class="detail_reqst_info_wrap">
 		<div class="detail_top">
 			신청 수업 상세 정보
@@ -75,8 +75,8 @@
 				<li>
 					<strong>신청입력사항</strong>
 					<div class="class_detail_item" th:each="detail : ${data.lctreReqstDetails}">
-						<span class="detailCn" 		th:text="${detail.classDetailItemCn}"></span>
-						<div class="detailAnswer" 	th:text="${detail.classDetailAnswer}"></div>
+						<span class="detailCn" th:text="${detail.classDetailItemCn}"></span>
+						<div class="detailAnswer" th:text="${detail.classDetailAnswer}"></div>
 					</div>
 				</li>
 				<li>
@@ -96,7 +96,7 @@
 			</ul>
 		</div>
 	</div>
-	<!-- footer -->
+    <!-- footer -->
 	<div class="article_detail_footer">
 		<div class="redBtn" th:onclick="'classCancel(\'' + ${targetDto.classReqstSn} + '\');'">
 			<a th:href="'javascript:;'">
@@ -110,7 +110,8 @@
 			</a>
 		</div>
 	</div>
-	<form id="cancelForm" name="cancelForm" method="post" th:action="@{ {basicPath}/reqstHistory/cancel ( basicPath = ${basicPath} ) }">
+	<form id="cancelForm" name="cancelForm" method="post"
+          th:action="@{ {basicPath}/reqstHistory/cancel ( basicPath = ${basicPath} ) }">
 		<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
 	</form>
 	

@@ -1062,7 +1062,7 @@ body .container.body .right_col {
   float: left;
   background: #8f6dd1;
   border-radius: 0;
-  height: 57px;
+  height: 50px;
   padding: 0px; }
 
 @media (max-width: 991px) {
@@ -1475,11 +1475,11 @@ a:hover, a:focus {
   width: 100%;
   color: #ECF0F1 !important;
   margin-left: 0 !important;
-  line-height: 59px;
+  line-height: 50px;
   display: block;
-  height: 55px;
+  height: 50px;
   margin: 0;
-  padding-left: 10px; }
+}
 
 .site_title:hover, .site_title:focus {
   text-decoration: none; }

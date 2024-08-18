@@ -302,8 +302,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom {
                         adminMenuHierarchy.menuSn.eq( menuRole.menuSn ),
                         menuRole.delYn.eq( "N" )
                 )
-                .where( eqRoleSn( sn ),
-                        adminMenuHierarchy.updtDt.isNotNull(),
+                .where( adminMenuHierarchy.updtDt.isNotNull(),
                         adminMenuHierarchy.delYn.in( "N", "Y" ) // 전부 조회 (삭제된 것도 조회)
                 )
                 .orderBy(

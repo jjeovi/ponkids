@@ -173,7 +173,7 @@
 						<table id="listTable" class="table table-bordered text-center">
 							<colgroup>
 								<col style="width:60px;" >
-								<col style="width:auto;" >
+								<col style="width:200px;" >
 								<col style="width:auto;" >
 								<col style="width:90px;" >
 								<col style="width:110px;" >
@@ -216,7 +216,7 @@
 									</td>
 									<td th:text="${data.regDt}"></td>
 									<td>
-										<a th:href="javascript:;" onclick="showReqstSttusListPopup()"  th:href="@{{basicPath}/{mcd}/modify ( basicPath = ${basicPath}, mcd = ${mcd}, pk = ${data.classSn} ) }" target="_blank" class="btn btn-primary btn-xs">
+										<a onclick="showReqstSttusListPopup();" class="btn btn-primary btn-xs" href="javascript:;" >
 											<i class="fa fa-pencil"></i>신청현황
 										</a>
 									</td>

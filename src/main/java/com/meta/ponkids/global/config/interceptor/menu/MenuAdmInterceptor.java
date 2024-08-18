@@ -52,7 +52,7 @@ public class MenuAdmInterceptor implements HandlerInterceptor {
         // listDto Setting
         
         // menuLit Setting
-        List<MenuListDto> menuList = menuService.getList( listDto );
+            List<MenuListDto> menuList = menuService.getList( listDto );
         
         // mcd setting
         if ( modelAndView != null ) {

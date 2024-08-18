@@ -345,7 +345,7 @@ public class LctreAdmController {
 	}
 
 
-	@PostMapping( BASIC_PATH + "/{lctreSn}/reqstSttusList" )
+	@GetMapping( BASIC_PATH + "/{lctreSn}/reqstSttusList" )
 	public String reqstSttusList(
 			@PathVariable String lctreSn,
 			@RequestParam( required = false ) Long preparNmprYn,

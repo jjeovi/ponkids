@@ -166,29 +166,11 @@
 				<!-- S:상단 배너 로고 (초기화면이동버튼)-->
 				<div class="navbar nav_title" style="border: 0;">
 					<a href="/index.html" class="site_title">
-						<img src="/common/images/pioneerkids_logo_title.png" style="width: 230px;height: auto;">
+
 					</a>
 				</div>
 				<!-- E:상단 배너 로고 (초기화면이동버튼)-->
 				<div class="clearfix"></div>
-				<!-- S: 좌측 상단 프로필 부분 -->
-				<div class="profile clearfix">
-					<div class="profile_pic">
-						<img th:if="${#authentication.principal.atchFileSn == null }" src="/common/images/img.jpg" class="img-circle upload-thumb noimg" >
-						<img th:unless="${#authentication.principal.atchFileSn == null }" th:src="@{/getImage(atchFileSn=${#authentication.principal.atchFileSn})}" class="img-circle upload-thumb" >
-					</div>
-					<div class="profile_info pl_20p">
-						<span>Welcome</span>
-						<h2 sec:authentication="principal.userNm">회원 이름</h2>
-					</div>
-				</div>
-				<!-- E: 좌측 상단 프로필 부분 -->
-				<!-- S: 사이드바 메뉴 -->
-				<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-					<div class="menu_section" th:insert="admin/layout/tiles/sideMenuList">
-					</div>
-				</div>
-				<!-- E: 사이드바 메뉴 -->
 			</div>
 		</div>
 		<!--E: 좌측메뉴바-->
@@ -223,7 +205,7 @@
 		<!--E: 상단 탑 바-->
 		<!-- page content -->
 		<div class="right_col" role="main">
-		
+
 			<th:block th:if="${currentMenu != null}">
 			<!-- S : 상단 메뉴 명 -->
 			<!-- TODO 메뉴 데이터 연결하여 메뉴명 , 메뉴 상세설명 을 뿌림. -->
