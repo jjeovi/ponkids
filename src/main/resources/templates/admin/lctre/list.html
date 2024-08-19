@@ -11,23 +11,30 @@
 
 	});
 
-	// 신청현황팝업호출
+	// 신청현황팝업호출 (전체대상)
 	// lctreSn : 수업일련번호
-	// preparNmprYn : 예비인원여부 [ 'Y', 'N', 'ALL(생략가능)' ]
-	function showReqstSttusListPopup( lctreSn, preparNmprYn ){
-		// ex ) : /admin/popup/lctre/10000000/reqstSttusList?preparNmprYn=Y
-		var parameter = '';
-		if ( preparNmprYn == 'Y' ) {
-			parameter = '?preparNmprYn=Y';
-		} else if ( preparNmprYn == 'N' ) {
-			parameter = '?preparNmprYn=N';
-		} else if ( preparNmprYn == 'ALL' ) {
-			parameter = '?preparNmprYn=ALL';
-		} else {
-			parameter = '';
-		}
+	function showReqstSttusListPopupN( lctreSn ){
+		// ex ) : /admin/popup/lctre/10000000/reqstSttusList?preparNmprYn=N
 
-		window.open( basicPath + '/' + lctreSn + '/reqstSttusList' + parameter, '_blank', 'width=1000px,height=auto,web-app' );
+		window.open( basicPath + '/' + lctreSn + '/reqstSttusList?preparNmprYn=N' , '_blank', 'width=1000px,height=auto,web-app' );
+
+	}
+
+	// 신청현황팝업호출 (전체대상)
+	// lctreSn : 수업일련번호
+	function showReqstSttusListPopupY( lctreSn ){
+		// ex ) : /admin/popup/lctre/10000000/reqstSttusList?preparNmprYn=Y
+
+		window.open( basicPath + '/' + lctreSn + '/reqstSttusList?preparNmprYn=Y' , '_blank', 'width=1000px,height=auto,web-app' );
+
+	}
+
+	// 신청현황팝업호출 (전체대상)
+	// lctreSn : 수업일련번호
+	function showReqstSttusListPopupAll( lctreSn ){
+		// ex ) : /admin/popup/lctre/10000000/reqstSttusList?preparNmprYn=Y
+
+		window.open( basicPath + '/' + lctreSn + '/reqstSttusList' , '_blank', 'width=1000px,height=auto,web-app' );
 
 	}
 
@@ -216,7 +223,7 @@
 									</td>
 									<td th:text="${data.regDt}"></td>
 									<td>
-										<a onclick="showReqstSttusListPopup();" class="btn btn-primary btn-xs" href="javascript:;" >
+										<a th:onclick="|showReqstSttusListPopupAll( ${data.lctreSn} );|" class="btn btn-primary btn-xs" href="javascript:;" >
 											<i class="fa fa-pencil"></i>신청현황
 										</a>
 									</td>

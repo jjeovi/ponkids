@@ -820,6 +820,12 @@
   z-index: 9999;
   position: absolute; }
 
+.nav-sm.popup .container.body .col-md-3.left_col {
+  width: 20px; }
+
+
+
+
 .nav-sm .container.body .col-md-3.left_col.menu_fixed {
   position: fixed;
   height: 100%; }
@@ -836,8 +842,21 @@
   margin-left: 70px;
   z-index: 2; }
 
+
+
+.nav-sm.popup .container.body .right_col {
+  margin-left: 20px;
+}
+
+
 .nav-sm .navbar.nav_title {
   width: 70px; }
+
+
+
+.nav-sm.popup .navbar.nav_title {
+  width: 20px; }
+
 
 .nav-sm .navbar.nav_title a span {
   display: none; }
@@ -851,10 +870,39 @@
   padding: 5px 6px;
   border-radius: 50%; }
 
+.site_title.logo_main{
+  /* pioneerkids_logo_small.png 를 배경으로 설정 */
+  background-image : url('/common/images/pioneerkids_logo_title.png');
+  background-size: cover; /* 배경 이미지를 전체 화면에 맞게 조절 */
+  background-position: center; /* 배경 이미지의 위치를 중앙으로 설정 */
+  background-repeat: no-repeat; /* 배경 이미지가 반복되지 않도록 설정 */
+}
+
+
+.site_title.logo_small{
+  background-image: url('/common/images/pioneerkids_logo_small.png');
+  background-size: 45px 45px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+
+
+.nav-sm.popup .site_title.logo_small{
+  background-image: url('/common/images/pioneerkids_logo_small.png');
+  background-size: 20px 20px;
+  background-position: top;
+  background-repeat: no-repeat;
+}
+
+
 .nav-sm .main_container .top_nav {
   display: block;
   margin-left: 70px;
   z-index: 2; }
+
+.nav-sm.popup .main_container .top_nav {
+  margin-left: 20px; }
 
 .nav-sm .nav.side-menu li.level_1 > a {
   text-align: center !important;
@@ -1064,6 +1112,12 @@ body .container.body .right_col {
   border-radius: 0;
   height: 50px;
   padding: 0px; }
+
+
+.nav-sm.popup .nav_title {
+  height: 20px; }
+
+
 
 @media (max-width: 991px) {
   .nav-md .container.body .right_col, .nav-md .container.body .top_nav {
@@ -1481,6 +1535,13 @@ a:hover, a:focus {
   margin: 0;
 }
 
+
+.site_title.popup {
+  line-height: 20px;
+  height: 20px;
+
+}
+
 .site_title:hover, .site_title:focus {
   text-decoration: none; }
   
@@ -1577,6 +1638,9 @@ footer {
 
 .nav-sm footer {
   margin-left: 70px; }
+
+.nav-sm.popup footer {
+  margin-left: 20px; }
 
 .footer_fixed footer {
   position: fixed;
@@ -5985,6 +6049,84 @@ span {
 }
 
 /* E : 설문조사 그룹 */
+
+
+/* S : 신청현황  */
+
+/* S : 신청현황 - 수업 기본 정보 영역 */
+.lctre-basic-info-wrap {
+  display: flex; /* 좌우 영역을 나누는 flex 컨테이너 */
+  gap: 20px; /* 좌우 영역 사이의 간격 */
+}
+
+.lctre-basic-info-wrap .left-area {
+  flex: 1; /* 좌측 영역이 전체의 1 비율을 차지 */
+  max-width: 350px; /* 좌측 영역의 최대 너비 */
+  min-width: 180px; /* 좌측 영역의 최대 너비 */
+}
+.lctre-basic-info-wrap .left-area img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.lctre-basic-info-wrap .right-area {
+  flex: 2; /* 우측 영역이 전체의 2 비율을 차지 */
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.lctre-basic-info-wrap .info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px;
+  border-bottom: 1px solid #ddd;
+  border-radius: 5px;
+  padding-left: 10px;
+}
+
+.lctre-basic-info-wrap .info-item label {
+  flex-basis: 20%; /* label의 비율 설정 */
+  min-width: 170px;
+  font-weight: bold;
+  margin : 0;
+}
+.lctre-basic-info-wrap .info-item span {
+  flex-basis: 80%; /* 남은 영역을 차지 */
+  color: #555;
+}
+
+/* E : 신청현황 - 수업 기본 정보 영역 */
+
+
+/* S : 신청현황 - 수업 상세 정보 영역 */
+
+.lctre-detail-info-wrap .section {
+  margin-bottom: 40px; /* 각 섹션 간의 여백 */
+}
+
+.lctre-detail-info-wrap .section h2 {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+
+
+.lctre-detail-info-wrap .section .info-text, .section pre {
+  margin-bottom: 10px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  white-space: pre-wrap; /* 줄바꿈과 연속 공백을 인식하여 그대로 출력 */
+}
+
+/* E : 신청현황 - 수업 상세 정보 영역 */
+
+
+/* S : 신청현황 - 신청현황 영역 */
+
+/* E : 신청현황 - 신청현황 영역 */
+
 
 
 

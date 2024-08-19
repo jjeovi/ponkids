@@ -86,6 +86,67 @@ public class LctreReqstRepositoryImpl implements LctreReqstRepositoryCustom {
 				
 	}
 
+
+	@Override
+	public List<LctreReqstListDto> getListByLctreSn( Long lctreSn ) {
+
+		return query
+				.select( new QLctreReqstListDto(
+								lctreReqst.lctreReqstSn,
+								lctreReqst.classReqstSn,
+								class$.classSj,
+								lctreReqst.lctreSn,
+								lctre.lctreSeq,
+								lctre.lctreSj,
+								lctre.lctreDt,
+								lctre.lctreAmt,
+								lctre.lctreDc,
+								lctre.lctreApplcntGuidance,
+								lctre.classDayCd,
+								cmmnCdDetail.cdDetailNm,
+								lctreReqst.chldrnSn,
+								userChldrn.chldrnNm,
+								lctreReqst.preparNmprYn,
+								user.userId
+						)
+				)
+				.from( lctreReqst )
+				.leftJoin( lctre )
+				// join 에는 delYn 조건 필수로 추가
+				.on( 	lctre.lctreSn.eq( lctreReqst.lctreSn ),
+						lctre.delYn.eq( "N" )
+				)
+				.leftJoin( class$ )
+				.on ( 	class$.classSn.eq( lctre.classSn ),
+						class$.delYn.eq( "N" )
+				)
+				.leftJoin( userChldrn )
+				// join 에는 delYn 조건 필수로 추가
+				.on( 	userChldrn.chldrnSn.eq( lctreReqst.chldrnSn ),
+						userChldrn.delYn.eq( "N" )
+				)
+				.leftJoin( user )
+				.on( 	user.userSn.eq( userChldrn.userSn ),
+						user.delYn.eq( "N" )
+				)
+				.leftJoin( cmmnCdDetail )
+				.on(	cmmnCdDetail.cdNm.eq("DAY_7_CD"),
+						cmmnCdDetail.cdDetailVal1.eq( lctre.classDayCd ),
+						cmmnCdDetail.useYn.eq("Y"),
+						cmmnCdDetail.delYn.eq("N")
+				)
+				.where(
+						lctreReqst.lctreSn.eq( lctreSn )
+				)
+				.orderBy(
+						lctreReqst.lctreReqstSn.asc()
+				)
+				.fetch();
+
+
+	}
+
+
 	@Override
 	public LctreReqstListDto getFrstPreparNmpr( LctreReqstListDto targetDto ) {
 

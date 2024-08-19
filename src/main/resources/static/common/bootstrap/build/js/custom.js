@@ -105,9 +105,13 @@ function init_sidebar() {
         if ($BODY.hasClass('nav-md')) {
             $SIDEBAR_MENU.find('li.active ul').hide();
             $SIDEBAR_MENU.find('li.active').addClass('active-sm').removeClass('active');
+            $('.nav_title').find('.site_title').removeClass('logo_main');
+            $('.nav_title').find('.site_title').addClass('logo_small');
         } else {
             $SIDEBAR_MENU.find('li.active-sm ul').show();
             $SIDEBAR_MENU.find('li.active-sm').addClass('active').removeClass('active-sm');
+            $('.nav_title').find('.site_title').removeClass('logo_small');
+            $('.nav_title').find('.site_title').addClass('logo_main');
         }
 
         $BODY.toggleClass('nav-md nav-sm');

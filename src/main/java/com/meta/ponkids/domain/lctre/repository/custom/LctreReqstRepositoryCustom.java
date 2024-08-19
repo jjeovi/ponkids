@@ -8,6 +8,8 @@ public interface LctreReqstRepositoryCustom {
     
     List<LctreReqstListDto> getListByClassReqstSn( Long classReqstSn );
 
+    List<LctreReqstListDto> getListByLctreSn( Long lctreSn );
+
     LctreReqstListDto getFrstPreparNmpr( LctreReqstListDto targetDto );
     
 }

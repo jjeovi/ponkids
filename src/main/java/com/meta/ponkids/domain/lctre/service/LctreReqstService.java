@@ -178,6 +178,27 @@ public class LctreReqstService {
 		
 		return lctreReqsts;
 	}
+
+
+	public List<LctreReqstListDto> getListByLctreSn( Long lctreSn ) {
+
+		List<LctreReqstListDto> lctreReqsts = lctreReqstRepository.getListByLctreSn( lctreSn );
+
+
+		if ( lctreReqsts != null && lctreReqsts.size() > 0 ) {
+
+			lctreReqsts = lctreReqsts
+					.stream()
+					.map( m -> {
+						m.setLctreReqstDetails( lctreReqstDetailRepository.getListByLctreReqstSn( m.getLctreReqstSn() ) );
+						return m;
+					} ).collect( Collectors.toList() );
+
+		}
+
+
+		return lctreReqsts;
+	}
 	
 	
 	// 각 수업신청건에 대한 수업 신청 상세 init 작업 

@@ -7,7 +7,9 @@ import com.meta.ponkids.domain.cls.service.ClassService;
 import com.meta.ponkids.domain.cls.service.ClassWeekService;
 import com.meta.ponkids.domain.lctre.dto.LctreListDto;
 import com.meta.ponkids.domain.lctre.dto.LctreModDto;
+import com.meta.ponkids.domain.lctre.dto.LctreReqstListDto;
 import com.meta.ponkids.domain.lctre.dto.LctreSaveDto;
+import com.meta.ponkids.domain.lctre.service.LctreReqstService;
 import com.meta.ponkids.domain.lctre.service.LctreService;
 import com.meta.ponkids.domain.system.cmmnCd.dto.CmmnCdDetailModDto;
 import com.meta.ponkids.domain.system.cmmnCd.service.CmmnCdDetailService;
@@ -48,6 +50,7 @@ public class LctreAdmController {
 
 	private final static String BASIC_VIEW_PATH = "admin/lctre";
 	private final static String BASIC_PATH = "/" + BASIC_VIEW_PATH;	// BASIC_VIEW_PATH 는  앞의 "/" 를 제거해야 함.
+	private final LctreReqstService lctreReqstService;
 
 
 	@GetMapping( value = { BASIC_PATH + "/{mcd}/list",
@@ -347,10 +350,25 @@ public class LctreAdmController {
 
 	@GetMapping( BASIC_PATH + "/{lctreSn}/reqstSttusList" )
 	public String reqstSttusList(
-			@PathVariable String lctreSn,
+			@PathVariable Long lctreSn,
 			@RequestParam( required = false ) Long preparNmprYn,
 			Model model ) {
 
+		/* S : 유효성 검사 */
+		if ( lctreSn == null ) {
+			model.addAttribute( "resultMsg", "수업 일련번호를 확인해주세요." );
+			model.addAttribute( "moveUrl", BASIC_PATH + "/list" );
+
+			return "common/alert";
+		}
+
+		/* E : 유효성 검사 */
+
+		// S : 필요한 객체 setting
+		model.addAttribute( "targetDto", lctreService.getByLctreSn( lctreSn ) );
+
+		model.addAttribute( "lctreReqstListDtos", lctreReqstService.getListByLctreSn( lctreSn ) );
+		// E : 필요한 객체 setting
 
 		return BASIC_VIEW_PATH + "/reqstSttusListPopup";
 	}

@@ -54,7 +54,7 @@ public class LctreListDto extends LctreDto {
 
 	private String 		preparRcritNmprSetYn;	// 예비 모집 인원 설정 여부
 	
-	private String 		preparRcritNmprSetYnNm;	// 예비 모집 인원 설정 여부
+	private String 		preparRcritNmprSetYnNm;	// 예비 모집 인원 설정 여부 명
 
 	private Long 		rltmPreparReqstNmprCo;	// 실시간 예비 신청 인원 수
 
