@@ -365,9 +365,10 @@ public class LctreAdmController {
 		/* E : 유효성 검사 */
 
 		// S : 필요한 객체 setting
-		model.addAttribute( "targetDto", lctreService.getByLctreSn( lctreSn ) );
+		
+		model.addAttribute( "targetDto", lctreService.getByLctreSn( lctreSn ) );					// 수업 정보 dto
 
-		model.addAttribute( "lctreReqstListDtos", lctreReqstService.getListByLctreSn( lctreSn ) );
+		model.addAttribute( "lctreReqstList", lctreReqstService.getListByLctreSn( lctreSn ) );	// 수업 신청자 리스트
 		// E : 필요한 객체 setting
 
 		return BASIC_VIEW_PATH + "/reqstSttusListPopup";

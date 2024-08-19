@@ -32,6 +32,8 @@ public class LctreListDto extends LctreDto {
 	
 	private String 		classDayNm;				// 클래스 요일 명
 	
+	private Long		thumbAtchFileSn;		// 썸네일 첨부 파일 일련번호
+	
 	private Long 		lctreSeq;				// 수업 순번
 	
 	private String 		lctreSj;				// 수업 제목
@@ -72,7 +74,7 @@ public class LctreListDto extends LctreDto {
 	
 	@Builder
 	@QueryProjection
-	public LctreListDto( Long lctreSn, Long ctgrySn, String ctgryNm, Long crseSn, String crseNm, Long classSn, String classSj, Long classDaySn, String classDayCd, String classDayNm, Long lctreSeq, String lctreSj, String lctreDt, Long lctreAmt, String lctreDc, String lctreApplcntGuidance, String rcritNmprSetYn, String rcritNmprSetYnNm, Long rltmReqstNmprCo, Long rcritNmprCo, String preparRcritNmprSetYn, String preparRcritNmprSetYnNm, Long rltmPreparReqstNmprCo, Long preparRcritNmprCo, String registerId, String regDt ) {
+	public LctreListDto( Long lctreSn, Long ctgrySn, String ctgryNm, Long crseSn, String crseNm, Long classSn, String classSj, Long classDaySn, String classDayCd, String classDayNm, Long thumbAtchFileSn, Long lctreSeq, String lctreSj, String lctreDt, Long lctreAmt, String lctreDc, String lctreApplcntGuidance, String rcritNmprSetYn, String rcritNmprSetYnNm, Long rltmReqstNmprCo, Long rcritNmprCo, String preparRcritNmprSetYn, String preparRcritNmprSetYnNm, Long rltmPreparReqstNmprCo, Long preparRcritNmprCo, String registerId, String regDt ) {
 		this.lctreSn = lctreSn;
 		this.ctgrySn = ctgrySn;
 		this.ctgryNm = ctgryNm;
@@ -83,6 +85,7 @@ public class LctreListDto extends LctreDto {
 		this.classDaySn = classDaySn;
 		this.classDayCd = classDayCd;
 		this.classDayNm = classDayNm;
+		this.thumbAtchFileSn = thumbAtchFileSn;
 		this.lctreSeq = lctreSeq;
 		this.lctreSj = lctreSj;
 		this.lctreDt = lctreDt;

@@ -1,6 +1,7 @@
 package com.meta.ponkids.domain.lctre.repository.impl;
 
 import static com.meta.ponkids.domain.cls.entity.QClass.class$;
+import static com.meta.ponkids.domain.cls.entity.QClassInqry.classInqry;
 import static com.meta.ponkids.domain.lctre.entity.QLctre.lctre;
 import static com.meta.ponkids.domain.lctre.entity.QLctreReqst.lctreReqst;
 import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
@@ -9,6 +10,7 @@ import static com.meta.ponkids.domain.user.entity.QUser.user;
 
 import java.util.List;
 
+import com.querydsl.core.types.dsl.Expressions;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -47,7 +49,10 @@ public class LctreReqstRepositoryImpl implements LctreReqstRepositoryCustom {
 												lctreReqst.chldrnSn,
 												userChldrn.chldrnNm,
 												lctreReqst.preparNmprYn,
-												user.userId
+												user.userId,
+												user.userNm,
+												Expressions.stringTemplate( "CONCAT(SUBSTRING({0}, 1, 3), '-', SUBSTRING({0}, 4, 4), '-', SUBSTRING({0}, 8, 4))", user.telNo).as("telNo"),
+												Expressions.stringTemplate("to_char({0}, '{1s}')", lctreReqst.regDt, "YYYY-MM-DD HH24:MI:SS").as("regDt")
 						)
 				)
 				.from( lctreReqst )
@@ -107,7 +112,10 @@ public class LctreReqstRepositoryImpl implements LctreReqstRepositoryCustom {
 								lctreReqst.chldrnSn,
 								userChldrn.chldrnNm,
 								lctreReqst.preparNmprYn,
-								user.userId
+								user.userId,
+								user.userNm,
+								Expressions.stringTemplate( "CONCAT(SUBSTRING({0}, 1, 3), '-', SUBSTRING({0}, 4, 4), '-', SUBSTRING({0}, 8, 4))", user.telNo).as("telNo"),
+								Expressions.stringTemplate("to_char({0}, '{1s}')", lctreReqst.regDt, "YYYY-MM-DD HH24:MI:SS").as("regDt")
 						)
 				)
 				.from( lctreReqst )
@@ -167,7 +175,10 @@ public class LctreReqstRepositoryImpl implements LctreReqstRepositoryCustom {
 												lctreReqst.chldrnSn,
 												userChldrn.chldrnNm,
 												lctreReqst.preparNmprYn,
-												user.userId
+												user.userId,
+												user.userNm,
+												Expressions.stringTemplate( "CONCAT(SUBSTRING({0}, 1, 3), '-', SUBSTRING({0}, 4, 4), '-', SUBSTRING({0}, 8, 4))", user.telNo).as("telNo"),
+												Expressions.stringTemplate("to_char({0}, '{1s}')", lctreReqst.regDt, "YYYY-MM-DD HH24:MI:SS").as("regDt")
 						)
 				)
 				.from( lctreReqst )

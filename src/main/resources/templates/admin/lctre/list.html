@@ -215,7 +215,7 @@
 									<td th:text="${data.classDayNm}"></td>
 									<td>
 										<th:block th:if="${data.rcritNmprSetYn eq 'Y'}">[[${data.rltmReqstNmprCo}]] / [[${data.rcritNmprCo}]]</th:block>
-										<th:block th:if="${data.rcritNmprSetYn eq 'N'}">[[${data.rcritNmprSetYnNm}]]</th:block>
+										<th:block th:if="${data.rcritNmprSetYn eq 'N'}">[[${data.rltmReqstNmprCo}]] / [[${data.rcritNmprSetYnNm}]]</th:block>
 									</td>
 									<td>
 										<th:block th:if="${data.preparRcritNmprSetYn eq 'Y'}">[[${data.rltmPreparReqstNmprCo}]] / [[${data.preparRcritNmprCo}]]</th:block>

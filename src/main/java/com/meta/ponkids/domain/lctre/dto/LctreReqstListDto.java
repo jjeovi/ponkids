@@ -47,7 +47,13 @@ public class LctreReqstListDto  {
 
 	private String		preparNmprYn;			// 예비 인원 여부
 	
-	private String		userId;					// 사용자 ID : 메일 발송 시 ID 검증하기 위함
+	private String		userId;					// 신청자 ID : 메일 발송 시 ID 검증하기 위함
+	
+	private String 		userNm;					// 신청자 명
+	
+	private String		telNo;					// 신청자 전화번호
+	
+	private String 		regDt;					// 등록일시
     
     private List<LctreReqstListDto> lctreReqsts;				// list
     
@@ -64,7 +70,8 @@ public class LctreReqstListDto  {
 	public LctreReqstListDto(	Long 	lctreReqstSn, 			Long 	classReqstSn, 			String	classSj,		Long	lctreSn,
 								Long	lctreSeq,				String 	lctreSj, 				String 	lctreDt,		Long	lctreAmt,
 								String	lctreDc,				String 	lctreApplcntGuidance, 	String 	classDayCd,		String 	classDayNm,
-								 Long 	chldrnSn,				String	chldrnNm,				String 	preparNmprYn,	String userId ) {
+								 Long 	chldrnSn,				String	chldrnNm,				String 	preparNmprYn,	String userId,
+								String	userNm,					String	telNo,					String 	regDt ) {
     	this.lctreReqstSn 			= lctreReqstSn;
 		this.classReqstSn 			= classReqstSn;
 		this.classSj 				= classSj;
@@ -81,6 +88,9 @@ public class LctreReqstListDto  {
 		this.chldrnNm 				= chldrnNm;
 		this.preparNmprYn 			= preparNmprYn;
 		this.userId					= userId;
+		this.userNm 				= userNm;
+		this.telNo					= telNo;
+		this.regDt					= regDt;
 	}
     
 
