@@ -112,7 +112,7 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
                 		) )					
                 .from( classInqry )
                 // leftJoin
-                .leftJoin( user)
+				.leftJoin( user )
                 .on( 	user.userSn.eq( classInqry.userSn ),
                 		user.delYn.eq("N")
                 )
@@ -141,7 +141,8 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
 						eqReplyYn( listDto.getReplyYn() ),
 						eqClassSn( listDto.getClassSn() ),
 						classInqry.parntsInqrySn.isNull(),
-						classInqry.step.eq("1")
+						classInqry.step.eq("1"),
+						eqUserSn( listDto.getUserSn() )
 				)
                 .orderBy( classInqry.classInqrySn.desc())
                 .offset( pageable.getOffset() )
@@ -153,8 +154,17 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
         JPAQuery<Long> count = query.select( classInqry.count() )
                 .from( classInqry )									
                 .where(
-                        eqOption( listDto.getSchOption(), listDto.getSchCntn() )
-		);
+						eqCateLv1( listDto.getCategory() ),	// 분류 조회 : lv1Sn 값 존재시 검색
+						eqCateLv2( listDto.getCategory() ),	// 분류 조회 : lv2Sn 값 존재시 검색
+						eqCateLv3( listDto.getCategory() ), // 분류 조회 : lv3Sn 값 존재시 검색
+						eqOption( listDto.getSchOption(), listDto.getSchCntn() ),
+						eqOpenYn( listDto.getOpenYn() ),
+						eqReplyYn( listDto.getReplyYn() ),
+						eqClassSn( listDto.getClassSn() ),
+						classInqry.parntsInqrySn.isNull(),
+						classInqry.step.eq("1"),
+						eqUserSn( listDto.getUserSn() )
+				);
 
 		return PageableExecutionUtils.getPage( results, pageable, count::fetchOne );
 		
@@ -385,6 +395,10 @@ public class ClassInqryRepositoryImpl implements ClassInqryRepositoryCustom {
     private BooleanExpression eqClassSn( Long pk ) {
         return pk != null ? classInqry.classSn.eq(pk) : null;
     }
+
+	private BooleanExpression eqUserSn( Long pk ) {
+		return pk != null ? user.userSn.eq( pk ) : null;
+	}
     
     private BooleanExpression eqClassInqrySn( Long pk ) {
     	return pk != null ? classInqry.classInqrySn.eq(pk) : null;

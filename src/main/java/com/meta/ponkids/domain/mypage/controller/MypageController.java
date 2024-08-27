@@ -1,8 +1,10 @@
 package com.meta.ponkids.domain.mypage.controller;
 
+import com.meta.ponkids.domain.cls.dto.ClassInqryListDto;
 import com.meta.ponkids.domain.cls.dto.ClassListDto;
 import com.meta.ponkids.domain.cls.dto.ClassReqstListDto;
 import com.meta.ponkids.domain.cls.dto.ClassReviewListDto;
+import com.meta.ponkids.domain.cls.service.ClassInqryService;
 import com.meta.ponkids.domain.cls.service.ClassReqstService;
 import com.meta.ponkids.domain.cls.service.ClassReviewService;
 import com.meta.ponkids.domain.cls.service.ClassService;
@@ -79,7 +81,10 @@ public class MypageController {
 
     private final ClassReviewService classReviewService;
 
+    private final ClassInqryService classInqryService;
+
     private final EmailService emailService;
+
 
     // layout 관련 dataSet 처리는
     // - MypageAop.java 에서 처리 ( 관심개수.. 등 )
@@ -399,6 +404,36 @@ public class MypageController {
         return USER_VIEW_PATH + BASIC_PATH + "/reviewList";
     }
 
+    @GetMapping( "/questionList" )
+    public String questionList( @ModelAttribute ClassInqryListDto listDto,
+                                @PageableDefault( size = 10 ) Pageable pageable,
+                                Model model ) {
+
+        // S : 필요한 객체 setting
+
+
+        // 클래스 의 Q&A
+        // 총 건수 : classInqryList.totalElements 로 구함.
+        listDto.setUserSn( SessionUtils.getAuthUserSn() );
+        model.addAttribute("resultList", classInqryService.getList( listDto, pageable ) );	// 클래스 후기 classSn으로 검색
+
+        // 검색 dto setting
+        model.addAttribute( "searchDTO", listDto );
+
+
+
+        // E : 필요한 객체 setting
+
+        // 기본 경로 setting
+        model.addAttribute( "basicPath", BASIC_PATH );
+        // mypage용 mcd
+        model.addAttribute( "mypageMcd", "questionList" );
+        return USER_VIEW_PATH + BASIC_PATH + "/questionList";
+    }
+
+
+
+
     @GetMapping( "/myInfoModify" )
     public String myInfoModify( Model model ) {
 
@@ -650,22 +685,6 @@ public class MypageController {
         // mypage용 mcd
         model.addAttribute( "mypageMcd", "inqryList" );
         return USER_VIEW_PATH + BASIC_PATH + "/inqryList";
-    }
-
-
-    @GetMapping( "/questionList" )
-    public String questionList( Model model ) {
-
-        // S : 필요한 객체 setting
-
-
-        // E : 필요한 객체 setting
-
-        // 기본 경로 setting
-        model.addAttribute( "basicPath", BASIC_PATH );
-        // mypage용 mcd
-        model.addAttribute( "mypageMcd", "questionList" );
-        return USER_VIEW_PATH + BASIC_PATH + "/questionList";
     }
 
 

@@ -42,7 +42,7 @@
 				<div class="review_content">
 					<div class="review_info">
 						<div class="review_name">
-							<h5 th:text="|${#strings.substring(data.userNm, 0, 1)}**|" >김**</h5>
+<!--							<h5 th:text="|${#strings.substring(data.userNm, 0, 1)}**|" >김**</h5>-->
 						</div>
 						<div class="like_star" >
 							<img src="/pon/common/image/star_like.svg" th:each="num : ${#numbers.sequence(1,data.reviewGradeLong)}" alt="후기별점" >

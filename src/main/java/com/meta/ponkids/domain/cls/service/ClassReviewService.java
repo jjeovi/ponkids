@@ -6,7 +6,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,13 +40,11 @@ public class ClassReviewService {
 		
 		return saveDto;
 	}
-	
 
     public Page<ClassReviewListDto> getList( ClassReviewListDto listDto, Pageable pageable ) {
         return classReviewRepository.getList( listDto, pageable );
     }
-    
-    
+
     public ClassReviewListDto getByClassReviewSn( Long pk ) {
         return classReviewRepository.getByClassReviewSn( pk );
     }

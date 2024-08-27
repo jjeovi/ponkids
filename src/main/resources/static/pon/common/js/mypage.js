@@ -95,32 +95,6 @@ function goClassReview( classSn ){
 		return false;
 	}
 	
-	function detailInqryLayer( classInqrySn ) {
-		
-		// 문의 상세 조회 layer 표출
-		showLayer('detailClassInqry');
-		
-		// 문의 상세 조회 layer 내용 setting
-		// 특정 클래스의 특정 요일 의 수업 리스트 조회
-		var url = "/classInqry/live/detailClassInqryAjax";
-		$.ajax( {
-			url: url,
-			type: "GET",
-			dataType: "json",
-			async: false,	// 동기식 ajax : 통신이 완료될 떄 까지 다음 line 진행 안함
-			data: {classInqrySn : classInqrySn}, // 검색할 값
-			contentType: "application/json",
-			success: function ( result ) {
-				
-				// return type : Map<String, Object>
-				var resultOne = result.resultOne;
-				
-				console.log( resultOne );
-			}
-		});
-		
-	}
-	
 	/*  E : 후기 작성하기 */
 	
 	
