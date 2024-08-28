@@ -422,9 +422,40 @@ function amtSetComma( val ){
 		$("#detailInqryRegDt").text( result.regDt );
 		$("#detailInqryCn").text( result.inqryCn );
 		// E : 작성자(마스킹), 별점, 등록일, 후기내용 setting
+
+
+		// targetReplyList
+		var targetReplyList = ajaxResult.targetReplyList;
+
+		// 순회한 키값 리스트를 재순회
+		for ( let item of targetReplyList ) {
+			$( ".pop_wrap.detailClassInqry" ).find( ".reply-wrap" ).append(
+				$( " <li> " ).append(
+					$( "<div>" ).attr( "class", "bent-line" ).append(),
+					$( "<div>" ).attr( "class", "detail_inqry_box reply-box" ).append(
+						$( "<div>" ).attr( "class", "info_top" ).append(
+							$( "<span>" ).attr( "class", "review_userNm" ).append( "관리자" ),
+							$( "<div>" ).attr( "class", "regDt" ).append( item.regDt ),
+						),
+						$( "<div>" ).attr( "class", "info_content" ).append( item.inqryCn )
+					)
+				)
+			)
+		}
+
+		// 로그인 되어 있을 시, 본인 여부 확인
+		// userSn 이 같을 시 , review_footer show
+		var myInqryYn = ajaxResult.myInqryYn;
+
+		if ( myInqryYn == "Y" ) {
+			$( "#inqryDeleteA" ).data( "delPk", result.classInqrySn );
+			$( ".inqry_footer" ).show();
+		} else {
+			$( ".review_footer" ).hide();
+		}
 	}
-	
-	
+
+
 	/*  E : 문의 */
 
 	/* S : 리뷰 ( 후기 ) */
@@ -448,7 +479,7 @@ function amtSetComma( val ){
 				} else {
 					
 					// 1. 문의 조회 layer 초기화
-					eraseLayerData( ['changeReviewData'] ); 
+					eraseLayerData( ['changeReviewData'] );
 					
 					// 2. 후기 조회 layer data setting
 					setReviewLayerData( ajaxResult );
@@ -465,7 +496,6 @@ function amtSetComma( val ){
 
 		var result = ajaxResult.resultOne;
 
-		var myReviewYn = ajaxResult.myReviewYn;
 
 		$("#reviewImg").append(
 				$( "<img>" ).attr("src","/getImage?atchFileSn="+ result.thumbAtchFileSn).append()
@@ -489,9 +519,29 @@ function amtSetComma( val ){
 		$("#detailReviewCn").text( result.reviewCn );
 		// E : 작성자(마스킹), 별점, 등록일, 후기내용 setting
 
+		// targetReplyList
+		var targetReplyList = ajaxResult.targetReplyList;
+
+		// 순회한 키값 리스트를 재순회
+		for ( let item of targetReplyList ) {
+			$( ".pop_wrap.detailClassReview" ).find( ".reply-wrap" ).append(
+				$( " <li> " ).append(
+					$( "<div>" ).attr( "class", "bent-line" ).append(),
+					$( "<div>" ).attr( "class", "detail_review_box reply-box" ).append(
+						$( "<div>" ).attr( "class", "info_top" ).append(
+							$( "<span>" ).attr( "class", "review_userNm" ).append( "관리자" ),
+							$( "<div>" ).attr( "class", "regDt" ).append( item.regDt ),
+						),
+						$( "<div>" ).attr( "class", "info_content" ).append( item.ReviewCn )
+					)
+				)
+			)
+		}
 
 		// 로그인 되어 있을 시, 본인 여부 확인
 		// userSn 이 같을 시 , review_footer show
+		var myReviewYn = ajaxResult.myReviewYn;
+
 		if ( myReviewYn == "Y" ) {
 			$( "#reviewDeleteA" ).data( "delPk", result.classReviewSn );
 			$( ".review_footer" ).show();

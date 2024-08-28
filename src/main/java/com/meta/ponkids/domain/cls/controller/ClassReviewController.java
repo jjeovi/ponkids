@@ -229,8 +229,8 @@ public class ClassReviewController {
         Map<String, Object> result = new HashMap<String, Object>();
         
         result.put( "resultOne", classReviewService.getByClassReviewSn( pk ) );   // 커리큘럼 일련번호로 검색
-        
-        result.put( "replyList", classReviewService.getListByStepAndParntsReviewSn( "2", pk ));
+
+        result.put( "targetReplyList", classReviewService.getListByStepAndParntsReviewSn( "2", pk ));
         
         String myReviewYn = "N";
         if ( SessionUtils.getAuthUserSn() != null ) {

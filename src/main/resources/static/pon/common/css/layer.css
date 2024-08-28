@@ -2039,36 +2039,41 @@ input[type="radio"][disabled]:checked+label{
 
 /* S : 클래스 리뷰 (상세 조회 ) */
 
-.detail_review_box {
+.detail_review_box, detail_inqry_box {
     padding: 5px 5px;
     border-top: 1px solid #c3c3c3;
     margin-top: 10px;
 }
-.detail_review_box .info_top {
+.detail_review_box .info_top, .detail_inqry_box .info_top {
     padding-top:7px;
     padding-bottom : 15px;
 }
 
-.detail_review_box .review_userNm, .detail_review_box .info_top .regDt{
+.detail_review_box .review_userNm, .detail_review_box .info_top .regDt,
+.detail_inqry_box .review_userNm, .detail_inqry_box .info_top .regDt {
     letter-spacing: 2px;
     font-size: 14px;
     color: #939393;
 }
-.detail_review_box .info_top .regDt{
+.detail_review_box .info_top .regDt,
+.detail_inqry_box .info_top .regDt{
     float : right;
     position : relative;
     top : 5px;
 
 }
 
-.detail_review_box .info_top .like_star{
+.detail_review_box .info_top .like_star,
+.detail_inqry_box .info_top .like_star{
     display: inline-block;
     position: relative;
     top: 3px;
     padding-left: 10px;
 }
 
-.detail_review_box .info_content {
+.detail_review_box .info_content,
+.detail_inqry_box .info_content
+{
     padding: 0px 15px;
     letter-spacing: 2px;
     line-height: 1.2rem;
@@ -2076,14 +2081,17 @@ input[type="radio"][disabled]:checked+label{
 }
 
 
-.detail_review_box .like_star img{ max-width: 17px; }
+.detail_review_box .like_star img,
+.detail_inqry_box .like_star img{ max-width: 17px; }
 
-.review_footer {
+.review_footer,
+.inqry_footer {
     text-align: center;
     margin-top: 40px;
 }
 
-.review_footer > div.redBtn {
+.review_footer > div.redBtn,
+.inqry_footer > div.redBtn{
     padding: 10px 30px;
     box-sizing: border-box;
     display: inline-block;
@@ -2097,6 +2105,41 @@ input[type="radio"][disabled]:checked+label{
 }
 
 /* E : 클래스 리뷰 (상세 조회 ) */
+
+
+/*  S : 답변( 후기 및 문의 ) */
+.reply-wrap li{
+    position: relative;
+}
+
+.reply-wrap li .bent-line {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    width: 3px;
+    height: 20px;
+    background-color: #b6b6b6;
+}
+
+
+.reply-wrap li .bent-line::before {
+    content: '';
+    position: absolute;
+    top: 19px;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background-color: #b6b6b6;
+}
+
+
+.reply-wrap .reply-box {
+    padding-left : 50px;
+
+}
+
+/*  E : 답변( 후기 및 문의 ) */
+
 
 
 

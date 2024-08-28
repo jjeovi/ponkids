@@ -1,5 +1,4 @@
 <div class="pop_wrap detailClassInqry" data-layer-wrap="detailClassInqry">
-	<form name="classInqryInsertForm" method="POST" th:action="@{ /classInqry/{mcd}/insert (  mcd = ${mcd} ) }" class="form" onsubmit="return insertClassInqry();" >
 	<div class="pop_top">
 		<button type="button" class="pop_close hide_layer" data-layer-id="detailClassInqry" >
 			<img src="/pon/common/image/chat_close.svg" alt="닫기_아이콘">
@@ -10,11 +9,11 @@
 		<h2 class="pop_title">문의상세조회</h2>
 	</div>
 	<div class="pop_content">
-		<input type="hidden" name="classSn" th:value="${targetDto.classSn}" />
+		<input type="hidden" name="classSn" />
 		<div class="class_info_wrap">
 			<div class="class_detail_box">
 				<div class="class_detail_left changeInqryData" id="thumbImg">
-					<img th:src="@{/getImage(atchFileSn=${targetDto.thumbAtchFileSn})}" alt="">
+					<img alt="">
 				</div>
 				<div class="class_detail_right">
 					<p id="inqryClassSj" class="changeInqryData classSj">클래스제목</p>
@@ -22,7 +21,7 @@
 			</div>
 		</div>
 		<!-- 후기 정보 : 별점, 등록일, 등록자, 후기내용, +사진(TODO) , +답글! -->
-		<div class="detail_review_box">
+		<div class="detail_inqry_box">
 			<div class="info_top">
 				<span id="detailInqryUserNm" class="review_userNm changeInqryData">홍길동</span>
 				<span id="detailInqryRegDt" class="regDt changeInqryData">
@@ -34,9 +33,9 @@
 			</div>
 		</div>
 		<!-- 후기 답변 -->
-		<ul class="changeInqryData" >
+		<ul class="changeInqryData reply-wrap" >
 			<li>
-				<div class="detail_review_box reply">
+				<div class="detail_inqry_box reply-box">
 					<div class="info_top">
 						<span class="review_userNm">관리자</span>
 						<div class="regDt">
@@ -50,7 +49,15 @@
 			</li>
 		</ul>
 	</div>
-	<div class="pop_footer">
+	<div class="inqry_footer" th:if = "${  loginYn eq 'Y'}">
+		<div class="redBtn">
+			<a id="inqryDeleteA" href="javascript:;" onclick="deleteInqryItem( 'deleteInqryForm', this );" data-del-pk >
+				<span>삭제</span>
+				<em></em>
+			</a>
+		</div>
 	</div>
+	<form id="deleteInqryForm" name="deleteInqryForm" method="post" th:action="@{ /classInqry/{mcd}/delete ( mcd = ${mcd} ) }">
+		<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->
 	</form>
 </div>

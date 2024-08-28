@@ -37,9 +37,10 @@
 			</div>
 		</div>
 		<!-- 후기 답변 -->
-		<ul class="changeReviewData" >
+		<ul class="changeReviewData reply-wrap" >
 			<li>
-				<div class="detail_review_box reply">
+				<div class="bent-line"></div>
+				<div class="detail_review_box reply-box">
 					<div class="info_top">
 						<span class="review_userNm">관리자</span>
 						<div class="regDt">
@@ -53,10 +54,7 @@
 			</li>
 		</ul>
 	</div>
-	<div class="pop_footer">
-
-	</div>
-	<div class="review_footer" th:if = "${  loginYn eq 'Y'}">
+	<div class="review_footer" th:if = "${ loginYn eq 'Y' }">
 		<div class="redBtn">
 			<a id="reviewDeleteA" href="javascript:;" onclick="deleteReviewItem( 'deleteReviewForm', this );" data-del-pk >
 				<span>삭제</span>

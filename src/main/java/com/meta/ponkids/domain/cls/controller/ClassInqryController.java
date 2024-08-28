@@ -194,6 +194,20 @@ public class ClassInqryController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		result.put( "resultOne" , classInqryRepository.getByClassInqrySn(listDto) );   // 커리큘럼 일련번호로 검색
+
+		// 답변 댓글 리스트 ( targetReplyList )
+		// step 2 / parntsInqrySn 로 검색
+		listDto.setStep("2");
+		result.put( "targetReplyList", classInqryService.findReplyByStepAndParntsInqrySn( listDto ) );
+
+
+		String myInqryYn = "N";
+		if ( SessionUtils.getAuthUserSn() != null ) {
+			if ( classInqryService.findById( listDto ).getUserSn().equals( SessionUtils.getAuthUserSn() ) ) {
+				myInqryYn = "Y";
+			}
+		}
+		result.put( "myInqryYn", myInqryYn );
 		
 		return result;
 	}
