@@ -532,7 +532,7 @@ function amtSetComma( val ){
 							$( "<span>" ).attr( "class", "review_userNm" ).append( "관리자" ),
 							$( "<div>" ).attr( "class", "regDt" ).append( item.regDt ),
 						),
-						$( "<div>" ).attr( "class", "info_content" ).append( item.ReviewCn )
+						$( "<div>" ).attr( "class", "info_content" ).append( item.reviewCn )
 					)
 				)
 			)
