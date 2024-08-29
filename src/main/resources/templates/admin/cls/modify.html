@@ -381,7 +381,7 @@
 									<div class="upload-display">
 										<div class="upload-thumb-wrap">
 											<img alt="프로필 이미지" class="upload-thumb noimg" 		th:if = 	"${targetDto.thumbAtchFileSn == null}" >
-											<img alt="프로필 이미지" class="upload-thumb" 				th:unless = "${targetDto.thumbAtchFileSn == null}" th:src="@{/getImage(atchFileSn=${targetDto.thumbAtchFileSn})}"  >
+											<img alt="프로필 이미지" class="upload-thumb" 			th:unless = "${targetDto.thumbAtchFileSn == null}" th:src="@{/getImage(atchFileSn=${targetDto.thumbAtchFileSn})}"  >
 										</div>
 									</div>
 									<div class="upload-file-name">
@@ -416,7 +416,7 @@
 						<div class="field item form-group">
 							<label class="col-form-label col-md-2 col-sm-3 label-align">할인전 금액</label>
 							<div class="col-md-6 col-sm-6">
-								<input class="form-control"name="classDscntBfeAmt" placeholder="할인전금액 입력" type="number" th:value="${targetDto.classDscntBfeAmt}"/>
+								<input class="form-control" name="classDscntBfeAmt" placeholder="할인전금액 입력" type="number" th:value="${targetDto.classDscntBfeAmt}"/>
 								<small class="font-gray-dark">
 									할인 적용시 할인하기 전 금액을 입력해주세요. 금액보다 큰 값이어야 합니다.
 								</small>
@@ -540,9 +540,9 @@
 							<label class="col-form-label col-md-2 col-sm-3 label-align">표시여부</label>
 							<div class="col-md-2 col-sm-4">
 								<div class="btn-group radiobox">
-									<input type="radio" id="classExpsrYn1" name="classExpsrYn" value="Y" th:checked="${targetDto.classExpsrYn eq 'Y'}" class="join-btn">
+									<input type="radio" id="classExpsrYn1" name="classExpsrYn" value="Y" th:checked="${targetDto.classExpsrYn eq 'Y'}" class="join-btn" required="required" >
 									<label for="classExpsrYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">표시</label>
-									<input type="radio" id="classExpsrYn2" name="classExpsrYn" value="N" th:checked="${targetDto.classExpsrYn eq 'N'}" class="join-btn">
+									<input type="radio" id="classExpsrYn2" name="classExpsrYn" value="N" th:checked="${targetDto.classExpsrYn eq 'N'}" class="join-btn" required="required" >
 									<label for="classExpsrYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">미표시</label>
 								</div>
 							</div>
@@ -551,9 +551,9 @@
 							<label class="col-form-label col-md-2 col-sm-3 label-align">표시기간</label>
 							<div class="col-md-2 col-sm-4">
 								<div class="btn-group radiobox">
-									<input type="radio" id="classPdSetYn1" name="classPdSetYn" value="N" th:checked="${targetDto.classPdSetYn eq 'N'}" class="join-btn">
+									<input type="radio" id="classPdSetYn1" name="classPdSetYn" value="N" th:checked="${targetDto.classPdSetYn eq 'N'}" class="join-btn" required="required" >
 									<label for="classPdSetYn1" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">상시</label>
-									<input type="radio" id="classPdSetYn2" name="classPdSetYn" value="Y" th:checked="${targetDto.classPdSetYn eq 'Y'}" class="join-btn">
+									<input type="radio" id="classPdSetYn2" name="classPdSetYn" value="Y" th:checked="${targetDto.classPdSetYn eq 'Y'}" class="join-btn" required="required" >
 									<label for="classPdSetYn2" class="btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">기간설정</label>
 								</div>
 							</div>

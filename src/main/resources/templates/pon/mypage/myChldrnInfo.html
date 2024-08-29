@@ -17,7 +17,7 @@
 <title layout:fragment="title">피오니키즈 - pioneerkids</title>
 <!-- S : Javascript functions	-->
 <div layout:fragment="script">
-		<!-- js -->
+	<!-- js -->
 	<script>
 
 		function myChldrnInfo( userChldrnSeq ) {
@@ -28,16 +28,95 @@
 			location.href = "?pageType=" + type
 		}
 
+		// 자녀 추가 등록 버튼 클릭시
 		function addMyChldrn(){
-			$("#insertForm").submit();
+
+			$targetForm = $("#insertForm");
+
+			// 이름 체크 (2자 이상 )
+			var name = $targetForm.find( "[name='userNm']" ).val();
+
+			if ( name == '' ) {
+				alert( "이름을 입력해주세요." );
+				return false;
+
+			} else if ( name.length < 2 || name.length > 10 ) {
+				alert( "이름은 2자 이상 10자 이하로 입력해주세요." );
+				return false;
+
+			}
+
+			// 성별 체크
+			var gender = $targetForm.find( "[name='gender']:checked" ).val();
+
+			if ( gender == null || gender == '' ) {
+				alert( "성별을 선택해 주세요." );
+				return false;
+			}
+
+			// 생년월일 체크
+			var brdtDate = $targetForm.find( "[name='brdtDate']" ).val();
+
+			if ( !isValidDate( brdtDate ) ) {
+				alert( "날짜는 yyyymmdd 형식으로 입력해주세요. ex) 19930119" );
+				return false;
+			}
+
+			// 연락처 체크
+			var telNo = $targetForm.find( "[name='telNo']" ).val();
+
+			if ( telNo != '' && !telNoRegexp.test( telNo ) ) {	// telNoRegexp = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
+				alert( "연락처 형식에 맞게 입력해주세요." );
+				return false;
+			}
+
+			$targetForm.submit();
+
 		}
 
-		function deleteChldrn( userChldrnSeq ) {
-
-		}
-
+		// 자녀 선택 후 수정 버튼 클릭시
 		function updateMyChldrn() {
-			$("#updateForm").submit();
+
+			$targetForm = $("#updateForm");
+
+			// 이름 체크 (2자 이상 )
+			var name = $targetForm.find( "[name='userNm']" ).val();
+
+			if ( name == '' ) {
+				alert( "이름을 입력해주세요." );
+				return false;
+
+			} else if ( name.length < 2 || name.length > 10 ) {
+				alert( "이름은 2자 이상 10자 이하로 입력해주세요." );
+				return false;
+
+			}
+
+			// 성별 체크
+			var gender = $targetForm.find( "[name='gender']:checked" ).val();
+
+			if ( gender == null || gender == '' ) {
+				alert( "성별을 선택해 주세요." );
+				return false;
+			}
+
+			// 생년월일 체크
+			var brdtDate = $targetForm.find( "[name='brdtDate']" ).val();
+
+			if ( !isValidDate( brdtDate ) ) {
+				alert( "날짜는 yyyymmdd 형식으로 입력해주세요. ex) 19930119" );
+				return false;
+			}
+
+			// 연락처 체크
+			var telNo = $targetForm.find( "[name='telNo']" ).val();
+
+			if ( telNo != '' && !telNoRegexp.test( telNo ) ) {	// telNoRegexp = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
+				alert( "연락처 형식에 맞게 입력해주세요." );
+				return false;
+			}
+
+			$targetForm.submit();
 		}
 
 	</script>

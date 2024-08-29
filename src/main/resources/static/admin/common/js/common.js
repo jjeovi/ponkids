@@ -210,14 +210,30 @@ function fileChange( e ) {
 		}
 
         if ( window.FileReader && $( e )[0].files[0] != null ) {
+            // 파일을 선택 했을 때
+            
+            // 업로드한 파일 확장자 명
+            var fileExtension = '.' + $( e )[0].files[0].name.split('.').pop().toLowerCase();
+            // 업로드 가능한 확장자 리스트
+            var possibleFileExtension = $(e).attr("accept");
+
+            // 업로드한 파일 확장자가 업로드 가능한 확장자 리스트가 아닐 경우
+            if ( !$(e).attr("accept").split(', ').includes( fileExtension ) ) {
+                alert( "파일 확장자를 확인해 주세요. (업로드 가능 확장자 : " + possibleFileExtension + ")" );
+                parent.prepend( '<div class="upload-file-name"><input class="input-file-name" value="선택된 파일 없음" disabled="disabled"></div>' );
+                parent.prepend( '<div class="upload-display"><div class="upload-thumb-wrap"><img class="upload-thumb noimg"></div></div>' );
+                return;
+            }
 
             parent.prepend( '<div class="upload-file-name"><input class="input-file-name" value="' + $( e )[0].files[0].name + '" disabled="disabled"></div>' );
 
             //image 파일만
-            if ( !$( e )[0].files[0].type.match( /image\// ) ) {
+            if ( !$( e )[0].files[0].type.match( '/image\//' ) ) {
                 parent.prepend( '<div class="upload-display"><div class="upload-thumb-wrap"><img class="upload-thumb noimg"></div></div>' );
                 return;
             }
+            
+            // ghkr
 
             var reader = new FileReader();
             reader.onload = function ( e ) {

@@ -259,6 +259,10 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
     }
     
     private BooleanExpression eqBannerPdSetYn() {
+
+        // - 2. 표시기간이 상시
+        // - 3. 표시기간이 기간일 경우 , 현재시간(now) 가 시작일~종료일 기간내에 포함되어있는 배너
+
         return banner.bannerPdSetYn.eq("N")
                 .or(
                             banner.bannerPdSetYn.eq("Y").
@@ -269,7 +273,6 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                                )
                        )
                     );
-//        return banner.bannerPdSetYn.eq("Y");
     }
     
     // 카테고리 lv 1 검색 옵션

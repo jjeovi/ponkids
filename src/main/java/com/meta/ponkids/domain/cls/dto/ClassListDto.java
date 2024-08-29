@@ -61,6 +61,8 @@ public class ClassListDto {
     private String 	schCntn;     // 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!
     
     private CategoryDto category;    // 카테고리 검색 : 생성자에는 추가하지 않음!
+
+    private String listType;
     
     @Builder
     @QueryProjection

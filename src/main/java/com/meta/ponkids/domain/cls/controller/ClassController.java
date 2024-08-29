@@ -86,6 +86,8 @@ public class ClassController {
 		
 		// 로그인 여부 파악 하여 userSn setting 함
 		listDto.setUserSn( SessionUtils.getAuthUserSn());
+		// listType 설정 : 사용자는 표시기간과, 표시여부 확인해야함 ( 쿼리에서 설정 )
+		listDto.setListType( "pon" );
 		// 목록 조회
 		Page<ClassListDto> resultList = classService.getList( listDto, pageable );
 		model.addAttribute( "resultList", resultList );

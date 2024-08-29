@@ -41,22 +41,6 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
 
         // (1) '결과list' 와 (2)'count' 를 2번에 걸쳐 조회
 
-
-//		this.classSn = classSn;
-//		this.ctgrySn = ctgrySn;
-//		this.crseSn = crseSn;
-//		this. = classSj;
-//		this.classSumry = classSumry;
-//		this. = classDc;
-//		this. = classAmt;
-//		this. = classDscntBfeAmt;
-//		this. = classPdSetYn;
-//		this. = classBeginDt;
-//		this. = classEndDt;
-//		this. = thumbAtchFileSn;
-//		this. = atchFileSn;
-//		this. = classExpsrYn;
-
         // (1) 결과list (results).
         List< ClassListDto > results = query
                 // select
@@ -121,7 +105,8 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 .where(
                         eqCateLv1( listDto.getCategory() ),
                         eqCateLv2( listDto.getCategory() ),
-                        eqOption( listDto.getSchOption(), listDto.getSchCntn(), listDto.getUserSn() )
+                        eqOption( listDto.getSchOption(), listDto.getSchCntn(), listDto.getUserSn() ),
+                        listTypeOption( listDto.getListType() )
                 )
                 .orderBy( class$.classSn.desc() )
                 .offset( pageable.getOffset() )
@@ -134,7 +119,8 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
                 .where(
                         eqCateLv1( listDto.getCategory() ),
                         eqCateLv2( listDto.getCategory() ),
-                        eqOption( listDto.getSchOption(), listDto.getSchCntn(), listDto.getUserSn() )
+                        eqOption( listDto.getSchOption(), listDto.getSchCntn(), listDto.getUserSn() ),
+                        listTypeOption( listDto.getListType() )
                 );
 
 
@@ -472,6 +458,28 @@ public class ClassRepositoryImpl implements ClassRepositoryCustom {
     // pk 로 고유값 1건만 조회
     private BooleanExpression neClassSn( Long classSn ) {
         return ( classSn != null ) ? class$.classSn.ne( classSn ) : null;
+    }
+
+    // 리스트 타입이 pon(사용자리스트)일 경우, 추가 조건 표시
+    private BooleanExpression listTypeOption( String listType ) {
+
+        if( listType != null && "pon".equals( listType ) ) {
+            // listType 이 "pon" 일 경우에만 사용자 쿼리 조건 추가
+
+            // - 표시기간이 상시
+            // - 표시기간이 기간일 경우 , 현재시간(now) 가 시작일~종료일 기간내에 포함되어있는 데이터
+
+            return class$.classExpsrYn.eq( "Y" ).and(
+                    class$.classPdSetYn.eq( "N" ).or(
+                            class$.classPdSetYn.eq( "Y" ).and( Expressions.stringTemplate( "to_char({0}, '{1s}')", Expressions.currentTimestamp(), "YYYY-MM-DD HH24:MI:SS" ).between( class$.classBeginDt, class$.classEndDt ) )
+                    )
+            );
+        } else {
+            return null;
+        }
+
+
+
     }
 
     // userSn으로 클래스 관심 조회

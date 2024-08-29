@@ -51,17 +51,12 @@ public class PopupRepositoryImpl implements PopupRepositoryCustom {
 						popup.url,
 						popup.registerId,
 						Expressions.stringTemplate("to_char({0}, '{1s}')", popup.regDt, "YYYY-MM-DD HH24:MI:SS")
-//						new CaseBuilder()
-//						.when( user.gender.eq("M")).then("남자")
-//						.when( user.gender.eq("F")).then("여자")
-//						.otherwise("")
-//						.as("gender"),
 						) )					
 				.from( popup )
 				// where
 				.where(
-		eqOption( listDto.getSchOption(), listDto.getSchCntn() )
-		)
+					eqOption( listDto.getSchOption(), listDto.getSchCntn() )
+				)
 				.orderBy( popup.popupSn.desc())
 				.offset( pageable.getOffset() )
 				.limit( pageable.getPageSize() )
@@ -96,18 +91,12 @@ public class PopupRepositoryImpl implements PopupRepositoryCustom {
 						popup.url,
 						popup.registerId,
 						Expressions.stringTemplate("to_char({0}, '{1s}')", popup.regDt, "YYYY-MM-DD HH24:MI:SS")
-//						new CaseBuilder()
-//						.when( user.gender.eq("M")).then("남자")
-//						.when( user.gender.eq("F")).then("여자")
-//						.otherwise("")
-//						.as("gender"),
 						) )					
 				.from( popup )
 				// where
 				.where(
 						popup.useYn.eq( "Y"),	// '사용' 인 팝업
-						Expressions.stringTemplate("to_char({0}, '{1s}')", Expressions.currentTimestamp(), "YYYY-MM-DD HH24:MI:SS").between(
-								popup.popupBeginDt, popup.popupEndDt)
+						Expressions.stringTemplate("to_char({0}, '{1s}')", Expressions.currentTimestamp(), "YYYY-MM-DD HH24:MI:SS").between( popup.popupBeginDt, popup.popupEndDt )
 				)
 				.orderBy( popup.popupSn.desc())
 				.fetch();
