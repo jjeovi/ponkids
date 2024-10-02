@@ -103,14 +103,14 @@
 		// 수업일시 체크
 		var lctreDt = $( "[name='lctreDt']" ).val();
 		if ( lctreDt == '' ) {
-			alert( "수업일시를 선택해주세요." );
+			alert( "수업일시를 선택해 주세요." );
 			$( "[name='lctreDt']" ).focus();
 			return false;
 		}
 		// 모집인원 설정시 모집인원 수 체크
 		var rcritNmprSetYn = $( "[name='rcritNmprSetYn']:checked" ).val();
 		if ( rcritNmprSetYn == 'Y' && $( "#rcritNmprCo" ).val() == '' ) {
-			alert( "모집인원 설정시 모집인원 수는 필수로 입력해주세요." );
+			alert( "모집인원 설정 시 인원 수는 필수로 입력해 주세요." );
 			$( "#rcritNmprCo" ).focus();
 			return false;
 		}
@@ -118,7 +118,7 @@
 		// 예비모집인원 설정시 예비모집인원 수 체크
 		var preparRcritNmprSetYn = $( "[name='preparRcritNmprSetYn']:checked" ).val();
 		if ( preparRcritNmprSetYn == 'Y' && $( "#preparRcritNmprCo" ).val() == '' ) {
-			alert( "예비모집인원 설정시 예비모집인원 수는 필수로 입력해주세요." );
+			alert( "예비 모집인원 설정 시 인원 수는 필수로 입력해 주세요." );
 			$( "#preparRcritNmprCo" ).focus();
 			return false;
 		}

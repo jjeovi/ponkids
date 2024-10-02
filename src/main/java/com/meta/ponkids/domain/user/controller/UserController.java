@@ -79,7 +79,7 @@ public class UserController {
             
         	// 결과코드 및 결과메시지 추가
             result.put("flag", "E");
-            result.put("msg", "해당ID로 가입된 ID가 있습니다. 다시 시도해주세요.");
+            result.put("msg", "해당ID로 가입된 ID가 있습니다. 다시 시도해 주세요.");
             
             return result;
             

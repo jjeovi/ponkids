@@ -141,7 +141,7 @@ function validCheckName( name ) {
         alert( "이름을 입력해주세요." );
         return false;
     } else if ( name.length < 2 || name.length > 10 ) {
-        alert( "이름은 2자 이상 10자 이하로 입력해주세요." );
+        alert( "이름은 2자 이상 10자 이하로 입력해 주세요." );
         return false;
     }
     return true;

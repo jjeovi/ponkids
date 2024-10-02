@@ -115,7 +115,7 @@ public class LoginoutController {
         } else if ( targetDto == null ) {
             // 1-2. 해당 입력값으로 찾은 계정이 없을 때
             result.put( "flag", "E" );
-            result.put( "msg", "입력하신 정보와 일치하는 계정이 존재하지 않습니다. 다시 시도해주세요. " );
+            result.put( "msg", "입력하신 정보와 일치하는 계정이 존재하지 않습니다. 다시 시도해 주세요." );
         }
 
         return result;
@@ -173,7 +173,7 @@ public class LoginoutController {
         } else if ( targetDto == null ) {
             // 1-2. 해당 입력값으로 찾은 계정이 없을 때
             result.put( "flag", "E" );
-            result.put( "msg", "입력하신 정보와 일치하는 계정이 존재하지 않습니다. 다시 시도해주세요. " );
+            result.put( "msg", "입력하신 정보와 일치하는 계정이 존재하지 않습니다. 다시 시도해 주세요." );
         }
 
         return result;
@@ -227,7 +227,7 @@ public class LoginoutController {
         } else {
             // 인증번호 불일치
             result.put( "flag", "E" );
-            result.put( "msg", "인증에 실패했습니다. 다시 시도해주세요." );
+            result.put( "msg", "인증에 실패했습니다. 다시 시도해 주세요." );
         }
 
         return result;

@@ -356,7 +356,7 @@ public class LctreAdmController {
 
 		/* S : 유효성 검사 */
 		if ( lctreSn == null ) {
-			model.addAttribute( "resultMsg", "수업 일련번호를 확인해주세요." );
+			model.addAttribute( "resultMsg", "수업 일련번호를 확인해 주세요." );
 			model.addAttribute( "moveUrl", BASIC_PATH + "/list" );
 
 			return "common/alert";

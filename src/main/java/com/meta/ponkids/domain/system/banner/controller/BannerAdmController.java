@@ -182,7 +182,7 @@ public class BannerAdmController {
         model.addAttribute( "targetDto", targetDto );
         
         if ( targetDto == null ) {
-        	model.addAttribute( "resultMsg", "유효하지 않은 배너입니다. 다시 확인해주세요." );
+        	model.addAttribute( "resultMsg", "유효하지 않은 배너입니다. 다시 확인해 주세요." );
             model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
             
             return "common/alert";

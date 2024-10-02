@@ -262,7 +262,7 @@ public class MypageController {
             String dateTimeString = DateUtils.getCurrentDateString( DateUtils.DF_YYYYMMDDHHMMSS_DP );    // 오늘 날짜
 
             if ( DateUtils.isBeforeDate( targetLctreDto.getLctreDt(), dateTimeString ) ) {
-                model.addAttribute( "resultMsg", "이미 시작한 수업이라 취소할 수 없습니다." );
+                model.addAttribute( "resultMsg", "이미 시작한 수업은 취소할 수 없습니다." );
                 model.addAttribute( "moveUrl", moveUrl );
 
                 return "common/alert";

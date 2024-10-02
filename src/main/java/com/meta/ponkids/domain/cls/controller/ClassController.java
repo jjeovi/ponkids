@@ -335,11 +335,11 @@ public class ClassController {
 		String resultMsg = "";
 		// 예비인원 여부 존재시, 예비로 신청되었다는 메시지 안내
 		if ( StringUtils.hasText( lctreReqsts.getPreparNmprYn() ) && "Y".equals( lctreReqsts.getPreparNmprYn() ) ) {
-			resultMsg = "정상적으로 신청 되었습니다. \n" +
+			resultMsg = "정상적으로 신청되었습니다.\n" +
 						"신청 수업 중 예비인원으로 신청된 수업이 존재합니다.\n" +
 						"마이페이지에서 확인해주세요.";
 		} else {
-			resultMsg = "정상적으로 신청 되었습니다.";
+			resultMsg = "정상적으로 신청되었습니다.";
 		}
 		
 		/* [START] 수업 신청 완료 안내 메일 발송 */

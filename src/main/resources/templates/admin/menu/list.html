@@ -163,7 +163,7 @@
 		sel = ref.get_selected();
 
 		if ( !sel.length ) {
-			alert( "등록할 메뉴의 상위메뉴를 선택해주세요. " );
+			alert( "등록할 메뉴의 상위 메뉴를 선택해 주세요." );
 			return false;
 		}
 
@@ -171,14 +171,14 @@
 		var parentNode = $( "#menuStructureJsTree" ).jstree( true ).get_node( sel ).original;
 
 		if ( parentNode.parntsMenuYn == 'N' ) {
-			alert( "부모메뉴로 설정되어있지 않는 메뉴 하위에는 메뉴를 등록할 수 없습니다." );
+			alert( "부모 메뉴가 아닌 항목 하위에는 하위 메뉴를 등록할 수 없습니다." );
 			return false;
 		} else if ( parentNode.level > 2 ) {
 			alert( "3레벨 이상의 경로에는 메뉴를 등록할 수 없습니다." );
 			return false;
 		}
 
-		if ( menuCreating == 'Y' && confirm( "기존 작성중인 메뉴등록 양식이 있습니다. 이어서 작성하시겠습니까?\n(취소시 새 메뉴 등록)" ) ) {
+		if ( menuCreating == 'Y' && confirm( "기존에 작성중인 메뉴등록 양식이 있습니다. 이어서 작성하시겠습니까?\n(취소시 새 메뉴 등록)" ) ) {
 
 			// 기존에 등록하던 메뉴등록 정보 이어서 등록
 
@@ -231,7 +231,7 @@
 			alert( "선택된 메뉴가 없습니다." );
 			return false;
 		} else if ( parntsMenuYn == 'Y' ) {
-			alert( "부모메뉴로 설정되어있는 메뉴는 삭제가 불가능합니다. 하위 메뉴 부터 삭제해주세요.\n하위메뉴가 없다면, 부모메뉴 설정을 N으로 수정한 후 삭제해주세요." );
+			alert( "부모 메뉴로 설정되어 있는 메뉴는 삭제가 불가능합니다. 하위 메뉴부터 삭제해 주세요.\n하위메뉴가 없다면, 부모 메뉴 설정을 N으로 수정한 후 삭제해 주세요." );
 			return false;
 		}
 

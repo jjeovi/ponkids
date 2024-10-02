@@ -122,7 +122,7 @@ public class UserAdmController {
             // 중복 ID 존재시 가입 불가
             
             // 메시지 출력 및 url 이동 처리
-            model.addAttribute( "resultMsg", "해당ID로 가입된 ID가 있습니다. 다시 시도해주세요." );
+            model.addAttribute( "resultMsg", "해당ID로 가입된 ID가 있습니다. 다시 시도해 주세요." );
             model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
             
             return "common/alert";

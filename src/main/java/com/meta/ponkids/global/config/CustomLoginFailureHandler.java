@@ -46,7 +46,7 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
         String errCd = "";
         if ( exception instanceof BadCredentialsException ) {
             errCd = "LGNEMCD001";
-//             = "아이디 또는 비밀번호가 맞지 않습니다. 다시 확인해 주세요.";
+//             = "아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.";
         } else if ( exception instanceof InternalAuthenticationServiceException ) {
             errCd = "LGNEMCD002";
 //            errorMsg = "내부적으로 발생한 시스템 문제로 인해 요청을 처리할 수 없습니다. 관리자에게 문의하세요.";

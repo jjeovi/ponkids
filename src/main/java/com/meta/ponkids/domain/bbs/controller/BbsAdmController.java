@@ -187,7 +187,7 @@ public class BbsAdmController {
             bbsService.deleteAllByBbsSn( bbsSn );
             msg = "정상적으로 삭제되었습니다.";
         } else {
-            msg = "게시물이 존재합니다. 게시판을 삭제 할수 없습니다.";
+            msg = "게시물이 존재합니다. 게시판을 삭제할 수 없습니다.";
         }
         
         // 메시지 출력 및 url 이동 처리

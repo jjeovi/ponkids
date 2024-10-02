@@ -238,7 +238,7 @@ function chldrnValidCheck( $targetChldrnDiv ) {
     } else {
 
         if ( !telNoRegexp.test( chldrnTelNo ) ) {	// telNoRegexp = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
-            alert( "연락처는 숫자 10~11자리로만 입력해주세요." );
+            alert( "연락처는 숫자 10~11자리로 입력해주세요." );
             return false;
         }
 
@@ -255,7 +255,7 @@ function validCheckName( name ) {
         alert( "이름을 입력해주세요." );
         return false;
     } else if ( name.length < 2 || name.length > 10 ) {
-        alert( "이름은 2자 이상 10자 이하로 입력해주세요." );
+        alert( "이름은 2자 이상 10자 이하로 입력해 주세요." );
         return false;
     }
     return true;
@@ -532,7 +532,7 @@ function validUserInsertForm( formId ) {
 
     if ( !emailValidChk( userId ) ) {
         result.flag = false;
-        result.msg = "ID는 이메일 형식으로 입력해주세요.";
+        result.msg = "잘못된 입력입니다. 아이디를 이메일 형식으로 입력해 주세요.";
         return result;
     }
 
@@ -555,13 +555,13 @@ function validUserInsertForm( formId ) {
 
     if ( !passwordMatchCheckFlag ) {
         result.flag = false;
-        result.msg = "비밀번호와 비밀번호재입력이 일치하지 않습니다.";
+        result.msg = "비밀번호와 비밀번호 재입력이 일치하지 않습니다.";
         return result;
     }
 
     if ( password != passwordRe ) {
         result.flag = false;
-        result.msg = "비밀번호와 비밀번호재입력이 일치하지 않습니다. 다시 확인하여 주세요.";
+        result.msg = "비밀번호와 비밀번호 재입력이 일치하지 않습니다. 다시 확인하여 주세요.";
         return result;
     }
 
@@ -576,7 +576,7 @@ function validUserInsertForm( formId ) {
 
     } else if ( name.length < 2 || name.length > 10 ) {
         result.flag = false;
-        result.msg = "이름은 2자 이상 10자 이하로 입력해주세요.";
+        result.msg = "이름은 2자 이상 10자 이하로 입력해 주세요.";
         return result;
 
     }
@@ -614,7 +614,7 @@ function validUserInsertForm( formId ) {
 
     if ( !agreeUseofTermsBool ) {
         result.flag = false;
-        result.msg = "이용약관에 동의해주세요.";
+        result.msg = "필수 이용약관에 동의해 주세요.";
         return result;
     }
 
@@ -941,7 +941,7 @@ function findUsername(){
     if ( !validCheckName( userNm ) ) {
         return false;
     } else if ( !telNoRegexp.test( telNo ) ) {	// telNoRegexp = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
-        alert("연락처 형식에 맞게 입력해주세요. (숫자만 입력)");
+        alert("연락처 형식에 맞게 입력해 주세요. (숫자만 입력)");
         return false;
     }
 
@@ -1097,7 +1097,7 @@ function startTimer( duration ) {
 
 
         if ( emailAuthNumTimer == 0 ){
-            alert("인증번호가 만료되었습니다. 다시 인증번호를 발송해주세요.");
+            alert("인증번호가 만료되었습니다. 다시 인증번호를 발송해 주세요.");
             return false;
         }
 
@@ -1148,14 +1148,14 @@ function changePassword( ) {
     // 2-1. 두 값이 같은지 비교하기
     if (!checkSameValue(new_Pw, new_check_Pw)) {
         // 두 값이 같지 않을 때
-        alert("비밀번호 변경 확인이 일치하지 않습니다. 다시 확인해주세요.");
+        alert("비밀번호 변경 확인이 일치하지 않습니다. 다시 확인해 주세요.");
         return false;
     }
 
     // 2-2. 유효성 체크..
     if (!validCheckPw(new_Pw)) {
         // 유효성이 맞지 않을떄..
-        alert( "유효성 이 맞지 않습니다. [영문자, 숫자, 기호 혼합 8자 이상] 을 지켜주세요.");
+        alert( "변경할 비밀번호는 영문, 숫자, 문자 조합으로 구성된 8~20자리 여야 합니다.");
         return false;
     }
 
@@ -1179,7 +1179,7 @@ function changePassword( ) {
             headers: headers,
             success: function ( response ) {
                 //서버로부터 응답처리
-                alert("정상적으로 비밀번호가 변경되었습니다. 로그인 후 이용해주세요.");
+                alert("정상적으로 비밀번호가 변경되었습니다. 로그인 후 이용해 주세요.");
                 // 비밀번호 변경 성공 시 홈 화면으로 리다이렉션
                 window.location.href = "/";
             }, error: function ( error ) {
