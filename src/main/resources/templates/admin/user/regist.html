@@ -37,8 +37,9 @@
 			}
 
 			// 거주지역 그 외만 선택 했을 시 return false;2
-			var resideArea = $( "input:radio[name='resideArea']:checked" ).val();
-			var country = $( "#countryList" ).val();
+			var resideArea	= $( "input:radio[name='resideArea']:checked" ).val();
+			var country		= $( "#countryList" ).val();
+			var zonecode	= $( "[name='zonecode']" );			// 우편번호
 			if ( resideArea == 'other' ) {
 				if ( country == '' ) {
 					alert( "거주지역을 선택해주세요." );
@@ -48,6 +49,11 @@
 					$( "[name='resideArea']" ).val( country );
 				}
 
+			} else {
+				if ( zonecode == '' ) {
+					alert( "주소를 입력해주세요." );
+					return false;
+				}
 			}
 
 			// 권한이 관리자일때, 권한 선택 안되어있을 때 return false
@@ -105,7 +111,9 @@
 
 			if ( country == 'other' ) {
 				$( "#countryList" ).show();
+				$( "#addressWrap" ).hide();
 			} else {
+				$( "#addressWrap" ).show();
 				$( "#countryList" ).hide();
 			}
 		} );
@@ -149,6 +157,33 @@
 				idDupResult( dupCheckFlag, "checkResult" );
 			}
 		} )
+
+		// 주소 검색 버튼 클릭 event
+		$("#findAddressBtn").click( function(){
+
+			// 다음 주소 api 연동
+			new daum.Postcode({
+				oncomplete: function( data ) {
+
+					// 상세주소 초기화
+					$( "[name='detailAddress']" ).val( "" );										// 상세주소 초기화
+
+					// 주소 정보 setting
+
+					$( "[name='zonecode']" ).val( data.zonecode );									// 우편번호
+					$( "[name='roadAddress']" ).val( data.roadAddress );							// 도로명주소
+					$( "[name='roadAddressEnglish']" ).val( data.roadAddressEnglish );				// 영문도로명주소
+					$( "[name='jibunAddress']" ).val( data.jibunAddress );							// 지번주소
+					$( "[name='jibunAddressEnglish']" ).val( data.jibunAddressEnglish );			// 영문지번주소
+					$( "[name='autoRoadAddress']" ).val( data.autoRoadAddress );					// 자동도로명주소
+					$( "[name='autoRoadAddressEnglish']" ).val( data.autoRoadAddressEnglish );		// 자동영문도로명주소
+					$( "[name='autoJibunAddress']" ).val( data.autoJibunAddress );					// 자동지번주소
+					$( "[name='autoJibunAddressEnglish']" ).val( data.autoJibunAddressEnglish );	// 자동영문지번주소
+
+				}
+			}).open();
+
+		} );
 	} );
 
 	// 비밀번호 보이기 함수
@@ -389,6 +424,16 @@
 						  th:action="@{ {basicPath}/mcd/insert ( basicPath = ${basicPath} ) }"
 						  enctype="multipart/form-data">
 						<input type="hidden" name="mngrConfmYn" value="Y"/>
+						<!-- 주소 정보 항목 -->
+						<input type="hidden" name="roadAddressEnglish"		title="영문도로명주소" value="" 	/>
+						<input type="hidden" name="jibunAddress"			title="지번주소" value="" 	/>
+						<input type="hidden" name="jibunAddressEnglish"		title="영문지번주소" value="" 	/>
+						<input type="hidden" name="autoRoadAddress"			title="자동도로명주" value="" 	/>
+						<input type="hidden" name="autoRoadAddressEnglish"	title="자동영문도로명주소" value="" 	/>
+						<input type="hidden" name="autoJibunAddress"		title="자동지번주소" value="" 	/>
+						<input type="hidden" name="autoJibunAddressEnglish"	title="자동영문지번주소" value="" 	/>
+
+
 						<div class="field item form-group">
 							<label class="col-form-label col-md-2 col-sm-3 label-align">프로필 이미지</label>
 							<div class="col-md-6 col-sm-6">
@@ -512,25 +557,30 @@
 								</div>
 							</div>
 							<div class="col-md-2 col-sm-4">
-								<select class="form-control" name="otherResideArea" id="countryList"
-										style="display: none;">
+								<select class="form-control" name="otherResideArea" id="countryList" style="display: none;">
 									<option value="">국가 선택</option>
 									<option th:each="item : ${resideAreaList}" th:value="${item.cdDetailVal1}" th:text="${item.cdDetailNm}">
 								</select>
 							</div>
 						</div>
-						<div class="field item form-group">
-							<label class="col-form-label col-md-2 col-sm-3 label-align">주소</label>
-							<div class="col-md-1 col-sm-6">
-								<input class="form-control text-center" type="text" name="zip" disabled="disabled"
-									placeholder="우편번호"/>
+						<div  id="addressWrap" style="display:none;">
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-3 label-align">주소</label>
+								<div class="col-md-1 col-sm-6">
+									<input class="form-control text-center" type="text" name="zonecode" readonly="readonly" placeholder="우편번호"/>
+								</div>
+								<div class="col-md-5 col-sm-6 pl-0">
+									<input class="form-control" type="text" name="roadAddress" readonly="readonly" placeholder="주소 찾기 버튼 클릭하여 주소 입력"/>
+								</div>
+								<div class="col-md-1 pl-0">
+									<button type="button" class="btn btn-purple w100p" id="findAddressBtn" >주소 찾기</button>
+								</div>
 							</div>
-							<div class="col-md-5 col-sm-6 pl-0">
-								<input class="form-control" type="text" name="rdnmAdr" disabled="disabled"
-									   placeholder="주소 찾기 버튼 클릭하여 주소 입력"/>
-							</div>
-							<div class="col-md-1 pl-0">
-								<button type="button" class="btn btn-purple w100p">주소 찾기</button>
+							<div class="field item form-group">
+								<label class="col-form-label col-md-2 col-sm-3 label-align"></label>
+								<div class="col-md-5 col-sm-6">
+									<input class="form-control" type="text" name="detailAddress"  placeholder="상세 주소를 입력해주세요."/>
+								</div>
 							</div>
 						</div>
 						<div class="field item form-group">

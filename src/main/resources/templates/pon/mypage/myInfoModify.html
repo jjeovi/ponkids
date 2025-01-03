@@ -34,8 +34,12 @@
 
 			// 거주지역 그 외만 선택 했을 시  return false;
 			var resideArea = $( "#updateForm input:radio[name='resideArea']:checked" ).val();
-			if ( resideArea != '대한민국' ) {
+			if ( resideArea == '대한민국' ) {
+				$( "#joinAddressWrap" ).show();
+				$( "#joinCountryList" ).hide();
+			} else {
 				$( "#joinCountryList" ).show();
+				$( "#joinAddressWrap" ).hide();
 			}
 
 			// 거주지역 변동시 셀렉트박스 표출 처리
@@ -44,11 +48,14 @@
 				// 그 외 거주지역 선택시 나라 선택하도록 setting
 				var country = $( this ).val();
 
-				if ( country != '대한민국' ) {
-					$( "#joinCountryList" ).show();
-				} else {
+				if ( country == '대한민국' ) {
+					$( "#joinAddressWrap" ).show();
 					$( "#joinCountryList" ).hide();
+				} else {
+					$( "#joinCountryList" ).show();
+					$( "#joinAddressWrap" ).hide();
 				}
+
 			} );
 		})
 
@@ -107,7 +114,16 @@
 		<div class="chldrnInfoWrap">
 			<!-- S: 자녀 수정 영역 -->
 			<form id="updateForm" name="updateForm" method="post"   th:action="@{ /mypage/myInfoModify/update }" class="form"  enctype="multipart/form-data" >
-			<input type="hidden" name="userSn" 		th:value="${targetDto.userSn}" />
+			<input type="hidden" name="userSn" 					th:value="${targetDto.userSn}" />
+			<!-- 주소 정보 항목 -->
+			<input type="hidden" name="roadAddressEnglish"		th:value="${targetDto.roadAddressEnglish}"	/>  	<!-- 영문도로명주소 -->
+			<input type="hidden" name="jibunAddress"			th:value="${targetDto.jibunAddress}"	/>			<!-- 지번주소 -->
+			<input type="hidden" name="jibunAddressEnglish"		th:value="${targetDto.jibunAddressEnglish}"	/>		<!-- 영문지번주소 -->
+			<input type="hidden" name="autoRoadAddress"			th:value="${targetDto.autoRoadAddress}"	/>			<!-- 자동도로명주 -->
+			<input type="hidden" name="autoRoadAddressEnglish"	th:value="${targetDto.autoRoadAddressEnglish}"	/>	<!-- 자동영문도로명주소 -->
+			<input type="hidden" name="autoJibunAddress"		th:value="${targetDto.autoJibunAddress}"	/>		<!-- 자동지번주소 -->
+			<input type="hidden" name="autoJibunAddressEnglish"	th:value="${targetDto.autoJibunAddressEnglish}"	/>	<!-- 자동영문지번주소 -->
+
 			<th:block th:if="${targetDto ne null}">
 			<div name="chldrnModDiv" class="modForm" th:style=" ${pageType eq 'add'} ? 'display:none;' " >
 				<div class="filebox preview-image">
@@ -187,6 +203,18 @@
 						<option value=''>국가 선택</option>
 						<option th:each="item : ${resideAreaList}" th:value="${item.cdDetailVal1}" th:text="${item.cdDetailNm}" th:selected="${item.cdDetailVal1} == ${targetDto.resideArea}" >
 					</select>
+				</div>
+				<div id="joinAddressWrap" style="display: none;"  >
+					<div class="data-field">
+						<input type="text" name="zonecode" placeholder="우편번호" readonly="readonly" style="width:145px; min-width: 145px;" th:value="${targetDto.zonecode}" >
+						<label class="btn btn-purple" id="findAddressBtn">주소검색</label>
+					</div>
+					<div class="data-field">
+						<input type="text" name="roadAddress" placeholder="주소(도로명)" readonly="readonly" th:value="${targetDto.roadAddress}" >
+					</div>
+					<div class="data-field">
+						<input type="text" name="detailAddress" placeholder="주소 상세" th:value="${targetDto.detailAddress}" >
+					</div>
 				</div>
 			</div>
 			</th:block>

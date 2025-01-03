@@ -10,7 +10,6 @@ import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import javax.persistence.Column;
@@ -44,12 +43,6 @@ public class LoginDto implements UserDetails , OAuth2User {
     private String telNo;               // 연락처
     
     private String resideArea;          // 거주지역
-    
-    private String zip;                 // 우편번호
-    
-    private String rdnmAdr;             // 도로명 주소
-    
-    private String detailAdr;           // 상세 주소
     
     private Long atchFileSn;         // 첨부파일 일련번호
     
@@ -107,7 +100,7 @@ public class LoginDto implements UserDetails , OAuth2User {
     
     @Builder
     @QueryProjection
-    public LoginDto( Long userSn, String userId, String password, Long roleSn, String roleNm, String roleDc, String userNm, String gender, String brdtDate, String telNo, String resideArea, String zip, String rdnmAdr, String detailAdr, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String snsKakaoCntnYn, String snsKakaoCntnDt, String snsGoogleCntnYn, String snsGoogleCntnDt, String snsNaverCntnYn, String snsNaverCntnDt, String snsFacebookCntnYn, String snsFacebookCntnDt, String snsAppleCntnYn, String snsAppleCntnDt, String lastLoginDt ) {
+    public LoginDto( Long userSn, String userId, String password, Long roleSn, String roleNm, String roleDc, String userNm, String gender, String brdtDate, String telNo, String resideArea, Long atchFileSn, String mngrYn, String mngrConfmYn, String confmerId, String confmerIp, LocalDateTime confmDt, String snsKakaoCntnYn, String snsKakaoCntnDt, String snsGoogleCntnYn, String snsGoogleCntnDt, String snsNaverCntnYn, String snsNaverCntnDt, String snsFacebookCntnYn, String snsFacebookCntnDt, String snsAppleCntnYn, String snsAppleCntnDt, String lastLoginDt ) {
         this.userSn = userSn;
         this.userId = userId;
         this.password = password;
@@ -119,9 +112,6 @@ public class LoginDto implements UserDetails , OAuth2User {
         this.brdtDate = brdtDate;
         this.telNo = telNo;
         this.resideArea = resideArea;
-        this.zip = zip;
-        this.rdnmAdr = rdnmAdr;
-        this.detailAdr = detailAdr;
         this.atchFileSn = atchFileSn;
         this.mngrYn = mngrYn;
         this.mngrConfmYn = mngrConfmYn;
@@ -210,9 +200,6 @@ public class LoginDto implements UserDetails , OAuth2User {
                 .brdtDate( user.getBrdtDate() )
                 .telNo( user.getTelNo() )
                 .resideArea( user.getResideArea() )
-                .zip( user.getZip() )
-                .rdnmAdr( user.getRdnmAdr() )
-                .detailAdr( user.getDetailAdr() )
                 .atchFileSn( user.getAtchFileSn() )
                 .mngrYn( user.getMngrYn() )
                 .mngrConfmYn( user.getMngrConfmYn() )
@@ -258,9 +245,6 @@ public class LoginDto implements UserDetails , OAuth2User {
                 .brdtDate( brdtDate )
                 .telNo( telNo )
                 .resideArea( resideArea )
-                .zip( zip )
-                .rdnmAdr( rdnmAdr )
-                .detailAdr( detailAdr )
                 .atchFileSn( atchFileSn )
                 .mngrYn( mngrYn )
                 .mngrConfmYn( mngrConfmYn )

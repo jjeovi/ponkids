@@ -94,6 +94,22 @@ public class UserService {
             }
         }
         
+        // 대한민국 / 그외 여부에 따른 값 setting
+        if( !( StringUtils.hasText( userSaveDto.getResideArea() ) && userSaveDto.getResideArea().equals("대한민국") ) ) {
+            // 대한민국이 아니라면
+            // 주소정보 초기화
+            userSaveDto.setZonecode( null );
+            userSaveDto.setRoadAddress( null );
+            userSaveDto.setRoadAddressEnglish( null );
+            userSaveDto.setJibunAddress( null );
+            userSaveDto.setJibunAddressEnglish( null );
+            userSaveDto.setAutoRoadAddress( null );
+            userSaveDto.setAutoRoadAddressEnglish( null );
+            userSaveDto.setAutoJibunAddress( null );
+            userSaveDto.setAutoJibunAddressEnglish( null );
+            userSaveDto.setDetailAddress(  null );
+        }
+        
         User newUser = userRepository.save( userSaveDto.toEntity() );                        // ** 회원 save -> save된 정보 newUser 로 저장
         
         // 관리자 여부 Y 일 때 권한 등록
@@ -191,29 +207,52 @@ public class UserService {
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
         if ( StringUtils.hasText( modDto.getUserNm() ) ) targetDto.setUserNm( modDto.getUserNm() );            // 이름
         if ( StringUtils.hasText( modDto.getGender() ) ) targetDto.setGender( modDto.getGender() );            // 성별
-        if ( StringUtils.hasText( modDto.getBrdtDate() ) ) targetDto.setBrdtDate( modDto.getBrdtDate() );        // 생년월일
-        if ( StringUtils.hasText( modDto.getTelNo() ) ) targetDto.setTelNo( modDto.getTelNo() );                // 연락처
+        if ( StringUtils.hasText( modDto.getBrdtDate() ) ) targetDto.setBrdtDate( modDto.getBrdtDate() );      // 생년월일
+        if ( StringUtils.hasText( modDto.getTelNo() ) ) targetDto.setTelNo( modDto.getTelNo() );               // 연락처
         if ( StringUtils.hasText( modDto.getResideArea() ) )
-            targetDto.setResideArea( modDto.getResideArea() );    // 거주지역
-        if ( StringUtils.hasText( modDto.getRdnmAdr() ) ) targetDto.setRdnmAdr( modDto.getRdnmAdr() );            // 주소
-        if ( StringUtils.hasText( modDto.getZip() ) )
-            targetDto.setZip( modDto.getZip() );                        // 우편번호
+            targetDto.setResideArea( modDto.getResideArea() );                                                 // 거주지역
         if ( StringUtils.hasText( modDto.getMngrYn() ) ) targetDto.setMngrYn( modDto.getMngrYn() );            // 관리자여부
 
-        targetDto.setAtchFileSn( modDto.getAtchFileSn() );                                                    // 첨부파일 (첨부파일은 Null이어도 변경)
+        targetDto.setAtchFileSn( modDto.getAtchFileSn() );                                                      // 첨부파일 (첨부파일은 Null이어도 변경)
+        
+        // 주소정보 setting
+        targetDto.setZonecode( modDto.getZonecode() );
+        targetDto.setRoadAddress( modDto.getRoadAddress() );
+        targetDto.setRoadAddressEnglish( modDto.getRoadAddressEnglish() );
+        targetDto.setJibunAddress( modDto.getJibunAddress() );
+        targetDto.setJibunAddressEnglish( modDto.getJibunAddressEnglish() );
+        targetDto.setAutoRoadAddress( modDto.getAutoRoadAddress() );
+        targetDto.setAutoRoadAddressEnglish( modDto.getAutoRoadAddressEnglish() );
+        targetDto.setAutoJibunAddress( modDto.getAutoJibunAddress() );
+        targetDto.setAutoJibunAddressEnglish( modDto.getAutoJibunAddressEnglish() );
+        targetDto.setDetailAddress( modDto.getDetailAddress() );
 
 
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
         targetDto.setUpdusrId( SessionUtils.getUserId() );
-
+        
+        // 대한민국 / 그외 여부에 따른 값 setting
+        if( !( StringUtils.hasText( targetDto.getResideArea() ) && targetDto.getResideArea().equals("대한민국") ) ) {
+            // 대한민국이 아니라면
+            // 주소정보 초기화
+            targetDto.setZonecode( null );
+            targetDto.setRoadAddress( null );
+            targetDto.setRoadAddressEnglish( null );
+            targetDto.setJibunAddress( null );
+            targetDto.setJibunAddressEnglish( null );
+            targetDto.setAutoRoadAddress( null );
+            targetDto.setAutoRoadAddressEnglish( null );
+            targetDto.setAutoJibunAddress( null );
+            targetDto.setAutoJibunAddressEnglish( null );
+            targetDto.setDetailAddress(  null );
+        }
+        
         // target object 전환 ( dto to entity )
         user = targetDto.toEntity();
-
+        
         // 수정사항 적용
         userRepository.save( user );
-
-
 
     }
     
@@ -245,17 +284,42 @@ public class UserService {
         if ( StringUtils.hasText( modDto.getTelNo() ) ) targetDto.setTelNo( modDto.getTelNo() );                // 연락처
         if ( StringUtils.hasText( modDto.getResideArea() ) )
             targetDto.setResideArea( modDto.getResideArea() );    // 거주지역
-        if ( StringUtils.hasText( modDto.getRdnmAdr() ) ) targetDto.setRdnmAdr( modDto.getRdnmAdr() );            // 주소
-        if ( StringUtils.hasText( modDto.getZip() ) )
-            targetDto.setZip( modDto.getZip() );                        // 우편번호
         if ( StringUtils.hasText( modDto.getMngrYn() ) ) targetDto.setMngrYn( modDto.getMngrYn() );            // 관리자여부
         
         targetDto.setAtchFileSn( modDto.getAtchFileSn() );                                                    // 첨부파일 (첨부파일은 Null이어도 변경)
+        
+        // 주소정보 setting
+        targetDto.setZonecode( modDto.getZonecode() );
+        targetDto.setRoadAddress( modDto.getRoadAddress() );
+        targetDto.setRoadAddressEnglish( modDto.getRoadAddressEnglish() );
+        targetDto.setJibunAddress( modDto.getJibunAddress() );
+        targetDto.setJibunAddressEnglish( modDto.getJibunAddressEnglish() );
+        targetDto.setAutoRoadAddress( modDto.getAutoRoadAddress() );
+        targetDto.setAutoRoadAddressEnglish( modDto.getAutoRoadAddressEnglish() );
+        targetDto.setAutoJibunAddress( modDto.getAutoJibunAddress() );
+        targetDto.setAutoJibunAddressEnglish( modDto.getAutoJibunAddressEnglish() );
+        targetDto.setDetailAddress( modDto.getDetailAddress() );
         
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
         targetDto.setUpdusrId( SessionUtils.getUserId() );
+        
+        // 대한민국 / 그외 여부에 따른 값 setting
+        if( !( StringUtils.hasText( targetDto.getResideArea() ) && targetDto.getResideArea().equals("대한민국") ) ) {
+            // 대한민국이 아니라면
+            // 주소정보 초기화
+            targetDto.setZonecode( null );
+            targetDto.setRoadAddress( null );
+            targetDto.setRoadAddressEnglish( null );
+            targetDto.setJibunAddress( null );
+            targetDto.setJibunAddressEnglish( null );
+            targetDto.setAutoRoadAddress( null );
+            targetDto.setAutoRoadAddressEnglish( null );
+            targetDto.setAutoJibunAddress( null );
+            targetDto.setAutoJibunAddressEnglish( null );
+            targetDto.setDetailAddress(  null );
+        }
         
         // target object 전환 ( dto to entity )
         user = targetDto.toEntity();

@@ -121,14 +121,6 @@ public class ClassCategoryCl02Service {
         // entity 에서 반영하지 않을 컬럼은 updatable = false 옵션 추가
         if ( StringUtils.hasText( modDto.getClNm() ) ) targetDto.setClNm( modDto.getClNm() );            // 이름
         if ( modDto.getClSeq() != null ) targetDto.setClSeq( modDto.getClSeq() );            // 성별
-//        if ( StringUtils.hasText( modDto.getBrdtDate() ) ) targetDto.setBrdtDate( modDto.getBrdtDate() );		// 생년월일
-//        if ( StringUtils.hasText( modDto.getTelNo() ) ) targetDto.setTelNo( modDto.getTelNo() );            	// 연락처
-//        if ( StringUtils.hasText( modDto.getResideArea() ) ) targetDto.setResideArea( modDto.getResideArea() );	// 거주지역
-//        if ( StringUtils.hasText( modDto.getRdnmAdr() ) ) targetDto.setRdnmAdr( modDto.getRdnmAdr() );        	// 주소
-//        if ( StringUtils.hasText( modDto.getZip() ) ) targetDto.setZip( modDto.getZip() );                		// 우편번호
-//        if ( StringUtils.hasText( modDto.getMngrYn() ) ) targetDto.setMngrYn( modDto.getMngrYn() );          	// 관리자여부
-
-//        targetDto.setAtchFileSn( modDto.getAtchFileSn() );          											// 첨부파일 (첨부파일은 Null이어도 변경)
         
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );

@@ -1,3 +1,4 @@
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 	$( function () {
 
@@ -34,11 +35,44 @@
 			var country = $( this ).val();
 
 			if ( country == 'other' ) {
+				// 그 외 국가로 했을시
 				$( "#join_countryList" ).show();
+				$( "#join_addressWrap" ).hide();
 			} else {
+				// 대한민국으로 했을시
+				$( "#join_addressWrap" ).show();
 				$( "#join_countryList" ).hide();
 			}
 		} );
+
+
+		// 주소 검색 버튼 클릭 event
+		$("#findAddressBtn").click( function(){
+
+			// 다음 주소 api 연동
+			new daum.Postcode({
+				oncomplete: function( data ) {
+
+					// 상세주소 초기화
+					$( "[name='detailAddress']" ).val( "" );										// 상세주소 초기화
+
+					// 주소 정보 setting
+
+					$( "[name='zonecode']" ).val( data.zonecode );									// 우편번호
+					$( "[name='roadAddress']" ).val( data.roadAddress );							// 도로명주소
+					$( "[name='roadAddressEnglish']" ).val( data.roadAddressEnglish );				// 영문도로명주소
+					$( "[name='jibunAddress']" ).val( data.jibunAddress );							// 지번주소
+					$( "[name='jibunAddressEnglish']" ).val( data.jibunAddressEnglish );			// 영문지번주소
+					$( "[name='autoRoadAddress']" ).val( data.autoRoadAddress );					// 자동도로명주소
+					$( "[name='autoRoadAddressEnglish']" ).val( data.autoRoadAddressEnglish );		// 자동영문도로명주소
+					$( "[name='autoJibunAddress']" ).val( data.autoJibunAddress );					// 자동지번주소
+					$( "[name='autoJibunAddressEnglish']" ).val( data.autoJibunAddressEnglish );	// 자동영문지번주소
+
+				}
+			}).open();
+
+		})
+
 
 	})
 	
@@ -58,10 +92,19 @@
 			<input type="hidden" name="snsType" 	/>
 			<input type="hidden" name="snsKakaoCntnYn" 	title="sns_kakao"	/>
 			<input type="hidden" name="snsGoogleCntnYn"	title="sns_google" 	/>
+			<!-- 주소 정보 항목 -->
+			<input type="hidden" name="roadAddressEnglish"		title="영문도로명주소" value="" 	/>
+			<input type="hidden" name="jibunAddress"			title="지번주소" value="" 	/>
+			<input type="hidden" name="jibunAddressEnglish"		title="영문지번주소" value="" 	/>
+			<input type="hidden" name="autoRoadAddress"			title="자동도로명주" value="" 	/>
+			<input type="hidden" name="autoRoadAddressEnglish"	title="자동영문도로명주소" value="" 	/>
+			<input type="hidden" name="autoJibunAddress"		title="자동지번주소" value="" 	/>
+			<input type="hidden" name="autoJibunAddressEnglish"	title="자동영문지번주소" value="" 	/>
+
 
 			<div class="filebox preview-image">
-				<div class="upload-display">
-					<div class="upload-thumb-wrap">
+				<div class=	"upload-display">
+					<div class="upload-thumb-wrap" style="max-width:100%;">
 						<img alt="프로필 이미지" class="upload-thumb noimg">
 					</div>
 				</div>
@@ -149,6 +192,12 @@
 				<label	class="r4px btn btn-outline-purple w100p" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default" >
 					<input type="radio" name="resideArea" value="other" class="join-btn" onclick="clickRadioEvent(this)" >그 외
 				</label>
+			</div>
+			<div class="data-field" id="join_addressWrap" style="display: none;" >
+				<input type="text" name="zonecode" placeholder="우편번호" readonly="readonly" style="width:145px; min-width: 145px;" >
+				<label class="btn btn-purple" id="findAddressBtn">주소검색</label>
+				<input type="text" name="roadAddress" placeholder="주소(도로명)" readonly="readonly" >
+				<input type="text" name="detailAddress" placeholder="주소 상세">
 			</div>
 			<select name="otherResideArea" class="selectbox" id="join_countryList" style="display:none;">
 				<option value=''>국가선택</option>

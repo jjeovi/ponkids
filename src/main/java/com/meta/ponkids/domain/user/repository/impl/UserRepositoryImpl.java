@@ -59,7 +59,13 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                                 .when( user.mngrYn.eq( "Y" ) ).then( "관리자" )
                                 .when( user.mngrYn.eq( "N" ) ).then( "사용자" )
                                 .otherwise( "" ).as( "mngrYn" ),
-                        user.mngrConfmYn )
+                        user.mngrConfmYn,
+                        new CaseBuilder()
+                                .when( user.mngrYn.eq("Y")).then( "-" )
+                                .when( user.mngrYn.eq("N").and( user.snsKakaoCntnYn.eq( "Y" ) ) ).then( "카카오" )
+                                .when( user.mngrYn.eq("N").and( user.snsGoogleCntnYn.eq("Y") ) ).then("구글")
+                                .otherwise("-" ).as("snsType" )
+                         )
                 ).from( user )
                 // where
                 .where(

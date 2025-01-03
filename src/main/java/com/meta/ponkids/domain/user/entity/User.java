@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.*;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -70,12 +69,6 @@ public class User extends BaseTimeEntity {
     @NotNull
     private String resideArea;          // 거주지역
     
-    private String zip;                 // 우편번호
-    
-    private String rdnmAdr;             // 도로명 주소
-    
-    private String detailAdr;           // 상세 주소
-    
     private Long atchFileSn;         // 첨부파일 일련번호
     
     private String mngrYn;              // 관리자 여부
@@ -110,6 +103,26 @@ public class User extends BaseTimeEntity {
     private LocalDateTime   snsAppleCntnDt;     // SNS Apple 연계 일시
     
     private LocalDateTime lastLoginDt;  // 마지막 로그인한 일시
+    
+    private String          zonecode;                   // 우편번호
+    
+    private String          roadAddress;                // 도로명주소
+    
+    private String          roadAddressEnglish;         // 영문도로명주소
+    
+    private String          jibunAddress;               // 지번주소
+    
+    private String          jibunAddressEnglish;        // 영문지번주소
+    
+    private String          autoRoadAddress;            // 자동도로명주소
+    
+    private String          autoRoadAddressEnglish;     // 자동영문도로명주소
+    
+    private String          autoJibunAddress;           // 자동지번주소
+    
+    private String          autoJibunAddressEnglish;    // 자동영문지번주소
+    
+    private String          detailAddress;              // 상세주소내용
     
     @Column( updatable = false )
     private String registerIp;          // 등록자 IP

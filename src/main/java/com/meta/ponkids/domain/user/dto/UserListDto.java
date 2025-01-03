@@ -36,13 +36,15 @@ public class UserListDto {
     
     private String mngrConfmYn;
     
+    private String snsType;
+    
     private String schOption;   // 검색 옵션 *( A,B,C,... ) : 생성자에는 추가하지 않음!
     
     private String schCntn;     // 검색 내용 *( 검색어 내용 ) : 생성자에는 추가하지 않음!
     
     
     @QueryProjection
-    public UserListDto( Long userSn, String userId, String userNm, String gender, String brdtDate, String telNo, String resideArea, String mngrYn, String mngrConfmYn ) {
+    public UserListDto( Long userSn, String userId, String userNm, String gender, String brdtDate, String telNo, String resideArea, String mngrYn, String mngrConfmYn, String snsType ) {
         this.userSn = userSn;
         this.userId = userId;
         this.userNm = userNm;
@@ -52,6 +54,7 @@ public class UserListDto {
         this.resideArea = resideArea;
         this.mngrYn = mngrYn;
         this.mngrConfmYn = mngrConfmYn;
+        this.snsType = snsType;
     }
     
 }

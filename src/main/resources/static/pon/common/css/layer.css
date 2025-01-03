@@ -1821,6 +1821,22 @@ input[type="radio"][disabled]:checked+label{
     color: #7334a8 !important;
 }
 
+.pop_wrap .info .dep2 {
+    font-size: 1.1rem;
+    padding-top: 5px;
+    padding-left: 1.4rem;
+    padding-right: 1.4rem;
+    padding-bottom: 5px;
+    line-height: 1.7rem;
+    color: #000000 !important;
+    word-break: keep-all;
+}
+
+
+.pop_wrap .termsOfUse .dep2.li {
+    text-indent: -15px;
+}
+
 .pop_wrap .dep3 {
 	font-size: 1rem;
     padding-top: 2px;

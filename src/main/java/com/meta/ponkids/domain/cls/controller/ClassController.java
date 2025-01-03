@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.meta.ponkids.global.email.EmailService;
 import com.meta.ponkids.global.exception.CustomException;
 import org.springframework.data.domain.Page;
@@ -83,6 +84,15 @@ public class ClassController {
 						Model model ) {
 		
 		// S : 필요한 객체 setting
+		
+		// 변수 분류1, 분류2 : 초기화 작업
+		// 분류1, 분류2가 둘다 값이 없을 경우 , 0으로 초기화해준다.
+		if( listDto.getCategory() == null ){
+			CategoryDto categoryDto = new CategoryDto();
+			categoryDto.setLv1Sn( (long)0 );
+			categoryDto.setLv2Sn( (long)0 );
+			listDto.setCategory( categoryDto );
+		}
 		
 		// 로그인 여부 파악 하여 userSn setting 함
 		listDto.setUserSn( SessionUtils.getAuthUserSn());

@@ -38,10 +38,15 @@ $( function () {
 
 //	$( '.class_2dep > div' ).hide();
 	$( '.class_1dep .tabnav a' ).click( function () {
-		$( '.class_2dep > div' ).hide().filter( this.hash ).fadeIn();
-		$( '.class_1dep .tabnav a' ).removeClass( 'active' );
-		$( this ).addClass( 'active' );
-		return false;
+
+		$("#cate01").val($(this).data("clSn"));			// 분류1 값 setting
+		$("#cate02").val(0);							// 분류2 값 setting : 전체로 검색 (0)
+
+		$( "[name='page']" ).val( 0 );					// 페이징 초기화
+
+		$( "[name='listForm']").submit();				// 리스트 조회 실행
+
+
 	} );
 	
 	$( '.detail_day button' ).click( function () {
