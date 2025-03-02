@@ -32,9 +32,9 @@ public class ClassService {
     public ClassSaveDto save( ClassSaveDto saveDto, HttpServletRequest request ) throws IOException {
         
         saveDto.setRegisterId( SessionUtils.getUserId() );                // Id set : regist
-        saveDto.setRegisterIp( IpUtils.getClientIP( request ) );            // Ip set : regist
+        saveDto.setRegisterIp( IpUtils.getClientIP( request ) );          // Ip set : regist
         saveDto.setUpdusrId( SessionUtils.getUserId() );                  // Id set : update
-        saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );              // Ip set : update
+        saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );            // Ip set : update
         
         if ( StringUtils.hasText( saveDto.getClassPdSetYn() ) && saveDto.getClassPdSetYn().equals( "Y" ) ) {
             // 표시기간설정여부 체크하여 표시기간 있을 시 숫자제외 다른 문자들 제거 작업 필요

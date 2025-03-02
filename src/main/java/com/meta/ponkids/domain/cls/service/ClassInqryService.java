@@ -31,14 +31,13 @@ public class ClassInqryService {
 //    public ClassInqrySaveDto save( ClassInqrySaveDto saveDto, ClassInqryRoleSaveDto classInqryRoleSaveDto, HttpServletRequest request ) throws IOException {
 		
 		saveDto.setRegisterId( SessionUtils.getUserId() );				// Id set : regist
-		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );			// Ip set : regist
-		saveDto.setUpdusrId( SessionUtils.getUserId() );					// Id set : update
-		saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );				// Ip set : update
+		saveDto.setRegisterIp( IpUtils.getClientIP( request ) );		// Ip set : regist
+		saveDto.setUpdusrId( SessionUtils.getUserId() );				// Id set : update
+		saveDto.setUpdusrIp( IpUtils.getClientIP( request ) );			// Ip set : update
 		
 		ClassInqry newClassInqry = classInqryRepository.save( saveDto.toEntity() );			// ** save -> save된 정보 newXxx 로 저장
 		
 		return saveDto;
-		
 	}
 	
 
@@ -74,7 +73,6 @@ public class ClassInqryService {
         ClassInqryModDto targetDto = new ClassInqryModDto();
         targetDto = targetDto.toDto( classInqry );
         
-        
         // id,ip setting
         targetDto.setUpdusrIp( IpUtils.getClientIP( request ) );
         targetDto.setUpdusrId( SessionUtils.getUserId() );
@@ -84,20 +82,16 @@ public class ClassInqryService {
         
         // 수정사항 적용
         classInqryRepository.save( classInqry );
-    	
     }
     
     public ClassInqryListDto findById( ClassInqryListDto listDto ) {
     	
     	return classInqryRepository.getByClassInqrySn(listDto);
-    	
     }
-    
     
     public List<ClassInqryListDto> findReplyByStepAndParntsInqrySn( ClassInqryListDto listDto ) {
     	
     	return classInqryRepository.findByStepAndParntsInqrySn(listDto.getStep(), listDto.getClassInqrySn());
-    	
     }
 
     @Transactional
@@ -105,8 +99,6 @@ public class ClassInqryService {
         
         // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
         classInqryRepository.deleteById( pk );    // Entity 의 @SQLDelete 를 수행
-        
     }
 	
-
 }

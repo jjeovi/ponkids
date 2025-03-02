@@ -1833,15 +1833,15 @@ input[type="radio"][disabled]:checked+label{
 }
 
 
-.pop_wrap .termsOfUse .dep2.li {
+.pop_wrap .dep2.li {
     text-indent: -15px;
 }
 
 .pop_wrap .dep3 {
 	font-size: 1rem;
     padding-top: 2px;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     padding-bottom: 9px;
     line-height: 1.7rem;
     word-break: keep-all;
@@ -1850,8 +1850,8 @@ input[type="radio"][disabled]:checked+label{
 .pop_wrap .dep4 {
 	 font-size: 1rem;
     padding-top: 5px;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     padding-bottom: 9px;
     line-height: 1.7rem;
     word-break: keep-all;

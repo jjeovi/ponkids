@@ -62,6 +62,10 @@ key :
     summernote :
         upload :
             path : /web/ponkids/summernote/uploads/                    # summernote 파일 업로드 경로 : 운영 서버
+    # 토스 결제 API
+    tossPayments :
+        baseUrl : https://api.tosspayments.com
+        secretKey : test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6
         
 ######################################################################################################################
 

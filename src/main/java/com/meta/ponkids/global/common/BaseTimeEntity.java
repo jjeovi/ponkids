@@ -30,7 +30,7 @@ public abstract class BaseTimeEntity {
     
     @Comment( value = "등록일시" )
     @Column( updatable = false )
-    @CreatedDate
+    @CreatedDate            // @EntityListeners( AuditingEntityListener.class ) 어노테이션이 있어야지만 동작한다.
     private LocalDateTime regDt;
     
     @Comment( value = "수정일시" )

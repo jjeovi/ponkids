@@ -1,6 +1,7 @@
 package com.meta.ponkids.domain.cls.controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,7 @@ import javax.transaction.Transactional;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.meta.ponkids.global.email.EmailService;
 import com.meta.ponkids.global.exception.CustomException;
+import com.meta.ponkids.global.util.generator.OrderIdGenerator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -208,8 +210,6 @@ public class ClassController {
 		return BASIC_VIEW_PATH + "/detail";
 	}
 	
-	
-	
 	/**
 	 * methodName    : insert
 	 * date           : 11/17/23
@@ -231,9 +231,6 @@ public class ClassController {
 		// 1. TB_CLASS_REQST insert
 		// 2. TB_LCTRE_REQST insert
 		// 3. TB_LCTRE_REQST_DETAIL insert
-
-		
-		// 0. 유효성 체크 작업.
 		// ===========================================
 		
 		// 0-1. classSn 체크
@@ -247,7 +244,7 @@ public class ClassController {
 		
 		// 0-2. userSn 체크 
 		// 로그인 안되어 있으면 return 
-		LoginDto loginDto = SessionUtils.getAuthentication(); 
+		LoginDto loginDto = SessionUtils.getAuthentication();
 		if ( loginDto == null || loginDto.getUserSn() == null ) {
 			// 메시지 출력 및 url 이동 처리
 			model.addAttribute( "resultMsg", "로그인 세션을 확인해주세요." );
@@ -299,7 +296,7 @@ public class ClassController {
 
 		// 총 신청 건수 ( 한 클래스 내에 몇개의 [수업&자녀] 의 조합으로 신청을 했는지 => 수업과 자녀가 여러개라면 2개이상이 가능함 ) 계산하여 setting
 		// 총 신청 건수 setting  (* 신청한 수업의 size : 개수 ) 
-		saveDto.setTotReqstCnt(  Long.valueOf( lctreReqstDtoList.size() ) );	
+		saveDto.setTotReqstCnt(  Long.valueOf( lctreReqstDtoList.size() ) );
 
 		// 1-2. 총 신청 금액 ( 신청 수업의 금액을 모두 합한 금액 ) 계산하여 setting
 		int totReqstAmt = 0;
@@ -315,7 +312,7 @@ public class ClassController {
 		}
 		
 		// for 문 돌면서 전체 합산한 수업금액을 saveDto 의 totReqstAmt 에 저장
-		saveDto.setTotReqstAmt( Long.valueOf( totReqstAmt ) );
+		saveDto.setTotReqstAmt( BigDecimal.valueOf( totReqstAmt ) );
 		
 		// 1-3. insert
 		saveDto = classReqstService.save( saveDto, request );

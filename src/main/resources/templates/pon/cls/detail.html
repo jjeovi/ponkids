@@ -24,6 +24,7 @@
 <div layout:fragment="script">
 	<!-- js -->
 	<script>
+
 	<!-- 같은 카테고리 다른 클래스 slider -->
 	var swiper = new Swiper(".detail_swiper", {
 		slidesPerView :4,
@@ -34,28 +35,28 @@
 		},
 		breakpoints: {
 			1240: {
-				slidesPerView: 4,  
+				slidesPerView: 4,
 				spaceBetween: 30,
 			},
 			768: {
-				slidesPerView: 3,  
+				slidesPerView: 3,
 				spaceBetween: 20,
 			},
 			365: {
-				slidesPerView: 2,  
+				slidesPerView: 2,
 				spaceBetween: 20,
 			},
 		}
 	});
-	
-	// 현재 추가한 수업의 총 금액 
+
+	// 현재 추가한 수업의 총 금액
 	let totalLctrePriceAmt = 0;
-	
-	
+
+
 	function selectWeekDay( e ) {
 		var classSn = $(e).data("classSn");
 		var classDayCd = $(e).data("classDayCd");
-		
+
 		// 특정 클래스의 특정 요일 의 수업 리스트 조회
 		var url = "/lctre/live/getLctreListByClassSnAndClassDayCdAjax";
 		$.ajax( {
@@ -67,83 +68,83 @@
 			contentType: "application/json",
 			success: function ( result ) {
 				// return type : Map<String, Object>
-				
+
 				var resultList = result.resultList;
-				
+
 				// 수업 selectbox 초기화
-				$("#lctreSn").empty();	
-				
+				$("#lctreSn").empty();
+
 				if ( resultList.length > 0 ) {
-					
+
 					// 수업 개수만큼 for ( 반복 )
 					$("#lctreSn").append("<option value=''>수업을 선택하세요</option>");
-					
+
 					for( let item of resultList ) {
-						
+
 						// 클래스 추가 (전체)
 						$("#lctreSn").append("<option value='" + item.lctreSn + "' data-lctre-amt='" + item.lctreAmt + "' >" + item.lctreSj + "</option>");
-						
+
 					}
-					
+
 				} else {
-					
+
 					$("#lctreSn").append("<option value=''>수업이 없습니다.</option>");
-					
+
 				}
-				
+
 			}
 		} );
 	}
-	
+
 	// 수업추가 버튼 클릭 event
 	function putInBoxLctre(){
-		
+
 		// 사전 유효성 검사 로직 실행하여 false 일 경우 수업추가 하지 않음.
 		if ( !validCheckPutInBoxLctre() ) {
 			return false;
 		}
-		
+
 		// 수업추가 html 박스 생성
 		lctreAddDrawHtml();
-		
+
 		// form 데이터용 추가
 	}
-	
+
 	// 수업추가 [ putInBoxLctre() ]  > 유효성 체크
 	function validCheckPutInBoxLctre() {
-		
+
 		// 1. 로그인 여부 check
 		if ( loginYn == 'N' ) {
 			alert("로그인 후 이용 가능합니다.");
 			showLayer('login');
 			return false;
 		}
-		
+
 		// 2. 수업 요일 선택 여부 check
 		if ( !$(".classDayBtn.active").length ){
 			alert("수업 요일을 선택해 주세요.");
 			return false ;
 		}
-		
+
 		// 3. 수업 선택 여부 check
 		if ( $( "#lctreSn option:selected" ).val() == "" ) {
 			alert("수업을 선택해 주세요.");
 			return false ;
 		}
-		
+
 		// 4. 자녀 선택 여부 check
 		if ( $( "#userChldrn option:selected" ).val() == "" ) {
 			alert("자녀를 선택해 주세요.");
 			return false ;
 		}
-		
+
 		// 5. 신청 입력 항목 중 필수값 체크
-		// 입력 유효성 체크 변수  
+		// 입력 유효성 체크 변수
 		var boolRequiredInput = false;
-		
+
 		// 신청 입력 항목 중 필수 항목 전체 순회
 		$( ".clsDtlInput.required" ).each( function ( i, item ) {
-			
+
 			if ( $(this).val() == '' ) {
 				alert("필수 입력항목을 입력해주세요.");
 				$(this).focus();
@@ -155,40 +156,40 @@
 		if ( boolRequiredInput ) {
 			return false;
 		}
-		
+
 		// 6. 추가한 항목 중 같은 (수업&자녀) 있는지 check
 		if ( isExistEqualChldrnAndLctre() ) {
 			return false;
 		}
-		
-		return true; 
+
+		return true;
 	}
-	
-	
+
+
 	// 수업추가 [ putInBoxLctre() ]  > html 박스 생성
 	function lctreAddDrawHtml() {
-		
-		// 추가 하기 전, 
+
+		// 추가 하기 전,
 		// no_item 영역 있는지 체크하여 있을 시 empty 작업 후 추가
-		
+
 		// no_item 있는지 체크
 		if ( $(".added_lctre_area .no_item").length ) {
-			// 추가영역 초기화 
+			// 추가영역 초기화
 			$(".added_lctre_area").empty();
 		}
-		
-		// 수업 박스 추가 
+
+		// 수업 박스 추가
 		$(".added_lctre_area").append(
 			$( "<div>" ).attr( "class", "lctre_box" ).attr("data-lctre-amt", $( "#lctreSn option:selected" ).data( 'lctreAmt' ) ).append(
-				
+
 					$( "<button>" ).attr( 	"class", 	"close_box" 						).append(
 						$(" <img> " ).attr( "src", "/pon/common/image/chat_close.svg" ).attr( "class", "close_icon" ).attr( "alt", "아이콘 닫기" ).attr("onclick","removeBoxLctre(this)").append()
 					),
 					$( "<div>" ).attr( 		"class" , 	"lctre_detail_application_area" 	).append(
-						// 자녀 , 요일+수업 , 신청입력항목 
-			
+						// 자녀 , 요일+수업 , 신청입력항목
+
 						// 자녀 정보 추가
-						// data-chldrn-sn : chldrnSn 값 setting 
+						// data-chldrn-sn : chldrnSn 값 setting
 						$("<p>").attr("class", "application_userChldrn item" ).attr( "data-chldrn-sn", $( "#userChldrn option:selected" ).val() ).append(
 							"자녀 : " + $( "#userChldrn option:selected" ).text()
 						),
@@ -198,7 +199,7 @@
 							"수업 : " + $(".classDayBtn.active").text() + ", " +  $( "#lctreSn option:selected" ).text()
 						)
 						// 신청입력항목은 이후 프로세스에서 따로 추가
-						
+
 					),
 					$( "<div>" ).attr( 		"class" , 	"lctre_bill" 						).append(
 						$(" <p> ").attr( "class" , "lctre_item_price" ).append(
@@ -209,68 +210,68 @@
 						$(" <input> ").attr( "type" , "hidden" ).attr("name","chldrnSn").attr("value",$( "#userChldrn option:selected" ).val() ).append(),
 						$(" <input> ").attr( "type" , "hidden" ).attr("name","lctreSn").attr("value", $( "#lctreSn option:selected" ).val() ).append()
 					)
-			)	
+			)
 		)
-		
+
 		// 수업 박스 > 수업상세 내용 ( .lctre_detail_application_area )  > 신청입력항목
 		// 신청 입력 항목 전체 순회
-		
+
 		var index=0;
 		$( ".clsDtlInput" ).each( function ( i, item ) {
-			
+
 			// 빈값이 아닐 경우에 수업박스에 추가.
 			if ( $(this).val() != null && $(this).val() != '' ) {
-				// 가장 마지막 lctre_detail_application_area 태그 찾기 : .eq(-1) 
+				// 가장 마지막 lctre_detail_application_area 태그 찾기 : .eq(-1)
 				$(".lctre_detail_application_area").eq(-1).append(
 					$("<p>").attr("class", "application_clsDtl item" ).append(
 						$(this).val()
 					)
 				)
-				
+
 				$(".input_data").eq(-1).append(
 					$(" <input> ").attr( "type" , "hidden" ).attr("name","lctreReqstDetails[" + index + "].classDetailSn").attr("value", $(this).data('classDetailSn')).append(),
 					$(" <input> ").attr( "type" , "hidden" ).attr("name","lctreReqstDetails[" + index + "].classDetailAnswer").attr("value", $(this).val()).append()
 				)
 				index++;
-				
+
 			}
-			
+
 		});
-		
+
 		// 총 금액 재계산
 		totalLctrePriceAmt +=  $( "#lctreSn option:selected" ).data( 'lctreAmt' );
 		$("#totalLctrePriceAmt").text( amtSetComma(totalLctrePriceAmt) );
 		// $( "#lctreSn option:selected" ).data( 'lctreAmt' )
-		
+
 	}
-	
-	
+
+
 	// 수업추가 [ putInBoxLctre() ]  > 유효성 체크 [ validCheckPutInBoxLctre() ] > 수업추가 중복 유효성 체크
 	// 추가한 수업 (박스 기준) 중 같은 수업과 자녀가 존재하는지 체크
 	function isExistEqualChldrnAndLctre() {
-		
+
 		var result = false;
-		
+
 		// 현재 선택한 자녀
 		var targetChldrnSn 	= $( "#userChldrn option:selected" ).val();
-		// 현재 선택한 수업 
+		// 현재 선택한 수업
 		var targetLctreSn 	= $( "#lctreSn option:selected" ).val();
-		
-		// 현재 선택한 기준의 자녀와 수업이 추가한 수업 중 존재하는지 확인 (.lctre_detail_application_area 탐색 ) 
+
+		// 현재 선택한 기준의 자녀와 수업이 추가한 수업 중 존재하는지 확인 (.lctre_detail_application_area 탐색 )
 		// 신청 입력 항목 전체 순회
 		$( ".lctre_detail_application_area" ).each( function ( i, item ) {
-			
+
 			// 추가된 수업 박스 중 같은 자녀와 수업 내용이 존재한다면
 			if ( ( $(this).find('.application_userChldrn').data('chldrnSn') == targetChldrnSn ) &&
 				 ( $(this).find('.application_lctreInfo').data('lctreSn') == targetLctreSn ) ) {
 				alert("해당 수업은 이미 신청되어 있습니다. 수업과 자녀 선택 내역을 확인해 주세요.");
 				result = true;
 				return false;
-			} 
+			}
 		});
-		
+
 		// 이미 신청한 건수 있는지 확인
-		
+
 		// 같은 자녀와 수업의 신청건수가 있는지 조회
 		var url = "/lctreReqst/live/existsByLctreSnAndChldrnSnAjax";
 		$.ajax( {
@@ -281,57 +282,57 @@
 			data: {chldrnSn : targetChldrnSn, lctreSn : targetLctreSn}, // 검색할 값
 			contentType: "application/json",
 			success: function ( ajaxResult ) {
-				
+
 				if ( ajaxResult )  {
 					alert("해당 자녀로 신청한 같은 수업내용이 존재합니다. 마이페이지에서 확인해주세요.");
 					result = true;
 				}
 			}
 		});
-		
+
 		return result;
 	}
-	
+
 	// 신청한 수업 X표시 눌러서 제거
 	function removeBoxLctre( e ) {
-		
+
 		// 제거 대상 lctreBox set
 		var removeTarget = $( e ).parent().parent();
-		
+
 		// 총 금액 재계산
 		totalLctrePriceAmt -=  removeTarget.data("lctreAmt");
 		$("#totalLctrePriceAmt").text( amtSetComma(totalLctrePriceAmt) );
 		// $( "#lctreSn option:selected" ).data( 'lctreAmt' )
-		
+
 		// 박스 제거 실행
 		removeTarget.remove();
-		
-		// 제거 후 수업박스 개수가 0개인지 확인하여 
+
+		// 제거 후 수업박스 개수가 0개인지 확인하여
 		// 0개 일 경우, no_item 추가작업 실행
 		if ( $(".added_lctre_area .lctre_box").not( '.no_item' ).length == 0 ) {
-			
+
 			// no_item 영역 추가
 			addNoItem();
-			
+
 		}
-		
+
 	}
-	
+
 	// no_item 영역 추가
 	function addNoItem(){
-		
+
 		$(".added_lctre_area").append(
 			$( "<div>" ).attr("class", "lctre_box no_item" ).append("수업을 추가해 주세요.")
 		);
 	}
-	
+
 	// 수업 신청
 	function insertLctre() {
 		// 추가된 수업개수 확인하여
 		// 수업이 존재하면 신청 진행
-		
+
 		var lctreBoxCnt = $(".added_lctre_area .lctre_box").not( '.no_item' ).length;
-		
+
 		if ( lctreBoxCnt < 1 ) {
 			// 수업 추가 할 수 있는 조건이 만족되면 자동으로 수업 추가 버튼 클릭
 			// putInBoxLctre();
@@ -341,15 +342,12 @@
 
 			return false;
 		}
-		
+
 		// 수업 신청 진행
 		if ( confirm("수업을 신청하시겠습니까?") ) {
-			// TODO 
 			// 수업 신청 진행
-			
 			// ==================== 유효성 모두 통과 후 dataset 정리 ==================================
-			// ==================== 유효성 모두 통과 후 dataset 정리 ==================================
-			
+
 			// 수업박스의 input 내용을 배열 처리하여 재정렬
 			// 수업sn, 자녀sn, 입력항목sn setting
 			$( ".input_data" ).each( function ( index ) {
@@ -358,11 +356,11 @@
 					$(this).attr("name", "lctreReqsts[" + index + "]." + $(this)[0].name );
 				})
 			} );
-			
-			
+
+
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -405,10 +403,10 @@
 	</div>
 	<!-- 클래스 정보 영역 시작 -->
 	<div class="class_detail_contanier">
-		<form name="classReqstInsertForm" method="POST" th:action="@{ {basicPath}/{mcd}/insert ( basicPath = ${basicPath}, mcd = ${mcd} ) }" class="form" onsubmit="return insertLctre();" >
+		<form name="classReqstInsertForm" method="POST" th:action="@{ /payment/{mcd}/orderCheckout ( mcd = ${mcd} ) }" class="form" onsubmit="return insertLctre();" >
 			<input type="hidden" name="classSn" th:value="${targetDto.classSn}" />
-			
-			<!-- class detail box 시작 --> 
+
+			<!-- class detail box 시작 -->
 			<div class="class_detail_box">
 				<div class="class_detail_left">
 					<img th:src="@{/getImage(atchFileSn=${targetDto.thumbAtchFileSn})}" alt="">
@@ -540,7 +538,22 @@
 		<!-- 과목 후기 종료 -->
   	</div>
   	<!-- 클래스 정보 영역 종료 -->
-  	
+
+<!--	&lt;!&ndash; test &ndash;&gt;-->
+<!--	&lt;!&ndash; 할인 쿠폰 &ndash;&gt;-->
+<!--    <div>-->
+<!--      <input type="checkbox" id="coupon-box" />-->
+<!--      <label for="coupon-box"> 5,000원 쿠폰 적용 </label>-->
+<!--    </div>-->
+<!--	&lt;!&ndash; 결제 UI &ndash;&gt;-->
+<!--    <div id="payment-method"></div>-->
+<!--	&lt;!&ndash; 이용약관 UI &ndash;&gt;-->
+<!--    <div id="agreement"></div>-->
+<!--	&lt;!&ndash; 결제하기 버튼 &ndash;&gt;-->
+<!--    <button class="button" id="payment-button" style="margin-top: 30px">결제하기</button>-->
+
+<!--	&lt;!&ndash; e: test &ndash;&gt;-->
+
   	<!-- 클래스 상세 탭 시작 ( 상세설명, 후기, Q&A 3개 탭으로 구성) -->
   	<div class="detail_info_tab">
 		<div class="detail_tab_nav">
@@ -557,7 +570,7 @@
 				클레스 설명
 			</div>
 			<!-- 상세설명 종료 -->
-			
+
 			<!-- 후기 시작 -->
 			<div id="detail_tab02" class="detail_tab" style="display:none;">
 				<div class="detail_tab_reivew">
@@ -584,11 +597,11 @@
 					<h5>수업 후기 목록이 없습니다.</h5>
 				</th:block>
 			</div>
-			
-			<!-- 후기상세조회 layer -->	
+
+			<!-- 후기상세조회 layer -->
 			<div class="layer_detailClassReview"	style="display: none;"	th:insert="pon/layer/layer_detailClassReview.html" />
 			<!-- 후기 종료 -->
-			
+
 			<!-- Q&A 시작 -->
 			<div id="detail_tab03" class="detail_tab" style="display:none;">
 				<div class="detail_tab_reivew">
@@ -618,18 +631,18 @@
 					<button type="button" onclick="goClassInqry();">문의하기</button>
 				</div>
 			</div>
-			
-			<!-- 문의등록 layer -->	
+
+			<!-- 문의등록 layer -->
 			<div class="layer_registClassInqry"	style="display: none;"	th:insert="pon/layer/layer_registClassInqry.html" />
-			
-			<!-- 문의조회 layer -->	
+
+			<!-- 문의조회 layer -->
 			<div class="layer_detailClassInqry"	style="display: none;"	th:insert="pon/layer/layer_detailClassInqry.html" />
-			
+
 			<!-- Q&A 종료 -->
 		</div>
 	</div>
 	<!-- 클래스 상세 탭 종료 ( 상세설명, 후기, Q&A 3개 탭으로 구성) -->
-	
+
 	<!-- 같은 카테고리 다른 클래스 시작 -->
 	<div class="detail_swipe">
 		<div class="detail_swiper_top">

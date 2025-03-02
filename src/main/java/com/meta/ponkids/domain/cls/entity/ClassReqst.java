@@ -10,6 +10,7 @@ import org.hibernate.annotations.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Getter
@@ -35,11 +36,13 @@ public class ClassReqst extends BaseTimeEntity {
     
     private Long classSn;                   // 클래스 일련번호
     
+    private String classReqstNm;            // 클래스 신청명
+    
     private Long userSn;                    // 사용자 일련번호
     
     private Long totReqstCnt;               // 총 신청 건수
     
-    private Long totReqstAmt;               // 총 신청 금액
+    private BigDecimal totReqstAmt;               // 총 신청 금액
     
     @Column( updatable = false )
     private String 	registerId;            	// 등록자ID

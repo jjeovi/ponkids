@@ -58,6 +58,7 @@ public class ClassReqstRepositoryImpl implements ClassReqstRepositoryCustom {
                 .select( new QClassReqstListDto(
                 		classReqst.classReqstSn,
                 		classReqst.classSn,
+                        classReqst.classReqstNm,
                 		class$.thumbAtchFileSn,
                         class$.ctgrySn,
                         classCategoryCl01.clNm.as( "ctgryNm" ),
@@ -117,6 +118,7 @@ public class ClassReqstRepositoryImpl implements ClassReqstRepositoryCustom {
     					new QClassReqstListDto(
     	                		classReqst.classReqstSn,
     	                		classReqst.classSn,
+                                classReqst.classReqstNm,
     	                		class$.thumbAtchFileSn,
     	                        class$.ctgrySn,
     	                        classCategoryCl01.clNm.as( "ctgryNm" ),
