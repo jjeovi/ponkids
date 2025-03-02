@@ -34,7 +34,7 @@
 			$targetForm = $("#insertForm");
 
 			// 이름 체크 (2자 이상 )
-			var name = $targetForm.find( "[name='userNm']" ).val();
+			var name = $targetForm.find( "[name='chldrnNm']" ).val();
 
 			if ( name == '' ) {
 				alert( "이름을 입력해주세요." );
@@ -47,7 +47,7 @@
 			}
 
 			// 성별 체크
-			var gender = $targetForm.find( "[name='gender']:checked" ).val();
+			var gender = $targetForm.find( "[name='chldrnGender']:checked" ).val();
 
 			if ( gender == null || gender == '' ) {
 				alert( "성별을 선택해 주세요." );
@@ -55,7 +55,7 @@
 			}
 
 			// 생년월일 체크
-			var brdtDate = $targetForm.find( "[name='brdtDate']" ).val();
+			var brdtDate = $targetForm.find( "[name='chldrnBrdtDate']" ).val();
 
 			if ( !isValidDate( brdtDate ) ) {
 				alert( "날짜는 yyyymmdd 형식으로 입력해주세요. ex) 19930119" );
@@ -63,7 +63,7 @@
 			}
 
 			// 연락처 체크
-			var telNo = $targetForm.find( "[name='telNo']" ).val();
+			var telNo = $targetForm.find( "[name='chldrnTelNo']" ).val();
 
 			if ( telNo != '' && !telNoRegexp.test( telNo ) ) {	// telNoRegexp = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
 				alert( "연락처 형식에 맞게 입력해주세요." );
@@ -80,7 +80,7 @@
 			$targetForm = $("#updateForm");
 
 			// 이름 체크 (2자 이상 )
-			var name = $targetForm.find( "[name='userNm']" ).val();
+			var name = $targetForm.find( "[name='chldrnNm']" ).val();
 
 			if ( name == '' ) {
 				alert( "이름을 입력해주세요." );
@@ -93,7 +93,7 @@
 			}
 
 			// 성별 체크
-			var gender = $targetForm.find( "[name='gender']:checked" ).val();
+			var gender = $targetForm.find( "[name='chldrnGender']:checked" ).val();
 
 			if ( gender == null || gender == '' ) {
 				alert( "성별을 선택해 주세요." );
@@ -101,7 +101,7 @@
 			}
 
 			// 생년월일 체크
-			var brdtDate = $targetForm.find( "[name='brdtDate']" ).val();
+			var brdtDate = $targetForm.find( "[name='chldrnBrdtDate']" ).val();
 
 			if ( !isValidDate( brdtDate ) ) {
 				alert( "날짜는 yyyymmdd 형식으로 입력해주세요. ex) 19930119" );
@@ -109,7 +109,7 @@
 			}
 
 			// 연락처 체크
-			var telNo = $targetForm.find( "[name='telNo']" ).val();
+			var telNo = $targetForm.find( "[name='chldrnTelNo']" ).val();
 
 			if ( telNo != '' && !telNoRegexp.test( telNo ) ) {	// telNoRegexp = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
 				alert( "연락처 형식에 맞게 입력해주세요." );
