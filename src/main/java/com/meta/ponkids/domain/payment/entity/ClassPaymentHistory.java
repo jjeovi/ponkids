@@ -128,10 +128,53 @@ public class ClassPaymentHistory {
     private LocalDateTime approvedAt;
     
     /**
-     * 결제 취소 시간
+     * 결제 취소 시간 : 사용자가 취소를 요청한 시간
+     */
+    @Column( name = "cancel_requested_at" )
+    private LocalDateTime cancelRequestedAt;
+    
+    /**
+     * 취소가능한금액 : 취소 후 환불가능한 금액
+     */
+    @Column( name = "refundable_amount" )
+    private BigDecimal refundableAmount;
+    
+    /**
+     * 결제 환불 시간 : 환불처리가 완료된 시간
      */
     @Column( name = "canceled_at" )
     private LocalDateTime canceledAt;
+    
+    /**
+     * 취소 금액
+     */
+    @Column( name = "cancel_amount" )
+    private BigDecimal cancelAmount;
+    
+    
+    /**
+     * 취소 상태
+     */
+    @Column( name = "cancel_status" )
+    private String cancelStatus;
+    
+    /**
+     * 취소 사유
+     */
+    @Column( name = "cancel_reason" )
+    private String cancelReason;
+    
+    /**
+     * 멱등키
+     */
+    @Column( name = "idempotency_key" )
+    private String idempotencyKey;
+    
+    /**
+     * 멱등키 생성시간
+     */
+    @Column( name = "idempotency_created_at" )
+    private LocalDateTime idempotencyCreatedAt;
     
     /**
      * 최초 등록한 사용자 ID : tb_class_payment의 updusr_id 로 설정
@@ -178,7 +221,15 @@ public class ClassPaymentHistory {
         this.reason             = classPayment.getReason();
         this.requestedAt        = classPayment.getRequestedAt();
         this.approvedAt         = classPayment.getApprovedAt();
+        this.cancelRequestedAt= classPayment.getCancelRequestedAt();
+        this.refundableAmount   = classPayment.getRefundableAmount();
         this.canceledAt         = classPayment.getCanceledAt();
+        this.cancelAmount       = classPayment.getCancelAmount();
+        this.cancelStatus       = classPayment.getCancelStatus();
+        this.cancelReason       = classPayment.getCancelReason();
+        this.idempotencyKey     = classPayment.getIdempotencyKey();
+        this.idempotencyCreatedAt = classPayment.getIdempotencyCreatedAt();
+        
         
         // default update info field
         this.registerId         = classPayment.getUpdusrId();   // tb_class_payment의 updusr_id 로 설정

@@ -77,8 +77,53 @@ public class ClassPayment extends BaseTimeEntity {
     @Column( name = "approved_at" )
     private LocalDateTime approvedAt;
     
+    /**
+     * 결제 취소 시간 : 사용자가 취소를 요청한 시간
+     */
+    @Column( name = "cancel_requested_at" )
+    private LocalDateTime cancelRequestedAt;
+    
+    /**
+     * 취소가능한금액 : 취소 후 환불가능한 금액
+     */
+    @Column( name = "refundable_amount" )
+    private BigDecimal refundableAmount;
+    
+    /**
+     * 결제 환불 시간 : 환불처리가 완료된 시간
+     */
     @Column( name = "canceled_at" )
     private LocalDateTime canceledAt;
+    
+    /**
+     * 취소 금액
+     */
+    @Column( name = "cancel_amount" )
+    private BigDecimal cancelAmount;
+    
+    /**
+     * 취소 상태
+     */
+    @Column( name = "cancel_status" )
+    private String cancelStatus;
+    
+    /**
+     * 취소 사유
+     */
+    @Column( name = "cancel_reason" )
+    private String cancelReason;
+    
+    /**
+     * 멱등키
+     */
+    @Column( name = "idempotency_key" )
+    private String idempotencyKey;
+    
+    /**
+     * 멱등키 생성시간
+     */
+    @Column( name = "idempotency_created_at" )
+    private LocalDateTime idempotencyCreatedAt;
     
     @Column( name = "register_id", length = 50, nullable = false, updatable = false )
     private String registerId;
@@ -92,6 +137,33 @@ public class ClassPayment extends BaseTimeEntity {
     @Column( name = "updusr_ip", length = 100 )
     private String updusrIp;
     
+    /**
+     * 환불 사유 로그를 기록하기 위한 도메인 메서드
+     *
+     * @param reason 환불 내역 로그 문자열
+     */
+    public void updateReason( String reason ) {
+        this.reason = reason;
+    }
+    
+    /**
+     * 환불 금액을 설정하는 도메인 메서드
+     *
+     * @param cancelAmount 환불 금액
+     */
+    public void setCancelAmount( BigDecimal cancelAmount ) {
+        this.cancelAmount = cancelAmount;
+    }
+    
+    // 멱등키 생성
+    public void setIdempotencyKey( String idempotencyKey ) {
+        this.idempotencyKey = idempotencyKey;
+    }
+    
+    // 멱등키 생성 시간
+    public void setIdempotencyCreatedAt( LocalDateTime idempotencyCreatedAt ) {
+        this.idempotencyCreatedAt = idempotencyCreatedAt;
+    }
  
 //    @Comment( value = "등록일시" )
 //    @Column( name="reg_dt", updatable = false )

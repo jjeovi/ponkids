@@ -66,7 +66,7 @@ public class CmmnCdDetailRepositoryImpl implements CmmnCdDetailRepositoryCustom 
                 		eqCdNm( listDto.getCdNm() ),
                 		eqOption( listDto.getSchOption(), listDto.getSchCntn() )
                 		)
-//                .orderBy( cmmnCdDetail.cdDetailSn.desc())
+                .orderBy( cmmnCdDetail.cdDetailSeq.desc() )
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )
                 .fetch();

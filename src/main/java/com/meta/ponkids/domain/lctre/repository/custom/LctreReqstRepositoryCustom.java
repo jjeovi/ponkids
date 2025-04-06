@@ -12,4 +12,5 @@ public interface LctreReqstRepositoryCustom {
 
     LctreReqstListDto getFrstPreparNmpr( LctreReqstListDto targetDto );
     
+    boolean existsLctreReqstWithPaidStatus(Long lctreSn, Long chldrnSn);
 }

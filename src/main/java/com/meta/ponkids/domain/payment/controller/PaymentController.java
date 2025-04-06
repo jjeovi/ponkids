@@ -12,11 +12,16 @@ import com.meta.ponkids.domain.lctre.service.LctreReqstService;
 import com.meta.ponkids.domain.lctre.service.LctreService;
 import com.meta.ponkids.domain.payment.dto.ClassPaymentSaveDto;
 import com.meta.ponkids.domain.payment.dto.TossApprReqDto;
+import com.meta.ponkids.domain.payment.entity.ClassPayment;
+import com.meta.ponkids.domain.payment.repository.ClassPaymentRepository;
 import com.meta.ponkids.domain.payment.service.ClassPaymentService;
+import com.meta.ponkids.domain.payment.validator.ClassPaymentValidator;
 import com.meta.ponkids.domain.system.login.dto.LoginDto;
 import com.meta.ponkids.global.util.session.SessionUtils;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +51,10 @@ public class PaymentController {
     private final LctreReqstRepository lctreReqstRepository;
     
     private final ClassPaymentService classPaymentService;
+    private final ClassPaymentRepository classPaymentRepository;
+    
+    private final ClassPaymentValidator classPaymentValidator;
+    
     
     /**
      * methodName    : checkout
@@ -72,48 +81,14 @@ public class PaymentController {
         // 4. TB_CLASS_PAYMENT insert <- payment_status를 [pending] 상태로 저장
         // ===========================================
         
-        // 0-1. classSn 체크
-        if ( saveDto == null || saveDto.getClassSn() == null ) {
-            // 메시지 출력 및 url 이동 처리
-            model.addAttribute( "resultMsg", "신청 중 문제가 발생하였습니다. 다시 시도해주세요." );
-            model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
-            
+        // 0. 유효성 체크 작업
+        boolean validationResult = classPaymentValidator.validateInsert( saveDto, lctreReqsts, model, mcd, BASIC_PATH );
+        
+        if ( !validationResult ) {
             return "common/alert";
         }
-        
-        // 0-2. userSn 체크
-        // 로그인 안되어 있으면 return
-        LoginDto loginDto = SessionUtils.getAuthentication();
-        if ( loginDto == null || loginDto.getUserSn() == null ) {
-            // 메시지 출력 및 url 이동 처리
-            model.addAttribute( "resultMsg", "로그인 세션을 확인해주세요." );
-            model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
-            
-            return "common/alert";
-        }
-        
-        // 0-3. 신청한 수업 존재 체크
-        List<LctreReqstSaveDto> lctreReqstDtoList = lctreReqsts.getLctreReqsts();
-        if ( lctreReqstDtoList == null ) {
-            model.addAttribute( "resultMsg", "신청한 수업이 없습니다. 다시 확인해주세요" );
-            model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/detail?pk=" + saveDto.getClassSn() );
-            
-            return "common/alert";
-        }
-        
-        // 0-4. 이미 등록되어있는 자녀와 수업인지 체크
-        // 같은자녀와수업의 내용으로는 중복등록할 수 없음.
-        for ( LctreReqstSaveDto lctreReqst : lctreReqstDtoList ) {
-            if ( lctreReqstRepository.existsByLctreSnAndChldrnSn( lctreReqst.getLctreSn(), lctreReqst.getChldrnSn() ) ) {
-                // 메시지 출력 및 url 이동 처리
-                model.addAttribute( "resultMsg", "같은 자녀로 신청된 같은수업이 존재합니다. 마이페이지에서 확인해주세요." );
-                model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/detail?pk=" + saveDto.getClassSn() );
-                
-                return "common/alert";
-            }
-        }
-        
-        // 0-4. 수업 수강모집인원 설정 확인 및 유효성 체크
+
+        // - 수업 수강모집인원 설정 확인 및 유효성 체크
         // 수업별로 체크를 해야하기 때문에 수업신청 프로세스에서 해당 체크 진행
         
         //      - 모집인원설정여부, 예비모집인원 설졍여부 확인
@@ -126,12 +101,14 @@ public class PaymentController {
         //             (2-2) [예비모집인원설정 N 인 경우] : 수강신청 실패 로직 (인원수초과 알림)
         
         // 로그인 세션의 userSn 값으로 set
+        LoginDto loginDto = SessionUtils.getAuthentication();
         saveDto.setUserSn( loginDto.getUserSn() );
         
         // 1. TB_CLASS_REQST insert
         // ===========================================
         // 총 신청 건수 ( 한 클래스 내에 몇개의 [수업&자녀] 의 조합으로 신청을 했는지 => 수업과 자녀가 여러개라면 2개이상이 가능함 ) 계산하여 setting
         // 총 신청 건수 setting  (* 신청한 수업의 size : 개수 )
+        List<LctreReqstSaveDto> lctreReqstDtoList = lctreReqsts.getLctreReqsts();
         saveDto.setTotReqstCnt( Long.valueOf( lctreReqstDtoList.size() ) );
         
         // 1-2. 총 신청 금액 ( 신청 수업의 금액을 모두 합한 금액 ) 계산하여 setting
@@ -229,13 +206,37 @@ public class PaymentController {
             HttpServletRequest request,
             Model model ) throws Exception {
         
+        // 유효성 체크 작업
+        boolean validationResult = classPaymentValidator.validateAfterPayment( tossApprReqDto, model, mcd, BASIC_PATH );
         
-        classPaymentService.confirmPayment( tossApprReqDto, request );
+        if ( !validationResult ) {
+            // 결제 취소 로직 구현
+            // TODO
+            return "common/alert";
+        }
+        // 클래스 중복 체크
+        // mcd
+        
+        ResponseEntity<JSONObject> result =  classPaymentService.confirmPayment( tossApprReqDto, request );
+        
+        if ( result == null ) {
+            ClassPayment classPayment = classPaymentRepository.findByOrderId( tossApprReqDto.getOrderId() ).orElse( null );
+            Long classSn = classPayment.getClassReqst().getClassSn();
+            
+            model.addAttribute( "resultMsg", "결제 중 오류가 발생하였습니다." );
+            model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/detail?pk=" + classSn );
+            return "common/alert";
+            
+        }
         
         // TODO : 결제 성공 화면 으로 이동 하도록 (결제성공화면 퍼블 구현 필요)
         // 메시지 출력 및 url 이동 처리
+        
+        // 0. orderId 값으로 결제정보(주문내역정보) 조회 .
+        ClassPayment classPayment = classPaymentRepository.findByOrderId( tossApprReqDto.getOrderId() ).orElse( null );
         model.addAttribute( "resultMsg", "결제에 성공하였습니다." );
-        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+//        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+        model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/detail?pk=" + classPayment.getClassReqst().getClassSn() );
         
         return "common/alert";
         

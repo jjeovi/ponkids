@@ -10,10 +10,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import com.meta.ponkids.domain.payment.validator.ClassPaymentValidator;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.meta.ponkids.global.email.EmailService;
 import com.meta.ponkids.global.exception.CustomException;
-import com.meta.ponkids.global.util.generator.OrderIdGenerator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -78,6 +78,8 @@ public class ClassController {
 	private final UserChldrnRepository userChldrnRepository;
 	
 	private final EmailService emailService;
+	
+	private final ClassPaymentValidator classPaymentValidator;
 
 	@GetMapping( BASIC_PATH + "/{mcd}/list" )
 	public String list( @ModelAttribute ClassListDto listDto,
@@ -199,9 +201,10 @@ public class ClassController {
 		// chldrn target object 조회
 		model.addAttribute( "targetChldrnDtoList", userChldrnRepository.getListByUserSn( userSn ) );
 		
-		// 8. 해당 클래스르 신청한 이력이 있는지 확인
+		// 8. 해당 클래스르 신청한 이력이 있는지 확인 ( 신청한 건의 개수 )
 		// 이력이 있다면 '해당 클래스를 신청한 이력이 존재합니다. (마이페이지로 이동)  ' 할 수 있는 버튼을 구현 할지 
-		model.addAttribute( "reqstHistoryYn", classReqstRepository.existsByClassSnAndUserSn( targetDto.getClassSn(), userSn ) );
+//		model.addAttribute( "reqstHistoryYn", classReqstRepository.existsByClassSnAndUserSn( targetDto.getClassSn(), userSn ) );
+		model.addAttribute( "reqstHistoryYnCnt", classReqstRepository.getByClassReqstHistoryCnt( targetDto.getClassSn(), userSn ) );
 		
 		// E : 필요한 객체 setting
 		
@@ -233,46 +236,53 @@ public class ClassController {
 		// 3. TB_LCTRE_REQST_DETAIL insert
 		// ===========================================
 		
-		// 0-1. classSn 체크
-		if ( saveDto == null || saveDto.getClassSn() == null ) {
-			// 메시지 출력 및 url 이동 처리
-			model.addAttribute( "resultMsg", "등록 중 문제가 발생하였습니다. 다시 시도해주세요." );
-			model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
-			
+		// 0. 유효성 체크 작업
+		boolean validationResult = classPaymentValidator.validateInsert( saveDto, lctreReqsts, model, mcd, BASIC_PATH );
+		
+		if ( !validationResult  ) {
 			return "common/alert";
 		}
 		
-		// 0-2. userSn 체크 
-		// 로그인 안되어 있으면 return 
-		LoginDto loginDto = SessionUtils.getAuthentication();
-		if ( loginDto == null || loginDto.getUserSn() == null ) {
-			// 메시지 출력 및 url 이동 처리
-			model.addAttribute( "resultMsg", "로그인 세션을 확인해주세요." );
-			model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
-			
-			return "common/alert";
-		}
-
-		// 0-3. 신청한 수업 존재 체크
-		List<LctreReqstSaveDto> lctreReqstDtoList = lctreReqsts.getLctreReqsts();
-		if ( lctreReqstDtoList == null ) {
-			model.addAttribute( "resultMsg", "신청한 수업이 없습니다. 다시 확인해주세요" );
-			model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/detail?pk=" + saveDto.getClassSn());
-
-			return "common/alert";
-		}
-
-		// 0-4. 이미 등록되어있는 자녀와 수업인지 체크
-		// 같은자녀와수업의 내용으로는 중복등록할 수 없음.
-		for (LctreReqstSaveDto lctreReqst : lctreReqstDtoList) {
-			if ( lctreReqstRepository.existsByLctreSnAndChldrnSn( lctreReqst.getLctreSn(), lctreReqst.getChldrnSn() ) ) {
-				// 메시지 출력 및 url 이동 처리
-				model.addAttribute( "resultMsg", "같은 자녀로 신청된 같은수업이 존재합니다. 마이페이지에서 확인해주세요." );
-				model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/detail?pk=" + saveDto.getClassSn() );
-
-				return "common/alert";
-			}
-		}
+//		// 0-1. classSn 체크
+//		if ( saveDto == null || saveDto.getClassSn() == null ) {
+//			// 메시지 출력 및 url 이동 처리
+//			model.addAttribute( "resultMsg", "등록 중 문제가 발생하였습니다. 다시 시도해주세요." );
+//			model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+//
+//			return "common/alert";
+//		}
+//
+//		// 0-2. userSn 체크
+//		// 로그인 안되어 있으면 return
+//		LoginDto loginDto = SessionUtils.getAuthentication();
+//		if ( loginDto == null || loginDto.getUserSn() == null ) {
+//			// 메시지 출력 및 url 이동 처리
+//			model.addAttribute( "resultMsg", "로그인 세션을 확인해주세요." );
+//			model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/list" );
+//
+//			return "common/alert";
+//		}
+//
+//		// 0-3. 신청한 수업 존재 체크
+//		List<LctreReqstSaveDto> lctreReqstDtoList = lctreReqsts.getLctreReqsts();
+//		if ( lctreReqstDtoList == null ) {
+//			model.addAttribute( "resultMsg", "신청한 수업이 없습니다. 다시 확인해주세요" );
+//			model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/detail?pk=" + saveDto.getClassSn());
+//
+//			return "common/alert";
+//		}
+//
+//		// 0-4. 이미 등록되어있는 자녀와 수업인지 체크
+//		// 같은자녀와수업의 내용으로는 중복등록할 수 없음.
+//		for (LctreReqstSaveDto lctreReqst : lctreReqstDtoList) {
+//			if ( lctreReqstRepository.existsLctreReqstWithPaidStatus( lctreReqst.getLctreSn(), lctreReqst.getChldrnSn() ) ) {
+//				// 메시지 출력 및 url 이동 처리
+//				model.addAttribute( "resultMsg", "같은 자녀로 신청된 같은수업이 존재합니다. 마이페이지에서 확인해주세요." );
+//				model.addAttribute( "moveUrl", BASIC_PATH + "/" + mcd + "/detail?pk=" + saveDto.getClassSn() );
+//
+//				return "common/alert";
+//			}
+//		}
 
 		// 0-4. 수업 수강모집인원 설정 확인 및 유효성 체크
 		// 수업별로 체크를 해야하기 때문에 수업신청 프로세스에서 해당 체크 진행
@@ -288,6 +298,7 @@ public class ClassController {
 
 
 		// 로그인 세션의 userSn 값으로 set
+		LoginDto loginDto = SessionUtils.getAuthentication();
 		saveDto.setUserSn( loginDto.getUserSn() );
 		
 		// 1. TB_CLASS_REQST insert
@@ -295,7 +306,8 @@ public class ClassController {
 
 
 		// 총 신청 건수 ( 한 클래스 내에 몇개의 [수업&자녀] 의 조합으로 신청을 했는지 => 수업과 자녀가 여러개라면 2개이상이 가능함 ) 계산하여 setting
-		// 총 신청 건수 setting  (* 신청한 수업의 size : 개수 ) 
+		// 총 신청 건수 setting  (* 신청한 수업의 size : 개수 )
+		List<LctreReqstSaveDto> lctreReqstDtoList = lctreReqsts.getLctreReqsts();
 		saveDto.setTotReqstCnt(  Long.valueOf( lctreReqstDtoList.size() ) );
 
 		// 1-2. 총 신청 금액 ( 신청 수업의 금액을 모두 합한 금액 ) 계산하여 setting

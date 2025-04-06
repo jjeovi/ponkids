@@ -16,41 +16,45 @@ import java.math.BigDecimal;
 @EqualsAndHashCode( callSuper = false )
 public class ClassReqstListDto {
 	
-	private Long 	classReqstSn;			// 클래스 신청 일련번호
+	private Long		classReqstSn;			// 클래스 신청 일련번호
 	
-	private Long 	classSn;                // 클래스 일련번호
+	private Long 		classSn;                // 클래스 일련번호
 	
-	private String	classReqstNm;			// 클래스 신청명
+	private String		classReqstNm;			// 클래스 신청명
 	
-	private Long 		thumbAtchFileSn;    // 썸네일첨부파일일련번호
+	private Long 		thumbAtchFileSn;    	// 썸네일첨부파일일련번호
 	
-    private Long 		ctgrySn;            // 카테고리코드
+    private Long 		ctgrySn;            	// 카테고리코드
     
-    private String 		ctgryNm;            // 카테고리명
+    private String 		ctgryNm;            	// 카테고리명
     
-    private Long 		crseSn;             // 커리큘럼코드
+    private Long 		crseSn;             	// 커리큘럼코드
     
-    private String 		crseNm;             // 커리큘럼명
+    private String 		crseNm;             	// 커리큘럼명
     
-    private String 		classSj;          	// 클래스제목
+    private String 		classSj;          		// 클래스제목
     
-	private Long 	userSn;                 // 사용자 일련번호
+	private Long 		userSn;                 // 사용자 일련번호
 	
-	private Long 	totReqstCnt;            // 총 신청 건수
+	private Long 		totReqstCnt;            // 총 신청 건수
 	
-	private BigDecimal totReqstAmt;            // 총 신청 금액
+	private BigDecimal	totReqstAmt;         	// 총 신청 금액
 	
-	private String 	regDt;    				// 등록일자
+	private String 		paymentStatus;			// 결제상태
+	
+	private String		paymentStatusNm;        // 결제상태명
+	
+	private String 		regDt;    				// 등록일자
     
-    private String 	registerId;             // 등록자 id
+    private String		registerId;             // 등록자 id
     
-    private String 	registerIp;             // 등록자 ip
+    private String		registerIp;             // 등록자 ip
     
-    private String 	updusrId;               // 수정자 ID
+    private String		updusrId;               // 수정자 ID
     
-    private String 	updusrIp;               // 수정자 IP
+    private String		updusrIp;               // 수정자 IP
     
-    private CategoryDto category;    // 카테고리 검색 : 생성자에는 추가하지 않음!
+    private CategoryDto	category;    			// 카테고리 검색 : 생성자에는 추가하지 않음!
     
     @Builder
     @QueryProjection
@@ -67,20 +71,24 @@ public class ClassReqstListDto {
 			Long userSn,
 			Long totReqstCnt,
 			BigDecimal totReqstAmt,
+			String paymentStatus,
+			String paymentStatusNm,
 			String regDt ) {
 		
-		this.classReqstSn	= classReqstSn;
-		this.classSn		= classSn;
-		this.classReqstNm	= classReqstNm;
-		this.thumbAtchFileSn= thumbAtchFileSn;
-		this.ctgrySn		= ctgrySn;
-		this.ctgryNm		= ctgryNm;
-		this.crseSn			= crseSn;
-		this.crseNm			= crseNm;
-		this.classSj		= classSj;
-		this.userSn			= userSn;
-		this.totReqstCnt	= totReqstCnt;
-		this.totReqstAmt	= totReqstAmt;
+		this.classReqstSn		= classReqstSn;
+		this.classSn			= classSn;
+		this.classReqstNm		= classReqstNm;
+		this.thumbAtchFileSn	= thumbAtchFileSn;
+		this.ctgrySn			= ctgrySn;
+		this.ctgryNm			= ctgryNm;
+		this.crseSn				= crseSn;
+		this.crseNm				= crseNm;
+		this.classSj			= classSj;
+		this.userSn				= userSn;
+		this.totReqstCnt		= totReqstCnt;
+		this.totReqstAmt		= totReqstAmt;
+		this.paymentStatus		= paymentStatus;
+		this.paymentStatusNm	= paymentStatusNm;
 		this.regDt			= regDt;
 	}
     

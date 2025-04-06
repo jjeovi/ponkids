@@ -6,12 +6,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface LctreReqstRepository extends JpaRepository<LctreReqst, Long>, LctreReqstRepositoryCustom {
 	
 	boolean existsByLctreSnAndChldrnSn( Long lctreSn, Long chldrnSn );
 
 	@Modifying( clearAutomatically = true )
+	@Transactional
 	@Query( value = "UPDATE {h-schema}tb_lctre_reqst"
 			+       "   SET del_yn   = 'Y'"
 			+       "     , updt_dt  = now()"
@@ -19,6 +21,7 @@ public interface LctreReqstRepository extends JpaRepository<LctreReqst, Long>, L
 	int deleteByClassReqstSn( @Param("classReqstSn") Long classReqstSn) ;
 
 	@Modifying( clearAutomatically = true )
+	@Transactional
 	@Query( value = "UPDATE {h-schema}tb_lctre_reqst"
 			+       "   SET prepar_nmpr_yn   = 'N'"
 			+       "     , updt_dt  = now()"

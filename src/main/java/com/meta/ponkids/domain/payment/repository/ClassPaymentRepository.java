@@ -23,6 +23,10 @@ public interface ClassPaymentRepository extends JpaRepository<ClassPayment, Long
      */
     Optional<ClassPayment> findByOrderId( String orderId );
     
+    // 또는, classReqstSn을 이용해서 찾기
+    Optional<ClassPayment> findByClassReqst_ClassReqstSn(Long classReqstSn);
+    
+    
     /**
      * 결제 키로 결제 정보 조회 (유니크 값이므로 단일 결과)
      *

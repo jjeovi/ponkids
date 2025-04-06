@@ -1,27 +1,26 @@
 package com.meta.ponkids.domain.lctre.repository.impl;
 
-import static com.meta.ponkids.domain.cls.entity.QClass.class$;
-import static com.meta.ponkids.domain.cls.entity.QClassInqry.classInqry;
-import static com.meta.ponkids.domain.lctre.entity.QLctre.lctre;
-import static com.meta.ponkids.domain.lctre.entity.QLctreReqst.lctreReqst;
-import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
-import static com.meta.ponkids.domain.user.entity.QUserChldrn.userChldrn;
-import static com.meta.ponkids.domain.user.entity.QUser.user;
-
-import java.util.List;
-
-import com.querydsl.core.types.dsl.Expressions;
-import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
-
 import com.meta.ponkids.domain.lctre.dto.LctreReqstListDto;
 import com.meta.ponkids.domain.lctre.dto.QLctreReqstListDto;
 import com.meta.ponkids.domain.lctre.repository.custom.LctreReqstRepositoryCustom;
 import com.meta.ponkids.global.common.dto.CategoryDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
+
+import static com.meta.ponkids.domain.cls.entity.QClass.class$;
+import static com.meta.ponkids.domain.cls.entity.QClassReqst.classReqst;
+import static com.meta.ponkids.domain.lctre.entity.QLctre.lctre;
+import static com.meta.ponkids.domain.lctre.entity.QLctreReqst.lctreReqst;
+import static com.meta.ponkids.domain.payment.entity.QClassPayment.classPayment;
+import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
+import static com.meta.ponkids.domain.user.entity.QUser.user;
+import static com.meta.ponkids.domain.user.entity.QUserChldrn.userChldrn;
 
 @Repository
 @RequiredArgsConstructor
@@ -87,8 +86,6 @@ public class LctreReqstRepositoryImpl implements LctreReqstRepositoryCustom {
 						lctreReqst.lctreReqstSn.asc()
 				)
 				.fetch();
-				
-				
 	}
 
 
@@ -150,17 +147,14 @@ public class LctreReqstRepositoryImpl implements LctreReqstRepositoryCustom {
 						lctreReqst.lctreReqstSn.asc()
 				)
 				.fetch();
-
-
 	}
-
 
 	@Override
 	public LctreReqstListDto getFrstPreparNmpr( LctreReqstListDto targetDto ) {
 
 		return query
 				.select( new QLctreReqstListDto(
-												lctreReqst.lctreReqstSn,
+										lctreReqst.lctreReqstSn,
 												lctreReqst.classReqstSn,
 												class$.classSj,
 												lctreReqst.lctreSn,
@@ -217,9 +211,30 @@ public class LctreReqstRepositoryImpl implements LctreReqstRepositoryCustom {
 						lctreReqst.lctreReqstSn.asc()
 				)
 				.fetchFirst();
-
 	}
 	
+	@Override
+	public boolean existsLctreReqstWithPaidStatus(Long lctreSn, Long chldrnSn) {
+		
+		return query
+				.selectOne()
+				.from( lctreReqst )
+				.leftJoin( classReqst)
+				.on(
+						lctreReqst.classReqstSn.eq( classReqst.classReqstSn )
+				)
+				.leftJoin( classPayment )
+				.on(
+						classReqst.classReqstSn.eq( classPayment.classReqst.classReqstSn )
+				)
+				.where(
+						lctreReqst.lctreSn.eq( lctreSn ),
+						lctreReqst.chldrnSn.eq( chldrnSn ),
+						lctreReqst.delYn.eq( "N" ),
+						classPayment.paymentStatus.eq( "DONE" )
+				)
+				.fetchFirst() != null;
+	}
 	
 	// -------------------------------- WHERE 검색 옵션 setting --------------------------------
 	

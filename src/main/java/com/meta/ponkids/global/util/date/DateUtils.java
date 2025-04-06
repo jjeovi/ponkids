@@ -616,4 +616,30 @@ public class DateUtils implements DateConstants {
         return OffsetDateTime.parse( requestedAt, formatter ).toLocalDateTime();
     }
     
+    /**
+     * String to LocalDateTime
+     * 인자로 받은 String 의 날짜 형식 문자열이
+     * yyyy-MM-dd 형식이 맞는지 체크 하기
+     *
+     * <pre>
+     * strToLDT("2025-02-16T15:10:25+09:00")
+     * @param requestedAt 기준일자 (yyyyMMdd)
+     * @return
+     * @throws ParseException
+     */
+    public static LocalDateTime strToLDT2( String requestedAt ) {
+        // 'T' 포함 여부에 따라 다른 포맷 적용
+        DateTimeFormatter formatter;
+        if (requestedAt.contains("T")) {
+            // 'T' 포함 형식: ISO_OFFSET_DATE_TIME로 처리 (예: 2027-03-27T12:00:00+02:00)
+            formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+        } else {
+            // 'T' 미포함 형식: 오프셋 없는 포맷 (예: 2027-03-27 12:00:00)
+            formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        }
+
+// OffsetDateTime으로 파싱 후 LocalDateTime으로 변환
+        return LocalDateTime.parse(requestedAt, formatter); // OffsetDateTime이 아닌 LocalDateTime을 사용
+    }
+    
 }

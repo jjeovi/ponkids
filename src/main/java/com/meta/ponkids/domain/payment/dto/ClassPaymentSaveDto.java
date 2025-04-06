@@ -2,7 +2,6 @@ package com.meta.ponkids.domain.payment.dto;
 
 import com.meta.ponkids.domain.cls.entity.ClassReqst;
 import com.meta.ponkids.domain.payment.PaymentProvider;
-import com.meta.ponkids.domain.payment.PaymentStatus;
 import com.meta.ponkids.domain.payment.entity.ClassPayment;
 import com.meta.ponkids.domain.user.entity.User;
 import lombok.AllArgsConstructor;
@@ -10,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -72,7 +72,7 @@ public class ClassPaymentSaveDto {
     private String paymentStatus;
     
     /**
-     * 결제 상태
+     * 원인 (취소 사유 등)
      */
     private String reason;
     
@@ -80,7 +80,46 @@ public class ClassPaymentSaveDto {
     
     private LocalDateTime approvedAt;
     
+    /**
+     * 결제 취소 시간 : 사용자가 취소를 요청한 시간
+     */
+    private LocalDateTime cancelRequestedAt;
+    
+    /**
+     * 취소가능한금액 : 취소 후 환불가능한 금액
+     */
+    private BigDecimal refundableAmount;
+    
+    /**
+     * 결제 환불 시간 : 환불처리가 완료된 시간
+     */
     private LocalDateTime canceledAt;
+    
+    /**
+     * 취소 금액
+     */
+    private BigDecimal cancelAmount;
+    
+    
+    /**
+     * 취소 상태
+     */
+    private String cancelStatus;
+    
+    /**
+     * 취소 사유
+     */
+    private String cancelReason;
+    
+    /**
+     * 멱등키
+     */
+    private String idempotencyKey;
+    
+    /**
+     * 멱등키 생성시간
+     */
+    private LocalDateTime idempotencyCreatedAt;
     
     private String registerId;
     
@@ -106,7 +145,14 @@ public class ClassPaymentSaveDto {
                 .reason( reason )
                 .requestedAt( requestedAt )
                 .approvedAt( approvedAt )
+                .cancelRequestedAt( cancelRequestedAt )
+                .refundableAmount( refundableAmount )
                 .canceledAt( canceledAt )
+                .cancelAmount( cancelAmount )
+                .cancelStatus( cancelStatus )
+                .cancelReason( cancelReason )
+                .idempotencyKey( idempotencyKey )
+                .idempotencyCreatedAt( idempotencyCreatedAt )
                 .registerId( registerId )
                 .registerIp( registerIp )
                 .updusrId( updusrId )
@@ -131,7 +177,14 @@ public class ClassPaymentSaveDto {
                 .reason( classPayment.getReason() )
                 .requestedAt( classPayment.getRequestedAt() )
                 .approvedAt( classPayment.getApprovedAt() )
+                .cancelRequestedAt( classPayment.getCancelRequestedAt() )
+                .refundableAmount( classPayment.getRefundableAmount() )
                 .canceledAt( classPayment.getCanceledAt() )
+                .cancelAmount( classPayment.getCancelAmount() )
+                .cancelStatus( classPayment.getCancelStatus() )
+                .cancelReason( classPayment.getCancelReason() )
+                .idempotencyKey( classPayment.getIdempotencyKey() )
+                .idempotencyCreatedAt( classPayment.getIdempotencyCreatedAt() )
                 .registerId( classPayment.getRegisterId() )
                 .registerIp( classPayment.getRegisterIp() )
                 .updusrId( classPayment.getUpdusrId() )

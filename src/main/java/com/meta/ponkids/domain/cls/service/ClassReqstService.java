@@ -52,7 +52,7 @@ public class ClassReqstService {
         return classReqstRepository.getList( listDto, pageable );
     }
     
-//    // 나의 클래스와 같은 카테고리의 다른 클래스 ( 내 클래스는 제외하고 검색 ) : 10건만 조회
+    //    // 나의 클래스와 같은 카테고리의 다른 클래스 ( 내 클래스는 제외하고 검색 ) : 10건만 조회
 //    public List<ClassListDto> getListTop10OtherClassExceptMeByCtgrySn( ClassListDto targetDto ) {
 //    	
 //    	return classRepository.getListTop10OtherClassExceptMeByCtgrySn( targetDto );
@@ -85,13 +85,14 @@ public class ClassReqstService {
 //    
 //    
     public ClassReqstListDto getByClassReqstSn( Long pk ) {
-    	
-    	
-    	return classReqstRepository.getByClassReqstSn(pk);
+        
+        
+        return classReqstRepository.getByClassReqstSn( pk );
         
         
     }
-//    
+    
+    //
 //    
 //    // pk 로 조회 ( 고유 1건 조회 ) 
 //    public ClassListDto getByClassSn( Long pk ) {
@@ -141,7 +142,7 @@ public class ClassReqstService {
 //    
     @Transactional
     public void deleteById( Long pk ) {
-
+        
         // delete 처리 : 실제 delete는 아니고 update 하여 del_yn 값을 Y로 수정작업
         classReqstRepository.deleteById( pk );    // Entity 의 @SQLDelete 를 수행
     }

@@ -20,6 +20,28 @@
 	<!-- js -->
 	<script>
 
+		// DOM 준비 된 이후 실행
+		$( function () {
+
+			// 현재 선택한 자녀의 성별 라디오버튼을 강제로 값 checked 처리 (안해주면 checked 처리가 풀려있음).
+			// 남자 = M 여자 = F
+			$targetForm = $("#updateForm");
+			var chldrnSeq = $targetForm.find( "[name='userChldrnSeq']" ).val();
+			if ( chldrnSeq != null && chldrnSeq != '' ) {
+				var genderVal = $targetForm.find( "[name='chldrnGenderOri']" ).val();
+				if ( genderVal == "M" ) {
+					$targetForm.find( "[name='chldrnGender'][value='M']" ).prop( "checked", true );
+					$targetForm.find( "[name='chldrnGender'][value='M']" ).trigger("click");
+				} else if ( genderVal == "F" ) {
+					$targetForm.find( "[name='chldrnGender'][value='F']" ).prop( "checked", true );
+					$targetForm.find( "[name='chldrnGender'][value='F']" ).trigger("click");
+				}
+			}
+
+
+
+		} );
+
 		function myChldrnInfo( userChldrnSeq ) {
 			location.href = "?userChldrnSeq=" + userChldrnSeq;
 		}
@@ -144,6 +166,8 @@
 			<div name="chldrnModDiv" class="modForm" th:style=" ${pageType eq 'add'} ? 'display:none;' " >
 				<input type="hidden" name="chldrnSn" th:value="${targetDto.chldrnSn}" />
 				<input type="hidden" name="userChldrnSeq" th:value="${targetDto.userChldrnSeq}" />
+				<input type="hidden" name="chldrnGenderOri"  	th:if="${targetDto.chldrnGender eq '남자'}" th:value="M" />
+				<input type="hidden" name="chldrnGenderOri"  	th:if="${targetDto.chldrnGender eq '여자'}" th:value="F" />
 				<div class="filebox preview-image">
 					<div class="upload-display">
 						<div class="upload-thumb-wrap">

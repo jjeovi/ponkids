@@ -502,7 +502,7 @@
 						</span> 
 						<button type="submit">신청하기</button>
 						
-						<span class="reqst-history" th:if="${ reqstHistoryYn != null && reqstHistoryYn}">
+						<span class="reqst-history" th:if="${reqstHistoryYnCnt != null and reqstHistoryYnCnt > 0}">
 							이 클래스에 이미 신청한 이력이 존재해요!
 							<a href="/mypage/reqstHistory/list">신청이력 확인하기</a>
 						</span>

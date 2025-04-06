@@ -16,7 +16,6 @@ import com.meta.ponkids.global.util.session.SessionUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,12 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.io.*;
+import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -41,25 +37,7 @@ public class ClassPaymentService {
     private final UserRepository userRepository;
     private final UserCustomerKeyService userCustomerKeyService;
     
-    @Value( "${key.tossPayments.baseUrl}" )
-    private String BASE_URL;
-    
-    @Value( "${key.tossPayments.secretKey}" )
-    private String SECRET_KEY;
-    
-    private String approveUrlPath;
-    
-    /**
-     * @PostConstruct를 사용하여 초기화
-     */
-    @PostConstruct
-    public void init() {
-        this.approveUrlPath = BASE_URL + "/v1/payments/confirm";
-    }
-    
-    public String getApproveUrlPath() {
-        return approveUrlPath;
-    }
+    private final TossApiService tossApiService;
     
     /**
      * 결제 정보 최초 저장
@@ -117,51 +95,19 @@ public class ClassPaymentService {
      */
     public ResponseEntity<JSONObject> confirmPayment( TossApprReqDto tossApprReqDto, HttpServletRequest request ) throws Exception {
         try {
-            // 1 JSON 데이터 생성
-            JSONParser parser = new JSONParser();
-            JSONObject obj = new JSONObject();
-            obj.put( "orderId", tossApprReqDto.getOrderId() );
-            obj.put( "amount", tossApprReqDto.getAmount() );
-            obj.put( "paymentKey", tossApprReqDto.getPaymentKey() );
             
-            // 2 토스페이먼츠 API 인증 헤더 생성
-            // 토스페이먼츠 API는 시크릿 키를 사용자 ID로 사용하고, 비밀번호는 사용하지 않습니다. 비밀번호❌가 없다는 것을 알리기 위해 시크릿 키 뒤에 콜론을 추가합니다.
-            // @docs https://docs.tosspayments.com/reference/using-api/authorization#%EC%9D%B8%EC%A6%9D
-            Base64.Encoder encoder = Base64.getEncoder();
-            byte[] encodedBytes = encoder.encode( ( SECRET_KEY + ":" ).getBytes( StandardCharsets.UTF_8 ) );
-            String authorizations = "Basic " + new String( encodedBytes );
+            Map<String, Object> resultMap =  tossApiService.requestTossPayment( tossApprReqDto );    // 결제 승인 요청
             
-            // 3 HTTP 연결 설정
-            // 결제 승인 API를 호출하세요. 결제를 승인하면 결제수단에서 금액이 차감돼요.
-            // @docs https://docs.tosspayments.com/guides/payment-widget/integration#3-결제-승인하기
-            URL url = new URL( getApproveUrlPath() );   // getApproveUrlPath() : https://api.tosspayments.com/v1/payments/confirm
-            HttpURLConnection connection = ( HttpURLConnection ) url.openConnection();
-            connection.setRequestProperty( "Authorization", authorizations );
-            connection.setRequestProperty( "Content-Type", "application/json" );
-            connection.setRequestMethod( "POST" );
-            connection.setDoOutput( true );
-            
-            // 4 요청 데이터 전송
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write( obj.toString().getBytes( "UTF-8" ) );
-            outputStream.flush();  // 버퍼 비우기 (데이터 전송)
-            outputStream.close();  // 스트림 닫기 (리소스 해제)
-            
-            // 5 응답 수신
-            int code = connection.getResponseCode();
-            boolean isSuccess = ( code == 200 );
-            
-            InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
-            Reader reader = new InputStreamReader( responseStream, StandardCharsets.UTF_8 );
-            JSONObject jsonObject = ( JSONObject ) parser.parse( reader );
-            responseStream.close();
+            int     code            = resultMap.get( "code" ) == null ? 0 : ( int ) resultMap.get( "code" );                      // 결제 승인 요청 결과 코드
+            boolean isSuccess       = resultMap.get( "isSuccess" ) == null ? false : ( boolean ) resultMap.get( "isSuccess" );    // 결제 승인 요청 결과 성공 여부
+            JSONObject resultJson   = resultMap.get( "resultJson" ) == null ? null : ( JSONObject ) resultMap.get( "resultJson" );    // 결제 승인 요청 결과 JSON 데이터
             
             // 결제 성공 및 실패 비즈니스 로직을 구현하세요.
             // 6 결제 성공 처리
             if ( isSuccess ) {
                 // 응답에서 필요한 데이터 추출
                 ObjectMapper objectMapper = new ObjectMapper();
-                TossApprResDto tossApprResDto = objectMapper.readValue( jsonObject.toString(), TossApprResDto.class );
+                TossApprResDto tossApprResDto = objectMapper.readValue( resultJson.toString(), TossApprResDto.class );
                 
                 // orderId 기준으로 조회
                 Optional<ClassPayment> classPayment = classPaymentRepository.findByOrderId( tossApprResDto.getOrderId() );
@@ -192,19 +138,19 @@ public class ClassPaymentService {
                 }
                 
                 log.info( "✅ 결제 승인 완료! 주문번호: {}", tossApprReqDto.getOrderId() );
-                return ResponseEntity.ok( jsonObject );
+                return ResponseEntity.ok( resultJson );
             } else {
                 
                 
                 // 7 결제 실패 처리
-                // 실패 api 구조
+                // 실패 api 구조 : { "code" : [code] , "message" : [message] }
 //            {
 //                "code": "NOT_FOUND_PAYMENT_SESSION",
 //                "message": "결제 시간이 만료되어 결제 진행 데이터가 존재하지 않습니다."
 //            }
                 
-                String failCode = ( String ) jsonObject.get( "code" );
-                String errorMessage = ( String ) jsonObject.get( "message" );
+                String failCode = ( String ) resultJson.get( "code" );
+                String errorMessage = ( String ) resultJson.get( "message" );
                 log.error( "❌ 결제 실패! 주문번호: {}, 사유: {}", tossApprReqDto.getOrderId(), errorMessage );
                 
                 // 결제 정보 업데이트
@@ -212,7 +158,7 @@ public class ClassPaymentService {
                 
             }
             
-            return ResponseEntity.status( code ).body( jsonObject );
+            return ResponseEntity.status( code ).body( resultJson );
             
         } catch ( Exception e ) {
             // 결제 승인 요청 중 오류 발생 시 처리

@@ -2,12 +2,16 @@ package com.meta.ponkids.domain.cls.repository.impl;
 
 
 import static com.meta.ponkids.domain.cls.entity.QClass.class$;
+import static com.meta.ponkids.domain.payment.entity.QClassPayment.classPayment;
 import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl01.classCategoryCl01;
 import static com.meta.ponkids.domain.cls.entity.QClassCategoryCl02.classCategoryCl02;
 import static com.meta.ponkids.domain.cls.entity.QClassReqst.classReqst;
+import static com.meta.ponkids.domain.system.cmmnCd.entity.QCmmnCdDetail.cmmnCdDetail;
 
 import java.util.List;
 
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.jpa.JPAExpressions;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -30,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class ClassReqstRepositoryImpl implements ClassReqstRepositoryCustom {
     
     private final JPAQueryFactory query;
+    
     
     @Override
     public Page<ClassReqstListDto> getList( ClassReqstListDto listDto, Pageable pageable ) {
@@ -68,6 +73,13 @@ public class ClassReqstRepositoryImpl implements ClassReqstRepositoryCustom {
                         classReqst.userSn,
                         classReqst.totReqstCnt,
                         classReqst.totReqstAmt,
+                        classPayment.paymentStatus,
+                        ExpressionUtils.as( JPAExpressions.select( classCategoryCl01.clNm )
+                                .from( cmmnCdDetail )
+                                .where(
+                                        cmmnCdDetail.cdNm.eq( "PAYMENT_STATUS_CD"),
+                                        cmmnCdDetail.cdDetailVal1.eq( classPayment.paymentStatus )
+                                ), "paymentStatusNm" ),
                         Expressions.stringTemplate( "to_char({0}, '{1s}')", classReqst.regDt, "YYYY-MM-DD" )
                 ) )
                 .from( classReqst )
@@ -86,12 +98,17 @@ public class ClassReqstRepositoryImpl implements ClassReqstRepositoryCustom {
                 .on(    classCategoryCl02.clSn.eq( class$.crseSn ),
                         classCategoryCl02.delYn.eq("N")
                 )
+                .leftJoin( classPayment )  // classPayment 테이블 join
+                .on(
+                        classReqst.classReqstSn.eq( classPayment.classReqst.classReqstSn )
+                )
                 // where
                 .where( 
                 		eqUserSn( listDto.getUserSn() ),
                 		eqCateLv1( listDto.getCategory() ),
-                		eqCateLv2( listDto.getCategory() )
-                		)
+                		eqCateLv2( listDto.getCategory() ),
+                        classPayment.paymentStatus.ne( "PENDING" )
+                )
                 .orderBy( classReqst.classReqstSn.desc())
                 .offset( pageable.getOffset() )
                 .limit( pageable.getPageSize() )
@@ -128,6 +145,13 @@ public class ClassReqstRepositoryImpl implements ClassReqstRepositoryCustom {
     	                        classReqst.userSn,
     	                        classReqst.totReqstCnt,
     	                        classReqst.totReqstAmt,
+                                classPayment.paymentStatus,
+                                ExpressionUtils.as( JPAExpressions.select( classCategoryCl01.clNm )
+                                        .from( cmmnCdDetail )
+                                        .where(
+                                                cmmnCdDetail.cdNm.eq( "PAYMENT_STATUS_CD"),
+                                                cmmnCdDetail.cdDetailVal1.eq( classPayment.paymentStatus )
+                                        ), "paymentStatusNm" ),
     	                        Expressions.stringTemplate( "to_char({0}, '{1s}')", classReqst.regDt, "YYYY-MM-DD" )
     					))
     			.from( classReqst )
@@ -146,6 +170,10 @@ public class ClassReqstRepositoryImpl implements ClassReqstRepositoryCustom {
                 .on(    classCategoryCl02.clSn.eq( class$.crseSn ),
                         classCategoryCl02.delYn.eq("N")
                 )
+                .leftJoin( classPayment )  // classPayment 테이블 join
+                .on(
+                        classReqst.classReqstSn.eq( classPayment.classReqst.classReqstSn )
+                )
                 // where
                 .where( 
                 		eqClassReqstSn( classReqstSn )
@@ -155,6 +183,49 @@ public class ClassReqstRepositoryImpl implements ClassReqstRepositoryCustom {
     			// QueryDsl을 사용하고 결과를 한 건만 조회해야 할 때, 결과가 명확하게 한 건만 조회됨이 보장되지 않는다면 fetchOne()은 NonUniqueResultException을 던질 가능성이 있다.
     			// 결과를 한 건만 조회해야 할 때, 결과가 명확하게 한 건만 조회됨이 보장되지 않는다면 내부적으로 limit(1)을 수행하는 fetchFirst()를 사용하자. 
     			// (출처) :https://hungseong.tistory.com/87
+        
+        
+    }
+    
+    
+    @Override
+    public Long getByClassReqstHistoryCnt( Long classSn, Long userSn ) {
+        
+        if ( classSn == null || userSn == null ) return 0L;
+        else {
+            return query
+                    .select(
+                            classReqst.count())
+                    .from( classReqst )
+                    // join 에는 delYn 조건 필수로 추가
+                    .leftJoin( class$ )
+                    .on( 	class$.classSn.eq( classReqst.classSn ),
+                            class$.delYn.eq( "N" )
+                    ).leftJoin( classPayment )  // classPayment 테이블 join
+                    .on(    classReqst.classReqstSn.eq( classPayment.classReqst.classReqstSn )
+                    )
+                    .leftJoin( classCategoryCl01 )
+                    // join 에는 delYn 조건 필수로 추가
+                    .on(    classCategoryCl01.clSn.eq( class$.ctgrySn ),
+                            classCategoryCl01.delYn.eq( "N" )
+                    )
+                    .leftJoin( classCategoryCl02 )
+                    // join 에는 delYn 조건 필수로 추가
+                    .on(    classCategoryCl02.clSn.eq( class$.crseSn ),
+                            classCategoryCl02.delYn.eq("N")
+                    )
+                    // where
+                    .where(
+                            //eqClassReqstSn( classReqstSn )
+                            eqClassSn( classSn ),
+                            eqUserSn( userSn ),
+                            classPayment.paymentStatus.eq( "DONE" ) // 결제완료된 것만 조회
+                    )
+                    .fetchOne();
+        }
+        // QueryDsl을 사용하고 결과를 한 건만 조회해야 할 때, 결과가 명확하게 한 건만 조회됨이 보장되지 않는다면 fetchOne()은 NonUniqueResultException을 던질 가능성이 있다.
+        // 결과를 한 건만 조회해야 할 때, 결과가 명확하게 한 건만 조회됨이 보장되지 않는다면 내부적으로 limit(1)을 수행하는 fetchFirst()를 사용하자.
+        // (출처) :https://hungseong.tistory.com/87
         
         
     }
@@ -190,17 +261,22 @@ public class ClassReqstRepositoryImpl implements ClassReqstRepositoryCustom {
     }
     
     
+    // classSn where 절에 조회
+    private BooleanExpression eqClassSn( Long classSn ) {
+        return ( classSn != null ) ? ( classReqst.classSn.eq( classSn ) ) : null;
+    }
+    
     // userSn where 절에 조회
     private BooleanExpression eqUserSn( Long userSn ) {
         return ( userSn != null ) ? ( classReqst.userSn.eq( userSn ) ) : null;
     }
 
     
-    
     // pk 로 고유값 1건만 조회
     private BooleanExpression eqClassReqstSn( Long classReqstSn ) {
-    	return ( classReqstSn != null ) ? classReqst.classReqstSn.eq( classReqstSn ) : null;
+        return ( classReqstSn != null ) ? classReqst.classReqstSn.eq( classReqstSn ) : null;
     }
+    
     
     
     
