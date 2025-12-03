@@ -420,3 +420,7 @@
 .sns_link {
     padding: 0px !important;
 }
+
+.detail_class_item {
+    cursor: pointer;
+}

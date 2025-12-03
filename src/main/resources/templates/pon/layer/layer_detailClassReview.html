@@ -55,12 +55,10 @@
 		</ul>
 	</div>
 	<div class="review_footer" th:if = "${ loginYn eq 'Y' }">
-		<div class="redBtn">
-			<a id="reviewDeleteA" href="javascript:;" onclick="deleteReviewItem( 'deleteReviewForm', this );" data-del-pk >
-				<span>삭제</span>
-				<em></em>
-			</a>
-		</div>
+		<a id="reviewDeleteA" class="redBtn" href="javascript:;" onclick="deleteReviewItem( 'deleteReviewForm', this );" data-del-pk >
+			<span>삭제</span>
+			<em></em>
+		</a>
 	</div>
 	<form id="deleteReviewForm" name="deleteReviewForm" method="post" th:action="@{ /classReview/{mcd}/delete ( mcd = ${mcd} ) }">
 		<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->

@@ -205,7 +205,6 @@ public class BannerAdmController {
     			    	model.addAttribute( "bannerClDetailCdList", cmmnCdDetailService.getList( "BANNER_CL_DETAIL_CD" ) );   // 배너 상세 분류 코드 리스트
     				}
     			}
-    			
     		}
     	}
     	
@@ -221,12 +220,12 @@ public class BannerAdmController {
     		model.addAttribute("ctgrySn", classModDto.getCtgrySn());	// ctgrySn setting
     		
     		// crseList setting
-    		model.addAttribute("crseList", classCategoryCl02Service.findByParntsClSnOrderByClSeq( classModDto.getCtgrySn() ));
+    		model.addAttribute("crseList", classCategoryCl02Service.findByParntsClSnOrderByClSeq( classModDto.getCtgrySn() ) );
     		
 
     		if ( classModDto.getCrseSn() != null && !(classModDto.getCrseSn().equals("")) ) {
     			// crseSn setting
-    			model.addAttribute("crseSn", classModDto.getCrseSn());	// crseSn setting
+    			model.addAttribute("crseSn", classModDto.getCrseSn() );	// crseSn setting
     		} else {
     			// crseSn setting
     			model.addAttribute("crseSn", "");	// crseSn setting

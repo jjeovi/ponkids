@@ -166,6 +166,15 @@ function detailClass( classSn ) {
 }
 
 
+
+// (메인화면용) 클래스 > 상세보기 event
+function detailClass2( e ) {
+	var classSn = $(e).closest(".swiper-slide").data("classSn");
+
+	location.href = "/class/mcdClass/detail?pk=" + classSn;
+}
+
+
 // 게시물 > 상세보기 event
 function detailNtt( e ) {
 

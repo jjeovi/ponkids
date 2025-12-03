@@ -427,24 +427,20 @@ public class MypageController {
                                 Model model ) {
         
         // S : 필요한 객체 setting
-        
-        
         // 클래스 의 Q&A
         // 총 건수 : classInqryList.totalElements 로 구함.
         listDto.setUserSn( SessionUtils.getAuthUserSn() );
-        model.addAttribute( "resultList", classInqryService.getList( listDto, pageable ) );    // 클래스 후기 classSn으로 검색
         
+        model.addAttribute( "resultList", classInqryService.getList( listDto, pageable ) );    // 클래스 후기 classSn으로 검색
         // 검색 dto setting
         model.addAttribute( "searchDTO", listDto );
-        
-        
-        
         // E : 필요한 객체 setting
         
         // 기본 경로 setting
         model.addAttribute( "basicPath", BASIC_PATH );
         // mypage용 mcd
         model.addAttribute( "mypageMcd", "questionList" );
+        model.addAttribute( "mcd", "myInfoModify" );        // inqry  삭제 할때 mcd값을 저장해야 해서, mcd값을 따로 저장
         return USER_VIEW_PATH + BASIC_PATH + "/questionList";
     }
     

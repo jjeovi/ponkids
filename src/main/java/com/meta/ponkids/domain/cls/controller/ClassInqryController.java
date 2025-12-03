@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import com.meta.ponkids.domain.cls.dto.ClassReviewModDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -210,6 +211,54 @@ public class ClassInqryController {
 		result.put( "myInqryYn", myInqryYn );
 		
 		return result;
+	}
+	
+	
+	
+	
+	@Transactional
+	@PostMapping( BASIC_PATH + "/{mcd}/delete" )
+	public String delete(
+			@RequestParam( required = true ) Long pk,
+			@PathVariable String mcd,
+			HttpServletRequest request,
+			Model model ) {
+		
+		// S : 필요한 객체 setting
+		
+		
+		// 저장 후 이동할 url setting
+		String moveUrl = request.getHeader("referer");
+		
+		// 로그인 세션 확인
+		if ( SessionUtils.getAuthUserSn() == null ) {
+			model.addAttribute( "resultMsg", "로그인 후 이용 가능합니다." );
+			model.addAttribute( "moveUrl", moveUrl );
+			
+			return "common/alert";
+		}
+		
+		
+		// 삭제 주체가 등록자와 같은지 비교
+		ClassInqryModDto targetDto = classInqryService.findById( pk );
+		if ( !targetDto.getUserSn().equals( SessionUtils.getAuthUserSn() ) ) {
+			model.addAttribute( "resultMsg", "로그인 정보를 확인해주세요." );
+			model.addAttribute( "moveUrl", moveUrl );
+			
+			return "common/alert";
+		}
+		
+		
+		// E : 필요한 객체 setting
+		
+		// 삭제 처리
+		classInqryService.deleteAllById( pk );		// By 뒤에는 custom
+		
+		// 메시지 출력 및 url 이동 처리
+		model.addAttribute( "resultMsg", "정상적으로 삭제되었습니다." );
+		model.addAttribute( "moveUrl", moveUrl );
+		
+		return "common/alert";
 	}
 	
 }

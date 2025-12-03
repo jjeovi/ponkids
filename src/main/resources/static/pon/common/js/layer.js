@@ -1229,3 +1229,15 @@ function deleteReviewItem( formName, e ) {
 
     }
 }
+
+
+// delete function
+function deleteInqryItem( formName, e ) {
+
+    var delPk = $( e ).data( "delPk" );
+    if ( confirm( "삭제하시겠습니까?" ) ) {
+        $( "form[name='" + formName + "']" ).find( "#delPk" ).val( delPk );
+        $( "form[name='" + formName + "']" ).submit();
+
+    }
+}

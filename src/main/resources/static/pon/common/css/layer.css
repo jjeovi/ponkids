@@ -2106,8 +2106,8 @@ input[type="radio"][disabled]:checked+label{
     margin-top: 40px;
 }
 
-.review_footer > div.redBtn,
-.inqry_footer > div.redBtn{
+.review_footer > a.redBtn,
+.inqry_footer > a.redBtn{
     padding: 10px 30px;
     box-sizing: border-box;
     display: inline-block;

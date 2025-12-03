@@ -50,12 +50,10 @@
 		</ul>
 	</div>
 	<div class="inqry_footer" th:if = "${  loginYn eq 'Y'}">
-		<div class="redBtn">
-			<a id="inqryDeleteA" href="javascript:;" onclick="deleteInqryItem( 'deleteInqryForm', this );" data-del-pk >
-				<span>삭제</span>
-				<em></em>
-			</a>
-		</div>
+		<a class="redBtn" id="inqryDeleteA" href="javascript:;" onclick="deleteInqryItem( 'deleteInqryForm', this );" data-del-pk >
+			<span>삭제</span>
+			<em></em>
+		</a>
 	</div>
 	<form id="deleteInqryForm" name="deleteInqryForm" method="post" th:action="@{ /classInqry/{mcd}/delete ( mcd = ${mcd} ) }">
 		<input type="hidden" name="pk" id="delPk" /> <!-- delPk 문자 수정 금지 -->

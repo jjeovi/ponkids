@@ -596,6 +596,7 @@
 				<th:block th:unless = "${!classInqryList.isEmpty() && #lists.size(classInqryList) > 0 }"> <!-- Q&A 없을 시 -->
 					<h5>수업 후기 목록이 없습니다.</h5>
 				</th:block>
+
 			</div>
 
 			<!-- 후기상세조회 layer -->
@@ -650,12 +651,12 @@
 		</div>
 		<div class="swiper mySwiper detail_swiper">
 			<div class="swiper-wrapper">
-				<div class="swiper-slide"  th:each="data : ${otherClassList}">
+				<div class="swiper-slide"  th:each="data : ${otherClassList}" th:data-class-sn="${data.classSn}" >
 					<div class="detail_class_item">
 						<div class="detail_class_item_img">
-							<img th:src="@{/getImage(atchFileSn=${data.thumbAtchFileSn})}" th:alt="|썸네일_${data.classSj}|">
+							<img th:src="@{/getImage(atchFileSn=${data.thumbAtchFileSn})}" th:alt="|썸네일_${data.classSj}|" onclick="detailClass2(this);" >
 						</div>
-						<div class="detail_class_info">
+						<div class="detail_class_info" onclick="detailClass2(this);" >
 							<p th:text="${data.ctgryNm}">카테고리명</p>
 							<h5 th:text="${data.classSj}">클래스제목</h5>
 							<h2 th:text="|${#numbers.formatInteger(data.classAmt, 3, 'COMMA')} 원|">클래스금액</h2>
