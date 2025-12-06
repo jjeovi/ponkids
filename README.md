@@ -68,7 +68,10 @@ DB phpPgAdmin : http://db.jjeovi.gabia.io/pgadmin/?_gl=1*15jm1ly*_ga*ODI1NTQ5MzY
 
 계정 / 비밀번호 : ponkids / ponkids2023!
 스키마 : ponkids 
-개발 스키마 : ponkids_dev (개발용으로 우선 작업  ponkids 스키마는 추후 운영에서 사용 예정... ) 
+개발 스키마 : ponkids_dev (개발용으로 우선 작업  ponkids 스키마는 추후 운영에서 사용 예정... )
+
+- gradle > build 를 통해 war파일을 생성한다.
+- 생성위치(맥기준) : /Users/jjeoV/Desktop/jjeoV/2023/pioneerKids/workspace/ponkidsDev/ponkids/build/libs
 
 운영 에서 프로젝트 실행 하는 법 :
 

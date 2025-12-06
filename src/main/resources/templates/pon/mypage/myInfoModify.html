@@ -100,6 +100,27 @@
 				return false;
 			}
 
+			// 거주지역 체크
+			// var resideArea	= $targetForm.find( "[name='resideArea']" ).val();
+			var resideArea = $( "#updateForm input:radio[name='resideArea']:checked" ).val();
+			var country		= $( "#countryList" ).val();
+			var zonecode	= $( "[name='zonecode']" ).val();			// 우편번호
+			if ( resideArea == 'other' ) {
+				if ( country == '' ) {
+					alert( "국가를 선택해주세요." );
+					$( "#countryList" ).focus();
+					return false;
+				} else {
+					$( "[name='resideArea']" ).val( country );
+				}
+
+			} else {
+				if ( zonecode == '' ) {
+					alert( "주소를 입력해주세요." );
+					return false;
+				}
+			}
+
 			$targetForm.submit();
 		}
 
@@ -199,7 +220,7 @@
 					</label>
 				</div>
 				<div class="data-field" id="joinCountryList" style="display:none;" >
-					<select name="otherResideArea" class="selectbox" >
+					<select name="otherResideArea" class="selectbox" id="countryList" >
 						<option value=''>국가 선택</option>
 						<option th:each="item : ${resideAreaList}" th:value="${item.cdDetailVal1}" th:text="${item.cdDetailNm}" th:selected="${item.cdDetailVal1} == ${targetDto.resideArea}" >
 					</select>

@@ -512,7 +512,9 @@
 
 @media(max-width:768px){
 	
+	/*
 	.mypage_detail_box{display: none;}
+	 */
 	
 	.mp_list{overflow-x: scroll; padding: 10px 10px;}
 	

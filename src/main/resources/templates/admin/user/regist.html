@@ -39,7 +39,7 @@
 			// 거주지역 그 외만 선택 했을 시 return false;2
 			var resideArea	= $( "input:radio[name='resideArea']:checked" ).val();
 			var country		= $( "#countryList" ).val();
-			var zonecode	= $( "[name='zonecode']" );			// 우편번호
+			var zonecode	= $( "[name='zonecode']" ).val();			// 우편번호
 			if ( resideArea == 'other' ) {
 				if ( country == '' ) {
 					alert( "거주지역을 선택해주세요." );

@@ -465,7 +465,7 @@ function amtSetComma( val ){
 			$( "#inqryDeleteA" ).data( "delPk", result.classInqrySn );
 			$( ".inqry_footer" ).show();
 		} else {
-			$( ".review_footer" ).hide();
+			$( ".inqry_footer" ).hide();
 		}
 	}
 
